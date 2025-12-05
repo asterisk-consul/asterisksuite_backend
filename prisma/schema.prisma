@@ -1,0 +1,1497 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model afipcomprobantes {
+  id                     BigInt             @id(map: "afipcomprobantes_pk") @default(autoincrement())
+  parentid               BigInt?
+  registrocabid          BigInt?
+  afippuntosventasid     BigInt?
+  fechacomp              DateTime?          @db.Timestamp(6)
+  nrocomp                Int?
+  nrocae                 String?            @db.VarChar(100)
+  jsoninput              Json?              @db.Json
+  jsonresponse           Json?              @db.Json
+  statusid               Int?
+  retries                Int?
+  procdate               DateTime?          @db.Timestamp(6)
+  prfname                String?            @db.VarChar(100)
+  statussmessage         String?            @db.VarChar(1000)
+  tipocomp               String?            @db.VarChar(20)
+  condventaid            BigInt?
+  fechadesde             DateTime?          @db.Timestamp(6)
+  fechahasta             DateTime?          @db.Timestamp(6)
+  fechavencimiento       DateTime?          @db.Timestamp(6)
+  tipoconcepto           Int?               @default(0)
+  comprobasocnro         String?            @db.VarChar(20)
+  comprobasoctipo        String?            @db.VarChar(20)
+  anulacion              String?            @db.VarChar(50)
+  reftransf              String?            @db.VarChar(50)
+  afipcomprobantes       afipcomprobantes?  @relation("afipcomprobantesToafipcomprobantes", fields: [parentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afipcomprobantes_afipcomp")
+  other_afipcomprobantes afipcomprobantes[] @relation("afipcomprobantesToafipcomprobantes")
+  afippuntosventas       afippuntosventas?  @relation(fields: [afippuntosventasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afipcomprobantes_apippos")
+  registrocab            registrocab?       @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afipcomprobantes_registrocab")
+  categorias             categorias?        @relation(fields: [condventaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_afipcomprobantes_condventaid")
+}
+
+model afippuntosventas {
+  id                  BigInt             @id(map: "afippuntosventas_pk") @default(autoincrement())
+  companyafipid       BigInt?
+  descripcion         String?            @db.VarChar(200)
+  numero              String?            @db.VarChar(10)
+  notas               String?
+  maxretries          Int?
+  intervaloreintentos Int?
+  apikey              String?            @db.VarChar(100)
+  apitoken            String?            @db.VarChar(100)
+  usertoken           String?            @db.VarChar(100)
+  afipcomprobantes    afipcomprobantes[]
+  companyafip         companyafip?       @relation(fields: [companyafipid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afippuntosventas_companyafip")
+}
+
+model articuloamedidacartera {
+  id                                                                        BigInt          @id(map: "articuloamedidacartera_pk") @default(autoincrement())
+  inregistrocuerpoid                                                        BigInt?
+  outregistrocuerpoid                                                       BigInt?
+  inregistrocabid                                                           BigInt?
+  outregistrocabid                                                          BigInt?
+  tipo                                                                      Int?            @default(0)
+  codigo                                                                    String?         @db.VarChar(50)
+  nroidentificador                                                          String          @db.VarChar(50)
+  detalle                                                                   String?
+  fechacreacion                                                             DateTime        @default(now()) @db.Timestamp(6)
+  fechalasupdate                                                            DateTime        @default(now()) @db.Timestamp(6)
+  registrocuerpo_articuloamedidacartera_outregistrocuerpoidToregistrocuerpo registrocuerpo? @relation("articuloamedidacartera_outregistrocuerpoidToregistrocuerpo", fields: [outregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artcartera_registrocuerpoout")
+  registrocab_articuloamedidacartera_inregistrocabidToregistrocab           registrocab?    @relation("articuloamedidacartera_inregistrocabidToregistrocab", fields: [inregistrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artmedcartera_registrocabin")
+  registrocab_articuloamedidacartera_outregistrocabidToregistrocab          registrocab?    @relation("articuloamedidacartera_outregistrocabidToregistrocab", fields: [outregistrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artmedcartera_registrocabout")
+  registrocuerpo_articuloamedidacartera_inregistrocuerpoidToregistrocuerpo  registrocuerpo? @relation("articuloamedidacartera_inregistrocuerpoidToregistrocuerpo", fields: [inregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artmedcartera_registrocuerpoin")
+}
+
+model articuloespec {
+  id              BigInt     @id(map: "articuloespecpk") @default(autoincrement())
+  articuloid      BigInt?
+  descrip         String?    @db.VarChar(200)
+  rangomax        Float?
+  rangomin        Float?
+  um              String?    @db.VarChar(30)
+  valorideal      String?    @db.VarChar(30)
+  valoresposibles String?    @db.VarChar(200)
+  isdescriptive   Boolean?   @default(false)
+  articulos       articulos? @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articuloespec_articulo_fk")
+}
+
+model articuloprecio {
+  id               BigInt      @id(map: "articulopreciopk") @default(autoincrement())
+  articuloid       BigInt?
+  categid          BigInt?
+  precio           Decimal?    @db.Decimal(10, 2)
+  changedate       DateTime?   @db.Timestamp(6)
+  factorconversion Float?      @default(1)
+  articulos        articulos?  @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloprecio_articulos")
+  categorias       categorias? @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloprecio_categorias")
+
+  @@unique([articuloid, categid], map: "articuloprecio_uni1")
+}
+
+model articulopreciohistorico {
+  id               BigInt      @id(map: "articulopreciohispk") @default(autoincrement())
+  articuloid       BigInt?
+  categid          BigInt?
+  precio           Decimal?    @db.Decimal(10, 2)
+  changedate       DateTime?   @db.Timestamp(6)
+  factorconversion Float?      @default(1)
+  articulos        articulos?  @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulopreciohis_articulos")
+  categorias       categorias? @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulopreciohis_categorias")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model articulos {
+  id                                                BigInt                    @id(map: "articulospk") @default(autoincrement())
+  internalcode                                      String?                   @db.VarChar(20)
+  externalcode                                      String?                   @db.VarChar(30)
+  nombre                                            String?                   @db.VarChar(100)
+  descrip                                           String?                   @db.VarChar(2000)
+  categid                                           BigInt
+  instructivoid                                     BigInt?
+  caracteristicas                                   String?                   @db.VarChar(200)
+  activo                                            Boolean?
+  cantidadunidad                                    Int?
+  puntorepo                                         Float?
+  nivelobj                                          Float?
+  cantminrepo                                       Float?
+  imagen                                            String?
+  um                                                String?                   @db.VarChar(20)
+  ub                                                Float?
+  compraminima                                      Float?
+  statusinicial                                     BigInt?
+  impuestoalic                                      Decimal?                  @default(0) @db.Decimal(6, 3)
+  isservice                                         Boolean?                  @default(false)
+  ischeque                                          Boolean?                  @default(false)
+  cuentacontableid                                  BigInt?
+  isamedida                                         Boolean?                  @default(false)
+  is_bom                                            Boolean?                  @default(false)
+  articuloespec                                     articuloespec[]
+  articuloprecio                                    articuloprecio[]
+  articulopreciohistorico                           articulopreciohistorico[]
+  statuses                                          statuses?                 @relation(fields: [statusinicial], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articulo_status_inicial_fk")
+  categorias_articulos_categidTocategorias          categorias                @relation("articulos_categidTocategorias", fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_articulos_fk")
+  categorias_articulos_cuentacontableidTocategorias categorias?               @relation("articulos_cuentacontableidTocategorias", fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulos_cuentascontables")
+  depositosarticulos                                depositosarticulos[]
+  instructivoarticulos                              instructivoarticulos[]
+  ordencuerpo                                       ordencuerpo[]
+  perfilesarticulos                                 perfilesarticulos[]
+  tareaarticulos                                    tareaarticulos[]
+  tipoarticulos                                     tipoarticulos[]           @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model articuloscompuestos {
+  articuloid                                                  BigInt?
+  parentarticuloid                                            BigInt?
+  cantidad                                                    Float?
+  id                                                          BigInt?     @default(autoincrement())
+  compvariableid                                              BigInt?
+  cuentacontableid                                            BigInt?
+  categorias_articuloscompuestos_compvariableidTocategorias   categorias? @relation("articuloscompuestos_compvariableidTocategorias", fields: [compvariableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_categorias3")
+  categorias_articuloscompuestos_cuentacontableidTocategorias categorias? @relation("articuloscompuestos_cuentacontableidTocategorias", fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_cuentascontables")
+
+  @@ignore
+}
+
+model cartera {
+  id                                                         BigInt          @id(map: "cartera_pk") @default(autoincrement())
+  inregistrocuerpoid                                         BigInt
+  outregistrocuerpoid                                        BigInt?
+  tipo                                                       Int?            @default(0)
+  banco                                                      String?         @db.VarChar(50)
+  nroidentificador                                           String          @db.VarChar(50)
+  fechacobro                                                 DateTime?       @db.Timestamp(6)
+  fechaingreso                                               DateTime        @default(now()) @db.Timestamp(6)
+  importe                                                    Decimal         @db.Decimal(16, 4)
+  registrocuerpo_cartera_inregistrocuerpoidToregistrocuerpo  registrocuerpo  @relation("cartera_inregistrocuerpoidToregistrocuerpo", fields: [inregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cartera_registrocuerpoin")
+  registrocuerpo_cartera_outregistrocuerpoidToregistrocuerpo registrocuerpo? @relation("cartera_outregistrocuerpoidToregistrocuerpo", fields: [outregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cartera_registrocuerpoout")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model categorias {
+  id                                                                   BigInt                           @id(map: "categoriaspk") @default(autoincrement())
+  name                                                                 String?                          @db.VarChar
+  parentid                                                             BigInt?
+  grupo                                                                String?                          @db.VarChar(30)
+  procparentid                                                         BigInt?
+  orden                                                                Int?
+  notas                                                                String?                          @db.VarChar(100)
+  valor                                                                String?                          @db.VarChar(100)
+  macroparentid                                                        BigInt?
+  afipcomprobantes                                                     afipcomprobantes[]
+  articuloprecio                                                       articuloprecio[]
+  articulopreciohistorico                                              articulopreciohistorico[]
+  articulos_articulos_categidTocategorias                              articulos[]                      @relation("articulos_categidTocategorias")
+  articulos_articulos_cuentacontableidTocategorias                     articulos[]                      @relation("articulos_cuentacontableidTocategorias")
+  articuloscompuestos_articuloscompuestos_compvariableidTocategorias   articuloscompuestos[]            @relation("articuloscompuestos_compvariableidTocategorias") @ignore
+  articuloscompuestos_articuloscompuestos_cuentacontableidTocategorias articuloscompuestos[]            @relation("articuloscompuestos_cuentacontableidTocategorias") @ignore
+  categoriasperfiles                                                   categoriasperfiles[]
+  companyafip                                                          companyafip[]
+  competencias                                                         competencias[]
+  comunica_comunica_frecuenciaidTocategorias                           comunica[]                       @relation("comunica_frecuenciaidTocategorias")
+  comunica_comunica_tipoidTocategorias                                 comunica[]                       @relation("comunica_tipoidTocategorias")
+  comunica_comunica_aquienTocategorias                                 comunica[]                       @relation("comunica_aquienTocategorias")
+  comunica_comunica_quienTocategorias                                  comunica[]                       @relation("comunica_quienTocategorias")
+  comunica_comunica_procesoentradaidTocategorias                       comunica[]                       @relation("comunica_procesoentradaidTocategorias")
+  comunica_comunica_procesoinidTocategorias                            comunica[]                       @relation("comunica_procesoinidTocategorias")
+  comunica_comunica_procesooutidTocategorias                           comunica[]                       @relation("comunica_procesooutidTocategorias")
+  contactos                                                            contactos[]
+  depositos                                                            depositos[]
+  flowdocument_flowdocument_frecuenciaidTocategorias                   flowdocument[]                   @relation("flowdocument_frecuenciaidTocategorias")
+  flowdocument_flowdocument_tipoidTocategorias                         flowdocument[]                   @relation("flowdocument_tipoidTocategorias")
+  flowdocumentfiltroarticulo                                           flowdocumentfiltroarticulo[]
+  flowdocumentpartesint                                                flowdocumentpartesint[]
+  flowdocumentprocesorelacionado                                       flowdocumentprocesorelacionado[]
+  grupos                                                               grupos[]
+  impositivos_impositivos_condivaTocategorias                          impositivos[]                    @relation("impositivos_condivaTocategorias")
+  impositivos_impositivos_provinciaidTocategorias                      impositivos[]                    @relation("impositivos_provinciaidTocategorias")
+  instructivoarticulos                                                 instructivoarticulos[]
+  instructivopuestos                                                   instructivopuestos[]
+  instructivotareas                                                    instructivotareas[]
+  instructivotareasresp                                                instructivotareasresp[]
+  ordencab                                                             ordencab[]
+  perfiles                                                             perfiles[]
+  perfilesarticulos                                                    perfilesarticulos[]
+  perfilesprecios_perfilesprecios_tipoperfilidTocategorias             perfilesprecios[]                @relation("perfilesprecios_tipoperfilidTocategorias")
+  perfilesprecios_perfilesprecios_tipoprecioidTocategorias             perfilesprecios[]                @relation("perfilesprecios_tipoprecioidTocategorias")
+  perfilesrel                                                          perfilesrel[]
+  puestodescrip                                                        puestodescrip[]
+  registrocab_registrocab_calidadfinalTocategorias                     registrocab[]                    @relation("registrocab_calidadfinalTocategorias")
+  registrocab_registrocab_opciondesplegableidTocategorias              registrocab[]                    @relation("registrocab_opciondesplegableidTocategorias")
+  registrocab_registrocab_parteinteresadatipoidTocategorias            registrocab[]                    @relation("registrocab_parteinteresadatipoidTocategorias")
+  registrocab_registrocab_cuentacontableidTocategorias                 registrocab[]                    @relation("registrocab_cuentacontableidTocategorias")
+  registrocab_registrocab_condventaidTocategorias                      registrocab[]                    @relation("registrocab_condventaidTocategorias")
+  registrocab_registrocab_listaprecioidTocategorias                    registrocab[]                    @relation("registrocab_listaprecioidTocategorias")
+  registrocab_registrocab_procesoidTocategorias                        registrocab[]                    @relation("registrocab_procesoidTocategorias")
+  registrocab_registrocab_macroprocesoidTocategorias                   registrocab[]                    @relation("registrocab_macroprocesoidTocategorias")
+  registrocab_registrocab_flowidTocategorias                           registrocab[]                    @relation("registrocab_flowidTocategorias")
+  registrocab_registrocab_envpaisTocategorias                          registrocab[]                    @relation("registrocab_envpaisTocategorias")
+  registrocab_registrocab_envprovTocategorias                          registrocab[]                    @relation("registrocab_envprovTocategorias")
+  reportes_reportes_grupoidTocategorias                                reportes[]                       @relation("reportes_grupoidTocategorias")
+  reportes_reportes_contextoidTocategorias                             reportes[]                       @relation("reportes_contextoidTocategorias")
+  reportesacl                                                          reportesacl[]
+  secuencias_secuencias_categoriaTocategorias                          secuencias[]                     @relation("secuencias_categoriaTocategorias")
+  secuencias_secuencias_grupoidTocategorias                            secuencias[]                     @relation("secuencias_grupoidTocategorias")
+  statuses                                                             statuses[]
+  statusesprecios                                                      statusesprecios[]
+  statusesrelacionesflows                                              statusesrelacionesflows[]
+  statusflows                                                          statusflows[]
+  stocklog                                                             stocklog[]
+  tipoarticulos                                                        tipoarticulos[]                  @ignore
+  wallet                                                               wallet[]
+}
+
+model categoriasperfiles {
+  id          BigInt     @id(map: "categoriasperfilespk") @default(autoincrement())
+  perfilid    BigInt
+  categoriaid BigInt
+  categorias  categorias @relation(fields: [categoriaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_categoriasperfiles_fk")
+  perfiles    perfiles   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_categoriasperfiles_fk")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model channels {
+  id             BigInt   @id(map: "channelspk") @default(autoincrement())
+  key            String?  @db.VarChar(30)
+  descrip        String?  @db.VarChar(200)
+  handlerclass   String?  @db.VarChar(200)
+  handlerpackage String?  @db.VarChar(200)
+  active         Boolean?
+  imputtemplate  String?  @db.VarChar(2000)
+}
+
+model company {
+  id              BigInt        @id(map: "company_pk") @default(autoincrement())
+  nombreempresa   String?       @db.VarChar(100)
+  direccion       String?       @db.VarChar(200)
+  telefono        String?       @db.VarChar(100)
+  mision          String?       @db.VarChar(4000)
+  vision          String?       @db.VarChar(4000)
+  valores         String?       @db.VarChar(4000)
+  politicacalidad String?       @db.VarChar(4000)
+  alcance         String?
+  companyafip     companyafip[]
+}
+
+model companyafip {
+  id               BigInt             @id(map: "companyafip_pk") @default(autoincrement())
+  companyid        BigInt?
+  nombrefiscal     String?            @db.VarChar(200)
+  cuit             String?            @db.VarChar(11)
+  condivaid        BigInt?
+  certifssl        Bytes?
+  wskey            String?
+  cbu              String?            @db.VarChar(50)
+  afippuntosventas afippuntosventas[]
+  categorias       categorias?        @relation(fields: [condivaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_companyafip_categ")
+  company          company?           @relation(fields: [companyid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_companyafip_company")
+}
+
+model competencianivel {
+  id                  Int                   @id(map: "competencianivelpk") @default(autoincrement())
+  descripcion         String?               @db.VarChar
+  competenciaid       BigInt?
+  titulo              String?               @db.VarChar
+  titulopi            String?               @db.VarChar
+  puntaje             Int?
+  competencias        competencias?         @relation(fields: [competenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_competencianivel_area")
+  perfilcompetencias  perfilcompetencias[]
+  puestoscompetencias puestoscompetencias[]
+}
+
+model competencias {
+  id                  BigInt                @id(map: "competenciaspk") @default(autoincrement())
+  parentid            BigInt?
+  nombre              String?               @db.VarChar(200)
+  cod                 String?               @db.VarChar(50)
+  descrip             String?
+  nivelpuesto         String?               @db.VarChar(100)
+  nivelpersonas       String?               @db.VarChar(100)
+  grupoid             BigInt?
+  competencianivel    competencianivel[]
+  competencias        competencias?         @relation("competenciasTocompetencias", fields: [parentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_competenciascompetencias")
+  other_competencias  competencias[]        @relation("competenciasTocompetencias")
+  categorias          categorias?           @relation(fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_competenciasgrupoid_categorias")
+  perfilcompetencias  perfilcompetencias[]
+  puestoscompetencias puestoscompetencias[]
+}
+
+model comunica {
+  id                                               BigInt        @id(map: "comunicapk") @default(autoincrement())
+  tipoid                                           BigInt?
+  que                                              String?       @db.VarChar(200)
+  cuando                                           String?       @db.VarChar(200)
+  aquien                                           BigInt?
+  como                                             String?       @db.VarChar(200)
+  quien                                            BigInt?
+  sequenciaid                                      BigInt?
+  procesoentradaid                                 BigInt?
+  procesoinid                                      BigInt?
+  procesooutid                                     BigInt?
+  flowdocumentid                                   BigInt?
+  statusesid                                       BigInt?
+  frecuenciaid                                     BigInt?
+  categorias_comunica_frecuenciaidTocategorias     categorias?   @relation("comunica_frecuenciaidTocategorias", fields: [frecuenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comunica_frecuenciaid_fk")
+  statuses                                         statuses?     @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comunica_statusesid_fk")
+  categorias_comunica_tipoidTocategorias           categorias?   @relation("comunica_tipoidTocategorias", fields: [tipoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunica_categ")
+  categorias_comunica_aquienTocategorias           categorias?   @relation("comunica_aquienTocategorias", fields: [aquien], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunica_categ1")
+  categorias_comunica_quienTocategorias            categorias?   @relation("comunica_quienTocategorias", fields: [quien], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunica_categ2")
+  secuencias                                       secuencias?   @relation(fields: [sequenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunica_secuencias")
+  categorias_comunica_procesoentradaidTocategorias categorias?   @relation("comunica_procesoentradaidTocategorias", fields: [procesoentradaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunicccategorias1")
+  categorias_comunica_procesoinidTocategorias      categorias?   @relation("comunica_procesoinidTocategorias", fields: [procesoinid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunicccategorias2")
+  categorias_comunica_procesooutidTocategorias     categorias?   @relation("comunica_procesooutidTocategorias", fields: [procesooutid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunicccategorias3")
+  flowdocument                                     flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkcomunicaflowdocuemnt")
+  receptores                                       receptores[]
+}
+
+model contactos {
+  id           BigInt        @id(map: "contactospk") @default(autoincrement())
+  perfilid     BigInt
+  nombre       String?       @db.VarChar(100)
+  email        String?       @db.VarChar(100)
+  telefono     String?       @db.VarChar(15)
+  skype        String?       @db.VarChar(100)
+  web          String?       @db.VarChar(200)
+  notas        String?       @db.VarChar(500)
+  direccion    String?       @db.VarChar(100)
+  piso         String?       @db.VarChar(5)
+  localidad    String?       @db.VarChar(50)
+  pcia         BigInt?
+  cp           String?       @db.VarChar(10)
+  pais         BigInt?
+  direccionnro String?       @db.VarChar(6)
+  dpto         String?       @db.VarChar(5)
+  tipoid       BigInt?
+  categorias   categorias?   @relation(fields: [tipoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contactos_categtipo")
+  perfiles     perfiles      @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_contactos_fk")
+  registrocab  registrocab[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model depositos {
+  id                    BigInt                  @id(map: "depositospk") @default(autoincrement())
+  descrip               String?                 @db.VarChar
+  parentid              BigInt?
+  categid               BigInt
+  perfilid              BigInt?
+  activo                Boolean?                @default(true)
+  categorias            categorias              @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_depositos_fk")
+  depositos             depositos?              @relation("depositosTodepositos", fields: [parentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "depositos_depositos_fk")
+  other_depositos       depositos[]             @relation("depositosTodepositos")
+  perfiles              perfiles?               @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_depositos_fk")
+  depositosarticulos    depositosarticulos[]
+  empleados             empleados[]
+  flowdocumentdepositos flowdocumentdepositos[]
+  perfilesdepositos     perfilesdepositos[]
+  puestodescrip         puestodescrip[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model depositosarticulos {
+  id                  BigInt                @id(map: "depositosarticulospk") @default(autoincrement())
+  depositoid          BigInt
+  articuloid          BigInt
+  cantidad            Float?
+  articulospecresult  Json?                 @db.Json
+  compraminima        Float?                @default(0)
+  puntorepo           Float?                @default(0)
+  cantminrepo         Float?                @default(0)
+  nivelobj            Float?                @default(0)
+  cantcomprometida    Float?                @default(0)
+  permitenegativo     Boolean?              @default(false)
+  canttransito        Float?                @default(0)
+  articulos           articulos             @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articulos_depositosarticulos_fk")
+  depositos           depositos             @relation(fields: [depositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "depositos_depositosarticulos_fk")
+  registrocab         registrocab[]
+  registrocuerpo      registrocuerpo[]
+  stocklog            stocklog[]
+  tareasexecarticulos tareasexecarticulos[]
+}
+
+model documents {
+  id                   BigInt                 @id(map: "documentspk") @default(autoincrement())
+  name                 String?                @db.VarChar(130)
+  descrip              String?                @db.VarChar(300)
+  perfilid             BigInt?
+  mime                 String?                @db.VarChar(50)
+  tamano               BigInt?
+  actividadid          BigInt?
+  perfiles             perfiles?              @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_documents_perfiles")
+  perfildocuments      perfildocuments[]
+  registrocabdocuments registrocabdocuments[]
+  tareasexecdocuments  tareasexecdocuments[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model empleados {
+  id           BigInt     @id(map: "empleadospk") @default(autoincrement())
+  perfilid     BigInt
+  legajonro    String?    @db.VarChar(50)
+  foto         String?
+  estcivil     BigInt?
+  nacionalidad String?    @db.VarChar(20)
+  fechanac     DateTime?  @db.Date
+  fechaincorp  DateTime?  @db.Date
+  fechabaja    DateTime?  @db.Date
+  lugarnacim   String?    @db.VarChar(200)
+  obrasocial   String?    @db.VarChar(100)
+  profesion    String?    @db.VarChar(100)
+  depositoid   BigInt?
+  depositos    depositos? @relation(fields: [depositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "empleados_fk")
+  perfiles     perfiles   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_empleados_fk")
+}
+
+model eventos {
+  id         BigInt       @id(map: "eventos_pk") @default(autoincrement())
+  accion     String?      @db.Char(1)
+  origen     String?      @db.VarChar(30)
+  urlwh      String?      @db.VarChar(300)
+  debuginfo  Boolean?     @default(false)
+  active     Boolean?     @default(true)
+  eventoslog eventoslog[]
+}
+
+model eventoslog {
+  id             BigInt    @id(map: "eventoslog_pk") @default(autoincrement())
+  eventosid      BigInt?
+  origenid       BigInt?
+  datasent       Json?
+  fecha          DateTime? @db.Timestamp(6)
+  responsestatus Int?
+  eventos        eventos?  @relation(fields: [eventosid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventoslog_eventos")
+}
+
+model flowdocument {
+  id                                               BigInt                           @id(map: "flowdocumentpk") @default(autoincrement())
+  titulo                                           String?                          @db.VarChar(200)
+  descrip                                          String?                          @db.VarChar
+  tipoid                                           BigInt?
+  statusid                                         BigInt?
+  procesoid                                        BigInt?
+  revision                                         String?                          @db.VarChar(30)
+  formaalmacenamiento                              String?                          @db.VarChar
+  objetivo                                         String?                          @db.VarChar
+  tiempoconservacion                               Int?
+  alcance                                          String?
+  formulariorel                                    String?                          @db.VarChar
+  arearespuso                                      BigInt?
+  fechacreacion                                    DateTime?                        @db.Timestamp(6)
+  fechavigencia                                    DateTime?                        @db.Timestamp(6)
+  fechamodif                                       DateTime?                        @db.Timestamp(6)
+  responsableelab                                  BigInt?
+  responsableaprob                                 BigInt?
+  responsablemodif                                 BigInt?
+  actividad                                        String?                          @db.VarChar
+  orden                                            Int?
+  categid                                          BigInt?
+  codificacion                                     String?                          @db.VarChar(100)
+  responsableid                                    BigInt?
+  preasignarusuario                                Int?                             @default(0)
+  requierecuerpo                                   Boolean?                         @default(false)
+  aplicarusuariomismotipo                          Boolean?                         @default(false)
+  aplicarrespmismotipo                             Boolean?                         @default(false)
+  frecuencia                                       String?                          @db.VarChar(100)
+  impactostock                                     Int?                             @default(0)
+  permitecuerpos                                   Boolean?                         @default(false)
+  permitecambiodeposito                            Boolean?                         @default(false)
+  comprometestock                                  Int?                             @default(0)
+  preguntarguardar                                 Int?                             @default(0)
+  deshabilitarbtnsiguientecuerpo                   Boolean?                         @default(false)
+  genafipcomp                                      Boolean?                         @default(false)
+  viewafipcomp                                     Boolean?                         @default(false)
+  frecuenciaid                                     BigInt?
+  permiteaddpi                                     Boolean?                         @default(false)
+  permiteaddarticulo                               Boolean?                         @default(false)
+  carterastatus                                    Int?                             @default(0)
+  obligaradjuntarregistro                          Int?                             @default(2)
+  canaddclientes                                   Int?                             @default(0)
+  copydatatoregdest                                Int?                             @default(0)
+  permiteagregartareas                             Boolean?                         @default(false)
+  permitearticulocab                               Boolean?                         @default(false)
+  canaddarticulo                                   Int?                             @default(3)
+  obligaradjuntarreghijo                           Int?                             @default(3)
+  permiteasociarfiles                              Int?                             @default(1)
+  ocultarinicio                                    Boolean?                         @default(false)
+  artamedidastatus                                 Int?                             @default(0)
+  permitiraudio                                    Int?                             @default(1)
+  permitesoluunregasoc                             Boolean?                         @default(false)
+  usararticulospadre                               Boolean?                         @default(false)
+  isenespera                                       Boolean?                         @default(false)
+  permitecambioarticulo                            Boolean?                         @default(false)
+  comunica                                         comunica[]
+  categorias_flowdocument_frecuenciaidTocategorias categorias?                      @relation("flowdocument_frecuenciaidTocategorias", fields: [frecuenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_flowdocument_categorias4")
+  categorias_flowdocument_tipoidTocategorias       categorias?                      @relation("flowdocument_tipoidTocategorias", fields: [tipoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocument_categid_fk")
+  statuses                                         statuses?                        @relation(fields: [statusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocument_status_fk")
+  flowdocumentdepositos                            flowdocumentdepositos[]
+  flowdocumentfiltroarticulo                       flowdocumentfiltroarticulo[]
+  flowdocumentpartesint                            flowdocumentpartesint[]
+  flowdocumentprocesorelacionado                   flowdocumentprocesorelacionado[]
+  flowdocumentresponsables                         flowdocumentresponsables[]
+  flowfactores                                     flowfactores[]
+  instructivo                                      instructivo[]
+  instructivotareas                                instructivotareas[]
+  puestodescrip                                    puestodescrip[]
+}
+
+model flowdocumentdepositos {
+  id             BigInt        @id @default(autoincrement())
+  depositoid     BigInt?
+  flowdocumentid BigInt?
+  tiporel        Int?          @default(0)
+  depositos      depositos?    @relation(fields: [depositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_fddepositos_depositos")
+  flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_fddepositos_flowdocument")
+
+  @@unique([flowdocumentid, depositoid], map: "flowdocumentdepositos_uni1")
+}
+
+model flowdocumentfiltroarticulo {
+  id             BigInt        @id @default(autoincrement())
+  categoriaid    BigInt?
+  flowdocumentid BigInt?
+  categorias     categorias?   @relation(fields: [categoriaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categ")
+  flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_flow_document")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model flowdocumentfiltroarticulo_bkp {
+  id             BigInt?
+  categoriaid    Int?
+  flowdocumentid Int?
+
+  @@ignore
+}
+
+model flowdocumentpartesint {
+  id             Int           @id @default(autoincrement())
+  categoriaid    BigInt?
+  flowdocumentid BigInt?
+  categorias     categorias?   @relation(fields: [categoriaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categ")
+  flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_flow_document")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model flowdocumentpartesint_bkp {
+  id             Int?
+  categoriaid    Int?
+  flowdocumentid Int?
+
+  @@ignore
+}
+
+model flowdocumentprocesorelacionado {
+  id             BigInt       @default(autoincrement())
+  flowdocumentid BigInt
+  relatedprocid  BigInt
+  tiporel        Int
+  categorias     categorias   @relation(fields: [relatedprocid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocumentrel_categories_fk")
+  flowdocument   flowdocument @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocumentrel_fd_fk")
+
+  @@unique([flowdocumentid, relatedprocid, tiporel], map: "flowdocumentprocesorelacionad_flowdocumentid_relatedprocid__key")
+}
+
+model flowdocumentresponsables {
+  id               BigInt       @id(map: "flowdocumentresponsables_pk") @default(autoincrement())
+  responsableid    BigInt?
+  tipointervencion BigInt?
+  flowdocumentid   BigInt
+  flowdocument     flowdocument @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocumentresponsables_fk")
+}
+
+model flowespecializ {
+  id                                                          BigInt       @id(map: "flowespecializpk") @default(autoincrement())
+  statusflowid                                                BigInt?
+  categid                                                     BigInt?
+  statusflowdestinoid                                         BigInt?
+  statusflows_flowespecializ_statusflowidTostatusflows        statusflows? @relation("flowespecializ_statusflowidTostatusflows", fields: [statusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowespecializ_statusflows_fk")
+  statusflows_flowespecializ_statusflowdestinoidTostatusflows statusflows? @relation("flowespecializ_statusflowdestinoidTostatusflows", fields: [statusflowdestinoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowespecializ_statusflows_fk2")
+}
+
+model flowfactores {
+  id             BigInt        @id(map: "flowfactorespk") @default(autoincrement())
+  flowdocumentid BigInt?
+  tipoid         BigInt?
+  titulo         String?       @db.VarChar(100)
+  mimetype       String?       @db.VarChar
+  archivo        Bytes?
+  jsondata       Json?         @db.Json
+  flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowfactores_flowdocument_fk")
+}
+
+model flowpreguntas {
+  id             BigInt           @id(map: "flowpreguntaspk") @default(autoincrement())
+  statusflowid   BigInt?
+  pregunta       String?          @db.VarChar(200)
+  formula        String?          @db.VarChar(500)
+  posx           Int?             @default(0)
+  posy           Int?             @default(0)
+  statusflows    statusflows?     @relation(fields: [statusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowpreguntas_statusflows_fk")
+  flowrespuestas flowrespuestas[]
+}
+
+model flowrespuestas {
+  id                  BigInt         @id(map: "flowrespuestaspk") @default(autoincrement())
+  flowpreguntasid     BigInt?
+  respuesta           String?        @db.VarChar(200)
+  statusflowid        BigInt?
+  siguientepreguntaid BigInt?
+  flowpreguntas       flowpreguntas? @relation(fields: [flowpreguntasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowrespuestas_fk")
+}
+
+model grupos {
+  id               BigInt             @id(map: "grupospk") @default(autoincrement())
+  descrip          String?            @db.VarChar(100)
+  fecharef         DateTime?          @db.Timestamp(6)
+  categid          BigInt?
+  categorias       categorias?        @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gruposcategorias")
+  registrocabgrupo registrocabgrupo[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model impositivos {
+  id                                             BigInt      @id(map: "impositivospk") @default(autoincrement())
+  perfilid                                       BigInt      @unique(map: "uni_impositivos_perfilid")
+  cuit                                           String?     @db.VarChar(50)
+  dirfiscal                                      String?     @db.VarChar(200)
+  condiva                                        BigInt?
+  provinciaid                                    BigInt?
+  mailcomprobantes                               String?     @db.VarChar(100)
+  categorias_impositivos_condivaTocategorias     categorias? @relation("impositivos_condivaTocategorias", fields: [condiva], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_impositivos_fk")
+  categorias_impositivos_provinciaidTocategorias categorias? @relation("impositivos_provinciaidTocategorias", fields: [provinciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_impositivos_categorias1")
+  perfiles                                       perfiles    @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_impositivos_fk")
+}
+
+model instructivo {
+  id                     BigInt                   @id(map: "instructivopk") @default(autoincrement())
+  statusid               BigInt?
+  arearesponsableid      BigInt?
+  responsableexec        BigInt?
+  responsableaprob       BigInt?
+  responsablesuperv      BigInt?
+  tipoinstructivo        BigInt?
+  flowdocumentid         BigInt?
+  hstotalasigandas       Float?
+  isdefault              Boolean?
+  modo                   Int?                     @default(0)
+  flowdocument           flowdocument?            @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruc_flowdoc_fk")
+  statuses               statuses?                @relation(fields: [statusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruc_status_fk")
+  instructivoactividades instructivoactividades[]
+  instructivoarticulos   instructivoarticulos[]
+  instructivoexec        instructivoexec[]
+  instructivopuestos     instructivopuestos[]
+  instructivotareas      instructivotareas[]
+}
+
+model instructivoactividades {
+  id            BigInt       @id(map: "instructivoactivpk") @default(autoincrement())
+  instructivoid BigInt?
+  actividadid   BigInt?
+  statuses      statuses?    @relation(fields: [actividadid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruc_activ_fk")
+  instructivo   instructivo? @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instrucact_instruc_fk")
+}
+
+model instructivoarticulos {
+  id                   BigInt       @id(map: "instructivoartpk") @default(autoincrement())
+  instructivoid        BigInt?
+  articuloid           BigInt?
+  repeticionunidadid   BigInt?
+  repeticionfrecuencia Decimal?     @db.Decimal(14, 4)
+  categorias           categorias?  @relation(fields: [repeticionunidadid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoarticulos_categ4")
+  articulos            articulos?   @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruart_articulos_fk")
+  instructivo          instructivo? @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruart_instruct_fk")
+}
+
+model instructivoexec {
+  id                                                                  BigInt          @id(map: "instructivoexecpk") @default(autoincrement())
+  instructivoid                                                       BigInt?
+  registrocuerpoid                                                    BigInt?
+  registrocuerpostatusflowid                                          BigInt?
+  responsableid                                                       BigInt?
+  responsablesuperv                                                   BigInt?
+  responsableaprob                                                    BigInt?
+  hstotalasignadas                                                    Decimal?        @db.Decimal(10, 2)
+  registrocabid                                                       BigInt?
+  registrocabstatusflowid                                             BigInt?
+  registrocuerpostatusid                                              BigInt?
+  isplaneado                                                          Boolean?        @default(false)
+  instructivo                                                         instructivo?    @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_instructivos")
+  perfiles_instructivoexec_responsableidToperfiles                    perfiles?       @relation("instructivoexec_responsableidToperfiles", fields: [responsableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_perfiles1")
+  perfiles_instructivoexec_responsableaprobToperfiles                 perfiles?       @relation("instructivoexec_responsableaprobToperfiles", fields: [responsableaprob], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_perfiles2")
+  perfiles_instructivoexec_responsablesupervToperfiles                perfiles?       @relation("instructivoexec_responsablesupervToperfiles", fields: [responsablesuperv], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_perfiles3")
+  registrocab                                                         registrocab?    @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_registrocabid")
+  registrocuerpo                                                      registrocuerpo? @relation(fields: [registrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_registrocuerpo")
+  statusflows_instructivoexec_registrocuerpostatusflowidTostatusflows statusflows?    @relation("instructivoexec_registrocuerpostatusflowidTostatusflows", fields: [registrocuerpostatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_statusflow1")
+  statusflows_instructivoexec_registrocabstatusflowidTostatusflows    statusflows?    @relation("instructivoexec_registrocabstatusflowidTostatusflows", fields: [registrocabstatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_statusflow2")
+  tareasexec                                                          tareasexec[]
+}
+
+model instructivopuestos {
+  id            BigInt       @id(map: "instructivopuestos_pk") @default(autoincrement())
+  instructivoid BigInt?
+  puestoid      BigInt?
+  rolename      String?      @default("plan") @db.VarChar(20)
+  categorias    categorias?  @relation(fields: [puestoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivopuestos_categorias")
+  instructivo   instructivo? @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivopuestos_instructivos")
+}
+
+model instructivotareas {
+  id                    BigInt                  @id(map: "instructivotareapk") @default(autoincrement())
+  instructivoid         BigInt?
+  flowdocumentid        BigInt?
+  tipotarea             BigInt?
+  statusid              BigInt?
+  orden                 Int?
+  tiempooptimista       Float?
+  tiempoprobable        Float?
+  tiempopesimista       Float?
+  personasnecesarias    Float?
+  categorias            categorias?             @relation(fields: [tipotarea], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "insttareas_categ1_fk")
+  flowdocument          flowdocument?           @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "insttareas_flowdoc_fk")
+  instructivo           instructivo?            @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "insttareas_instruc_fk")
+  statuses              statuses?               @relation(fields: [statusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "insttareas_status_fk")
+  instructivotareasresp instructivotareasresp[]
+  tareasexec            tareasexec[]
+}
+
+model instructivotareasresp {
+  id                  BigInt             @id(map: "pkinstructivotareasresp") @default(autoincrement())
+  instructivotareasid BigInt?
+  categoriasid        BigInt?
+  categorias          categorias?        @relation(fields: [categoriasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivotareasresp_categorias")
+  instructivotareas   instructivotareas? @relation(fields: [instructivotareasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivotareasresp_insttareas")
+}
+
+model logs9000 {
+  id                                                BigInt       @id(map: "logs9000pk") @default(autoincrement())
+  registrocabid                                     BigInt?
+  registrocuerpoid                                  BigInt?
+  userid                                            BigInt
+  oldflowstatusid                                   BigInt?
+  newflowstatusid                                   BigInt
+  fecha                                             DateTime?    @db.Timestamp(6)
+  extradata                                         Json?
+  xlatitud                                          Decimal?     @db.Decimal(14, 8)
+  xlongitud                                         Decimal?     @db.Decimal(14, 8)
+  statusflows_logs9000_newflowstatusidTostatusflows statusflows  @relation("logs9000_newflowstatusidTostatusflows", fields: [newflowstatusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "logs9000_statusflows_newstatus_fk")
+  statusflows_logs9000_oldflowstatusidTostatusflows statusflows? @relation("logs9000_oldflowstatusidTostatusflows", fields: [oldflowstatusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "logs9000_statusflows_oldstatus_fk")
+  usuarios                                          usuarios     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuarios_logs9000_fk")
+}
+
+model logs9000tareas {
+  id           BigInt      @id(map: "logs9000tareas_pk") @default(autoincrement())
+  tareasexecid BigInt?
+  oldstatus    Int?
+  newstatus    Int?
+  fecha        DateTime?   @db.Timestamp(6)
+  xlatitud     Decimal?    @db.Decimal(14, 8)
+  xlongitud    Decimal?    @db.Decimal(14, 8)
+  tareasexec   tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_logs9000tareas_tareasexec")
+}
+
+model notifyregistrocab {
+  id                                                             BigInt       @id(map: "notifyregistrocabpk") @default(autoincrement())
+  registrocabid                                                  BigInt?
+  origenstatusflowid                                             BigInt?
+  destinostatusflowid                                            BigInt?
+  mensaje                                                        String?      @db.VarChar(500)
+  fechacreacion                                                  DateTime?    @db.Timestamp(6)
+  fechalectura                                                   DateTime?    @db.Timestamp(6)
+  registrocab                                                    registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_notifyregistrocab_registrocab")
+  statusflows_notifyregistrocab_destinostatusflowidTostatusflows statusflows? @relation("notifyregistrocab_destinostatusflowidTostatusflows", fields: [destinostatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_notifyregistrocab_statusflowdest")
+  statusflows_notifyregistrocab_origenstatusflowidTostatusflows  statusflows? @relation("notifyregistrocab_origenstatusflowidTostatusflows", fields: [origenstatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_notifyregistrocab_statusfloworigen")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ordencab {
+  id                BigInt              @id(map: "ordencabpk") @default(autoincrement())
+  title             String?             @db.VarChar(100)
+  presupcuerpoid    BigInt
+  fecha             DateTime?           @db.Timestamp(6)
+  ordencateg        BigInt?
+  categorias        categorias?         @relation(fields: [ordencateg], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_ordencab_fk")
+  ordencuerpo       ordencuerpo[]
+  ordenpresupcuerpo ordenpresupcuerpo[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ordencuerpo {
+  id              BigInt    @id(map: "ordencuerpopk") @default(autoincrement())
+  ordencabid      BigInt
+  ownerid         String?   @db.VarChar
+  statusid        BigInt
+  articuloid      BigInt
+  cantidad        String?   @db.VarChar
+  preciounit      Float?
+  preciototal     Float?
+  percentcomplete Int?
+  detalles        String?   @db.VarChar(2000)
+  articulos       articulos @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articulos_ordencuerpo_fk")
+  ordencab        ordencab  @relation(fields: [ordencabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ordencab_ordencuerpo_fk")
+  statuses        statuses  @relation(fields: [statusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "statuses_ordencuerpo_fk")
+}
+
+model ordenpresupcuerpo {
+  id             BigInt         @id(map: "ordenpresupcuerpopk") @default(autoincrement())
+  presupcuerpoid BigInt
+  ordencabid     BigInt
+  ordencab       ordencab       @relation(fields: [ordencabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ordencab_ordenpresupcuerpo_fk")
+  registrocuerpo registrocuerpo @relation(fields: [presupcuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "presupcuerpo_ordenpresupcuerpo_fk")
+}
+
+model perfilcompetencias {
+  id                 BigInt            @id(map: "perfilcompetenciaspk") @default(autoincrement())
+  perfilid           BigInt?
+  competenciaid      BigInt?
+  notas              String?
+  competencianivelid Int?
+  competencias       competencias?     @relation(fields: [competenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilcompetencias_competencias")
+  perfiles           perfiles?         @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilcompetencias_perfiles")
+  competencianivel   competencianivel? @relation(fields: [competencianivelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilcompetenciascompetencianivelid_competencianivel")
+}
+
+model perfildocuments {
+  id          BigInt     @id(map: "perfildocumentspk") @default(autoincrement())
+  perfilid    BigInt?
+  documentsid BigInt?
+  documents   documents? @relation(fields: [documentsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfildocuments_documents")
+  perfiles    perfiles?  @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfildocuments_perfil")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model perfiles {
+  id                                                          BigInt               @id(map: "perfilespk") @default(autoincrement())
+  identificador                                               String?              @db.VarChar(50)
+  nombre                                                      String?              @db.VarChar(50)
+  apellido                                                    String?              @db.VarChar(50)
+  razonsocial                                                 String?              @db.VarChar(100)
+  notas                                                       String?              @db.VarChar(2000)
+  activo                                                      Boolean?
+  tipo                                                        BigInt?
+  despeciales                                                 Json?                @db.Json
+  documento                                                   String?              @db.VarChar(20)
+  tipodocumento                                               BigInt?
+  externalid                                                  String?              @db.VarChar
+  tipoprecioid                                                BigInt?
+  porcentajedesc                                              Decimal?             @default(0) @db.Decimal(5, 2)
+  zonaid                                                      BigInt?
+  xlatitud                                                    Decimal?             @db.Decimal(14, 8)
+  xlongitud                                                   Decimal?             @db.Decimal(14, 8)
+  categoriasperfiles                                          categoriasperfiles[]
+  contactos                                                   contactos[]
+  depositos                                                   depositos[]
+  documents                                                   documents[]
+  empleados                                                   empleados[]
+  impositivos                                                 impositivos?
+  instructivoexec_instructivoexec_responsableidToperfiles     instructivoexec[]    @relation("instructivoexec_responsableidToperfiles")
+  instructivoexec_instructivoexec_responsableaprobToperfiles  instructivoexec[]    @relation("instructivoexec_responsableaprobToperfiles")
+  instructivoexec_instructivoexec_responsablesupervToperfiles instructivoexec[]    @relation("instructivoexec_responsablesupervToperfiles")
+  perfilcompetencias                                          perfilcompetencias[]
+  perfildocuments                                             perfildocuments[]
+  categorias                                                  categorias?          @relation(fields: [tipoprecioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfil_categorias3")
+  perfilesarticulos                                           perfilesarticulos[]
+  perfilesdepositos                                           perfilesdepositos[]
+  perfilesrel_perfilesrel_perfilidToperfiles                  perfilesrel[]        @relation("perfilesrel_perfilidToperfiles")
+  perfilesrel_perfilesrel_perfilidrelToperfiles               perfilesrel[]        @relation("perfilesrel_perfilidrelToperfiles")
+  registrocab_registrocab_auditoridToperfiles                 registrocab[]        @relation("registrocab_auditoridToperfiles")
+  registrocab_registrocab_ejecutoridToperfiles                registrocab[]        @relation("registrocab_ejecutoridToperfiles")
+  registrocab_registrocab_clientidToperfiles                  registrocab[]        @relation("registrocab_clientidToperfiles")
+  registrocab_registrocab_vendedoridToperfiles                registrocab[]        @relation("registrocab_vendedoridToperfiles")
+  registrocab_registrocab_responsableactactualidToperfiles    registrocab[]        @relation("registrocab_responsableactactualidToperfiles")
+  registrocuerpo                                              registrocuerpo[]
+  tareaexecperfil                                             tareaexecperfil[]
+  tareasexecpersonas                                          tareasexecpersonas[]
+  usuarios                                                    usuarios[]
+  wallet                                                      wallet[]
+}
+
+model perfilesarticulos {
+  id         BigInt      @id(map: "perfilesarticulos_pk") @default(autoincrement())
+  perfilid   BigInt?
+  articuloid BigInt?
+  tiporelid  BigInt?
+  articulos  articulos?  @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesarticulos_articulos")
+  categorias categorias? @relation(fields: [tiporelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesarticulos_categorias")
+  perfiles   perfiles?   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesarticulos_perfiles")
+}
+
+model perfilesdepositos {
+  id         BigInt     @id(map: "perfilesdepositospk") @default(autoincrement())
+  depositoid BigInt?
+  perfilid   BigInt?
+  depositos  depositos? @relation(fields: [depositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkperfilesdepositos_deposito")
+  perfiles   perfiles?  @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkperfilesdepositos_perfil")
+}
+
+model perfilesprecios {
+  id                                                  BigInt      @id(map: "perfilesprecios_fk") @default(autoincrement())
+  perfilid                                            BigInt
+  tipoperfilid                                        BigInt?
+  tipoprecioid                                        BigInt?
+  porcentajedesc                                      Decimal?    @db.Decimal(5, 2)
+  categorias_perfilesprecios_tipoperfilidTocategorias categorias? @relation("perfilesprecios_tipoperfilidTocategorias", fields: [tipoperfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesprecios_categorias1")
+  categorias_perfilesprecios_tipoprecioidTocategorias categorias? @relation("perfilesprecios_tipoprecioidTocategorias", fields: [tipoprecioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesprecios_categorias2")
+
+  @@unique([perfilid, tipoperfilid, tipoprecioid])
+}
+
+model perfilesrel {
+  id                                         BigInt      @id(map: "perfilesrelpk") @default(autoincrement())
+  perfilid                                   BigInt?
+  perfilidrel                                BigInt?
+  tiporelid                                  BigInt?
+  perfiles_perfilesrel_perfilidToperfiles    perfiles?   @relation("perfilesrel_perfilidToperfiles", fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesrel_perfiles1")
+  perfiles_perfilesrel_perfilidrelToperfiles perfiles?   @relation("perfilesrel_perfilidrelToperfiles", fields: [perfilidrel], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesrel_perfiles2")
+  categorias                                 categorias? @relation(fields: [tiporelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesrelcateg1")
+}
+
+model puestodescrip {
+  id                  BigInt                @id(map: "puestodescrippk") @default(autoincrement())
+  areaid              BigInt?
+  puestoid            BigInt?
+  flowdocumentid      BigInt?
+  descrip             String?
+  horarios            String?               @db.VarChar(50)
+  personalacargo      String?               @db.VarChar(100)
+  tipopuesto          BigInt?
+  depositos           depositos?            @relation(fields: [areaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestodescrip_area")
+  categorias          categorias?           @relation(fields: [puestoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestodescrip_categorias1")
+  flowdocument        flowdocument?         @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestodescrip_flowdocument")
+  puestoscompetencias puestoscompetencias[]
+}
+
+model puestoscompetencias {
+  id                 BigInt            @id(map: "puestoscompetenciaspk") @default(autoincrement())
+  puestodescripid    BigInt?
+  competenciaid      BigInt?
+  notas              String?
+  competencianivelid Int?
+  competencianivel   competencianivel? @relation(fields: [competencianivelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestoscompetencias_competencianivelid")
+  competencias       competencias?     @relation(fields: [competenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestoscompetencias_competencias")
+  puestodescrip      puestodescrip?    @relation(fields: [puestodescripid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestoscompetencias_puestos")
+}
+
+model receptores {
+  id         BigInt    @id(map: "receptorespk") @default(autoincrement())
+  comunicaid BigInt?
+  statusesid BigInt?
+  comunica   comunica? @relation(fields: [comunicaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkrereceptorescomunica")
+  statuses   statuses? @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "receptores_statusesid_fk")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model registrocab {
+  id                                                                          BigInt                   @id(map: "presupcabpk") @default(autoincrement())
+  descrip                                                                     String?                  @db.VarChar(100)
+  fecha                                                                       DateTime?                @db.Date
+  fechacompromiso                                                             DateTime?                @db.Date
+  clientid                                                                    BigInt?
+  clientname                                                                  String?                  @db.VarChar(100)
+  vendedorid                                                                  BigInt?
+  notas                                                                       String?                  @db.VarChar(2000)
+  obsventas                                                                   String?                  @db.VarChar(2000)
+  obsadm                                                                      String?                  @db.VarChar(2000)
+  obsoo                                                                       String?                  @db.VarChar(2000)
+  envcontact                                                                  String?                  @db.VarChar(200)
+  envmail                                                                     String?                  @db.VarChar(200)
+  envtelef                                                                    String?                  @db.VarChar(20)
+  envdirec                                                                    String?                  @db.VarChar(200)
+  envlocalid                                                                  String?                  @db.VarChar(200)
+  envcp                                                                       String?                  @db.VarChar(10)
+  calidadfinal                                                                BigInt?
+  statusid                                                                    BigInt?
+  referenciatexto                                                             String?                  @db.VarChar(100)
+  envprov                                                                     BigInt?
+  envpais                                                                     BigInt?
+  flowid                                                                      BigInt?
+  responsableactactualid                                                      BigInt?
+  statusflowid                                                                BigInt?
+  currentuser                                                                 BigInt?
+  parteinteresadatipoid                                                       BigInt?
+  puestotrabajoid                                                             BigInt?
+  procesoid                                                                   BigInt?
+  totalprecio                                                                 Decimal?                 @db.Decimal(16, 4)
+  totalimpuestos                                                              Decimal?                 @db.Decimal(16, 4)
+  cuentacontableid                                                            BigInt?
+  obsactuar                                                                   String?                  @db.VarChar(2000)
+  obsprod                                                                     String?                  @db.VarChar(2000)
+  externalid                                                                  String?                  @unique(map: "registrocab_uni_externalid") @db.VarChar(50)
+  obsinicio                                                                   String?                  @db.VarChar(2000)
+  obsverificar                                                                String?                  @db.VarChar(2000)
+  auditorid                                                                   BigInt?
+  ejecutorid                                                                  BigInt?
+  opciondesplegableid                                                         BigInt?
+  opciondesplegabletexto                                                      String?                  @db.VarChar(100)
+  contactosid                                                                 BigInt?
+  creationdate                                                                DateTime?                @default(now()) @db.Timestamp(6)
+  xlatitud                                                                    Decimal?                 @db.Decimal(14, 8)
+  xlongitud                                                                   Decimal?                 @db.Decimal(14, 8)
+  condventaid                                                                 BigInt?
+  depositoarticuloid                                                          BigInt?
+  articulocantidad                                                            Float?                   @default(0)
+  listaprecioid                                                               BigInt?
+  varcn0                                                                      Float?                   @default(0)
+  varcn1                                                                      Float?                   @default(0)
+  varcn2                                                                      Float?                   @default(0)
+  varcn3                                                                      Float?
+  fechavencimiento                                                            DateTime?                @db.Date
+  macroprocesoid                                                              BigInt?
+  afipcomprobantes                                                            afipcomprobantes[]
+  articuloamedidacartera_articuloamedidacartera_inregistrocabidToregistrocab  articuloamedidacartera[] @relation("articuloamedidacartera_inregistrocabidToregistrocab")
+  articuloamedidacartera_articuloamedidacartera_outregistrocabidToregistrocab articuloamedidacartera[] @relation("articuloamedidacartera_outregistrocabidToregistrocab")
+  instructivoexec                                                             instructivoexec[]
+  notifyregistrocab                                                           notifyregistrocab[]
+  categorias_registrocab_calidadfinalTocategorias                             categorias?              @relation("registrocab_calidadfinalTocategorias", fields: [calidadfinal], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_calidad_final")
+  usuarios                                                                    usuarios?                @relation(fields: [currentuser], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_current_user_cab")
+  categorias_registrocab_opciondesplegableidTocategorias                      categorias?              @relation("registrocab_opciondesplegableidTocategorias", fields: [opciondesplegableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcab_categ_opciondespleg")
+  contactos                                                                   contactos?               @relation(fields: [contactosid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcab_contactos")
+  depositosarticulos                                                          depositosarticulos?      @relation(fields: [depositoarticuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcab_depositoarticulo")
+  categorias_registrocab_parteinteresadatipoidTocategorias                    categorias?              @relation("registrocab_parteinteresadatipoidTocategorias", fields: [parteinteresadatipoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcab_parteinttipo_1")
+  perfiles_registrocab_auditoridToperfiles                                    perfiles?                @relation("registrocab_auditoridToperfiles", fields: [auditorid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcab_perfil_auditor")
+  perfiles_registrocab_ejecutoridToperfiles                                   perfiles?                @relation("registrocab_ejecutoridToperfiles", fields: [ejecutorid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcab_perfil_ejecutor")
+  categorias_registrocab_cuentacontableidTocategorias                         categorias?              @relation("registrocab_cuentacontableidTocategorias", fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocab_categcuentacontable")
+  categorias_registrocab_condventaidTocategorias                              categorias?              @relation("registrocab_condventaidTocategorias", fields: [condventaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocab_categs_condventas")
+  categorias_registrocab_listaprecioidTocategorias                            categorias?              @relation("registrocab_listaprecioidTocategorias", fields: [listaprecioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocab_listasprecios")
+  categorias_registrocab_procesoidTocategorias                                categorias?              @relation("registrocab_procesoidTocategorias", fields: [procesoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabcategorias1")
+  categorias_registrocab_macroprocesoidTocategorias                           categorias?              @relation("registrocab_macroprocesoidTocategorias", fields: [macroprocesoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabcategorias2")
+  perfiles_registrocab_clientidToperfiles                                     perfiles?                @relation("registrocab_clientidToperfiles", fields: [clientid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_presupcab_clientid_fk")
+  perfiles_registrocab_vendedoridToperfiles                                   perfiles?                @relation("registrocab_vendedoridToperfiles", fields: [vendedorid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_presupcab_vendedorfk")
+  categorias_registrocab_flowidTocategorias                                   categorias?              @relation("registrocab_flowidTocategorias", fields: [flowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "presup_cab_flowid_fk")
+  categorias_registrocab_envpaisTocategorias                                  categorias?              @relation("registrocab_envpaisTocategorias", fields: [envpais], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "presup_cab_pais_fk")
+  categorias_registrocab_envprovTocategorias                                  categorias?              @relation("registrocab_envprovTocategorias", fields: [envprov], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "presup_cab_pcia_fk")
+  perfiles_registrocab_responsableactactualidToperfiles                       perfiles?                @relation("registrocab_responsableactactualidToperfiles", fields: [responsableactactualid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "responsable_act_actual_id_fk")
+  statusflows                                                                 statusflows?             @relation(fields: [statusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "statusflow_registrocab_fk")
+  registrocabaudio                                                            registrocabaudio[]
+  registrocabdocuments                                                        registrocabdocuments[]
+  registrocabgrupo                                                            registrocabgrupo[]
+  registrocabrel_registrocabrel_registrocabidToregistrocab                    registrocabrel[]         @relation("registrocabrel_registrocabidToregistrocab")
+  registrocabrel_registrocabrel_relatedregistrocabidToregistrocab             registrocabrel[]         @relation("registrocabrel_relatedregistrocabidToregistrocab")
+  registrocabseq                                                              registrocabseq[]
+  registrocuerpo                                                              registrocuerpo[]
+  stocklog                                                                    stocklog[]
+
+  @@index([calidadfinal], map: "fki_fk_calidad_final")
+  @@index([currentuser], map: "fki_fk_current_user_cab")
+}
+
+model registrocabaudio {
+  id            BigInt       @id @default(autoincrement())
+  registrocabid BigInt?
+  audiosrcb64   String
+  userid        BigInt?
+  registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabaudio_registrocab")
+}
+
+model registrocabdocuments {
+  id            BigInt       @id(map: "registrocabdocumentspk") @default(autoincrement())
+  registrocabid BigInt?
+  documentsid   BigInt?
+  documents     documents?   @relation(fields: [documentsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabdocuments_documents")
+  registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabdocuments_registrocab")
+}
+
+model registrocabgrupo {
+  id            BigInt       @id(map: "registrocabgrupopk") @default(autoincrement())
+  grupoid       BigInt?
+  registrocabid BigInt?
+  orden         Int?
+  grupos        grupos?      @relation(fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcabgrupos_grupos")
+  registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcabgrupos_registrocab")
+}
+
+model registrocabrel {
+  id                                                           BigInt      @default(autoincrement())
+  registrocabid                                                BigInt
+  relatedregistrocabid                                         BigInt
+  tiporel                                                      Int
+  orden                                                        Int?
+  registrocab_registrocabrel_registrocabidToregistrocab        registrocab @relation("registrocabrel_registrocabidToregistrocab", fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "registrocabrel_regcab_fk")
+  registrocab_registrocabrel_relatedregistrocabidToregistrocab registrocab @relation("registrocabrel_relatedregistrocabidToregistrocab", fields: [relatedregistrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "registrocabrel_regcabrel_fk")
+
+  @@unique([registrocabid, relatedregistrocabid, tiporel])
+}
+
+model registrocabseq {
+  id            BigInt       @id(map: "pk_registorcabseq") @default(autoincrement())
+  registrocabid BigInt?
+  secuenciaid   BigInt?
+  valor         BigInt?
+  registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registro_cab")
+  secuencias    secuencias?  @relation(fields: [secuenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_seq")
+
+  @@unique([registrocabid, secuenciaid], map: "unique_secuencia_x_cab")
+  @@unique([secuenciaid, valor], map: "unique_secuencia_x_valor")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model registrocuerpo {
+  id                                                                                BigInt                   @id(map: "presupcuerpopk") @default(autoincrement())
+  presupcabid                                                                       BigInt
+  articulodepositoid                                                                BigInt
+  cuerpostatusid                                                                    BigInt
+  cantidad                                                                          Float?
+  preciounit                                                                        Float?
+  preciototal                                                                       Float?
+  porcentajuste                                                                     Float?
+  cuerponotas                                                                       String?                  @db.VarChar(2000)
+  articulospecresult                                                                String?
+  varn0                                                                             Float?
+  varn1                                                                             Float?
+  varn2                                                                             Float?
+  varn3                                                                             Float?
+  varn4                                                                             Float?
+  varn5                                                                             Float?
+  varn6                                                                             Float?
+  varn7                                                                             Float?
+  varn8                                                                             Float?
+  varn9                                                                             Float?
+  vart0                                                                             String?                  @db.VarChar
+  vart1                                                                             String?                  @db.VarChar
+  vart2                                                                             String?                  @db.VarChar
+  vart3                                                                             String?                  @db.VarChar
+  vart4                                                                             String?                  @db.VarChar
+  vart5                                                                             String?                  @db.VarChar
+  vart6                                                                             String?                  @db.VarChar
+  vart7                                                                             String?                  @db.VarChar
+  vart8                                                                             String?                  @db.VarChar
+  vart9                                                                             String?                  @db.VarChar
+  responsableactactualid                                                            BigInt?
+  cuerpostatusflowid                                                                BigInt?
+  deposito                                                                          String?                  @db.VarChar
+  cuerpocurrentuser                                                                 BigInt?
+  varf0                                                                             DateTime?                @db.Date
+  varf1                                                                             DateTime?                @db.Date
+  varf2                                                                             DateTime?                @db.Date
+  varf3                                                                             DateTime?                @db.Date
+  varf4                                                                             DateTime?                @db.Date
+  varb0                                                                             Boolean?
+  varb1                                                                             Boolean?
+  impuestoalic                                                                      Decimal?                 @db.Decimal(6, 3)
+  preciototalimpu                                                                   Decimal?                 @db.Decimal(16, 4)
+  depositodestinoid                                                                 BigInt?
+  creationdate                                                                      DateTime?                @default(now()) @db.Timestamp(6)
+  xlatitud                                                                          Decimal?                 @db.Decimal(14, 8)
+  xlongitud                                                                         Decimal?                 @db.Decimal(14, 8)
+  medidasalto                                                                       Decimal?                 @default(1) @db.Decimal(12, 4)
+  medidaslargo                                                                      Decimal?                 @default(1) @db.Decimal(12, 4)
+  medidasancho                                                                      Decimal?                 @default(1) @db.Decimal(12, 4)
+  varb2                                                                             Boolean?
+  varb3                                                                             Boolean?
+  varb4                                                                             Boolean?
+  articulodepositodestinoid                                                         BigInt?
+  articuloamedidacartera_articuloamedidacartera_outregistrocuerpoidToregistrocuerpo articuloamedidacartera[] @relation("articuloamedidacartera_outregistrocuerpoidToregistrocuerpo")
+  articuloamedidacartera_articuloamedidacartera_inregistrocuerpoidToregistrocuerpo  articuloamedidacartera[] @relation("articuloamedidacartera_inregistrocuerpoidToregistrocuerpo")
+  cartera_cartera_inregistrocuerpoidToregistrocuerpo                                cartera[]                @relation("cartera_inregistrocuerpoidToregistrocuerpo")
+  cartera_cartera_outregistrocuerpoidToregistrocuerpo                               cartera[]                @relation("cartera_outregistrocuerpoidToregistrocuerpo")
+  instructivoexec                                                                   instructivoexec[]
+  ordenpresupcuerpo                                                                 ordenpresupcuerpo[]
+  depositosarticulos                                                                depositosarticulos       @relation(fields: [articulodepositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "depositosarticulos_presupcuerpo_fk")
+  usuarios                                                                          usuarios?                @relation(fields: [cuerpocurrentuser], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_current_user_cuerpo")
+  registrocab                                                                       registrocab              @relation(fields: [presupcabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "presupcab_presupcuerpo_fk")
+  perfiles                                                                          perfiles?                @relation(fields: [responsableactactualid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "responsable_act_actual_id_fk")
+  statuses                                                                          statuses                 @relation(fields: [cuerpostatusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "statuses_presupcuerpo_fk")
+  statusflows                                                                       statusflows?             @relation(fields: [cuerpostatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "statusflow_registrocuerpo_fk")
+  stocklog                                                                          stocklog[]
+
+  @@index([cuerpocurrentuser], map: "idx_current_user_cuerpo")
+  @@index([presupcabid], map: "registrocuerpopresup")
+}
+
+model reportes {
+  id                                         BigInt              @id(map: "reportespk") @default(autoincrement())
+  descrip                                    String?             @db.VarChar(100)
+  uri                                        String?             @db.VarChar(300)
+  params                                     Json?               @db.Json
+  key                                        String?             @db.VarChar(50)
+  contextoid                                 BigInt?
+  orden                                      Int?                @default(0)
+  grupoid                                    BigInt?
+  categorias_reportes_grupoidTocategorias    categorias?         @relation("reportes_grupoidTocategorias", fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportes_categoria")
+  categorias_reportes_contextoidTocategorias categorias?         @relation("reportes_contextoidTocategorias", fields: [contextoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportes_categorias")
+  reportesacl                                reportesacl[]
+  reportesactividad                          reportesactividad[]
+}
+
+model reportesacl {
+  id              BigInt      @id(map: "reportesacl_pk") @default(autoincrement())
+  reporteid       BigInt?
+  puestotrabajoid BigInt?
+  categorias      categorias? @relation(fields: [puestotrabajoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reporteacl_categorias")
+  reportes        reportes?   @relation(fields: [reporteid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reporteacl_reporte")
+}
+
+model reportesactividad {
+  id         BigInt    @id(map: "reportesactividad_pk") @default(autoincrement())
+  reporteid  BigInt?
+  statusesid BigInt?
+  reportes   reportes? @relation(fields: [reporteid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportesactividad_reporte")
+  statuses   statuses? @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportesactividad_statuses")
+}
+
+model role {
+  id        Int         @id @default(autoincrement())
+  version   BigInt
+  authority String      @unique(map: "uk_irsamgnera6angm0prq1kemt2") @db.VarChar(255)
+  user_role user_role[]
+}
+
+model rowconfig {
+  id       Int     @id(map: "rowconfigpk") @default(autoincrement())
+  userid   BigInt?
+  tipo     String? @db.VarChar(200)
+  jsondata Json?   @db.Json
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model secuencias {
+  id                                          BigInt           @id(map: "secuenciaspk") @default(autoincrement())
+  descrip                                     String?          @db.VarChar(200)
+  currval                                     BigInt?
+  stepn                                       Int?
+  categoria                                   BigInt?
+  grupoid                                     BigInt?
+  codigoregistro                              String?          @db.VarChar(50)
+  codigolistregistro                          String?          @db.VarChar(200)
+  name                                        String?          @db.VarChar(100)
+  referencia                                  String?          @db.VarChar(100)
+  version                                     String?          @db.VarChar(50)
+  statusesid                                  BigInt?
+  comunica                                    comunica[]
+  registrocabseq                              registrocabseq[]
+  categorias_secuencias_categoriaTocategorias categorias?      @relation("secuencias_categoriaTocategorias", fields: [categoria], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categoria")
+  categorias_secuencias_grupoidTocategorias   categorias?      @relation("secuencias_grupoidTocategorias", fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_secuencias_categ_1")
+  statuses                                    statuses?        @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_secuencias_statuses")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model statuses {
+  id                                                            BigInt                   @id(map: "statusespk") @default(autoincrement())
+  descrip                                                       String?                  @db.VarChar
+  categid                                                       BigInt
+  valor                                                         Float?                   @default(0)
+  articulos                                                     articulos[]
+  comunica                                                      comunica[]
+  flowdocument                                                  flowdocument[]
+  instructivo                                                   instructivo[]
+  instructivoactividades                                        instructivoactividades[]
+  instructivotareas                                             instructivotareas[]
+  ordencuerpo                                                   ordencuerpo[]
+  receptores                                                    receptores[]
+  registrocuerpo                                                registrocuerpo[]
+  reportesactividad                                             reportesactividad[]
+  secuencias                                                    secuencias[]
+  categorias                                                    categorias               @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_statuses_fk")
+  statusesprecios                                               statusesprecios[]
+  statusesrelaciones_statusesrelaciones_statusesidTostatuses    statusesrelaciones[]     @relation("statusesrelaciones_statusesidTostatuses")
+  statusesrelaciones_statusesrelaciones_statusesrelidTostatuses statusesrelaciones[]     @relation("statusesrelaciones_statusesrelidTostatuses")
+}
+
+model statusesprecios {
+  id         BigInt     @id(map: "statusespreciosfk") @default(autoincrement())
+  statusesid BigInt
+  categid    BigInt
+  categorias categorias @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesprecios_categorias")
+  statuses   statuses   @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesprecios_statuses")
+
+  @@unique([statusesid, categid], map: "uni_statusesprecios")
+}
+
+model statusesrelaciones {
+  id                                                  BigInt    @id(map: "statusesrelaciones_pk") @default(autoincrement())
+  statusesid                                          BigInt?
+  statusesrelid                                       BigInt?
+  tiporelid                                           BigInt?   @default(100)
+  statuses_statusesrelaciones_statusesidTostatuses    statuses? @relation("statusesrelaciones_statusesidTostatuses", fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesrelaciones_statuses1")
+  statuses_statusesrelaciones_statusesrelidTostatuses statuses? @relation("statusesrelaciones_statusesrelidTostatuses", fields: [statusesrelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesrelaciones_statuses2")
+}
+
+model statusesrelacionesflows {
+  id         BigInt      @id(map: "statusesrelacionesflowsfk") @default(autoincrement())
+  statusesid BigInt
+  flowid     BigInt?
+  categorias categorias? @relation(fields: [flowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesrelacionesflows_categorias")
+
+  @@unique([statusesid, flowid])
+}
+
+model statusflows {
+  id                                                                      BigInt              @id(map: "statusflowspk") @default(autoincrement())
+  statusid                                                                BigInt?
+  sigstatusid                                                             BigInt?
+  categid                                                                 BigInt?
+  sigmacroprocesoid                                                       BigInt?
+  tipo                                                                    Int                 @default(0)
+  posx                                                                    Int?                @default(0)
+  posy                                                                    Int?                @default(0)
+  conndescrip                                                             String?             @db.VarChar(100)
+  flowespecializ_flowespecializ_statusflowidTostatusflows                 flowespecializ[]    @relation("flowespecializ_statusflowidTostatusflows")
+  flowespecializ_flowespecializ_statusflowdestinoidTostatusflows          flowespecializ[]    @relation("flowespecializ_statusflowdestinoidTostatusflows")
+  flowpreguntas                                                           flowpreguntas[]
+  instructivoexec_instructivoexec_registrocuerpostatusflowidTostatusflows instructivoexec[]   @relation("instructivoexec_registrocuerpostatusflowidTostatusflows")
+  instructivoexec_instructivoexec_registrocabstatusflowidTostatusflows    instructivoexec[]   @relation("instructivoexec_registrocabstatusflowidTostatusflows")
+  logs9000_logs9000_newflowstatusidTostatusflows                          logs9000[]          @relation("logs9000_newflowstatusidTostatusflows")
+  logs9000_logs9000_oldflowstatusidTostatusflows                          logs9000[]          @relation("logs9000_oldflowstatusidTostatusflows")
+  notifyregistrocab_notifyregistrocab_destinostatusflowidTostatusflows    notifyregistrocab[] @relation("notifyregistrocab_destinostatusflowidTostatusflows")
+  notifyregistrocab_notifyregistrocab_origenstatusflowidTostatusflows     notifyregistrocab[] @relation("notifyregistrocab_origenstatusflowidTostatusflows")
+  registrocab                                                             registrocab[]
+  registrocuerpo                                                          registrocuerpo[]
+  categorias                                                              categorias?         @relation(fields: [sigmacroprocesoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_mp")
+  stocklog                                                                stocklog[]
+}
+
+model stocklog {
+  id                   BigInt              @id(map: "stocklogpk") @default(autoincrement())
+  registrocabid        BigInt?
+  registrocuerpoid     BigInt?
+  depositosarticulosid BigInt?
+  statusflowsid        BigInt?
+  cuentacontableid     BigInt?
+  fechaimpacto         DateTime?           @default(now()) @db.Timestamp(6)
+  cantidad             Float?
+  tipoimpacto          Int?
+  saldoresultante      Float?
+  categorias           categorias?         @relation(fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_categ")
+  depositosarticulos   depositosarticulos? @relation(fields: [depositosarticulosid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_depositosarticulos")
+  registrocab          registrocab?        @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_registrocab")
+  registrocuerpo       registrocuerpo?     @relation(fields: [registrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_registrocuerpo")
+  statusflows          statusflows?        @relation(fields: [statusflowsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_statusflows")
+}
+
+model tareaarticulos {
+  id         BigInt     @id(map: "tareaarticulospk") @default(autoincrement())
+  tareaid    BigInt?
+  articuloid BigInt?
+  articulos  articulos? @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tareaarticulos_articulos_fk")
+}
+
+model tareaexecperfil {
+  id          BigInt    @id(map: "tareaexecperfilpk") @default(autoincrement())
+  tareaexecid BigInt?
+  perfilid    BigInt?
+  perfiles    perfiles? @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tareaexecperfil_perfil_fk")
+}
+
+model tareasexec {
+  id                  BigInt                @id(map: "tareasexecpk") @default(autoincrement())
+  instructivoexecid   BigInt?
+  instructivotareaid  BigInt?
+  status              Int?
+  fechaestimadainicio DateTime?             @db.Timestamp(6)
+  fechaestimadafin    DateTime?             @db.Timestamp(6)
+  fechainic           DateTime?             @db.Timestamp(6)
+  fechafin            DateTime?             @db.Timestamp(6)
+  hsexec              Decimal?              @db.Decimal(10, 2)
+  descripcion         String?               @db.VarChar(200)
+  costo               Decimal?              @db.Decimal(10, 2)
+  esfuerzo            Decimal?              @db.Decimal(10, 2)
+  porcentajeavance    Decimal?              @db.Decimal(5, 2)
+  comentarioavance    String?               @db.VarChar(500)
+  decisiontomada      String?               @db.VarChar(500)
+  orden               Int?
+  xlatitud            Decimal?              @db.Decimal(14, 8)
+  xlongitud           Decimal?              @db.Decimal(14, 8)
+  enpausa             Boolean?              @default(false)
+  criticidad          Boolean?              @default(false)
+  isagregada          Boolean?              @default(false)
+  extrainfo           String?               @db.VarChar
+  logs9000tareas      logs9000tareas[]
+  instructivoexec     instructivoexec?      @relation(fields: [instructivoexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexec_instructivoexec")
+  instructivotareas   instructivotareas?    @relation(fields: [instructivotareaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexec_instructivotareas")
+  tareasexecarticulos tareasexecarticulos[]
+  tareasexecdocuments tareasexecdocuments[]
+  tareasexecpersonas  tareasexecpersonas[]
+  tareasexectiempos   tareasexectiempos[]
+}
+
+model tareasexecarticulos {
+  id                 BigInt              @id(map: "tareasexecarticulospk") @default(autoincrement())
+  tareasexecid       BigInt?
+  depositoarticuloid BigInt?
+  cantidad           Decimal?            @db.Decimal(10, 4)
+  depositosarticulos depositosarticulos? @relation(fields: [depositoarticuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecarticulos_depositoarticulo")
+  tareasexec         tareasexec?         @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecarticulos_tareaexec")
+}
+
+model tareasexecdocuments {
+  id           BigInt      @id(map: "tareasexecdocumentspk") @default(autoincrement())
+  tareasexecid BigInt?
+  documentsid  BigInt?
+  documents    documents?  @relation(fields: [documentsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecdocuments_documents")
+  tareasexec   tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecdocuments_tareasexec")
+}
+
+model tareasexecpersonas {
+  id           BigInt      @id(map: "tareasexecpersonaspk") @default(autoincrement())
+  tareasexecid BigInt?
+  perfilid     BigInt?
+  perfiles     perfiles?   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecpersonas_perfiles")
+  tareasexec   tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecpersonas_tareaexec")
+}
+
+model tareasexectiempos {
+  id            BigInt      @id(map: "tareasexectiempos_pk") @default(autoincrement())
+  tareasexecid  BigInt?
+  fecha         DateTime?   @db.Timestamp(6)
+  statusid      Int?
+  initintervalo Int?
+  enpausa       Boolean?    @default(false)
+  tareasexec    tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexectiempos_tareasexec")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tipoarticulos {
+  id         Int         @default(autoincrement())
+  categid    BigInt?
+  articuloid BigInt?
+  articulos  articulos?  @relation(fields: [articuloid], references: [id], onDelete: Restrict, map: "tipoarticulos_fk")
+  categorias categorias? @relation(fields: [categid], references: [id], onDelete: Restrict, map: "tipoarticulos_fk_1")
+
+  @@unique([articuloid, categid], map: "tipoarticulos_uni1")
+  @@ignore
+}
+
+model user_role {
+  user_id  BigInt
+  role_id  Int
+  role     role     @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fka68196081fvovjhkek5m97n3y")
+  usuarios usuarios @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkj345gk1bovqvfame88rcx7yyx")
+
+  @@id([user_id, role_id])
+}
+
+model usuarios {
+  id               BigInt           @id(map: "usuariospk") @default(autoincrement())
+  perfilid         BigInt?
+  username         String?          @db.VarChar(200)
+  version          BigInt           @default(0)
+  password_expired Boolean          @default(false)
+  account_locked   Boolean          @default(false)
+  password         String           @db.VarChar(255)
+  account_expired  Boolean          @default(false)
+  enabled          Boolean          @default(true)
+  email            String?          @db.VarChar(255)
+  logs9000         logs9000[]
+  registrocab      registrocab[]
+  registrocuerpo   registrocuerpo[]
+  user_role        user_role[]
+  perfiles         perfiles?        @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_usuarios_fk")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model wallet {
+  id         BigInt      @id(map: "walletpk") @default(autoincrement())
+  perfilid   BigInt
+  tipocta    BigInt?
+  numero     String?     @db.VarChar(50)
+  entidad    String?     @db.VarChar(50)
+  categorias categorias? @relation(fields: [tipocta], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_wallet_fk")
+  perfiles   perfiles    @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_wallet_fk")
+}

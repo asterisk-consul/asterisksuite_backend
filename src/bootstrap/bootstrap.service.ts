@@ -20,7 +20,7 @@ export class BootstrapService implements OnApplicationBootstrap {
         try {
             this.logger.log('Creando SSH tunnel...');
             await this.sshService.createSSHTunnel(port);
-            this.logger.log('SSH tunnel listo');
+            this.logger.log('SSH tunnel creado');
         } catch (e) {
             this.logger.error('SSH tunnel fallido', e);
         }
