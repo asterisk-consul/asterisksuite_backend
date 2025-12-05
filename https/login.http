@@ -6,3 +6,14 @@ Content-Type: application/json
     "username": "Administrador",
     "password": "1234"
 }
+
+
+### login flowsma
+POST 
+https://api.flowsma.com/gm/api/login
+Content-Type: application/json
+
+{
+    "username": "Administrador",
+    "password": "1234"
+}

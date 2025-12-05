@@ -55,6 +55,8 @@ model afippuntosventas {
   usertoken           String?            @db.VarChar(100)
   afipcomprobantes    afipcomprobantes[]
   companyafip         companyafip?       @relation(fields: [companyafipid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afippuntosventas_companyafip")
+
+  @@schema("test9000")
 }
 
 model articuloamedidacartera {
@@ -73,6 +75,8 @@ model articuloamedidacartera {
   registrocab_articuloamedidacartera_inregistrocabidToregistrocab           registrocab?    @relation("articuloamedidacartera_inregistrocabidToregistrocab", fields: [inregistrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artmedcartera_registrocabin")
   registrocab_articuloamedidacartera_outregistrocabidToregistrocab          registrocab?    @relation("articuloamedidacartera_outregistrocabidToregistrocab", fields: [outregistrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artmedcartera_registrocabout")
   registrocuerpo_articuloamedidacartera_inregistrocuerpoidToregistrocuerpo  registrocuerpo? @relation("articuloamedidacartera_inregistrocuerpoidToregistrocuerpo", fields: [inregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_artmedcartera_registrocuerpoin")
+
+  @@schema("test9000")
 }
 
 model articuloespec {
@@ -86,6 +90,8 @@ model articuloespec {
   valoresposibles String?    @db.VarChar(200)
   isdescriptive   Boolean?   @default(false)
   articulos       articulos? @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articuloespec_articulo_fk")
+
+  @@schema("test9000")
 }
 
 model articuloprecio {
@@ -99,6 +105,7 @@ model articuloprecio {
   categorias       categorias? @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloprecio_categorias")
 
   @@unique([articuloid, categid], map: "articuloprecio_uni1")
+  @@schema("test9000")
 }
 
 model articulopreciohistorico {
@@ -110,6 +117,8 @@ model articulopreciohistorico {
   factorconversion Float?      @default(1)
   articulos        articulos?  @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulopreciohis_articulos")
   categorias       categorias? @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articulopreciohis_categorias")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -150,6 +159,8 @@ model articulos {
   perfilesarticulos                                 perfilesarticulos[]
   tareaarticulos                                    tareaarticulos[]
   tipoarticulos                                     tipoarticulos[]           @ignore
+
+  @@schema("test9000")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -164,6 +175,7 @@ model articuloscompuestos {
   categorias_articuloscompuestos_cuentacontableidTocategorias categorias? @relation("articuloscompuestos_cuentacontableidTocategorias", fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_cuentascontables")
 
   @@ignore
+  @@schema("test9000")
 }
 
 model cartera {
@@ -178,6 +190,8 @@ model cartera {
   importe                                                    Decimal         @db.Decimal(16, 4)
   registrocuerpo_cartera_inregistrocuerpoidToregistrocuerpo  registrocuerpo  @relation("cartera_inregistrocuerpoidToregistrocuerpo", fields: [inregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cartera_registrocuerpoin")
   registrocuerpo_cartera_outregistrocuerpoidToregistrocuerpo registrocuerpo? @relation("cartera_outregistrocuerpoidToregistrocuerpo", fields: [outregistrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cartera_registrocuerpoout")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -252,6 +266,8 @@ model categorias {
   stocklog                                                             stocklog[]
   tipoarticulos                                                        tipoarticulos[]                  @ignore
   wallet                                                               wallet[]
+
+  @@schema("test9000")
 }
 
 model categoriasperfiles {
@@ -260,6 +276,8 @@ model categoriasperfiles {
   categoriaid BigInt
   categorias  categorias @relation(fields: [categoriaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_categoriasperfiles_fk")
   perfiles    perfiles   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_categoriasperfiles_fk")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -271,6 +289,8 @@ model channels {
   handlerpackage String?  @db.VarChar(200)
   active         Boolean?
   imputtemplate  String?  @db.VarChar(2000)
+
+  @@schema("test9000")
 }
 
 model company {
@@ -284,6 +304,8 @@ model company {
   politicacalidad String?       @db.VarChar(4000)
   alcance         String?
   companyafip     companyafip[]
+
+  @@schema("test9000")
 }
 
 model companyafip {
@@ -298,6 +320,8 @@ model companyafip {
   afippuntosventas afippuntosventas[]
   categorias       categorias?        @relation(fields: [condivaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_companyafip_categ")
   company          company?           @relation(fields: [companyid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_companyafip_company")
+
+  @@schema("test9000")
 }
 
 model competencianivel {
@@ -310,6 +334,8 @@ model competencianivel {
   competencias        competencias?         @relation(fields: [competenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_competencianivel_area")
   perfilcompetencias  perfilcompetencias[]
   puestoscompetencias puestoscompetencias[]
+
+  @@schema("test9000")
 }
 
 model competencias {
@@ -327,6 +353,8 @@ model competencias {
   categorias          categorias?           @relation(fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_competenciasgrupoid_categorias")
   perfilcompetencias  perfilcompetencias[]
   puestoscompetencias puestoscompetencias[]
+
+  @@schema("test9000")
 }
 
 model comunica {
@@ -355,6 +383,8 @@ model comunica {
   categorias_comunica_procesooutidTocategorias     categorias?   @relation("comunica_procesooutidTocategorias", fields: [procesooutid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comunicccategorias3")
   flowdocument                                     flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkcomunicaflowdocuemnt")
   receptores                                       receptores[]
+
+  @@schema("test9000")
 }
 
 model contactos {
@@ -378,6 +408,8 @@ model contactos {
   categorias   categorias?   @relation(fields: [tipoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contactos_categtipo")
   perfiles     perfiles      @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_contactos_fk")
   registrocab  registrocab[]
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -397,6 +429,8 @@ model depositos {
   flowdocumentdepositos flowdocumentdepositos[]
   perfilesdepositos     perfilesdepositos[]
   puestodescrip         puestodescrip[]
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -419,6 +453,8 @@ model depositosarticulos {
   registrocuerpo      registrocuerpo[]
   stocklog            stocklog[]
   tareasexecarticulos tareasexecarticulos[]
+
+  @@schema("test9000")
 }
 
 model documents {
@@ -433,6 +469,8 @@ model documents {
   perfildocuments      perfildocuments[]
   registrocabdocuments registrocabdocuments[]
   tareasexecdocuments  tareasexecdocuments[]
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -452,6 +490,8 @@ model empleados {
   depositoid   BigInt?
   depositos    depositos? @relation(fields: [depositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "empleados_fk")
   perfiles     perfiles   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_empleados_fk")
+
+  @@schema("test9000")
 }
 
 model eventos {
@@ -462,6 +502,8 @@ model eventos {
   debuginfo  Boolean?     @default(false)
   active     Boolean?     @default(true)
   eventoslog eventoslog[]
+
+  @@schema("test9000")
 }
 
 model eventoslog {
@@ -472,6 +514,8 @@ model eventoslog {
   fecha          DateTime? @db.Timestamp(6)
   responsestatus Int?
   eventos        eventos?  @relation(fields: [eventosid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventoslog_eventos")
+
+  @@schema("test9000")
 }
 
 model flowdocument {
@@ -544,6 +588,8 @@ model flowdocument {
   instructivo                                      instructivo[]
   instructivotareas                                instructivotareas[]
   puestodescrip                                    puestodescrip[]
+
+  @@schema("test9000")
 }
 
 model flowdocumentdepositos {
@@ -555,6 +601,7 @@ model flowdocumentdepositos {
   flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_fddepositos_flowdocument")
 
   @@unique([flowdocumentid, depositoid], map: "flowdocumentdepositos_uni1")
+  @@schema("test9000")
 }
 
 model flowdocumentfiltroarticulo {
@@ -563,6 +610,8 @@ model flowdocumentfiltroarticulo {
   flowdocumentid BigInt?
   categorias     categorias?   @relation(fields: [categoriaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categ")
   flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_flow_document")
+
+  @@schema("test9000")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -572,6 +621,7 @@ model flowdocumentfiltroarticulo_bkp {
   flowdocumentid Int?
 
   @@ignore
+  @@schema("test9000")
 }
 
 model flowdocumentpartesint {
@@ -580,6 +630,8 @@ model flowdocumentpartesint {
   flowdocumentid BigInt?
   categorias     categorias?   @relation(fields: [categoriaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categ")
   flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_flow_document")
+
+  @@schema("test9000")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -589,6 +641,7 @@ model flowdocumentpartesint_bkp {
   flowdocumentid Int?
 
   @@ignore
+  @@schema("test9000")
 }
 
 model flowdocumentprocesorelacionado {
@@ -600,6 +653,7 @@ model flowdocumentprocesorelacionado {
   flowdocument   flowdocument @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocumentrel_fd_fk")
 
   @@unique([flowdocumentid, relatedprocid, tiporel], map: "flowdocumentprocesorelacionad_flowdocumentid_relatedprocid__key")
+  @@schema("test9000")
 }
 
 model flowdocumentresponsables {
@@ -608,6 +662,8 @@ model flowdocumentresponsables {
   tipointervencion BigInt?
   flowdocumentid   BigInt
   flowdocument     flowdocument @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowdocumentresponsables_fk")
+
+  @@schema("test9000")
 }
 
 model flowespecializ {
@@ -617,6 +673,8 @@ model flowespecializ {
   statusflowdestinoid                                         BigInt?
   statusflows_flowespecializ_statusflowidTostatusflows        statusflows? @relation("flowespecializ_statusflowidTostatusflows", fields: [statusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowespecializ_statusflows_fk")
   statusflows_flowespecializ_statusflowdestinoidTostatusflows statusflows? @relation("flowespecializ_statusflowdestinoidTostatusflows", fields: [statusflowdestinoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowespecializ_statusflows_fk2")
+
+  @@schema("test9000")
 }
 
 model flowfactores {
@@ -628,6 +686,8 @@ model flowfactores {
   archivo        Bytes?
   jsondata       Json?         @db.Json
   flowdocument   flowdocument? @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowfactores_flowdocument_fk")
+
+  @@schema("test9000")
 }
 
 model flowpreguntas {
@@ -639,6 +699,8 @@ model flowpreguntas {
   posy           Int?             @default(0)
   statusflows    statusflows?     @relation(fields: [statusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowpreguntas_statusflows_fk")
   flowrespuestas flowrespuestas[]
+
+  @@schema("test9000")
 }
 
 model flowrespuestas {
@@ -648,6 +710,8 @@ model flowrespuestas {
   statusflowid        BigInt?
   siguientepreguntaid BigInt?
   flowpreguntas       flowpreguntas? @relation(fields: [flowpreguntasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "flowrespuestas_fk")
+
+  @@schema("test9000")
 }
 
 model grupos {
@@ -657,6 +721,8 @@ model grupos {
   categid          BigInt?
   categorias       categorias?        @relation(fields: [categid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gruposcategorias")
   registrocabgrupo registrocabgrupo[]
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -671,6 +737,8 @@ model impositivos {
   categorias_impositivos_condivaTocategorias     categorias? @relation("impositivos_condivaTocategorias", fields: [condiva], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_impositivos_fk")
   categorias_impositivos_provinciaidTocategorias categorias? @relation("impositivos_provinciaidTocategorias", fields: [provinciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_impositivos_categorias1")
   perfiles                                       perfiles    @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_impositivos_fk")
+
+  @@schema("test9000")
 }
 
 model instructivo {
@@ -692,6 +760,8 @@ model instructivo {
   instructivoexec        instructivoexec[]
   instructivopuestos     instructivopuestos[]
   instructivotareas      instructivotareas[]
+
+  @@schema("test9000")
 }
 
 model instructivoactividades {
@@ -700,6 +770,8 @@ model instructivoactividades {
   actividadid   BigInt?
   statuses      statuses?    @relation(fields: [actividadid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruc_activ_fk")
   instructivo   instructivo? @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instrucact_instruc_fk")
+
+  @@schema("test9000")
 }
 
 model instructivoarticulos {
@@ -711,6 +783,8 @@ model instructivoarticulos {
   categorias           categorias?  @relation(fields: [repeticionunidadid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoarticulos_categ4")
   articulos            articulos?   @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruart_articulos_fk")
   instructivo          instructivo? @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "instruart_instruct_fk")
+
+  @@schema("test9000")
 }
 
 model instructivoexec {
@@ -735,6 +809,8 @@ model instructivoexec {
   statusflows_instructivoexec_registrocuerpostatusflowidTostatusflows statusflows?    @relation("instructivoexec_registrocuerpostatusflowidTostatusflows", fields: [registrocuerpostatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_statusflow1")
   statusflows_instructivoexec_registrocabstatusflowidTostatusflows    statusflows?    @relation("instructivoexec_registrocabstatusflowidTostatusflows", fields: [registrocabstatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivoexec_statusflow2")
   tareasexec                                                          tareasexec[]
+
+  @@schema("test9000")
 }
 
 model instructivopuestos {
@@ -744,6 +820,8 @@ model instructivopuestos {
   rolename      String?      @default("plan") @db.VarChar(20)
   categorias    categorias?  @relation(fields: [puestoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivopuestos_categorias")
   instructivo   instructivo? @relation(fields: [instructivoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivopuestos_instructivos")
+
+  @@schema("test9000")
 }
 
 model instructivotareas {
@@ -763,6 +841,8 @@ model instructivotareas {
   statuses              statuses?               @relation(fields: [statusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "insttareas_status_fk")
   instructivotareasresp instructivotareasresp[]
   tareasexec            tareasexec[]
+
+  @@schema("test9000")
 }
 
 model instructivotareasresp {
@@ -771,6 +851,8 @@ model instructivotareasresp {
   categoriasid        BigInt?
   categorias          categorias?        @relation(fields: [categoriasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivotareasresp_categorias")
   instructivotareas   instructivotareas? @relation(fields: [instructivotareasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_instructivotareasresp_insttareas")
+
+  @@schema("test9000")
 }
 
 model logs9000 {
@@ -787,6 +869,8 @@ model logs9000 {
   statusflows_logs9000_newflowstatusidTostatusflows statusflows  @relation("logs9000_newflowstatusidTostatusflows", fields: [newflowstatusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "logs9000_statusflows_newstatus_fk")
   statusflows_logs9000_oldflowstatusidTostatusflows statusflows? @relation("logs9000_oldflowstatusidTostatusflows", fields: [oldflowstatusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "logs9000_statusflows_oldstatus_fk")
   usuarios                                          usuarios     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuarios_logs9000_fk")
+
+  @@schema("test9000")
 }
 
 model logs9000tareas {
@@ -798,6 +882,8 @@ model logs9000tareas {
   xlatitud     Decimal?    @db.Decimal(14, 8)
   xlongitud    Decimal?    @db.Decimal(14, 8)
   tareasexec   tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_logs9000tareas_tareasexec")
+
+  @@schema("test9000")
 }
 
 model notifyregistrocab {
@@ -811,6 +897,8 @@ model notifyregistrocab {
   registrocab                                                    registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_notifyregistrocab_registrocab")
   statusflows_notifyregistrocab_destinostatusflowidTostatusflows statusflows? @relation("notifyregistrocab_destinostatusflowidTostatusflows", fields: [destinostatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_notifyregistrocab_statusflowdest")
   statusflows_notifyregistrocab_origenstatusflowidTostatusflows  statusflows? @relation("notifyregistrocab_origenstatusflowidTostatusflows", fields: [origenstatusflowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_notifyregistrocab_statusfloworigen")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -823,6 +911,8 @@ model ordencab {
   categorias        categorias?         @relation(fields: [ordencateg], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_ordencab_fk")
   ordencuerpo       ordencuerpo[]
   ordenpresupcuerpo ordenpresupcuerpo[]
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -840,6 +930,8 @@ model ordencuerpo {
   articulos       articulos @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articulos_ordencuerpo_fk")
   ordencab        ordencab  @relation(fields: [ordencabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ordencab_ordencuerpo_fk")
   statuses        statuses  @relation(fields: [statusid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "statuses_ordencuerpo_fk")
+
+  @@schema("test9000")
 }
 
 model ordenpresupcuerpo {
@@ -848,6 +940,8 @@ model ordenpresupcuerpo {
   ordencabid     BigInt
   ordencab       ordencab       @relation(fields: [ordencabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ordencab_ordenpresupcuerpo_fk")
   registrocuerpo registrocuerpo @relation(fields: [presupcuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "presupcuerpo_ordenpresupcuerpo_fk")
+
+  @@schema("test9000")
 }
 
 model perfilcompetencias {
@@ -859,6 +953,8 @@ model perfilcompetencias {
   competencias       competencias?     @relation(fields: [competenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilcompetencias_competencias")
   perfiles           perfiles?         @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilcompetencias_perfiles")
   competencianivel   competencianivel? @relation(fields: [competencianivelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilcompetenciascompetencianivelid_competencianivel")
+
+  @@schema("test9000")
 }
 
 model perfildocuments {
@@ -867,6 +963,8 @@ model perfildocuments {
   documentsid BigInt?
   documents   documents? @relation(fields: [documentsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfildocuments_documents")
   perfiles    perfiles?  @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfildocuments_perfil")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -914,6 +1012,8 @@ model perfiles {
   tareasexecpersonas                                          tareasexecpersonas[]
   usuarios                                                    usuarios[]
   wallet                                                      wallet[]
+
+  @@schema("test9000")
 }
 
 model perfilesarticulos {
@@ -924,6 +1024,8 @@ model perfilesarticulos {
   articulos  articulos?  @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesarticulos_articulos")
   categorias categorias? @relation(fields: [tiporelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesarticulos_categorias")
   perfiles   perfiles?   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesarticulos_perfiles")
+
+  @@schema("test9000")
 }
 
 model perfilesdepositos {
@@ -932,6 +1034,8 @@ model perfilesdepositos {
   perfilid   BigInt?
   depositos  depositos? @relation(fields: [depositoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkperfilesdepositos_deposito")
   perfiles   perfiles?  @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkperfilesdepositos_perfil")
+
+  @@schema("test9000")
 }
 
 model perfilesprecios {
@@ -944,6 +1048,7 @@ model perfilesprecios {
   categorias_perfilesprecios_tipoprecioidTocategorias categorias? @relation("perfilesprecios_tipoprecioidTocategorias", fields: [tipoprecioid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesprecios_categorias2")
 
   @@unique([perfilid, tipoperfilid, tipoprecioid])
+  @@schema("test9000")
 }
 
 model perfilesrel {
@@ -954,6 +1059,8 @@ model perfilesrel {
   perfiles_perfilesrel_perfilidToperfiles    perfiles?   @relation("perfilesrel_perfilidToperfiles", fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesrel_perfiles1")
   perfiles_perfilesrel_perfilidrelToperfiles perfiles?   @relation("perfilesrel_perfilidrelToperfiles", fields: [perfilidrel], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesrel_perfiles2")
   categorias                                 categorias? @relation(fields: [tiporelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_perfilesrelcateg1")
+
+  @@schema("test9000")
 }
 
 model puestodescrip {
@@ -969,6 +1076,8 @@ model puestodescrip {
   categorias          categorias?           @relation(fields: [puestoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestodescrip_categorias1")
   flowdocument        flowdocument?         @relation(fields: [flowdocumentid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestodescrip_flowdocument")
   puestoscompetencias puestoscompetencias[]
+
+  @@schema("test9000")
 }
 
 model puestoscompetencias {
@@ -980,6 +1089,8 @@ model puestoscompetencias {
   competencianivel   competencianivel? @relation(fields: [competencianivelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestoscompetencias_competencianivelid")
   competencias       competencias?     @relation(fields: [competenciaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestoscompetencias_competencias")
   puestodescrip      puestodescrip?    @relation(fields: [puestodescripid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_puestoscompetencias_puestos")
+
+  @@schema("test9000")
 }
 
 model receptores {
@@ -988,6 +1099,8 @@ model receptores {
   statusesid BigInt?
   comunica   comunica? @relation(fields: [comunicaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkrereceptorescomunica")
   statuses   statuses? @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "receptores_statusesid_fk")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -1083,6 +1196,7 @@ model registrocab {
 
   @@index([calidadfinal], map: "fki_fk_calidad_final")
   @@index([currentuser], map: "fki_fk_current_user_cab")
+  @@schema("test9000")
 }
 
 model registrocabaudio {
@@ -1091,6 +1205,8 @@ model registrocabaudio {
   audiosrcb64   String
   userid        BigInt?
   registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabaudio_registrocab")
+
+  @@schema("test9000")
 }
 
 model registrocabdocuments {
@@ -1099,6 +1215,8 @@ model registrocabdocuments {
   documentsid   BigInt?
   documents     documents?   @relation(fields: [documentsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabdocuments_documents")
   registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_registrocabdocuments_registrocab")
+
+  @@schema("test9000")
 }
 
 model registrocabgrupo {
@@ -1108,6 +1226,8 @@ model registrocabgrupo {
   orden         Int?
   grupos        grupos?      @relation(fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcabgrupos_grupos")
   registrocab   registrocab? @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_regcabgrupos_registrocab")
+
+  @@schema("test9000")
 }
 
 model registrocabrel {
@@ -1120,6 +1240,7 @@ model registrocabrel {
   registrocab_registrocabrel_relatedregistrocabidToregistrocab registrocab @relation("registrocabrel_relatedregistrocabidToregistrocab", fields: [relatedregistrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "registrocabrel_regcabrel_fk")
 
   @@unique([registrocabid, relatedregistrocabid, tiporel])
+  @@schema("test9000")
 }
 
 model registrocabseq {
@@ -1132,6 +1253,7 @@ model registrocabseq {
 
   @@unique([registrocabid, secuenciaid], map: "unique_secuencia_x_cab")
   @@unique([secuenciaid, valor], map: "unique_secuencia_x_valor")
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -1206,6 +1328,7 @@ model registrocuerpo {
 
   @@index([cuerpocurrentuser], map: "idx_current_user_cuerpo")
   @@index([presupcabid], map: "registrocuerpopresup")
+  @@schema("test9000")
 }
 
 model reportes {
@@ -1221,6 +1344,8 @@ model reportes {
   categorias_reportes_contextoidTocategorias categorias?         @relation("reportes_contextoidTocategorias", fields: [contextoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportes_categorias")
   reportesacl                                reportesacl[]
   reportesactividad                          reportesactividad[]
+
+  @@schema("test9000")
 }
 
 model reportesacl {
@@ -1229,6 +1354,8 @@ model reportesacl {
   puestotrabajoid BigInt?
   categorias      categorias? @relation(fields: [puestotrabajoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reporteacl_categorias")
   reportes        reportes?   @relation(fields: [reporteid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reporteacl_reporte")
+
+  @@schema("test9000")
 }
 
 model reportesactividad {
@@ -1237,6 +1364,8 @@ model reportesactividad {
   statusesid BigInt?
   reportes   reportes? @relation(fields: [reporteid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportesactividad_reporte")
   statuses   statuses? @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reportesactividad_statuses")
+
+  @@schema("test9000")
 }
 
 model role {
@@ -1244,6 +1373,8 @@ model role {
   version   BigInt
   authority String      @unique(map: "uk_irsamgnera6angm0prq1kemt2") @db.VarChar(255)
   user_role user_role[]
+
+  @@schema("test9000")
 }
 
 model rowconfig {
@@ -1251,6 +1382,8 @@ model rowconfig {
   userid   BigInt?
   tipo     String? @db.VarChar(200)
   jsondata Json?   @db.Json
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -1272,6 +1405,8 @@ model secuencias {
   categorias_secuencias_categoriaTocategorias categorias?      @relation("secuencias_categoriaTocategorias", fields: [categoria], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categoria")
   categorias_secuencias_grupoidTocategorias   categorias?      @relation("secuencias_grupoidTocategorias", fields: [grupoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_secuencias_categ_1")
   statuses                                    statuses?        @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_secuencias_statuses")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -1295,6 +1430,8 @@ model statuses {
   statusesprecios                                               statusesprecios[]
   statusesrelaciones_statusesrelaciones_statusesidTostatuses    statusesrelaciones[]     @relation("statusesrelaciones_statusesidTostatuses")
   statusesrelaciones_statusesrelaciones_statusesrelidTostatuses statusesrelaciones[]     @relation("statusesrelaciones_statusesrelidTostatuses")
+
+  @@schema("test9000")
 }
 
 model statusesprecios {
@@ -1305,6 +1442,7 @@ model statusesprecios {
   statuses   statuses   @relation(fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesprecios_statuses")
 
   @@unique([statusesid, categid], map: "uni_statusesprecios")
+  @@schema("test9000")
 }
 
 model statusesrelaciones {
@@ -1314,6 +1452,8 @@ model statusesrelaciones {
   tiporelid                                           BigInt?   @default(100)
   statuses_statusesrelaciones_statusesidTostatuses    statuses? @relation("statusesrelaciones_statusesidTostatuses", fields: [statusesid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesrelaciones_statuses1")
   statuses_statusesrelaciones_statusesrelidTostatuses statuses? @relation("statusesrelaciones_statusesrelidTostatuses", fields: [statusesrelid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesrelaciones_statuses2")
+
+  @@schema("test9000")
 }
 
 model statusesrelacionesflows {
@@ -1323,6 +1463,7 @@ model statusesrelacionesflows {
   categorias categorias? @relation(fields: [flowid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statusesrelacionesflows_categorias")
 
   @@unique([statusesid, flowid])
+  @@schema("test9000")
 }
 
 model statusflows {
@@ -1348,6 +1489,8 @@ model statusflows {
   registrocuerpo                                                          registrocuerpo[]
   categorias                                                              categorias?         @relation(fields: [sigmacroprocesoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_mp")
   stocklog                                                                stocklog[]
+
+  @@schema("test9000")
 }
 
 model stocklog {
@@ -1366,6 +1509,8 @@ model stocklog {
   registrocab          registrocab?        @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_registrocab")
   registrocuerpo       registrocuerpo?     @relation(fields: [registrocuerpoid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_registrocuerpo")
   statusflows          statusflows?        @relation(fields: [statusflowsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stocklog_statusflows")
+
+  @@schema("test9000")
 }
 
 model tareaarticulos {
@@ -1373,6 +1518,8 @@ model tareaarticulos {
   tareaid    BigInt?
   articuloid BigInt?
   articulos  articulos? @relation(fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tareaarticulos_articulos_fk")
+
+  @@schema("test9000")
 }
 
 model tareaexecperfil {
@@ -1380,6 +1527,8 @@ model tareaexecperfil {
   tareaexecid BigInt?
   perfilid    BigInt?
   perfiles    perfiles? @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tareaexecperfil_perfil_fk")
+
+  @@schema("test9000")
 }
 
 model tareasexec {
@@ -1412,6 +1561,8 @@ model tareasexec {
   tareasexecdocuments tareasexecdocuments[]
   tareasexecpersonas  tareasexecpersonas[]
   tareasexectiempos   tareasexectiempos[]
+
+  @@schema("test9000")
 }
 
 model tareasexecarticulos {
@@ -1421,6 +1572,8 @@ model tareasexecarticulos {
   cantidad           Decimal?            @db.Decimal(10, 4)
   depositosarticulos depositosarticulos? @relation(fields: [depositoarticuloid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecarticulos_depositoarticulo")
   tareasexec         tareasexec?         @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecarticulos_tareaexec")
+
+  @@schema("test9000")
 }
 
 model tareasexecdocuments {
@@ -1429,6 +1582,8 @@ model tareasexecdocuments {
   documentsid  BigInt?
   documents    documents?  @relation(fields: [documentsid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecdocuments_documents")
   tareasexec   tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecdocuments_tareasexec")
+
+  @@schema("test9000")
 }
 
 model tareasexecpersonas {
@@ -1437,6 +1592,8 @@ model tareasexecpersonas {
   perfilid     BigInt?
   perfiles     perfiles?   @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecpersonas_perfiles")
   tareasexec   tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexecpersonas_tareaexec")
+
+  @@schema("test9000")
 }
 
 model tareasexectiempos {
@@ -1447,6 +1604,8 @@ model tareasexectiempos {
   initintervalo Int?
   enpausa       Boolean?    @default(false)
   tareasexec    tareasexec? @relation(fields: [tareasexecid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tareasexectiempos_tareasexec")
+
+  @@schema("test9000")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -1459,6 +1618,7 @@ model tipoarticulos {
 
   @@unique([articuloid, categid], map: "tipoarticulos_uni1")
   @@ignore
+  @@schema("test9000")
 }
 
 model user_role {
@@ -1468,6 +1628,7 @@ model user_role {
   usuarios usuarios @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkj345gk1bovqvfame88rcx7yyx")
 
   @@id([user_id, role_id])
+  @@schema("test9000")
 }
 
 model usuarios {
@@ -1499,4 +1660,6 @@ model wallet {
   entidad    String?     @db.VarChar(50)
   categorias categorias? @relation(fields: [tipocta], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categorias_wallet_fk")
   perfiles   perfiles    @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_wallet_fk")
+
+  @@schema("test9000")
 }
