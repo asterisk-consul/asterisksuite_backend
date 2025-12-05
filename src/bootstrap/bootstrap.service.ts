@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SshService } from '../ssh/ssh.service';
+import { SshService } from '../ssh/ssh.service.js';
 
 @Injectable()
 export class BootstrapService implements OnApplicationBootstrap {

@@ -1,6 +1,6 @@
 // src/ssh/ssh.module.ts
 import { Module } from '@nestjs/common';
-import { SshService } from './ssh.service';
+import { SshService } from './ssh.service.js';
 
 @Module({
     providers: [SshService],

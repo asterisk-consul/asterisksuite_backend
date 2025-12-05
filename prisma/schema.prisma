@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  schemas  = ["test9000"]
 }
 
 model afipcomprobantes {
@@ -37,6 +38,8 @@ model afipcomprobantes {
   afippuntosventas       afippuntosventas?  @relation(fields: [afippuntosventasid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afipcomprobantes_apippos")
   registrocab            registrocab?       @relation(fields: [registrocabid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "afipcomprobantes_registrocab")
   categorias             categorias?        @relation(fields: [condventaid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_afipcomprobantes_condventaid")
+
+  @@schema("test9000")
 }
 
 model afippuntosventas {
@@ -1483,6 +1486,8 @@ model usuarios {
   registrocuerpo   registrocuerpo[]
   user_role        user_role[]
   perfiles         perfiles?        @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_usuarios_fk")
+
+  @@schema("test9000")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

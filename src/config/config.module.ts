@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { validationSchema } from './validation.schema';
-import { loadSSHKey } from './ssh-key.loader';
+import { validationSchema } from './validation.schema.js';
+import { loadSSHKey } from './ssh-key.loader.js';
 
 // Cargar clave SSH antes de iniciar ConfigModule
 loadSSHKey();

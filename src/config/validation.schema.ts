@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import Joi from 'joi';
 
 export const validationSchema = Joi.object({
     SSH_HOST: Joi.string().required(),
