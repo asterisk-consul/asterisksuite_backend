@@ -23,6 +23,10 @@ export class AuthService {
   async validateUser(username: string, password: string) {
     const user = await this.prisma.usuarios.findFirst({
       where: { username },
+      include: {
+        perfiles: true, // Datos personales
+        user_role: true, // Solo la tabla intermedia
+      },
     });
 
     if (!user) throw new UnauthorizedException('Usuario no encontrado');
@@ -39,11 +43,22 @@ export class AuthService {
 
   async login(username: string, password: string) {
     const user = await this.validateUser(username, password);
-    console.log(user);
+
+    const roleIds = user.user_role.map((ur) => Number(ur.role_id));
+
+    const roles = await this.prisma.role.findMany({
+      where: {
+        id: { in: roleIds },
+      },
+    });
+
+    // Extraer solo los authorities
+    const authorities = roles.map((role) => role.authority);
 
     const payload = {
-      sub: user.id.toString(), // convertir BigInt a string
+      sub: user.id.toString(),
       username: user.username,
+      roles: authorities, // ['ROLE_ADMIN', 'ROLE_USER']
     };
 
     const token = this.jwt.sign(payload);
@@ -52,8 +67,9 @@ export class AuthService {
       access_token: token,
       user: {
         id: user.id.toString(),
-        perfilid: user.perfilid?.toString(),
         username: user.username,
+        perfil: user.perfiles,
+        roles: authorities,
       },
     };
   }

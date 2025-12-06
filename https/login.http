@@ -3,14 +3,13 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "username": "Administrador",
+    "username": "Cristian.c",
     "password": "1234"
 }
 
 
 ### login flowsma
-POST 
-https://api.flowsma.com/gm/api/login
+POST https://api.flowsma.com/gm/api/login
 Content-Type: application/json
 
 {

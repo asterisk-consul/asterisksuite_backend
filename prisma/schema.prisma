@@ -1369,11 +1369,12 @@ model reportesactividad {
 }
 
 model role {
-  id        Int         @id @default(autoincrement())
+  id        BigInt      @id @default(autoincrement())
   version   BigInt
   authority String      @unique(map: "uk_irsamgnera6angm0prq1kemt2") @db.VarChar(255)
   user_role user_role[]
 
+  @@map("role")
   @@schema("test9000")
 }
 
@@ -1623,7 +1624,7 @@ model tipoarticulos {
 
 model user_role {
   user_id  BigInt
-  role_id  Int
+  role_id  BigInt
   role     role     @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fka68196081fvovjhkek5m97n3y")
   usuarios usuarios @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkj345gk1bovqvfame88rcx7yyx")
 
