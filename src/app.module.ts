@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module.js'; // <-- Add/identify th
 import { SshModule } from './ssh/ssh.module.js';
 import { BootstrapModule } from './bootstrap/bootstrap.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { ArticulosModule } from './articulos/articulos.module.js';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module.js';
     SshModule,
     BootstrapModule,
     AuthModule,
+    ArticulosModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,0 +1,17 @@
+### 1. Login
+POST http://localhost:3008/api/login
+Content-Type: application/json
+
+{
+  "username": "Administrador",
+  "password": "1234"
+}
+
+
+###
+GET http://localhost:3008/articulos/index
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTE5MjQ3MCwiZXhwIjoxNzY1Mjc4ODcwfQ.mWAjckr7KW8tAi7R6rOmNFbn4EKE4i4FuHABbMBn8kk
+
+###
+GET http://localhost:3008/articulos/arbol-costos/1118
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTE5MjQ3MCwiZXhwIjoxNzY1Mjc4ODcwfQ.mWAjckr7KW8tAi7R6rOmNFbn4EKE4i4FuHABbMBn8kk

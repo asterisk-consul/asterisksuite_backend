@@ -1,0 +1,154 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service.js';
+import {
+  ArticuloSafe,
+  ArticuloCompuestoSafe,
+  ArbolCostosNodo,
+} from './types/arbol-costos.types.js';
+
+@Injectable()
+export class ArticulosService {
+  constructor(private prisma: PrismaService) {}
+
+  async findAll() {
+    return this.prisma.articulos.findMany({
+      include: {
+        articuloespec: true,
+        articuloprecio: true,
+        depositosarticulos: {
+          select: {
+            cantidad: true,
+            depositos: {
+              select: {
+                id: true,
+                descrip: true,
+              },
+            },
+          },
+        },
+        tipoarticulos: true,
+        hijos: true,
+        articulos_padre: true,
+      },
+    });
+  }
+
+  async obtenerArbolCostos(articuloId: number): Promise<ArbolCostosNodo> {
+    /** ============================================================
+     * 1. Obtener artículos con su precio más reciente
+     * ============================================================ */
+    const articulos = (await this.prisma.articulos.findMany({
+      include: {
+        articuloprecio: {
+          orderBy: { changedate: 'desc' },
+          take: 1,
+        },
+      },
+    })) as unknown as ArticuloSafe[];
+
+    /** ============================================================
+     * 2. Obtener relaciones compuestas
+     * ============================================================ */
+    const compuestos =
+      (await this.prisma.articuloscompuestos.findMany()) as unknown as ArticuloCompuestoSafe[];
+
+    /** ============================================================
+     * 3. Crear el mapa de nodos
+     * ============================================================ */
+    const map = new Map<bigint, ArbolCostosNodo>();
+
+    for (const a of articulos) {
+      const precioUnitario = Number(a.articuloprecio?.[0]?.precio ?? 0) || 0;
+
+      map.set(a.id, {
+        id: a.id,
+        nombre: a.nombre ?? '',
+        precioUnitario,
+        cantidad: 1, // la cantidad del nodo la define el padre
+        costoTotal: 0,
+        hijos: [],
+      });
+    }
+
+    /** ============================================================
+     * 4. Relacionar nodos padre ↔ hijos
+     * ============================================================ */
+    for (const comp of compuestos) {
+      if (!comp.parentarticuloid || !comp.articuloid) continue;
+
+      const padre = map.get(comp.parentarticuloid);
+      const hijo = map.get(comp.articuloid);
+
+      if (!padre || !hijo) continue;
+
+      padre.hijos.push({
+        ...hijo,
+        cantidad: Number(comp.cantidad ?? 1) || 1,
+      });
+    }
+
+    /** ============================================================
+     * 5. Obtener la raíz solicitada
+     * ============================================================ */
+    const raiz = map.get(BigInt(articuloId));
+    if (!raiz) throw new Error('Artículo no encontrado');
+
+    /** ============================================================
+     * 6. Calcular costos recursivamente (ALGORITMO CORREGIDO)
+     * ============================================================ */
+    this.calcularCosto(raiz);
+
+    return raiz;
+  }
+
+  /** ==========================================================
+   * FUNCIÓN RECURSIVA PARA CALCULAR COSTOS (Versión correcta)
+   * ========================================================== */
+  private calcularCosto(nodo: ArbolCostosNodo): number {
+    // costo propio solo si tiene precio
+    const costoPropio = nodo.precioUnitario > 0 ? nodo.precioUnitario : 0;
+
+    // Si no tiene hijos: su costo total es su costo propio
+    nodo.costoTotal = costoPropio;
+
+    if (nodo.hijos.length === 0) {
+      return nodo.costoTotal;
+    }
+
+    // Sumar hijos multiplicados por la cantidad que el padre requiere
+    let sumaHijos = 0;
+
+    for (const h of nodo.hijos) {
+      const costoHijo = this.calcularCosto(h);
+      const cantidad = Number(h.cantidad ?? 1) || 1;
+      sumaHijos += costoHijo * cantidad;
+    }
+
+    nodo.costoTotal = costoPropio + sumaHijos;
+    return nodo.costoTotal;
+  }
+
+  async findOne(id: number) {
+    return this.prisma.articulos.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        articuloespec: true,
+        articuloprecio: true,
+        depositosarticulos: {
+          select: {
+            cantidad: true,
+            depositos: {
+              select: {
+                id: true,
+                descrip: true,
+              },
+            },
+          },
+        },
+        tipoarticulos: true,
+      },
+    });
+  }
+}

@@ -3,17 +3,17 @@ import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
 
-@Controller('auth')
+@Controller('api')
 export class AuthController {
-    constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
-    @Post('login')
-    async login(@Body() body: LoginDto) {
-        return this.authService.login(body.username, body.password);
-    }
+  @Post('login')
+  async login(@Body() body: LoginDto) {
+    return this.authService.login(body.username, body.password);
+  }
 
-    @Post('register')
-    async register(@Body() body: RegisterDto) {
-        return this.authService.register(body);
-    }
+  @Post('register')
+  async register(@Body() body: RegisterDto) {
+    return this.authService.register(body);
+  }
 }

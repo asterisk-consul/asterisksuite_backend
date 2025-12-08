@@ -146,7 +146,6 @@ model articulos {
   ischeque                                          Boolean?                  @default(false)
   cuentacontableid                                  BigInt?
   isamedida                                         Boolean?                  @default(false)
-  is_bom                                            Boolean?                  @default(false)
   articuloespec                                     articuloespec[]
   articuloprecio                                    articuloprecio[]
   articulopreciohistorico                           articulopreciohistorico[]
@@ -158,23 +157,31 @@ model articulos {
   ordencuerpo                                       ordencuerpo[]
   perfilesarticulos                                 perfilesarticulos[]
   tareaarticulos                                    tareaarticulos[]
-  tipoarticulos                                     tipoarticulos[]           @ignore
+  tipoarticulos                                     tipoarticulos[]
+
+  // Relaciones con articuloscompuestos
+  articulos_padre articuloscompuestos[] @relation("articuloscompuestos_articuloid")
+  hijos           articuloscompuestos[] @relation("articuloscompuestos_parentarticuloid")
 
   @@schema("test9000")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model articuloscompuestos {
-  articuloid                                                  BigInt?
-  parentarticuloid                                            BigInt?
-  cantidad                                                    Float?
-  id                                                          BigInt?     @default(autoincrement())
-  compvariableid                                              BigInt?
-  cuentacontableid                                            BigInt?
+  id               BigInt  @unique @default(autoincrement())
+  articuloid       BigInt?
+  parentarticuloid BigInt?
+  cantidad         Float?
+  compvariableid   BigInt?
+  cuentacontableid BigInt?
+
+  // Relaciones con articulos
+  articulo        articulos? @relation("articuloscompuestos_articuloid", fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parent_articulo articulos? @relation("articuloscompuestos_parentarticuloid", fields: [parentarticuloid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  // Relaciones con categorias (existentes)
   categorias_articuloscompuestos_compvariableidTocategorias   categorias? @relation("articuloscompuestos_compvariableidTocategorias", fields: [compvariableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_categorias3")
   categorias_articuloscompuestos_cuentacontableidTocategorias categorias? @relation("articuloscompuestos_cuentacontableidTocategorias", fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_cuentascontables")
 
-  @@ignore
   @@schema("test9000")
 }
 
@@ -1612,13 +1619,12 @@ model tareasexectiempos {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model tipoarticulos {
   id         Int         @default(autoincrement())
-  categid    BigInt?
-  articuloid BigInt?
+  categid    BigInt
+  articuloid BigInt
   articulos  articulos?  @relation(fields: [articuloid], references: [id], onDelete: Restrict, map: "tipoarticulos_fk")
   categorias categorias? @relation(fields: [categid], references: [id], onDelete: Restrict, map: "tipoarticulos_fk_1")
 
   @@unique([articuloid, categid], map: "tipoarticulos_uni1")
-  @@ignore
   @@schema("test9000")
 }
 
