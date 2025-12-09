@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard.js';
 @Controller('articulos')
 @UseGuards(JwtAuthGuard) // Protege todas las rutas del controlador
 export class ArticulosController {
-  constructor(private articulosService: ArticulosService) {}
+  constructor(private articulosService: ArticulosService) { }
 
   @Get('index')
   async index() {
@@ -27,6 +27,11 @@ export class ArticulosController {
   @Get('arbol-costos/:id')
   async arbolCostos(@Param('id') id: string) {
     return this.articulosService.obtenerArbolCostos(+id);
+  }
+
+  @Get('compuestos/:id')
+  async compuestos(@Param('id') id: string) {
+    return this.articulosService.findListaMaestra(+id);
   }
 
   // @Get(':id')

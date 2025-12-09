@@ -174,11 +174,15 @@ model articuloscompuestos {
   compvariableid   BigInt?
   cuentacontableid BigInt?
 
+  // Nuevos campos
+  ancho Decimal? @db.Decimal(10, 2)
+  largo Decimal? @db.Decimal(10, 2)
+
   // Relaciones con articulos
   articulo        articulos? @relation("articuloscompuestos_articuloid", fields: [articuloid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parent_articulo articulos? @relation("articuloscompuestos_parentarticuloid", fields: [parentarticuloid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  // Relaciones con categorias (existentes)
+  // Relaciones con categorias
   categorias_articuloscompuestos_compvariableidTocategorias   categorias? @relation("articuloscompuestos_compvariableidTocategorias", fields: [compvariableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_categorias3")
   categorias_articuloscompuestos_cuentacontableidTocategorias categorias? @relation("articuloscompuestos_cuentacontableidTocategorias", fields: [cuentacontableid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_articuloscompuestos_cuentascontables")
 
@@ -271,7 +275,7 @@ model categorias {
   statusesrelacionesflows                                              statusesrelacionesflows[]
   statusflows                                                          statusflows[]
   stocklog                                                             stocklog[]
-  tipoarticulos                                                        tipoarticulos[]                  @ignore
+  tipoarticulos                                                        tipoarticulos[]
   wallet                                                               wallet[]
 
   @@schema("test9000")
