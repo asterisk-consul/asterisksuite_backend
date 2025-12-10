@@ -42,7 +42,7 @@ export type NodoListaMaestra = {
 
   categorias?: {
     id: bigint;
-    nombre: string;
+    name: string;
   }[];
 
   hijos: NodoListaMaestra[]

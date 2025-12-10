@@ -34,6 +34,33 @@ export class ArticulosService {
     });
   }
 
+  async findOne(id: number) {
+    return this.prisma.articulos.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        articuloespec: true,
+        articuloprecio: true,
+        articulopreciohistorico: true,
+        depositosarticulos: {
+          select: {
+            depositos: {
+              select: {
+                id: true,
+                descrip: true,
+              },
+            },
+          },
+        },
+        hijos: true,
+        tipoarticulos: true,
+        perfilesarticulos: true,
+        articulos_padre: true,
+      },
+    });
+  }
+
   async obtenerArbolCostos(articuloId: number): Promise<ArbolCostosNodo> {
     /** ============================================================
      * 1. Obtener artículos con su precio más reciente
@@ -101,7 +128,7 @@ export class ArticulosService {
 
     return raiz;
   }
-
+  
   /** ==========================================================
    * FUNCIÓN RECURSIVA PARA CALCULAR COSTOS (Versión correcta)
    * ========================================================== */
@@ -127,30 +154,6 @@ export class ArticulosService {
 
     nodo.costoTotal = costoPropio + sumaHijos;
     return nodo.costoTotal;
-  }
-
-  async findOne(id: number) {
-    return this.prisma.articulos.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        articuloespec: true,
-        articuloprecio: true,
-        depositosarticulos: {
-          select: {
-            cantidad: true,
-            depositos: {
-              select: {
-                id: true,
-                descrip: true,
-              },
-            },
-          },
-        },
-        tipoarticulos: true,
-      },
-    });
   }
 
   async findListaMaestra(articuloId: number): Promise<NodoListaMaestra> {
@@ -223,16 +226,17 @@ export class ArticulosService {
         depositos: a.depositosarticulos.map(d => ({
           id: d.id,
           cantidad: Number(d.cantidad),
-          deposito: d.depositos.descrip
+          deposito: d.depositos?.descrip ?? ''   // Nunca null
         })),
 
         // ==========================================
         // NUEVO: Categorías (tipos de artículo)
         // ==========================================
         categorias: a.tipoarticulos.map(t => ({
-          id: t.categorias?.id ?? null,
-          nombre: t.categorias?.nombre ?? null
+          id: t.categorias?.id ?? BigInt(0),
+          name: t.categorias?.name ?? ''
         })),
+
 
         hijos: []
       });

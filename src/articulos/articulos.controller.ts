@@ -34,10 +34,10 @@ export class ArticulosController {
     return this.articulosService.findListaMaestra(+id);
   }
 
-  // @Get(':id')
-  // async findOne(@Param('id') id: string) {
-  //   return this.articulosService.findOne(+id);
-  // }
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.articulosService.findOne(+id);
+  }
 
   // @Post()
   // @UseGuards(RolesGuard) // Opcional: si solo ciertos roles pueden crear
