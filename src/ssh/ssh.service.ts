@@ -1,7 +1,7 @@
-// src/ssh/ssh.service.ts
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTunnel } from 'tunnel-ssh';
+import * as net from 'net';
 
 interface TunnelInstance {
   server: any;
@@ -26,51 +26,84 @@ export class SshService implements OnModuleDestroy {
   private readonly logger = new Logger(SshService.name);
   private tunnelInstance: TunnelInstance | null = null;
   private isConnecting = false;
+  private reconnecting = false;
 
   constructor(private configService: ConfigService) {}
 
+  // ============================================================
+  // LIBERA EL PUERTO SI ESTÁ EN USO
+  // ============================================================
+  private async freePort(port: number): Promise<void> {
+    this.logger.log(`Verificando si el puerto ${port} está libre...`);
+
+    return new Promise((resolve) => {
+      const tester = net.createServer();
+
+      tester.once('error', (err: any) => {
+        if (err.code === 'EADDRINUSE') {
+          this.logger.warn(`Puerto ${port} ocupado. Intentando liberarlo...`);
+          try {
+            const client = net.connect({ port }, () => {
+              client.destroy();
+            });
+            client.on('close', () => resolve(undefined));
+          } catch (_) {
+            resolve(undefined);
+          }
+        } else {
+          resolve(undefined);
+        }
+      });
+
+      tester.once('listening', () => {
+        tester.close(() => resolve(undefined));
+      });
+
+      tester.listen(port);
+    });
+  }
+
+  // ============================================================
+  // MÉTODO PRINCIPAL: CREA EL TÚNEL SSH
+  // ============================================================
   async createSSHTunnel(localPort: number): Promise<TunnelInstance> {
-    // Si ya existe un túnel, verificar que esté activo
     if (this.tunnelInstance) {
-      this.logger.log('✅ Túnel SSH ya existe, reutilizando conexión');
+      this.logger.log('Túnel SSH existente, reutilizando');
       return this.tunnelInstance;
     }
 
-    // Evitar múltiples conexiones simultáneas
     if (this.isConnecting) {
-      this.logger.log('⏳ Ya hay una conexión SSH en proceso, esperando...');
-      // Esperar hasta que termine la conexión actual
+      this.logger.log('Esperando conexión SSH existente...');
       while (this.isConnecting) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((res) => setTimeout(res, 100));
       }
-      // Después de esperar, verificar que el túnel se haya creado
       if (!this.tunnelInstance) {
-        throw new Error(
-          '❌ Error: El túnel no se pudo crear mientras esperaba',
-        );
+        throw new Error('No se pudo crear el túnel tras esperar');
       }
       return this.tunnelInstance;
     }
 
-    // Validar configuración
     const sshHost = this.configService.get<string>('SSH_HOST');
     const sshUsername = this.configService.get<string>('SSH_USER');
     const sshPrivateKey = this.configService.get<string>('SSH_PRIVATE_KEY');
 
     if (!sshHost || !sshUsername || !sshPrivateKey) {
-      throw new Error('❌ Faltan variables de entorno de SSH');
+      throw new Error('Faltan variables de entorno SSH');
     }
 
     this.isConnecting = true;
+
+    // Liberar puerto antes de abrir el túnel
+    await this.freePort(localPort);
 
     const sshOptions = {
       host: sshHost,
       port: this.configService.get<number>('SSH_PORT', 22),
       username: sshUsername,
       privateKey: sshPrivateKey.replace(/\\n/g, '\n'),
-      keepaliveInterval: 10000, // mantener la conexión viva
+      keepaliveInterval: 10000,
       keepaliveCountMax: 3,
-      readyTimeout: 20000, // timeout de 20s para establecer conexión
+      readyTimeout: 20000,
     };
 
     const forwardOptions = {
@@ -81,16 +114,14 @@ export class SshService implements OnModuleDestroy {
     };
 
     const tunnelOptions = {
-      autoClose: false, // NO cerrar automáticamente el túnel
-      reconnectOnError: false, // No reconectar automáticamente en errores
+      autoClose: false,
+      reconnectOnError: false,
     };
 
-    const serverOptions = {
-      port: localPort,
-    };
+    const serverOptions = { port: localPort };
 
     try {
-      this.logger.log(`🔌 Creando túnel SSH a ${sshHost}:${sshOptions.port}`);
+      this.logger.log(`Creando túnel SSH a ${sshHost}:${sshOptions.port}...`);
 
       const [server, conn] = await createTunnel(
         tunnelOptions,
@@ -101,68 +132,84 @@ export class SshService implements OnModuleDestroy {
 
       this.tunnelInstance = { server, conn };
 
-      // Configurar listeners de eventos para monitorear el túnel
+      // ------------------------------------------------------------
+      // LISTENERS DE RECONEXIÓN
+      // ------------------------------------------------------------
       conn.on('error', (err) => {
-        this.logger.error('❌ Error en conexión SSH:', err);
-        this.tunnelInstance = null;
+        this.logger.error('Error en conexión SSH:', err);
+        this.handleTunnelClose(localPort, 'error');
       });
 
       conn.on('end', () => {
-        this.logger.warn('⚠️ Conexión SSH terminada');
-        this.tunnelInstance = null;
+        this.logger.warn('Conexión SSH terminada');
+        this.handleTunnelClose(localPort, 'end');
       });
 
       conn.on('close', () => {
-        this.logger.warn('⚠️ Conexión SSH cerrada');
-        this.tunnelInstance = null;
+        this.logger.warn('Conexión SSH cerrada');
+        this.handleTunnelClose(localPort, 'close');
       });
 
+      // Errores del servidor TCP
       server.on('error', (err: NodeError) => {
-        this.logger.error('❌ Error en servidor del túnel:', err);
+        this.logger.error('Error en servidor del túnel:', err);
         if (err.code === 'EADDRINUSE') {
-          this.logger.error(`❌ El puerto ${localPort} ya está en uso`);
+          this.logger.error(`Puerto ${localPort} en uso`);
         }
       });
 
       server.on('close', () => {
-        this.logger.log('🔴 Servidor del túnel cerrado');
+        this.logger.log('Servidor del túnel cerrado');
       });
 
       this.logger.log(
-        `✅ Túnel SSH creado: localhost:${localPort} -> ${sshHost}:5432`,
+        `Túnel SSH creado correctamente: localhost:${localPort} -> ${sshHost}:5432`,
       );
 
       this.isConnecting = false;
       return this.tunnelInstance;
     } catch (err) {
-      this.logger.error('❌ Error creando túnel SSH:', err);
+      this.logger.error('Error creando túnel SSH:', err);
       this.tunnelInstance = null;
       this.isConnecting = false;
       throw err;
     }
   }
 
-  async closeSSHTunnel(): Promise<void> {
-    if (this.tunnelInstance) {
-      this.logger.log('🔌 Cerrando túnel SSH manualmente');
+  // ============================================================
+  // MANEJO DE CIERRE + RECONEXIÓN AUTOMÁTICA
+  // ============================================================
+  private async handleTunnelClose(localPort: number, reason: string) {
+    if (this.reconnecting) return;
+
+    this.logger.warn(`Túnel SSH caído por: ${reason}`);
+    this.tunnelInstance = null;
+    this.reconnecting = true;
+
+    let delay = 2000; // 2 segundos
+    const maxDelay = 60000; // 1 minuto
+
+    while (!this.tunnelInstance) {
       try {
-        if (this.tunnelInstance.server) {
-          this.tunnelInstance.server.close();
-        }
-        if (this.tunnelInstance.conn) {
-          this.tunnelInstance.conn.end();
-        }
-        this.tunnelInstance = null;
-        this.logger.log('✅ Túnel SSH cerrado manualmente');
+        this.logger.log(`Reintentando conexión SSH en ${delay / 1000}s...`);
+        await new Promise((res) => setTimeout(res, delay));
+
+        await this.createSSHTunnel(localPort);
+
+        this.logger.log('Túnel SSH reconectado correctamente');
+        break;
       } catch (err) {
-        this.logger.error('❌ Error cerrando túnel manualmente:', err);
-        throw err;
+        this.logger.error('Falló reconexión del túnel:', err);
+        delay = Math.min(delay * 2, maxDelay);
       }
-    } else {
-      this.logger.log('ℹ️ No hay túnel SSH activo para cerrar');
     }
+
+    this.reconnecting = false;
   }
 
+  // ============================================================
+  // ESTADO DEL TÚNEL
+  // ============================================================
   getTunnelStatus(): TunnelStatus {
     return {
       active: this.tunnelInstance !== null,
@@ -176,38 +223,42 @@ export class SshService implements OnModuleDestroy {
     };
   }
 
-  // Función para reconectar el túnel si se cae
-  async ensureTunnelActive(localPort: number): Promise<TunnelInstance> {
-    const status = this.getTunnelStatus();
-
-    if (!status.active && !status.connecting) {
-      this.logger.warn('⚠️ Túnel no activo, reconectando...');
-      return await this.createSSHTunnel(localPort);
-    }
-
-    // Si llegamos aquí, el túnel debería estar activo o conectándose
+  // ============================================================
+  // CIERRE MANUAL
+  // ============================================================
+  async closeSSHTunnel(): Promise<void> {
     if (!this.tunnelInstance) {
-      throw new Error('❌ Error: Túnel en estado inconsistente');
+      this.logger.log('No hay túnel SSH activo para cerrar');
+      return;
     }
 
-    return this.tunnelInstance;
+    this.logger.log('Cerrando túnel SSH manualmente');
+
+    try {
+      this.tunnelInstance.server?.close();
+      this.tunnelInstance.conn?.end();
+      this.tunnelInstance = null;
+
+      this.logger.log('Túnel SSH cerrado manualmente');
+    } catch (err) {
+      this.logger.error('Error cerrando túnel manualmente:', err);
+      throw err;
+    }
   }
 
-  // Hook del ciclo de vida de NestJS - se ejecuta al cerrar la aplicación
+  // ============================================================
+  // HOOK NESTJS
+  // ============================================================
   async onModuleDestroy(): Promise<void> {
     if (this.tunnelInstance) {
-      this.logger.log('🛑 Cerrando túnel SSH...');
+      this.logger.log('Cerrando túnel SSH por apagado de la app...');
       try {
-        if (this.tunnelInstance.server) {
-          this.tunnelInstance.server.close();
-        }
-        if (this.tunnelInstance.conn) {
-          this.tunnelInstance.conn.end();
-        }
+        this.tunnelInstance.server?.close();
+        this.tunnelInstance.conn?.end();
         this.tunnelInstance = null;
-        this.logger.log('✅ Túnel SSH cerrado correctamente');
+        this.logger.log('Túnel SSH cerrado correctamente');
       } catch (err) {
-        this.logger.error('❌ Error cerrando túnel:', err);
+        this.logger.error('Error cerrando túnel:', err);
       }
     }
   }

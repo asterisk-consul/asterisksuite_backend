@@ -144,6 +144,7 @@ model articulos {
   impuestoalic                                      Decimal?                  @default(0) @db.Decimal(6, 3)
   isservice                                         Boolean?                  @default(false)
   ischeque                                          Boolean?                  @default(false)
+  isbom                                             Boolean?                  @default(false)
   cuentacontableid                                  BigInt?
   isamedida                                         Boolean?                  @default(false)
   articuloespec                                     articuloespec[]
