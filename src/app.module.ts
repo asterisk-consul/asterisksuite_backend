@@ -13,16 +13,12 @@ import { CategoriasModule } from './categorias/categorias.module.js';
   imports: [
     // 1. Load the configuration FIRST.
     AppConfigModule,
-
-    // 2. Load the PrismaModule AFTER the configuration is loaded and global.
-    PrismaModule,
-
-    // 3. Load other modules that depend on the database/config.
     SshModule,
+    PrismaModule,
     BootstrapModule,
     AuthModule,
     ArticulosModule,
     CategoriasModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

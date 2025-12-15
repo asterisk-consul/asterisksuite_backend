@@ -6,4 +6,10 @@ import { SshService } from './ssh.service.js';
     providers: [SshService],
     exports: [SshService],
 })
-export class SshModule { }
+export class SshModule {
+    constructor(private readonly sshService: SshService) { }
+
+    async onModuleInit() {
+        await this.sshService.createSSHTunnel(5433);
+    }
+}

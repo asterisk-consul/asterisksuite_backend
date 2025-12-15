@@ -10,7 +10,7 @@ import {
 
 @Injectable()
 export class ArticulosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async findAll() {
     return this.prisma.articulos.findMany({
@@ -35,7 +35,7 @@ export class ArticulosService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: bigint) {
     const articulo = await this.prisma.articulos.findUnique({
       where: { id },
       include: {
