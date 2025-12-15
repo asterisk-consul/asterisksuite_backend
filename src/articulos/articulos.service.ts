@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { ArticuloPrecioDTO } from './dto/arbol-costos.dto.js';
 import {
   ArticuloSafe,
   ArticuloCompuestoSafe,
@@ -9,7 +10,7 @@ import {
 
 @Injectable()
 export class ArticulosService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async findAll() {
     return this.prisma.articulos.findMany({
@@ -35,10 +36,8 @@ export class ArticulosService {
   }
 
   async findOne(id: number) {
-    return this.prisma.articulos.findUnique({
-      where: {
-        id: id,
-      },
+    const articulo = await this.prisma.articulos.findUnique({
+      where: { id },
       include: {
         articuloespec: true,
         articuloprecio: true,
@@ -46,10 +45,7 @@ export class ArticulosService {
         depositosarticulos: {
           select: {
             depositos: {
-              select: {
-                id: true,
-                descrip: true,
-              },
+              select: { id: true, descrip: true },
             },
           },
         },
@@ -59,6 +55,22 @@ export class ArticulosService {
         articulos_padre: true,
       },
     });
+
+    if (!articulo) return null;
+
+    return {
+      ...articulo,
+      articuloprecio: articulo.articuloprecio.map(
+        (p): ArticuloPrecioDTO => ({
+          id: p.id,
+          articuloid: p.articuloid,
+          categid: p.categid,
+          precio: p.precio ? Number(p.precio) : null,
+          changedate: p.changedate ? p.changedate.toISOString() : null,
+          factorconversion: p.factorconversion,
+        }),
+      ),
+    };
   }
 
   async obtenerArbolCostos(articuloId: number): Promise<ArbolCostosNodo> {
@@ -128,7 +140,7 @@ export class ArticulosService {
 
     return raiz;
   }
-  
+
   /** ==========================================================
    * FUNCIÓN RECURSIVA PARA CALCULAR COSTOS (Versión correcta)
    * ========================================================== */
@@ -178,14 +190,14 @@ export class ArticulosService {
                 descrip: true,
               },
             },
-          }
+          },
         },
         tipoarticulos: {
           include: {
             categorias: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     /** ============================================================
@@ -198,8 +210,8 @@ export class ArticulosService {
         parentarticuloid: true,
         cantidad: true,
         ancho: true,
-        largo: true
-      }
+        largo: true,
+      },
     });
 
     /** ============================================================
@@ -223,24 +235,22 @@ export class ArticulosService {
         // ==========================================
         // NUEVO: Depósitos
         // ==========================================
-        depositos: a.depositosarticulos.map(d => ({
+        depositos: a.depositosarticulos.map((d) => ({
           id: d.id,
           cantidad: Number(d.cantidad),
-          deposito: d.depositos?.descrip ?? ''   // Nunca null
+          deposito: d.depositos?.descrip ?? '', // Nunca null
         })),
 
         // ==========================================
         // NUEVO: Categorías (tipos de artículo)
         // ==========================================
-        categorias: a.tipoarticulos.map(t => ({
+        categorias: a.tipoarticulos.map((t) => ({
           id: t.categorias?.id ?? BigInt(0),
-          name: t.categorias?.name ?? ''
+          name: t.categorias?.name ?? '',
         })),
 
-
-        hijos: []
+        hijos: [],
       });
-
     }
 
     /** ============================================================
@@ -258,9 +268,8 @@ export class ArticulosService {
         ...hijo,
         cantidad: Number(comp.cantidad ?? 1),
         ancho: comp.ancho !== null ? Number(comp.ancho) : null,
-        largo: comp.largo !== null ? Number(comp.largo) : null
+        largo: comp.largo !== null ? Number(comp.largo) : null,
       });
-
     }
 
     /** ============================================================
@@ -271,5 +280,4 @@ export class ArticulosService {
 
     return raiz;
   }
-
 }

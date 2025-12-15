@@ -24,16 +24,16 @@ export interface ArbolCostosNodo {
 }
 
 export type NodoListaMaestra = {
-  id: bigint
-  nombre: string
-  internalcode: string | null
-  externalcode: string | null
-  cantidad: number
-  ancho: number | null
-  largo: number | null
-  um: string | null
-  ub: number | null
-  esTerminal: boolean
+  id: bigint;
+  nombre: string;
+  internalcode: string | null;
+  externalcode: string | null;
+  cantidad: number;
+  ancho: number | null;
+  largo: number | null;
+  um: string | null;
+  ub: number | null;
+  esTerminal: boolean;
   depositos?: {
     id: bigint;
     cantidad: number;
@@ -45,5 +45,5 @@ export type NodoListaMaestra = {
     name: string;
   }[];
 
-  hijos: NodoListaMaestra[]
-}
+  hijos: NodoListaMaestra[];
+};

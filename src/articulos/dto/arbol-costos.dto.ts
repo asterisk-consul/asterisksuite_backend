@@ -1,5 +1,5 @@
 export class ArbolCostosDto {
-  id: bigint;
+  id: number;
   nombre: string | null;
   descrip: string | null;
   precio: number; // precio propio
@@ -7,4 +7,13 @@ export class ArbolCostosDto {
   costoPropio: number;
   costoTotal: number;
   hijos?: ArbolCostosDto[];
+}
+
+export interface ArticuloPrecioDTO {
+  id: bigint;
+  articuloid: bigint | null;
+  categid: bigint | null;
+  precio: number | null; // <-- cambiamos Decimal a number
+  changedate: string | null;
+  factorconversion: number | null;
 }

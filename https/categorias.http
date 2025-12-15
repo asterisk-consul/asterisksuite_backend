@@ -1,0 +1,77 @@
+### =========================
+### 1. Login
+### =========================
+POST http://localhost:3008/api/login
+Content-Type: application/json
+
+{
+  "username": "Administrador",
+  "password": "1234"
+}
+
+### Copiá el token del response y pegalo abajo
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTcxNzE0MywiZXhwIjoxNzY1ODAzNTQzfQ.j9pzcYqf4I_3XCodZ373RnTfXTP0pdkQ2PTESyC-Kmo
+
+
+### =========================
+### 2. Listar todas las categorías
+### =========================
+GET http://localhost:3008/api/categorias
+Authorization: {{token}}
+
+
+### =========================
+### 3. Listar categorías por UN grupo
+### =========================
+GET http://localhost:3008/api/categorias?grupo=opciondesplegable
+Authorization: {{token}}
+
+
+### =========================
+### 4. Listar categorías por VARIOS grupos
+### (CSV)
+### =========================
+GET http://localhost:3008/api/categorias?grupo=opciondesplegable,ventas,compras
+Authorization: {{token}}
+
+
+### =========================
+### 5. Listar por grupo + parentid
+### =========================
+GET http://localhost:3008/api/categorias?grupo=opciondesplegable&parentid=3
+Authorization: {{token}}
+
+
+### =========================
+### 6. Crear categoría
+### =========================
+POST http://localhost:3008/api/categorias
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Categoría prueba",
+  "grupo": "opciondesplegable",
+  "orden": 10,
+  "notas": "Creada desde archivo http"
+}
+
+
+### =========================
+### 7. Actualizar categoría
+### =========================
+PATCH http://localhost:3008/api/categorias/1
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Categoría prueba actualizada",
+  "orden": 20
+}
+
+
+### =========================
+### 8. Eliminar categoría
+### =========================
+DELETE http://localhost:3008/api/categorias/1
+Authorization: {{token}}
