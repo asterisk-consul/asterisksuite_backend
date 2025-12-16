@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Copiá el token del response y pegalo abajo
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTcxNzE0MywiZXhwIjoxNzY1ODAzNTQzfQ.j9pzcYqf4I_3XCodZ373RnTfXTP0pdkQ2PTESyC-Kmo
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTgyMzg0MiwiZXhwIjoxNzY1OTEwMjQyfQ.L76Agksg_m8H7nT-BFgMQbHktuxQBJEM1nDCK7XJZ0E
 
 
 ### =========================
@@ -19,11 +19,17 @@ Content-Type: application/json
 GET http://localhost:3008/api/categorias
 Authorization: {{token}}
 
+### =========================
+### 2.b Listar todas las categorías  por id
+### =========================
+GET http://localhost:3008/api/categorias/1130
+Authorization: {{token}}
+
 
 ### =========================
 ### 3. Listar categorías por UN grupo
 ### =========================
-GET http://localhost:3008/api/categorias?grupo=opciondesplegable
+GET http://localhost:3008/api/categorias?grupo=tipoprecio
 Authorization: {{token}}
 
 
