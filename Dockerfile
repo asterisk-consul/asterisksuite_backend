@@ -3,9 +3,18 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copiar package.json y package-lock.json / instalar dependencias
+# Copiar package.json y package-lock.json
 COPY package*.json ./
+
+# Instalar dependencias
 RUN npm install
+
+# Copiar Prisma schema
+COPY prisma ./prisma
+
+# Generar cliente de Prisma
+RUN npm install prisma --save-dev
+RUN npx prisma generate
 
 # Copiar el resto del proyecto
 COPY . .
