@@ -16,4 +16,13 @@ commands:
   deploy:
     - docker stop asterisksuite_backend || true
     - docker rm asterisksuite_backend || true
-    - docker run -d --name asterisksuite_backend -p 3008:3008 asterisksuite_backend
+    - docker run -d --name asterisksuite_backend \
+      -p 3008:3008 \
+      -e PORT=3008 \
+      -e PG_USER=postgres \
+      -e PG_PASSWORD=postgres \
+      -e PG_DATABASE=va9000-alona \
+      -e PG_PORT=5433 \
+      -e JWT_SECRET=donandresasterisk \
+      -e DATABASE_URL="postgresql://postgres:postgres@localhost:5433/va9000-alona?schema=test9000" \
+      asterisksuite_backend
