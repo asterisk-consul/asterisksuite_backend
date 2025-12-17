@@ -1,7 +1,7 @@
 ### =========================
 ### 1. Login
 ### =========================
-POST http://localhost:3008/api/login
+POST http://apialona.asterisksuite.cloud:3008/api/login
 Content-Type: application/json
 
 {
