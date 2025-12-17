@@ -1,0 +1,19 @@
+name: asterisksuite_backend
+host: 198.27.81.163
+username: soporte
+privateKey: ./keys/id_rsa
+path: /home/soporte/asterisksuite_backend
+
+build:
+  type: Dockerfile # Usamos Dockerfile
+  context: . # Carpeta donde está el Dockerfile
+  dockerfile: Dockerfile
+
+commands:
+  pre-deploy:
+    - docker pull node:20-alpine || true
+    - docker build -t asterisksuite_backend .
+  deploy:
+    - docker stop asterisksuite_backend || true
+    - docker rm asterisksuite_backend || true
+    - docker run -d --name asterisksuite_backend -p 3008:3008 asterisksuite_backend
