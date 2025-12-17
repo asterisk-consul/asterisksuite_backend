@@ -1,4 +1,4 @@
-# Etapa de build
+# ===== Etapa de build =====
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY . .
 # Build de NestJS
 RUN npm run build
 
-# Etapa de producción
+# ===== Etapa de producción =====
 FROM node:20-alpine
 
 WORKDIR /app
@@ -25,11 +25,8 @@ RUN npm install --only=production
 # Copiar la carpeta dist desde el build
 COPY --from=builder /app/dist ./dist
 
-# Copiar el .env
-COPY .env .env
-
 # Exponer el puerto de tu app
 EXPOSE 3008
 
-# Comando para correr la app
+# Comando para ejecutar la app
 CMD ["node", "dist/main.js"]
