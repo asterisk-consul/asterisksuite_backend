@@ -1,4 +1,4 @@
-# ===== BUILD =====
+# ===== Etapa de build =====
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -7,12 +7,13 @@ COPY package*.json ./
 RUN npm install
 
 COPY prisma ./prisma
-COPY . .
+RUN npx prisma generate
 
+COPY . .
 RUN npm run build
 
 
-# ===== RUNTIME =====
+# ===== Etapa de producción =====
 FROM node:20-alpine
 
 WORKDIR /app
@@ -20,11 +21,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --only=production
 
-COPY prisma ./prisma
 COPY --from=builder /app/dist ./dist
 
-# 🔑 Generar Prisma YA EN PRODUCCIÓN
-RUN npx prisma generate
+EXPOSE 3000
 
-EXPOSE 3008
 CMD ["node", "dist/src/main.js"]

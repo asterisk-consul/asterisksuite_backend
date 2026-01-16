@@ -23,11 +23,12 @@ async function bootstrap() {
   app.enableCors({ origin: true, credentials: true });
 
   const config = app.get(ConfigService);
-  const port: number = config.get<number>('PORT') ?? 3008;
+  const port = config.get<number>('PORT') ?? 3008;
 
-  await app.listen(port);
+  // 🔑 CLAVE PARA DOCKER / DOCKPLOY
+  await app.listen(port, '0.0.0.0');
 
-  logger.log(`Server running on http://localhost:${port}`);
+  logger.log(`Server running on port ${port}`);
 }
 
 bootstrap();

@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard.js';
 @Controller('articulos')
 @UseGuards(JwtAuthGuard) // Protege todas las rutas del controlador
 export class ArticulosController {
-  constructor(private articulosService: ArticulosService) { }
+  constructor(private articulosService: ArticulosService) {}
 
   @Get('index')
   async index() {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { CreateCategoriaDto } from './dto/create-categorias.dto.js';
-import { UpdateCategoriaDto } from './dto/update-categoria.dto.js';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateCategoriaDto } from './dto/create-categorias.dto';
+import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 
 @Injectable()
 export class CategoriasService {

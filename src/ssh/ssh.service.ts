@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  OnModuleDestroy,
-} from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTunnel } from 'tunnel-ssh';
 import * as net from 'net';
@@ -25,7 +21,7 @@ export class SshService implements OnModuleDestroy {
     this.readyResolver = resolve;
   });
 
-  constructor(private readonly config: ConfigService) { }
+  constructor(private readonly config: ConfigService) {}
 
   // ===============================
   // PUBLIC
@@ -65,21 +61,15 @@ export class SshService implements OnModuleDestroy {
         return;
       }
 
-      this.conn.forwardOut(
-        '127.0.0.1',
-        0,
-        '127.0.0.1',
-        5432,
-        (err, stream) => {
-          if (err || !stream) {
-            socket.destroy();
-            return;
-          }
+      this.conn.forwardOut('127.0.0.1', 0, '127.0.0.1', 5432, (err, stream) => {
+        if (err || !stream) {
+          socket.destroy();
+          return;
+        }
 
-          socket.pipe(stream);
-          stream.pipe(socket);
-        },
-      );
+        socket.pipe(stream);
+        stream.pipe(socket);
+      });
     });
 
     try {
@@ -107,15 +97,9 @@ export class SshService implements OnModuleDestroy {
 
       this.conn = sshConn;
 
-      sshConn.on('error', (e) =>
-        this.handleTunnelClose(localPort, e),
-      );
-      sshConn.on('end', () =>
-        this.handleTunnelClose(localPort, 'end'),
-      );
-      sshConn.on('close', () =>
-        this.handleTunnelClose(localPort, 'close'),
-      );
+      sshConn.on('error', (e) => this.handleTunnelClose(localPort, e));
+      sshConn.on('end', () => this.handleTunnelClose(localPort, 'end'));
+      sshConn.on('close', () => this.handleTunnelClose(localPort, 'close'));
 
       // 🔴 LISTEN SOLO CUANDO SSH ESTÁ LISTO
       server.listen(localPort, '127.0.0.1', () => {
@@ -139,10 +123,7 @@ export class SshService implements OnModuleDestroy {
   // ============================================================
   // MANEJO DE CAÍDA Y RECONEXIÓN
   // ============================================================
-  private async handleTunnelClose(
-    localPort: number,
-    reason: any,
-  ) {
+  private async handleTunnelClose(localPort: number, reason: any) {
     if (this.reconnecting) return;
     this.reconnecting = true;
 
@@ -153,9 +134,7 @@ export class SshService implements OnModuleDestroy {
     let delay = 2000;
 
     while (!this.conn) {
-      this.logger.log(
-        `Reintentando túnel SSH en ${delay / 1000}s...`,
-      );
+      this.logger.log(`Reintentando túnel SSH en ${delay / 1000}s...`);
       await new Promise((res) => setTimeout(res, delay));
 
       try {
@@ -176,7 +155,7 @@ export class SshService implements OnModuleDestroy {
     try {
       this.server?.close();
       this.conn?.end();
-    } catch { }
+    } catch {}
 
     this.server = null;
     this.conn = null;
