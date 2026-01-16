@@ -1,15 +1,39 @@
-deploy:
-  - docker stop asterisksuite_backend || true
-  - docker rm asterisksuite_backend || true
-  - docker run -d --name asterisksuite_backend \
-    -e PORT=3000 \
-    -e PG_USER=postgres \
-    -e PG_PASSWORD=postgres \
-    -e PG_DATABASE=va9000-alona \
-    -e PG_PORT=5433 \
-    -e JWT_SECRET=donandresasterisk \
-    -e DATABASE_URL="postgresql://dokploy:amukds4wi9001583845717ad2@dokploy-postgres:5432/dokploy?schema=test9000" \
-    -l "traefik.enable=true" \
-    -l "traefik.http.routers.asterisksuite_backend.rule=Host(`apialona.asterisksuite.cloud`)" \
-    -l "traefik.http.services.asterisksuite_backend.loadbalancer.server.port=3000" \
-    asterisksuite_backend
+name: asterisksuite_backend
+host: 198.27.81.163
+username: soporte
+privateKey: ./keys/id_rsa
+path: /home/soporte/asterisksuite_backend
+
+build:
+  type: Dockerfile
+  context: .
+  dockerfile: Dockerfile
+
+commands:
+  pre-deploy:
+    # Asegurarse de tener la imagen base
+    - docker pull node:20-alpine || true
+    # Build del contenedor
+    - docker build -t asterisksuite_backend .
+
+  deploy:
+    # Detener y remover contenedor previo si existe
+    - docker stop asterisksuite_backend || true
+    - docker rm asterisksuite_backend || true
+
+    # Levantar contenedor con variables de entorno y volumen para clave SSH
+    - docker run -d --name asterisksuite_backend \
+      -p 3008:3008 \
+      -e PORT=3008 \
+      -e JWT_SECRET=donandresasterisk \
+      -e SSH_HOST=198.27.81.163 \
+      -e SSH_PORT=1990 \
+      -e SSH_USER=soporte \
+      -e SSH_PRIVATE_KEY_PATH=/app/keys/id_rsa \
+      -e SSH_LOCAL_PORT=5433 \
+      -e DATABASE_URL="postgresql://postgres:postgres@localhost:5433/va9000-alona?schema=test9000" \
+      -v ./keys:/app/keys:ro \
+      -l "traefik.enable=true" \
+      -l "traefik.http.routers.asterisksuite_backend.rule=Host(`apialona.asterisksuite.cloud`)" \
+      -l "traefik.http.services.asterisksuite_backend.loadbalancer.server.port=3000" \
+      asterisksuite_backend

@@ -6,7 +6,15 @@ Content-Type: application/json
     "username": "Administrador",
     "password": "1234"
 }
+###login alona
 
+POST https://apialona.asterisksuite.cloud/auth/login
+Content-Type: application/json
+
+{
+    "username": "Administrador",
+    "password": "1234"
+}
 
 ### login flowsma
 POST https://api.flowsma.com/dev/api/login
