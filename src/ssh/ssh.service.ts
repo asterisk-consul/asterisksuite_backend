@@ -37,9 +37,6 @@ export class SshService implements OnModuleDestroy {
     if (this.isConnecting || this.conn) return;
 
     this.isConnecting = true;
-    this.logger.log(
-      `Iniciando creación de túnel SSH en puerto ${localPort}...`,
-    );
 
     const sshHost = this.config.get<string>('SSH_HOST');
     const sshUser = this.config.get<string>('SSH_USER');
@@ -51,34 +48,16 @@ export class SshService implements OnModuleDestroy {
       throw new Error('Variables de entorno SSH incompletas');
     }
 
-    // TCP server — NO listen todavía
-    const server = net.createServer();
-    this.server = server;
-
-    server.on('connection', (socket) => {
-      if (!this.conn) {
-        socket.destroy();
-        return;
-      }
-
-      this.conn.forwardOut('127.0.0.1', 0, '127.0.0.1', 5432, (err, stream) => {
-        if (err || !stream) {
-          socket.destroy();
-          return;
-        }
-
-        socket.pipe(stream);
-        stream.pipe(socket);
-      });
-    });
-
     try {
-      const [_, sshConn] = await createTunnel(
+      const [, sshConn] = await createTunnel(
         {
           autoClose: true,
           reconnectOnError: false,
         },
-        { port: localPort },
+        {
+          host: '127.0.0.1',
+          port: localPort,
+        },
         {
           host: sshHost,
           port: this.config.get('SSH_PORT', 22),
@@ -88,8 +67,6 @@ export class SshService implements OnModuleDestroy {
           keepaliveCountMax: 3,
         },
         {
-          srcAddr: '127.0.0.1',
-          srcPort: localPort,
           dstAddr: '127.0.0.1',
           dstPort: 5432,
         },
@@ -101,22 +78,16 @@ export class SshService implements OnModuleDestroy {
       sshConn.on('end', () => this.handleTunnelClose(localPort, 'end'));
       sshConn.on('close', () => this.handleTunnelClose(localPort, 'close'));
 
-      // 🔴 LISTEN SOLO CUANDO SSH ESTÁ LISTO
-      server.listen(localPort, '127.0.0.1', () => {
-        this.logger.log(
-          `Túnel SSH activo en localhost:${localPort} → ${sshHost}:5432`,
-        );
+      this.logger.log(
+        `Túnel SSH activo en localhost:${localPort} → ${sshHost}:5432`,
+      );
 
-        // 🔴 RESUELVE READY
-        this.readyResolver();
-      });
-
-      this.isConnecting = false;
+      this.readyResolver();
     } catch (err) {
-      this.logger.error('Error creando túnel SSH', err);
       this.cleanup();
-      this.isConnecting = false;
       throw err;
+    } finally {
+      this.isConnecting = false;
     }
   }
 
@@ -153,11 +124,9 @@ export class SshService implements OnModuleDestroy {
   // ============================================================
   private cleanup() {
     try {
-      this.server?.close();
-      this.conn?.end();
+      this.conn?.close?.();
+      this.conn?.end?.();
     } catch {}
-
-    this.server = null;
     this.conn = null;
   }
 
