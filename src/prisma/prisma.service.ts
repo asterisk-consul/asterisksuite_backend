@@ -2,8 +2,7 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from 'src/generated/prisma/client';
-import { SshService } from 'src/ssh/ssh.service';
-
+import { SshService } from '../ssh/ssh.service';
 @Injectable()
 export class PrismaService
   extends PrismaClient
@@ -16,10 +15,10 @@ export class PrismaService
   }
 
   async onModuleInit() {
-    // 🔴 1. Levanta el túnel (await bloquea hasta que está listo)
-    await this.sshService.createSSHTunnel(5433); // o el puerto local que uses
+    // 🔴 ESPERA AL TÚNEL
+    await this.sshService.waitUntilReady();
 
-    // 🔴 2. Recién ahora conecta Prisma
+    // 🔴 RECIÉN AHORA conecta Prisma
     await this.$connect();
   }
 
