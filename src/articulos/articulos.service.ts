@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { Prisma } from 'src/generated/prisma/client.js';
 import { ArticuloPrecioDTO } from './dto/arbol-costos.dto.js';
 import {
   ArticuloSafe,
@@ -10,28 +11,76 @@ import {
 
 @Injectable()
 export class ArticulosService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.articulos.findMany({
-      include: {
-        articuloespec: true,
-        articuloprecio: true,
-        depositosarticulos: {
-          select: {
-            cantidad: true,
-            depositos: {
-              select: {
-                id: true,
-                descrip: true,
-              },
-            },
-          },
+  async findAll(query: { expand?: string; page?: number; limit?: number }) {
+    // ---------------------------
+    // Paginación (control backend)
+    // ---------------------------
+    const page = Number(query.page) >= 0 ? Number(query.page) : 0;
+    const limit = Math.min(Number(query.limit) || 25, 100);
+
+    // ---------------------------
+    // Expansiones permitidas
+    // ---------------------------
+    const allowedExpands = ['precio', 'espec'];
+
+    const expands = (query.expand ?? '')
+      .split(',')
+      .filter((e) => allowedExpands.includes(e));
+
+    // ---------------------------
+    // Select base (siempre liviano)
+    // ---------------------------
+    const select: Prisma.articulosSelect = {
+      id: true,
+      internalcode: true,
+      externalcode: true,
+      nombre: true,
+      descrip: true,
+      caracteristicas: true,
+      categid: true,
+      activo: true,
+      um: true,
+      cuentacontableid: true,
+      isbom: true,
+      ischeque: true,
+      // SIEMPRE incluido (filtros)
+      tipoarticulos: {
+        select: {
+          id: true,
+          categid: true,
         },
-        tipoarticulos: true,
-        hijos: true,
-        articulos_padre: true,
       },
+    };
+
+    // ---------------------------
+    // Expansiones opcionales
+    // ---------------------------
+    if (expands.includes('precio')) {
+      select.articuloprecio = {
+        select: {
+          precio: true,
+        },
+      };
+    }
+
+    if (expands.includes('espec')) {
+      select.articuloespec = {
+        select: {
+          descrip: true,
+        },
+      };
+    }
+
+    // ---------------------------
+    // Query final
+    // ---------------------------
+    return this.prisma.articulos.findMany({
+      select,
+      skip: page * limit,
+      take: limit,
+      orderBy: { id: 'asc' },
     });
   }
 

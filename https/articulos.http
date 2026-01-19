@@ -1,25 +1,42 @@
+//@url= https://apialona.asterisksuite.cloud/api
+@url= http://localhost:3000/api
+
+@token= Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2ODY1NjY0NywiZXhwIjoxNzY4NzQzMDQ3fQ.1b7kkWO_lr8hhn2bT2e7kDQyTkA0SEN1L5xIjlbugew
+
 ### 1. Login
-POST http://localhost:3008/api/login
+POST http://localhost:3000/api/login
 Content-Type: application/json
 
 {
   "username": "Administrador",
   "password": "1234"
 }
+###login alona
 
+POST {{url}}/login
+Content-Type: application/json
+
+{
+    "username": "Administrador",
+    "password": "1234"
+}
+
+### trae todos los articulos pero lo basico
+GET {{url}}/articulos/index
+Authorization: {{token}}
+
+### trae todos los articulos con las especificaciones que les pasemos
+GET {{url}}/articulos/index?expand=precio,espec
+Authorization: {{token}}
 
 ###
-GET http://localhost:3008/articulos/index
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzOCIsInVzZXJuYW1lIjoiQWRtaW5pc3RyYWRvciIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzY1Mjg3NDkwLCJleHAiOjE3NjUzNzM4OTB9.lCHyRXs6VPwcaIvGZFD6Iftm2jXzwyl8afPtlgJuRN8
-
-###
-GET http://localhost:3008/articulos/arbol-costos/1118
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTI4NzgzNCwiZXhwIjoxNzY1Mzc0MjM0fQ.E4DJIe_6bh5uLFHZX3MMThEiWT5spaimMIHXxnIDyzY
+GET {{url}}/articulos/arbol-costos/1118
+Authorization: {{token}}
 
 ###
 GET http://localhost:3008/articulos/compuestos/1118
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTYyNjE0NSwiZXhwIjoxNzY1NzEyNTQ1fQ.f0-uIilya73Tme8xOEOe_geqWpj-1XBEg8OgdYv2ZfI
+Authorization: {{token}}
 
 ###
 GET http://localhost:3008/articulos/1133
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2NTM4OTExOCwiZXhwIjoxNzY1NDc1NTE4fQ.mO-e2C-nKyQBeYmKmZ3NXBMpqhIAv1no-iDt58fYuww
+Authorization: {{token}}
