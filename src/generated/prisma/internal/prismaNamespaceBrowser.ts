@@ -139,6 +139,7 @@ export const ModelName = {
   tipoarticulos: 'tipoarticulos',
   user_role: 'user_role',
   usuarios: 'usuarios',
+  UserTablePreference: 'UserTablePreference',
   wallet: 'wallet'
 } as const
 
@@ -1432,6 +1433,20 @@ export const UsuariosScalarFieldEnum = {
 export type UsuariosScalarFieldEnum = (typeof UsuariosScalarFieldEnum)[keyof typeof UsuariosScalarFieldEnum]
 
 
+export const UserTablePreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tableKey: 'tableKey',
+  visibleColumns: 'visibleColumns',
+  pageSize: 'pageSize',
+  sort: 'sort',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserTablePreferenceScalarFieldEnum = (typeof UserTablePreferenceScalarFieldEnum)[keyof typeof UserTablePreferenceScalarFieldEnum]
+
+
 export const WalletScalarFieldEnum = {
   id: 'id',
   perfilid: 'perfilid',
@@ -1457,6 +1472,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

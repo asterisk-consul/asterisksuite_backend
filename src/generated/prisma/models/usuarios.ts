@@ -269,6 +269,7 @@ export type usuariosWhereInput = {
   registrocuerpo?: Prisma.RegistrocuerpoListRelationFilter
   user_role?: Prisma.User_roleListRelationFilter
   perfiles?: Prisma.XOR<Prisma.PerfilesNullableScalarRelationFilter, Prisma.perfilesWhereInput> | null
+  userTablePreferences?: Prisma.UserTablePreferenceListRelationFilter
 }
 
 export type usuariosOrderByWithRelationInput = {
@@ -287,6 +288,7 @@ export type usuariosOrderByWithRelationInput = {
   registrocuerpo?: Prisma.registrocuerpoOrderByRelationAggregateInput
   user_role?: Prisma.user_roleOrderByRelationAggregateInput
   perfiles?: Prisma.perfilesOrderByWithRelationInput
+  userTablePreferences?: Prisma.UserTablePreferenceOrderByRelationAggregateInput
 }
 
 export type usuariosWhereUniqueInput = Prisma.AtLeast<{
@@ -308,6 +310,7 @@ export type usuariosWhereUniqueInput = Prisma.AtLeast<{
   registrocuerpo?: Prisma.RegistrocuerpoListRelationFilter
   user_role?: Prisma.User_roleListRelationFilter
   perfiles?: Prisma.XOR<Prisma.PerfilesNullableScalarRelationFilter, Prisma.perfilesWhereInput> | null
+  userTablePreferences?: Prisma.UserTablePreferenceListRelationFilter
 }, "id">
 
 export type usuariosOrderByWithAggregationInput = {
@@ -359,6 +362,7 @@ export type usuariosCreateInput = {
   registrocuerpo?: Prisma.registrocuerpoCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleCreateNestedManyWithoutUsuariosInput
   perfiles?: Prisma.perfilesCreateNestedOneWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUncheckedCreateInput = {
@@ -376,6 +380,7 @@ export type usuariosUncheckedCreateInput = {
   registrocab?: Prisma.registrocabUncheckedCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleUncheckedCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUpdateInput = {
@@ -393,6 +398,7 @@ export type usuariosUpdateInput = {
   registrocuerpo?: Prisma.registrocuerpoUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUpdateManyWithoutUsuariosNestedInput
   perfiles?: Prisma.perfilesUpdateOneWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateInput = {
@@ -410,6 +416,7 @@ export type usuariosUncheckedUpdateInput = {
   registrocab?: Prisma.registrocabUncheckedUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUncheckedUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosCreateManyInput = {
@@ -627,6 +634,20 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type usuariosCreateNestedOneWithoutUserTablePreferencesInput = {
+  create?: Prisma.XOR<Prisma.usuariosCreateWithoutUserTablePreferencesInput, Prisma.usuariosUncheckedCreateWithoutUserTablePreferencesInput>
+  connectOrCreate?: Prisma.usuariosCreateOrConnectWithoutUserTablePreferencesInput
+  connect?: Prisma.usuariosWhereUniqueInput
+}
+
+export type usuariosUpdateOneRequiredWithoutUserTablePreferencesNestedInput = {
+  create?: Prisma.XOR<Prisma.usuariosCreateWithoutUserTablePreferencesInput, Prisma.usuariosUncheckedCreateWithoutUserTablePreferencesInput>
+  connectOrCreate?: Prisma.usuariosCreateOrConnectWithoutUserTablePreferencesInput
+  upsert?: Prisma.usuariosUpsertWithoutUserTablePreferencesInput
+  connect?: Prisma.usuariosWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usuariosUpdateToOneWithWhereWithoutUserTablePreferencesInput, Prisma.usuariosUpdateWithoutUserTablePreferencesInput>, Prisma.usuariosUncheckedUpdateWithoutUserTablePreferencesInput>
+}
+
 export type usuariosCreateWithoutLogs9000Input = {
   id?: bigint | number
   username?: string | null
@@ -641,6 +662,7 @@ export type usuariosCreateWithoutLogs9000Input = {
   registrocuerpo?: Prisma.registrocuerpoCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleCreateNestedManyWithoutUsuariosInput
   perfiles?: Prisma.perfilesCreateNestedOneWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUncheckedCreateWithoutLogs9000Input = {
@@ -657,6 +679,7 @@ export type usuariosUncheckedCreateWithoutLogs9000Input = {
   registrocab?: Prisma.registrocabUncheckedCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleUncheckedCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usuariosCreateOrConnectWithoutLogs9000Input = {
@@ -689,6 +712,7 @@ export type usuariosUpdateWithoutLogs9000Input = {
   registrocuerpo?: Prisma.registrocuerpoUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUpdateManyWithoutUsuariosNestedInput
   perfiles?: Prisma.perfilesUpdateOneWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateWithoutLogs9000Input = {
@@ -705,6 +729,7 @@ export type usuariosUncheckedUpdateWithoutLogs9000Input = {
   registrocab?: Prisma.registrocabUncheckedUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUncheckedUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosCreateWithoutPerfilesInput = {
@@ -721,6 +746,7 @@ export type usuariosCreateWithoutPerfilesInput = {
   registrocab?: Prisma.registrocabCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUncheckedCreateWithoutPerfilesInput = {
@@ -737,6 +763,7 @@ export type usuariosUncheckedCreateWithoutPerfilesInput = {
   registrocab?: Prisma.registrocabUncheckedCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleUncheckedCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usuariosCreateOrConnectWithoutPerfilesInput = {
@@ -795,6 +822,7 @@ export type usuariosCreateWithoutRegistrocabInput = {
   registrocuerpo?: Prisma.registrocuerpoCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleCreateNestedManyWithoutUsuariosInput
   perfiles?: Prisma.perfilesCreateNestedOneWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUncheckedCreateWithoutRegistrocabInput = {
@@ -811,6 +839,7 @@ export type usuariosUncheckedCreateWithoutRegistrocabInput = {
   logs9000?: Prisma.logs9000UncheckedCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleUncheckedCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usuariosCreateOrConnectWithoutRegistrocabInput = {
@@ -843,6 +872,7 @@ export type usuariosUpdateWithoutRegistrocabInput = {
   registrocuerpo?: Prisma.registrocuerpoUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUpdateManyWithoutUsuariosNestedInput
   perfiles?: Prisma.perfilesUpdateOneWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateWithoutRegistrocabInput = {
@@ -859,6 +889,7 @@ export type usuariosUncheckedUpdateWithoutRegistrocabInput = {
   logs9000?: Prisma.logs9000UncheckedUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUncheckedUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosCreateWithoutRegistrocuerpoInput = {
@@ -875,6 +906,7 @@ export type usuariosCreateWithoutRegistrocuerpoInput = {
   registrocab?: Prisma.registrocabCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleCreateNestedManyWithoutUsuariosInput
   perfiles?: Prisma.perfilesCreateNestedOneWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUncheckedCreateWithoutRegistrocuerpoInput = {
@@ -891,6 +923,7 @@ export type usuariosUncheckedCreateWithoutRegistrocuerpoInput = {
   logs9000?: Prisma.logs9000UncheckedCreateNestedManyWithoutUsuariosInput
   registrocab?: Prisma.registrocabUncheckedCreateNestedManyWithoutUsuariosInput
   user_role?: Prisma.user_roleUncheckedCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usuariosCreateOrConnectWithoutRegistrocuerpoInput = {
@@ -923,6 +956,7 @@ export type usuariosUpdateWithoutRegistrocuerpoInput = {
   registrocab?: Prisma.registrocabUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUpdateManyWithoutUsuariosNestedInput
   perfiles?: Prisma.perfilesUpdateOneWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateWithoutRegistrocuerpoInput = {
@@ -939,6 +973,7 @@ export type usuariosUncheckedUpdateWithoutRegistrocuerpoInput = {
   logs9000?: Prisma.logs9000UncheckedUpdateManyWithoutUsuariosNestedInput
   registrocab?: Prisma.registrocabUncheckedUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUncheckedUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosCreateWithoutUser_roleInput = {
@@ -955,6 +990,7 @@ export type usuariosCreateWithoutUser_roleInput = {
   registrocab?: Prisma.registrocabCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoCreateNestedManyWithoutUsuariosInput
   perfiles?: Prisma.perfilesCreateNestedOneWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceCreateNestedManyWithoutUserInput
 }
 
 export type usuariosUncheckedCreateWithoutUser_roleInput = {
@@ -971,6 +1007,7 @@ export type usuariosUncheckedCreateWithoutUser_roleInput = {
   logs9000?: Prisma.logs9000UncheckedCreateNestedManyWithoutUsuariosInput
   registrocab?: Prisma.registrocabUncheckedCreateNestedManyWithoutUsuariosInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedCreateNestedManyWithoutUsuariosInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usuariosCreateOrConnectWithoutUser_roleInput = {
@@ -1003,6 +1040,7 @@ export type usuariosUpdateWithoutUser_roleInput = {
   registrocab?: Prisma.registrocabUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUpdateManyWithoutUsuariosNestedInput
   perfiles?: Prisma.perfilesUpdateOneWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateWithoutUser_roleInput = {
@@ -1019,6 +1057,91 @@ export type usuariosUncheckedUpdateWithoutUser_roleInput = {
   logs9000?: Prisma.logs9000UncheckedUpdateManyWithoutUsuariosNestedInput
   registrocab?: Prisma.registrocabUncheckedUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usuariosCreateWithoutUserTablePreferencesInput = {
+  id?: bigint | number
+  username?: string | null
+  version?: bigint | number
+  password_expired?: boolean
+  account_locked?: boolean
+  password: string
+  account_expired?: boolean
+  enabled?: boolean
+  email?: string | null
+  logs9000?: Prisma.logs9000CreateNestedManyWithoutUsuariosInput
+  registrocab?: Prisma.registrocabCreateNestedManyWithoutUsuariosInput
+  registrocuerpo?: Prisma.registrocuerpoCreateNestedManyWithoutUsuariosInput
+  user_role?: Prisma.user_roleCreateNestedManyWithoutUsuariosInput
+  perfiles?: Prisma.perfilesCreateNestedOneWithoutUsuariosInput
+}
+
+export type usuariosUncheckedCreateWithoutUserTablePreferencesInput = {
+  id?: bigint | number
+  perfilid?: bigint | number | null
+  username?: string | null
+  version?: bigint | number
+  password_expired?: boolean
+  account_locked?: boolean
+  password: string
+  account_expired?: boolean
+  enabled?: boolean
+  email?: string | null
+  logs9000?: Prisma.logs9000UncheckedCreateNestedManyWithoutUsuariosInput
+  registrocab?: Prisma.registrocabUncheckedCreateNestedManyWithoutUsuariosInput
+  registrocuerpo?: Prisma.registrocuerpoUncheckedCreateNestedManyWithoutUsuariosInput
+  user_role?: Prisma.user_roleUncheckedCreateNestedManyWithoutUsuariosInput
+}
+
+export type usuariosCreateOrConnectWithoutUserTablePreferencesInput = {
+  where: Prisma.usuariosWhereUniqueInput
+  create: Prisma.XOR<Prisma.usuariosCreateWithoutUserTablePreferencesInput, Prisma.usuariosUncheckedCreateWithoutUserTablePreferencesInput>
+}
+
+export type usuariosUpsertWithoutUserTablePreferencesInput = {
+  update: Prisma.XOR<Prisma.usuariosUpdateWithoutUserTablePreferencesInput, Prisma.usuariosUncheckedUpdateWithoutUserTablePreferencesInput>
+  create: Prisma.XOR<Prisma.usuariosCreateWithoutUserTablePreferencesInput, Prisma.usuariosUncheckedCreateWithoutUserTablePreferencesInput>
+  where?: Prisma.usuariosWhereInput
+}
+
+export type usuariosUpdateToOneWithWhereWithoutUserTablePreferencesInput = {
+  where?: Prisma.usuariosWhereInput
+  data: Prisma.XOR<Prisma.usuariosUpdateWithoutUserTablePreferencesInput, Prisma.usuariosUncheckedUpdateWithoutUserTablePreferencesInput>
+}
+
+export type usuariosUpdateWithoutUserTablePreferencesInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  password_expired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  account_locked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  account_expired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logs9000?: Prisma.logs9000UpdateManyWithoutUsuariosNestedInput
+  registrocab?: Prisma.registrocabUpdateManyWithoutUsuariosNestedInput
+  registrocuerpo?: Prisma.registrocuerpoUpdateManyWithoutUsuariosNestedInput
+  user_role?: Prisma.user_roleUpdateManyWithoutUsuariosNestedInput
+  perfiles?: Prisma.perfilesUpdateOneWithoutUsuariosNestedInput
+}
+
+export type usuariosUncheckedUpdateWithoutUserTablePreferencesInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  perfilid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  password_expired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  account_locked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  account_expired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logs9000?: Prisma.logs9000UncheckedUpdateManyWithoutUsuariosNestedInput
+  registrocab?: Prisma.registrocabUncheckedUpdateManyWithoutUsuariosNestedInput
+  registrocuerpo?: Prisma.registrocuerpoUncheckedUpdateManyWithoutUsuariosNestedInput
+  user_role?: Prisma.user_roleUncheckedUpdateManyWithoutUsuariosNestedInput
 }
 
 export type usuariosCreateManyPerfilesInput = {
@@ -1047,6 +1170,7 @@ export type usuariosUpdateWithoutPerfilesInput = {
   registrocab?: Prisma.registrocabUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateWithoutPerfilesInput = {
@@ -1063,6 +1187,7 @@ export type usuariosUncheckedUpdateWithoutPerfilesInput = {
   registrocab?: Prisma.registrocabUncheckedUpdateManyWithoutUsuariosNestedInput
   registrocuerpo?: Prisma.registrocuerpoUncheckedUpdateManyWithoutUsuariosNestedInput
   user_role?: Prisma.user_roleUncheckedUpdateManyWithoutUsuariosNestedInput
+  userTablePreferences?: Prisma.UserTablePreferenceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usuariosUncheckedUpdateManyWithoutPerfilesInput = {
@@ -1087,6 +1212,7 @@ export type UsuariosCountOutputType = {
   registrocab: number
   registrocuerpo: number
   user_role: number
+  userTablePreferences: number
 }
 
 export type UsuariosCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1094,6 +1220,7 @@ export type UsuariosCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   registrocab?: boolean | UsuariosCountOutputTypeCountRegistrocabArgs
   registrocuerpo?: boolean | UsuariosCountOutputTypeCountRegistrocuerpoArgs
   user_role?: boolean | UsuariosCountOutputTypeCountUser_roleArgs
+  userTablePreferences?: boolean | UsuariosCountOutputTypeCountUserTablePreferencesArgs
 }
 
 /**
@@ -1134,6 +1261,13 @@ export type UsuariosCountOutputTypeCountUser_roleArgs<ExtArgs extends runtime.Ty
   where?: Prisma.user_roleWhereInput
 }
 
+/**
+ * UsuariosCountOutputType without action
+ */
+export type UsuariosCountOutputTypeCountUserTablePreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserTablePreferenceWhereInput
+}
+
 
 export type usuariosSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1151,6 +1285,7 @@ export type usuariosSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   registrocuerpo?: boolean | Prisma.usuarios$registrocuerpoArgs<ExtArgs>
   user_role?: boolean | Prisma.usuarios$user_roleArgs<ExtArgs>
   perfiles?: boolean | Prisma.usuarios$perfilesArgs<ExtArgs>
+  userTablePreferences?: boolean | Prisma.usuarios$userTablePreferencesArgs<ExtArgs>
   _count?: boolean | Prisma.UsuariosCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuarios"]>
 
@@ -1202,6 +1337,7 @@ export type usuariosInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   registrocuerpo?: boolean | Prisma.usuarios$registrocuerpoArgs<ExtArgs>
   user_role?: boolean | Prisma.usuarios$user_roleArgs<ExtArgs>
   perfiles?: boolean | Prisma.usuarios$perfilesArgs<ExtArgs>
+  userTablePreferences?: boolean | Prisma.usuarios$userTablePreferencesArgs<ExtArgs>
   _count?: boolean | Prisma.UsuariosCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usuariosIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1219,6 +1355,7 @@ export type $usuariosPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     registrocuerpo: Prisma.$registrocuerpoPayload<ExtArgs>[]
     user_role: Prisma.$user_rolePayload<ExtArgs>[]
     perfiles: Prisma.$perfilesPayload<ExtArgs> | null
+    userTablePreferences: Prisma.$UserTablePreferencePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -1630,6 +1767,7 @@ export interface Prisma__usuariosClient<T, Null = never, ExtArgs extends runtime
   registrocuerpo<T extends Prisma.usuarios$registrocuerpoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usuarios$registrocuerpoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$registrocuerpoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user_role<T extends Prisma.usuarios$user_roleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usuarios$user_roleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$user_rolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   perfiles<T extends Prisma.usuarios$perfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usuarios$perfilesArgs<ExtArgs>>): Prisma.Prisma__perfilesClient<runtime.Types.Result.GetResult<Prisma.$perfilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  userTablePreferences<T extends Prisma.usuarios$userTablePreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usuarios$userTablePreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserTablePreferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2177,6 +2315,30 @@ export type usuarios$perfilesArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.perfilesInclude<ExtArgs> | null
   where?: Prisma.perfilesWhereInput
+}
+
+/**
+ * usuarios.userTablePreferences
+ */
+export type usuarios$userTablePreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserTablePreference
+   */
+  select?: Prisma.UserTablePreferenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserTablePreference
+   */
+  omit?: Prisma.UserTablePreferenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserTablePreferenceInclude<ExtArgs> | null
+  where?: Prisma.UserTablePreferenceWhereInput
+  orderBy?: Prisma.UserTablePreferenceOrderByWithRelationInput | Prisma.UserTablePreferenceOrderByWithRelationInput[]
+  cursor?: Prisma.UserTablePreferenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserTablePreferenceScalarFieldEnum | Prisma.UserTablePreferenceScalarFieldEnum[]
 }
 
 /**

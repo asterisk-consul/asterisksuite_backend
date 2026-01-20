@@ -1,11 +1,12 @@
 // src/articulos/articulos.module.ts
 import { Module } from '@nestjs/common';
-import { PrismaModule } from '../prisma/prisma.module.js';
-import { ArticulosController } from './articulos.controller.js';
-import { ArticulosService } from './articulos.service.js';
+import { PrismaModule } from '../prisma/prisma.module';
+import { ArticulosController } from './articulos.controller';
+import { ArticulosService } from './articulos.service';
+import { TableModule } from '@/tables/table.module';
 
 @Module({
-  imports: [PrismaModule], // Add this
+  imports: [PrismaModule,TableModule], // Add this
   controllers: [ArticulosController],
   providers: [ArticulosService], // Remove PrismaService
   exports: [ArticulosService],

@@ -1645,22 +1645,43 @@ model user_role {
 }
 
 model usuarios {
-  id               BigInt           @id(map: "usuariospk") @default(autoincrement())
-  perfilid         BigInt?
-  username         String?          @db.VarChar(200)
-  version          BigInt           @default(0)
-  password_expired Boolean          @default(false)
-  account_locked   Boolean          @default(false)
-  password         String           @db.VarChar(255)
-  account_expired  Boolean          @default(false)
-  enabled          Boolean          @default(true)
-  email            String?          @db.VarChar(255)
-  logs9000         logs9000[]
-  registrocab      registrocab[]
-  registrocuerpo   registrocuerpo[]
-  user_role        user_role[]
-  perfiles         perfiles?        @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_usuarios_fk")
+  id                   BigInt                @id(map: "usuariospk") @default(autoincrement())
+  perfilid             BigInt?
+  username             String?               @db.VarChar(200)
+  version              BigInt                @default(0)
+  password_expired     Boolean               @default(false)
+  account_locked       Boolean               @default(false)
+  password             String                @db.VarChar(255)
+  account_expired      Boolean               @default(false)
+  enabled              Boolean               @default(true)
+  email                String?               @db.VarChar(255)
+  logs9000             logs9000[]
+  registrocab          registrocab[]
+  registrocuerpo       registrocuerpo[]
+  user_role            user_role[]
+  perfiles             perfiles?             @relation(fields: [perfilid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perfiles_usuarios_fk")
+  userTablePreferences UserTablePreference[]
 
+  @@schema("test9000")
+}
+
+model UserTablePreference {
+  id       BigInt @id @default(autoincrement())
+  userId   BigInt @map("user_id")
+  tableKey String @map("table_key")
+
+  visibleColumns Json  @map("visible_columns")
+  pageSize       Int   @default(25) @map("page_size")
+  sort           Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user usuarios @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tableKey])
+  @@index([userId])
+  @@index([tableKey])
   @@schema("test9000")
 }
 

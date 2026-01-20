@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { Prisma } from 'src/generated/prisma/client.js';
 import { ArticuloPrecioDTO } from './dto/arbol-costos.dto.js';
+import { TableBuilder } from '../tables/table.builder';
+import { ArticulosTable } from './table/articulos.table';
 import {
   ArticuloSafe,
   ArticuloCompuestoSafe,
@@ -11,90 +13,67 @@ import {
 
 @Injectable()
 export class ArticulosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private tableBuilder: TableBuilder) {}
 
-  async findAll(query: { expand?: string; page?: number; limit?: number }) {
-    // ---------------------------
-    // Paginación (control backend)
-    // ---------------------------
-    const page = Number(query.page) >= 0 ? Number(query.page) : 0;
-    const limit = Math.min(Number(query.limit) || 25, 100);
+async findAll(
+  query: { expand?: string; page?: number; limit?: number },
+  userId: bigint,
+) {
+  const allowedExpands = ['precio', 'espec'];
 
-    // ---------------------------
-    // Expansiones permitidas
-    // ---------------------------
-    const allowedExpands = ['precio', 'espec'];
+  const expands = (query.expand ?? '')
+    .split(',')
+    .filter(e => allowedExpands.includes(e));
 
-    const expands = (query.expand ?? '')
-      .split(',')
-      .filter((e) => allowedExpands.includes(e));
-
-    // ---------------------------
-    // Select base (siempre liviano)
-    // ---------------------------
-    const select: Prisma.articulosSelect = {
-      id: true,
-      internalcode: true,
-      externalcode: true,
-      nombre: true,
-      descrip: true,
-      caracteristicas: true,
-      categid: true,
-      activo: true,
-      um: true,
-      cuentacontableid: true,
-      isbom: true,
-      ischeque: true,
-      // SIEMPRE incluido (filtros)
-      tipoarticulos: {
-        select: {
-          id: true,
-          categid: true,
-        },
+  const select: Prisma.articulosSelect = {
+    id: true,
+    internalcode: true,
+    externalcode: true,
+    nombre: true,
+    descrip: true,
+    caracteristicas: true,
+    categid: true,
+    activo: true,
+    um: true,
+    cuentacontableid: true,
+    isbom: true,
+    ischeque: true,
+    tipoarticulos: {
+      select: {
+        id: true,
+        categid: true,
       },
-    };
+    },
+  };
 
-    // ---------------------------
-    // Expansiones opcionales
-    // ---------------------------
-    if (expands.includes('precio')) {
-      select.articuloprecio = {
-        select: {
-          precio: true,
-        },
-      };
-    }
-
-    if (expands.includes('espec')) {
-      select.articuloespec = {
-        select: {
-          descrip: true,
-        },
-      };
-    }
-
-    // ---------------------------
-    // Query final
-    // ---------------------------
-const data = await this.prisma.articulos.findMany({
-  select,
-  skip: page * limit,
-  take: limit,
-  orderBy: { id: 'asc' },
-});
-
-return data.map((a) => ({
-  ...a,
-  id: a.id.toString(),
-  categid: a.categid?.toString(),
-  cuentacontableid: a.cuentacontableid?.toString(),
-  tipoarticulos: a.tipoarticulos.map((t) => ({
-    ...t,
-    id: t.id.toString(),
-    categid: t.categid?.toString(),
-  })),
-}));
+  if (expands.includes('precio')) {
+    select.articuloprecio = { select: { precio: true } };
   }
+
+  if (expands.includes('espec')) {
+    select.articuloespec = { select: { descrip: true } };
+  }
+
+  return this.tableBuilder
+    .for('articulos')
+    .columnsDef(ArticulosTable)
+    .queryModel(this.prisma.articulos)
+    .selectDef(select)
+    .request(query)
+    .user(userId)
+    .map(a => ({
+      ...a,
+      id: a.id.toString(),
+      categid: a.categid?.toString(),
+      cuentacontableid: a.cuentacontableid?.toString(),
+      tipoarticulos: a.tipoarticulos.map(t => ({
+        ...t,
+        id: t.id.toString(),
+        categid: t.categid?.toString(),
+      })),
+    }))
+    .build();
+}
 
   async findOne(id: bigint) {
     const articulo = await this.prisma.articulos.findUnique({

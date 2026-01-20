@@ -478,6 +478,11 @@ export type user_role = Prisma.user_roleModel
  */
 export type usuarios = Prisma.usuariosModel
 /**
+ * Model UserTablePreference
+ * 
+ */
+export type UserTablePreference = Prisma.UserTablePreferenceModel
+/**
  * Model wallet
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  */

@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Query,
+  Req,
   // Post,
   // Body,
   // Param,
@@ -21,8 +22,8 @@ export class ArticulosController {
   constructor(private articulosService: ArticulosService) {}
 
   @Get('index')
-  findAll(@Query() query: { expand?: string; page?: number; limit?: number }) {
-    return this.articulosService.findAll(query);
+  findAll(@Query() query: { expand?: string; page?: number; limit?: number }, @Req() req) {
+    return this.articulosService.findAll(query, req.user.id);
   }
 
   @Get('arbol-costos/:id')

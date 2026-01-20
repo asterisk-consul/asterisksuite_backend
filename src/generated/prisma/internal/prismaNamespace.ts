@@ -472,6 +472,7 @@ export const ModelName = {
   tipoarticulos: 'tipoarticulos',
   user_role: 'user_role',
   usuarios: 'usuarios',
+  UserTablePreference: 'UserTablePreference',
   wallet: 'wallet'
 } as const
 
@@ -488,7 +489,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "afipcomprobantes" | "afippuntosventas" | "articuloamedidacartera" | "articuloespec" | "articuloprecio" | "articulopreciohistorico" | "articulos" | "articuloscompuestos" | "cartera" | "categorias" | "categoriasperfiles" | "channels" | "company" | "companyafip" | "competencianivel" | "competencias" | "comunica" | "contactos" | "depositos" | "depositosarticulos" | "documents" | "empleados" | "eventos" | "eventoslog" | "flowdocument" | "flowdocumentdepositos" | "flowdocumentfiltroarticulo" | "flowdocumentpartesint" | "flowdocumentprocesorelacionado" | "flowdocumentresponsables" | "flowespecializ" | "flowfactores" | "flowpreguntas" | "flowrespuestas" | "grupos" | "impositivos" | "instructivo" | "instructivoactividades" | "instructivoarticulos" | "instructivoexec" | "instructivopuestos" | "instructivotareas" | "instructivotareasresp" | "logs9000" | "logs9000tareas" | "notifyregistrocab" | "ordencab" | "ordencuerpo" | "ordenpresupcuerpo" | "perfilcompetencias" | "perfildocuments" | "perfiles" | "perfilesarticulos" | "perfilesdepositos" | "perfilesprecios" | "perfilesrel" | "puestodescrip" | "puestoscompetencias" | "receptores" | "registrocab" | "registrocabaudio" | "registrocabdocuments" | "registrocabgrupo" | "registrocabrel" | "registrocabseq" | "registrocuerpo" | "reportes" | "reportesacl" | "reportesactividad" | "role" | "rowconfig" | "secuencias" | "statuses" | "statusesprecios" | "statusesrelaciones" | "statusesrelacionesflows" | "statusflows" | "stocklog" | "tareaarticulos" | "tareaexecperfil" | "tareasexec" | "tareasexecarticulos" | "tareasexecdocuments" | "tareasexecpersonas" | "tareasexectiempos" | "tipoarticulos" | "user_role" | "usuarios" | "wallet"
+    modelProps: "afipcomprobantes" | "afippuntosventas" | "articuloamedidacartera" | "articuloespec" | "articuloprecio" | "articulopreciohistorico" | "articulos" | "articuloscompuestos" | "cartera" | "categorias" | "categoriasperfiles" | "channels" | "company" | "companyafip" | "competencianivel" | "competencias" | "comunica" | "contactos" | "depositos" | "depositosarticulos" | "documents" | "empleados" | "eventos" | "eventoslog" | "flowdocument" | "flowdocumentdepositos" | "flowdocumentfiltroarticulo" | "flowdocumentpartesint" | "flowdocumentprocesorelacionado" | "flowdocumentresponsables" | "flowespecializ" | "flowfactores" | "flowpreguntas" | "flowrespuestas" | "grupos" | "impositivos" | "instructivo" | "instructivoactividades" | "instructivoarticulos" | "instructivoexec" | "instructivopuestos" | "instructivotareas" | "instructivotareasresp" | "logs9000" | "logs9000tareas" | "notifyregistrocab" | "ordencab" | "ordencuerpo" | "ordenpresupcuerpo" | "perfilcompetencias" | "perfildocuments" | "perfiles" | "perfilesarticulos" | "perfilesdepositos" | "perfilesprecios" | "perfilesrel" | "puestodescrip" | "puestoscompetencias" | "receptores" | "registrocab" | "registrocabaudio" | "registrocabdocuments" | "registrocabgrupo" | "registrocabrel" | "registrocabseq" | "registrocuerpo" | "reportes" | "reportesacl" | "reportesactividad" | "role" | "rowconfig" | "secuencias" | "statuses" | "statusesprecios" | "statusesrelaciones" | "statusesrelacionesflows" | "statusflows" | "stocklog" | "tareaarticulos" | "tareaexecperfil" | "tareasexec" | "tareasexecarticulos" | "tareasexecdocuments" | "tareasexecpersonas" | "tareasexectiempos" | "tipoarticulos" | "user_role" | "usuarios" | "userTablePreference" | "wallet"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -7004,6 +7005,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserTablePreference: {
+      payload: Prisma.$UserTablePreferencePayload<ExtArgs>
+      fields: Prisma.UserTablePreferenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserTablePreferenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserTablePreferenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>
+        }
+        findFirst: {
+          args: Prisma.UserTablePreferenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserTablePreferenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>
+        }
+        findMany: {
+          args: Prisma.UserTablePreferenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>[]
+        }
+        create: {
+          args: Prisma.UserTablePreferenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>
+        }
+        createMany: {
+          args: Prisma.UserTablePreferenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserTablePreferenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>[]
+        }
+        delete: {
+          args: Prisma.UserTablePreferenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>
+        }
+        update: {
+          args: Prisma.UserTablePreferenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>
+        }
+        deleteMany: {
+          args: Prisma.UserTablePreferenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserTablePreferenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserTablePreferenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>[]
+        }
+        upsert: {
+          args: Prisma.UserTablePreferenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserTablePreferencePayload>
+        }
+        aggregate: {
+          args: Prisma.UserTablePreferenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserTablePreference>
+        }
+        groupBy: {
+          args: Prisma.UserTablePreferenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserTablePreferenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserTablePreferenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserTablePreferenceCountAggregateOutputType> | number
+        }
+      }
+    }
     wallet: {
       payload: Prisma.$walletPayload<ExtArgs>
       fields: Prisma.walletFieldRefs
@@ -8391,6 +8466,20 @@ export const UsuariosScalarFieldEnum = {
 export type UsuariosScalarFieldEnum = (typeof UsuariosScalarFieldEnum)[keyof typeof UsuariosScalarFieldEnum]
 
 
+export const UserTablePreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tableKey: 'tableKey',
+  visibleColumns: 'visibleColumns',
+  pageSize: 'pageSize',
+  sort: 'sort',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserTablePreferenceScalarFieldEnum = (typeof UserTablePreferenceScalarFieldEnum)[keyof typeof UserTablePreferenceScalarFieldEnum]
+
+
 export const WalletScalarFieldEnum = {
   id: 'id',
   perfilid: 'perfilid',
@@ -8416,6 +8505,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -8750,6 +8846,7 @@ export type GlobalOmitConfig = {
   tipoarticulos?: Prisma.tipoarticulosOmit
   user_role?: Prisma.user_roleOmit
   usuarios?: Prisma.usuariosOmit
+  userTablePreference?: Prisma.UserTablePreferenceOmit
   wallet?: Prisma.walletOmit
 }
 
