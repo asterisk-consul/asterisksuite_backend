@@ -76,12 +76,24 @@ export class ArticulosService {
     // ---------------------------
     // Query final
     // ---------------------------
-    return this.prisma.articulos.findMany({
-      select,
-      skip: page * limit,
-      take: limit,
-      orderBy: { id: 'asc' },
-    });
+const data = await this.prisma.articulos.findMany({
+  select,
+  skip: page * limit,
+  take: limit,
+  orderBy: { id: 'asc' },
+});
+
+return data.map((a) => ({
+  ...a,
+  id: a.id.toString(),
+  categid: a.categid?.toString(),
+  cuentacontableid: a.cuentacontableid?.toString(),
+  tipoarticulos: a.tipoarticulos.map((t) => ({
+    ...t,
+    id: t.id.toString(),
+    categid: t.categid?.toString(),
+  })),
+}));
   }
 
   async findOne(id: bigint) {

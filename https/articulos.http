@@ -1,10 +1,10 @@
-//@url= https://apialona.asterisksuite.cloud/api
+# @url= https://apialona.asterisksuite.cloud/api
 @url= http://localhost:3000/api
 
-@token= Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2ODY1NjY0NywiZXhwIjoxNzY4NzQzMDQ3fQ.1b7kkWO_lr8hhn2bT2e7kDQyTkA0SEN1L5xIjlbugew
+@token= Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2ODg1NDE4OCwiZXhwIjoxNzY4OTQwNTg4fQ.uzUb4PZdcHocifv4a5BRJu7cKkggvPMgEnLspFMW8TA
 
 ### 1. Login
-POST http://localhost:3000/api/login
+POST {{url}}/login
 Content-Type: application/json
 
 {

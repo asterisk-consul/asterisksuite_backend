@@ -1,0 +1,22 @@
+{"explorer.fileNesting.enabled": true,
+"explorer.fileNesting.patterns": {
+  "package.json": "pnpm-lock.yaml, package-lock.json, yarn.lock, .npmrc",
+  
+  "tsconfig.json": "tsconfig.*.json",
+  
+  ".env": ".env.*, .env.example",
+  
+  "prisma.config.ts": "prisma/, generated/",
+  
+  "nest-cli.json": "src/, test/",
+  
+  "Dockerfile": ".docploy.yml",
+  
+  "eslint.config.mjs": ".prettierrc",
+  
+  "README.md": "DOCUMENTATION.md, implementation_plan.md, task.md",
+  
+  ".gitignore": ".gitattributes"
+}
+}
+
