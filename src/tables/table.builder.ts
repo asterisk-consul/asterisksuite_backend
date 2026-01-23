@@ -1,75 +1,71 @@
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '@/prisma/prisma.service'
-import { TableColumn } from './table.types'
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
+import { TableColumn } from './table.types';
 
 @Injectable()
 export class TableBuilder {
   constructor(private prisma: PrismaService) {}
 
-  private tableKey!: string
-  private columns!: TableColumn[]
-  private model!: any
-  private query!: any
-  private userId?: bigint
+  private tableKey!: string;
+  private columns!: TableColumn[];
+  private model!: any;
+  private query!: any;
+  private userId?: bigint;
 
-  private select?: any
-  private mapRow?: (row: any) => any
+  private select?: any;
+  private mapRow?: (row: any) => any;
 
   // -------------------------
   // Configuración
   // -------------------------
   for(tableKey: string) {
-    this.tableKey = tableKey
-    return this
+    this.tableKey = tableKey;
+    return this;
   }
 
   columnsDef(columns: TableColumn[]) {
-    this.columns = columns
-    return this
+    this.columns = columns;
+    return this;
   }
 
   queryModel(model: any) {
-    this.model = model
-    return this
+    this.model = model;
+    return this;
   }
 
   request(query: any) {
-    this.query = query
-    return this
+    this.query = query;
+    return this;
   }
 
-user(userId?: bigint) {
-  this.userId = userId
-  return this
-}
-
+  user(userId?: bigint) {
+    this.userId = userId;
+    return this;
+  }
 
   selectDef(select: any) {
-    this.select = select
-    return this
+    this.select = select;
+    return this;
   }
 
   map(fn: (row: any) => any) {
-    this.mapRow = fn
-    return this
+    this.mapRow = fn;
+    return this;
   }
 
   // -------------------------
   // Build
   // -------------------------
   async build() {
-    const preferences = await this.loadPreferences()
+    const preferences = await this.loadPreferences();
 
-    const page = Number(this.query?.page) || 1
-    const limit =
-      Number(this.query?.limit) ||
-      preferences?.pageSize ||
-      25
+    const page = Number(this.query?.page) || 1;
+    const limit = Number(this.query?.limit) || preferences?.pageSize || 25;
 
-    const skip = (page - 1) * limit
+    const skip = (page - 1) * limit;
 
-    const where = this.buildWhere()
-    const orderBy = this.buildOrderBy(preferences)
+    const where = this.buildWhere();
+    const orderBy = this.buildOrderBy(preferences);
 
     const rowsRaw = await this.model.findMany({
       select: this.select,
@@ -77,13 +73,11 @@ user(userId?: bigint) {
       skip,
       take: limit,
       orderBy,
-    })
+    });
 
-    const total = await this.model.count({ where })
+    const total = await this.model.count({ where });
 
-    const rows = this.mapRow
-      ? rowsRaw.map(this.mapRow)
-      : rowsRaw
+    const rows = this.mapRow ? rowsRaw.map(this.mapRow) : rowsRaw;
 
     return {
       meta: {
@@ -93,14 +87,14 @@ user(userId?: bigint) {
       },
       columns: this.buildColumns(preferences),
       rows,
-    }
+    };
   }
 
   // -------------------------
   // Preferencias
   // -------------------------
   private async loadPreferences() {
-    if (!this.userId) return null
+    if (!this.userId) return null;
 
     return this.prisma.userTablePreference.findUnique({
       where: {
@@ -109,41 +103,51 @@ user(userId?: bigint) {
           tableKey: this.tableKey,
         },
       },
-    })
+    });
   }
 
   // -------------------------
   // Columnas visibles
   // -------------------------
   private buildColumns(pref: any) {
-    const visibleColumns = pref?.visibleColumns as string[] | undefined
+    const visible = pref?.visibleColumns as string[] | undefined;
+    const order = pref?.columnsOrder as string[] | undefined;
 
-    return this.columns.map(col => ({
+    let cols = this.columns.map((col) => ({
       ...col,
-      visible: visibleColumns
-        ? visibleColumns.includes(col.key)
+      visible: visible
+        ? visible.includes(col.key)
         : col.defaultVisible !== false,
-    }))
+    }));
+
+    // 👇 aplicar orden si existe
+    if (order?.length) {
+      cols = order
+        .map((key) => cols.find((c) => c.key === key))
+        .filter(Boolean) as typeof cols;
+    }
+
+    return cols;
   }
 
   // -------------------------
   // Filtros
   // -------------------------
   private buildWhere() {
-    if (!this.query?.search) return {}
+    if (!this.query?.search) return {};
 
-    const searchable = this.columns.filter(c => c.filterable)
+    const searchable = this.columns.filter((c) => c.filterable);
 
-    if (!searchable.length) return {}
+    if (!searchable.length) return {};
 
     return {
-      OR: searchable.map(col => ({
+      OR: searchable.map((col) => ({
         [col.key]: {
           contains: this.query.search,
           mode: 'insensitive',
         },
       })),
-    }
+    };
   }
 
   // -------------------------
@@ -151,14 +155,14 @@ user(userId?: bigint) {
   // -------------------------
   private buildOrderBy(pref: any) {
     if (this.query?.sort) {
-      const [key, dir] = this.query.sort.split(':')
-      return { [key]: dir === 'desc' ? 'desc' : 'asc' }
+      const [key, dir] = this.query.sort.split(':');
+      return { [key]: dir === 'desc' ? 'desc' : 'asc' };
     }
 
     if (pref?.sort) {
-      return pref.sort
+      return pref.sort;
     }
 
-    return undefined
+    return undefined;
   }
 }

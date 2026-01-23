@@ -8471,6 +8471,7 @@ export const UserTablePreferenceScalarFieldEnum = {
   userId: 'userId',
   tableKey: 'tableKey',
   visibleColumns: 'visibleColumns',
+  columnsOrder: 'columnsOrder',
   pageSize: 'pageSize',
   sort: 'sort',
   createdAt: 'createdAt',

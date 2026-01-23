@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
 export interface AuthenticatedUser {
-  userId: string;
+  id: bigint; // o string si usás UUID
   username: string;
   roles: string[];
 }

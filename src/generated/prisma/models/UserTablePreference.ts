@@ -61,6 +61,7 @@ export type UserTablePreferenceCountAggregateOutputType = {
   userId: number
   tableKey: number
   visibleColumns: number
+  columnsOrder: number
   pageSize: number
   sort: number
   createdAt: number
@@ -104,6 +105,7 @@ export type UserTablePreferenceCountAggregateInputType = {
   userId?: true
   tableKey?: true
   visibleColumns?: true
+  columnsOrder?: true
   pageSize?: true
   sort?: true
   createdAt?: true
@@ -202,6 +204,7 @@ export type UserTablePreferenceGroupByOutputType = {
   userId: bigint
   tableKey: string
   visibleColumns: runtime.JsonValue
+  columnsOrder: runtime.JsonValue
   pageSize: number
   sort: runtime.JsonValue | null
   createdAt: Date
@@ -236,6 +239,7 @@ export type UserTablePreferenceWhereInput = {
   userId?: Prisma.BigIntFilter<"UserTablePreference"> | bigint | number
   tableKey?: Prisma.StringFilter<"UserTablePreference"> | string
   visibleColumns?: Prisma.JsonFilter<"UserTablePreference">
+  columnsOrder?: Prisma.JsonFilter<"UserTablePreference">
   pageSize?: Prisma.IntFilter<"UserTablePreference"> | number
   sort?: Prisma.JsonNullableFilter<"UserTablePreference">
   createdAt?: Prisma.DateTimeFilter<"UserTablePreference"> | Date | string
@@ -248,6 +252,7 @@ export type UserTablePreferenceOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   tableKey?: Prisma.SortOrder
   visibleColumns?: Prisma.SortOrder
+  columnsOrder?: Prisma.SortOrder
   pageSize?: Prisma.SortOrder
   sort?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -264,6 +269,7 @@ export type UserTablePreferenceWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.BigIntFilter<"UserTablePreference"> | bigint | number
   tableKey?: Prisma.StringFilter<"UserTablePreference"> | string
   visibleColumns?: Prisma.JsonFilter<"UserTablePreference">
+  columnsOrder?: Prisma.JsonFilter<"UserTablePreference">
   pageSize?: Prisma.IntFilter<"UserTablePreference"> | number
   sort?: Prisma.JsonNullableFilter<"UserTablePreference">
   createdAt?: Prisma.DateTimeFilter<"UserTablePreference"> | Date | string
@@ -276,6 +282,7 @@ export type UserTablePreferenceOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   tableKey?: Prisma.SortOrder
   visibleColumns?: Prisma.SortOrder
+  columnsOrder?: Prisma.SortOrder
   pageSize?: Prisma.SortOrder
   sort?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -295,6 +302,7 @@ export type UserTablePreferenceScalarWhereWithAggregatesInput = {
   userId?: Prisma.BigIntWithAggregatesFilter<"UserTablePreference"> | bigint | number
   tableKey?: Prisma.StringWithAggregatesFilter<"UserTablePreference"> | string
   visibleColumns?: Prisma.JsonWithAggregatesFilter<"UserTablePreference">
+  columnsOrder?: Prisma.JsonWithAggregatesFilter<"UserTablePreference">
   pageSize?: Prisma.IntWithAggregatesFilter<"UserTablePreference"> | number
   sort?: Prisma.JsonNullableWithAggregatesFilter<"UserTablePreference">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserTablePreference"> | Date | string
@@ -305,6 +313,7 @@ export type UserTablePreferenceCreateInput = {
   id?: bigint | number
   tableKey: string
   visibleColumns: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -317,6 +326,7 @@ export type UserTablePreferenceUncheckedCreateInput = {
   userId: bigint | number
   tableKey: string
   visibleColumns: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -327,6 +337,7 @@ export type UserTablePreferenceUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -339,6 +350,7 @@ export type UserTablePreferenceUncheckedUpdateInput = {
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -350,6 +362,7 @@ export type UserTablePreferenceCreateManyInput = {
   userId: bigint | number
   tableKey: string
   visibleColumns: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -360,6 +373,7 @@ export type UserTablePreferenceUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,6 +385,7 @@ export type UserTablePreferenceUncheckedUpdateManyInput = {
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -397,6 +412,7 @@ export type UserTablePreferenceCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   tableKey?: Prisma.SortOrder
   visibleColumns?: Prisma.SortOrder
+  columnsOrder?: Prisma.SortOrder
   pageSize?: Prisma.SortOrder
   sort?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -479,6 +495,7 @@ export type UserTablePreferenceCreateWithoutUserInput = {
   id?: bigint | number
   tableKey: string
   visibleColumns: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -489,6 +506,7 @@ export type UserTablePreferenceUncheckedCreateWithoutUserInput = {
   id?: bigint | number
   tableKey: string
   visibleColumns: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -529,6 +547,7 @@ export type UserTablePreferenceScalarWhereInput = {
   userId?: Prisma.BigIntFilter<"UserTablePreference"> | bigint | number
   tableKey?: Prisma.StringFilter<"UserTablePreference"> | string
   visibleColumns?: Prisma.JsonFilter<"UserTablePreference">
+  columnsOrder?: Prisma.JsonFilter<"UserTablePreference">
   pageSize?: Prisma.IntFilter<"UserTablePreference"> | number
   sort?: Prisma.JsonNullableFilter<"UserTablePreference">
   createdAt?: Prisma.DateTimeFilter<"UserTablePreference"> | Date | string
@@ -539,6 +558,7 @@ export type UserTablePreferenceCreateManyUserInput = {
   id?: bigint | number
   tableKey: string
   visibleColumns: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -549,6 +569,7 @@ export type UserTablePreferenceUpdateWithoutUserInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -559,6 +580,7 @@ export type UserTablePreferenceUncheckedUpdateWithoutUserInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -569,6 +591,7 @@ export type UserTablePreferenceUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   tableKey?: Prisma.StringFieldUpdateOperationsInput | string
   visibleColumns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  columnsOrder?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   pageSize?: Prisma.IntFieldUpdateOperationsInput | number
   sort?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -582,6 +605,7 @@ export type UserTablePreferenceSelect<ExtArgs extends runtime.Types.Extensions.I
   userId?: boolean
   tableKey?: boolean
   visibleColumns?: boolean
+  columnsOrder?: boolean
   pageSize?: boolean
   sort?: boolean
   createdAt?: boolean
@@ -594,6 +618,7 @@ export type UserTablePreferenceSelectCreateManyAndReturn<ExtArgs extends runtime
   userId?: boolean
   tableKey?: boolean
   visibleColumns?: boolean
+  columnsOrder?: boolean
   pageSize?: boolean
   sort?: boolean
   createdAt?: boolean
@@ -606,6 +631,7 @@ export type UserTablePreferenceSelectUpdateManyAndReturn<ExtArgs extends runtime
   userId?: boolean
   tableKey?: boolean
   visibleColumns?: boolean
+  columnsOrder?: boolean
   pageSize?: boolean
   sort?: boolean
   createdAt?: boolean
@@ -618,13 +644,14 @@ export type UserTablePreferenceSelectScalar = {
   userId?: boolean
   tableKey?: boolean
   visibleColumns?: boolean
+  columnsOrder?: boolean
   pageSize?: boolean
   sort?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserTablePreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tableKey" | "visibleColumns" | "pageSize" | "sort" | "createdAt" | "updatedAt", ExtArgs["result"]["userTablePreference"]>
+export type UserTablePreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tableKey" | "visibleColumns" | "columnsOrder" | "pageSize" | "sort" | "createdAt" | "updatedAt", ExtArgs["result"]["userTablePreference"]>
 export type UserTablePreferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.usuariosDefaultArgs<ExtArgs>
 }
@@ -645,6 +672,7 @@ export type $UserTablePreferencePayload<ExtArgs extends runtime.Types.Extensions
     userId: bigint
     tableKey: string
     visibleColumns: runtime.JsonValue
+    columnsOrder: runtime.JsonValue
     pageSize: number
     sort: runtime.JsonValue | null
     createdAt: Date
@@ -1077,6 +1105,7 @@ export interface UserTablePreferenceFieldRefs {
   readonly userId: Prisma.FieldRef<"UserTablePreference", 'BigInt'>
   readonly tableKey: Prisma.FieldRef<"UserTablePreference", 'String'>
   readonly visibleColumns: Prisma.FieldRef<"UserTablePreference", 'Json'>
+  readonly columnsOrder: Prisma.FieldRef<"UserTablePreference", 'Json'>
   readonly pageSize: Prisma.FieldRef<"UserTablePreference", 'Int'>
   readonly sort: Prisma.FieldRef<"UserTablePreference", 'Json'>
   readonly createdAt: Prisma.FieldRef<"UserTablePreference", 'DateTime'>

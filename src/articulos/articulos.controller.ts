@@ -22,7 +22,10 @@ export class ArticulosController {
   constructor(private articulosService: ArticulosService) {}
 
   @Get('index')
-  findAll(@Query() query: { expand?: string; page?: number; limit?: number }, @Req() req) {
+  findAll(
+    @Query() query: { expand?: string; page?: number; limit?: number },
+    @Req() req,
+  ) {
     return this.articulosService.findAll(query, req.user.id);
   }
 
