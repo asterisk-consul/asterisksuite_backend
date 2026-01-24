@@ -1,20 +1,19 @@
+# @url = https://apialona.asterisksuite.cloud/api
+@url = http://localhost:3000/api
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2OTA4NzMxMiwiZXhwIjoxNzY5MTczNzEyfQ.8ZjNTj13vYCG5amdryx-ZZ94cOdkh9Em-lS83xE0yoM
+
 ### Login
-POST http://localhost:3000/api/login
+POST {{url}}/login
 Content-Type: application/json
 
 {
     "username": "Administrador",
     "password": "1234"
 }
+
 ###login alona
-
-POST https://apialona.asterisksuite.cloud/api/login
-Content-Type: application/json
-
-{
-    "username": "Administrador",
-    "password": "1234"
-}
+GET {{url}}/me
+Authorization: {{token}}
 
 ### login flowsma
 POST https://api.flowsma.com/dev/api/login

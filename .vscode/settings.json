@@ -17,6 +17,8 @@
   "README.md": "DOCUMENTATION.md, implementation_plan.md, task.md",
   
   ".gitignore": ".gitattributes"
-}
+},
+"graalvm.home": "",
+"netbeans.jdkhome": ""
 }
 

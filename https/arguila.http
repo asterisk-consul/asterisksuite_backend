@@ -1,0 +1,11 @@
+-GET -G -H "ApiAuthorization: 82a7b3ce-1f93-4c19-a048-fd0aea336cc4" -H "Company: 4" http://serverarguia:17000/Api/GetApiLiveQueryData --data "process=17671&fromDate=&toDate=&pageSize=10&pageIndex=0&customQuery=0"
+
+@baseUrl = http://serverarguia:17000
+@token = 82a7b3ce-1f93-4c19-a048-fd0aea336cc4
+@company = 4
+###
+GET {{baseUrl}}/Api/GetApiLiveQueryData?process=17671&pageSize=50&pageIndex=0&customQuery=0
+ApiAuthorization: {{token}}
+Company: {{company}}
+
+

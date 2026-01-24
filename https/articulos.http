@@ -1,7 +1,7 @@
 # @url= https://apialona.asterisksuite.cloud/api
 @url= http://localhost:3000/api
 
-@token= Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2ODk0OTY4OSwiZXhwIjoxNzY5MDM2MDg5fQ.W3CmzpORKPqTva6Kjhe788bEzQpJwYU4gFkzxgk2lxQ
+@token= Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNDYiLCJ1c2VybmFtZSI6IkFkbWluaXN0cmFkb3IiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2OTA4NzMxMiwiZXhwIjoxNzY5MTczNzEyfQ.8ZjNTj13vYCG5amdryx-ZZ94cOdkh9Em-lS83xE0yoM
 
 ### 1. Login
 POST {{url}}/login
