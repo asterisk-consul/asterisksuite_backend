@@ -13,67 +13,70 @@ import {
 
 @Injectable()
 export class ArticulosService {
-  constructor(private prisma: PrismaService, private tableBuilder: TableBuilder) {}
+  constructor(
+    private prisma: PrismaService,
+    private tableBuilder: TableBuilder,
+  ) {}
 
-async findAll(
-  query: { expand?: string; page?: number; limit?: number },
-  userId: bigint,
-) {
-  const allowedExpands = ['precio', 'espec'];
+  async findAll(
+    query: { expand?: string; page?: number; limit?: number },
+    userId: bigint,
+  ) {
+    const allowedExpands = ['precio', 'espec'];
 
-  const expands = (query.expand ?? '')
-    .split(',')
-    .filter(e => allowedExpands.includes(e));
+    const expands = (query.expand ?? '')
+      .split(',')
+      .filter((e) => allowedExpands.includes(e));
 
-  const select: Prisma.articulosSelect = {
-    id: true,
-    internalcode: true,
-    externalcode: true,
-    nombre: true,
-    descrip: true,
-    caracteristicas: true,
-    categid: true,
-    activo: true,
-    um: true,
-    cuentacontableid: true,
-    isbom: true,
-    ischeque: true,
-    tipoarticulos: {
-      select: {
-        id: true,
-        categid: true,
+    const select: Prisma.articulosSelect = {
+      id: true,
+      internalcode: true,
+      externalcode: true,
+      nombre: true,
+      descrip: true,
+      caracteristicas: true,
+      categid: true,
+      activo: true,
+      um: true,
+      cuentacontableid: true,
+      isbom: true,
+      ischeque: true,
+      tipoarticulos: {
+        select: {
+          id: true,
+          categid: true,
+        },
       },
-    },
-  };
+    };
 
-  if (expands.includes('precio')) {
-    select.articuloprecio = { select: { precio: true } };
+    if (expands.includes('precio')) {
+      select.articuloprecio = { select: { precio: true } };
+    }
+
+    if (expands.includes('espec')) {
+      select.articuloespec = { select: { descrip: true } };
+    }
+
+    return this.tableBuilder
+      .for('articulos')
+      .columnsDef(ArticulosTable)
+      .queryModel(this.prisma.articulos)
+      .selectDef(select)
+      .request(query)
+      .user(userId)
+      .map((a) => ({
+        ...a,
+        id: a.id.toString(),
+        categid: a.categid?.toString(),
+        cuentacontableid: a.cuentacontableid?.toString(),
+        tipoarticulos: a.tipoarticulos.map((t) => ({
+          ...t,
+          id: t.id.toString(),
+          categid: t.categid?.toString(),
+        })),
+      }))
+      .build();
   }
-
-  if (expands.includes('espec')) {
-    select.articuloespec = { select: { descrip: true } };
-  }
-
-  return this.tableBuilder
-    .for('articulos')
-    .columnsDef(ArticulosTable)
-    .queryModel(this.prisma.articulos)
-    .selectDef(select)
-    .request(query)
-    .user(userId)
-    .map(a => ({
-      ...a,
-      id: a.id.toString(),
-      categid: a.categid?.toString(),
-      cuentacontableid: a.cuentacontableid?.toString(),
-      tipoarticulos: a.tipoarticulos.map(t => ({
-        ...t,
-        id: t.id.toString(),
-        categid: t.categid?.toString(),
-      })),
-    }))
-    .build();
-}
 
   async findOne(id: bigint) {
     const articulo = await this.prisma.articulos.findUnique({

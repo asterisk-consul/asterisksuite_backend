@@ -1683,6 +1683,7 @@ model UserTablePreference {
   @@unique([userId, tableKey])
   @@index([userId])
   @@index([tableKey])
+  @@map("user_table_preferences")
   @@schema("test9000")
 }
 
