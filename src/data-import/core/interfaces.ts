@@ -3,7 +3,7 @@ export interface DataSource {
 }
 
 export interface Parser<T> {
-  parse(raw: unknown[]): Promise<T[]>;
+  parse(raw: unknown[]): T[];
 }
 
 export interface Transformer<I, O> {

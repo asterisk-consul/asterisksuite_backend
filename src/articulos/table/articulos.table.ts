@@ -1,4 +1,4 @@
-import { TableColumn } from '@/tables/table.types'
+import { TableColumn } from '@/tables/table.types';
 export const ArticulosTable: TableColumn[] = [
   {
     key: 'internalcode',
@@ -32,4 +32,4 @@ export const ArticulosTable: TableColumn[] = [
     type: 'currency',
     defaultVisible: false,
   },
-]
+];

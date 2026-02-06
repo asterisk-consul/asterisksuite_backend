@@ -10,7 +10,7 @@ export class ArticuloPrecioTransformer implements Transformer<
   any,
   ArticuloPrecio
 > {
-  transform(input: any[]): Promise<ArticuloPrecio[]> {
+  async transform(input: any[]): Promise<ArticuloPrecio[]> {
     return input.map((row) => ({
       codigo: row.codigo,
       precio: Number(row.precio),

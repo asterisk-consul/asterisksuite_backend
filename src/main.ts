@@ -9,6 +9,9 @@ async function bootstrap() {
   const logger = new Logger('Main');
 
   app.setGlobalPrefix('api');
+  app.enableCors({
+    origin: 'http://localhost:3001',
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
