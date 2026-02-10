@@ -10,7 +10,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: 'http://localhost:3001',
+    origin: [
+      'http://localhost:3008',
+      'http://localhost:3001',
+      'http://192.168.18.3:3008',
+      'https://dev.astreisksuite.cloud',
+      'http://dev.astreisksuite.cloud',
+    ],
   });
 
   app.useGlobalPipes(

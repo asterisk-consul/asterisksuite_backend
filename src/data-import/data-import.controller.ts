@@ -14,7 +14,8 @@ export class DataImportController {
 
   @Post('articulo-precio')
   @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile() file: Express.Multer.File) {
+  upload(@UploadedFile() file: Express.Multer.File) {
+    console.log('Archivo recibido:', file);
     return this.service.importArticuloPrecio(file);
   }
 }

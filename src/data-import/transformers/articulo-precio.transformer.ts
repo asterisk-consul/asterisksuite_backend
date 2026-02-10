@@ -1,20 +1,17 @@
 import { Transformer } from '../core/interfaces';
-
-export interface ArticuloPrecio {
-  codigo: string;
-  precio: number;
-  proveedor: string;
-}
+import { ArticuloPrecioRaw } from '../schemas/articulo-precio.schema';
 
 export class ArticuloPrecioTransformer implements Transformer<
-  any,
-  ArticuloPrecio
+  ArticuloPrecioRaw,
+  any
 > {
-  async transform(input: any[]): Promise<ArticuloPrecio[]> {
-    return input.map((row) => ({
-      codigo: row.codigo,
-      precio: Number(row.precio),
-      proveedor: row.proveedor.trim(),
+  async transform(input: ArticuloPrecioRaw[]): Promise<any[]> {
+    // Transformar array completo
+    return input.map((item) => ({
+      codigo: item.codigo,
+      precio: item.precio,
+      proveedor: item.proveedor,
+      // Agrega cualquier transformación adicional aquí
     }));
   }
 }
