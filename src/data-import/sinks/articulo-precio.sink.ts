@@ -4,7 +4,6 @@ export class ArticuloPrecioSink implements Sink<any> {
   async send(data: any[]): Promise<void> {
     try {
       console.log('Guardar en BD:', data);
-
       // Tu lógica de guardado aquí
       // Ejemplo:
       // await this.articuloPrecioRepository.insert(data);

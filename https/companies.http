@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:3000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzOCIsInVzZXJuYW1lIjoiQWRtaW5pc3RyYWRvciIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzcxMjc3NDMyLCJleHAiOjE3NzEzNjM4MzJ9.JwfPytQ1JZMRagIgDzSRewXG_IcnVqi10C2OJjpmpvg
+
+
+###
+# Auth
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "Administrador",
+    "password": "1234"
+}
+
+###
+# Crear compañía
+POST {{baseUrl}}/api/companies
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Don Andres",
+  "taxId": "30-00000000-0",
+  "address": "Ruta 9 Km 200",
+  "phone": "123456789",
+  "email": "admin@donandres.com"
+}
+
+###
+# Obtener todas las compañías
+GET {{baseUrl}}/api/companies
+Authorization: Bearer {{token}}
+
+###
+# Obtener compañía por ID
+GET {{baseUrl}}/api/companies/8efc304c-d882-41a9-b0e2-6ace231a2c8f
+Authorization: Bearer {{token}}
+
+###
+# Actualizar compañía
+PATCH {{baseUrl}}/api/companies/8efc304c-d882-41a9-b0e2-6ace231a2c8f
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "phone": "111222333"
+}
+
+###
+# Eliminar compañía
+DELETE {{baseUrl}}/companies/1
+Authorization: Bearer {{token}}

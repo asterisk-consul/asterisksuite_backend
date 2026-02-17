@@ -1,0 +1,411 @@
+generator client {
+    provider     = "prisma-client"
+    output       = "../src/generated/prisma-logistica"
+    moduleFormat = "cjs"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model business_parties {
+    id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id      String            @db.Uuid
+    type            String            @db.VarChar(20)
+    name            String            @db.VarChar(255)
+    tax_id          String?           @db.VarChar(50)
+    phone           String?           @db.VarChar(50)
+    email           String?           @db.VarChar(150)
+    active          Boolean           @default(true)
+    created_at      DateTime          @default(now()) @db.Timestamp(6)
+    companies       companies         @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    delivery_notes  delivery_notes[]
+    party_locations party_locations[]
+
+    @@index([company_id], map: "idx_parties_company")
+}
+
+model cargo_transfer_items {
+    id               String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    transfer_id      String          @db.Uuid
+    pallet_id        String?         @db.Uuid
+    delivery_note_id String?         @db.Uuid
+    quantity         Decimal?        @db.Decimal(12, 3)
+    delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    cargo_transfers  cargo_transfers @relation(fields: [transfer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model cargo_transfers {
+    id                                        String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    from_trip_id                              String?                @db.Uuid
+    to_trip_id                                String?                @db.Uuid
+    location_id                               String?                @db.Uuid
+    transfer_time                             DateTime               @default(now()) @db.Timestamp(6)
+    performed_by                              String?                @db.Uuid
+    notes                                     String?
+    cargo_transfer_items                      cargo_transfer_items[]
+    trips_cargo_transfers_from_trip_idTotrips trips?                 @relation("cargo_transfers_from_trip_idTotrips", fields: [from_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    locations                                 locations?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    users                                     users?                 @relation(fields: [performed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    trips_cargo_transfers_to_trip_idTotrips   trips?                 @relation("cargo_transfers_to_trip_idTotrips", fields: [to_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model companies {
+    id               String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    name             String             @db.VarChar(255)
+    tax_id           String?            @db.VarChar(50)
+    phone            String?            @db.VarChar(30)
+    created_at       DateTime           @default(now()) @db.Timestamp(6)
+    business_parties business_parties[]
+    delivery_notes   delivery_notes[]
+    drivers          drivers[]
+    pallets          pallets[]
+    picking_orders   picking_orders[]
+    products         products[]
+    trips            trips[]
+    users            users[]
+    vehicles         vehicles[]
+    warehouses       warehouses[]
+}
+
+model delivery_notes {
+    id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id           String                 @db.Uuid
+    type                 String                 @db.VarChar(20)
+    number               String                 @db.VarChar(50)
+    status               String                 @db.VarChar(20)
+    party_id             String?                @db.Uuid
+    trip_id              String?                @db.Uuid
+    created_by           String?                @db.Uuid
+    deleted_at           DateTime?              @db.Timestamp(6)
+    created_at           DateTime               @default(now()) @db.Timestamp(6)
+    cargo_transfer_items cargo_transfer_items[]
+    companies            companies              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    business_parties     business_parties?      @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
+    picking_orders       picking_orders[]
+    trip_cargo           trip_cargo[]
+}
+
+model drivers {
+    id                 String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id         String    @db.Uuid
+    first_name         String    @db.VarChar(100)
+    last_name          String    @db.VarChar(100)
+    document           String?   @db.VarChar(50)
+    phone              String?   @db.VarChar(50)
+    license_number     String?   @db.VarChar(50)
+    license_expiration DateTime? @db.Date
+    active             Boolean   @default(true)
+    created_at         DateTime  @default(now()) @db.Timestamp(6)
+    companies          companies @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    trips              trips[]
+}
+
+model entity_photos {
+    id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    entity_type String   @db.VarChar(30)
+    entity_id   String   @db.Uuid
+    file_id     String   @db.Uuid
+    photo_type  String?  @db.VarChar(30)
+    created_at  DateTime @default(now()) @db.Timestamp(6)
+    files       files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([entity_type, entity_id], map: "idx_entity_photos")
+}
+
+model files {
+    id               String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    storage_provider String?         @db.VarChar(50)
+    file_path        String
+    public_url       String?
+    file_name        String?         @db.VarChar(255)
+    mime_type        String?         @db.VarChar(100)
+    file_size        Int?
+    uploaded_by      String?         @db.Uuid
+    created_at       DateTime        @default(now()) @db.Timestamp(6)
+    entity_photos    entity_photos[]
+    users            users?          @relation(fields: [uploaded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model locations {
+    id                                             String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    address                                        String?           @db.VarChar(255)
+    city                                           String?           @db.VarChar(100)
+    province                                       String?           @db.VarChar(100)
+    country                                        String?           @db.VarChar(100)
+    postal_code                                    String?           @db.VarChar(20)
+    latitude                                       Decimal?          @db.Decimal(10, 6)
+    longitude                                      Decimal?          @db.Decimal(10, 6)
+    created_at                                     DateTime          @default(now()) @db.Timestamp(6)
+    cargo_transfers                                cargo_transfers[]
+    party_locations                                party_locations[]
+    trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
+    trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
+    warehouses                                     warehouses[]
+}
+
+model pallet_items {
+    id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    pallet_id  String   @db.Uuid
+    product_id String   @db.Uuid
+    quantity   Decimal  @db.Decimal(12, 3)
+    pallets    pallets  @relation(fields: [pallet_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    products   products @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@unique([pallet_id, product_id])
+}
+
+model pallets {
+    id                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id           String                 @db.Uuid
+    code                 String                 @unique @db.VarChar(100)
+    warehouse_id         String?                @db.Uuid
+    status               String                 @db.VarChar(20)
+    created_by           String?                @db.Uuid
+    deleted_at           DateTime?              @db.Timestamp(6)
+    created_at           DateTime               @default(now()) @db.Timestamp(6)
+    cargo_transfer_items cargo_transfer_items[]
+    pallet_items         pallet_items[]
+    companies            companies              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouses           warehouses?            @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    picking_results      picking_results[]
+    picking_sources      picking_sources[]
+    trip_cargo           trip_cargo[]
+}
+
+model party_locations {
+    id                                                         String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    party_id                                                   String           @db.Uuid
+    location_id                                                String           @db.Uuid
+    label                                                      String?          @db.VarChar(100)
+    created_at                                                 DateTime         @default(now()) @db.Timestamp(6)
+    locations                                                  locations        @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    business_parties                                           business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    trips_trips_destination_party_location_idToparty_locations trips[]          @relation("trips_destination_party_location_idToparty_locations")
+    trips_trips_origin_party_location_idToparty_locations      trips[]          @relation("trips_origin_party_location_idToparty_locations")
+}
+
+model picking_items {
+    id                String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    picking_order_id  String            @db.Uuid
+    product_id        String            @db.Uuid
+    quantity_required Decimal           @db.Decimal(12, 3)
+    quantity_picked   Decimal?          @default(0) @db.Decimal(12, 3)
+    picking_orders    picking_orders    @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    products          products          @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    picking_sources   picking_sources[]
+}
+
+model picking_orders {
+    id               String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    warehouse_id     String            @db.Uuid
+    client_id        String?           @db.Uuid
+    status           String            @db.VarChar(20)
+    delivery_note_id String?           @db.Uuid
+    trip_id          String?           @db.Uuid
+    created_by       String?           @db.Uuid
+    created_at       DateTime          @default(now()) @db.Timestamp(6)
+    picking_items    picking_items[]
+    companies        companies?        @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    users            users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    delivery_notes   delivery_notes?   @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    trips            trips?            @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouses       warehouses        @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    picking_results  picking_results[]
+}
+
+model picking_results {
+    id               String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    picking_order_id String         @db.Uuid
+    pallet_id        String         @db.Uuid
+    pallets          pallets        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    picking_orders   picking_orders @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model picking_sources {
+    id              String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    picking_item_id String        @db.Uuid
+    pallet_id       String        @db.Uuid
+    quantity        Decimal       @db.Decimal(12, 3)
+    pallets         pallets       @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    picking_items   picking_items @relation(fields: [picking_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model products {
+    id                        String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id                String                      @db.Uuid
+    name                      String                      @db.VarChar(255)
+    sku                       String?                     @db.VarChar(100)
+    requires_refrigeration    Boolean?                    @default(false)
+    created_at                DateTime                    @default(now()) @db.Timestamp(6)
+    pallet_items              pallet_items[]
+    picking_items             picking_items[]
+    companies                 companies                   @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouse_stock           warehouse_stock[]
+    warehouse_stock_movements warehouse_stock_movements[]
+}
+
+model trip_cargo {
+    id               String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    trip_id          String          @db.Uuid
+    pallet_id        String?         @db.Uuid
+    delivery_note_id String?         @db.Uuid
+    loaded_at        DateTime?       @db.Timestamp(6)
+    unloaded_at      DateTime?       @db.Timestamp(6)
+    delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    trips            trips           @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([pallet_id], map: "idx_trip_cargo_pallet")
+    @@index([trip_id], map: "idx_trip_cargo_trip")
+}
+
+model trip_temperature_logs {
+    id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    trip_id     String   @db.Uuid
+    temperature Decimal  @db.Decimal(5, 2)
+    recorded_at DateTime @default(now()) @db.Timestamp(6)
+    recorded_by String?  @db.Uuid
+    users       users?   @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    trips       trips    @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model trips {
+    id                                                                   String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id                                                           String                  @db.Uuid
+    reference_number                                                     String?                 @db.VarChar(100)
+    vehicle_id                                                           String?                 @db.Uuid
+    driver_id                                                            String?                 @db.Uuid
+    origin_warehouse_id                                                  String?                 @db.Uuid
+    destination_warehouse_id                                             String?                 @db.Uuid
+    origin_party_location_id                                             String?                 @db.Uuid
+    destination_party_location_id                                        String?                 @db.Uuid
+    origin_location_id                                                   String?                 @db.Uuid
+    destination_location_id                                              String?                 @db.Uuid
+    departure_time                                                       DateTime?               @db.Timestamp(6)
+    arrival_time                                                         DateTime?               @db.Timestamp(6)
+    status                                                               String                  @db.VarChar(20)
+    notes                                                                String?
+    created_by                                                           String?                 @db.Uuid
+    deleted_at                                                           DateTime?               @db.Timestamp(6)
+    created_at                                                           DateTime                @default(now()) @db.Timestamp(6)
+    cargo_transfers_cargo_transfers_from_trip_idTotrips                  cargo_transfers[]       @relation("cargo_transfers_from_trip_idTotrips")
+    cargo_transfers_cargo_transfers_to_trip_idTotrips                    cargo_transfers[]       @relation("cargo_transfers_to_trip_idTotrips")
+    delivery_notes                                                       delivery_notes[]
+    picking_orders                                                       picking_orders[]
+    trip_cargo                                                           trip_cargo[]
+    trip_temperature_logs                                                trip_temperature_logs[]
+    companies                                                            companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    users                                                                users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    locations_trips_destination_location_idTolocations                   locations?              @relation("trips_destination_location_idTolocations", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    party_locations_trips_destination_party_location_idToparty_locations party_locations?        @relation("trips_destination_party_location_idToparty_locations", fields: [destination_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouses_trips_destination_warehouse_idTowarehouses                warehouses?             @relation("trips_destination_warehouse_idTowarehouses", fields: [destination_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    drivers                                                              drivers?                @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    locations_trips_origin_location_idTolocations                        locations?              @relation("trips_origin_location_idTolocations", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    party_locations_trips_origin_party_location_idToparty_locations      party_locations?        @relation("trips_origin_party_location_idToparty_locations", fields: [origin_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouses_trips_origin_warehouse_idTowarehouses                     warehouses?             @relation("trips_origin_warehouse_idTowarehouses", fields: [origin_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    vehicles                                                             vehicles?               @relation(fields: [vehicle_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([company_id], map: "idx_trips_company")
+    @@index([driver_id], map: "idx_trips_driver")
+    @@index([status], map: "idx_trips_status")
+    @@index([vehicle_id], map: "idx_trips_vehicle")
+}
+
+model users {
+    id                        String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id                String?                     @db.Uuid
+    name                      String                      @db.VarChar(255)
+    email                     String                      @unique @db.VarChar(255)
+    password_hash             String?
+    role                      String?                     @db.VarChar(30)
+    active                    Boolean?                    @default(true)
+    created_at                DateTime                    @default(now()) @db.Timestamp(6)
+    cargo_transfers           cargo_transfers[]
+    delivery_notes            delivery_notes[]
+    files                     files[]
+    pallets                   pallets[]
+    picking_orders            picking_orders[]
+    trip_temperature_logs     trip_temperature_logs[]
+    trips                     trips[]
+    companies                 companies?                  @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouse_stock_movements warehouse_stock_movements[]
+}
+
+model vehicles {
+    id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id    String    @db.Uuid
+    type          String    @db.VarChar(30)
+    plate         String    @unique @db.VarChar(20)
+    brand         String?   @db.VarChar(100)
+    model         String?   @db.VarChar(100)
+    year          Int?
+    max_weight    Decimal?  @db.Decimal(12, 3)
+    max_volume    Decimal?  @db.Decimal(12, 3)
+    refrigeration Boolean?  @default(false)
+    active        Boolean   @default(true)
+    created_at    DateTime  @default(now()) @db.Timestamp(6)
+    trips         trips[]
+    companies     companies @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([company_id], map: "idx_vehicles_company")
+}
+
+model warehouse_stock {
+    id                String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    warehouse_id      String     @db.Uuid
+    product_id        String     @db.Uuid
+    quantity          Decimal    @default(0) @db.Decimal(12, 3)
+    reserved_quantity Decimal    @default(0) @db.Decimal(12, 3)
+    updated_at        DateTime   @default(now()) @db.Timestamp(6)
+    products          products   @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouses        warehouses @relation(fields: [warehouse_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([warehouse_id, product_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model warehouse_stock_movements {
+    id             String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    warehouse_id   String     @db.Uuid
+    product_id     String     @db.Uuid
+    movement_type  String     @db.VarChar(20)
+    direction      String     @db.VarChar(3)
+    quantity       Decimal    @db.Decimal(12, 3)
+    reference_type String?    @db.VarChar(30)
+    reference_id   String?    @db.Uuid
+    notes          String?
+    created_at     DateTime   @default(now()) @db.Timestamp(6)
+    created_by     String?    @db.Uuid
+    users          users?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    products       products   @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    warehouses     warehouses @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([product_id], map: "idx_stock_movements_product")
+    @@index([reference_type, reference_id], map: "idx_stock_movements_ref")
+    @@index([warehouse_id], map: "idx_stock_movements_warehouse")
+}
+
+model warehouses {
+    id                                               String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    company_id                                       String                      @db.Uuid
+    location_id                                      String?                     @db.Uuid
+    name                                             String                      @db.VarChar(255)
+    code                                             String?                     @db.VarChar(50)
+    active                                           Boolean                     @default(true)
+    created_at                                       DateTime                    @default(now()) @db.Timestamp(6)
+    pallets                                          pallets[]
+    picking_orders                                   picking_orders[]
+    trips_trips_destination_warehouse_idTowarehouses trips[]                     @relation("trips_destination_warehouse_idTowarehouses")
+    trips_trips_origin_warehouse_idTowarehouses      trips[]                     @relation("trips_origin_warehouse_idTowarehouses")
+    warehouse_stock                                  warehouse_stock[]
+    warehouse_stock_movements                        warehouse_stock_movements[]
+    companies                                        companies                   @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    locations                                        locations?                  @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@unique([company_id, code])
+}

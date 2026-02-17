@@ -6,7 +6,7 @@ import { ArticulosService } from './articulos.service';
 import { TableModule } from '@/tables/table.module';
 
 @Module({
-  imports: [PrismaModule,TableModule], // Add this
+  imports: [PrismaModule, TableModule], // Add this
   controllers: [ArticulosController],
   providers: [ArticulosService], // Remove PrismaService
   exports: [ArticulosService],

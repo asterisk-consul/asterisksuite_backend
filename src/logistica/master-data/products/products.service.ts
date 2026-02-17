@@ -1,0 +1,49 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+
+@Injectable()
+export class ProductsService {
+  constructor(private prisma: LogisticaPrismaService) {}
+
+  async create(data: CreateProductDto) {
+    return this.prisma.products.create({
+      data,
+    });
+  }
+
+  async findAll(companyId: string) {
+    return this.prisma.products.findMany({
+      where: { company_id: companyId },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async findOne(id: string) {
+    const product = await this.prisma.products.findUnique({
+      where: { id },
+    });
+
+    if (!product) throw new NotFoundException('Product not found');
+
+    return product;
+  }
+
+  async update(id: string, data: UpdateProductDto) {
+    await this.findOne(id);
+
+    return this.prisma.products.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async remove(id: string) {
+    await this.findOne(id);
+
+    return this.prisma.products.delete({
+      where: { id },
+    });
+  }
+}

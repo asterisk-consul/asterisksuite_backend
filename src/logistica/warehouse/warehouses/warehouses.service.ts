@@ -1,0 +1,77 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { CreateWarehouseDto } from './dto/create-warehouse.dto';
+import { UpdateWarehouseDto } from './dto/update-warehouse.dto';
+
+@Injectable()
+export class WarehousesService {
+  constructor(private readonly prisma: LogisticaPrismaService) {}
+
+  async create(data: CreateWarehouseDto) {
+    return this.prisma.warehouses.create({
+      data: {
+        company_id: data.companyId,
+        name: data.name,
+        code: data.code,
+        location_id: data.locationId,
+        active: data.active ?? true,
+      },
+    });
+  }
+
+  async findAll(companyId: string) {
+    return this.prisma.warehouses.findMany({
+      where: {
+        company_id: companyId,
+        active: true,
+      },
+      include: {
+        locations: true,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+  }
+
+  async findOne(id: string) {
+    const warehouse = await this.prisma.warehouses.findUnique({
+      where: { id },
+      include: {
+        locations: true,
+        warehouse_stock: true,
+      },
+    });
+
+    if (!warehouse) {
+      throw new NotFoundException('Warehouse not found');
+    }
+
+    return warehouse;
+  }
+
+  async update(id: string, data: UpdateWarehouseDto) {
+    await this.findOne(id);
+
+    return this.prisma.warehouses.update({
+      where: { id },
+      data: {
+        name: data.name,
+        code: data.code,
+        location_id: data.locationId,
+        active: data.active,
+      },
+    });
+  }
+
+  async deactivate(id: string) {
+    await this.findOne(id);
+
+    return this.prisma.warehouses.update({
+      where: { id },
+      data: {
+        active: false,
+      },
+    });
+  }
+}
