@@ -2,22 +2,22 @@ import { IsUUID, IsString, IsOptional } from 'class-validator';
 
 export class CreateDeliveryNoteDto {
   @IsUUID()
-  company_id!: string;
+  companyId!: string;
 
   @IsString()
-  type!: string; // OUTBOUND | INBOUND | INTERNAL
+  type!: string; // OUTBOUND / INBOUND
 
   @IsString()
-  number!: string;
+  pointOfSale!: string; // talonario
 
-  @IsString()
-  status!: string; // DRAFT | CONFIRMED | CANCELLED
+  @IsUUID()
+  partyId!: string;
 
   @IsOptional()
   @IsUUID()
-  party_id?: string;
+  pickingOrderId?: string;
 
   @IsOptional()
   @IsUUID()
-  trip_id?: string;
+  tripId?: string;
 }

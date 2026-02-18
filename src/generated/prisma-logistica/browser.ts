@@ -142,3 +142,8 @@ export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
  * 
  */
 export type warehouses = Prisma.warehousesModel
+/**
+ * Model document_sequences
+ * 
+ */
+export type document_sequences = Prisma.document_sequencesModel

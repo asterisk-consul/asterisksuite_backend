@@ -408,7 +408,8 @@ export const ModelName = {
   vehicles: 'vehicles',
   warehouse_stock: 'warehouse_stock',
   warehouse_stock_movements: 'warehouse_stock_movements',
-  warehouses: 'warehouses'
+  warehouses: 'warehouses',
+  document_sequences: 'document_sequences'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "trips" | "users" | "vehicles" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "trips" | "users" | "vehicles" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2278,6 +2279,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    document_sequences: {
+      payload: Prisma.$document_sequencesPayload<ExtArgs>
+      fields: Prisma.document_sequencesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_sequencesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_sequencesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>
+        }
+        findFirst: {
+          args: Prisma.document_sequencesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_sequencesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>
+        }
+        findMany: {
+          args: Prisma.document_sequencesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>[]
+        }
+        create: {
+          args: Prisma.document_sequencesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>
+        }
+        createMany: {
+          args: Prisma.document_sequencesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_sequencesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>[]
+        }
+        delete: {
+          args: Prisma.document_sequencesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>
+        }
+        update: {
+          args: Prisma.document_sequencesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_sequencesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_sequencesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_sequencesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_sequencesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_sequencesPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_sequencesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_sequences>
+        }
+        groupBy: {
+          args: Prisma.document_sequencesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_sequencesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_sequencesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_sequencesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2653,6 +2728,20 @@ export const WarehousesScalarFieldEnum = {
 export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof typeof WarehousesScalarFieldEnum]
 
 
+export const Document_sequencesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  document_type: 'document_type',
+  point_of_sale: 'point_of_sale',
+  current_number: 'current_number',
+  prefix: 'prefix',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2879,6 +2968,7 @@ export type GlobalOmitConfig = {
   warehouse_stock?: Prisma.warehouse_stockOmit
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOmit
   warehouses?: Prisma.warehousesOmit
+  document_sequences?: Prisma.document_sequencesOmit
 }
 
 /* Types for Logging */

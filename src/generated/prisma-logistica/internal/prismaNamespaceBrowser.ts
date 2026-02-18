@@ -75,7 +75,8 @@ export const ModelName = {
   vehicles: 'vehicles',
   warehouse_stock: 'warehouse_stock',
   warehouse_stock_movements: 'warehouse_stock_movements',
-  warehouses: 'warehouses'
+  warehouses: 'warehouses',
+  document_sequences: 'document_sequences'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,6 +429,20 @@ export const WarehousesScalarFieldEnum = {
 } as const
 
 export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof typeof WarehousesScalarFieldEnum]
+
+
+export const Document_sequencesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  document_type: 'document_type',
+  point_of_sale: 'point_of_sale',
+  current_number: 'current_number',
+  prefix: 'prefix',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
 
 
 export const SortOrder = {
