@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTransferDto } from './dto/create-transfer.dto';
-import { LogisticaPrismaService } from 'src/prisma/prisma-logistica.service';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class TransfersService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   create(dto: CreateTransferDto, userId: string) {
     return this.prisma.cargo_transfers.create({

@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzOCIsInVzZXJuYW1lIjoiQWRtaW5pc3RyYWRvciIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzcxMjc3NDMyLCJleHAiOjE3NzEzNjM4MzJ9.JwfPytQ1JZMRagIgDzSRewXG_IcnVqi10C2OJjpmpvg
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzOCIsInVzZXJuYW1lIjoiQWRtaW5pc3RyYWRvciIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzcxNTkzOTMxLCJleHAiOjE3NzE2ODAzMzF9.JsWH8Rlnq-LXNnzl_xrK7wZNOF2Rgej2W0fwubY7IDU
 
 
 ###
@@ -26,6 +26,11 @@ Content-Type: application/json
   "email": "admin@donandres.com"
 }
 
+
+###
+# Obtener todas las depositos
+GET {{baseUrl}}/api/warehouses
+Authorization: Bearer {{token}}
 ###
 # Obtener todas las compañías
 GET {{baseUrl}}/api/companies

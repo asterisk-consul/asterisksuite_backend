@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { CreateDeliveryNoteDto } from './dto/create-delivery-note.dto';
 import { UpdateDeliveryNoteDto } from './dto/update-delivery-note.dto';
 import { QueryDeliveryNoteDto } from './dto/query-delivery-note.dto';
@@ -12,7 +12,7 @@ import { DocumentSequencesService } from '../document-sequences/document-sequenc
 @Injectable()
 export class DeliveryNotesService {
   constructor(
-    private readonly prisma: LogisticaPrismaService,
+    private readonly prisma: PrismaService,
     private readonly sequences: DocumentSequencesService,
   ) {}
 

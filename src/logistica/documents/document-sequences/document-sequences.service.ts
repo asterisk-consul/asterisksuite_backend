@@ -1,10 +1,10 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { Prisma } from '@/generated/prisma-logistica/client';
-import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { Prisma } from '@/generated/prisma/client';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class DocumentSequencesService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async getNextNumber(
     tx: Prisma.TransactionClient,

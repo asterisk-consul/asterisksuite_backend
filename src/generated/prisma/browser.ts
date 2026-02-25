@@ -18,452 +18,147 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
- * Model afipcomprobantes
+ * Model business_parties
  * 
  */
-export type afipcomprobantes = Prisma.afipcomprobantesModel
+export type business_parties = Prisma.business_partiesModel
 /**
- * Model afippuntosventas
+ * Model cargo_transfer_items
  * 
  */
-export type afippuntosventas = Prisma.afippuntosventasModel
+export type cargo_transfer_items = Prisma.cargo_transfer_itemsModel
 /**
- * Model articuloamedidacartera
+ * Model cargo_transfers
  * 
  */
-export type articuloamedidacartera = Prisma.articuloamedidacarteraModel
+export type cargo_transfers = Prisma.cargo_transfersModel
 /**
- * Model articuloespec
+ * Model companies
  * 
  */
-export type articuloespec = Prisma.articuloespecModel
+export type companies = Prisma.companiesModel
 /**
- * Model articuloprecio
+ * Model delivery_notes
  * 
  */
-export type articuloprecio = Prisma.articuloprecioModel
+export type delivery_notes = Prisma.delivery_notesModel
 /**
- * Model articulopreciohistorico
+ * Model drivers
  * 
  */
-export type articulopreciohistorico = Prisma.articulopreciohistoricoModel
+export type drivers = Prisma.driversModel
 /**
- * Model articulos
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type articulos = Prisma.articulosModel
-/**
- * Model articuloscompuestos
- * 
- */
-export type articuloscompuestos = Prisma.articuloscompuestosModel
-/**
- * Model cartera
- * 
- */
-export type cartera = Prisma.carteraModel
-/**
- * Model categorias
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type categorias = Prisma.categoriasModel
-/**
- * Model categoriasperfiles
- * 
- */
-export type categoriasperfiles = Prisma.categoriasperfilesModel
-/**
- * Model channels
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type channels = Prisma.channelsModel
-/**
- * Model company
- * 
- */
-export type company = Prisma.companyModel
-/**
- * Model companyafip
- * 
- */
-export type companyafip = Prisma.companyafipModel
-/**
- * Model competencianivel
- * 
- */
-export type competencianivel = Prisma.competencianivelModel
-/**
- * Model competencias
- * 
- */
-export type competencias = Prisma.competenciasModel
-/**
- * Model comunica
- * 
- */
-export type comunica = Prisma.comunicaModel
-/**
- * Model contactos
- * 
- */
-export type contactos = Prisma.contactosModel
-/**
- * Model depositos
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type depositos = Prisma.depositosModel
-/**
- * Model depositosarticulos
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type depositosarticulos = Prisma.depositosarticulosModel
-/**
- * Model documents
- * 
- */
-export type documents = Prisma.documentsModel
-/**
- * Model empleados
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type empleados = Prisma.empleadosModel
-/**
- * Model eventos
- * 
- */
-export type eventos = Prisma.eventosModel
-/**
- * Model eventoslog
- * 
- */
-export type eventoslog = Prisma.eventoslogModel
-/**
- * Model flowdocument
- * 
- */
-export type flowdocument = Prisma.flowdocumentModel
-/**
- * Model flowdocumentdepositos
- * 
- */
-export type flowdocumentdepositos = Prisma.flowdocumentdepositosModel
-/**
- * Model flowdocumentfiltroarticulo
- * 
- */
-export type flowdocumentfiltroarticulo = Prisma.flowdocumentfiltroarticuloModel
-/**
- * Model flowdocumentpartesint
- * 
- */
-export type flowdocumentpartesint = Prisma.flowdocumentpartesintModel
-/**
- * Model flowdocumentprocesorelacionado
- * 
- */
-export type flowdocumentprocesorelacionado = Prisma.flowdocumentprocesorelacionadoModel
-/**
- * Model flowdocumentresponsables
- * 
- */
-export type flowdocumentresponsables = Prisma.flowdocumentresponsablesModel
-/**
- * Model flowespecializ
- * 
- */
-export type flowespecializ = Prisma.flowespecializModel
-/**
- * Model flowfactores
- * 
- */
-export type flowfactores = Prisma.flowfactoresModel
-/**
- * Model flowpreguntas
- * 
- */
-export type flowpreguntas = Prisma.flowpreguntasModel
-/**
- * Model flowrespuestas
- * 
- */
-export type flowrespuestas = Prisma.flowrespuestasModel
-/**
- * Model grupos
- * 
- */
-export type grupos = Prisma.gruposModel
-/**
- * Model impositivos
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type impositivos = Prisma.impositivosModel
-/**
- * Model instructivo
- * 
- */
-export type instructivo = Prisma.instructivoModel
-/**
- * Model instructivoactividades
- * 
- */
-export type instructivoactividades = Prisma.instructivoactividadesModel
-/**
- * Model instructivoarticulos
- * 
- */
-export type instructivoarticulos = Prisma.instructivoarticulosModel
-/**
- * Model instructivoexec
- * 
- */
-export type instructivoexec = Prisma.instructivoexecModel
-/**
- * Model instructivopuestos
- * 
- */
-export type instructivopuestos = Prisma.instructivopuestosModel
-/**
- * Model instructivotareas
- * 
- */
-export type instructivotareas = Prisma.instructivotareasModel
-/**
- * Model instructivotareasresp
- * 
- */
-export type instructivotareasresp = Prisma.instructivotareasrespModel
-/**
- * Model logs9000
- * 
- */
-export type logs9000 = Prisma.logs9000Model
-/**
- * Model logs9000tareas
- * 
- */
-export type logs9000tareas = Prisma.logs9000tareasModel
-/**
- * Model notifyregistrocab
- * 
- */
-export type notifyregistrocab = Prisma.notifyregistrocabModel
-/**
- * Model ordencab
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type ordencab = Prisma.ordencabModel
-/**
- * Model ordencuerpo
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type ordencuerpo = Prisma.ordencuerpoModel
-/**
- * Model ordenpresupcuerpo
- * 
- */
-export type ordenpresupcuerpo = Prisma.ordenpresupcuerpoModel
-/**
- * Model perfilcompetencias
- * 
- */
-export type perfilcompetencias = Prisma.perfilcompetenciasModel
-/**
- * Model perfildocuments
- * 
- */
-export type perfildocuments = Prisma.perfildocumentsModel
-/**
- * Model perfiles
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type perfiles = Prisma.perfilesModel
-/**
- * Model perfilesarticulos
- * 
- */
-export type perfilesarticulos = Prisma.perfilesarticulosModel
-/**
- * Model perfilesdepositos
- * 
- */
-export type perfilesdepositos = Prisma.perfilesdepositosModel
-/**
- * Model perfilesprecios
- * 
- */
-export type perfilesprecios = Prisma.perfilespreciosModel
-/**
- * Model perfilesrel
- * 
- */
-export type perfilesrel = Prisma.perfilesrelModel
-/**
- * Model puestodescrip
- * 
- */
-export type puestodescrip = Prisma.puestodescripModel
-/**
- * Model puestoscompetencias
- * 
- */
-export type puestoscompetencias = Prisma.puestoscompetenciasModel
-/**
- * Model receptores
- * 
- */
-export type receptores = Prisma.receptoresModel
-/**
- * Model registrocab
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type registrocab = Prisma.registrocabModel
-/**
- * Model registrocabaudio
- * 
- */
-export type registrocabaudio = Prisma.registrocabaudioModel
-/**
- * Model registrocabdocuments
- * 
- */
-export type registrocabdocuments = Prisma.registrocabdocumentsModel
-/**
- * Model registrocabgrupo
+ * Model entity_photos
  * 
  */
-export type registrocabgrupo = Prisma.registrocabgrupoModel
+export type entity_photos = Prisma.entity_photosModel
 /**
- * Model registrocabrel
+ * Model files
  * 
  */
-export type registrocabrel = Prisma.registrocabrelModel
+export type files = Prisma.filesModel
 /**
- * Model registrocabseq
+ * Model locations
  * 
  */
-export type registrocabseq = Prisma.registrocabseqModel
+export type locations = Prisma.locationsModel
 /**
- * Model registrocuerpo
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type registrocuerpo = Prisma.registrocuerpoModel
-/**
- * Model reportes
- * 
- */
-export type reportes = Prisma.reportesModel
-/**
- * Model reportesacl
+ * Model pallet_items
  * 
  */
-export type reportesacl = Prisma.reportesaclModel
+export type pallet_items = Prisma.pallet_itemsModel
 /**
- * Model reportesactividad
+ * Model pallets
  * 
  */
-export type reportesactividad = Prisma.reportesactividadModel
+export type pallets = Prisma.palletsModel
 /**
- * Model role
+ * Model party_locations
  * 
  */
-export type role = Prisma.roleModel
+export type party_locations = Prisma.party_locationsModel
 /**
- * Model rowconfig
+ * Model picking_items
  * 
  */
-export type rowconfig = Prisma.rowconfigModel
+export type picking_items = Prisma.picking_itemsModel
 /**
- * Model secuencias
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type secuencias = Prisma.secuenciasModel
-/**
- * Model statuses
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type statuses = Prisma.statusesModel
-/**
- * Model statusesprecios
+ * Model picking_orders
  * 
  */
-export type statusesprecios = Prisma.statusespreciosModel
+export type picking_orders = Prisma.picking_ordersModel
 /**
- * Model statusesrelaciones
+ * Model picking_results
  * 
  */
-export type statusesrelaciones = Prisma.statusesrelacionesModel
+export type picking_results = Prisma.picking_resultsModel
 /**
- * Model statusesrelacionesflows
+ * Model picking_sources
  * 
  */
-export type statusesrelacionesflows = Prisma.statusesrelacionesflowsModel
+export type picking_sources = Prisma.picking_sourcesModel
 /**
- * Model statusflows
+ * Model products
  * 
  */
-export type statusflows = Prisma.statusflowsModel
+export type products = Prisma.productsModel
 /**
- * Model stocklog
+ * Model trip_cargo
  * 
  */
-export type stocklog = Prisma.stocklogModel
+export type trip_cargo = Prisma.trip_cargoModel
 /**
- * Model tareaarticulos
+ * Model trip_temperature_logs
  * 
  */
-export type tareaarticulos = Prisma.tareaarticulosModel
+export type trip_temperature_logs = Prisma.trip_temperature_logsModel
 /**
- * Model tareaexecperfil
+ * Model dispatch_orders
  * 
  */
-export type tareaexecperfil = Prisma.tareaexecperfilModel
+export type dispatch_orders = Prisma.dispatch_ordersModel
 /**
- * Model tareasexec
+ * Model trips
  * 
  */
-export type tareasexec = Prisma.tareasexecModel
+export type trips = Prisma.tripsModel
 /**
- * Model tareasexecarticulos
+ * Model users
  * 
  */
-export type tareasexecarticulos = Prisma.tareasexecarticulosModel
+export type users = Prisma.usersModel
 /**
- * Model tareasexecdocuments
+ * Model vehicles
  * 
  */
-export type tareasexecdocuments = Prisma.tareasexecdocumentsModel
+export type vehicles = Prisma.vehiclesModel
 /**
- * Model tareasexecpersonas
+ * Model vehicle_combinations
  * 
  */
-export type tareasexecpersonas = Prisma.tareasexecpersonasModel
+export type vehicle_combinations = Prisma.vehicle_combinationsModel
 /**
- * Model tareasexectiempos
+ * Model warehouse_stock
  * 
  */
-export type tareasexectiempos = Prisma.tareasexectiemposModel
+export type warehouse_stock = Prisma.warehouse_stockModel
 /**
- * Model tipoarticulos
- * The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+ * Model warehouse_stock_movements
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  */
-export type tipoarticulos = Prisma.tipoarticulosModel
+export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
 /**
- * Model user_role
+ * Model warehouses
  * 
  */
-export type user_role = Prisma.user_roleModel
+export type warehouses = Prisma.warehousesModel
 /**
- * Model usuarios
+ * Model document_sequences
  * 
  */
-export type usuarios = Prisma.usuariosModel
+export type document_sequences = Prisma.document_sequencesModel
 /**
- * Model UserTablePreference
+ * Model refresh_tokens
  * 
- */
-export type UserTablePreference = Prisma.UserTablePreferenceModel
-/**
- * Model wallet
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  */
-export type wallet = Prisma.walletModel
+export type refresh_tokens = Prisma.refresh_tokensModel

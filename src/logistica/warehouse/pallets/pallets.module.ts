@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PalletsService } from './pallets.service';
 import { PalletsController } from './pallets.controller';
-import { LogisticaPrismaModule } from '@/prisma/prisma-logistica.module';
+import { PrismaModule } from '@/prisma/prisma.module';
 
 @Module({
-  imports: [LogisticaPrismaModule],
+  imports: [PrismaModule],
   controllers: [PalletsController],
   providers: [PalletsService],
 })

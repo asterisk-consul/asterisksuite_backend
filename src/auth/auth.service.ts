@@ -1,93 +1,183 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import * as bcrypt from 'bcryptjs';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+import { RegisterDto } from './dto/register.dto';
+import type { AuthUser } from './types/auth-user.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwt: JwtService,
+    private jwtService: JwtService,
   ) {}
 
-  /**
-   * Remueve el prefijo "{bcrypt}" si existe
-   */
-  private normalizeHash(hash: string): string {
-    if (hash.startsWith('{bcrypt}')) {
-      return hash.replace('{bcrypt}', '');
-    }
-    return hash;
+  private hashToken(token: string) {
+    return crypto.createHash('sha256').update(token).digest('hex');
   }
 
-  async validateUser(username: string, password: string) {
-    const user = await this.prisma.usuarios.findFirst({
-      where: { username },
-      include: {
-        perfiles: true, // Datos personales
-        user_role: true, // Solo la tabla intermedia
-      },
-    });
-
-    if (!user) throw new UnauthorizedException('Usuario no encontrado');
-
-    // Normalizar hash antes de comparar
-    const storedHash = this.normalizeHash(user.password);
-
-    const valid = await bcrypt.compare(password, storedHash);
-
-    if (!valid) throw new UnauthorizedException('Credenciales incorrectas');
-
-    return user;
-  }
-
-  async login(username: string, password: string) {
-    const user = await this.validateUser(username, password);
-
-    const roleIds = user.user_role.map((ur) => Number(ur.role_id));
-
-    const roles = await this.prisma.role.findMany({
-      where: {
-        id: { in: roleIds },
-      },
-    });
-
-    // Extraer solo los authorities
-    const authorities = roles.map((role) => role.authority);
-
+  private async generateTokens(user: AuthUser) {
     const payload = {
-      sub: user.id.toString(),
-      username: user.username,
-      roles: authorities, // ['ROLE_ADMIN', 'ROLE_USER']
+      sub: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
     };
 
-    const token = this.jwt.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '15m',
+    });
 
-    return {
-      access_token: token,
-      user: {
-        id: user.id.toString(),
-        username: user.username,
-        perfil: user.perfiles,
-        roles: authorities,
-      },
-    };
-  }
+    const refreshToken = crypto.randomBytes(64).toString('hex');
 
-  async register(data: { username: string; password: string }) {
-    // Hash normal con bcrypt
-    const rawHashed = await bcrypt.hash(data.password, 10);
-
-    // Agregar prefijo requerido por el backend Java
-    const hashedWithPrefix = `{bcrypt}${rawHashed}`;
-
-    const user = await this.prisma.usuarios.create({
+    await this.prisma.refresh_tokens.create({
       data: {
-        username: data.username,
-        password: hashedWithPrefix,
+        user_id: user.id,
+        token_hash: this.hashToken(refreshToken),
+        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       },
     });
 
-    return user;
+    return { accessToken, refreshToken };
+  }
+
+  // =========================
+  // REGISTER
+  // =========================
+  async register(dto: RegisterDto) {
+    const existing = await this.prisma.users.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (existing) {
+      throw new BadRequestException('Email ya registrado');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    const user = await this.prisma.users.create({
+      data: {
+        name: dto.name,
+        email: dto.email,
+        password_hash: passwordHash,
+        role: dto.role ?? 'user',
+        company_id: dto.companyId ?? null,
+      },
+    });
+
+    return this.generateTokens(user);
+  }
+
+  // =========================
+  // LOGIN
+  // =========================
+  async login(email: string, password: string) {
+    const user = await this.prisma.users.findUnique({
+      where: { email },
+    });
+
+    if (!user || !user.password_hash) {
+      throw new UnauthorizedException();
+    }
+
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) throw new UnauthorizedException();
+
+    return this.generateTokens(user);
+  }
+
+  // =========================
+  // REFRESH (ROTATION)
+  // =========================
+  async refresh(refreshToken: string) {
+    const hashed = this.hashToken(refreshToken);
+
+    const stored = await this.prisma.refresh_tokens.findFirst({
+      where: {
+        token_hash: hashed,
+        revoked: false,
+      },
+      include: { users: true },
+    });
+
+    if (!stored || stored.expires_at < new Date()) {
+      throw new UnauthorizedException();
+    }
+
+    await this.prisma.refresh_tokens.update({
+      where: { id: stored.id },
+      data: { revoked: true },
+    });
+
+    return this.generateTokens(stored.users);
+  }
+
+  // =========================
+  // LOGOUT
+  // =========================
+  async logout(refreshToken: string) {
+    const hashed = this.hashToken(refreshToken);
+
+    await this.prisma.refresh_tokens.updateMany({
+      where: { token_hash: hashed },
+      data: { revoked: true },
+    });
+
+    return { message: 'Logout exitoso' };
+  }
+
+  // =========================
+  // LOGOUT ALL DEVICES
+  // =========================
+  async logoutAll(userId: string) {
+    await this.prisma.refresh_tokens.updateMany({
+      where: { user_id: userId },
+      data: { revoked: true },
+    });
+
+    return { message: 'Todas las sesiones cerradas' };
+  }
+
+  // =========================
+  // CHANGE PASSWORD
+  // =========================
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || !user.password_hash) {
+      throw new UnauthorizedException();
+    }
+
+    const valid = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!valid) {
+      throw new UnauthorizedException('Password Incorrecto');
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 10);
+
+    await this.prisma.users.update({
+      where: { id: userId },
+      data: { password_hash: newHash },
+    });
+
+    // 🔐 Revocar TODAS las sesiones por seguridad
+    await this.prisma.refresh_tokens.updateMany({
+      where: { user_id: userId },
+      data: { revoked: true },
+    });
+
+    return { message: 'Password actualizado. Todas las sesiones cerradas' };
   }
 }

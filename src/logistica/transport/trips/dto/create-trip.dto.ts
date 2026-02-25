@@ -6,7 +6,7 @@ export class CreateTripDto {
 
   @IsOptional()
   @IsUUID()
-  vehicleId?: string;
+  vehicleCombinationId?: string;
 
   @IsOptional()
   @IsUUID()

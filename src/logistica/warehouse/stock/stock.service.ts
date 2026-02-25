@@ -1,11 +1,11 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateStockMovementDto } from './dto/create-stock-movement.dto';
-import { Prisma } from '@/generated/prisma-logistica/client';
-import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { Prisma } from '@/generated/prisma/client';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class StockService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async getStockByWarehouse(warehouseId: string) {
     return this.prisma.warehouse_stock.findMany({

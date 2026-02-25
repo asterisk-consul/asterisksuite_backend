@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDriverDto } from './dto/create-driver.dto';
-import { LogisticaPrismaService } from 'src/prisma/prisma-logistica.service';
+import { PrismaService } from '@/prisma/prisma.service';
 @Injectable()
 export class DriversService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   create(dto: CreateDriverDto) {
     return this.prisma.drivers.create({

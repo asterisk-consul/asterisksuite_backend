@@ -1,12 +1,12 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { LogisticaPrismaService } from 'src/prisma/prisma-logistica.service';
-import { Prisma } from 'src/generated/prisma-logistica/client';
+import { PrismaService } from '@/prisma/prisma.service';
+import { Prisma } from 'src/generated/prisma/client';
 import { CreatePickingDto } from './dto/create-picking.dto';
 import { TransferPalletDto } from './dto/transfer-pallet.dto';
 
 @Injectable()
 export class PickingService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(dto: CreatePickingDto) {
     return this.prisma.$transaction(async (tx) => {

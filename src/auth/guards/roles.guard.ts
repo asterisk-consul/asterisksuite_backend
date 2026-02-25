@@ -3,9 +3,10 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
 export interface AuthenticatedUser {
-  id: bigint; // o string si usás UUID
-  username: string;
-  roles: string[];
+  id: string; // UUID
+  email: string;
+  role: string;
+  companyId?: string;
 }
 
 interface RequestWithUser extends Request {
@@ -27,6 +28,6 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
 
-    return requiredRoles.some((role) => user.roles.includes(role));
+    return requiredRoles.includes(user.role);
   }
 }

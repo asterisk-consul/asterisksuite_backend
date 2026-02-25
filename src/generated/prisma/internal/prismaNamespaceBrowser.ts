@@ -51,96 +51,35 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  afipcomprobantes: 'afipcomprobantes',
-  afippuntosventas: 'afippuntosventas',
-  articuloamedidacartera: 'articuloamedidacartera',
-  articuloespec: 'articuloespec',
-  articuloprecio: 'articuloprecio',
-  articulopreciohistorico: 'articulopreciohistorico',
-  articulos: 'articulos',
-  articuloscompuestos: 'articuloscompuestos',
-  cartera: 'cartera',
-  categorias: 'categorias',
-  categoriasperfiles: 'categoriasperfiles',
-  channels: 'channels',
-  company: 'company',
-  companyafip: 'companyafip',
-  competencianivel: 'competencianivel',
-  competencias: 'competencias',
-  comunica: 'comunica',
-  contactos: 'contactos',
-  depositos: 'depositos',
-  depositosarticulos: 'depositosarticulos',
-  documents: 'documents',
-  empleados: 'empleados',
-  eventos: 'eventos',
-  eventoslog: 'eventoslog',
-  flowdocument: 'flowdocument',
-  flowdocumentdepositos: 'flowdocumentdepositos',
-  flowdocumentfiltroarticulo: 'flowdocumentfiltroarticulo',
-  flowdocumentpartesint: 'flowdocumentpartesint',
-  flowdocumentprocesorelacionado: 'flowdocumentprocesorelacionado',
-  flowdocumentresponsables: 'flowdocumentresponsables',
-  flowespecializ: 'flowespecializ',
-  flowfactores: 'flowfactores',
-  flowpreguntas: 'flowpreguntas',
-  flowrespuestas: 'flowrespuestas',
-  grupos: 'grupos',
-  impositivos: 'impositivos',
-  instructivo: 'instructivo',
-  instructivoactividades: 'instructivoactividades',
-  instructivoarticulos: 'instructivoarticulos',
-  instructivoexec: 'instructivoexec',
-  instructivopuestos: 'instructivopuestos',
-  instructivotareas: 'instructivotareas',
-  instructivotareasresp: 'instructivotareasresp',
-  logs9000: 'logs9000',
-  logs9000tareas: 'logs9000tareas',
-  notifyregistrocab: 'notifyregistrocab',
-  ordencab: 'ordencab',
-  ordencuerpo: 'ordencuerpo',
-  ordenpresupcuerpo: 'ordenpresupcuerpo',
-  perfilcompetencias: 'perfilcompetencias',
-  perfildocuments: 'perfildocuments',
-  perfiles: 'perfiles',
-  perfilesarticulos: 'perfilesarticulos',
-  perfilesdepositos: 'perfilesdepositos',
-  perfilesprecios: 'perfilesprecios',
-  perfilesrel: 'perfilesrel',
-  puestodescrip: 'puestodescrip',
-  puestoscompetencias: 'puestoscompetencias',
-  receptores: 'receptores',
-  registrocab: 'registrocab',
-  registrocabaudio: 'registrocabaudio',
-  registrocabdocuments: 'registrocabdocuments',
-  registrocabgrupo: 'registrocabgrupo',
-  registrocabrel: 'registrocabrel',
-  registrocabseq: 'registrocabseq',
-  registrocuerpo: 'registrocuerpo',
-  reportes: 'reportes',
-  reportesacl: 'reportesacl',
-  reportesactividad: 'reportesactividad',
-  role: 'role',
-  rowconfig: 'rowconfig',
-  secuencias: 'secuencias',
-  statuses: 'statuses',
-  statusesprecios: 'statusesprecios',
-  statusesrelaciones: 'statusesrelaciones',
-  statusesrelacionesflows: 'statusesrelacionesflows',
-  statusflows: 'statusflows',
-  stocklog: 'stocklog',
-  tareaarticulos: 'tareaarticulos',
-  tareaexecperfil: 'tareaexecperfil',
-  tareasexec: 'tareasexec',
-  tareasexecarticulos: 'tareasexecarticulos',
-  tareasexecdocuments: 'tareasexecdocuments',
-  tareasexecpersonas: 'tareasexecpersonas',
-  tareasexectiempos: 'tareasexectiempos',
-  tipoarticulos: 'tipoarticulos',
-  user_role: 'user_role',
-  usuarios: 'usuarios',
-  UserTablePreference: 'UserTablePreference',
-  wallet: 'wallet'
+  business_parties: 'business_parties',
+  cargo_transfer_items: 'cargo_transfer_items',
+  cargo_transfers: 'cargo_transfers',
+  companies: 'companies',
+  delivery_notes: 'delivery_notes',
+  drivers: 'drivers',
+  entity_photos: 'entity_photos',
+  files: 'files',
+  locations: 'locations',
+  pallet_items: 'pallet_items',
+  pallets: 'pallets',
+  party_locations: 'party_locations',
+  picking_items: 'picking_items',
+  picking_orders: 'picking_orders',
+  picking_results: 'picking_results',
+  picking_sources: 'picking_sources',
+  products: 'products',
+  trip_cargo: 'trip_cargo',
+  trip_temperature_logs: 'trip_temperature_logs',
+  dispatch_orders: 'dispatch_orders',
+  trips: 'trips',
+  users: 'users',
+  vehicles: 'vehicles',
+  vehicle_combinations: 'vehicle_combinations',
+  warehouse_stock: 'warehouse_stock',
+  warehouse_stock_movements: 'warehouse_stock_movements',
+  warehouses: 'warehouses',
+  document_sequences: 'document_sequences',
+  refresh_tokens: 'refresh_tokens'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -159,1304 +98,401 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const AfipcomprobantesScalarFieldEnum = {
+export const Business_partiesScalarFieldEnum = {
   id: 'id',
-  parentid: 'parentid',
-  registrocabid: 'registrocabid',
-  afippuntosventasid: 'afippuntosventasid',
-  fechacomp: 'fechacomp',
-  nrocomp: 'nrocomp',
-  nrocae: 'nrocae',
-  jsoninput: 'jsoninput',
-  jsonresponse: 'jsonresponse',
-  statusid: 'statusid',
-  retries: 'retries',
-  procdate: 'procdate',
-  prfname: 'prfname',
-  statussmessage: 'statussmessage',
-  tipocomp: 'tipocomp',
-  condventaid: 'condventaid',
-  fechadesde: 'fechadesde',
-  fechahasta: 'fechahasta',
-  fechavencimiento: 'fechavencimiento',
-  tipoconcepto: 'tipoconcepto',
-  comprobasocnro: 'comprobasocnro',
-  comprobasoctipo: 'comprobasoctipo',
-  anulacion: 'anulacion',
-  reftransf: 'reftransf'
-} as const
-
-export type AfipcomprobantesScalarFieldEnum = (typeof AfipcomprobantesScalarFieldEnum)[keyof typeof AfipcomprobantesScalarFieldEnum]
-
-
-export const AfippuntosventasScalarFieldEnum = {
-  id: 'id',
-  companyafipid: 'companyafipid',
-  descripcion: 'descripcion',
-  numero: 'numero',
-  notas: 'notas',
-  maxretries: 'maxretries',
-  intervaloreintentos: 'intervaloreintentos',
-  apikey: 'apikey',
-  apitoken: 'apitoken',
-  usertoken: 'usertoken'
-} as const
-
-export type AfippuntosventasScalarFieldEnum = (typeof AfippuntosventasScalarFieldEnum)[keyof typeof AfippuntosventasScalarFieldEnum]
-
-
-export const ArticuloamedidacarteraScalarFieldEnum = {
-  id: 'id',
-  inregistrocuerpoid: 'inregistrocuerpoid',
-  outregistrocuerpoid: 'outregistrocuerpoid',
-  inregistrocabid: 'inregistrocabid',
-  outregistrocabid: 'outregistrocabid',
-  tipo: 'tipo',
-  codigo: 'codigo',
-  nroidentificador: 'nroidentificador',
-  detalle: 'detalle',
-  fechacreacion: 'fechacreacion',
-  fechalasupdate: 'fechalasupdate'
-} as const
-
-export type ArticuloamedidacarteraScalarFieldEnum = (typeof ArticuloamedidacarteraScalarFieldEnum)[keyof typeof ArticuloamedidacarteraScalarFieldEnum]
-
-
-export const ArticuloespecScalarFieldEnum = {
-  id: 'id',
-  articuloid: 'articuloid',
-  descrip: 'descrip',
-  rangomax: 'rangomax',
-  rangomin: 'rangomin',
-  um: 'um',
-  valorideal: 'valorideal',
-  valoresposibles: 'valoresposibles',
-  isdescriptive: 'isdescriptive'
-} as const
-
-export type ArticuloespecScalarFieldEnum = (typeof ArticuloespecScalarFieldEnum)[keyof typeof ArticuloespecScalarFieldEnum]
-
-
-export const ArticuloprecioScalarFieldEnum = {
-  id: 'id',
-  articuloid: 'articuloid',
-  categid: 'categid',
-  precio: 'precio',
-  changedate: 'changedate',
-  factorconversion: 'factorconversion'
-} as const
-
-export type ArticuloprecioScalarFieldEnum = (typeof ArticuloprecioScalarFieldEnum)[keyof typeof ArticuloprecioScalarFieldEnum]
-
-
-export const ArticulopreciohistoricoScalarFieldEnum = {
-  id: 'id',
-  articuloid: 'articuloid',
-  categid: 'categid',
-  precio: 'precio',
-  changedate: 'changedate',
-  factorconversion: 'factorconversion'
-} as const
-
-export type ArticulopreciohistoricoScalarFieldEnum = (typeof ArticulopreciohistoricoScalarFieldEnum)[keyof typeof ArticulopreciohistoricoScalarFieldEnum]
-
-
-export const ArticulosScalarFieldEnum = {
-  id: 'id',
-  internalcode: 'internalcode',
-  externalcode: 'externalcode',
-  nombre: 'nombre',
-  descrip: 'descrip',
-  categid: 'categid',
-  instructivoid: 'instructivoid',
-  caracteristicas: 'caracteristicas',
-  activo: 'activo',
-  cantidadunidad: 'cantidadunidad',
-  puntorepo: 'puntorepo',
-  nivelobj: 'nivelobj',
-  cantminrepo: 'cantminrepo',
-  imagen: 'imagen',
-  um: 'um',
-  ub: 'ub',
-  compraminima: 'compraminima',
-  statusinicial: 'statusinicial',
-  impuestoalic: 'impuestoalic',
-  isservice: 'isservice',
-  ischeque: 'ischeque',
-  isbom: 'isbom',
-  cuentacontableid: 'cuentacontableid',
-  isamedida: 'isamedida'
-} as const
-
-export type ArticulosScalarFieldEnum = (typeof ArticulosScalarFieldEnum)[keyof typeof ArticulosScalarFieldEnum]
-
-
-export const ArticuloscompuestosScalarFieldEnum = {
-  id: 'id',
-  articuloid: 'articuloid',
-  parentarticuloid: 'parentarticuloid',
-  cantidad: 'cantidad',
-  compvariableid: 'compvariableid',
-  cuentacontableid: 'cuentacontableid',
-  ancho: 'ancho',
-  largo: 'largo'
-} as const
-
-export type ArticuloscompuestosScalarFieldEnum = (typeof ArticuloscompuestosScalarFieldEnum)[keyof typeof ArticuloscompuestosScalarFieldEnum]
-
-
-export const CarteraScalarFieldEnum = {
-  id: 'id',
-  inregistrocuerpoid: 'inregistrocuerpoid',
-  outregistrocuerpoid: 'outregistrocuerpoid',
-  tipo: 'tipo',
-  banco: 'banco',
-  nroidentificador: 'nroidentificador',
-  fechacobro: 'fechacobro',
-  fechaingreso: 'fechaingreso',
-  importe: 'importe'
-} as const
-
-export type CarteraScalarFieldEnum = (typeof CarteraScalarFieldEnum)[keyof typeof CarteraScalarFieldEnum]
-
-
-export const CategoriasScalarFieldEnum = {
-  id: 'id',
+  company_id: 'company_id',
+  type: 'type',
   name: 'name',
-  parentid: 'parentid',
-  grupo: 'grupo',
-  procparentid: 'procparentid',
-  orden: 'orden',
-  notas: 'notas',
-  valor: 'valor',
-  macroparentid: 'macroparentid'
-} as const
-
-export type CategoriasScalarFieldEnum = (typeof CategoriasScalarFieldEnum)[keyof typeof CategoriasScalarFieldEnum]
-
-
-export const CategoriasperfilesScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  categoriaid: 'categoriaid'
-} as const
-
-export type CategoriasperfilesScalarFieldEnum = (typeof CategoriasperfilesScalarFieldEnum)[keyof typeof CategoriasperfilesScalarFieldEnum]
-
-
-export const ChannelsScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  descrip: 'descrip',
-  handlerclass: 'handlerclass',
-  handlerpackage: 'handlerpackage',
-  active: 'active',
-  imputtemplate: 'imputtemplate'
-} as const
-
-export type ChannelsScalarFieldEnum = (typeof ChannelsScalarFieldEnum)[keyof typeof ChannelsScalarFieldEnum]
-
-
-export const CompanyScalarFieldEnum = {
-  id: 'id',
-  nombreempresa: 'nombreempresa',
-  direccion: 'direccion',
-  telefono: 'telefono',
-  mision: 'mision',
-  vision: 'vision',
-  valores: 'valores',
-  politicacalidad: 'politicacalidad',
-  alcance: 'alcance'
-} as const
-
-export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
-
-
-export const CompanyafipScalarFieldEnum = {
-  id: 'id',
-  companyid: 'companyid',
-  nombrefiscal: 'nombrefiscal',
-  cuit: 'cuit',
-  condivaid: 'condivaid',
-  certifssl: 'certifssl',
-  wskey: 'wskey',
-  cbu: 'cbu'
-} as const
-
-export type CompanyafipScalarFieldEnum = (typeof CompanyafipScalarFieldEnum)[keyof typeof CompanyafipScalarFieldEnum]
-
-
-export const CompetencianivelScalarFieldEnum = {
-  id: 'id',
-  descripcion: 'descripcion',
-  competenciaid: 'competenciaid',
-  titulo: 'titulo',
-  titulopi: 'titulopi',
-  puntaje: 'puntaje'
-} as const
-
-export type CompetencianivelScalarFieldEnum = (typeof CompetencianivelScalarFieldEnum)[keyof typeof CompetencianivelScalarFieldEnum]
-
-
-export const CompetenciasScalarFieldEnum = {
-  id: 'id',
-  parentid: 'parentid',
-  nombre: 'nombre',
-  cod: 'cod',
-  descrip: 'descrip',
-  nivelpuesto: 'nivelpuesto',
-  nivelpersonas: 'nivelpersonas',
-  grupoid: 'grupoid'
-} as const
-
-export type CompetenciasScalarFieldEnum = (typeof CompetenciasScalarFieldEnum)[keyof typeof CompetenciasScalarFieldEnum]
-
-
-export const ComunicaScalarFieldEnum = {
-  id: 'id',
-  tipoid: 'tipoid',
-  que: 'que',
-  cuando: 'cuando',
-  aquien: 'aquien',
-  como: 'como',
-  quien: 'quien',
-  sequenciaid: 'sequenciaid',
-  procesoentradaid: 'procesoentradaid',
-  procesoinid: 'procesoinid',
-  procesooutid: 'procesooutid',
-  flowdocumentid: 'flowdocumentid',
-  statusesid: 'statusesid',
-  frecuenciaid: 'frecuenciaid'
-} as const
-
-export type ComunicaScalarFieldEnum = (typeof ComunicaScalarFieldEnum)[keyof typeof ComunicaScalarFieldEnum]
-
-
-export const ContactosScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  nombre: 'nombre',
+  tax_id: 'tax_id',
+  phone: 'phone',
   email: 'email',
-  telefono: 'telefono',
-  skype: 'skype',
-  web: 'web',
-  notas: 'notas',
-  direccion: 'direccion',
-  piso: 'piso',
-  localidad: 'localidad',
-  pcia: 'pcia',
-  cp: 'cp',
-  pais: 'pais',
-  direccionnro: 'direccionnro',
-  dpto: 'dpto',
-  tipoid: 'tipoid'
+  active: 'active',
+  created_at: 'created_at'
 } as const
 
-export type ContactosScalarFieldEnum = (typeof ContactosScalarFieldEnum)[keyof typeof ContactosScalarFieldEnum]
+export type Business_partiesScalarFieldEnum = (typeof Business_partiesScalarFieldEnum)[keyof typeof Business_partiesScalarFieldEnum]
 
 
-export const DepositosScalarFieldEnum = {
+export const Cargo_transfer_itemsScalarFieldEnum = {
   id: 'id',
-  descrip: 'descrip',
-  parentid: 'parentid',
-  categid: 'categid',
-  perfilid: 'perfilid',
-  activo: 'activo'
+  transfer_id: 'transfer_id',
+  pallet_id: 'pallet_id',
+  delivery_note_id: 'delivery_note_id',
+  quantity: 'quantity'
 } as const
 
-export type DepositosScalarFieldEnum = (typeof DepositosScalarFieldEnum)[keyof typeof DepositosScalarFieldEnum]
+export type Cargo_transfer_itemsScalarFieldEnum = (typeof Cargo_transfer_itemsScalarFieldEnum)[keyof typeof Cargo_transfer_itemsScalarFieldEnum]
 
 
-export const DepositosarticulosScalarFieldEnum = {
+export const Cargo_transfersScalarFieldEnum = {
   id: 'id',
-  depositoid: 'depositoid',
-  articuloid: 'articuloid',
-  cantidad: 'cantidad',
-  articulospecresult: 'articulospecresult',
-  compraminima: 'compraminima',
-  puntorepo: 'puntorepo',
-  cantminrepo: 'cantminrepo',
-  nivelobj: 'nivelobj',
-  cantcomprometida: 'cantcomprometida',
-  permitenegativo: 'permitenegativo',
-  canttransito: 'canttransito'
+  from_trip_id: 'from_trip_id',
+  to_trip_id: 'to_trip_id',
+  location_id: 'location_id',
+  transfer_time: 'transfer_time',
+  performed_by: 'performed_by',
+  notes: 'notes'
 } as const
 
-export type DepositosarticulosScalarFieldEnum = (typeof DepositosarticulosScalarFieldEnum)[keyof typeof DepositosarticulosScalarFieldEnum]
+export type Cargo_transfersScalarFieldEnum = (typeof Cargo_transfersScalarFieldEnum)[keyof typeof Cargo_transfersScalarFieldEnum]
 
 
-export const DocumentsScalarFieldEnum = {
+export const CompaniesScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  descrip: 'descrip',
-  perfilid: 'perfilid',
-  mime: 'mime',
-  tamano: 'tamano',
-  actividadid: 'actividadid'
+  tax_id: 'tax_id',
+  phone: 'phone',
+  created_at: 'created_at'
 } as const
 
-export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
 
 
-export const EmpleadosScalarFieldEnum = {
+export const Delivery_notesScalarFieldEnum = {
   id: 'id',
-  perfilid: 'perfilid',
-  legajonro: 'legajonro',
-  foto: 'foto',
-  estcivil: 'estcivil',
-  nacionalidad: 'nacionalidad',
-  fechanac: 'fechanac',
-  fechaincorp: 'fechaincorp',
-  fechabaja: 'fechabaja',
-  lugarnacim: 'lugarnacim',
-  obrasocial: 'obrasocial',
-  profesion: 'profesion',
-  depositoid: 'depositoid'
-} as const
-
-export type EmpleadosScalarFieldEnum = (typeof EmpleadosScalarFieldEnum)[keyof typeof EmpleadosScalarFieldEnum]
-
-
-export const EventosScalarFieldEnum = {
-  id: 'id',
-  accion: 'accion',
-  origen: 'origen',
-  urlwh: 'urlwh',
-  debuginfo: 'debuginfo',
-  active: 'active'
-} as const
-
-export type EventosScalarFieldEnum = (typeof EventosScalarFieldEnum)[keyof typeof EventosScalarFieldEnum]
-
-
-export const EventoslogScalarFieldEnum = {
-  id: 'id',
-  eventosid: 'eventosid',
-  origenid: 'origenid',
-  datasent: 'datasent',
-  fecha: 'fecha',
-  responsestatus: 'responsestatus'
-} as const
-
-export type EventoslogScalarFieldEnum = (typeof EventoslogScalarFieldEnum)[keyof typeof EventoslogScalarFieldEnum]
-
-
-export const FlowdocumentScalarFieldEnum = {
-  id: 'id',
-  titulo: 'titulo',
-  descrip: 'descrip',
-  tipoid: 'tipoid',
-  statusid: 'statusid',
-  procesoid: 'procesoid',
-  revision: 'revision',
-  formaalmacenamiento: 'formaalmacenamiento',
-  objetivo: 'objetivo',
-  tiempoconservacion: 'tiempoconservacion',
-  alcance: 'alcance',
-  formulariorel: 'formulariorel',
-  arearespuso: 'arearespuso',
-  fechacreacion: 'fechacreacion',
-  fechavigencia: 'fechavigencia',
-  fechamodif: 'fechamodif',
-  responsableelab: 'responsableelab',
-  responsableaprob: 'responsableaprob',
-  responsablemodif: 'responsablemodif',
-  actividad: 'actividad',
-  orden: 'orden',
-  categid: 'categid',
-  codificacion: 'codificacion',
-  responsableid: 'responsableid',
-  preasignarusuario: 'preasignarusuario',
-  requierecuerpo: 'requierecuerpo',
-  aplicarusuariomismotipo: 'aplicarusuariomismotipo',
-  aplicarrespmismotipo: 'aplicarrespmismotipo',
-  frecuencia: 'frecuencia',
-  impactostock: 'impactostock',
-  permitecuerpos: 'permitecuerpos',
-  permitecambiodeposito: 'permitecambiodeposito',
-  comprometestock: 'comprometestock',
-  preguntarguardar: 'preguntarguardar',
-  deshabilitarbtnsiguientecuerpo: 'deshabilitarbtnsiguientecuerpo',
-  genafipcomp: 'genafipcomp',
-  viewafipcomp: 'viewafipcomp',
-  frecuenciaid: 'frecuenciaid',
-  permiteaddpi: 'permiteaddpi',
-  permiteaddarticulo: 'permiteaddarticulo',
-  carterastatus: 'carterastatus',
-  obligaradjuntarregistro: 'obligaradjuntarregistro',
-  canaddclientes: 'canaddclientes',
-  copydatatoregdest: 'copydatatoregdest',
-  permiteagregartareas: 'permiteagregartareas',
-  permitearticulocab: 'permitearticulocab',
-  canaddarticulo: 'canaddarticulo',
-  obligaradjuntarreghijo: 'obligaradjuntarreghijo',
-  permiteasociarfiles: 'permiteasociarfiles',
-  ocultarinicio: 'ocultarinicio',
-  artamedidastatus: 'artamedidastatus',
-  permitiraudio: 'permitiraudio',
-  permitesoluunregasoc: 'permitesoluunregasoc',
-  usararticulospadre: 'usararticulospadre',
-  isenespera: 'isenespera',
-  permitecambioarticulo: 'permitecambioarticulo'
-} as const
-
-export type FlowdocumentScalarFieldEnum = (typeof FlowdocumentScalarFieldEnum)[keyof typeof FlowdocumentScalarFieldEnum]
-
-
-export const FlowdocumentdepositosScalarFieldEnum = {
-  id: 'id',
-  depositoid: 'depositoid',
-  flowdocumentid: 'flowdocumentid',
-  tiporel: 'tiporel'
-} as const
-
-export type FlowdocumentdepositosScalarFieldEnum = (typeof FlowdocumentdepositosScalarFieldEnum)[keyof typeof FlowdocumentdepositosScalarFieldEnum]
-
-
-export const FlowdocumentfiltroarticuloScalarFieldEnum = {
-  id: 'id',
-  categoriaid: 'categoriaid',
-  flowdocumentid: 'flowdocumentid'
-} as const
-
-export type FlowdocumentfiltroarticuloScalarFieldEnum = (typeof FlowdocumentfiltroarticuloScalarFieldEnum)[keyof typeof FlowdocumentfiltroarticuloScalarFieldEnum]
-
-
-export const FlowdocumentpartesintScalarFieldEnum = {
-  id: 'id',
-  categoriaid: 'categoriaid',
-  flowdocumentid: 'flowdocumentid'
-} as const
-
-export type FlowdocumentpartesintScalarFieldEnum = (typeof FlowdocumentpartesintScalarFieldEnum)[keyof typeof FlowdocumentpartesintScalarFieldEnum]
-
-
-export const FlowdocumentprocesorelacionadoScalarFieldEnum = {
-  id: 'id',
-  flowdocumentid: 'flowdocumentid',
-  relatedprocid: 'relatedprocid',
-  tiporel: 'tiporel'
-} as const
-
-export type FlowdocumentprocesorelacionadoScalarFieldEnum = (typeof FlowdocumentprocesorelacionadoScalarFieldEnum)[keyof typeof FlowdocumentprocesorelacionadoScalarFieldEnum]
-
-
-export const FlowdocumentresponsablesScalarFieldEnum = {
-  id: 'id',
-  responsableid: 'responsableid',
-  tipointervencion: 'tipointervencion',
-  flowdocumentid: 'flowdocumentid'
-} as const
-
-export type FlowdocumentresponsablesScalarFieldEnum = (typeof FlowdocumentresponsablesScalarFieldEnum)[keyof typeof FlowdocumentresponsablesScalarFieldEnum]
-
-
-export const FlowespecializScalarFieldEnum = {
-  id: 'id',
-  statusflowid: 'statusflowid',
-  categid: 'categid',
-  statusflowdestinoid: 'statusflowdestinoid'
-} as const
-
-export type FlowespecializScalarFieldEnum = (typeof FlowespecializScalarFieldEnum)[keyof typeof FlowespecializScalarFieldEnum]
-
-
-export const FlowfactoresScalarFieldEnum = {
-  id: 'id',
-  flowdocumentid: 'flowdocumentid',
-  tipoid: 'tipoid',
-  titulo: 'titulo',
-  mimetype: 'mimetype',
-  archivo: 'archivo',
-  jsondata: 'jsondata'
-} as const
-
-export type FlowfactoresScalarFieldEnum = (typeof FlowfactoresScalarFieldEnum)[keyof typeof FlowfactoresScalarFieldEnum]
-
-
-export const FlowpreguntasScalarFieldEnum = {
-  id: 'id',
-  statusflowid: 'statusflowid',
-  pregunta: 'pregunta',
-  formula: 'formula',
-  posx: 'posx',
-  posy: 'posy'
-} as const
-
-export type FlowpreguntasScalarFieldEnum = (typeof FlowpreguntasScalarFieldEnum)[keyof typeof FlowpreguntasScalarFieldEnum]
-
-
-export const FlowrespuestasScalarFieldEnum = {
-  id: 'id',
-  flowpreguntasid: 'flowpreguntasid',
-  respuesta: 'respuesta',
-  statusflowid: 'statusflowid',
-  siguientepreguntaid: 'siguientepreguntaid'
-} as const
-
-export type FlowrespuestasScalarFieldEnum = (typeof FlowrespuestasScalarFieldEnum)[keyof typeof FlowrespuestasScalarFieldEnum]
-
-
-export const GruposScalarFieldEnum = {
-  id: 'id',
-  descrip: 'descrip',
-  fecharef: 'fecharef',
-  categid: 'categid'
-} as const
-
-export type GruposScalarFieldEnum = (typeof GruposScalarFieldEnum)[keyof typeof GruposScalarFieldEnum]
-
-
-export const ImpositivosScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  cuit: 'cuit',
-  dirfiscal: 'dirfiscal',
-  condiva: 'condiva',
-  provinciaid: 'provinciaid',
-  mailcomprobantes: 'mailcomprobantes'
-} as const
-
-export type ImpositivosScalarFieldEnum = (typeof ImpositivosScalarFieldEnum)[keyof typeof ImpositivosScalarFieldEnum]
-
-
-export const InstructivoScalarFieldEnum = {
-  id: 'id',
-  statusid: 'statusid',
-  arearesponsableid: 'arearesponsableid',
-  responsableexec: 'responsableexec',
-  responsableaprob: 'responsableaprob',
-  responsablesuperv: 'responsablesuperv',
-  tipoinstructivo: 'tipoinstructivo',
-  flowdocumentid: 'flowdocumentid',
-  hstotalasigandas: 'hstotalasigandas',
-  isdefault: 'isdefault',
-  modo: 'modo'
-} as const
-
-export type InstructivoScalarFieldEnum = (typeof InstructivoScalarFieldEnum)[keyof typeof InstructivoScalarFieldEnum]
-
-
-export const InstructivoactividadesScalarFieldEnum = {
-  id: 'id',
-  instructivoid: 'instructivoid',
-  actividadid: 'actividadid'
-} as const
-
-export type InstructivoactividadesScalarFieldEnum = (typeof InstructivoactividadesScalarFieldEnum)[keyof typeof InstructivoactividadesScalarFieldEnum]
-
-
-export const InstructivoarticulosScalarFieldEnum = {
-  id: 'id',
-  instructivoid: 'instructivoid',
-  articuloid: 'articuloid',
-  repeticionunidadid: 'repeticionunidadid',
-  repeticionfrecuencia: 'repeticionfrecuencia'
-} as const
-
-export type InstructivoarticulosScalarFieldEnum = (typeof InstructivoarticulosScalarFieldEnum)[keyof typeof InstructivoarticulosScalarFieldEnum]
-
-
-export const InstructivoexecScalarFieldEnum = {
-  id: 'id',
-  instructivoid: 'instructivoid',
-  registrocuerpoid: 'registrocuerpoid',
-  registrocuerpostatusflowid: 'registrocuerpostatusflowid',
-  responsableid: 'responsableid',
-  responsablesuperv: 'responsablesuperv',
-  responsableaprob: 'responsableaprob',
-  hstotalasignadas: 'hstotalasignadas',
-  registrocabid: 'registrocabid',
-  registrocabstatusflowid: 'registrocabstatusflowid',
-  registrocuerpostatusid: 'registrocuerpostatusid',
-  isplaneado: 'isplaneado'
-} as const
-
-export type InstructivoexecScalarFieldEnum = (typeof InstructivoexecScalarFieldEnum)[keyof typeof InstructivoexecScalarFieldEnum]
-
-
-export const InstructivopuestosScalarFieldEnum = {
-  id: 'id',
-  instructivoid: 'instructivoid',
-  puestoid: 'puestoid',
-  rolename: 'rolename'
-} as const
-
-export type InstructivopuestosScalarFieldEnum = (typeof InstructivopuestosScalarFieldEnum)[keyof typeof InstructivopuestosScalarFieldEnum]
-
-
-export const InstructivotareasScalarFieldEnum = {
-  id: 'id',
-  instructivoid: 'instructivoid',
-  flowdocumentid: 'flowdocumentid',
-  tipotarea: 'tipotarea',
-  statusid: 'statusid',
-  orden: 'orden',
-  tiempooptimista: 'tiempooptimista',
-  tiempoprobable: 'tiempoprobable',
-  tiempopesimista: 'tiempopesimista',
-  personasnecesarias: 'personasnecesarias'
-} as const
-
-export type InstructivotareasScalarFieldEnum = (typeof InstructivotareasScalarFieldEnum)[keyof typeof InstructivotareasScalarFieldEnum]
-
-
-export const InstructivotareasrespScalarFieldEnum = {
-  id: 'id',
-  instructivotareasid: 'instructivotareasid',
-  categoriasid: 'categoriasid'
-} as const
-
-export type InstructivotareasrespScalarFieldEnum = (typeof InstructivotareasrespScalarFieldEnum)[keyof typeof InstructivotareasrespScalarFieldEnum]
-
-
-export const Logs9000ScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  registrocuerpoid: 'registrocuerpoid',
-  userid: 'userid',
-  oldflowstatusid: 'oldflowstatusid',
-  newflowstatusid: 'newflowstatusid',
-  fecha: 'fecha',
-  extradata: 'extradata',
-  xlatitud: 'xlatitud',
-  xlongitud: 'xlongitud'
-} as const
-
-export type Logs9000ScalarFieldEnum = (typeof Logs9000ScalarFieldEnum)[keyof typeof Logs9000ScalarFieldEnum]
-
-
-export const Logs9000tareasScalarFieldEnum = {
-  id: 'id',
-  tareasexecid: 'tareasexecid',
-  oldstatus: 'oldstatus',
-  newstatus: 'newstatus',
-  fecha: 'fecha',
-  xlatitud: 'xlatitud',
-  xlongitud: 'xlongitud'
-} as const
-
-export type Logs9000tareasScalarFieldEnum = (typeof Logs9000tareasScalarFieldEnum)[keyof typeof Logs9000tareasScalarFieldEnum]
-
-
-export const NotifyregistrocabScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  origenstatusflowid: 'origenstatusflowid',
-  destinostatusflowid: 'destinostatusflowid',
-  mensaje: 'mensaje',
-  fechacreacion: 'fechacreacion',
-  fechalectura: 'fechalectura'
-} as const
-
-export type NotifyregistrocabScalarFieldEnum = (typeof NotifyregistrocabScalarFieldEnum)[keyof typeof NotifyregistrocabScalarFieldEnum]
-
-
-export const OrdencabScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  presupcuerpoid: 'presupcuerpoid',
-  fecha: 'fecha',
-  ordencateg: 'ordencateg'
-} as const
-
-export type OrdencabScalarFieldEnum = (typeof OrdencabScalarFieldEnum)[keyof typeof OrdencabScalarFieldEnum]
-
-
-export const OrdencuerpoScalarFieldEnum = {
-  id: 'id',
-  ordencabid: 'ordencabid',
-  ownerid: 'ownerid',
-  statusid: 'statusid',
-  articuloid: 'articuloid',
-  cantidad: 'cantidad',
-  preciounit: 'preciounit',
-  preciototal: 'preciototal',
-  percentcomplete: 'percentcomplete',
-  detalles: 'detalles'
-} as const
-
-export type OrdencuerpoScalarFieldEnum = (typeof OrdencuerpoScalarFieldEnum)[keyof typeof OrdencuerpoScalarFieldEnum]
-
-
-export const OrdenpresupcuerpoScalarFieldEnum = {
-  id: 'id',
-  presupcuerpoid: 'presupcuerpoid',
-  ordencabid: 'ordencabid'
-} as const
-
-export type OrdenpresupcuerpoScalarFieldEnum = (typeof OrdenpresupcuerpoScalarFieldEnum)[keyof typeof OrdenpresupcuerpoScalarFieldEnum]
-
-
-export const PerfilcompetenciasScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  competenciaid: 'competenciaid',
-  notas: 'notas',
-  competencianivelid: 'competencianivelid'
-} as const
-
-export type PerfilcompetenciasScalarFieldEnum = (typeof PerfilcompetenciasScalarFieldEnum)[keyof typeof PerfilcompetenciasScalarFieldEnum]
-
-
-export const PerfildocumentsScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  documentsid: 'documentsid'
-} as const
-
-export type PerfildocumentsScalarFieldEnum = (typeof PerfildocumentsScalarFieldEnum)[keyof typeof PerfildocumentsScalarFieldEnum]
-
-
-export const PerfilesScalarFieldEnum = {
-  id: 'id',
-  identificador: 'identificador',
-  nombre: 'nombre',
-  apellido: 'apellido',
-  razonsocial: 'razonsocial',
-  notas: 'notas',
-  activo: 'activo',
-  tipo: 'tipo',
-  despeciales: 'despeciales',
-  documento: 'documento',
-  tipodocumento: 'tipodocumento',
-  externalid: 'externalid',
-  tipoprecioid: 'tipoprecioid',
-  porcentajedesc: 'porcentajedesc',
-  zonaid: 'zonaid',
-  xlatitud: 'xlatitud',
-  xlongitud: 'xlongitud'
-} as const
-
-export type PerfilesScalarFieldEnum = (typeof PerfilesScalarFieldEnum)[keyof typeof PerfilesScalarFieldEnum]
-
-
-export const PerfilesarticulosScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  articuloid: 'articuloid',
-  tiporelid: 'tiporelid'
-} as const
-
-export type PerfilesarticulosScalarFieldEnum = (typeof PerfilesarticulosScalarFieldEnum)[keyof typeof PerfilesarticulosScalarFieldEnum]
-
-
-export const PerfilesdepositosScalarFieldEnum = {
-  id: 'id',
-  depositoid: 'depositoid',
-  perfilid: 'perfilid'
-} as const
-
-export type PerfilesdepositosScalarFieldEnum = (typeof PerfilesdepositosScalarFieldEnum)[keyof typeof PerfilesdepositosScalarFieldEnum]
-
-
-export const PerfilespreciosScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  tipoperfilid: 'tipoperfilid',
-  tipoprecioid: 'tipoprecioid',
-  porcentajedesc: 'porcentajedesc'
-} as const
-
-export type PerfilespreciosScalarFieldEnum = (typeof PerfilespreciosScalarFieldEnum)[keyof typeof PerfilespreciosScalarFieldEnum]
-
-
-export const PerfilesrelScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  perfilidrel: 'perfilidrel',
-  tiporelid: 'tiporelid'
-} as const
-
-export type PerfilesrelScalarFieldEnum = (typeof PerfilesrelScalarFieldEnum)[keyof typeof PerfilesrelScalarFieldEnum]
-
-
-export const PuestodescripScalarFieldEnum = {
-  id: 'id',
-  areaid: 'areaid',
-  puestoid: 'puestoid',
-  flowdocumentid: 'flowdocumentid',
-  descrip: 'descrip',
-  horarios: 'horarios',
-  personalacargo: 'personalacargo',
-  tipopuesto: 'tipopuesto'
-} as const
-
-export type PuestodescripScalarFieldEnum = (typeof PuestodescripScalarFieldEnum)[keyof typeof PuestodescripScalarFieldEnum]
-
-
-export const PuestoscompetenciasScalarFieldEnum = {
-  id: 'id',
-  puestodescripid: 'puestodescripid',
-  competenciaid: 'competenciaid',
-  notas: 'notas',
-  competencianivelid: 'competencianivelid'
-} as const
-
-export type PuestoscompetenciasScalarFieldEnum = (typeof PuestoscompetenciasScalarFieldEnum)[keyof typeof PuestoscompetenciasScalarFieldEnum]
-
-
-export const ReceptoresScalarFieldEnum = {
-  id: 'id',
-  comunicaid: 'comunicaid',
-  statusesid: 'statusesid'
-} as const
-
-export type ReceptoresScalarFieldEnum = (typeof ReceptoresScalarFieldEnum)[keyof typeof ReceptoresScalarFieldEnum]
-
-
-export const RegistrocabScalarFieldEnum = {
-  id: 'id',
-  descrip: 'descrip',
-  fecha: 'fecha',
-  fechacompromiso: 'fechacompromiso',
-  clientid: 'clientid',
-  clientname: 'clientname',
-  vendedorid: 'vendedorid',
-  notas: 'notas',
-  obsventas: 'obsventas',
-  obsadm: 'obsadm',
-  obsoo: 'obsoo',
-  envcontact: 'envcontact',
-  envmail: 'envmail',
-  envtelef: 'envtelef',
-  envdirec: 'envdirec',
-  envlocalid: 'envlocalid',
-  envcp: 'envcp',
-  calidadfinal: 'calidadfinal',
-  statusid: 'statusid',
-  referenciatexto: 'referenciatexto',
-  envprov: 'envprov',
-  envpais: 'envpais',
-  flowid: 'flowid',
-  responsableactactualid: 'responsableactactualid',
-  statusflowid: 'statusflowid',
-  currentuser: 'currentuser',
-  parteinteresadatipoid: 'parteinteresadatipoid',
-  puestotrabajoid: 'puestotrabajoid',
-  procesoid: 'procesoid',
-  totalprecio: 'totalprecio',
-  totalimpuestos: 'totalimpuestos',
-  cuentacontableid: 'cuentacontableid',
-  obsactuar: 'obsactuar',
-  obsprod: 'obsprod',
-  externalid: 'externalid',
-  obsinicio: 'obsinicio',
-  obsverificar: 'obsverificar',
-  auditorid: 'auditorid',
-  ejecutorid: 'ejecutorid',
-  opciondesplegableid: 'opciondesplegableid',
-  opciondesplegabletexto: 'opciondesplegabletexto',
-  contactosid: 'contactosid',
-  creationdate: 'creationdate',
-  xlatitud: 'xlatitud',
-  xlongitud: 'xlongitud',
-  condventaid: 'condventaid',
-  depositoarticuloid: 'depositoarticuloid',
-  articulocantidad: 'articulocantidad',
-  listaprecioid: 'listaprecioid',
-  varcn0: 'varcn0',
-  varcn1: 'varcn1',
-  varcn2: 'varcn2',
-  varcn3: 'varcn3',
-  fechavencimiento: 'fechavencimiento',
-  macroprocesoid: 'macroprocesoid'
-} as const
-
-export type RegistrocabScalarFieldEnum = (typeof RegistrocabScalarFieldEnum)[keyof typeof RegistrocabScalarFieldEnum]
-
-
-export const RegistrocabaudioScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  audiosrcb64: 'audiosrcb64',
-  userid: 'userid'
-} as const
-
-export type RegistrocabaudioScalarFieldEnum = (typeof RegistrocabaudioScalarFieldEnum)[keyof typeof RegistrocabaudioScalarFieldEnum]
-
-
-export const RegistrocabdocumentsScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  documentsid: 'documentsid'
-} as const
-
-export type RegistrocabdocumentsScalarFieldEnum = (typeof RegistrocabdocumentsScalarFieldEnum)[keyof typeof RegistrocabdocumentsScalarFieldEnum]
-
-
-export const RegistrocabgrupoScalarFieldEnum = {
-  id: 'id',
-  grupoid: 'grupoid',
-  registrocabid: 'registrocabid',
-  orden: 'orden'
-} as const
-
-export type RegistrocabgrupoScalarFieldEnum = (typeof RegistrocabgrupoScalarFieldEnum)[keyof typeof RegistrocabgrupoScalarFieldEnum]
-
-
-export const RegistrocabrelScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  relatedregistrocabid: 'relatedregistrocabid',
-  tiporel: 'tiporel',
-  orden: 'orden'
-} as const
-
-export type RegistrocabrelScalarFieldEnum = (typeof RegistrocabrelScalarFieldEnum)[keyof typeof RegistrocabrelScalarFieldEnum]
-
-
-export const RegistrocabseqScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  secuenciaid: 'secuenciaid',
-  valor: 'valor'
-} as const
-
-export type RegistrocabseqScalarFieldEnum = (typeof RegistrocabseqScalarFieldEnum)[keyof typeof RegistrocabseqScalarFieldEnum]
-
-
-export const RegistrocuerpoScalarFieldEnum = {
-  id: 'id',
-  presupcabid: 'presupcabid',
-  articulodepositoid: 'articulodepositoid',
-  cuerpostatusid: 'cuerpostatusid',
-  cantidad: 'cantidad',
-  preciounit: 'preciounit',
-  preciototal: 'preciototal',
-  porcentajuste: 'porcentajuste',
-  cuerponotas: 'cuerponotas',
-  articulospecresult: 'articulospecresult',
-  varn0: 'varn0',
-  varn1: 'varn1',
-  varn2: 'varn2',
-  varn3: 'varn3',
-  varn4: 'varn4',
-  varn5: 'varn5',
-  varn6: 'varn6',
-  varn7: 'varn7',
-  varn8: 'varn8',
-  varn9: 'varn9',
-  vart0: 'vart0',
-  vart1: 'vart1',
-  vart2: 'vart2',
-  vart3: 'vart3',
-  vart4: 'vart4',
-  vart5: 'vart5',
-  vart6: 'vart6',
-  vart7: 'vart7',
-  vart8: 'vart8',
-  vart9: 'vart9',
-  responsableactactualid: 'responsableactactualid',
-  cuerpostatusflowid: 'cuerpostatusflowid',
-  deposito: 'deposito',
-  cuerpocurrentuser: 'cuerpocurrentuser',
-  varf0: 'varf0',
-  varf1: 'varf1',
-  varf2: 'varf2',
-  varf3: 'varf3',
-  varf4: 'varf4',
-  varb0: 'varb0',
-  varb1: 'varb1',
-  impuestoalic: 'impuestoalic',
-  preciototalimpu: 'preciototalimpu',
-  depositodestinoid: 'depositodestinoid',
-  creationdate: 'creationdate',
-  xlatitud: 'xlatitud',
-  xlongitud: 'xlongitud',
-  medidasalto: 'medidasalto',
-  medidaslargo: 'medidaslargo',
-  medidasancho: 'medidasancho',
-  varb2: 'varb2',
-  varb3: 'varb3',
-  varb4: 'varb4',
-  articulodepositodestinoid: 'articulodepositodestinoid'
-} as const
-
-export type RegistrocuerpoScalarFieldEnum = (typeof RegistrocuerpoScalarFieldEnum)[keyof typeof RegistrocuerpoScalarFieldEnum]
-
-
-export const ReportesScalarFieldEnum = {
-  id: 'id',
-  descrip: 'descrip',
-  uri: 'uri',
-  params: 'params',
-  key: 'key',
-  contextoid: 'contextoid',
-  orden: 'orden',
-  grupoid: 'grupoid'
-} as const
-
-export type ReportesScalarFieldEnum = (typeof ReportesScalarFieldEnum)[keyof typeof ReportesScalarFieldEnum]
-
-
-export const ReportesaclScalarFieldEnum = {
-  id: 'id',
-  reporteid: 'reporteid',
-  puestotrabajoid: 'puestotrabajoid'
-} as const
-
-export type ReportesaclScalarFieldEnum = (typeof ReportesaclScalarFieldEnum)[keyof typeof ReportesaclScalarFieldEnum]
-
-
-export const ReportesactividadScalarFieldEnum = {
-  id: 'id',
-  reporteid: 'reporteid',
-  statusesid: 'statusesid'
-} as const
-
-export type ReportesactividadScalarFieldEnum = (typeof ReportesactividadScalarFieldEnum)[keyof typeof ReportesactividadScalarFieldEnum]
-
-
-export const RoleScalarFieldEnum = {
-  id: 'id',
-  version: 'version',
-  authority: 'authority'
-} as const
-
-export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
-
-
-export const RowconfigScalarFieldEnum = {
-  id: 'id',
-  userid: 'userid',
-  tipo: 'tipo',
-  jsondata: 'jsondata'
-} as const
-
-export type RowconfigScalarFieldEnum = (typeof RowconfigScalarFieldEnum)[keyof typeof RowconfigScalarFieldEnum]
-
-
-export const SecuenciasScalarFieldEnum = {
-  id: 'id',
-  descrip: 'descrip',
-  currval: 'currval',
-  stepn: 'stepn',
-  categoria: 'categoria',
-  grupoid: 'grupoid',
-  codigoregistro: 'codigoregistro',
-  codigolistregistro: 'codigolistregistro',
-  name: 'name',
-  referencia: 'referencia',
-  version: 'version',
-  statusesid: 'statusesid'
-} as const
-
-export type SecuenciasScalarFieldEnum = (typeof SecuenciasScalarFieldEnum)[keyof typeof SecuenciasScalarFieldEnum]
-
-
-export const StatusesScalarFieldEnum = {
-  id: 'id',
-  descrip: 'descrip',
-  categid: 'categid',
-  valor: 'valor'
-} as const
-
-export type StatusesScalarFieldEnum = (typeof StatusesScalarFieldEnum)[keyof typeof StatusesScalarFieldEnum]
-
-
-export const StatusespreciosScalarFieldEnum = {
-  id: 'id',
-  statusesid: 'statusesid',
-  categid: 'categid'
-} as const
-
-export type StatusespreciosScalarFieldEnum = (typeof StatusespreciosScalarFieldEnum)[keyof typeof StatusespreciosScalarFieldEnum]
-
-
-export const StatusesrelacionesScalarFieldEnum = {
-  id: 'id',
-  statusesid: 'statusesid',
-  statusesrelid: 'statusesrelid',
-  tiporelid: 'tiporelid'
-} as const
-
-export type StatusesrelacionesScalarFieldEnum = (typeof StatusesrelacionesScalarFieldEnum)[keyof typeof StatusesrelacionesScalarFieldEnum]
-
-
-export const StatusesrelacionesflowsScalarFieldEnum = {
-  id: 'id',
-  statusesid: 'statusesid',
-  flowid: 'flowid'
-} as const
-
-export type StatusesrelacionesflowsScalarFieldEnum = (typeof StatusesrelacionesflowsScalarFieldEnum)[keyof typeof StatusesrelacionesflowsScalarFieldEnum]
-
-
-export const StatusflowsScalarFieldEnum = {
-  id: 'id',
-  statusid: 'statusid',
-  sigstatusid: 'sigstatusid',
-  categid: 'categid',
-  sigmacroprocesoid: 'sigmacroprocesoid',
-  tipo: 'tipo',
-  posx: 'posx',
-  posy: 'posy',
-  conndescrip: 'conndescrip'
-} as const
-
-export type StatusflowsScalarFieldEnum = (typeof StatusflowsScalarFieldEnum)[keyof typeof StatusflowsScalarFieldEnum]
-
-
-export const StocklogScalarFieldEnum = {
-  id: 'id',
-  registrocabid: 'registrocabid',
-  registrocuerpoid: 'registrocuerpoid',
-  depositosarticulosid: 'depositosarticulosid',
-  statusflowsid: 'statusflowsid',
-  cuentacontableid: 'cuentacontableid',
-  fechaimpacto: 'fechaimpacto',
-  cantidad: 'cantidad',
-  tipoimpacto: 'tipoimpacto',
-  saldoresultante: 'saldoresultante'
-} as const
-
-export type StocklogScalarFieldEnum = (typeof StocklogScalarFieldEnum)[keyof typeof StocklogScalarFieldEnum]
-
-
-export const TareaarticulosScalarFieldEnum = {
-  id: 'id',
-  tareaid: 'tareaid',
-  articuloid: 'articuloid'
-} as const
-
-export type TareaarticulosScalarFieldEnum = (typeof TareaarticulosScalarFieldEnum)[keyof typeof TareaarticulosScalarFieldEnum]
-
-
-export const TareaexecperfilScalarFieldEnum = {
-  id: 'id',
-  tareaexecid: 'tareaexecid',
-  perfilid: 'perfilid'
-} as const
-
-export type TareaexecperfilScalarFieldEnum = (typeof TareaexecperfilScalarFieldEnum)[keyof typeof TareaexecperfilScalarFieldEnum]
-
-
-export const TareasexecScalarFieldEnum = {
-  id: 'id',
-  instructivoexecid: 'instructivoexecid',
-  instructivotareaid: 'instructivotareaid',
+  company_id: 'company_id',
+  type: 'type',
+  number: 'number',
   status: 'status',
-  fechaestimadainicio: 'fechaestimadainicio',
-  fechaestimadafin: 'fechaestimadafin',
-  fechainic: 'fechainic',
-  fechafin: 'fechafin',
-  hsexec: 'hsexec',
-  descripcion: 'descripcion',
-  costo: 'costo',
-  esfuerzo: 'esfuerzo',
-  porcentajeavance: 'porcentajeavance',
-  comentarioavance: 'comentarioavance',
-  decisiontomada: 'decisiontomada',
-  orden: 'orden',
-  xlatitud: 'xlatitud',
-  xlongitud: 'xlongitud',
-  enpausa: 'enpausa',
-  criticidad: 'criticidad',
-  isagregada: 'isagregada',
-  extrainfo: 'extrainfo'
+  party_id: 'party_id',
+  trip_id: 'trip_id',
+  created_by: 'created_by',
+  deleted_at: 'deleted_at',
+  created_at: 'created_at',
+  dispatch_order_id: 'dispatch_order_id'
 } as const
 
-export type TareasexecScalarFieldEnum = (typeof TareasexecScalarFieldEnum)[keyof typeof TareasexecScalarFieldEnum]
+export type Delivery_notesScalarFieldEnum = (typeof Delivery_notesScalarFieldEnum)[keyof typeof Delivery_notesScalarFieldEnum]
 
 
-export const TareasexecarticulosScalarFieldEnum = {
+export const DriversScalarFieldEnum = {
   id: 'id',
-  tareasexecid: 'tareasexecid',
-  depositoarticuloid: 'depositoarticuloid',
-  cantidad: 'cantidad'
+  company_id: 'company_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  document: 'document',
+  phone: 'phone',
+  license_number: 'license_number',
+  license_expiration: 'license_expiration',
+  active: 'active',
+  created_at: 'created_at'
 } as const
 
-export type TareasexecarticulosScalarFieldEnum = (typeof TareasexecarticulosScalarFieldEnum)[keyof typeof TareasexecarticulosScalarFieldEnum]
+export type DriversScalarFieldEnum = (typeof DriversScalarFieldEnum)[keyof typeof DriversScalarFieldEnum]
 
 
-export const TareasexecdocumentsScalarFieldEnum = {
+export const Entity_photosScalarFieldEnum = {
   id: 'id',
-  tareasexecid: 'tareasexecid',
-  documentsid: 'documentsid'
+  entity_type: 'entity_type',
+  entity_id: 'entity_id',
+  file_id: 'file_id',
+  photo_type: 'photo_type',
+  created_at: 'created_at'
 } as const
 
-export type TareasexecdocumentsScalarFieldEnum = (typeof TareasexecdocumentsScalarFieldEnum)[keyof typeof TareasexecdocumentsScalarFieldEnum]
+export type Entity_photosScalarFieldEnum = (typeof Entity_photosScalarFieldEnum)[keyof typeof Entity_photosScalarFieldEnum]
 
 
-export const TareasexecpersonasScalarFieldEnum = {
+export const FilesScalarFieldEnum = {
   id: 'id',
-  tareasexecid: 'tareasexecid',
-  perfilid: 'perfilid'
+  storage_provider: 'storage_provider',
+  file_path: 'file_path',
+  public_url: 'public_url',
+  file_name: 'file_name',
+  mime_type: 'mime_type',
+  file_size: 'file_size',
+  uploaded_by: 'uploaded_by',
+  created_at: 'created_at'
 } as const
 
-export type TareasexecpersonasScalarFieldEnum = (typeof TareasexecpersonasScalarFieldEnum)[keyof typeof TareasexecpersonasScalarFieldEnum]
+export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
 
 
-export const TareasexectiemposScalarFieldEnum = {
+export const LocationsScalarFieldEnum = {
   id: 'id',
-  tareasexecid: 'tareasexecid',
-  fecha: 'fecha',
-  statusid: 'statusid',
-  initintervalo: 'initintervalo',
-  enpausa: 'enpausa'
+  address: 'address',
+  city: 'city',
+  province: 'province',
+  country: 'country',
+  postal_code: 'postal_code',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  created_at: 'created_at'
 } as const
 
-export type TareasexectiemposScalarFieldEnum = (typeof TareasexectiemposScalarFieldEnum)[keyof typeof TareasexectiemposScalarFieldEnum]
+export type LocationsScalarFieldEnum = (typeof LocationsScalarFieldEnum)[keyof typeof LocationsScalarFieldEnum]
 
 
-export const TipoarticulosScalarFieldEnum = {
+export const Pallet_itemsScalarFieldEnum = {
   id: 'id',
-  categid: 'categid',
-  articuloid: 'articuloid'
+  pallet_id: 'pallet_id',
+  product_id: 'product_id',
+  quantity: 'quantity'
 } as const
 
-export type TipoarticulosScalarFieldEnum = (typeof TipoarticulosScalarFieldEnum)[keyof typeof TipoarticulosScalarFieldEnum]
+export type Pallet_itemsScalarFieldEnum = (typeof Pallet_itemsScalarFieldEnum)[keyof typeof Pallet_itemsScalarFieldEnum]
 
 
-export const User_roleScalarFieldEnum = {
+export const PalletsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  code: 'code',
+  warehouse_id: 'warehouse_id',
+  status: 'status',
+  created_by: 'created_by',
+  deleted_at: 'deleted_at',
+  created_at: 'created_at'
+} as const
+
+export type PalletsScalarFieldEnum = (typeof PalletsScalarFieldEnum)[keyof typeof PalletsScalarFieldEnum]
+
+
+export const Party_locationsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  location_id: 'location_id',
+  label: 'label',
+  created_at: 'created_at'
+} as const
+
+export type Party_locationsScalarFieldEnum = (typeof Party_locationsScalarFieldEnum)[keyof typeof Party_locationsScalarFieldEnum]
+
+
+export const Picking_itemsScalarFieldEnum = {
+  id: 'id',
+  picking_order_id: 'picking_order_id',
+  product_id: 'product_id',
+  quantity_required: 'quantity_required',
+  quantity_picked: 'quantity_picked'
+} as const
+
+export type Picking_itemsScalarFieldEnum = (typeof Picking_itemsScalarFieldEnum)[keyof typeof Picking_itemsScalarFieldEnum]
+
+
+export const Picking_ordersScalarFieldEnum = {
+  id: 'id',
+  warehouse_id: 'warehouse_id',
+  client_id: 'client_id',
+  status: 'status',
+  delivery_note_id: 'delivery_note_id',
+  trip_id: 'trip_id',
+  created_by: 'created_by',
+  created_at: 'created_at',
+  dispatch_order_id: 'dispatch_order_id'
+} as const
+
+export type Picking_ordersScalarFieldEnum = (typeof Picking_ordersScalarFieldEnum)[keyof typeof Picking_ordersScalarFieldEnum]
+
+
+export const Picking_resultsScalarFieldEnum = {
+  id: 'id',
+  picking_order_id: 'picking_order_id',
+  pallet_id: 'pallet_id'
+} as const
+
+export type Picking_resultsScalarFieldEnum = (typeof Picking_resultsScalarFieldEnum)[keyof typeof Picking_resultsScalarFieldEnum]
+
+
+export const Picking_sourcesScalarFieldEnum = {
+  id: 'id',
+  picking_item_id: 'picking_item_id',
+  pallet_id: 'pallet_id',
+  quantity: 'quantity'
+} as const
+
+export type Picking_sourcesScalarFieldEnum = (typeof Picking_sourcesScalarFieldEnum)[keyof typeof Picking_sourcesScalarFieldEnum]
+
+
+export const ProductsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  sku: 'sku',
+  requires_refrigeration: 'requires_refrigeration',
+  created_at: 'created_at'
+} as const
+
+export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
+
+
+export const Trip_cargoScalarFieldEnum = {
+  id: 'id',
+  trip_id: 'trip_id',
+  pallet_id: 'pallet_id',
+  delivery_note_id: 'delivery_note_id',
+  loaded_at: 'loaded_at',
+  unloaded_at: 'unloaded_at'
+} as const
+
+export type Trip_cargoScalarFieldEnum = (typeof Trip_cargoScalarFieldEnum)[keyof typeof Trip_cargoScalarFieldEnum]
+
+
+export const Trip_temperature_logsScalarFieldEnum = {
+  id: 'id',
+  trip_id: 'trip_id',
+  temperature: 'temperature',
+  recorded_at: 'recorded_at',
+  recorded_by: 'recorded_by'
+} as const
+
+export type Trip_temperature_logsScalarFieldEnum = (typeof Trip_temperature_logsScalarFieldEnum)[keyof typeof Trip_temperature_logsScalarFieldEnum]
+
+
+export const Dispatch_ordersScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  order_number: 'order_number',
+  status: 'status',
+  requires_stock: 'requires_stock',
+  planned_date: 'planned_date',
+  confirmed_at: 'confirmed_at',
+  customer_id: 'customer_id',
+  origin_location_id: 'origin_location_id',
+  destination_location_id: 'destination_location_id',
+  created_by: 'created_by',
+  created_at: 'created_at'
+} as const
+
+export type Dispatch_ordersScalarFieldEnum = (typeof Dispatch_ordersScalarFieldEnum)[keyof typeof Dispatch_ordersScalarFieldEnum]
+
+
+export const TripsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  reference_number: 'reference_number',
+  vehicle_combination_id: 'vehicle_combination_id',
+  driver_id: 'driver_id',
+  origin_warehouse_id: 'origin_warehouse_id',
+  destination_warehouse_id: 'destination_warehouse_id',
+  origin_party_location_id: 'origin_party_location_id',
+  destination_party_location_id: 'destination_party_location_id',
+  origin_location_id: 'origin_location_id',
+  destination_location_id: 'destination_location_id',
+  departure_time: 'departure_time',
+  arrival_time: 'arrival_time',
+  status: 'status',
+  notes: 'notes',
+  created_by: 'created_by',
+  deleted_at: 'deleted_at',
+  created_at: 'created_at',
+  dispatch_order_id: 'dispatch_order_id'
+} as const
+
+export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  email: 'email',
+  password_hash: 'password_hash',
+  role: 'role',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const VehiclesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  type: 'type',
+  plate: 'plate',
+  brand: 'brand',
+  model: 'model',
+  year: 'year',
+  max_weight: 'max_weight',
+  max_volume: 'max_volume',
+  refrigeration: 'refrigeration',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type VehiclesScalarFieldEnum = (typeof VehiclesScalarFieldEnum)[keyof typeof VehiclesScalarFieldEnum]
+
+
+export const Vehicle_combinationsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  tractor_id: 'tractor_id',
+  trailer_id: 'trailer_id',
+  valid_from: 'valid_from',
+  valid_until: 'valid_until',
+  created_by: 'created_by',
+  created_at: 'created_at'
+} as const
+
+export type Vehicle_combinationsScalarFieldEnum = (typeof Vehicle_combinationsScalarFieldEnum)[keyof typeof Vehicle_combinationsScalarFieldEnum]
+
+
+export const Warehouse_stockScalarFieldEnum = {
+  id: 'id',
+  warehouse_id: 'warehouse_id',
+  product_id: 'product_id',
+  quantity: 'quantity',
+  reserved_quantity: 'reserved_quantity',
+  updated_at: 'updated_at'
+} as const
+
+export type Warehouse_stockScalarFieldEnum = (typeof Warehouse_stockScalarFieldEnum)[keyof typeof Warehouse_stockScalarFieldEnum]
+
+
+export const Warehouse_stock_movementsScalarFieldEnum = {
+  id: 'id',
+  warehouse_id: 'warehouse_id',
+  product_id: 'product_id',
+  movement_type: 'movement_type',
+  direction: 'direction',
+  quantity: 'quantity',
+  reference_type: 'reference_type',
+  reference_id: 'reference_id',
+  notes: 'notes',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Warehouse_stock_movementsScalarFieldEnum = (typeof Warehouse_stock_movementsScalarFieldEnum)[keyof typeof Warehouse_stock_movementsScalarFieldEnum]
+
+
+export const WarehousesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  location_id: 'location_id',
+  name: 'name',
+  code: 'code',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof typeof WarehousesScalarFieldEnum]
+
+
+export const Document_sequencesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  document_type: 'document_type',
+  point_of_sale: 'point_of_sale',
+  current_number: 'current_number',
+  prefix: 'prefix',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
+
+
+export const Refresh_tokensScalarFieldEnum = {
+  id: 'id',
   user_id: 'user_id',
-  role_id: 'role_id'
+  token_hash: 'token_hash',
+  expires_at: 'expires_at',
+  revoked: 'revoked',
+  created_at: 'created_at'
 } as const
 
-export type User_roleScalarFieldEnum = (typeof User_roleScalarFieldEnum)[keyof typeof User_roleScalarFieldEnum]
-
-
-export const UsuariosScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  username: 'username',
-  version: 'version',
-  password_expired: 'password_expired',
-  account_locked: 'account_locked',
-  password: 'password',
-  account_expired: 'account_expired',
-  enabled: 'enabled',
-  email: 'email'
-} as const
-
-export type UsuariosScalarFieldEnum = (typeof UsuariosScalarFieldEnum)[keyof typeof UsuariosScalarFieldEnum]
-
-
-export const UserTablePreferenceScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  tableKey: 'tableKey',
-  visibleColumns: 'visibleColumns',
-  columnsOrder: 'columnsOrder',
-  pageSize: 'pageSize',
-  sort: 'sort',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserTablePreferenceScalarFieldEnum = (typeof UserTablePreferenceScalarFieldEnum)[keyof typeof UserTablePreferenceScalarFieldEnum]
-
-
-export const WalletScalarFieldEnum = {
-  id: 'id',
-  perfilid: 'perfilid',
-  tipocta: 'tipocta',
-  numero: 'numero',
-  entidad: 'entidad'
-} as const
-
-export type WalletScalarFieldEnum = (typeof WalletScalarFieldEnum)[keyof typeof WalletScalarFieldEnum]
+export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1467,36 +503,12 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const NullableJsonNullValueInput = {
-  DbNull: 'DbNull',
-  JsonNull: 'JsonNull'
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-export const JsonNullValueInput = {
-  JsonNull: 'JsonNull'
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-export const JsonNullValueFilter = {
-  DbNull: 'DbNull',
-  JsonNull: 'JsonNull',
-  AnyNull: 'AnyNull'
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {

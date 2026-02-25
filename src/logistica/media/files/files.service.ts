@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
 
 @Injectable()
 export class FilesService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   create(dto: CreateFileDto) {
     return this.prisma.files.create({

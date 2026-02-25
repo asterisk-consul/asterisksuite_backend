@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { LogisticaPrismaService } from '@/prisma/prisma-logistica.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { CreateWarehouseDto } from './dto/create-warehouse.dto';
 import { UpdateWarehouseDto } from './dto/update-warehouse.dto';
 
 @Injectable()
 export class WarehousesService {
-  constructor(private readonly prisma: LogisticaPrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateWarehouseDto) {
     return this.prisma.warehouses.create({

@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { LogisticaPrismaService } from 'src/prisma/prisma-logistica.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { AddTripCargoDto } from './dto/add-trip.dto';
 @Injectable()
 export class TripsService {
-  constructor(private prisma: LogisticaPrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   create(dto: CreateTripDto, userId: string) {
     return this.prisma.trips.create({
       data: {
         company_id: dto.companyId,
-        vehicle_id: dto.vehicleId,
+        vehicle_combination_id: dto.vehicleCombinationId,
         driver_id: dto.driverId,
         origin_warehouse_id: dto.originWarehouseId,
         destination_warehouse_id: dto.destinationWarehouseId,
