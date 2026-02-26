@@ -1,16 +1,26 @@
-import { Controller, Post, Patch, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Patch,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { AddTripCargoDto } from './dto/add-trip.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 
 @Controller('transport/trips')
+@UseGuards(JwtAuthGuard)
 export class TripsController {
   constructor(private readonly service: TripsService) {}
 
   @Post()
-  create(@Body() dto: CreateTripDto) {
-    const userId = 'HARDCODE_USER_ID'; // luego JWT
-    return this.service.create(dto, userId);
+  create(@Body() dto: CreateTripDto, @CurrentUser() user: AuthUser) {
+    return this.service.create(dto, user.id);
   }
 
   @Patch(':id/start')

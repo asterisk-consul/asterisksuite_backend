@@ -1,9 +1,11 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, UseGuards } from '@nestjs/common';
 import { PickingService } from './picking.service';
 import { CreatePickingDto } from './dto/create-picking.dto';
 import { TransferPalletDto } from './dto/transfer-pallet.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 @Controller('logistica/picking')
+@UseGuards(JwtAuthGuard)
 export class PickingController {
   constructor(private readonly pickingService: PickingService) {}
 

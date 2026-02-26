@@ -7,12 +7,14 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BusinessPartiesService } from './business-parties.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
-
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 @Controller('master-data/business-parties')
+@UseGuards(JwtAuthGuard)
 export class BusinessPartiesController {
   constructor(private readonly service: BusinessPartiesService) {}
 

@@ -7,12 +7,15 @@ import {
   Param,
   Body,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PalletsService } from './pallets.service';
 import { CreatePalletDto } from './dto/create-pallet.dto';
 import { UpdatePalletDto } from './dto/update-pallet.dto';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 
 @Controller('warehouse/pallets')
+@UseGuards(JwtAuthGuard)
 export class PalletsController {
   constructor(private readonly service: PalletsService) {}
 

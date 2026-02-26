@@ -6,7 +6,7 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 
 @Controller('transport/transfers')
-@UseGuards(JwtAuthGuard) // 🔐 Protege todo el controller
+@UseGuards(JwtAuthGuard)
 export class TransfersController {
   constructor(private readonly service: TransfersService) {}
 
