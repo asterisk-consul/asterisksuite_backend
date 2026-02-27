@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMjhjNWE4Yy1mZWFhLTQ4NWUtYmMyYS05YzMwYjFkNjNiYmUiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NzIwNTE3NDYsImV4cCI6MTc3MjA1MjY0Nn0.pvB7x45WNMfcBBfdxdFZLAacqJcA4z0WiSLNPrE4bmw
-@refreshToken = 3eb0e946b62f528d425d78f15e7818a0380d03dfee424df7985502ac17cc64419fbac978d79996c5d1446201ae1828417f9233979ec6fb7bf60ed61916b0d8be
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMjhjNWE4Yy1mZWFhLTQ4NWUtYmMyYS05YzMwYjFkNjNiYmUiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NzIxMzA3OTksImV4cCI6MTc3MjEzMTY5OX0.IvhXnAUDVPZWtBeSAv18RhNmu3_FYH0uNY1u_3sb0XE
+@refreshToken = b9d51f87ad91a17055fd8990e943aa992bc93cb6e235a58422da61ca2908237aa462e9c60d5d81fd989359532f9b53fccfafd00b721e92c9f88e5ae9800bab79
 
 ###
 # ==============================
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 {
   "email": "admin@mail.com",
-  "password": "123456"
+  "password": "12345678"
 }
 
 ###

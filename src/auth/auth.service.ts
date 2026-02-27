@@ -44,7 +44,20 @@ export class AuthService {
       },
     });
 
-    return { accessToken, refreshToken };
+    // 🔎 Sanitizar usuario
+    const safeUser: AuthUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
+    };
+
+    return {
+      user: safeUser,
+      accessToken,
+      refreshToken,
+    };
   }
 
   // =========================
@@ -71,7 +84,13 @@ export class AuthService {
       },
     });
 
-    return this.generateTokens(user);
+    return this.generateTokens({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.company_id,
+    });
   }
 
   // =========================
@@ -89,7 +108,13 @@ export class AuthService {
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) throw new UnauthorizedException();
 
-    return this.generateTokens(user);
+    return this.generateTokens({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.company_id,
+    });
   }
 
   // =========================
