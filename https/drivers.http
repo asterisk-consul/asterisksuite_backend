@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMjhjNWE4Yy1mZWFhLTQ4NWUtYmMyYS05YzMwYjFkNjNiYmUiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjI0NDUxMywiZXhwIjoxNzcyMjQ1NDEzfQ.wKTRTsYpkyRQgylfLkCXh_cILw3EGNxPQ5R3b8ch08k
+@refreshToken = b9d51f87ad91a17055fd8990e943aa992bc93cb6e235a58422da61ca2908237aa462e9c60d5d81fd989359532f9b53fccfafd00b721e92c9f88e5ae9800bab79
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "12345678"
+}
+
+
+### ============================================
+### Crear chofer
+### POST /transport/drivers
+### ============================================
+
+POST {{baseUrl}}/transport/drivers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "b8c78e68-2d33-4927-b6cb-b78ecdca3d64",
+  "firstName": "Juan",
+  "lastName": "Pérez",
+  "document": "30123456",
+  "phone": "3511234567",
+  "licenseNumber": "B1234567",
+  "licenseExpiration": "2027-12-31"
+}
+
+
+### ============================================
+### Listar choferes activos por empresa
+### GET /transport/drivers?companyId=...
+### ============================================
+
+GET {{baseUrl}}/transport/drivers?companyId=b8c78e68-2d33-4927-b6cb-b78ecdca3d64
+Authorization: Bearer {{accessToken}}

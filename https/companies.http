@@ -1,21 +1,23 @@
 @baseUrl = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzOCIsInVzZXJuYW1lIjoiQWRtaW5pc3RyYWRvciIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzcxNTkzOTMxLCJleHAiOjE3NzE2ODAzMzF9.JsWH8Rlnq-LXNnzl_xrK7wZNOF2Rgej2W0fwubY7IDU
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMjhjNWE4Yy1mZWFhLTQ4NWUtYmMyYS05YzMwYjFkNjNiYmUiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjI0MzYxMCwiZXhwIjoxNzcyMjQ0NTEwfQ.67si5kMQBBSBgMNxqaDNdWOtbmDNWya57GQJPwkx1M8
+@refreshToken = d9d9512c89e5c626d92933acaf8d4de09a0641afb2bdc843e05f4240bbb76c1c7be90fc90bd7fa4153f8469e69153dc58df600e184c2e86bf09e2588d48683a0
 
 
 ###
-# Auth
-POST {{baseUrl}}/api/auth/login
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "username": "Administrador",
-    "password": "1234"
+  "email": "admin@mail.com",
+  "password": "12345678"
 }
-
 ###
 # Crear compañía
 POST {{baseUrl}}/api/companies
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
