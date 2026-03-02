@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
-import { Prisma } from 'src/generated/prisma/client';
+import { Prisma } from '@/generated/prisma/client';
 import { CreatePickingDto } from './dto/create-picking.dto';
 import { TransferPalletDto } from './dto/transfer-pallet.dto';
 
