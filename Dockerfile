@@ -7,8 +7,8 @@ COPY package*.json ./
 RUN npm install
 
 COPY prisma ./prisma
-# Genera el cliente en la ubicación personalizada
-RUN npx prisma generate --generator client --output ./src/generated/prisma
+# Ahora sin --output, solo especificamos el generador
+RUN npx prisma generate --generator client
 
 COPY . .
 RUN npm run build
@@ -21,9 +21,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --only=production
 
-# Copiar el cliente generado en la ubicación personalizada
+# Copiar el cliente generado (estará en src/generated según schema.prisma)
 COPY --from=builder /app/src/generated ./src/generated
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 3000
 
