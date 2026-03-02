@@ -9,9 +9,7 @@ RUN npm install
 COPY prisma ./prisma
 RUN npx prisma generate
 
-# 🔥 Copiar TODO el proyecto (incluyendo tsconfig.json, nest-cli.json, etc.)
 COPY . .
-
 RUN npm run build
 
 
@@ -23,10 +21,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
 
-COPY prisma ./prisma
-
+# El cliente generado está en src/generated, no en node_modules/.prisma
 COPY --from=builder /app/src/generated ./src/generated
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
