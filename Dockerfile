@@ -19,7 +19,13 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install --omit=dev
+
+# 🔥 IMPORTANTE: copiar prisma schema
+COPY prisma ./prisma
+
+# 🔥 GENERAR CLIENTE EN PRODUCCIÓN
+RUN npx prisma generate
 
 COPY --from=builder /app/dist ./dist
 
