@@ -7,9 +7,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY prisma ./prisma
-RUN npx prisma generate
+COPY src ./src
 
-COPY . .
+RUN npx prisma generate
 RUN npm run build
 
 
@@ -21,11 +21,14 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
 
-# 🔥 IMPORTANTE: copiar prisma schema
 COPY prisma ./prisma
 
-# 🔥 GENERAR CLIENTE EN PRODUCCIÓN
-RUN npx prisma generate
+# 🔥 CLAVE: el cliente generado va a src/generated/prisma
+# Necesitás copiarlo desde el builder ANTES del build
+COPY --from=builder /app/src/generated ./src/generated
+
+# También copiar node_modules/.prisma por los binarios nativos
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 COPY --from=builder /app/dist ./dist
 
