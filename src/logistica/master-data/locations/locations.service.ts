@@ -50,13 +50,13 @@ export class LocationsService {
     return this.prisma.locations.update({
       where: { id },
       data: {
-        address: dto.address,
+        address: dto.address || undefined,
         city: dto.city,
         province: dto.province,
         country: dto.country,
         postal_code: dto.postalCode,
-        latitude: dto.latitude,
-        longitude: dto.longitude,
+        latitude: dto.latitude || undefined,
+        longitude: dto.longitude || undefined,
       },
     });
   }

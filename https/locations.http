@@ -1,0 +1,77 @@
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjMwNjI1MywiZXhwIjoxNzcyMzA3MTUzfQ.4CAvG8af3LUOhl3PioPppDuf9fZcdodK3L92S1Ngk8I
+@refreshToken = d9d9512c89e5c626d92933acaf8d4de09a0641afb2bdc843e05f4240bbb76c1c7be90fc90bd7fa4153f8469e69153dc58df600e184c2e86bf09e2588d48683a0
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+### ==================================================
+### Crear Location
+### POST /locations
+### ==================================================
+
+POST {{baseUrl}}/locations
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "city": "Leones",
+  "province": "Córdoba",
+  "country": "Argentina",
+  "postalCode": "5900"
+}
+
+
+### ==================================================
+### Listar todas las Locations
+### GET /locations
+### ==================================================
+
+GET {{baseUrl}}/locations
+Authorization: Bearer {{accessToken}}
+
+
+### ==================================================
+### Obtener Location por ID (incluye warehouses)
+### GET /locations/:id
+### ==================================================
+
+GET {{baseUrl}}/locations/UUID_DE_LA_LOCATION
+Authorization: Bearer {{accessToken}}
+
+
+### ==================================================
+### Actualizar Location
+### PATCH /locations/:id
+### ==================================================
+
+PATCH {{baseUrl}}/locations/8dc20266-15e0-4ecd-be0d-780a748191e3
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "address": "Nueva Dirección 999",
+  "city": "Córdoba Capital",
+  "province": "Córdoba",
+  "country": "Argentina",
+  "postalCode": "5000",
+  "latitude": -31.4201,
+  "longitude": -64.1888
+}
+
+
+### ==================================================
+### Eliminar Location
+### DELETE /locations/:id
+### ==================================================
+
+DELETE {{baseUrl}}/locations/40b9e81d-8952-4b1f-a10b-8ac50ad2da4f
+Authorization: Bearer {{accessToken}}

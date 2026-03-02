@@ -1,8 +1,6 @@
-@baseUrl = http://localhost:3000
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMjhjNWE4Yy1mZWFhLTQ4NWUtYmMyYS05YzMwYjFkNjNiYmUiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjI0MzYxMCwiZXhwIjoxNzcyMjQ0NTEwfQ.67si5kMQBBSBgMNxqaDNdWOtbmDNWya57GQJPwkx1M8
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjMxMTE1MywiZXhwIjoxNzcyMzEyMDUzfQ.41QZtN3qZP2LHMPFOxnfD6ZV0mqu8h7PvAZwJlvpMjY
 @refreshToken = d9d9512c89e5c626d92933acaf8d4de09a0641afb2bdc843e05f4240bbb76c1c7be90fc90bd7fa4153f8469e69153dc58df600e184c2e86bf09e2588d48683a0
-
-
 ###
 # ==============================
 # 🔐 LOGIN
@@ -12,11 +10,11 @@ Content-Type: application/json
 
 {
   "email": "admin@mail.com",
-  "password": "12345678"
+  "password": "123456"
 }
 ###
 # Crear compañía
-POST {{baseUrl}}/api/companies
+POST {{baseUrl}}/companies
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -32,15 +30,15 @@ Content-Type: application/json
 ###
 # Obtener todas las depositos
 GET {{baseUrl}}/api/warehouses
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
 ###
 # Obtener todas las compañías
-GET {{baseUrl}}/api/companies
-Authorization: Bearer {{token}}
+GET {{baseUrl}}/companies
+Authorization: Bearer {{accessToken}}
 
 ###
 # Obtener compañía por ID
-GET {{baseUrl}}/api/companies/8efc304c-d882-41a9-b0e2-6ace231a2c8f
+GET {{baseUrl}}/companies/8efc304c-d882-41a9-b0e2-6ace231a2c8f
 Authorization: Bearer {{token}}
 
 ###

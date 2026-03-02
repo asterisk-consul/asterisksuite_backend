@@ -1,0 +1,62 @@
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjM3MDA4MywiZXhwIjoxNzcyMzcwOTgzfQ.V2pCGe84B-DGizc6T3l4XGjMbP1wBrkN7fEaYP_x3Rw
+
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+### =====================================================
+### Crear Vehículo
+### POST /transport/vehicles
+### =====================================================
+
+POST {{baseUrl}}/transport/vehicles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "type": "truck",
+  "plate": "AB123CD",
+  "brand": "Mercedes-Benz",
+  "model": "Actros",
+  "year": 2022,
+  "maxWeight": 18000,
+  "maxVolume": 60,
+  "refrigeration": true
+}
+
+
+### =====================================================
+### Crear Vehículo (mínimo requerido)
+### =====================================================
+
+POST {{baseUrl}}/transport/vehicles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "type": "van",
+  "plate": "AE456FG"
+}
+
+
+### =====================================================
+### Listar Vehículos activos por empresa
+### GET /transport/vehicles?companyId=
+### =====================================================
+
+GET {{baseUrl}}/transport/vehicles?companyId={{companyId}}
+Authorization: Bearer {{accessToken}}

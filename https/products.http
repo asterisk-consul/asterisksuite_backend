@@ -1,0 +1,90 @@
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjMyOTQ1MiwiZXhwIjoxNzcyMzMwMzUyfQ.5BTOG1FKI2InlrDJqxruJlT-LKSChVs52sgEU_BFeQI
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@productId = 72756cfa-7fab-4272-8543-f505d288f869
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+
+### =====================================================
+### Crear Producto
+### POST /master-data/products
+### =====================================================
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "name": "Producto Demo",
+  "sku": "SKU-001",
+  "requires_refrigeration": false
+}
+
+
+### =====================================================
+### Crear Producto (mínimo requerido)
+### =====================================================
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "name": "Producto Sin SKU"
+}
+
+
+### =====================================================
+### Listar Productos por empresa
+### GET /master-data/products?company_id=
+### =====================================================
+
+GET {{baseUrl}}/master-data/products?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Obtener Producto por ID
+### GET /master-data/products/:id
+### =====================================================
+
+GET {{baseUrl}}/master-data/products/{{productId}}
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Actualizar Producto
+### PATCH /master-data/products/:id
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/products/{{productId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Producto Actualizado",
+  "sku": "SKU-NEW-123",
+  "requires_refrigeration": true
+}
+
+
+### =====================================================
+### Eliminar Producto (hard delete)
+### DELETE /master-data/products/:id
+### =====================================================
+
+DELETE {{baseUrl}}/master-data/products/{{productId}}
+Authorization: Bearer {{accessToken}}
