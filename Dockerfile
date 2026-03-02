@@ -22,7 +22,7 @@ COPY package*.json ./
 RUN npm install --only=production
 
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/src/generated ./src/generated  # 🔥 clave
+COPY --from=builder /app/src/generated ./src/generated
 
 RUN npx prisma generate
 
