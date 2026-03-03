@@ -515,3 +515,19 @@ model refresh_tokens {
   @@index([user_id])
   @@index([token_hash])
 }
+
+enum VehicleDocumentType {
+  TITULO_PROPIEDAD
+  POLIZA
+  CUOTA
+  SENASA
+  VTV
+}
+
+enum DriverDocumentType {
+  RECIBO_SUELDO
+  CARNET_MANIPULACION
+  REGISTRO_CONDUCIR
+  CURSO
+  APTO_FISICO
+}
