@@ -412,7 +412,10 @@ export const ModelName = {
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
   document_sequences: 'document_sequences',
-  refresh_tokens: 'refresh_tokens'
+  refresh_tokens: 'refresh_tokens',
+  transport_document_types: 'transport_document_types',
+  documents_vehicle: 'documents_vehicle',
+  documents_driver: 'documents_driver'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2578,6 +2581,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    transport_document_types: {
+      payload: Prisma.$transport_document_typesPayload<ExtArgs>
+      fields: Prisma.transport_document_typesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.transport_document_typesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.transport_document_typesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>
+        }
+        findFirst: {
+          args: Prisma.transport_document_typesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.transport_document_typesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>
+        }
+        findMany: {
+          args: Prisma.transport_document_typesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>[]
+        }
+        create: {
+          args: Prisma.transport_document_typesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>
+        }
+        createMany: {
+          args: Prisma.transport_document_typesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.transport_document_typesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>[]
+        }
+        delete: {
+          args: Prisma.transport_document_typesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>
+        }
+        update: {
+          args: Prisma.transport_document_typesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>
+        }
+        deleteMany: {
+          args: Prisma.transport_document_typesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.transport_document_typesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.transport_document_typesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>[]
+        }
+        upsert: {
+          args: Prisma.transport_document_typesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transport_document_typesPayload>
+        }
+        aggregate: {
+          args: Prisma.Transport_document_typesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransport_document_types>
+        }
+        groupBy: {
+          args: Prisma.transport_document_typesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Transport_document_typesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.transport_document_typesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Transport_document_typesCountAggregateOutputType> | number
+        }
+      }
+    }
+    documents_vehicle: {
+      payload: Prisma.$documents_vehiclePayload<ExtArgs>
+      fields: Prisma.documents_vehicleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.documents_vehicleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.documents_vehicleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>
+        }
+        findFirst: {
+          args: Prisma.documents_vehicleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.documents_vehicleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>
+        }
+        findMany: {
+          args: Prisma.documents_vehicleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>[]
+        }
+        create: {
+          args: Prisma.documents_vehicleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>
+        }
+        createMany: {
+          args: Prisma.documents_vehicleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.documents_vehicleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>[]
+        }
+        delete: {
+          args: Prisma.documents_vehicleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>
+        }
+        update: {
+          args: Prisma.documents_vehicleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>
+        }
+        deleteMany: {
+          args: Prisma.documents_vehicleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.documents_vehicleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.documents_vehicleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>[]
+        }
+        upsert: {
+          args: Prisma.documents_vehicleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_vehiclePayload>
+        }
+        aggregate: {
+          args: Prisma.Documents_vehicleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocuments_vehicle>
+        }
+        groupBy: {
+          args: Prisma.documents_vehicleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Documents_vehicleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.documents_vehicleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Documents_vehicleCountAggregateOutputType> | number
+        }
+      }
+    }
+    documents_driver: {
+      payload: Prisma.$documents_driverPayload<ExtArgs>
+      fields: Prisma.documents_driverFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.documents_driverFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.documents_driverFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>
+        }
+        findFirst: {
+          args: Prisma.documents_driverFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.documents_driverFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>
+        }
+        findMany: {
+          args: Prisma.documents_driverFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>[]
+        }
+        create: {
+          args: Prisma.documents_driverCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>
+        }
+        createMany: {
+          args: Prisma.documents_driverCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.documents_driverCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>[]
+        }
+        delete: {
+          args: Prisma.documents_driverDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>
+        }
+        update: {
+          args: Prisma.documents_driverUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>
+        }
+        deleteMany: {
+          args: Prisma.documents_driverDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.documents_driverUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.documents_driverUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>[]
+        }
+        upsert: {
+          args: Prisma.documents_driverUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documents_driverPayload>
+        }
+        aggregate: {
+          args: Prisma.Documents_driverAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocuments_driver>
+        }
+        groupBy: {
+          args: Prisma.documents_driverGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Documents_driverGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.documents_driverCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Documents_driverCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3014,6 +3239,39 @@ export const Refresh_tokensScalarFieldEnum = {
 export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
 
 
+export const Transport_document_typesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  entity: 'entity',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Transport_document_typesScalarFieldEnum = (typeof Transport_document_typesScalarFieldEnum)[keyof typeof Transport_document_typesScalarFieldEnum]
+
+
+export const Documents_vehicleScalarFieldEnum = {
+  id: 'id',
+  vehicle_id: 'vehicle_id',
+  document_type_id: 'document_type_id',
+  expiration_date: 'expiration_date',
+  created_at: 'created_at'
+} as const
+
+export type Documents_vehicleScalarFieldEnum = (typeof Documents_vehicleScalarFieldEnum)[keyof typeof Documents_vehicleScalarFieldEnum]
+
+
+export const Documents_driverScalarFieldEnum = {
+  id: 'id',
+  driver_id: 'driver_id',
+  document_type_id: 'document_type_id',
+  expiration_date: 'expiration_date',
+  created_at: 'created_at'
+} as const
+
+export type Documents_driverScalarFieldEnum = (typeof Documents_driverScalarFieldEnum)[keyof typeof Documents_driverScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3244,6 +3502,9 @@ export type GlobalOmitConfig = {
   warehouses?: Prisma.warehousesOmit
   document_sequences?: Prisma.document_sequencesOmit
   refresh_tokens?: Prisma.refresh_tokensOmit
+  transport_document_types?: Prisma.transport_document_typesOmit
+  documents_vehicle?: Prisma.documents_vehicleOmit
+  documents_driver?: Prisma.documents_driverOmit
 }
 
 /* Types for Logging */

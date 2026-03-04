@@ -224,6 +224,7 @@ export type driversWhereInput = {
   created_at?: Prisma.DateTimeFilter<"drivers"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   trips?: Prisma.TripsListRelationFilter
+  driverDocuments?: Prisma.Documents_driverListRelationFilter
 }
 
 export type driversOrderByWithRelationInput = {
@@ -239,6 +240,7 @@ export type driversOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   companies?: Prisma.companiesOrderByWithRelationInput
   trips?: Prisma.tripsOrderByRelationAggregateInput
+  driverDocuments?: Prisma.documents_driverOrderByRelationAggregateInput
 }
 
 export type driversWhereUniqueInput = Prisma.AtLeast<{
@@ -257,6 +259,7 @@ export type driversWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"drivers"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   trips?: Prisma.TripsListRelationFilter
+  driverDocuments?: Prisma.Documents_driverListRelationFilter
 }, "id">
 
 export type driversOrderByWithAggregationInput = {
@@ -303,6 +306,7 @@ export type driversCreateInput = {
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutDriversInput
   trips?: Prisma.tripsCreateNestedManyWithoutDriversInput
+  driverDocuments?: Prisma.documents_driverCreateNestedManyWithoutDriversInput
 }
 
 export type driversUncheckedCreateInput = {
@@ -317,6 +321,7 @@ export type driversUncheckedCreateInput = {
   active?: boolean
   created_at?: Date | string
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutDriversInput
+  driverDocuments?: Prisma.documents_driverUncheckedCreateNestedManyWithoutDriversInput
 }
 
 export type driversUpdateInput = {
@@ -331,6 +336,7 @@ export type driversUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutDriversNestedInput
   trips?: Prisma.tripsUpdateManyWithoutDriversNestedInput
+  driverDocuments?: Prisma.documents_driverUpdateManyWithoutDriversNestedInput
 }
 
 export type driversUncheckedUpdateInput = {
@@ -345,6 +351,7 @@ export type driversUncheckedUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trips?: Prisma.tripsUncheckedUpdateManyWithoutDriversNestedInput
+  driverDocuments?: Prisma.documents_driverUncheckedUpdateManyWithoutDriversNestedInput
 }
 
 export type driversCreateManyInput = {
@@ -439,6 +446,11 @@ export type DriversNullableScalarRelationFilter = {
   isNot?: Prisma.driversWhereInput | null
 }
 
+export type DriversScalarRelationFilter = {
+  is?: Prisma.driversWhereInput
+  isNot?: Prisma.driversWhereInput
+}
+
 export type driversCreateNestedManyWithoutCompaniesInput = {
   create?: Prisma.XOR<Prisma.driversCreateWithoutCompaniesInput, Prisma.driversUncheckedCreateWithoutCompaniesInput> | Prisma.driversCreateWithoutCompaniesInput[] | Prisma.driversUncheckedCreateWithoutCompaniesInput[]
   connectOrCreate?: Prisma.driversCreateOrConnectWithoutCompaniesInput | Prisma.driversCreateOrConnectWithoutCompaniesInput[]
@@ -497,6 +509,20 @@ export type driversUpdateOneWithoutTripsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.driversUpdateToOneWithWhereWithoutTripsInput, Prisma.driversUpdateWithoutTripsInput>, Prisma.driversUncheckedUpdateWithoutTripsInput>
 }
 
+export type driversCreateNestedOneWithoutDriverDocumentsInput = {
+  create?: Prisma.XOR<Prisma.driversCreateWithoutDriverDocumentsInput, Prisma.driversUncheckedCreateWithoutDriverDocumentsInput>
+  connectOrCreate?: Prisma.driversCreateOrConnectWithoutDriverDocumentsInput
+  connect?: Prisma.driversWhereUniqueInput
+}
+
+export type driversUpdateOneRequiredWithoutDriverDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.driversCreateWithoutDriverDocumentsInput, Prisma.driversUncheckedCreateWithoutDriverDocumentsInput>
+  connectOrCreate?: Prisma.driversCreateOrConnectWithoutDriverDocumentsInput
+  upsert?: Prisma.driversUpsertWithoutDriverDocumentsInput
+  connect?: Prisma.driversWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.driversUpdateToOneWithWhereWithoutDriverDocumentsInput, Prisma.driversUpdateWithoutDriverDocumentsInput>, Prisma.driversUncheckedUpdateWithoutDriverDocumentsInput>
+}
+
 export type driversCreateWithoutCompaniesInput = {
   id?: string
   first_name: string
@@ -508,6 +534,7 @@ export type driversCreateWithoutCompaniesInput = {
   active?: boolean
   created_at?: Date | string
   trips?: Prisma.tripsCreateNestedManyWithoutDriversInput
+  driverDocuments?: Prisma.documents_driverCreateNestedManyWithoutDriversInput
 }
 
 export type driversUncheckedCreateWithoutCompaniesInput = {
@@ -521,6 +548,7 @@ export type driversUncheckedCreateWithoutCompaniesInput = {
   active?: boolean
   created_at?: Date | string
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutDriversInput
+  driverDocuments?: Prisma.documents_driverUncheckedCreateNestedManyWithoutDriversInput
 }
 
 export type driversCreateOrConnectWithoutCompaniesInput = {
@@ -576,6 +604,7 @@ export type driversCreateWithoutTripsInput = {
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutDriversInput
+  driverDocuments?: Prisma.documents_driverCreateNestedManyWithoutDriversInput
 }
 
 export type driversUncheckedCreateWithoutTripsInput = {
@@ -589,6 +618,7 @@ export type driversUncheckedCreateWithoutTripsInput = {
   license_expiration?: Date | string | null
   active?: boolean
   created_at?: Date | string
+  driverDocuments?: Prisma.documents_driverUncheckedCreateNestedManyWithoutDriversInput
 }
 
 export type driversCreateOrConnectWithoutTripsInput = {
@@ -618,6 +648,7 @@ export type driversUpdateWithoutTripsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutDriversNestedInput
+  driverDocuments?: Prisma.documents_driverUpdateManyWithoutDriversNestedInput
 }
 
 export type driversUncheckedUpdateWithoutTripsInput = {
@@ -631,6 +662,79 @@ export type driversUncheckedUpdateWithoutTripsInput = {
   license_expiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  driverDocuments?: Prisma.documents_driverUncheckedUpdateManyWithoutDriversNestedInput
+}
+
+export type driversCreateWithoutDriverDocumentsInput = {
+  id?: string
+  first_name: string
+  last_name: string
+  document?: string | null
+  phone?: string | null
+  license_number?: string | null
+  license_expiration?: Date | string | null
+  active?: boolean
+  created_at?: Date | string
+  companies: Prisma.companiesCreateNestedOneWithoutDriversInput
+  trips?: Prisma.tripsCreateNestedManyWithoutDriversInput
+}
+
+export type driversUncheckedCreateWithoutDriverDocumentsInput = {
+  id?: string
+  company_id: string
+  first_name: string
+  last_name: string
+  document?: string | null
+  phone?: string | null
+  license_number?: string | null
+  license_expiration?: Date | string | null
+  active?: boolean
+  created_at?: Date | string
+  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutDriversInput
+}
+
+export type driversCreateOrConnectWithoutDriverDocumentsInput = {
+  where: Prisma.driversWhereUniqueInput
+  create: Prisma.XOR<Prisma.driversCreateWithoutDriverDocumentsInput, Prisma.driversUncheckedCreateWithoutDriverDocumentsInput>
+}
+
+export type driversUpsertWithoutDriverDocumentsInput = {
+  update: Prisma.XOR<Prisma.driversUpdateWithoutDriverDocumentsInput, Prisma.driversUncheckedUpdateWithoutDriverDocumentsInput>
+  create: Prisma.XOR<Prisma.driversCreateWithoutDriverDocumentsInput, Prisma.driversUncheckedCreateWithoutDriverDocumentsInput>
+  where?: Prisma.driversWhereInput
+}
+
+export type driversUpdateToOneWithWhereWithoutDriverDocumentsInput = {
+  where?: Prisma.driversWhereInput
+  data: Prisma.XOR<Prisma.driversUpdateWithoutDriverDocumentsInput, Prisma.driversUncheckedUpdateWithoutDriverDocumentsInput>
+}
+
+export type driversUpdateWithoutDriverDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  license_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  license_expiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companies?: Prisma.companiesUpdateOneRequiredWithoutDriversNestedInput
+  trips?: Prisma.tripsUpdateManyWithoutDriversNestedInput
+}
+
+export type driversUncheckedUpdateWithoutDriverDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  company_id?: Prisma.StringFieldUpdateOperationsInput | string
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  license_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  license_expiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trips?: Prisma.tripsUncheckedUpdateManyWithoutDriversNestedInput
 }
 
 export type driversCreateManyCompaniesInput = {
@@ -656,6 +760,7 @@ export type driversUpdateWithoutCompaniesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trips?: Prisma.tripsUpdateManyWithoutDriversNestedInput
+  driverDocuments?: Prisma.documents_driverUpdateManyWithoutDriversNestedInput
 }
 
 export type driversUncheckedUpdateWithoutCompaniesInput = {
@@ -669,6 +774,7 @@ export type driversUncheckedUpdateWithoutCompaniesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trips?: Prisma.tripsUncheckedUpdateManyWithoutDriversNestedInput
+  driverDocuments?: Prisma.documents_driverUncheckedUpdateManyWithoutDriversNestedInput
 }
 
 export type driversUncheckedUpdateManyWithoutCompaniesInput = {
@@ -690,10 +796,12 @@ export type driversUncheckedUpdateManyWithoutCompaniesInput = {
 
 export type DriversCountOutputType = {
   trips: number
+  driverDocuments: number
 }
 
 export type DriversCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   trips?: boolean | DriversCountOutputTypeCountTripsArgs
+  driverDocuments?: boolean | DriversCountOutputTypeCountDriverDocumentsArgs
 }
 
 /**
@@ -713,6 +821,13 @@ export type DriversCountOutputTypeCountTripsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.tripsWhereInput
 }
 
+/**
+ * DriversCountOutputType without action
+ */
+export type DriversCountOutputTypeCountDriverDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.documents_driverWhereInput
+}
+
 
 export type driversSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -727,6 +842,7 @@ export type driversSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   created_at?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   trips?: boolean | Prisma.drivers$tripsArgs<ExtArgs>
+  driverDocuments?: boolean | Prisma.drivers$driverDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.DriversCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["drivers"]>
 
@@ -775,6 +891,7 @@ export type driversOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type driversInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   trips?: boolean | Prisma.drivers$tripsArgs<ExtArgs>
+  driverDocuments?: boolean | Prisma.drivers$driverDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.DriversCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type driversIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -789,6 +906,7 @@ export type $driversPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     companies: Prisma.$companiesPayload<ExtArgs>
     trips: Prisma.$tripsPayload<ExtArgs>[]
+    driverDocuments: Prisma.$documents_driverPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1197,6 +1315,7 @@ export interface Prisma__driversClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   companies<T extends Prisma.companiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companiesDefaultArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   trips<T extends Prisma.drivers$tripsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.drivers$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  driverDocuments<T extends Prisma.drivers$driverDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.drivers$driverDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documents_driverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1653,6 +1772,30 @@ export type drivers$tripsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.TripsScalarFieldEnum | Prisma.TripsScalarFieldEnum[]
+}
+
+/**
+ * drivers.driverDocuments
+ */
+export type drivers$driverDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the documents_driver
+   */
+  select?: Prisma.documents_driverSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the documents_driver
+   */
+  omit?: Prisma.documents_driverOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documents_driverInclude<ExtArgs> | null
+  where?: Prisma.documents_driverWhereInput
+  orderBy?: Prisma.documents_driverOrderByWithRelationInput | Prisma.documents_driverOrderByWithRelationInput[]
+  cursor?: Prisma.documents_driverWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Documents_driverScalarFieldEnum | Prisma.Documents_driverScalarFieldEnum[]
 }
 
 /**

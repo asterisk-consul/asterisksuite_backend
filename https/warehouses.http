@@ -1,7 +1,8 @@
 @baseUrl = https://apidonandres.asterisksuite.cloud/api
 @accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjU3NDgzNSwiZXhwIjoxNzcyNTc1NzM1fQ.LqLpp30xlnMpuctrvPmYmuHrCs5hFW48oKTqBCggPJI
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
-@productId = 72756cfa-7fab-4272-8543-f505d288f869
+@warehouseId = ce63037a-4a81-432a-8d01-336f6a45f188
+@locationId = 8590f4d9-582c-43d4-bbbd-0161ec8afb80
 
 ###
 # ==============================
@@ -14,77 +15,87 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+### ==================================================
+### Listar todas las Locations
+### GET /locations
+### ==================================================
+
+GET {{baseUrl}}/locations
+Authorization: Bearer {{accessToken}}
 
 
 ### =====================================================
-### Crear Producto
-### POST /master-data/products
+### Crear Warehouse
+### POST /warehouses
 ### =====================================================
 
-POST {{baseUrl}}/master-data/products
+POST {{baseUrl}}/warehouses
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "{{companyId}}",
-  "name": "Producto Demo",
-  "sku": "SKU-001",
-  "requires_refrigeration": false
+  "companyId": "{{companyId}}",
+  "name": "Depósito Central",
+  "code": "WH-CENTRAL",
+  "locationId": "{{locationId}}",
+  "active": true
 }
 
 
 ### =====================================================
-### Crear Producto (mínimo requerido)
+### Crear Warehouse (mínimo requerido)
 ### =====================================================
 
-POST {{baseUrl}}/master-data/products
+POST {{baseUrl}}/warehouses
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "{{companyId}}",
-  "name": "Producto Sin SKU"
+  "companyId": "{{companyId}}",
+  "name": "Depósito Secundario"
 }
 
 
 ### =====================================================
-### Listar Productos por empresa
-### GET /master-data/products?company_id=
+### Listar Warehouses activos por empresa
+### GET /warehouses?companyId=
 ### =====================================================
 
-GET {{baseUrl}}/master-data/products?company_id={{companyId}}
+GET {{baseUrl}}/warehouses?companyId={{companyId}}
 Authorization: Bearer {{accessToken}}
 
 
 ### =====================================================
-### Obtener Producto por ID
-### GET /master-data/products/:id
+### Obtener Warehouse por ID
+### (incluye locations y warehouse_stock)
+### GET /warehouses/:id
 ### =====================================================
 
-GET {{baseUrl}}/master-data/products/{{productId}}
+GET {{baseUrl}}/warehouses/{{warehouseId}}
 Authorization: Bearer {{accessToken}}
 
 
 ### =====================================================
-### Actualizar Producto
-### PATCH /master-data/products/:id
+### Actualizar Warehouse
+### PATCH /warehouses/:id
 ### =====================================================
 
-PATCH {{baseUrl}}/master-data/products/{{productId}}
+PATCH {{baseUrl}}/warehouses/{{warehouseId}}
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "Producto Actualizado",
-  "sku": "SKU-NEW-123",
-  "requires_refrigeration": true
+  "name": "Depósito Central Actualizado",
+  "code": "WH-NEW",
+  "locationId": "{{locationId}}",
+  "active": true
 }
 
 
 ### =====================================================
-### Eliminar Producto (hard delete)
-### DELETE /master-data/products/:id
+### Desactivar Warehouse (soft delete)
+### DELETE /warehouses/:id
 ### =====================================================
 
-DELETE {{baseUrl}}/master-data/products/{{productId}}
+DELETE {{baseUrl}}/warehouses/46d94276-dc44-46c6-acef-868ba66a6c21
 Authorization: Bearer {{accessToken}}

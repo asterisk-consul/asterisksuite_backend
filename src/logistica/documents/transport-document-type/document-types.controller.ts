@@ -1,0 +1,34 @@
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Param,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { DocumentTypesService } from './document-types.service';
+import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+
+@Controller('logistica/document-types')
+@UseGuards(JwtAuthGuard)
+export class DocumentTypesController {
+  constructor(private readonly service: DocumentTypesService) {}
+
+  @Post()
+  create(@Body() dto: CreateDocumentTypeDto) {
+    return this.service.create(dto);
+  }
+
+  @Get()
+  findAll(@Query('entity') entity?: 'VEHICLE' | 'DRIVER') {
+    return this.service.findAll(entity);
+  }
+
+  @Patch(':id/deactivate')
+  deactivate(@Param('id') id: string) {
+    return this.service.deactivate(id);
+  }
+}

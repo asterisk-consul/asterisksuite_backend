@@ -1,34 +1,38 @@
 import {
-  IsUUID,
-  IsString,
   IsOptional,
+  IsString,
   IsBoolean,
   IsInt,
   IsNumber,
+  IsUUID,
+  IsDateString,
   ValidateNested,
   IsArray,
-  IsDateString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-class CreateVehicleDocumentDto {
+class UpdateVehicleDocumentDto {
+  @IsOptional()
   @IsUUID()
-  documentTypeId!: string;
+  id?: string; // id de documents_vehicle
+
+  @IsOptional()
+  @IsUUID()
+  documentTypeId?: string; // requerido si es nuevo
 
   @IsOptional()
   @IsDateString()
   expirationDate?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  remove?: boolean;
 }
 
-export class CreateVehicleDto {
-  @IsUUID()
-  companyId!: string;
-
+export class UpdateVehicleDto {
+  @IsOptional()
   @IsString()
-  type!: string;
-
-  @IsString()
-  plate!: string;
+  type?: string;
 
   @IsOptional()
   @IsString()
@@ -55,8 +59,12 @@ export class CreateVehicleDto {
   refrigeration?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  active?: boolean;
+
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreateVehicleDocumentDto)
-  documents?: CreateVehicleDocumentDto[];
+  @Type(() => UpdateVehicleDocumentDto)
+  documents?: UpdateVehicleDocumentDto[];
 }

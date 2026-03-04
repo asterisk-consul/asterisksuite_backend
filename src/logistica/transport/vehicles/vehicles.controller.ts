@@ -1,8 +1,19 @@
-import { Controller, Post, Get, Body, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Param,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
-import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-@Controller('transport/vehicles')
+import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+
+@Controller('logistica/vehicles')
 @UseGuards(JwtAuthGuard)
 export class VehiclesController {
   constructor(private readonly service: VehiclesService) {}
@@ -15,5 +26,20 @@ export class VehiclesController {
   @Get()
   findAll(@Query('companyId') companyId: string) {
     return this.service.findAll(companyId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateVehicleDto) {
+    return this.service.update(id, dto);
+  }
+
+  @Patch(':id/deactivate')
+  deactivate(@Param('id') id: string) {
+    return this.service.deactivate(id);
   }
 }

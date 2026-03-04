@@ -182,3 +182,18 @@ export type document_sequences = Prisma.document_sequencesModel
  * 
  */
 export type refresh_tokens = Prisma.refresh_tokensModel
+/**
+ * Model transport_document_types
+ * 
+ */
+export type transport_document_types = Prisma.transport_document_typesModel
+/**
+ * Model documents_vehicle
+ * 
+ */
+export type documents_vehicle = Prisma.documents_vehicleModel
+/**
+ * Model documents_driver
+ * 
+ */
+export type documents_driver = Prisma.documents_driverModel

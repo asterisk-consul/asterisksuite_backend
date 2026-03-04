@@ -1,7 +1,11 @@
-@baseUrl = https://apidonandres.asterisksuite.cloud/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjQ2MjU2NiwiZXhwIjoxNzcyNDYzNDY2fQ.kpnLiKQkfOvDRcOHG594PAMkXCwRkyZ0TSaaySj_sLA
-
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjY1MDk5MywiZXhwIjoxNzcyNjUxODkzfQ.pmzZMzwiZmSRbQ2c1evWoWTkCGge0xuZUuAI38Xc0jY
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@vehicleId = 3c2c3bc4-77af-4ad8-912f-3dc647aae5b0
+@documentTypeVehicle = UUID_DOCUMENT_TYPE_VEHICLE
+@documentTypeVehicle2=
+
+@vehicleDocumentId = UUID_DOCUMENTS_VEHICLE
 
 
 ###
@@ -17,46 +21,155 @@ Content-Type: application/json
 }
 
 ### =====================================================
-### Crear Vehículo
-### POST /transport/vehicles
+### 1️⃣ Crear vehículo SIN documentos
 ### =====================================================
 
-POST {{baseUrl}}/transport/vehicles
+POST {{baseUrl}}/logistica/vehicles
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "companyId": "{{companyId}}",
-  "type": "truck",
-  "plate": "AB123CD",
-  "brand": "Mercedes-Benz",
+  "type": "CAMION",
+  "plate": "ABC123",
+  "brand": "Mercedes Benz",
   "model": "Actros",
   "year": 2022,
   "maxWeight": 18000,
-  "maxVolume": 60,
-  "refrigeration": true
+  "maxVolume": 45,
+  "refrigeration": false
 }
 
-
 ### =====================================================
-### Crear Vehículo (mínimo requerido)
+### 2️⃣ Crear vehículo con UN documento
 ### =====================================================
 
-POST {{baseUrl}}/transport/vehicles
+POST {{baseUrl}}/logistica/vehicles
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "companyId": "{{companyId}}",
-  "type": "van",
-  "plate": "AE456FG"
+  "type": "CAMION",
+  "plate": "DEF456",
+  "brand": "Scania",
+  "model": "R450",
+  "year": 2021,
+  "documents": [
+    {
+      "documentTypeId": "{{documentTypeVehicle}}",
+      "expirationDate": "2026-12-31"
+    }
+  ]
 }
 
-
 ### =====================================================
-### Listar Vehículos activos por empresa
-### GET /transport/vehicles?companyId=
+### 3️⃣ Crear vehículo con MÚLTIPLES documentos
 ### =====================================================
 
-GET {{baseUrl}}/transport/vehicles?companyId={{companyId}}
+POST {{baseUrl}}/logistica/vehicles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "type": "SEMI",
+  "plate": "GHI789",
+  "documents": [
+    {
+      "documentTypeId": "{{documentTypeVehicle}}",
+      "expirationDate": "2026-12-31"
+    },
+    {
+      "documentTypeId": "{{documentTypeVehicle2}}",
+      "expirationDate": "2025-08-15"
+    }
+  ]
+}
+
+### =====================================================
+### 4️⃣ Actualizar solo datos básicos
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicles/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "brand": "Volvo",
+  "model": "FH16",
+  "year": 2023,
+  "refrigeration": true
+}
+
+### =====================================================
+### 5️⃣ Agregar nuevo documento
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicles/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "documents": [
+    {
+      "documentTypeId": "{{documentTypeVehicle}}",
+      "expirationDate": "2027-01-01"
+    }
+  ]
+}
+
+### =====================================================
+### 6️⃣ Actualizar vencimiento documento existente
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicles/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "documents": [
+    {
+      "id": "{{vehicleDocumentId}}",
+      "expirationDate": "2028-05-10"
+    }
+  ]
+}
+
+### =====================================================
+### 7️⃣ Eliminar documento
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicles/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "documents": [
+    {
+      "id": "{{vehicleDocumentId}}",
+      "remove": true
+    }
+  ]
+}
+
+### =====================================================
+### 8️⃣ Desactivar vehículo (soft delete)
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicles/{{vehicleId}}/deactivate
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 9️⃣ Obtener todos los vehículos de una empresa
+### =====================================================
+
+GET {{baseUrl}}/logistica/vehicles?companyId={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 🔟 Obtener vehículo por ID
+### =====================================================
+
+GET {{baseUrl}}/logistica/vehicles/{{vehicleId}}
 Authorization: Bearer {{accessToken}}

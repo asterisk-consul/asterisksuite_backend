@@ -79,7 +79,10 @@ export const ModelName = {
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
   document_sequences: 'document_sequences',
-  refresh_tokens: 'refresh_tokens'
+  refresh_tokens: 'refresh_tokens',
+  transport_document_types: 'transport_document_types',
+  documents_vehicle: 'documents_vehicle',
+  documents_driver: 'documents_driver'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -493,6 +496,39 @@ export const Refresh_tokensScalarFieldEnum = {
 } as const
 
 export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
+
+
+export const Transport_document_typesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  entity: 'entity',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Transport_document_typesScalarFieldEnum = (typeof Transport_document_typesScalarFieldEnum)[keyof typeof Transport_document_typesScalarFieldEnum]
+
+
+export const Documents_vehicleScalarFieldEnum = {
+  id: 'id',
+  vehicle_id: 'vehicle_id',
+  document_type_id: 'document_type_id',
+  expiration_date: 'expiration_date',
+  created_at: 'created_at'
+} as const
+
+export type Documents_vehicleScalarFieldEnum = (typeof Documents_vehicleScalarFieldEnum)[keyof typeof Documents_vehicleScalarFieldEnum]
+
+
+export const Documents_driverScalarFieldEnum = {
+  id: 'id',
+  driver_id: 'driver_id',
+  document_type_id: 'document_type_id',
+  expiration_date: 'expiration_date',
+  created_at: 'created_at'
+} as const
+
+export type Documents_driverScalarFieldEnum = (typeof Documents_driverScalarFieldEnum)[keyof typeof Documents_driverScalarFieldEnum]
 
 
 export const SortOrder = {

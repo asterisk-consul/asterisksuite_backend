@@ -283,6 +283,7 @@ export type vehiclesWhereInput = {
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   vehicle_combinations_tractor?: Prisma.Vehicle_combinationsListRelationFilter
   vehicle_combinations_trailer?: Prisma.Vehicle_combinationsListRelationFilter
+  vehicleDocuments?: Prisma.Documents_vehicleListRelationFilter
 }
 
 export type vehiclesOrderByWithRelationInput = {
@@ -301,6 +302,7 @@ export type vehiclesOrderByWithRelationInput = {
   companies?: Prisma.companiesOrderByWithRelationInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
+  vehicleDocuments?: Prisma.documents_vehicleOrderByRelationAggregateInput
 }
 
 export type vehiclesWhereUniqueInput = Prisma.AtLeast<{
@@ -322,6 +324,7 @@ export type vehiclesWhereUniqueInput = Prisma.AtLeast<{
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   vehicle_combinations_tractor?: Prisma.Vehicle_combinationsListRelationFilter
   vehicle_combinations_trailer?: Prisma.Vehicle_combinationsListRelationFilter
+  vehicleDocuments?: Prisma.Documents_vehicleListRelationFilter
 }, "id" | "plate">
 
 export type vehiclesOrderByWithAggregationInput = {
@@ -377,6 +380,7 @@ export type vehiclesCreateInput = {
   companies: Prisma.companiesCreateNestedOneWithoutVehiclesInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
+  vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesUncheckedCreateInput = {
@@ -394,6 +398,7 @@ export type vehiclesUncheckedCreateInput = {
   created_at?: Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesUpdateInput = {
@@ -411,6 +416,7 @@ export type vehiclesUpdateInput = {
   companies?: Prisma.companiesUpdateOneRequiredWithoutVehiclesNestedInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesUncheckedUpdateInput = {
@@ -428,6 +434,7 @@ export type vehiclesUncheckedUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesCreateManyInput = {
@@ -623,6 +630,20 @@ export type vehiclesUpdateOneWithoutVehicle_combinations_trailerNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.vehiclesUpdateToOneWithWhereWithoutVehicle_combinations_trailerInput, Prisma.vehiclesUpdateWithoutVehicle_combinations_trailerInput>, Prisma.vehiclesUncheckedUpdateWithoutVehicle_combinations_trailerInput>
 }
 
+export type vehiclesCreateNestedOneWithoutVehicleDocumentsInput = {
+  create?: Prisma.XOR<Prisma.vehiclesCreateWithoutVehicleDocumentsInput, Prisma.vehiclesUncheckedCreateWithoutVehicleDocumentsInput>
+  connectOrCreate?: Prisma.vehiclesCreateOrConnectWithoutVehicleDocumentsInput
+  connect?: Prisma.vehiclesWhereUniqueInput
+}
+
+export type vehiclesUpdateOneRequiredWithoutVehicleDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.vehiclesCreateWithoutVehicleDocumentsInput, Prisma.vehiclesUncheckedCreateWithoutVehicleDocumentsInput>
+  connectOrCreate?: Prisma.vehiclesCreateOrConnectWithoutVehicleDocumentsInput
+  upsert?: Prisma.vehiclesUpsertWithoutVehicleDocumentsInput
+  connect?: Prisma.vehiclesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.vehiclesUpdateToOneWithWhereWithoutVehicleDocumentsInput, Prisma.vehiclesUpdateWithoutVehicleDocumentsInput>, Prisma.vehiclesUncheckedUpdateWithoutVehicleDocumentsInput>
+}
+
 export type vehiclesCreateWithoutCompaniesInput = {
   id?: string
   type: string
@@ -637,6 +658,7 @@ export type vehiclesCreateWithoutCompaniesInput = {
   created_at?: Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
+  vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesUncheckedCreateWithoutCompaniesInput = {
@@ -653,6 +675,7 @@ export type vehiclesUncheckedCreateWithoutCompaniesInput = {
   created_at?: Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesCreateOrConnectWithoutCompaniesInput = {
@@ -713,6 +736,7 @@ export type vehiclesCreateWithoutVehicle_combinations_tractorInput = {
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutVehiclesInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
+  vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesUncheckedCreateWithoutVehicle_combinations_tractorInput = {
@@ -729,6 +753,7 @@ export type vehiclesUncheckedCreateWithoutVehicle_combinations_tractorInput = {
   active?: boolean
   created_at?: Date | string
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesCreateOrConnectWithoutVehicle_combinations_tractorInput = {
@@ -750,6 +775,7 @@ export type vehiclesCreateWithoutVehicle_combinations_trailerInput = {
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutVehiclesInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
+  vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesUncheckedCreateWithoutVehicle_combinations_trailerInput = {
@@ -766,6 +792,7 @@ export type vehiclesUncheckedCreateWithoutVehicle_combinations_trailerInput = {
   active?: boolean
   created_at?: Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
 }
 
 export type vehiclesCreateOrConnectWithoutVehicle_combinations_trailerInput = {
@@ -798,6 +825,7 @@ export type vehiclesUpdateWithoutVehicle_combinations_tractorInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutVehiclesNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesUncheckedUpdateWithoutVehicle_combinations_tractorInput = {
@@ -814,6 +842,7 @@ export type vehiclesUncheckedUpdateWithoutVehicle_combinations_tractorInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesUpsertWithoutVehicle_combinations_trailerInput = {
@@ -841,6 +870,7 @@ export type vehiclesUpdateWithoutVehicle_combinations_trailerInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutVehiclesNestedInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesUncheckedUpdateWithoutVehicle_combinations_trailerInput = {
@@ -857,6 +887,91 @@ export type vehiclesUncheckedUpdateWithoutVehicle_combinations_trailerInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
+}
+
+export type vehiclesCreateWithoutVehicleDocumentsInput = {
+  id?: string
+  type: string
+  plate: string
+  brand?: string | null
+  model?: string | null
+  year?: number | null
+  max_weight?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  max_volume?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refrigeration?: boolean | null
+  active?: boolean
+  created_at?: Date | string
+  companies: Prisma.companiesCreateNestedOneWithoutVehiclesInput
+  vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
+  vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
+}
+
+export type vehiclesUncheckedCreateWithoutVehicleDocumentsInput = {
+  id?: string
+  company_id: string
+  type: string
+  plate: string
+  brand?: string | null
+  model?: string | null
+  year?: number | null
+  max_weight?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  max_volume?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refrigeration?: boolean | null
+  active?: boolean
+  created_at?: Date | string
+  vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
+  vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
+}
+
+export type vehiclesCreateOrConnectWithoutVehicleDocumentsInput = {
+  where: Prisma.vehiclesWhereUniqueInput
+  create: Prisma.XOR<Prisma.vehiclesCreateWithoutVehicleDocumentsInput, Prisma.vehiclesUncheckedCreateWithoutVehicleDocumentsInput>
+}
+
+export type vehiclesUpsertWithoutVehicleDocumentsInput = {
+  update: Prisma.XOR<Prisma.vehiclesUpdateWithoutVehicleDocumentsInput, Prisma.vehiclesUncheckedUpdateWithoutVehicleDocumentsInput>
+  create: Prisma.XOR<Prisma.vehiclesCreateWithoutVehicleDocumentsInput, Prisma.vehiclesUncheckedCreateWithoutVehicleDocumentsInput>
+  where?: Prisma.vehiclesWhereInput
+}
+
+export type vehiclesUpdateToOneWithWhereWithoutVehicleDocumentsInput = {
+  where?: Prisma.vehiclesWhereInput
+  data: Prisma.XOR<Prisma.vehiclesUpdateWithoutVehicleDocumentsInput, Prisma.vehiclesUncheckedUpdateWithoutVehicleDocumentsInput>
+}
+
+export type vehiclesUpdateWithoutVehicleDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  max_weight?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  max_volume?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companies?: Prisma.companiesUpdateOneRequiredWithoutVehiclesNestedInput
+  vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
+  vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
+}
+
+export type vehiclesUncheckedUpdateWithoutVehicleDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  company_id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  max_weight?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  max_volume?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
+  vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
 }
 
 export type vehiclesCreateManyCompaniesInput = {
@@ -887,6 +1002,7 @@ export type vehiclesUpdateWithoutCompaniesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesUncheckedUpdateWithoutCompaniesInput = {
@@ -903,6 +1019,7 @@ export type vehiclesUncheckedUpdateWithoutCompaniesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
+  vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
 }
 
 export type vehiclesUncheckedUpdateManyWithoutCompaniesInput = {
@@ -927,11 +1044,13 @@ export type vehiclesUncheckedUpdateManyWithoutCompaniesInput = {
 export type VehiclesCountOutputType = {
   vehicle_combinations_tractor: number
   vehicle_combinations_trailer: number
+  vehicleDocuments: number
 }
 
 export type VehiclesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vehicle_combinations_tractor?: boolean | VehiclesCountOutputTypeCountVehicle_combinations_tractorArgs
   vehicle_combinations_trailer?: boolean | VehiclesCountOutputTypeCountVehicle_combinations_trailerArgs
+  vehicleDocuments?: boolean | VehiclesCountOutputTypeCountVehicleDocumentsArgs
 }
 
 /**
@@ -958,6 +1077,13 @@ export type VehiclesCountOutputTypeCountVehicle_combinations_trailerArgs<ExtArgs
   where?: Prisma.vehicle_combinationsWhereInput
 }
 
+/**
+ * VehiclesCountOutputType without action
+ */
+export type VehiclesCountOutputTypeCountVehicleDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.documents_vehicleWhereInput
+}
+
 
 export type vehiclesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -975,6 +1101,7 @@ export type vehiclesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   vehicle_combinations_tractor?: boolean | Prisma.vehicles$vehicle_combinations_tractorArgs<ExtArgs>
   vehicle_combinations_trailer?: boolean | Prisma.vehicles$vehicle_combinations_trailerArgs<ExtArgs>
+  vehicleDocuments?: boolean | Prisma.vehicles$vehicleDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.VehiclesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicles"]>
 
@@ -1030,6 +1157,7 @@ export type vehiclesInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   vehicle_combinations_tractor?: boolean | Prisma.vehicles$vehicle_combinations_tractorArgs<ExtArgs>
   vehicle_combinations_trailer?: boolean | Prisma.vehicles$vehicle_combinations_trailerArgs<ExtArgs>
+  vehicleDocuments?: boolean | Prisma.vehicles$vehicleDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.VehiclesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type vehiclesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1045,6 +1173,7 @@ export type $vehiclesPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     companies: Prisma.$companiesPayload<ExtArgs>
     vehicle_combinations_tractor: Prisma.$vehicle_combinationsPayload<ExtArgs>[]
     vehicle_combinations_trailer: Prisma.$vehicle_combinationsPayload<ExtArgs>[]
+    vehicleDocuments: Prisma.$documents_vehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1456,6 +1585,7 @@ export interface Prisma__vehiclesClient<T, Null = never, ExtArgs extends runtime
   companies<T extends Prisma.companiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companiesDefaultArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   vehicle_combinations_tractor<T extends Prisma.vehicles$vehicle_combinations_tractorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.vehicles$vehicle_combinations_tractorArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$vehicle_combinationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vehicle_combinations_trailer<T extends Prisma.vehicles$vehicle_combinations_trailerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.vehicles$vehicle_combinations_trailerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$vehicle_combinationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vehicleDocuments<T extends Prisma.vehicles$vehicleDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.vehicles$vehicleDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documents_vehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1938,6 +2068,30 @@ export type vehicles$vehicle_combinations_trailerArgs<ExtArgs extends runtime.Ty
   take?: number
   skip?: number
   distinct?: Prisma.Vehicle_combinationsScalarFieldEnum | Prisma.Vehicle_combinationsScalarFieldEnum[]
+}
+
+/**
+ * vehicles.vehicleDocuments
+ */
+export type vehicles$vehicleDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the documents_vehicle
+   */
+  select?: Prisma.documents_vehicleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the documents_vehicle
+   */
+  omit?: Prisma.documents_vehicleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documents_vehicleInclude<ExtArgs> | null
+  where?: Prisma.documents_vehicleWhereInput
+  orderBy?: Prisma.documents_vehicleOrderByWithRelationInput | Prisma.documents_vehicleOrderByWithRelationInput[]
+  cursor?: Prisma.documents_vehicleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Documents_vehicleScalarFieldEnum | Prisma.Documents_vehicleScalarFieldEnum[]
 }
 
 /**
