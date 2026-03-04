@@ -1,0 +1,84 @@
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjY2MDUwMywiZXhwIjoxNzcyNjYxNDAzfQ.g5Cdd8ZbEzRyohVqCpBpo1a94pUlPZRU7ZsztHahFgA
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@tractorId = 15d104d7-0e1c-402e-8eb5-40b829190558
+@trailerId = 38d8a64d-9c93-449e-8abc-77507d7ed779
+@combinationId = UUID_COMBINATION
+@userId = UUID_USER
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+### =====================================================
+### 1️⃣ Crear combinación SIN trailer
+### =====================================================
+
+POST {{baseUrl}}/logistica/vehicle-combinations
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "tractorId": "{{tractorId}}",
+  "validFrom": "2025-01-01",
+  "createdBy": "{{userId}}"
+}
+
+### =====================================================
+### 2️⃣ Crear combinación CON trailer
+### =====================================================
+
+POST {{baseUrl}}/logistica/vehicle-combinations
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "tractorId": "{{tractorId}}",
+  "trailerId": "{{trailerId}}",
+  "validFrom": "2025-01-01",
+  "validUntil": "2025-12-31",
+  "createdBy": "{{userId}}"
+}
+
+### =====================================================
+### 3️⃣ Obtener todas las combinaciones de una empresa
+### =====================================================
+
+GET {{baseUrl}}/logistica/vehicle-combinations?companyId={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 4️⃣ Obtener combinación por ID
+### =====================================================
+
+GET {{baseUrl}}/logistica/vehicle-combinations/{{combinationId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 5️⃣ Actualizar fecha de finalización
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicle-combinations/{{combinationId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "validUntil": "2026-01-01"
+}
+
+### =====================================================
+### 6️⃣ Cerrar combinación (setea valid_until = now())
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/vehicle-combinations/{{combinationId}}/close
+Authorization: Bearer {{accessToken}}
