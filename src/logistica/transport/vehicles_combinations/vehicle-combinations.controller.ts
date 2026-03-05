@@ -1,45 +1,96 @@
 import {
   Controller,
-  Post,
   Get,
-  Patch,
-  Param,
+  Post,
   Body,
+  Param,
+  Patch,
+  Delete,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+
 import { VehicleCombinationsService } from './vehicle-combinations.service';
 import { CreateVehicleCombinationDto } from './dto/create-vehicle-combination.dto';
 import { UpdateVehicleCombinationDto } from './dto/update-vehicle-combination.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
-@Controller('logistica/vehicle-combinations')
+@Controller('vehicle-combinations')
 @UseGuards(JwtAuthGuard)
 export class VehicleCombinationsController {
   constructor(private readonly service: VehicleCombinationsService) {}
+
+  // --------------------------------------------------
+  // CREATE
+  // --------------------------------------------------
 
   @Post()
   create(@Body() dto: CreateVehicleCombinationDto) {
     return this.service.create(dto);
   }
 
+  // --------------------------------------------------
+  // LISTAR TODAS
+  // --------------------------------------------------
+
   @Get()
-  findAll(@Query('companyId') companyId: string) {
-    return this.service.findAll(companyId);
+  findAll(@Query('company_id') company_id: string) {
+    return this.service.findAll(company_id);
   }
+
+  // --------------------------------------------------
+  // LISTAR ACTIVAS
+  // --------------------------------------------------
+
+  @Get('active')
+  findActive(@Query('company_id') company_id: string) {
+    return this.service.findActive(company_id);
+  }
+
+  // --------------------------------------------------
+  // HISTORIAL POR VEHICULO
+  // --------------------------------------------------
+
+  @Get('vehicle/:vehicle_id')
+  findByVehicle(@Param('vehicle_id') vehicle_id: string) {
+    return this.service.findByVehicle(vehicle_id);
+  }
+
+  // --------------------------------------------------
+  // BUSCAR UNA
+  // --------------------------------------------------
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
 
+  // --------------------------------------------------
+  // FINALIZAR COMBINACION
+  // --------------------------------------------------
+
+  @Patch(':id/finish')
+  finish(@Param('id') id: string) {
+    return this.service.finishCombination(id);
+  }
+
+  // --------------------------------------------------
+  // UPDATE
+  // --------------------------------------------------
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateVehicleCombinationDto) {
     return this.service.update(id, dto);
   }
 
-  @Patch(':id/close')
-  close(@Param('id') id: string) {
-    return this.service.close(id);
+  // --------------------------------------------------
+  // DELETE
+  // --------------------------------------------------
+
+  @Delete(':id')
+  remove(@Param('id') id: string, @Req() req: any) {
+    const user_id = req.user.sub;
+    return this.service.remove(id, user_id);
   }
 }

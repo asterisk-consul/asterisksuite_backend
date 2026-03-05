@@ -1,40 +1,63 @@
 import {
   Controller,
+  Get,
   Post,
-  Patch,
   Body,
   Param,
-  UseGuards,
+  Patch,
+  Delete,
 } from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
-import { AddTripCargoDto } from './dto/add-trip.dto';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-import { CurrentUser } from '@/auth/decorators/current-user.decorator';
-import type { AuthUser } from '@/auth/types/auth-user.interface';
+import { UpdateTripDto } from './dto/update-trip.dto';
+import { CreateTripRateDto } from './dto/create-trip-rate.dto';
+import { UpdateTripRateDto } from './dto/update-trip-rate.dto';
 
-@Controller('transport/trips')
-@UseGuards(JwtAuthGuard)
+@Controller('trips')
 export class TripsController {
   constructor(private readonly service: TripsService) {}
 
+  @Get(':company_id')
+  findAll(@Param('company_id') company_id: string) {
+    return this.service.findAll(company_id);
+  }
+
+  @Get('detail/:id')
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(id);
+  }
+
   @Post()
-  create(@Body() dto: CreateTripDto, @CurrentUser() user: AuthUser) {
-    return this.service.create(dto, user.id);
+  create(@Body() dto: CreateTripDto) {
+    return this.service.create(dto);
   }
 
-  @Patch(':id/start')
-  start(@Param('id') id: string) {
-    return this.service.start(id);
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateTripDto) {
+    return this.service.update(id, dto);
   }
 
-  @Patch(':id/complete')
-  complete(@Param('id') id: string) {
-    return this.service.complete(id);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.service.remove(id);
   }
 
-  @Post('cargo')
-  addCargo(@Body() dto: AddTripCargoDto) {
-    return this.service.addCargo(dto);
+  // ------------------------------
+  // TRIP RATES
+  // ------------------------------
+
+  @Post(':trip_id/rates')
+  addRate(@Param('trip_id') trip_id: string, @Body() dto: CreateTripRateDto) {
+    return this.service.addRate(trip_id, dto);
+  }
+
+  @Patch('rates/:id')
+  updateRate(@Param('id') id: string, @Body() dto: UpdateTripRateDto) {
+    return this.service.updateRate(id, dto);
+  }
+
+  @Delete('rates/:id')
+  removeRate(@Param('id') id: string) {
+    return this.service.removeRate(id);
   }
 }

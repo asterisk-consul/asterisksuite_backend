@@ -197,3 +197,13 @@ export type documents_vehicle = Prisma.documents_vehicleModel
  * 
  */
 export type documents_driver = Prisma.documents_driverModel
+/**
+ * Model transfer_rates
+ * 
+ */
+export type transfer_rates = Prisma.transfer_ratesModel
+/**
+ * Model trip_rates
+ * 
+ */
+export type trip_rates = Prisma.trip_ratesModel

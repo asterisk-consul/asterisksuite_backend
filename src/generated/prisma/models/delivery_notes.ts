@@ -230,10 +230,10 @@ export type delivery_notesWhereInput = {
   deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   cargo_transfer_items?: Prisma.Cargo_transfer_itemsListRelationFilter
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
+  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
   trips?: Prisma.XOR<Prisma.TripsNullableScalarRelationFilter, Prisma.tripsWhereInput> | null
   picking_orders?: Prisma.Picking_ordersListRelationFilter
@@ -252,10 +252,10 @@ export type delivery_notesOrderByWithRelationInput = {
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  dispatch_orders?: Prisma.dispatch_ordersOrderByWithRelationInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsOrderByRelationAggregateInput
   companies?: Prisma.companiesOrderByWithRelationInput
   users?: Prisma.usersOrderByWithRelationInput
+  dispatch_orders?: Prisma.dispatch_ordersOrderByWithRelationInput
   business_parties?: Prisma.business_partiesOrderByWithRelationInput
   trips?: Prisma.tripsOrderByWithRelationInput
   picking_orders?: Prisma.picking_ordersOrderByRelationAggregateInput
@@ -277,10 +277,10 @@ export type delivery_notesWhereUniqueInput = Prisma.AtLeast<{
   deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   cargo_transfer_items?: Prisma.Cargo_transfer_itemsListRelationFilter
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
+  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
   trips?: Prisma.XOR<Prisma.TripsNullableScalarRelationFilter, Prisma.tripsWhereInput> | null
   picking_orders?: Prisma.Picking_ordersListRelationFilter
@@ -328,10 +328,10 @@ export type delivery_notesCreateInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
@@ -362,10 +362,10 @@ export type delivery_notesUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
@@ -752,10 +752,10 @@ export type delivery_notesCreateWithoutBusiness_partiesInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutDelivery_notesInput
@@ -827,9 +827,9 @@ export type delivery_notesCreateWithoutCargo_transfer_itemsInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
@@ -875,9 +875,9 @@ export type delivery_notesUpdateWithoutCargo_transfer_itemsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
@@ -907,9 +907,9 @@ export type delivery_notesCreateWithoutCompaniesInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
@@ -965,10 +965,10 @@ export type delivery_notesCreateWithoutPicking_ordersInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutDelivery_notesInput
@@ -1013,10 +1013,10 @@ export type delivery_notesUpdateWithoutPicking_ordersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutDelivery_notesNestedInput
@@ -1045,10 +1045,10 @@ export type delivery_notesCreateWithoutTrip_cargoInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
@@ -1093,10 +1093,10 @@ export type delivery_notesUpdateWithoutTrip_cargoInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
@@ -1183,10 +1183,10 @@ export type delivery_notesCreateWithoutTripsInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutDelivery_notesInput
@@ -1241,9 +1241,9 @@ export type delivery_notesCreateWithoutUsersInput = {
   status: string
   deleted_at?: Date | string | null
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   companies: Prisma.companiesCreateNestedOneWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
   trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
@@ -1312,10 +1312,10 @@ export type delivery_notesUpdateWithoutBusiness_partiesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutDelivery_notesNestedInput
@@ -1370,9 +1370,9 @@ export type delivery_notesUpdateWithoutCompaniesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
@@ -1486,10 +1486,10 @@ export type delivery_notesUpdateWithoutTripsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutDelivery_notesNestedInput
@@ -1544,9 +1544,9 @@ export type delivery_notesUpdateWithoutUsersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
   trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
@@ -1643,10 +1643,10 @@ export type delivery_notesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   deleted_at?: boolean
   created_at?: boolean
   dispatch_order_id?: boolean
-  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   cargo_transfer_items?: boolean | Prisma.delivery_notes$cargo_transfer_itemsArgs<ExtArgs>
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   business_parties?: boolean | Prisma.delivery_notes$business_partiesArgs<ExtArgs>
   trips?: boolean | Prisma.delivery_notes$tripsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.delivery_notes$picking_ordersArgs<ExtArgs>
@@ -1666,9 +1666,9 @@ export type delivery_notesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   deleted_at?: boolean
   created_at?: boolean
   dispatch_order_id?: boolean
-  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   business_parties?: boolean | Prisma.delivery_notes$business_partiesArgs<ExtArgs>
   trips?: boolean | Prisma.delivery_notes$tripsArgs<ExtArgs>
 }, ExtArgs["result"]["delivery_notes"]>
@@ -1685,9 +1685,9 @@ export type delivery_notesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   deleted_at?: boolean
   created_at?: boolean
   dispatch_order_id?: boolean
-  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   business_parties?: boolean | Prisma.delivery_notes$business_partiesArgs<ExtArgs>
   trips?: boolean | Prisma.delivery_notes$tripsArgs<ExtArgs>
 }, ExtArgs["result"]["delivery_notes"]>
@@ -1708,10 +1708,10 @@ export type delivery_notesSelectScalar = {
 
 export type delivery_notesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "type" | "number" | "status" | "party_id" | "trip_id" | "created_by" | "deleted_at" | "created_at" | "dispatch_order_id", ExtArgs["result"]["delivery_notes"]>
 export type delivery_notesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   cargo_transfer_items?: boolean | Prisma.delivery_notes$cargo_transfer_itemsArgs<ExtArgs>
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   business_parties?: boolean | Prisma.delivery_notes$business_partiesArgs<ExtArgs>
   trips?: boolean | Prisma.delivery_notes$tripsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.delivery_notes$picking_ordersArgs<ExtArgs>
@@ -1719,16 +1719,16 @@ export type delivery_notesInclude<ExtArgs extends runtime.Types.Extensions.Inter
   _count?: boolean | Prisma.Delivery_notesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type delivery_notesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   business_parties?: boolean | Prisma.delivery_notes$business_partiesArgs<ExtArgs>
   trips?: boolean | Prisma.delivery_notes$tripsArgs<ExtArgs>
 }
 export type delivery_notesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
   business_parties?: boolean | Prisma.delivery_notes$business_partiesArgs<ExtArgs>
   trips?: boolean | Prisma.delivery_notes$tripsArgs<ExtArgs>
 }
@@ -1736,10 +1736,10 @@ export type delivery_notesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type $delivery_notesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "delivery_notes"
   objects: {
-    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs> | null
     cargo_transfer_items: Prisma.$cargo_transfer_itemsPayload<ExtArgs>[]
     companies: Prisma.$companiesPayload<ExtArgs>
     users: Prisma.$usersPayload<ExtArgs> | null
+    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs> | null
     business_parties: Prisma.$business_partiesPayload<ExtArgs> | null
     trips: Prisma.$tripsPayload<ExtArgs> | null
     picking_orders: Prisma.$picking_ordersPayload<ExtArgs>[]
@@ -2151,10 +2151,10 @@ readonly fields: delivery_notesFieldRefs;
  */
 export interface Prisma__delivery_notesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  dispatch_orders<T extends Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>>): Prisma.Prisma__dispatch_ordersClient<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   cargo_transfer_items<T extends Prisma.delivery_notes$cargo_transfer_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$cargo_transfer_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cargo_transfer_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   companies<T extends Prisma.companiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companiesDefaultArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.delivery_notes$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  dispatch_orders<T extends Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>>): Prisma.Prisma__dispatch_ordersClient<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   business_parties<T extends Prisma.delivery_notes$business_partiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$business_partiesArgs<ExtArgs>>): Prisma.Prisma__business_partiesClient<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   trips<T extends Prisma.delivery_notes$tripsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$tripsArgs<ExtArgs>>): Prisma.Prisma__tripsClient<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   picking_orders<T extends Prisma.delivery_notes$picking_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.delivery_notes$picking_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2595,25 +2595,6 @@ export type delivery_notesDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * delivery_notes.dispatch_orders
- */
-export type delivery_notes$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the dispatch_orders
-   */
-  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the dispatch_orders
-   */
-  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
-  where?: Prisma.dispatch_ordersWhereInput
-}
-
-/**
  * delivery_notes.cargo_transfer_items
  */
 export type delivery_notes$cargo_transfer_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2654,6 +2635,25 @@ export type delivery_notes$usersArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.usersInclude<ExtArgs> | null
   where?: Prisma.usersWhereInput
+}
+
+/**
+ * delivery_notes.dispatch_orders
+ */
+export type delivery_notes$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
 }
 
 /**

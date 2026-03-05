@@ -151,8 +151,8 @@ export type Transport_document_typesGroupByOutputType = {
   id: string
   name: string
   entity: string
-  active: boolean
-  created_at: Date
+  active: boolean | null
+  created_at: Date | null
   _count: Transport_document_typesCountAggregateOutputType | null
   _min: Transport_document_typesMinAggregateOutputType | null
   _max: Transport_document_typesMaxAggregateOutputType | null
@@ -180,20 +180,20 @@ export type transport_document_typesWhereInput = {
   id?: Prisma.UuidFilter<"transport_document_types"> | string
   name?: Prisma.StringFilter<"transport_document_types"> | string
   entity?: Prisma.StringFilter<"transport_document_types"> | string
-  active?: Prisma.BoolFilter<"transport_document_types"> | boolean
-  created_at?: Prisma.DateTimeFilter<"transport_document_types"> | Date | string
-  documents_vehicle?: Prisma.Documents_vehicleListRelationFilter
+  active?: Prisma.BoolNullableFilter<"transport_document_types"> | boolean | null
+  created_at?: Prisma.DateTimeNullableFilter<"transport_document_types"> | Date | string | null
   documents_driver?: Prisma.Documents_driverListRelationFilter
+  documents_vehicle?: Prisma.Documents_vehicleListRelationFilter
 }
 
 export type transport_document_typesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   entity?: Prisma.SortOrder
-  active?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  documents_vehicle?: Prisma.documents_vehicleOrderByRelationAggregateInput
+  active?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   documents_driver?: Prisma.documents_driverOrderByRelationAggregateInput
+  documents_vehicle?: Prisma.documents_vehicleOrderByRelationAggregateInput
 }
 
 export type transport_document_typesWhereUniqueInput = Prisma.AtLeast<{
@@ -203,18 +203,18 @@ export type transport_document_typesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.transport_document_typesWhereInput | Prisma.transport_document_typesWhereInput[]
   name?: Prisma.StringFilter<"transport_document_types"> | string
   entity?: Prisma.StringFilter<"transport_document_types"> | string
-  active?: Prisma.BoolFilter<"transport_document_types"> | boolean
-  created_at?: Prisma.DateTimeFilter<"transport_document_types"> | Date | string
-  documents_vehicle?: Prisma.Documents_vehicleListRelationFilter
+  active?: Prisma.BoolNullableFilter<"transport_document_types"> | boolean | null
+  created_at?: Prisma.DateTimeNullableFilter<"transport_document_types"> | Date | string | null
   documents_driver?: Prisma.Documents_driverListRelationFilter
+  documents_vehicle?: Prisma.Documents_vehicleListRelationFilter
 }, "id">
 
 export type transport_document_typesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   entity?: Prisma.SortOrder
-  active?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
+  active?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.transport_document_typesCountOrderByAggregateInput
   _max?: Prisma.transport_document_typesMaxOrderByAggregateInput
   _min?: Prisma.transport_document_typesMinOrderByAggregateInput
@@ -227,72 +227,72 @@ export type transport_document_typesScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"transport_document_types"> | string
   name?: Prisma.StringWithAggregatesFilter<"transport_document_types"> | string
   entity?: Prisma.StringWithAggregatesFilter<"transport_document_types"> | string
-  active?: Prisma.BoolWithAggregatesFilter<"transport_document_types"> | boolean
-  created_at?: Prisma.DateTimeWithAggregatesFilter<"transport_document_types"> | Date | string
+  active?: Prisma.BoolNullableWithAggregatesFilter<"transport_document_types"> | boolean | null
+  created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"transport_document_types"> | Date | string | null
 }
 
 export type transport_document_typesCreateInput = {
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
-  documents_vehicle?: Prisma.documents_vehicleCreateNestedManyWithoutTransport_document_typesInput
+  active?: boolean | null
+  created_at?: Date | string | null
   documents_driver?: Prisma.documents_driverCreateNestedManyWithoutTransport_document_typesInput
+  documents_vehicle?: Prisma.documents_vehicleCreateNestedManyWithoutTransport_document_typesInput
 }
 
 export type transport_document_typesUncheckedCreateInput = {
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
-  documents_vehicle?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutTransport_document_typesInput
+  active?: boolean | null
+  created_at?: Date | string | null
   documents_driver?: Prisma.documents_driverUncheckedCreateNestedManyWithoutTransport_document_typesInput
+  documents_vehicle?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutTransport_document_typesInput
 }
 
 export type transport_document_typesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents_vehicle?: Prisma.documents_vehicleUpdateManyWithoutTransport_document_typesNestedInput
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents_driver?: Prisma.documents_driverUpdateManyWithoutTransport_document_typesNestedInput
+  documents_vehicle?: Prisma.documents_vehicleUpdateManyWithoutTransport_document_typesNestedInput
 }
 
 export type transport_document_typesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  documents_vehicle?: Prisma.documents_vehicleUncheckedUpdateManyWithoutTransport_document_typesNestedInput
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents_driver?: Prisma.documents_driverUncheckedUpdateManyWithoutTransport_document_typesNestedInput
+  documents_vehicle?: Prisma.documents_vehicleUncheckedUpdateManyWithoutTransport_document_typesNestedInput
 }
 
 export type transport_document_typesCreateManyInput = {
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
+  active?: boolean | null
+  created_at?: Date | string | null
 }
 
 export type transport_document_typesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type transport_document_typesUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type transport_document_typesCountOrderByAggregateInput = {
@@ -356,8 +356,8 @@ export type transport_document_typesCreateWithoutDocuments_vehicleInput = {
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
+  active?: boolean | null
+  created_at?: Date | string | null
   documents_driver?: Prisma.documents_driverCreateNestedManyWithoutTransport_document_typesInput
 }
 
@@ -365,8 +365,8 @@ export type transport_document_typesUncheckedCreateWithoutDocuments_vehicleInput
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
+  active?: boolean | null
+  created_at?: Date | string | null
   documents_driver?: Prisma.documents_driverUncheckedCreateNestedManyWithoutTransport_document_typesInput
 }
 
@@ -390,8 +390,8 @@ export type transport_document_typesUpdateWithoutDocuments_vehicleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents_driver?: Prisma.documents_driverUpdateManyWithoutTransport_document_typesNestedInput
 }
 
@@ -399,8 +399,8 @@ export type transport_document_typesUncheckedUpdateWithoutDocuments_vehicleInput
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents_driver?: Prisma.documents_driverUncheckedUpdateManyWithoutTransport_document_typesNestedInput
 }
 
@@ -408,8 +408,8 @@ export type transport_document_typesCreateWithoutDocuments_driverInput = {
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
+  active?: boolean | null
+  created_at?: Date | string | null
   documents_vehicle?: Prisma.documents_vehicleCreateNestedManyWithoutTransport_document_typesInput
 }
 
@@ -417,8 +417,8 @@ export type transport_document_typesUncheckedCreateWithoutDocuments_driverInput 
   id?: string
   name: string
   entity: string
-  active?: boolean
-  created_at?: Date | string
+  active?: boolean | null
+  created_at?: Date | string | null
   documents_vehicle?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutTransport_document_typesInput
 }
 
@@ -442,8 +442,8 @@ export type transport_document_typesUpdateWithoutDocuments_driverInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents_vehicle?: Prisma.documents_vehicleUpdateManyWithoutTransport_document_typesNestedInput
 }
 
@@ -451,8 +451,8 @@ export type transport_document_typesUncheckedUpdateWithoutDocuments_driverInput 
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   entity?: Prisma.StringFieldUpdateOperationsInput | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   documents_vehicle?: Prisma.documents_vehicleUncheckedUpdateManyWithoutTransport_document_typesNestedInput
 }
 
@@ -462,13 +462,13 @@ export type transport_document_typesUncheckedUpdateWithoutDocuments_driverInput 
  */
 
 export type Transport_document_typesCountOutputType = {
-  documents_vehicle: number
   documents_driver: number
+  documents_vehicle: number
 }
 
 export type Transport_document_typesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  documents_vehicle?: boolean | Transport_document_typesCountOutputTypeCountDocuments_vehicleArgs
   documents_driver?: boolean | Transport_document_typesCountOutputTypeCountDocuments_driverArgs
+  documents_vehicle?: boolean | Transport_document_typesCountOutputTypeCountDocuments_vehicleArgs
 }
 
 /**
@@ -484,15 +484,15 @@ export type Transport_document_typesCountOutputTypeDefaultArgs<ExtArgs extends r
 /**
  * Transport_document_typesCountOutputType without action
  */
-export type Transport_document_typesCountOutputTypeCountDocuments_vehicleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.documents_vehicleWhereInput
+export type Transport_document_typesCountOutputTypeCountDocuments_driverArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.documents_driverWhereInput
 }
 
 /**
  * Transport_document_typesCountOutputType without action
  */
-export type Transport_document_typesCountOutputTypeCountDocuments_driverArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.documents_driverWhereInput
+export type Transport_document_typesCountOutputTypeCountDocuments_vehicleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.documents_vehicleWhereInput
 }
 
 
@@ -502,8 +502,8 @@ export type transport_document_typesSelect<ExtArgs extends runtime.Types.Extensi
   entity?: boolean
   active?: boolean
   created_at?: boolean
-  documents_vehicle?: boolean | Prisma.transport_document_types$documents_vehicleArgs<ExtArgs>
   documents_driver?: boolean | Prisma.transport_document_types$documents_driverArgs<ExtArgs>
+  documents_vehicle?: boolean | Prisma.transport_document_types$documents_vehicleArgs<ExtArgs>
   _count?: boolean | Prisma.Transport_document_typesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transport_document_types"]>
 
@@ -533,8 +533,8 @@ export type transport_document_typesSelectScalar = {
 
 export type transport_document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "entity" | "active" | "created_at", ExtArgs["result"]["transport_document_types"]>
 export type transport_document_typesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  documents_vehicle?: boolean | Prisma.transport_document_types$documents_vehicleArgs<ExtArgs>
   documents_driver?: boolean | Prisma.transport_document_types$documents_driverArgs<ExtArgs>
+  documents_vehicle?: boolean | Prisma.transport_document_types$documents_vehicleArgs<ExtArgs>
   _count?: boolean | Prisma.Transport_document_typesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type transport_document_typesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -543,15 +543,15 @@ export type transport_document_typesIncludeUpdateManyAndReturn<ExtArgs extends r
 export type $transport_document_typesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "transport_document_types"
   objects: {
-    documents_vehicle: Prisma.$documents_vehiclePayload<ExtArgs>[]
     documents_driver: Prisma.$documents_driverPayload<ExtArgs>[]
+    documents_vehicle: Prisma.$documents_vehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     entity: string
-    active: boolean
-    created_at: Date
+    active: boolean | null
+    created_at: Date | null
   }, ExtArgs["result"]["transport_document_types"]>
   composites: {}
 }
@@ -946,8 +946,8 @@ readonly fields: transport_document_typesFieldRefs;
  */
 export interface Prisma__transport_document_typesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  documents_vehicle<T extends Prisma.transport_document_types$documents_vehicleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transport_document_types$documents_vehicleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documents_vehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents_driver<T extends Prisma.transport_document_types$documents_driverArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transport_document_types$documents_driverArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documents_driverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documents_vehicle<T extends Prisma.transport_document_types$documents_vehicleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transport_document_types$documents_vehicleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documents_vehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1370,30 +1370,6 @@ export type transport_document_typesDeleteManyArgs<ExtArgs extends runtime.Types
 }
 
 /**
- * transport_document_types.documents_vehicle
- */
-export type transport_document_types$documents_vehicleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the documents_vehicle
-   */
-  select?: Prisma.documents_vehicleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the documents_vehicle
-   */
-  omit?: Prisma.documents_vehicleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.documents_vehicleInclude<ExtArgs> | null
-  where?: Prisma.documents_vehicleWhereInput
-  orderBy?: Prisma.documents_vehicleOrderByWithRelationInput | Prisma.documents_vehicleOrderByWithRelationInput[]
-  cursor?: Prisma.documents_vehicleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Documents_vehicleScalarFieldEnum | Prisma.Documents_vehicleScalarFieldEnum[]
-}
-
-/**
  * transport_document_types.documents_driver
  */
 export type transport_document_types$documents_driverArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1415,6 +1391,30 @@ export type transport_document_types$documents_driverArgs<ExtArgs extends runtim
   take?: number
   skip?: number
   distinct?: Prisma.Documents_driverScalarFieldEnum | Prisma.Documents_driverScalarFieldEnum[]
+}
+
+/**
+ * transport_document_types.documents_vehicle
+ */
+export type transport_document_types$documents_vehicleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the documents_vehicle
+   */
+  select?: Prisma.documents_vehicleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the documents_vehicle
+   */
+  omit?: Prisma.documents_vehicleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documents_vehicleInclude<ExtArgs> | null
+  where?: Prisma.documents_vehicleWhereInput
+  orderBy?: Prisma.documents_vehicleOrderByWithRelationInput | Prisma.documents_vehicleOrderByWithRelationInput[]
+  cursor?: Prisma.documents_vehicleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Documents_vehicleScalarFieldEnum | Prisma.Documents_vehicleScalarFieldEnum[]
 }
 
 /**

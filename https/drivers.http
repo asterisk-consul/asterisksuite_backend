@@ -1,7 +1,9 @@
 @baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMjhjNWE4Yy1mZWFhLTQ4NWUtYmMyYS05YzMwYjFkNjNiYmUiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjI0NDUxMywiZXhwIjoxNzcyMjQ1NDEzfQ.wKTRTsYpkyRQgylfLkCXh_cILw3EGNxPQ5R3b8ch08k
-@refreshToken = b9d51f87ad91a17055fd8990e943aa992bc93cb6e235a58422da61ca2908237aa462e9c60d5d81fd989359532f9b53fccfafd00b721e92c9f88e5ae9800bab79
-
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3Mjc0MzQxMywiZXhwIjoxNzcyNzQ0MzEzfQ.AHcU7A6284xvg78ff1yIvSNKI8piHcCXUgRses7HgsU
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@driverId = UUID_DRIVER
+@documentTypeLicense = e90d7345-dbe6-4eb6-8034-9980359729e8
+@documentTypeMedical = UUID_DOC_TYPE_MEDICAL
 
 ###
 # ==============================
@@ -12,34 +14,124 @@ Content-Type: application/json
 
 {
   "email": "admin@mail.com",
-  "password": "12345678"
+  "password": "123456"
 }
 
-
-### ============================================
-### Crear chofer
-### POST /transport/drivers
-### ============================================
+### ======================================================
+### 1️⃣ Crear driver SIN documentos
+### ======================================================
 
 POST {{baseUrl}}/transport/drivers
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "companyId": "b8c78e68-2d33-4927-b6cb-b78ecdca3d64",
-  "firstName": "Juan",
-  "lastName": "Pérez",
+  "company_id": "{{companyId}}",
+  "first_name": "Juan",
+  "last_name": "Pérez",
   "document": "30123456",
-  "phone": "3511234567",
-  "licenseNumber": "B1234567",
-  "licenseExpiration": "2027-12-31"
+  "phone": "3515551234"
 }
 
+### ======================================================
+### 2️⃣ Crear driver CON un documento
+### ======================================================
 
-### ============================================
-### Listar choferes activos por empresa
-### GET /transport/drivers?companyId=...
-### ============================================
+POST {{baseUrl}}/transport/drivers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
-GET {{baseUrl}}/transport/drivers?companyId=b8c78e68-2d33-4927-b6cb-b78ecdca3d64
+{
+  "company_id": "{{companyId}}",
+  "first_name": "Carlos",
+  "last_name": "Gómez",
+  "document": "28456789",
+  "phone": "3514448899",
+  "documents": [
+    {
+      "document_type_id": "{{documentTypeLicense}}",
+      "expiration_date": "2026-05-01"
+    }
+  ]
+}
+
+### ======================================================
+### 3️⃣ Crear driver CON múltiples documentos
+### ======================================================
+
+POST {{baseUrl}}/transport/drivers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "first_name": "Miguel",
+  "last_name": "Fernandez",
+  "document": "30999888",
+  "phone": "3516667777",
+  "documents": [
+    {
+      "document_type_id": "{{documentTypeLicense}}",
+      "expiration_date": "2026-05-01"
+    },
+    {
+      "document_type_id": "{{documentTypeMedical}}",
+      "expiration_date": "2025-11-15"
+    }
+  ]
+}
+
+### ======================================================
+### 4️⃣ Obtener todos los drivers de una empresa
+### ======================================================
+
+GET {{baseUrl}}/transport/drivers?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+### ======================================================
+### 5️⃣ Obtener driver por ID
+### ======================================================
+
+GET {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+
+### ======================================================
+### 6️⃣ Actualizar datos del driver
+### ======================================================
+
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "phone": "3519990000"
+}
+
+### ======================================================
+### 7️⃣ Actualizar / agregar documentos del driver
+### (usa UPSERT por document_type_id)
+### ======================================================
+
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "documents": [
+    {
+      "document_type_id": "{{documentTypeLicense}}",
+      "expiration_date": "2027-01-01"
+    },
+    {
+      "document_type_id": "{{documentTypeMedical}}",
+      "expiration_date": "2026-10-10"
+    }
+  ]
+}
+
+### ======================================================
+### 8️⃣ Eliminar driver
+### ======================================================
+
+DELETE {{baseUrl}}/transport/drivers/{{driverId}}
 Authorization: Bearer {{accessToken}}

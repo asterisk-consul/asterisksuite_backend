@@ -152,7 +152,7 @@ export type Documents_driverGroupByOutputType = {
   driver_id: string
   document_type_id: string
   expiration_date: Date | null
-  created_at: Date
+  created_at: Date | null
   _count: Documents_driverCountAggregateOutputType | null
   _min: Documents_driverMinAggregateOutputType | null
   _max: Documents_driverMaxAggregateOutputType | null
@@ -181,7 +181,7 @@ export type documents_driverWhereInput = {
   driver_id?: Prisma.UuidFilter<"documents_driver"> | string
   document_type_id?: Prisma.UuidFilter<"documents_driver"> | string
   expiration_date?: Prisma.DateTimeNullableFilter<"documents_driver"> | Date | string | null
-  created_at?: Prisma.DateTimeFilter<"documents_driver"> | Date | string
+  created_at?: Prisma.DateTimeNullableFilter<"documents_driver"> | Date | string | null
   drivers?: Prisma.XOR<Prisma.DriversScalarRelationFilter, Prisma.driversWhereInput>
   transport_document_types?: Prisma.XOR<Prisma.Transport_document_typesScalarRelationFilter, Prisma.transport_document_typesWhereInput>
 }
@@ -191,7 +191,7 @@ export type documents_driverOrderByWithRelationInput = {
   driver_id?: Prisma.SortOrder
   document_type_id?: Prisma.SortOrder
   expiration_date?: Prisma.SortOrderInput | Prisma.SortOrder
-  created_at?: Prisma.SortOrder
+  created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   drivers?: Prisma.driversOrderByWithRelationInput
   transport_document_types?: Prisma.transport_document_typesOrderByWithRelationInput
 }
@@ -205,7 +205,7 @@ export type documents_driverWhereUniqueInput = Prisma.AtLeast<{
   driver_id?: Prisma.UuidFilter<"documents_driver"> | string
   document_type_id?: Prisma.UuidFilter<"documents_driver"> | string
   expiration_date?: Prisma.DateTimeNullableFilter<"documents_driver"> | Date | string | null
-  created_at?: Prisma.DateTimeFilter<"documents_driver"> | Date | string
+  created_at?: Prisma.DateTimeNullableFilter<"documents_driver"> | Date | string | null
   drivers?: Prisma.XOR<Prisma.DriversScalarRelationFilter, Prisma.driversWhereInput>
   transport_document_types?: Prisma.XOR<Prisma.Transport_document_typesScalarRelationFilter, Prisma.transport_document_typesWhereInput>
 }, "id" | "driver_id_document_type_id">
@@ -215,7 +215,7 @@ export type documents_driverOrderByWithAggregationInput = {
   driver_id?: Prisma.SortOrder
   document_type_id?: Prisma.SortOrder
   expiration_date?: Prisma.SortOrderInput | Prisma.SortOrder
-  created_at?: Prisma.SortOrder
+  created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.documents_driverCountOrderByAggregateInput
   _max?: Prisma.documents_driverMaxOrderByAggregateInput
   _min?: Prisma.documents_driverMinOrderByAggregateInput
@@ -229,13 +229,13 @@ export type documents_driverScalarWhereWithAggregatesInput = {
   driver_id?: Prisma.UuidWithAggregatesFilter<"documents_driver"> | string
   document_type_id?: Prisma.UuidWithAggregatesFilter<"documents_driver"> | string
   expiration_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents_driver"> | Date | string | null
-  created_at?: Prisma.DateTimeWithAggregatesFilter<"documents_driver"> | Date | string
+  created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents_driver"> | Date | string | null
 }
 
 export type documents_driverCreateInput = {
   id?: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
   drivers: Prisma.driversCreateNestedOneWithoutDriverDocumentsInput
   transport_document_types: Prisma.transport_document_typesCreateNestedOneWithoutDocuments_driverInput
 }
@@ -245,13 +245,13 @@ export type documents_driverUncheckedCreateInput = {
   driver_id: string
   document_type_id: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
 }
 
 export type documents_driverUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   drivers?: Prisma.driversUpdateOneRequiredWithoutDriverDocumentsNestedInput
   transport_document_types?: Prisma.transport_document_typesUpdateOneRequiredWithoutDocuments_driverNestedInput
 }
@@ -261,7 +261,7 @@ export type documents_driverUncheckedUpdateInput = {
   driver_id?: Prisma.StringFieldUpdateOperationsInput | string
   document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type documents_driverCreateManyInput = {
@@ -269,13 +269,13 @@ export type documents_driverCreateManyInput = {
   driver_id: string
   document_type_id: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
 }
 
 export type documents_driverUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type documents_driverUncheckedUpdateManyInput = {
@@ -283,7 +283,7 @@ export type documents_driverUncheckedUpdateManyInput = {
   driver_id?: Prisma.StringFieldUpdateOperationsInput | string
   document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type Documents_driverListRelationFilter = {
@@ -412,7 +412,7 @@ export type documents_driverUncheckedUpdateManyWithoutTransport_document_typesNe
 export type documents_driverCreateWithoutDriversInput = {
   id?: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
   transport_document_types: Prisma.transport_document_typesCreateNestedOneWithoutDocuments_driverInput
 }
 
@@ -420,7 +420,7 @@ export type documents_driverUncheckedCreateWithoutDriversInput = {
   id?: string
   document_type_id: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
 }
 
 export type documents_driverCreateOrConnectWithoutDriversInput = {
@@ -457,13 +457,13 @@ export type documents_driverScalarWhereInput = {
   driver_id?: Prisma.UuidFilter<"documents_driver"> | string
   document_type_id?: Prisma.UuidFilter<"documents_driver"> | string
   expiration_date?: Prisma.DateTimeNullableFilter<"documents_driver"> | Date | string | null
-  created_at?: Prisma.DateTimeFilter<"documents_driver"> | Date | string
+  created_at?: Prisma.DateTimeNullableFilter<"documents_driver"> | Date | string | null
 }
 
 export type documents_driverCreateWithoutTransport_document_typesInput = {
   id?: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
   drivers: Prisma.driversCreateNestedOneWithoutDriverDocumentsInput
 }
 
@@ -471,7 +471,7 @@ export type documents_driverUncheckedCreateWithoutTransport_document_typesInput 
   id?: string
   driver_id: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
 }
 
 export type documents_driverCreateOrConnectWithoutTransport_document_typesInput = {
@@ -504,13 +504,13 @@ export type documents_driverCreateManyDriversInput = {
   id?: string
   document_type_id: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
 }
 
 export type documents_driverUpdateWithoutDriversInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   transport_document_types?: Prisma.transport_document_typesUpdateOneRequiredWithoutDocuments_driverNestedInput
 }
 
@@ -518,27 +518,27 @@ export type documents_driverUncheckedUpdateWithoutDriversInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type documents_driverUncheckedUpdateManyWithoutDriversInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type documents_driverCreateManyTransport_document_typesInput = {
   id?: string
   driver_id: string
   expiration_date?: Date | string | null
-  created_at?: Date | string
+  created_at?: Date | string | null
 }
 
 export type documents_driverUpdateWithoutTransport_document_typesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   drivers?: Prisma.driversUpdateOneRequiredWithoutDriverDocumentsNestedInput
 }
 
@@ -546,14 +546,14 @@ export type documents_driverUncheckedUpdateWithoutTransport_document_typesInput 
   id?: Prisma.StringFieldUpdateOperationsInput | string
   driver_id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type documents_driverUncheckedUpdateManyWithoutTransport_document_typesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   driver_id?: Prisma.StringFieldUpdateOperationsInput | string
   expiration_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -621,7 +621,7 @@ export type $documents_driverPayload<ExtArgs extends runtime.Types.Extensions.In
     driver_id: string
     document_type_id: string
     expiration_date: Date | null
-    created_at: Date
+    created_at: Date | null
   }, ExtArgs["result"]["documents_driver"]>
   composites: {}
 }

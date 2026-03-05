@@ -1,9 +1,10 @@
 import {
   Injectable,
-  BadRequestException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { Prisma } from '@/generated/prisma/client';
 import { CreateVehicleCombinationDto } from './dto/create-vehicle-combination.dto';
 import { UpdateVehicleCombinationDto } from './dto/update-vehicle-combination.dto';
 
@@ -11,108 +12,196 @@ import { UpdateVehicleCombinationDto } from './dto/update-vehicle-combination.dt
 export class VehicleCombinationsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateVehicleCombinationDto) {
-    return this.prisma.$transaction(async (tx) => {
-      // 1️⃣ Validar tractor
-      const tractor = await tx.vehicles.findUnique({
-        where: { id: dto.tractorId },
-      });
+  // --------------------------------------------------
+  // VALIDAR CONFLICTOS ACTIVOS
+  // --------------------------------------------------
 
-      if (!tractor || tractor.company_id !== dto.companyId) {
-        throw new BadRequestException('Tractor inválido');
-      }
+  private async validateActiveConflicts(dto: CreateVehicleCombinationDto) {
+    const conditions: Prisma.vehicle_combinationsWhereInput[] = [
+      { tractor_id: dto.tractor_id },
+    ];
 
-      // 2️⃣ Validar trailer si existe
-      if (dto.trailerId) {
-        const trailer = await tx.vehicles.findUnique({
-          where: { id: dto.trailerId },
-        });
+    if (dto.trailer_id) {
+      conditions.push({ trailer_id: dto.trailer_id });
+    }
 
-        if (!trailer || trailer.company_id !== dto.companyId) {
-          throw new BadRequestException('Trailer inválido');
-        }
-      }
+    if (dto.driver_id) {
+      conditions.push({ driver_id: dto.driver_id });
+    }
 
-      // 3️⃣ Verificar que no exista combinación activa del mismo tractor
-      const existingActive = await tx.vehicle_combinations.findFirst({
-        where: {
-          tractor_id: dto.tractorId,
-          valid_until: null,
-        },
-      });
-
-      if (existingActive) {
-        throw new BadRequestException(
-          'El tractor ya tiene una combinación activa',
-        );
-      }
-
-      return tx.vehicle_combinations.create({
-        data: {
-          company_id: dto.companyId,
-          tractor_id: dto.tractorId,
-          trailer_id: dto.trailerId,
-          valid_from: new Date(dto.validFrom),
-          valid_until: dto.validUntil ? new Date(dto.validUntil) : null,
-          created_by: dto.createdBy,
-        },
-        include: {
-          tractor: true,
-          trailer: true,
-        },
-      });
+    const conflict = await this.prisma.vehicle_combinations.findFirst({
+      where: {
+        company_id: dto.company_id,
+        valid_until: null,
+        OR: conditions,
+      },
     });
+
+    if (conflict) {
+      throw new BadRequestException(
+        'El tractor, trailer o driver ya están en otra combinación activa',
+      );
+    }
   }
 
-  async findAll(companyId: string) {
-    return this.prisma.vehicle_combinations.findMany({
-      where: { company_id: companyId },
+  // --------------------------------------------------
+  // CREATE
+  // --------------------------------------------------
+
+  async create(dto: CreateVehicleCombinationDto, user_id?: string) {
+    await this.validateActiveConflicts(dto);
+
+    return this.prisma.vehicle_combinations.create({
+      data: {
+        company_id: dto.company_id,
+        tractor_id: dto.tractor_id,
+        trailer_id: dto.trailer_id,
+        driver_id: dto.driver_id,
+        unit_number: dto.unit_number,
+        valid_from: new Date(dto.valid_from),
+        valid_until: dto.valid_until ? new Date(dto.valid_until) : null,
+        created_by: user_id,
+      },
       include: {
         tractor: true,
         trailer: true,
+        drivers: true,
       },
-      orderBy: { valid_from: 'desc' },
     });
   }
 
+  // --------------------------------------------------
+  // LISTAR TODAS
+  // --------------------------------------------------
+
+  async findAll(company_id: string) {
+    return this.prisma.vehicle_combinations.findMany({
+      where: { company_id },
+      include: {
+        tractor: true,
+        trailer: true,
+        drivers: true,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+  }
+
+  // --------------------------------------------------
+  // LISTAR ACTIVAS
+  // --------------------------------------------------
+
+  async findActive(company_id: string) {
+    return this.prisma.vehicle_combinations.findMany({
+      where: {
+        company_id,
+        valid_until: null,
+      },
+      include: {
+        tractor: true,
+        trailer: true,
+        drivers: true,
+      },
+    });
+  }
+
+  // --------------------------------------------------
+  // BUSCAR UNA
+  // --------------------------------------------------
+
   async findOne(id: string) {
-    const combo = await this.prisma.vehicle_combinations.findUnique({
+    const combination = await this.prisma.vehicle_combinations.findUnique({
       where: { id },
       include: {
         tractor: true,
         trailer: true,
+        drivers: true,
         trips: true,
       },
     });
 
-    if (!combo) {
-      throw new NotFoundException('Combinación no encontrada');
+    if (!combination) {
+      throw new NotFoundException('Vehicle combination not found');
     }
 
-    return combo;
+    return combination;
   }
 
-  async update(id: string, dto: UpdateVehicleCombinationDto) {
-    const exists = await this.prisma.vehicle_combinations.findUnique({
-      where: { id },
-    });
+  // --------------------------------------------------
+  // FINALIZAR COMBINACION
+  // --------------------------------------------------
 
-    if (!exists) {
-      throw new NotFoundException('Combinación no encontrada');
+  async finishCombination(id: string) {
+    const combination = await this.findOne(id);
+
+    if (combination.valid_until) {
+      throw new BadRequestException('La combinación ya está finalizada');
     }
 
     return this.prisma.vehicle_combinations.update({
       where: { id },
       data: {
-        valid_until: dto.validUntil ? new Date(dto.validUntil) : null,
+        valid_until: new Date(),
       },
     });
   }
 
-  async close(id: string) {
+  // --------------------------------------------------
+  // UPDATE
+  // --------------------------------------------------
+
+  async update(id: string, dto: UpdateVehicleCombinationDto) {
+    await this.findOne(id);
+
     return this.prisma.vehicle_combinations.update({
       where: { id },
-      data: { valid_until: new Date() },
+      data: {
+        unit_number: dto.unit_number,
+        valid_from: dto.valid_from ? new Date(dto.valid_from) : undefined,
+        valid_until: dto.valid_until ? new Date(dto.valid_until) : null,
+      },
+      include: {
+        tractor: true,
+        trailer: true,
+        drivers: true,
+      },
+    });
+  }
+
+  // --------------------------------------------------
+  // HISTORIAL POR VEHICULO
+  // --------------------------------------------------
+
+  async findByVehicle(vehicle_id: string) {
+    return this.prisma.vehicle_combinations.findMany({
+      where: {
+        OR: [{ tractor_id: vehicle_id }, { trailer_id: vehicle_id }],
+      },
+      include: {
+        tractor: true,
+        trailer: true,
+        drivers: true,
+      },
+      orderBy: {
+        valid_from: 'desc',
+      },
+    });
+  }
+
+  // --------------------------------------------------
+  // SOFT DELETE
+  // --------------------------------------------------
+
+  async remove(id: string, user_id?: string) {
+    await this.findOne(id);
+
+    return this.prisma.vehicle_combinations.update({
+      where: { id },
+      data: {
+        deleted_at: new Date(),
+        deleted_by: user_id,
+      },
     });
   }
 }

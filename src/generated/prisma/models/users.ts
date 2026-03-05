@@ -208,16 +208,16 @@ export type usersWhereInput = {
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   cargo_transfers?: Prisma.Cargo_transfersListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
+  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   files?: Prisma.FilesListRelationFilter
   pallets?: Prisma.PalletsListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
+  refreshTokens?: Prisma.Refresh_tokensListRelationFilter
   trip_temperature_logs?: Prisma.Trip_temperature_logsListRelationFilter
   trips?: Prisma.TripsListRelationFilter
   companies?: Prisma.XOR<Prisma.CompaniesNullableScalarRelationFilter, Prisma.companiesWhereInput> | null
-  warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
-  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   vehicle_combinations?: Prisma.Vehicle_combinationsListRelationFilter
-  refreshTokens?: Prisma.Refresh_tokensListRelationFilter
+  warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
 }
 
 export type usersOrderByWithRelationInput = {
@@ -231,16 +231,16 @@ export type usersOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   cargo_transfers?: Prisma.cargo_transfersOrderByRelationAggregateInput
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
+  dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
   files?: Prisma.filesOrderByRelationAggregateInput
   pallets?: Prisma.palletsOrderByRelationAggregateInput
   picking_orders?: Prisma.picking_ordersOrderByRelationAggregateInput
+  refreshTokens?: Prisma.refresh_tokensOrderByRelationAggregateInput
   trip_temperature_logs?: Prisma.trip_temperature_logsOrderByRelationAggregateInput
   trips?: Prisma.tripsOrderByRelationAggregateInput
   companies?: Prisma.companiesOrderByWithRelationInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
-  dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
   vehicle_combinations?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
-  refreshTokens?: Prisma.refresh_tokensOrderByRelationAggregateInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -257,16 +257,16 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   cargo_transfers?: Prisma.Cargo_transfersListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
+  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   files?: Prisma.FilesListRelationFilter
   pallets?: Prisma.PalletsListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
+  refreshTokens?: Prisma.Refresh_tokensListRelationFilter
   trip_temperature_logs?: Prisma.Trip_temperature_logsListRelationFilter
   trips?: Prisma.TripsListRelationFilter
   companies?: Prisma.XOR<Prisma.CompaniesNullableScalarRelationFilter, Prisma.companiesWhereInput> | null
-  warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
-  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   vehicle_combinations?: Prisma.Vehicle_combinationsListRelationFilter
-  refreshTokens?: Prisma.Refresh_tokensListRelationFilter
+  warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
 }, "id" | "email">
 
 export type usersOrderByWithAggregationInput = {
@@ -307,16 +307,16 @@ export type usersCreateInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -330,15 +330,15 @@ export type usersUncheckedCreateInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersUpdateInput = {
@@ -351,16 +351,16 @@ export type usersUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -374,15 +374,15 @@ export type usersUncheckedUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -695,16 +695,16 @@ export type usersCreateWithoutCargo_transfersInput = {
   active?: boolean | null
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutCargo_transfersInput = {
@@ -717,15 +717,15 @@ export type usersUncheckedCreateWithoutCargo_transfersInput = {
   active?: boolean | null
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutCargo_transfersInput = {
@@ -753,16 +753,16 @@ export type usersUpdateWithoutCargo_transfersInput = {
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutCargo_transfersInput = {
@@ -775,15 +775,15 @@ export type usersUncheckedUpdateWithoutCargo_transfersInput = {
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutCompaniesInput = {
@@ -796,15 +796,15 @@ export type usersCreateWithoutCompaniesInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutCompaniesInput = {
@@ -817,15 +817,15 @@ export type usersUncheckedCreateWithoutCompaniesInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutCompaniesInput = {
@@ -877,16 +877,16 @@ export type usersCreateWithoutDelivery_notesInput = {
   active?: boolean | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutDelivery_notesInput = {
@@ -899,15 +899,15 @@ export type usersUncheckedCreateWithoutDelivery_notesInput = {
   active?: boolean | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutDelivery_notesInput = {
@@ -935,16 +935,16 @@ export type usersUpdateWithoutDelivery_notesInput = {
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutDelivery_notesInput = {
@@ -957,15 +957,15 @@ export type usersUncheckedUpdateWithoutDelivery_notesInput = {
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutFilesInput = {
@@ -978,15 +978,15 @@ export type usersCreateWithoutFilesInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutFilesInput = {
@@ -1000,14 +1000,14 @@ export type usersUncheckedCreateWithoutFilesInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutFilesInput = {
@@ -1036,15 +1036,15 @@ export type usersUpdateWithoutFilesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutFilesInput = {
@@ -1058,14 +1058,14 @@ export type usersUncheckedUpdateWithoutFilesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutPalletsInput = {
@@ -1078,15 +1078,15 @@ export type usersCreateWithoutPalletsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutPalletsInput = {
@@ -1100,14 +1100,14 @@ export type usersUncheckedCreateWithoutPalletsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutPalletsInput = {
@@ -1136,15 +1136,15 @@ export type usersUpdateWithoutPalletsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutPalletsInput = {
@@ -1158,14 +1158,14 @@ export type usersUncheckedUpdateWithoutPalletsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutPicking_ordersInput = {
@@ -1178,15 +1178,15 @@ export type usersCreateWithoutPicking_ordersInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutPicking_ordersInput = {
@@ -1200,14 +1200,14 @@ export type usersUncheckedCreateWithoutPicking_ordersInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutPicking_ordersInput = {
@@ -1236,15 +1236,15 @@ export type usersUpdateWithoutPicking_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutPicking_ordersInput = {
@@ -1258,14 +1258,14 @@ export type usersUncheckedUpdateWithoutPicking_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutTrip_temperature_logsInput = {
@@ -1278,15 +1278,15 @@ export type usersCreateWithoutTrip_temperature_logsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutTrip_temperature_logsInput = {
@@ -1300,14 +1300,14 @@ export type usersUncheckedCreateWithoutTrip_temperature_logsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
-  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutTrip_temperature_logsInput = {
@@ -1336,15 +1336,15 @@ export type usersUpdateWithoutTrip_temperature_logsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutTrip_temperature_logsInput = {
@@ -1358,14 +1358,14 @@ export type usersUncheckedUpdateWithoutTrip_temperature_logsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutDispatch_ordersInput = {
@@ -1381,12 +1381,12 @@ export type usersCreateWithoutDispatch_ordersInput = {
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutDispatch_ordersInput = {
@@ -1403,11 +1403,11 @@ export type usersUncheckedCreateWithoutDispatch_ordersInput = {
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutDispatch_ordersInput = {
@@ -1439,12 +1439,12 @@ export type usersUpdateWithoutDispatch_ordersInput = {
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutDispatch_ordersInput = {
@@ -1461,11 +1461,11 @@ export type usersUncheckedUpdateWithoutDispatch_ordersInput = {
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutTripsInput = {
@@ -1478,15 +1478,15 @@ export type usersCreateWithoutTripsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutTripsInput = {
@@ -1500,14 +1500,14 @@ export type usersUncheckedCreateWithoutTripsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutTripsInput = {
@@ -1536,15 +1536,15 @@ export type usersUpdateWithoutTripsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutTripsInput = {
@@ -1558,14 +1558,14 @@ export type usersUncheckedUpdateWithoutTripsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutVehicle_combinationsInput = {
@@ -1578,15 +1578,15 @@ export type usersCreateWithoutVehicle_combinationsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutVehicle_combinationsInput = {
@@ -1600,14 +1600,14 @@ export type usersUncheckedCreateWithoutVehicle_combinationsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutVehicle_combinationsInput = {
@@ -1636,15 +1636,15 @@ export type usersUpdateWithoutVehicle_combinationsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutVehicle_combinationsInput = {
@@ -1658,14 +1658,14 @@ export type usersUncheckedUpdateWithoutVehicle_combinationsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutWarehouse_stock_movementsInput = {
@@ -1678,15 +1678,15 @@ export type usersCreateWithoutWarehouse_stock_movementsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutWarehouse_stock_movementsInput = {
@@ -1700,14 +1700,14 @@ export type usersUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutWarehouse_stock_movementsInput = {
@@ -1736,15 +1736,15 @@ export type usersUpdateWithoutWarehouse_stock_movementsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
@@ -1758,14 +1758,14 @@ export type usersUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutRefreshTokensInput = {
@@ -1778,15 +1778,15 @@ export type usersCreateWithoutRefreshTokensInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
   companies?: Prisma.companiesCreateNestedOneWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutRefreshTokensInput = {
@@ -1800,14 +1800,14 @@ export type usersUncheckedCreateWithoutRefreshTokensInput = {
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutRefreshTokensInput = {
@@ -1836,15 +1836,15 @@ export type usersUpdateWithoutRefreshTokensInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutRefreshTokensInput = {
@@ -1858,14 +1858,14 @@ export type usersUncheckedUpdateWithoutRefreshTokensInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateManyCompaniesInput = {
@@ -1888,15 +1888,15 @@ export type usersUpdateWithoutCompaniesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutCompaniesInput = {
@@ -1909,15 +1909,15 @@ export type usersUncheckedUpdateWithoutCompaniesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateManyWithoutCompaniesInput = {
@@ -1938,29 +1938,29 @@ export type usersUncheckedUpdateManyWithoutCompaniesInput = {
 export type UsersCountOutputType = {
   cargo_transfers: number
   delivery_notes: number
+  dispatch_orders: number
   files: number
   pallets: number
   picking_orders: number
+  refreshTokens: number
   trip_temperature_logs: number
   trips: number
-  warehouse_stock_movements: number
-  dispatch_orders: number
   vehicle_combinations: number
-  refreshTokens: number
+  warehouse_stock_movements: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfers?: boolean | UsersCountOutputTypeCountCargo_transfersArgs
   delivery_notes?: boolean | UsersCountOutputTypeCountDelivery_notesArgs
+  dispatch_orders?: boolean | UsersCountOutputTypeCountDispatch_ordersArgs
   files?: boolean | UsersCountOutputTypeCountFilesArgs
   pallets?: boolean | UsersCountOutputTypeCountPalletsArgs
   picking_orders?: boolean | UsersCountOutputTypeCountPicking_ordersArgs
+  refreshTokens?: boolean | UsersCountOutputTypeCountRefreshTokensArgs
   trip_temperature_logs?: boolean | UsersCountOutputTypeCountTrip_temperature_logsArgs
   trips?: boolean | UsersCountOutputTypeCountTripsArgs
-  warehouse_stock_movements?: boolean | UsersCountOutputTypeCountWarehouse_stock_movementsArgs
-  dispatch_orders?: boolean | UsersCountOutputTypeCountDispatch_ordersArgs
   vehicle_combinations?: boolean | UsersCountOutputTypeCountVehicle_combinationsArgs
-  refreshTokens?: boolean | UsersCountOutputTypeCountRefreshTokensArgs
+  warehouse_stock_movements?: boolean | UsersCountOutputTypeCountWarehouse_stock_movementsArgs
 }
 
 /**
@@ -1990,6 +1990,13 @@ export type UsersCountOutputTypeCountDelivery_notesArgs<ExtArgs extends runtime.
 /**
  * UsersCountOutputType without action
  */
+export type UsersCountOutputTypeCountDispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.dispatch_ordersWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
 export type UsersCountOutputTypeCountFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.filesWhereInput
 }
@@ -2011,6 +2018,13 @@ export type UsersCountOutputTypeCountPicking_ordersArgs<ExtArgs extends runtime.
 /**
  * UsersCountOutputType without action
  */
+export type UsersCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.refresh_tokensWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
 export type UsersCountOutputTypeCountTrip_temperature_logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.trip_temperature_logsWhereInput
 }
@@ -2025,20 +2039,6 @@ export type UsersCountOutputTypeCountTripsArgs<ExtArgs extends runtime.Types.Ext
 /**
  * UsersCountOutputType without action
  */
-export type UsersCountOutputTypeCountWarehouse_stock_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.warehouse_stock_movementsWhereInput
-}
-
-/**
- * UsersCountOutputType without action
- */
-export type UsersCountOutputTypeCountDispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.dispatch_ordersWhereInput
-}
-
-/**
- * UsersCountOutputType without action
- */
 export type UsersCountOutputTypeCountVehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.vehicle_combinationsWhereInput
 }
@@ -2046,8 +2046,8 @@ export type UsersCountOutputTypeCountVehicle_combinationsArgs<ExtArgs extends ru
 /**
  * UsersCountOutputType without action
  */
-export type UsersCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.refresh_tokensWhereInput
+export type UsersCountOutputTypeCountWarehouse_stock_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.warehouse_stock_movementsWhereInput
 }
 
 
@@ -2062,16 +2062,16 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   created_at?: boolean
   cargo_transfers?: boolean | Prisma.users$cargo_transfersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.users$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.users$dispatch_ordersArgs<ExtArgs>
   files?: boolean | Prisma.users$filesArgs<ExtArgs>
   pallets?: boolean | Prisma.users$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.users$picking_ordersArgs<ExtArgs>
+  refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
   trip_temperature_logs?: boolean | Prisma.users$trip_temperature_logsArgs<ExtArgs>
   trips?: boolean | Prisma.users$tripsArgs<ExtArgs>
   companies?: boolean | Prisma.users$companiesArgs<ExtArgs>
-  warehouse_stock_movements?: boolean | Prisma.users$warehouse_stock_movementsArgs<ExtArgs>
-  dispatch_orders?: boolean | Prisma.users$dispatch_ordersArgs<ExtArgs>
   vehicle_combinations?: boolean | Prisma.users$vehicle_combinationsArgs<ExtArgs>
-  refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
+  warehouse_stock_movements?: boolean | Prisma.users$warehouse_stock_movementsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -2114,16 +2114,16 @@ export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfers?: boolean | Prisma.users$cargo_transfersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.users$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.users$dispatch_ordersArgs<ExtArgs>
   files?: boolean | Prisma.users$filesArgs<ExtArgs>
   pallets?: boolean | Prisma.users$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.users$picking_ordersArgs<ExtArgs>
+  refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
   trip_temperature_logs?: boolean | Prisma.users$trip_temperature_logsArgs<ExtArgs>
   trips?: boolean | Prisma.users$tripsArgs<ExtArgs>
   companies?: boolean | Prisma.users$companiesArgs<ExtArgs>
-  warehouse_stock_movements?: boolean | Prisma.users$warehouse_stock_movementsArgs<ExtArgs>
-  dispatch_orders?: boolean | Prisma.users$dispatch_ordersArgs<ExtArgs>
   vehicle_combinations?: boolean | Prisma.users$vehicle_combinationsArgs<ExtArgs>
-  refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
+  warehouse_stock_movements?: boolean | Prisma.users$warehouse_stock_movementsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2138,16 +2138,16 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     cargo_transfers: Prisma.$cargo_transfersPayload<ExtArgs>[]
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs>[]
+    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
     files: Prisma.$filesPayload<ExtArgs>[]
     pallets: Prisma.$palletsPayload<ExtArgs>[]
     picking_orders: Prisma.$picking_ordersPayload<ExtArgs>[]
+    refreshTokens: Prisma.$refresh_tokensPayload<ExtArgs>[]
     trip_temperature_logs: Prisma.$trip_temperature_logsPayload<ExtArgs>[]
     trips: Prisma.$tripsPayload<ExtArgs>[]
     companies: Prisma.$companiesPayload<ExtArgs> | null
-    warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
-    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
     vehicle_combinations: Prisma.$vehicle_combinationsPayload<ExtArgs>[]
-    refreshTokens: Prisma.$refresh_tokensPayload<ExtArgs>[]
+    warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2554,16 +2554,16 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cargo_transfers<T extends Prisma.users$cargo_transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$cargo_transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cargo_transfersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   delivery_notes<T extends Prisma.users$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$delivery_notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispatch_orders<T extends Prisma.users$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   files<T extends Prisma.users$filesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$filesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$filesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pallets<T extends Prisma.users$palletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$palletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$palletsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   picking_orders<T extends Prisma.users$picking_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$picking_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  refreshTokens<T extends Prisma.users$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$refresh_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trip_temperature_logs<T extends Prisma.users$trip_temperature_logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$trip_temperature_logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_temperature_logsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trips<T extends Prisma.users$tripsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   companies<T extends Prisma.users$companiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$companiesArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  warehouse_stock_movements<T extends Prisma.users$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  dispatch_orders<T extends Prisma.users$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vehicle_combinations<T extends Prisma.users$vehicle_combinationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$vehicle_combinationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$vehicle_combinationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  refreshTokens<T extends Prisma.users$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$refresh_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  warehouse_stock_movements<T extends Prisma.users$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3045,6 +3045,30 @@ export type users$delivery_notesArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * users.dispatch_orders
+ */
+export type users$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
+  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
+  cursor?: Prisma.dispatch_ordersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
+}
+
+/**
  * users.files
  */
 export type users$filesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3117,6 +3141,30 @@ export type users$picking_ordersArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * users.refreshTokens
+ */
+export type users$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the refresh_tokens
+   */
+  select?: Prisma.refresh_tokensSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the refresh_tokens
+   */
+  omit?: Prisma.refresh_tokensOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.refresh_tokensInclude<ExtArgs> | null
+  where?: Prisma.refresh_tokensWhereInput
+  orderBy?: Prisma.refresh_tokensOrderByWithRelationInput | Prisma.refresh_tokensOrderByWithRelationInput[]
+  cursor?: Prisma.refresh_tokensWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Refresh_tokensScalarFieldEnum | Prisma.Refresh_tokensScalarFieldEnum[]
+}
+
+/**
  * users.trip_temperature_logs
  */
 export type users$trip_temperature_logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3184,54 +3232,6 @@ export type users$companiesArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * users.warehouse_stock_movements
- */
-export type users$warehouse_stock_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the warehouse_stock_movements
-   */
-  select?: Prisma.warehouse_stock_movementsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the warehouse_stock_movements
-   */
-  omit?: Prisma.warehouse_stock_movementsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.warehouse_stock_movementsInclude<ExtArgs> | null
-  where?: Prisma.warehouse_stock_movementsWhereInput
-  orderBy?: Prisma.warehouse_stock_movementsOrderByWithRelationInput | Prisma.warehouse_stock_movementsOrderByWithRelationInput[]
-  cursor?: Prisma.warehouse_stock_movementsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
-}
-
-/**
- * users.dispatch_orders
- */
-export type users$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the dispatch_orders
-   */
-  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the dispatch_orders
-   */
-  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
-  where?: Prisma.dispatch_ordersWhereInput
-  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
-  cursor?: Prisma.dispatch_ordersWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
-}
-
-/**
  * users.vehicle_combinations
  */
 export type users$vehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3256,27 +3256,27 @@ export type users$vehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * users.refreshTokens
+ * users.warehouse_stock_movements
  */
-export type users$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type users$warehouse_stock_movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the refresh_tokens
+   * Select specific fields to fetch from the warehouse_stock_movements
    */
-  select?: Prisma.refresh_tokensSelect<ExtArgs> | null
+  select?: Prisma.warehouse_stock_movementsSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the refresh_tokens
+   * Omit specific fields from the warehouse_stock_movements
    */
-  omit?: Prisma.refresh_tokensOmit<ExtArgs> | null
+  omit?: Prisma.warehouse_stock_movementsOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.refresh_tokensInclude<ExtArgs> | null
-  where?: Prisma.refresh_tokensWhereInput
-  orderBy?: Prisma.refresh_tokensOrderByWithRelationInput | Prisma.refresh_tokensOrderByWithRelationInput[]
-  cursor?: Prisma.refresh_tokensWhereUniqueInput
+  include?: Prisma.warehouse_stock_movementsInclude<ExtArgs> | null
+  where?: Prisma.warehouse_stock_movementsWhereInput
+  orderBy?: Prisma.warehouse_stock_movementsOrderByWithRelationInput | Prisma.warehouse_stock_movementsOrderByWithRelationInput[]
+  cursor?: Prisma.warehouse_stock_movementsWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.Refresh_tokensScalarFieldEnum | Prisma.Refresh_tokensScalarFieldEnum[]
+  distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
 }
 
 /**

@@ -1,0 +1,94 @@
+@baseUrl = http://localhost:3000/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3Mjc0NTU2MCwiZXhwIjoxNzcyNzQ2NDYwfQ.I36QRapw61pPjRqZJGM_Y1HvzorRvjSdX-ZojV3JP9U
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@rateId = a6e5b562-9187-436c-a159-151a8644902a
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+### ======================================================
+### 1️⃣ Crear transfer rate
+### ======================================================
+
+POST {{baseUrl}}/transfer-rates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "name": "Por bultos",
+  "rate_type": "INTERNAL",
+  "description": "bultos",
+  "active": true
+}
+
+### ======================================================
+### 2️⃣ Crear otro tipo de tarifa
+### ======================================================
+
+POST {{baseUrl}}/transfer-rates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "name": "Transferencia cliente",
+  "rate_type": "CLIENT",
+  "description": "Transferencia a cliente"
+}
+
+### ======================================================
+### 3️⃣ Obtener todas las tarifas de transferencia
+### ======================================================
+
+GET {{baseUrl}}/transfer-rates?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+### ======================================================
+### 4️⃣ Obtener una tarifa por ID
+### ======================================================
+
+GET {{baseUrl}}/transfer-rates/{{rateId}}
+Authorization: Bearer {{accessToken}}
+
+### ======================================================
+### 5️⃣ Actualizar tarifa
+### ======================================================
+
+PATCH {{baseUrl}}/transfer-rates/{{rateId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Transferencia entre depósitos",
+  "description": "Actualizado",
+  "active": true
+}
+
+### ======================================================
+### 6️⃣ Desactivar tarifa
+### ======================================================
+
+PATCH {{baseUrl}}/transfer-rates/{{rateId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "active": false
+}
+
+### ======================================================
+### 7️⃣ Eliminar tarifa
+### ======================================================
+
+DELETE {{baseUrl}}/transfer-rates/{{rateId}}
+Authorization: Bearer {{accessToken}}

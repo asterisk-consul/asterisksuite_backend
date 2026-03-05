@@ -415,7 +415,9 @@ export const ModelName = {
   refresh_tokens: 'refresh_tokens',
   transport_document_types: 'transport_document_types',
   documents_vehicle: 'documents_vehicle',
-  documents_driver: 'documents_driver'
+  documents_driver: 'documents_driver',
+  transfer_rates: 'transfer_rates',
+  trip_rates: 'trip_rates'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -431,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "trip_rates"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2803,6 +2805,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    transfer_rates: {
+      payload: Prisma.$transfer_ratesPayload<ExtArgs>
+      fields: Prisma.transfer_ratesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.transfer_ratesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.transfer_ratesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>
+        }
+        findFirst: {
+          args: Prisma.transfer_ratesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.transfer_ratesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>
+        }
+        findMany: {
+          args: Prisma.transfer_ratesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>[]
+        }
+        create: {
+          args: Prisma.transfer_ratesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>
+        }
+        createMany: {
+          args: Prisma.transfer_ratesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.transfer_ratesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>[]
+        }
+        delete: {
+          args: Prisma.transfer_ratesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>
+        }
+        update: {
+          args: Prisma.transfer_ratesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>
+        }
+        deleteMany: {
+          args: Prisma.transfer_ratesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.transfer_ratesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.transfer_ratesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>[]
+        }
+        upsert: {
+          args: Prisma.transfer_ratesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transfer_ratesPayload>
+        }
+        aggregate: {
+          args: Prisma.Transfer_ratesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransfer_rates>
+        }
+        groupBy: {
+          args: Prisma.transfer_ratesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Transfer_ratesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.transfer_ratesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Transfer_ratesCountAggregateOutputType> | number
+        }
+      }
+    }
+    trip_rates: {
+      payload: Prisma.$trip_ratesPayload<ExtArgs>
+      fields: Prisma.trip_ratesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.trip_ratesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.trip_ratesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+        }
+        findFirst: {
+          args: Prisma.trip_ratesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.trip_ratesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+        }
+        findMany: {
+          args: Prisma.trip_ratesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>[]
+        }
+        create: {
+          args: Prisma.trip_ratesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+        }
+        createMany: {
+          args: Prisma.trip_ratesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.trip_ratesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>[]
+        }
+        delete: {
+          args: Prisma.trip_ratesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+        }
+        update: {
+          args: Prisma.trip_ratesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+        }
+        deleteMany: {
+          args: Prisma.trip_ratesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.trip_ratesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.trip_ratesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>[]
+        }
+        upsert: {
+          args: Prisma.trip_ratesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+        }
+        aggregate: {
+          args: Prisma.Trip_ratesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTrip_rates>
+        }
+        groupBy: {
+          args: Prisma.trip_ratesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Trip_ratesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.trip_ratesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Trip_ratesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2916,8 +3066,6 @@ export const DriversScalarFieldEnum = {
   last_name: 'last_name',
   document: 'document',
   phone: 'phone',
-  license_number: 'license_number',
-  license_expiration: 'license_expiration',
   active: 'active',
   created_at: 'created_at'
 } as const
@@ -3105,7 +3253,6 @@ export const TripsScalarFieldEnum = {
   company_id: 'company_id',
   reference_number: 'reference_number',
   vehicle_combination_id: 'vehicle_combination_id',
-  driver_id: 'driver_id',
   origin_warehouse_id: 'origin_warehouse_id',
   destination_warehouse_id: 'destination_warehouse_id',
   origin_party_location_id: 'origin_party_location_id',
@@ -3119,7 +3266,8 @@ export const TripsScalarFieldEnum = {
   created_by: 'created_by',
   deleted_at: 'deleted_at',
   created_at: 'created_at',
-  dispatch_order_id: 'dispatch_order_id'
+  dispatch_order_id: 'dispatch_order_id',
+  kilometers: 'kilometers'
 } as const
 
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum]
@@ -3165,7 +3313,11 @@ export const Vehicle_combinationsScalarFieldEnum = {
   valid_from: 'valid_from',
   valid_until: 'valid_until',
   created_by: 'created_by',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  unit_number: 'unit_number',
+  driver_id: 'driver_id',
+  deleted_at: 'deleted_at',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Vehicle_combinationsScalarFieldEnum = (typeof Vehicle_combinationsScalarFieldEnum)[keyof typeof Vehicle_combinationsScalarFieldEnum]
@@ -3270,6 +3422,30 @@ export const Documents_driverScalarFieldEnum = {
 } as const
 
 export type Documents_driverScalarFieldEnum = (typeof Documents_driverScalarFieldEnum)[keyof typeof Documents_driverScalarFieldEnum]
+
+
+export const Transfer_ratesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  rate_type: 'rate_type',
+  description: 'description',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Transfer_ratesScalarFieldEnum = (typeof Transfer_ratesScalarFieldEnum)[keyof typeof Transfer_ratesScalarFieldEnum]
+
+
+export const Trip_ratesScalarFieldEnum = {
+  id: 'id',
+  trip_id: 'trip_id',
+  rate_id: 'rate_id',
+  value: 'value',
+  created_at: 'created_at'
+} as const
+
+export type Trip_ratesScalarFieldEnum = (typeof Trip_ratesScalarFieldEnum)[keyof typeof Trip_ratesScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3505,6 +3681,8 @@ export type GlobalOmitConfig = {
   transport_document_types?: Prisma.transport_document_typesOmit
   documents_vehicle?: Prisma.documents_vehicleOmit
   documents_driver?: Prisma.documents_driverOmit
+  transfer_rates?: Prisma.transfer_ratesOmit
+  trip_rates?: Prisma.trip_ratesOmit
 }
 
 /* Types for Logging */

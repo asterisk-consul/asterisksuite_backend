@@ -1,7 +1,6 @@
-import { IsOptional, IsDateString } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateVehicleCombinationDto } from './create-vehicle-combination.dto';
 
-export class UpdateVehicleCombinationDto {
-  @IsOptional()
-  @IsDateString()
-  validUntil?: string;
-}
+export class UpdateVehicleCombinationDto extends PartialType(
+  CreateVehicleCombinationDto,
+) {}

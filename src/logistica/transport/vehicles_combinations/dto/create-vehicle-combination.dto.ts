@@ -1,24 +1,28 @@
-import { IsUUID, IsOptional, IsDateString } from 'class-validator';
+import { IsUUID, IsOptional, IsDateString, IsString } from 'class-validator';
 
 export class CreateVehicleCombinationDto {
   @IsUUID()
-  companyId!: string;
+  company_id!: string;
 
   @IsUUID()
-  tractorId!: string;
+  tractor_id!: string;
 
   @IsOptional()
   @IsUUID()
-  trailerId?: string;
+  trailer_id?: string;
 
   @IsDateString()
-  validFrom!: string;
+  valid_from!: string;
 
   @IsOptional()
   @IsDateString()
-  validUntil?: string;
+  valid_until?: string;
 
   @IsOptional()
   @IsUUID()
-  createdBy?: string;
+  driver_id?: string;
+
+  @IsOptional()
+  @IsString()
+  unit_number?: string;
 }

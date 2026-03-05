@@ -1,55 +1,94 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
-import { AddTripCargoDto } from './dto/add-trip.dto';
+import { UpdateTripDto } from './dto/update-trip.dto';
+import { CreateTripRateDto } from './dto/create-trip-rate.dto';
+import { UpdateTripRateDto } from './dto/update-trip-rate.dto';
+
 @Injectable()
 export class TripsService {
   constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateTripDto, userId: string) {
+  async findAll(company_id: string) {
+    return this.prisma.trips.findMany({
+      where: { company_id },
+      include: {
+        vehicle_combination: true,
+        trip_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: string) {
+    const trip = await this.prisma.trips.findUnique({
+      where: { id },
+      include: {
+        trip_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
+      },
+    });
+
+    if (!trip) throw new NotFoundException('Trip not found');
+
+    return trip;
+  }
+
+  async create(dto: CreateTripDto) {
     return this.prisma.trips.create({
+      data: dto,
+    });
+  }
+
+  async update(id: string, dto: UpdateTripDto) {
+    await this.findOne(id);
+
+    return this.prisma.trips.update({
+      where: { id },
+      data: dto,
+    });
+  }
+
+  async remove(id: string) {
+    await this.findOne(id);
+
+    return this.prisma.trips.delete({
+      where: { id },
+    });
+  }
+
+  // ------------------------------
+  // TRIP RATES
+  // ------------------------------
+
+  async addRate(trip_id: string, dto: CreateTripRateDto) {
+    return this.prisma.trip_rates.create({
       data: {
-        company_id: dto.companyId,
-        vehicle_combination_id: dto.vehicleCombinationId,
-        driver_id: dto.driverId,
-        origin_warehouse_id: dto.originWarehouseId,
-        destination_warehouse_id: dto.destinationWarehouseId,
-        origin_location_id: dto.originLocationId,
-        destination_location_id: dto.destinationLocationId,
-        status: 'PLANNED',
-        notes: dto.notes,
-        created_by: userId,
+        trip_id,
+        rate_id: dto.rate_id,
+        value: dto.value,
       },
     });
   }
 
-  async start(id: string) {
-    return this.prisma.trips.update({
+  async updateRate(id: string, dto: UpdateTripRateDto) {
+    return this.prisma.trip_rates.update({
       where: { id },
       data: {
-        status: 'IN_PROGRESS',
-        departure_time: new Date(),
+        value: dto.value,
       },
     });
   }
 
-  async complete(id: string) {
-    return this.prisma.trips.update({
+  async removeRate(id: string) {
+    return this.prisma.trip_rates.delete({
       where: { id },
-      data: {
-        status: 'COMPLETED',
-        arrival_time: new Date(),
-      },
-    });
-  }
-  async addCargo(dto: AddTripCargoDto) {
-    return this.prisma.trip_cargo.create({
-      data: {
-        trip_id: dto.tripId,
-        pallet_id: dto.palletId,
-        delivery_note_id: dto.deliveryNoteId,
-        loaded_at: new Date(),
-      },
     });
   }
 }

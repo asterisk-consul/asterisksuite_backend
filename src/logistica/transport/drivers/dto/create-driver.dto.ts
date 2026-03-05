@@ -1,14 +1,22 @@
-import { IsUUID, IsString, IsOptional, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { DriverDocumentDto } from './driver-document.dto';
 
 export class CreateDriverDto {
-  @IsUUID()
-  companyId!: string;
+  @IsString()
+  company_id!: string;
 
   @IsString()
-  firstName!: string;
+  first_name!: string;
 
   @IsString()
-  lastName!: string;
+  last_name!: string;
 
   @IsOptional()
   @IsString()
@@ -19,10 +27,12 @@ export class CreateDriverDto {
   phone?: string;
 
   @IsOptional()
-  @IsString()
-  licenseNumber?: string;
+  @IsBoolean()
+  active?: boolean;
 
   @IsOptional()
-  @IsDateString()
-  licenseExpiration?: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DriverDocumentDto)
+  documents?: DriverDocumentDto[];
 }
