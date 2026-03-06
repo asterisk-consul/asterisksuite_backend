@@ -182,3 +182,38 @@ export type document_sequences = Prisma.document_sequencesModel
  * 
  */
 export type refresh_tokens = Prisma.refresh_tokensModel
+/**
+ * Model document_item_taxes
+ * 
+ */
+export type document_item_taxes = Prisma.document_item_taxesModel
+/**
+ * Model document_items
+ * 
+ */
+export type document_items = Prisma.document_itemsModel
+/**
+ * Model document_taxes
+ * 
+ */
+export type document_taxes = Prisma.document_taxesModel
+/**
+ * Model document_types
+ * 
+ */
+export type document_types = Prisma.document_typesModel
+/**
+ * Model documents
+ * 
+ */
+export type documents = Prisma.documentsModel
+/**
+ * Model product_taxes
+ * 
+ */
+export type product_taxes = Prisma.product_taxesModel
+/**
+ * Model taxes
+ * 
+ */
+export type taxes = Prisma.taxesModel

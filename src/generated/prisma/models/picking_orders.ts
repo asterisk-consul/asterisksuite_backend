@@ -214,11 +214,11 @@ export type picking_ordersWhereInput = {
   created_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   created_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
-  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   picking_items?: Prisma.Picking_itemsListRelationFilter
   companies?: Prisma.XOR<Prisma.CompaniesNullableScalarRelationFilter, Prisma.companiesWhereInput> | null
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   delivery_notes?: Prisma.XOR<Prisma.Delivery_notesNullableScalarRelationFilter, Prisma.delivery_notesWhereInput> | null
+  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   trips?: Prisma.XOR<Prisma.TripsNullableScalarRelationFilter, Prisma.tripsWhereInput> | null
   warehouses?: Prisma.XOR<Prisma.WarehousesScalarRelationFilter, Prisma.warehousesWhereInput>
   picking_results?: Prisma.Picking_resultsListRelationFilter
@@ -234,11 +234,11 @@ export type picking_ordersOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  dispatch_orders?: Prisma.dispatch_ordersOrderByWithRelationInput
   picking_items?: Prisma.picking_itemsOrderByRelationAggregateInput
   companies?: Prisma.companiesOrderByWithRelationInput
   users?: Prisma.usersOrderByWithRelationInput
   delivery_notes?: Prisma.delivery_notesOrderByWithRelationInput
+  dispatch_orders?: Prisma.dispatch_ordersOrderByWithRelationInput
   trips?: Prisma.tripsOrderByWithRelationInput
   warehouses?: Prisma.warehousesOrderByWithRelationInput
   picking_results?: Prisma.picking_resultsOrderByRelationAggregateInput
@@ -257,11 +257,11 @@ export type picking_ordersWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   created_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
-  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   picking_items?: Prisma.Picking_itemsListRelationFilter
   companies?: Prisma.XOR<Prisma.CompaniesNullableScalarRelationFilter, Prisma.companiesWhereInput> | null
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   delivery_notes?: Prisma.XOR<Prisma.Delivery_notesNullableScalarRelationFilter, Prisma.delivery_notesWhereInput> | null
+  dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
   trips?: Prisma.XOR<Prisma.TripsNullableScalarRelationFilter, Prisma.tripsWhereInput> | null
   warehouses?: Prisma.XOR<Prisma.WarehousesScalarRelationFilter, Prisma.warehousesWhereInput>
   picking_results?: Prisma.Picking_resultsListRelationFilter
@@ -301,11 +301,11 @@ export type picking_ordersCreateInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
@@ -329,11 +329,11 @@ export type picking_ordersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
@@ -718,10 +718,10 @@ export type picking_ordersCreateWithoutCompaniesInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
@@ -785,10 +785,10 @@ export type picking_ordersCreateWithoutDelivery_notesInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
@@ -837,10 +837,10 @@ export type picking_ordersCreateWithoutPicking_itemsInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
@@ -879,10 +879,10 @@ export type picking_ordersUpdateWithoutPicking_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
@@ -905,11 +905,11 @@ export type picking_ordersCreateWithoutPicking_resultsInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
 }
@@ -947,11 +947,11 @@ export type picking_ordersUpdateWithoutPicking_resultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
 }
@@ -1025,11 +1025,11 @@ export type picking_ordersCreateWithoutTripsInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
 }
@@ -1077,10 +1077,10 @@ export type picking_ordersCreateWithoutUsersInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
@@ -1129,11 +1129,11 @@ export type picking_ordersCreateWithoutWarehousesInput = {
   id?: string
   status: string
   created_at?: Date | string
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutPicking_ordersInput
   companies?: Prisma.companiesCreateNestedOneWithoutPicking_ordersInput
   users?: Prisma.usersCreateNestedOneWithoutPicking_ordersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutPicking_ordersInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutPicking_ordersInput
   trips?: Prisma.tripsCreateNestedOneWithoutPicking_ordersInput
   picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPicking_ordersInput
 }
@@ -1192,10 +1192,10 @@ export type picking_ordersUpdateWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
@@ -1240,10 +1240,10 @@ export type picking_ordersUpdateWithoutDelivery_notesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
@@ -1336,11 +1336,11 @@ export type picking_ordersUpdateWithoutTripsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
 }
@@ -1384,10 +1384,10 @@ export type picking_ordersUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
@@ -1432,11 +1432,11 @@ export type picking_ordersUpdateWithoutWarehousesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutPicking_ordersNestedInput
   companies?: Prisma.companiesUpdateOneWithoutPicking_ordersNestedInput
   users?: Prisma.usersUpdateOneWithoutPicking_ordersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateOneWithoutPicking_ordersNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput
   trips?: Prisma.tripsUpdateOneWithoutPicking_ordersNestedInput
   picking_results?: Prisma.picking_resultsUpdateManyWithoutPicking_ordersNestedInput
 }
@@ -1515,11 +1515,11 @@ export type picking_ordersSelect<ExtArgs extends runtime.Types.Extensions.Intern
   created_by?: boolean
   created_at?: boolean
   dispatch_order_id?: boolean
-  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   picking_items?: boolean | Prisma.picking_orders$picking_itemsArgs<ExtArgs>
   companies?: boolean | Prisma.picking_orders$companiesArgs<ExtArgs>
   users?: boolean | Prisma.picking_orders$usersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.picking_orders$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   trips?: boolean | Prisma.picking_orders$tripsArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
   picking_results?: boolean | Prisma.picking_orders$picking_resultsArgs<ExtArgs>
@@ -1536,10 +1536,10 @@ export type picking_ordersSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   created_by?: boolean
   created_at?: boolean
   dispatch_order_id?: boolean
-  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.picking_orders$companiesArgs<ExtArgs>
   users?: boolean | Prisma.picking_orders$usersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.picking_orders$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   trips?: boolean | Prisma.picking_orders$tripsArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["picking_orders"]>
@@ -1554,10 +1554,10 @@ export type picking_ordersSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   created_by?: boolean
   created_at?: boolean
   dispatch_order_id?: boolean
-  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.picking_orders$companiesArgs<ExtArgs>
   users?: boolean | Prisma.picking_orders$usersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.picking_orders$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   trips?: boolean | Prisma.picking_orders$tripsArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["picking_orders"]>
@@ -1576,29 +1576,29 @@ export type picking_ordersSelectScalar = {
 
 export type picking_ordersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "warehouse_id" | "client_id" | "status" | "delivery_note_id" | "trip_id" | "created_by" | "created_at" | "dispatch_order_id", ExtArgs["result"]["picking_orders"]>
 export type picking_ordersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   picking_items?: boolean | Prisma.picking_orders$picking_itemsArgs<ExtArgs>
   companies?: boolean | Prisma.picking_orders$companiesArgs<ExtArgs>
   users?: boolean | Prisma.picking_orders$usersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.picking_orders$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   trips?: boolean | Prisma.picking_orders$tripsArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
   picking_results?: boolean | Prisma.picking_orders$picking_resultsArgs<ExtArgs>
   _count?: boolean | Prisma.Picking_ordersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type picking_ordersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.picking_orders$companiesArgs<ExtArgs>
   users?: boolean | Prisma.picking_orders$usersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.picking_orders$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   trips?: boolean | Prisma.picking_orders$tripsArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }
 export type picking_ordersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   companies?: boolean | Prisma.picking_orders$companiesArgs<ExtArgs>
   users?: boolean | Prisma.picking_orders$usersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.picking_orders$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>
   trips?: boolean | Prisma.picking_orders$tripsArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }
@@ -1606,11 +1606,11 @@ export type picking_ordersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type $picking_ordersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "picking_orders"
   objects: {
-    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs> | null
     picking_items: Prisma.$picking_itemsPayload<ExtArgs>[]
     companies: Prisma.$companiesPayload<ExtArgs> | null
     users: Prisma.$usersPayload<ExtArgs> | null
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs> | null
+    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs> | null
     trips: Prisma.$tripsPayload<ExtArgs> | null
     warehouses: Prisma.$warehousesPayload<ExtArgs>
     picking_results: Prisma.$picking_resultsPayload<ExtArgs>[]
@@ -2019,11 +2019,11 @@ readonly fields: picking_ordersFieldRefs;
  */
 export interface Prisma__picking_ordersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  dispatch_orders<T extends Prisma.picking_orders$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>>): Prisma.Prisma__dispatch_ordersClient<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   picking_items<T extends Prisma.picking_orders$picking_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$picking_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   companies<T extends Prisma.picking_orders$companiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$companiesArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.picking_orders$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   delivery_notes<T extends Prisma.picking_orders$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$delivery_notesArgs<ExtArgs>>): Prisma.Prisma__delivery_notesClient<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  dispatch_orders<T extends Prisma.picking_orders$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$dispatch_ordersArgs<ExtArgs>>): Prisma.Prisma__dispatch_ordersClient<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   trips<T extends Prisma.picking_orders$tripsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$tripsArgs<ExtArgs>>): Prisma.Prisma__tripsClient<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   warehouses<T extends Prisma.warehousesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehousesDefaultArgs<ExtArgs>>): Prisma.Prisma__warehousesClient<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   picking_results<T extends Prisma.picking_orders$picking_resultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.picking_orders$picking_resultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_resultsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2461,25 +2461,6 @@ export type picking_ordersDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * picking_orders.dispatch_orders
- */
-export type picking_orders$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the dispatch_orders
-   */
-  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the dispatch_orders
-   */
-  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
-  where?: Prisma.dispatch_ordersWhereInput
-}
-
-/**
  * picking_orders.picking_items
  */
 export type picking_orders$picking_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2558,6 +2539,25 @@ export type picking_orders$delivery_notesArgs<ExtArgs extends runtime.Types.Exte
    */
   include?: Prisma.delivery_notesInclude<ExtArgs> | null
   where?: Prisma.delivery_notesWhereInput
+}
+
+/**
+ * picking_orders.dispatch_orders
+ */
+export type picking_orders$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
 }
 
 /**

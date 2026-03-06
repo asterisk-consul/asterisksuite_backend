@@ -8,14 +8,20 @@ async function bootstrap() {
   const logger = new Logger('Main');
 
   app.setGlobalPrefix('api');
+
+  // Un solo enableCors con todos los orígenes
   app.enableCors({
     origin: [
       'http://localhost:3008',
       'http://localhost:3001',
+      'http://localhost:5500', // ← Live Server
+      'http://127.0.0.1:5500', // ← Live Server (alternativo)
+      'null',
       'http://192.168.18.3:3008',
       'https://dev.astreisksuite.cloud',
       'http://dev.astreisksuite.cloud',
     ],
+    credentials: true,
   });
 
   app.useGlobalPipes(
@@ -26,14 +32,10 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors({ origin: true, credentials: true });
-
   const config = app.get(ConfigService);
   const port = config.get<number>('PORT') ?? 3008;
 
-  // 🔑 CLAVE PARA DOCKER / DOCKPLOY
   await app.listen(port, '0.0.0.0');
-
   logger.log(`Server running on port ${port}`);
 }
 

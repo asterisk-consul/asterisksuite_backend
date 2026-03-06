@@ -412,7 +412,14 @@ export const ModelName = {
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
   document_sequences: 'document_sequences',
-  refresh_tokens: 'refresh_tokens'
+  refresh_tokens: 'refresh_tokens',
+  document_item_taxes: 'document_item_taxes',
+  document_items: 'document_items',
+  document_taxes: 'document_taxes',
+  document_types: 'document_types',
+  documents: 'documents',
+  product_taxes: 'product_taxes',
+  taxes: 'taxes'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2578,6 +2585,524 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    document_item_taxes: {
+      payload: Prisma.$document_item_taxesPayload<ExtArgs>
+      fields: Prisma.document_item_taxesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_item_taxesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_item_taxesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>
+        }
+        findFirst: {
+          args: Prisma.document_item_taxesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_item_taxesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>
+        }
+        findMany: {
+          args: Prisma.document_item_taxesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>[]
+        }
+        create: {
+          args: Prisma.document_item_taxesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>
+        }
+        createMany: {
+          args: Prisma.document_item_taxesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_item_taxesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>[]
+        }
+        delete: {
+          args: Prisma.document_item_taxesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>
+        }
+        update: {
+          args: Prisma.document_item_taxesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_item_taxesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_item_taxesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_item_taxesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_item_taxesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_item_taxesPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_item_taxesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_item_taxes>
+        }
+        groupBy: {
+          args: Prisma.document_item_taxesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_item_taxesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_item_taxesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_item_taxesCountAggregateOutputType> | number
+        }
+      }
+    }
+    document_items: {
+      payload: Prisma.$document_itemsPayload<ExtArgs>
+      fields: Prisma.document_itemsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_itemsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_itemsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>
+        }
+        findFirst: {
+          args: Prisma.document_itemsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_itemsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>
+        }
+        findMany: {
+          args: Prisma.document_itemsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>[]
+        }
+        create: {
+          args: Prisma.document_itemsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>
+        }
+        createMany: {
+          args: Prisma.document_itemsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_itemsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>[]
+        }
+        delete: {
+          args: Prisma.document_itemsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>
+        }
+        update: {
+          args: Prisma.document_itemsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_itemsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_itemsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_itemsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_itemsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_itemsPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_itemsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_items>
+        }
+        groupBy: {
+          args: Prisma.document_itemsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_itemsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_itemsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_itemsCountAggregateOutputType> | number
+        }
+      }
+    }
+    document_taxes: {
+      payload: Prisma.$document_taxesPayload<ExtArgs>
+      fields: Prisma.document_taxesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_taxesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_taxesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>
+        }
+        findFirst: {
+          args: Prisma.document_taxesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_taxesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>
+        }
+        findMany: {
+          args: Prisma.document_taxesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>[]
+        }
+        create: {
+          args: Prisma.document_taxesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>
+        }
+        createMany: {
+          args: Prisma.document_taxesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_taxesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>[]
+        }
+        delete: {
+          args: Prisma.document_taxesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>
+        }
+        update: {
+          args: Prisma.document_taxesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_taxesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_taxesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_taxesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_taxesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_taxesPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_taxesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_taxes>
+        }
+        groupBy: {
+          args: Prisma.document_taxesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_taxesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_taxesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_taxesCountAggregateOutputType> | number
+        }
+      }
+    }
+    document_types: {
+      payload: Prisma.$document_typesPayload<ExtArgs>
+      fields: Prisma.document_typesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_typesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_typesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>
+        }
+        findFirst: {
+          args: Prisma.document_typesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_typesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>
+        }
+        findMany: {
+          args: Prisma.document_typesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>[]
+        }
+        create: {
+          args: Prisma.document_typesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>
+        }
+        createMany: {
+          args: Prisma.document_typesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_typesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>[]
+        }
+        delete: {
+          args: Prisma.document_typesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>
+        }
+        update: {
+          args: Prisma.document_typesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_typesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_typesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_typesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_typesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_typesPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_typesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_types>
+        }
+        groupBy: {
+          args: Prisma.document_typesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_typesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_typesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_typesCountAggregateOutputType> | number
+        }
+      }
+    }
+    documents: {
+      payload: Prisma.$documentsPayload<ExtArgs>
+      fields: Prisma.documentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.documentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.documentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>
+        }
+        findFirst: {
+          args: Prisma.documentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.documentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>
+        }
+        findMany: {
+          args: Prisma.documentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>[]
+        }
+        create: {
+          args: Prisma.documentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>
+        }
+        createMany: {
+          args: Prisma.documentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.documentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>[]
+        }
+        delete: {
+          args: Prisma.documentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>
+        }
+        update: {
+          args: Prisma.documentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.documentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.documentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.documentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.documentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$documentsPayload>
+        }
+        aggregate: {
+          args: Prisma.DocumentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocuments>
+        }
+        groupBy: {
+          args: Prisma.documentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocumentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.documentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocumentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    product_taxes: {
+      payload: Prisma.$product_taxesPayload<ExtArgs>
+      fields: Prisma.product_taxesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.product_taxesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.product_taxesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>
+        }
+        findFirst: {
+          args: Prisma.product_taxesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.product_taxesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>
+        }
+        findMany: {
+          args: Prisma.product_taxesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>[]
+        }
+        create: {
+          args: Prisma.product_taxesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>
+        }
+        createMany: {
+          args: Prisma.product_taxesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.product_taxesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>[]
+        }
+        delete: {
+          args: Prisma.product_taxesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>
+        }
+        update: {
+          args: Prisma.product_taxesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>
+        }
+        deleteMany: {
+          args: Prisma.product_taxesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.product_taxesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.product_taxesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>[]
+        }
+        upsert: {
+          args: Prisma.product_taxesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_taxesPayload>
+        }
+        aggregate: {
+          args: Prisma.Product_taxesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProduct_taxes>
+        }
+        groupBy: {
+          args: Prisma.product_taxesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_taxesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.product_taxesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_taxesCountAggregateOutputType> | number
+        }
+      }
+    }
+    taxes: {
+      payload: Prisma.$taxesPayload<ExtArgs>
+      fields: Prisma.taxesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.taxesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.taxesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>
+        }
+        findFirst: {
+          args: Prisma.taxesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.taxesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>
+        }
+        findMany: {
+          args: Prisma.taxesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>[]
+        }
+        create: {
+          args: Prisma.taxesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>
+        }
+        createMany: {
+          args: Prisma.taxesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.taxesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>[]
+        }
+        delete: {
+          args: Prisma.taxesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>
+        }
+        update: {
+          args: Prisma.taxesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>
+        }
+        deleteMany: {
+          args: Prisma.taxesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.taxesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.taxesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>[]
+        }
+        upsert: {
+          args: Prisma.taxesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$taxesPayload>
+        }
+        aggregate: {
+          args: Prisma.TaxesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTaxes>
+        }
+        groupBy: {
+          args: Prisma.taxesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaxesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.taxesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaxesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3014,6 +3539,104 @@ export const Refresh_tokensScalarFieldEnum = {
 export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
 
 
+export const Document_item_taxesScalarFieldEnum = {
+  id: 'id',
+  document_item_id: 'document_item_id',
+  tax_id: 'tax_id',
+  tax_rate: 'tax_rate',
+  tax_amount: 'tax_amount',
+  created_at: 'created_at'
+} as const
+
+export type Document_item_taxesScalarFieldEnum = (typeof Document_item_taxesScalarFieldEnum)[keyof typeof Document_item_taxesScalarFieldEnum]
+
+
+export const Document_itemsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  product_id: 'product_id',
+  quantity: 'quantity',
+  price: 'price',
+  created_at: 'created_at',
+  unit_price: 'unit_price'
+} as const
+
+export type Document_itemsScalarFieldEnum = (typeof Document_itemsScalarFieldEnum)[keyof typeof Document_itemsScalarFieldEnum]
+
+
+export const Document_taxesScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  tax_id: 'tax_id',
+  tax_rate: 'tax_rate',
+  taxable_base: 'taxable_base',
+  tax_amount: 'tax_amount',
+  created_at: 'created_at'
+} as const
+
+export type Document_taxesScalarFieldEnum = (typeof Document_taxesScalarFieldEnum)[keyof typeof Document_taxesScalarFieldEnum]
+
+
+export const Document_typesScalarFieldEnum = {
+  id: 'id',
+  document_sequence_id: 'document_sequence_id',
+  code: 'code',
+  description: 'description',
+  direction: 'direction',
+  affects_stock: 'affects_stock',
+  affects_accounting: 'affects_accounting',
+  active: 'active'
+} as const
+
+export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
+
+
+export const DocumentsScalarFieldEnum = {
+  id: 'id',
+  document_type_id: 'document_type_id',
+  party_id: 'party_id',
+  number: 'number',
+  date: 'date',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  subtotal: 'subtotal',
+  total_taxes: 'total_taxes',
+  total: 'total',
+  descrip: 'descrip'
+} as const
+
+export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Product_taxesScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  tax_id: 'tax_id',
+  is_included_in_price: 'is_included_in_price',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Product_taxesScalarFieldEnum = (typeof Product_taxesScalarFieldEnum)[keyof typeof Product_taxesScalarFieldEnum]
+
+
+export const TaxesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  code: 'code',
+  name: 'name',
+  tax_type: 'tax_type',
+  rate: 'rate',
+  is_percentage: 'is_percentage',
+  active: 'active',
+  created_at: 'created_at',
+  calculation_level: 'calculation_level'
+} as const
+
+export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3244,6 +3867,13 @@ export type GlobalOmitConfig = {
   warehouses?: Prisma.warehousesOmit
   document_sequences?: Prisma.document_sequencesOmit
   refresh_tokens?: Prisma.refresh_tokensOmit
+  document_item_taxes?: Prisma.document_item_taxesOmit
+  document_items?: Prisma.document_itemsOmit
+  document_taxes?: Prisma.document_taxesOmit
+  document_types?: Prisma.document_typesOmit
+  documents?: Prisma.documentsOmit
+  product_taxes?: Prisma.product_taxesOmit
+  taxes?: Prisma.taxesOmit
 }
 
 /* Types for Logging */

@@ -79,7 +79,14 @@ export const ModelName = {
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
   document_sequences: 'document_sequences',
-  refresh_tokens: 'refresh_tokens'
+  refresh_tokens: 'refresh_tokens',
+  document_item_taxes: 'document_item_taxes',
+  document_items: 'document_items',
+  document_taxes: 'document_taxes',
+  document_types: 'document_types',
+  documents: 'documents',
+  product_taxes: 'product_taxes',
+  taxes: 'taxes'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -493,6 +500,104 @@ export const Refresh_tokensScalarFieldEnum = {
 } as const
 
 export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
+
+
+export const Document_item_taxesScalarFieldEnum = {
+  id: 'id',
+  document_item_id: 'document_item_id',
+  tax_id: 'tax_id',
+  tax_rate: 'tax_rate',
+  tax_amount: 'tax_amount',
+  created_at: 'created_at'
+} as const
+
+export type Document_item_taxesScalarFieldEnum = (typeof Document_item_taxesScalarFieldEnum)[keyof typeof Document_item_taxesScalarFieldEnum]
+
+
+export const Document_itemsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  product_id: 'product_id',
+  quantity: 'quantity',
+  price: 'price',
+  created_at: 'created_at',
+  unit_price: 'unit_price'
+} as const
+
+export type Document_itemsScalarFieldEnum = (typeof Document_itemsScalarFieldEnum)[keyof typeof Document_itemsScalarFieldEnum]
+
+
+export const Document_taxesScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  tax_id: 'tax_id',
+  tax_rate: 'tax_rate',
+  taxable_base: 'taxable_base',
+  tax_amount: 'tax_amount',
+  created_at: 'created_at'
+} as const
+
+export type Document_taxesScalarFieldEnum = (typeof Document_taxesScalarFieldEnum)[keyof typeof Document_taxesScalarFieldEnum]
+
+
+export const Document_typesScalarFieldEnum = {
+  id: 'id',
+  document_sequence_id: 'document_sequence_id',
+  code: 'code',
+  description: 'description',
+  direction: 'direction',
+  affects_stock: 'affects_stock',
+  affects_accounting: 'affects_accounting',
+  active: 'active'
+} as const
+
+export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
+
+
+export const DocumentsScalarFieldEnum = {
+  id: 'id',
+  document_type_id: 'document_type_id',
+  party_id: 'party_id',
+  number: 'number',
+  date: 'date',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  subtotal: 'subtotal',
+  total_taxes: 'total_taxes',
+  total: 'total',
+  descrip: 'descrip'
+} as const
+
+export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Product_taxesScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  tax_id: 'tax_id',
+  is_included_in_price: 'is_included_in_price',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type Product_taxesScalarFieldEnum = (typeof Product_taxesScalarFieldEnum)[keyof typeof Product_taxesScalarFieldEnum]
+
+
+export const TaxesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  code: 'code',
+  name: 'name',
+  tax_type: 'tax_type',
+  rate: 'rate',
+  is_percentage: 'is_percentage',
+  active: 'active',
+  created_at: 'created_at',
+  calculation_level: 'calculation_level'
+} as const
+
+export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
 
 
 export const SortOrder = {

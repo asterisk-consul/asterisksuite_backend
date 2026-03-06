@@ -253,12 +253,12 @@ export type locationsWhereInput = {
   longitude?: Prisma.DecimalNullableFilter<"locations"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"locations"> | Date | string
   cargo_transfers?: Prisma.Cargo_transfersListRelationFilter
+  dispatch_orders_destination?: Prisma.Dispatch_ordersListRelationFilter
+  dispatch_orders_origin?: Prisma.Dispatch_ordersListRelationFilter
   party_locations?: Prisma.Party_locationsListRelationFilter
   trips_trips_destination_location_idTolocations?: Prisma.TripsListRelationFilter
   trips_trips_origin_location_idTolocations?: Prisma.TripsListRelationFilter
   warehouses?: Prisma.WarehousesListRelationFilter
-  dispatch_orders_origin?: Prisma.Dispatch_ordersListRelationFilter
-  dispatch_orders_destination?: Prisma.Dispatch_ordersListRelationFilter
 }
 
 export type locationsOrderByWithRelationInput = {
@@ -272,12 +272,12 @@ export type locationsOrderByWithRelationInput = {
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   cargo_transfers?: Prisma.cargo_transfersOrderByRelationAggregateInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersOrderByRelationAggregateInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersOrderByRelationAggregateInput
   party_locations?: Prisma.party_locationsOrderByRelationAggregateInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsOrderByRelationAggregateInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsOrderByRelationAggregateInput
   warehouses?: Prisma.warehousesOrderByRelationAggregateInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersOrderByRelationAggregateInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersOrderByRelationAggregateInput
 }
 
 export type locationsWhereUniqueInput = Prisma.AtLeast<{
@@ -294,12 +294,12 @@ export type locationsWhereUniqueInput = Prisma.AtLeast<{
   longitude?: Prisma.DecimalNullableFilter<"locations"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"locations"> | Date | string
   cargo_transfers?: Prisma.Cargo_transfersListRelationFilter
+  dispatch_orders_destination?: Prisma.Dispatch_ordersListRelationFilter
+  dispatch_orders_origin?: Prisma.Dispatch_ordersListRelationFilter
   party_locations?: Prisma.Party_locationsListRelationFilter
   trips_trips_destination_location_idTolocations?: Prisma.TripsListRelationFilter
   trips_trips_origin_location_idTolocations?: Prisma.TripsListRelationFilter
   warehouses?: Prisma.WarehousesListRelationFilter
-  dispatch_orders_origin?: Prisma.Dispatch_ordersListRelationFilter
-  dispatch_orders_destination?: Prisma.Dispatch_ordersListRelationFilter
 }, "id">
 
 export type locationsOrderByWithAggregationInput = {
@@ -345,12 +345,12 @@ export type locationsCreateInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUncheckedCreateInput = {
@@ -364,12 +364,12 @@ export type locationsUncheckedCreateInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUpdateInput = {
@@ -383,12 +383,12 @@ export type locationsUpdateInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUncheckedUpdateInput = {
@@ -402,12 +402,12 @@ export type locationsUncheckedUpdateInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsCreateManyInput = {
@@ -532,26 +532,16 @@ export type locationsUpdateOneRequiredWithoutParty_locationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutParty_locationsInput, Prisma.locationsUpdateWithoutParty_locationsInput>, Prisma.locationsUncheckedUpdateWithoutParty_locationsInput>
 }
 
-export type locationsCreateNestedOneWithoutDispatch_orders_originInput = {
-  create?: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_originInput>
-  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutDispatch_orders_originInput
-  connect?: Prisma.locationsWhereUniqueInput
-}
-
 export type locationsCreateNestedOneWithoutDispatch_orders_destinationInput = {
   create?: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_destinationInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_destinationInput>
   connectOrCreate?: Prisma.locationsCreateOrConnectWithoutDispatch_orders_destinationInput
   connect?: Prisma.locationsWhereUniqueInput
 }
 
-export type locationsUpdateOneWithoutDispatch_orders_originNestedInput = {
+export type locationsCreateNestedOneWithoutDispatch_orders_originInput = {
   create?: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_originInput>
   connectOrCreate?: Prisma.locationsCreateOrConnectWithoutDispatch_orders_originInput
-  upsert?: Prisma.locationsUpsertWithoutDispatch_orders_originInput
-  disconnect?: Prisma.locationsWhereInput | boolean
-  delete?: Prisma.locationsWhereInput | boolean
   connect?: Prisma.locationsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutDispatch_orders_originInput, Prisma.locationsUpdateWithoutDispatch_orders_originInput>, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_originInput>
 }
 
 export type locationsUpdateOneWithoutDispatch_orders_destinationNestedInput = {
@@ -562,6 +552,16 @@ export type locationsUpdateOneWithoutDispatch_orders_destinationNestedInput = {
   delete?: Prisma.locationsWhereInput | boolean
   connect?: Prisma.locationsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutDispatch_orders_destinationInput, Prisma.locationsUpdateWithoutDispatch_orders_destinationInput>, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_destinationInput>
+}
+
+export type locationsUpdateOneWithoutDispatch_orders_originNestedInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_originInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutDispatch_orders_originInput
+  upsert?: Prisma.locationsUpsertWithoutDispatch_orders_originInput
+  disconnect?: Prisma.locationsWhereInput | boolean
+  delete?: Prisma.locationsWhereInput | boolean
+  connect?: Prisma.locationsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutDispatch_orders_originInput, Prisma.locationsUpdateWithoutDispatch_orders_originInput>, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_originInput>
 }
 
 export type locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -622,12 +622,12 @@ export type locationsCreateWithoutCargo_transfersInput = {
   latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUncheckedCreateWithoutCargo_transfersInput = {
@@ -640,12 +640,12 @@ export type locationsUncheckedCreateWithoutCargo_transfersInput = {
   latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsCreateOrConnectWithoutCargo_transfersInput = {
@@ -674,12 +674,12 @@ export type locationsUpdateWithoutCargo_transfersInput = {
   latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutCargo_transfersInput = {
@@ -692,12 +692,12 @@ export type locationsUncheckedUpdateWithoutCargo_transfersInput = {
   latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsCreateWithoutParty_locationsInput = {
@@ -711,11 +711,11 @@ export type locationsCreateWithoutParty_locationsInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUncheckedCreateWithoutParty_locationsInput = {
@@ -729,11 +729,11 @@ export type locationsUncheckedCreateWithoutParty_locationsInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsCreateOrConnectWithoutParty_locationsInput = {
@@ -763,11 +763,11 @@ export type locationsUpdateWithoutParty_locationsInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutParty_locationsInput = {
@@ -781,52 +781,11 @@ export type locationsUncheckedUpdateWithoutParty_locationsInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
-}
-
-export type locationsCreateWithoutDispatch_orders_originInput = {
-  id?: string
-  address?: string | null
-  city?: string | null
-  province?: string | null
-  country?: string | null
-  postal_code?: string | null
-  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  created_at?: Date | string
-  cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
-  trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
-  trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
-  warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
-}
-
-export type locationsUncheckedCreateWithoutDispatch_orders_originInput = {
-  id?: string
-  address?: string | null
-  city?: string | null
-  province?: string | null
-  country?: string | null
-  postal_code?: string | null
-  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  created_at?: Date | string
-  cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
-  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
-  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
-  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
-}
-
-export type locationsCreateOrConnectWithoutDispatch_orders_originInput = {
-  where: Prisma.locationsWhereUniqueInput
-  create: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_originInput>
 }
 
 export type locationsCreateWithoutDispatch_orders_destinationInput = {
@@ -840,11 +799,11 @@ export type locationsCreateWithoutDispatch_orders_destinationInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
 }
 
 export type locationsUncheckedCreateWithoutDispatch_orders_destinationInput = {
@@ -858,11 +817,11 @@ export type locationsUncheckedCreateWithoutDispatch_orders_destinationInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
 }
 
 export type locationsCreateOrConnectWithoutDispatch_orders_destinationInput = {
@@ -870,51 +829,45 @@ export type locationsCreateOrConnectWithoutDispatch_orders_destinationInput = {
   create: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_destinationInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_destinationInput>
 }
 
-export type locationsUpsertWithoutDispatch_orders_originInput = {
-  update: Prisma.XOR<Prisma.locationsUpdateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_originInput>
+export type locationsCreateWithoutDispatch_orders_originInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+}
+
+export type locationsUncheckedCreateWithoutDispatch_orders_originInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+}
+
+export type locationsCreateOrConnectWithoutDispatch_orders_originInput = {
+  where: Prisma.locationsWhereUniqueInput
   create: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_originInput>
-  where?: Prisma.locationsWhereInput
-}
-
-export type locationsUpdateToOneWithWhereWithoutDispatch_orders_originInput = {
-  where?: Prisma.locationsWhereInput
-  data: Prisma.XOR<Prisma.locationsUpdateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_originInput>
-}
-
-export type locationsUpdateWithoutDispatch_orders_originInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
-  trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
-  trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
-  warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
-}
-
-export type locationsUncheckedUpdateWithoutDispatch_orders_originInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
-  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
-  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
-  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUpsertWithoutDispatch_orders_destinationInput = {
@@ -939,11 +892,11 @@ export type locationsUpdateWithoutDispatch_orders_destinationInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutDispatch_orders_destinationInput = {
@@ -957,11 +910,58 @@ export type locationsUncheckedUpdateWithoutDispatch_orders_destinationInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
+}
+
+export type locationsUpsertWithoutDispatch_orders_originInput = {
+  update: Prisma.XOR<Prisma.locationsUpdateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_originInput>
+  create: Prisma.XOR<Prisma.locationsCreateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedCreateWithoutDispatch_orders_originInput>
+  where?: Prisma.locationsWhereInput
+}
+
+export type locationsUpdateToOneWithWhereWithoutDispatch_orders_originInput = {
+  where?: Prisma.locationsWhereInput
+  data: Prisma.XOR<Prisma.locationsUpdateWithoutDispatch_orders_originInput, Prisma.locationsUncheckedUpdateWithoutDispatch_orders_originInput>
+}
+
+export type locationsUpdateWithoutDispatch_orders_originInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+}
+
+export type locationsUncheckedUpdateWithoutDispatch_orders_originInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
 }
 
 export type locationsCreateWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -975,11 +975,11 @@ export type locationsCreateWithoutTrips_trips_destination_location_idTolocations
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUncheckedCreateWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -993,11 +993,11 @@ export type locationsUncheckedCreateWithoutTrips_trips_destination_location_idTo
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsCreateOrConnectWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -1016,11 +1016,11 @@ export type locationsCreateWithoutTrips_trips_origin_location_idTolocationsInput
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUncheckedCreateWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1034,11 +1034,11 @@ export type locationsUncheckedCreateWithoutTrips_trips_origin_location_idTolocat
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsCreateOrConnectWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1068,11 +1068,11 @@ export type locationsUpdateWithoutTrips_trips_destination_location_idTolocations
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -1086,11 +1086,11 @@ export type locationsUncheckedUpdateWithoutTrips_trips_destination_location_idTo
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUpsertWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1115,11 +1115,11 @@ export type locationsUpdateWithoutTrips_trips_origin_location_idTolocationsInput
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1133,11 +1133,11 @@ export type locationsUncheckedUpdateWithoutTrips_trips_origin_location_idTolocat
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsCreateWithoutWarehousesInput = {
@@ -1151,11 +1151,11 @@ export type locationsCreateWithoutWarehousesInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsUncheckedCreateWithoutWarehousesInput = {
@@ -1169,11 +1169,11 @@ export type locationsUncheckedCreateWithoutWarehousesInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
 }
 
 export type locationsCreateOrConnectWithoutWarehousesInput = {
@@ -1203,11 +1203,11 @@ export type locationsUpdateWithoutWarehousesInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutWarehousesInput = {
@@ -1221,11 +1221,11 @@ export type locationsUncheckedUpdateWithoutWarehousesInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
-  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
-  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 
@@ -1235,22 +1235,22 @@ export type locationsUncheckedUpdateWithoutWarehousesInput = {
 
 export type LocationsCountOutputType = {
   cargo_transfers: number
+  dispatch_orders_destination: number
+  dispatch_orders_origin: number
   party_locations: number
   trips_trips_destination_location_idTolocations: number
   trips_trips_origin_location_idTolocations: number
   warehouses: number
-  dispatch_orders_origin: number
-  dispatch_orders_destination: number
 }
 
 export type LocationsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfers?: boolean | LocationsCountOutputTypeCountCargo_transfersArgs
+  dispatch_orders_destination?: boolean | LocationsCountOutputTypeCountDispatch_orders_destinationArgs
+  dispatch_orders_origin?: boolean | LocationsCountOutputTypeCountDispatch_orders_originArgs
   party_locations?: boolean | LocationsCountOutputTypeCountParty_locationsArgs
   trips_trips_destination_location_idTolocations?: boolean | LocationsCountOutputTypeCountTrips_trips_destination_location_idTolocationsArgs
   trips_trips_origin_location_idTolocations?: boolean | LocationsCountOutputTypeCountTrips_trips_origin_location_idTolocationsArgs
   warehouses?: boolean | LocationsCountOutputTypeCountWarehousesArgs
-  dispatch_orders_origin?: boolean | LocationsCountOutputTypeCountDispatch_orders_originArgs
-  dispatch_orders_destination?: boolean | LocationsCountOutputTypeCountDispatch_orders_destinationArgs
 }
 
 /**
@@ -1268,6 +1268,20 @@ export type LocationsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
  */
 export type LocationsCountOutputTypeCountCargo_transfersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.cargo_transfersWhereInput
+}
+
+/**
+ * LocationsCountOutputType without action
+ */
+export type LocationsCountOutputTypeCountDispatch_orders_destinationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.dispatch_ordersWhereInput
+}
+
+/**
+ * LocationsCountOutputType without action
+ */
+export type LocationsCountOutputTypeCountDispatch_orders_originArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.dispatch_ordersWhereInput
 }
 
 /**
@@ -1298,20 +1312,6 @@ export type LocationsCountOutputTypeCountWarehousesArgs<ExtArgs extends runtime.
   where?: Prisma.warehousesWhereInput
 }
 
-/**
- * LocationsCountOutputType without action
- */
-export type LocationsCountOutputTypeCountDispatch_orders_originArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.dispatch_ordersWhereInput
-}
-
-/**
- * LocationsCountOutputType without action
- */
-export type LocationsCountOutputTypeCountDispatch_orders_destinationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.dispatch_ordersWhereInput
-}
-
 
 export type locationsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1324,12 +1324,12 @@ export type locationsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   longitude?: boolean
   created_at?: boolean
   cargo_transfers?: boolean | Prisma.locations$cargo_transfersArgs<ExtArgs>
+  dispatch_orders_destination?: boolean | Prisma.locations$dispatch_orders_destinationArgs<ExtArgs>
+  dispatch_orders_origin?: boolean | Prisma.locations$dispatch_orders_originArgs<ExtArgs>
   party_locations?: boolean | Prisma.locations$party_locationsArgs<ExtArgs>
   trips_trips_destination_location_idTolocations?: boolean | Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs>
   trips_trips_origin_location_idTolocations?: boolean | Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs>
   warehouses?: boolean | Prisma.locations$warehousesArgs<ExtArgs>
-  dispatch_orders_origin?: boolean | Prisma.locations$dispatch_orders_originArgs<ExtArgs>
-  dispatch_orders_destination?: boolean | Prisma.locations$dispatch_orders_destinationArgs<ExtArgs>
   _count?: boolean | Prisma.LocationsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["locations"]>
 
@@ -1372,12 +1372,12 @@ export type locationsSelectScalar = {
 export type locationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "address" | "city" | "province" | "country" | "postal_code" | "latitude" | "longitude" | "created_at", ExtArgs["result"]["locations"]>
 export type locationsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfers?: boolean | Prisma.locations$cargo_transfersArgs<ExtArgs>
+  dispatch_orders_destination?: boolean | Prisma.locations$dispatch_orders_destinationArgs<ExtArgs>
+  dispatch_orders_origin?: boolean | Prisma.locations$dispatch_orders_originArgs<ExtArgs>
   party_locations?: boolean | Prisma.locations$party_locationsArgs<ExtArgs>
   trips_trips_destination_location_idTolocations?: boolean | Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs>
   trips_trips_origin_location_idTolocations?: boolean | Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs>
   warehouses?: boolean | Prisma.locations$warehousesArgs<ExtArgs>
-  dispatch_orders_origin?: boolean | Prisma.locations$dispatch_orders_originArgs<ExtArgs>
-  dispatch_orders_destination?: boolean | Prisma.locations$dispatch_orders_destinationArgs<ExtArgs>
   _count?: boolean | Prisma.LocationsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type locationsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1387,12 +1387,12 @@ export type $locationsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "locations"
   objects: {
     cargo_transfers: Prisma.$cargo_transfersPayload<ExtArgs>[]
+    dispatch_orders_destination: Prisma.$dispatch_ordersPayload<ExtArgs>[]
+    dispatch_orders_origin: Prisma.$dispatch_ordersPayload<ExtArgs>[]
     party_locations: Prisma.$party_locationsPayload<ExtArgs>[]
     trips_trips_destination_location_idTolocations: Prisma.$tripsPayload<ExtArgs>[]
     trips_trips_origin_location_idTolocations: Prisma.$tripsPayload<ExtArgs>[]
     warehouses: Prisma.$warehousesPayload<ExtArgs>[]
-    dispatch_orders_origin: Prisma.$dispatch_ordersPayload<ExtArgs>[]
-    dispatch_orders_destination: Prisma.$dispatch_ordersPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1799,12 +1799,12 @@ readonly fields: locationsFieldRefs;
 export interface Prisma__locationsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cargo_transfers<T extends Prisma.locations$cargo_transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$cargo_transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cargo_transfersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispatch_orders_destination<T extends Prisma.locations$dispatch_orders_destinationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$dispatch_orders_destinationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispatch_orders_origin<T extends Prisma.locations$dispatch_orders_originArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$dispatch_orders_originArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   party_locations<T extends Prisma.locations$party_locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$party_locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_locationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trips_trips_destination_location_idTolocations<T extends Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trips_trips_origin_location_idTolocations<T extends Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouses<T extends Prisma.locations$warehousesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$warehousesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  dispatch_orders_origin<T extends Prisma.locations$dispatch_orders_originArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$dispatch_orders_originArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  dispatch_orders_destination<T extends Prisma.locations$dispatch_orders_destinationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$dispatch_orders_destinationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2255,6 +2255,54 @@ export type locations$cargo_transfersArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
+ * locations.dispatch_orders_destination
+ */
+export type locations$dispatch_orders_destinationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
+  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
+  cursor?: Prisma.dispatch_ordersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
+}
+
+/**
+ * locations.dispatch_orders_origin
+ */
+export type locations$dispatch_orders_originArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
+  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
+  cursor?: Prisma.dispatch_ordersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
+}
+
+/**
  * locations.party_locations
  */
 export type locations$party_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2348,54 +2396,6 @@ export type locations$warehousesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.WarehousesScalarFieldEnum | Prisma.WarehousesScalarFieldEnum[]
-}
-
-/**
- * locations.dispatch_orders_origin
- */
-export type locations$dispatch_orders_originArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the dispatch_orders
-   */
-  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the dispatch_orders
-   */
-  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
-  where?: Prisma.dispatch_ordersWhereInput
-  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
-  cursor?: Prisma.dispatch_ordersWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
-}
-
-/**
- * locations.dispatch_orders_destination
- */
-export type locations$dispatch_orders_destinationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the dispatch_orders
-   */
-  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the dispatch_orders
-   */
-  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
-  where?: Prisma.dispatch_ordersWhereInput
-  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
-  cursor?: Prisma.dispatch_ordersWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
 }
 
 /**

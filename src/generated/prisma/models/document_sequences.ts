@@ -241,6 +241,7 @@ export type document_sequencesWhereInput = {
   active?: Prisma.BoolFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
+  document_types?: Prisma.Document_typesListRelationFilter
 }
 
 export type document_sequencesOrderByWithRelationInput = {
@@ -253,6 +254,7 @@ export type document_sequencesOrderByWithRelationInput = {
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   companies?: Prisma.companiesOrderByWithRelationInput
+  document_types?: Prisma.document_typesOrderByRelationAggregateInput
 }
 
 export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
@@ -269,6 +271,7 @@ export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   active?: Prisma.BoolFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
+  document_types?: Prisma.Document_typesListRelationFilter
 }, "id" | "company_id_document_type_point_of_sale">
 
 export type document_sequencesOrderByWithAggregationInput = {
@@ -310,6 +313,7 @@ export type document_sequencesCreateInput = {
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutDocumentSequencesInput
+  document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUncheckedCreateInput = {
@@ -321,6 +325,7 @@ export type document_sequencesUncheckedCreateInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  document_types?: Prisma.document_typesUncheckedCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUpdateInput = {
@@ -332,6 +337,7 @@ export type document_sequencesUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutDocumentSequencesNestedInput
+  document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateInput = {
@@ -343,6 +349,7 @@ export type document_sequencesUncheckedUpdateInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  document_types?: Prisma.document_typesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesCreateManyInput = {
@@ -434,6 +441,11 @@ export type document_sequencesSumOrderByAggregateInput = {
   current_number?: Prisma.SortOrder
 }
 
+export type Document_sequencesNullableScalarRelationFilter = {
+  is?: Prisma.document_sequencesWhereInput | null
+  isNot?: Prisma.document_sequencesWhereInput | null
+}
+
 export type document_sequencesCreateNestedManyWithoutCompaniesInput = {
   create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutCompaniesInput, Prisma.document_sequencesUncheckedCreateWithoutCompaniesInput> | Prisma.document_sequencesCreateWithoutCompaniesInput[] | Prisma.document_sequencesUncheckedCreateWithoutCompaniesInput[]
   connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutCompaniesInput | Prisma.document_sequencesCreateOrConnectWithoutCompaniesInput[]
@@ -484,6 +496,22 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type document_sequencesCreateNestedOneWithoutDocument_typesInput = {
+  create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_typesInput>
+  connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocument_typesInput
+  connect?: Prisma.document_sequencesWhereUniqueInput
+}
+
+export type document_sequencesUpdateOneWithoutDocument_typesNestedInput = {
+  create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_typesInput>
+  connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocument_typesInput
+  upsert?: Prisma.document_sequencesUpsertWithoutDocument_typesInput
+  disconnect?: Prisma.document_sequencesWhereInput | boolean
+  delete?: Prisma.document_sequencesWhereInput | boolean
+  connect?: Prisma.document_sequencesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.document_sequencesUpdateToOneWithWhereWithoutDocument_typesInput, Prisma.document_sequencesUpdateWithoutDocument_typesInput>, Prisma.document_sequencesUncheckedUpdateWithoutDocument_typesInput>
+}
+
 export type document_sequencesCreateWithoutCompaniesInput = {
   id?: string
   document_type: string
@@ -492,6 +520,7 @@ export type document_sequencesCreateWithoutCompaniesInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUncheckedCreateWithoutCompaniesInput = {
@@ -502,6 +531,7 @@ export type document_sequencesUncheckedCreateWithoutCompaniesInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  document_types?: Prisma.document_typesUncheckedCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesCreateOrConnectWithoutCompaniesInput = {
@@ -544,6 +574,66 @@ export type document_sequencesScalarWhereInput = {
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
 }
 
+export type document_sequencesCreateWithoutDocument_typesInput = {
+  id?: string
+  document_type: string
+  point_of_sale: string
+  current_number?: number
+  prefix?: string | null
+  active?: boolean
+  created_at?: Date | string
+  companies: Prisma.companiesCreateNestedOneWithoutDocumentSequencesInput
+}
+
+export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
+  id?: string
+  company_id: string
+  document_type: string
+  point_of_sale: string
+  current_number?: number
+  prefix?: string | null
+  active?: boolean
+  created_at?: Date | string
+}
+
+export type document_sequencesCreateOrConnectWithoutDocument_typesInput = {
+  where: Prisma.document_sequencesWhereUniqueInput
+  create: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_typesInput>
+}
+
+export type document_sequencesUpsertWithoutDocument_typesInput = {
+  update: Prisma.XOR<Prisma.document_sequencesUpdateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedUpdateWithoutDocument_typesInput>
+  create: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_typesInput>
+  where?: Prisma.document_sequencesWhereInput
+}
+
+export type document_sequencesUpdateToOneWithWhereWithoutDocument_typesInput = {
+  where?: Prisma.document_sequencesWhereInput
+  data: Prisma.XOR<Prisma.document_sequencesUpdateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedUpdateWithoutDocument_typesInput>
+}
+
+export type document_sequencesUpdateWithoutDocument_typesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
+  current_number?: Prisma.IntFieldUpdateOperationsInput | number
+  prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companies?: Prisma.companiesUpdateOneRequiredWithoutDocumentSequencesNestedInput
+}
+
+export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  company_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
+  current_number?: Prisma.IntFieldUpdateOperationsInput | number
+  prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type document_sequencesCreateManyCompaniesInput = {
   id?: string
   document_type: string
@@ -562,6 +652,7 @@ export type document_sequencesUpdateWithoutCompaniesInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateWithoutCompaniesInput = {
@@ -572,6 +663,7 @@ export type document_sequencesUncheckedUpdateWithoutCompaniesInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  document_types?: Prisma.document_typesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateManyWithoutCompaniesInput = {
@@ -585,6 +677,35 @@ export type document_sequencesUncheckedUpdateManyWithoutCompaniesInput = {
 }
 
 
+/**
+ * Count Type Document_sequencesCountOutputType
+ */
+
+export type Document_sequencesCountOutputType = {
+  document_types: number
+}
+
+export type Document_sequencesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  document_types?: boolean | Document_sequencesCountOutputTypeCountDocument_typesArgs
+}
+
+/**
+ * Document_sequencesCountOutputType without action
+ */
+export type Document_sequencesCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Document_sequencesCountOutputType
+   */
+  select?: Prisma.Document_sequencesCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * Document_sequencesCountOutputType without action
+ */
+export type Document_sequencesCountOutputTypeCountDocument_typesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_typesWhereInput
+}
+
 
 export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -596,6 +717,8 @@ export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.In
   active?: boolean
   created_at?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
+  _count?: boolean | Prisma.Document_sequencesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_sequences"]>
 
 export type document_sequencesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -636,6 +759,8 @@ export type document_sequencesSelectScalar = {
 export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "document_type" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at", ExtArgs["result"]["document_sequences"]>
 export type document_sequencesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
+  _count?: boolean | Prisma.Document_sequencesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type document_sequencesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
@@ -648,6 +773,7 @@ export type $document_sequencesPayload<ExtArgs extends runtime.Types.Extensions.
   name: "document_sequences"
   objects: {
     companies: Prisma.$companiesPayload<ExtArgs>
+    document_types: Prisma.$document_typesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1053,6 +1179,7 @@ readonly fields: document_sequencesFieldRefs;
 export interface Prisma__document_sequencesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   companies<T extends Prisma.companiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companiesDefaultArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  document_types<T extends Prisma.document_sequences$document_typesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_sequences$document_typesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_typesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1483,6 +1610,30 @@ export type document_sequencesDeleteManyArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many document_sequences to delete.
    */
   limit?: number
+}
+
+/**
+ * document_sequences.document_types
+ */
+export type document_sequences$document_typesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the document_types
+   */
+  select?: Prisma.document_typesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the document_types
+   */
+  omit?: Prisma.document_typesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.document_typesInclude<ExtArgs> | null
+  where?: Prisma.document_typesWhereInput
+  orderBy?: Prisma.document_typesOrderByWithRelationInput | Prisma.document_typesOrderByWithRelationInput[]
+  cursor?: Prisma.document_typesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_typesScalarFieldEnum | Prisma.Document_typesScalarFieldEnum[]
 }
 
 /**

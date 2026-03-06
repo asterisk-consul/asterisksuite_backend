@@ -184,17 +184,18 @@ export type companiesWhereInput = {
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
   business_parties?: Prisma.Business_partiesListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
+  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
+  documentSequences?: Prisma.Document_sequencesListRelationFilter
   drivers?: Prisma.DriversListRelationFilter
   pallets?: Prisma.PalletsListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
   products?: Prisma.ProductsListRelationFilter
+  taxes?: Prisma.TaxesListRelationFilter
   trips?: Prisma.TripsListRelationFilter
   users?: Prisma.UsersListRelationFilter
+  vehicle_combinations?: Prisma.Vehicle_combinationsListRelationFilter
   vehicles?: Prisma.VehiclesListRelationFilter
   warehouses?: Prisma.WarehousesListRelationFilter
-  documentSequences?: Prisma.Document_sequencesListRelationFilter
-  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
-  vehicle_combinations?: Prisma.Vehicle_combinationsListRelationFilter
 }
 
 export type companiesOrderByWithRelationInput = {
@@ -205,17 +206,18 @@ export type companiesOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   business_parties?: Prisma.business_partiesOrderByRelationAggregateInput
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
+  dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
+  documentSequences?: Prisma.document_sequencesOrderByRelationAggregateInput
   drivers?: Prisma.driversOrderByRelationAggregateInput
   pallets?: Prisma.palletsOrderByRelationAggregateInput
   picking_orders?: Prisma.picking_ordersOrderByRelationAggregateInput
   products?: Prisma.productsOrderByRelationAggregateInput
+  taxes?: Prisma.taxesOrderByRelationAggregateInput
   trips?: Prisma.tripsOrderByRelationAggregateInput
   users?: Prisma.usersOrderByRelationAggregateInput
+  vehicle_combinations?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
   vehicles?: Prisma.vehiclesOrderByRelationAggregateInput
   warehouses?: Prisma.warehousesOrderByRelationAggregateInput
-  documentSequences?: Prisma.document_sequencesOrderByRelationAggregateInput
-  dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
-  vehicle_combinations?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
 }
 
 export type companiesWhereUniqueInput = Prisma.AtLeast<{
@@ -229,17 +231,18 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
   business_parties?: Prisma.Business_partiesListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
+  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
+  documentSequences?: Prisma.Document_sequencesListRelationFilter
   drivers?: Prisma.DriversListRelationFilter
   pallets?: Prisma.PalletsListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
   products?: Prisma.ProductsListRelationFilter
+  taxes?: Prisma.TaxesListRelationFilter
   trips?: Prisma.TripsListRelationFilter
   users?: Prisma.UsersListRelationFilter
+  vehicle_combinations?: Prisma.Vehicle_combinationsListRelationFilter
   vehicles?: Prisma.VehiclesListRelationFilter
   warehouses?: Prisma.WarehousesListRelationFilter
-  documentSequences?: Prisma.Document_sequencesListRelationFilter
-  dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
-  vehicle_combinations?: Prisma.Vehicle_combinationsListRelationFilter
 }, "id">
 
 export type companiesOrderByWithAggregationInput = {
@@ -272,17 +275,18 @@ export type companiesCreateInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateInput = {
@@ -293,17 +297,18 @@ export type companiesUncheckedCreateInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUpdateInput = {
@@ -314,17 +319,18 @@ export type companiesUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateInput = {
@@ -335,17 +341,18 @@ export type companiesUncheckedUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateManyInput = {
@@ -592,6 +599,20 @@ export type companiesUpdateOneRequiredWithoutDocumentSequencesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutDocumentSequencesInput, Prisma.companiesUpdateWithoutDocumentSequencesInput>, Prisma.companiesUncheckedUpdateWithoutDocumentSequencesInput>
 }
 
+export type companiesCreateNestedOneWithoutTaxesInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutTaxesInput, Prisma.companiesUncheckedCreateWithoutTaxesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutTaxesInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesUpdateOneRequiredWithoutTaxesNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutTaxesInput, Prisma.companiesUncheckedCreateWithoutTaxesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutTaxesInput
+  upsert?: Prisma.companiesUpsertWithoutTaxesInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutTaxesInput, Prisma.companiesUpdateWithoutTaxesInput>, Prisma.companiesUncheckedUpdateWithoutTaxesInput>
+}
+
 export type companiesCreateWithoutBusiness_partiesInput = {
   id?: string
   name: string
@@ -599,17 +620,18 @@ export type companiesCreateWithoutBusiness_partiesInput = {
   phone?: string | null
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutBusiness_partiesInput = {
@@ -619,17 +641,18 @@ export type companiesUncheckedCreateWithoutBusiness_partiesInput = {
   phone?: string | null
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutBusiness_partiesInput = {
@@ -655,17 +678,18 @@ export type companiesUpdateWithoutBusiness_partiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutBusiness_partiesInput = {
@@ -675,17 +699,18 @@ export type companiesUncheckedUpdateWithoutBusiness_partiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutDelivery_notesInput = {
@@ -695,17 +720,18 @@ export type companiesCreateWithoutDelivery_notesInput = {
   phone?: string | null
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutDelivery_notesInput = {
@@ -715,17 +741,18 @@ export type companiesUncheckedCreateWithoutDelivery_notesInput = {
   phone?: string | null
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutDelivery_notesInput = {
@@ -751,17 +778,18 @@ export type companiesUpdateWithoutDelivery_notesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutDelivery_notesInput = {
@@ -771,17 +799,18 @@ export type companiesUncheckedUpdateWithoutDelivery_notesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutDriversInput = {
@@ -792,16 +821,17 @@ export type companiesCreateWithoutDriversInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutDriversInput = {
@@ -812,16 +842,17 @@ export type companiesUncheckedCreateWithoutDriversInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutDriversInput = {
@@ -848,16 +879,17 @@ export type companiesUpdateWithoutDriversInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutDriversInput = {
@@ -868,16 +900,17 @@ export type companiesUncheckedUpdateWithoutDriversInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutPalletsInput = {
@@ -888,16 +921,17 @@ export type companiesCreateWithoutPalletsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutPalletsInput = {
@@ -908,16 +942,17 @@ export type companiesUncheckedCreateWithoutPalletsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutPalletsInput = {
@@ -944,16 +979,17 @@ export type companiesUpdateWithoutPalletsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutPalletsInput = {
@@ -964,16 +1000,17 @@ export type companiesUncheckedUpdateWithoutPalletsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutPicking_ordersInput = {
@@ -984,16 +1021,17 @@ export type companiesCreateWithoutPicking_ordersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutPicking_ordersInput = {
@@ -1004,16 +1042,17 @@ export type companiesUncheckedCreateWithoutPicking_ordersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutPicking_ordersInput = {
@@ -1040,16 +1079,17 @@ export type companiesUpdateWithoutPicking_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutPicking_ordersInput = {
@@ -1060,16 +1100,17 @@ export type companiesUncheckedUpdateWithoutPicking_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutProductsInput = {
@@ -1080,16 +1121,17 @@ export type companiesCreateWithoutProductsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutProductsInput = {
@@ -1100,16 +1142,17 @@ export type companiesUncheckedCreateWithoutProductsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutProductsInput = {
@@ -1136,16 +1179,17 @@ export type companiesUpdateWithoutProductsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutProductsInput = {
@@ -1156,16 +1200,17 @@ export type companiesUncheckedUpdateWithoutProductsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutDispatch_ordersInput = {
@@ -1176,16 +1221,17 @@ export type companiesCreateWithoutDispatch_ordersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutDispatch_ordersInput = {
@@ -1196,16 +1242,17 @@ export type companiesUncheckedCreateWithoutDispatch_ordersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutDispatch_ordersInput = {
@@ -1232,16 +1279,17 @@ export type companiesUpdateWithoutDispatch_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutDispatch_ordersInput = {
@@ -1252,16 +1300,17 @@ export type companiesUncheckedUpdateWithoutDispatch_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutTripsInput = {
@@ -1272,16 +1321,17 @@ export type companiesCreateWithoutTripsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutTripsInput = {
@@ -1292,16 +1342,17 @@ export type companiesUncheckedCreateWithoutTripsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutTripsInput = {
@@ -1328,16 +1379,17 @@ export type companiesUpdateWithoutTripsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutTripsInput = {
@@ -1348,16 +1400,17 @@ export type companiesUncheckedUpdateWithoutTripsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutUsersInput = {
@@ -1368,16 +1421,17 @@ export type companiesCreateWithoutUsersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutUsersInput = {
@@ -1388,16 +1442,17 @@ export type companiesUncheckedCreateWithoutUsersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutUsersInput = {
@@ -1424,16 +1479,17 @@ export type companiesUpdateWithoutUsersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutUsersInput = {
@@ -1444,16 +1500,17 @@ export type companiesUncheckedUpdateWithoutUsersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutVehiclesInput = {
@@ -1464,16 +1521,17 @@ export type companiesCreateWithoutVehiclesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
-  warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
+  warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutVehiclesInput = {
@@ -1484,16 +1542,17 @@ export type companiesUncheckedCreateWithoutVehiclesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
-  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
+  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutVehiclesInput = {
@@ -1520,16 +1579,17 @@ export type companiesUpdateWithoutVehiclesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
-  warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
+  warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutVehiclesInput = {
@@ -1540,16 +1600,17 @@ export type companiesUncheckedUpdateWithoutVehiclesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
-  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
+  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutVehicle_combinationsInput = {
@@ -1560,16 +1621,17 @@ export type companiesCreateWithoutVehicle_combinationsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutVehicle_combinationsInput = {
@@ -1580,16 +1642,17 @@ export type companiesUncheckedCreateWithoutVehicle_combinationsInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutVehicle_combinationsInput = {
@@ -1616,16 +1679,17 @@ export type companiesUpdateWithoutVehicle_combinationsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutVehicle_combinationsInput = {
@@ -1636,16 +1700,17 @@ export type companiesUncheckedUpdateWithoutVehicle_combinationsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutWarehousesInput = {
@@ -1656,16 +1721,17 @@ export type companiesCreateWithoutWarehousesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
-  vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
   vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
+  vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutWarehousesInput = {
@@ -1676,16 +1742,17 @@ export type companiesUncheckedCreateWithoutWarehousesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutWarehousesInput = {
@@ -1712,16 +1779,17 @@ export type companiesUpdateWithoutWarehousesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
-  vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
+  vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutWarehousesInput = {
@@ -1732,16 +1800,17 @@ export type companiesUncheckedUpdateWithoutWarehousesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesCreateWithoutDocumentSequencesInput = {
@@ -1752,16 +1821,17 @@ export type companiesCreateWithoutDocumentSequencesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesUncheckedCreateWithoutDocumentSequencesInput = {
@@ -1772,16 +1842,17 @@ export type companiesUncheckedCreateWithoutDocumentSequencesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  taxes?: Prisma.taxesUncheckedCreateNestedManyWithoutCompaniesInput
   trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
   users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
   vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
 export type companiesCreateOrConnectWithoutDocumentSequencesInput = {
@@ -1808,16 +1879,17 @@ export type companiesUpdateWithoutDocumentSequencesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutDocumentSequencesInput = {
@@ -1828,16 +1900,117 @@ export type companiesUncheckedUpdateWithoutDocumentSequencesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
+  pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
+  taxes?: Prisma.taxesUncheckedUpdateManyWithoutCompaniesNestedInput
+  trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
+  users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
+  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
+}
+
+export type companiesCreateWithoutTaxesInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  phone?: string | null
+  created_at?: Date | string
+  business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
+  pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
+  products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
+  trips?: Prisma.tripsCreateNestedManyWithoutCompaniesInput
+  users?: Prisma.usersCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutCompaniesInput
+  vehicles?: Prisma.vehiclesCreateNestedManyWithoutCompaniesInput
+  warehouses?: Prisma.warehousesCreateNestedManyWithoutCompaniesInput
+}
+
+export type companiesUncheckedCreateWithoutTaxesInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  phone?: string | null
+  created_at?: Date | string
+  business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
+  pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
+  products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
+  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutCompaniesInput
+  users?: Prisma.usersUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutCompaniesInput
+  vehicles?: Prisma.vehiclesUncheckedCreateNestedManyWithoutCompaniesInput
+  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutCompaniesInput
+}
+
+export type companiesCreateOrConnectWithoutTaxesInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutTaxesInput, Prisma.companiesUncheckedCreateWithoutTaxesInput>
+}
+
+export type companiesUpsertWithoutTaxesInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutTaxesInput, Prisma.companiesUncheckedUpdateWithoutTaxesInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutTaxesInput, Prisma.companiesUncheckedCreateWithoutTaxesInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutTaxesInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutTaxesInput, Prisma.companiesUncheckedUpdateWithoutTaxesInput>
+}
+
+export type companiesUpdateWithoutTaxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
+  pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
+  products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
+  trips?: Prisma.tripsUpdateManyWithoutCompaniesNestedInput
+  users?: Prisma.usersUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutCompaniesNestedInput
+  vehicles?: Prisma.vehiclesUpdateManyWithoutCompaniesNestedInput
+  warehouses?: Prisma.warehousesUpdateManyWithoutCompaniesNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutTaxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
+  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
   trips?: Prisma.tripsUncheckedUpdateManyWithoutCompaniesNestedInput
   users?: Prisma.usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
   vehicles?: Prisma.vehiclesUncheckedUpdateManyWithoutCompaniesNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutCompaniesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
 
@@ -1848,33 +2021,35 @@ export type companiesUncheckedUpdateWithoutDocumentSequencesInput = {
 export type CompaniesCountOutputType = {
   business_parties: number
   delivery_notes: number
+  dispatch_orders: number
+  documentSequences: number
   drivers: number
   pallets: number
   picking_orders: number
   products: number
+  taxes: number
   trips: number
   users: number
+  vehicle_combinations: number
   vehicles: number
   warehouses: number
-  documentSequences: number
-  dispatch_orders: number
-  vehicle_combinations: number
 }
 
 export type CompaniesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business_parties?: boolean | CompaniesCountOutputTypeCountBusiness_partiesArgs
   delivery_notes?: boolean | CompaniesCountOutputTypeCountDelivery_notesArgs
+  dispatch_orders?: boolean | CompaniesCountOutputTypeCountDispatch_ordersArgs
+  documentSequences?: boolean | CompaniesCountOutputTypeCountDocumentSequencesArgs
   drivers?: boolean | CompaniesCountOutputTypeCountDriversArgs
   pallets?: boolean | CompaniesCountOutputTypeCountPalletsArgs
   picking_orders?: boolean | CompaniesCountOutputTypeCountPicking_ordersArgs
   products?: boolean | CompaniesCountOutputTypeCountProductsArgs
+  taxes?: boolean | CompaniesCountOutputTypeCountTaxesArgs
   trips?: boolean | CompaniesCountOutputTypeCountTripsArgs
   users?: boolean | CompaniesCountOutputTypeCountUsersArgs
+  vehicle_combinations?: boolean | CompaniesCountOutputTypeCountVehicle_combinationsArgs
   vehicles?: boolean | CompaniesCountOutputTypeCountVehiclesArgs
   warehouses?: boolean | CompaniesCountOutputTypeCountWarehousesArgs
-  documentSequences?: boolean | CompaniesCountOutputTypeCountDocumentSequencesArgs
-  dispatch_orders?: boolean | CompaniesCountOutputTypeCountDispatch_ordersArgs
-  vehicle_combinations?: boolean | CompaniesCountOutputTypeCountVehicle_combinationsArgs
 }
 
 /**
@@ -1899,6 +2074,20 @@ export type CompaniesCountOutputTypeCountBusiness_partiesArgs<ExtArgs extends ru
  */
 export type CompaniesCountOutputTypeCountDelivery_notesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.delivery_notesWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountDispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.dispatch_ordersWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountDocumentSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_sequencesWhereInput
 }
 
 /**
@@ -1932,6 +2121,13 @@ export type CompaniesCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Ty
 /**
  * CompaniesCountOutputType without action
  */
+export type CompaniesCountOutputTypeCountTaxesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.taxesWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
 export type CompaniesCountOutputTypeCountTripsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.tripsWhereInput
 }
@@ -1941,6 +2137,13 @@ export type CompaniesCountOutputTypeCountTripsArgs<ExtArgs extends runtime.Types
  */
 export type CompaniesCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.usersWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountVehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.vehicle_combinationsWhereInput
 }
 
 /**
@@ -1957,27 +2160,6 @@ export type CompaniesCountOutputTypeCountWarehousesArgs<ExtArgs extends runtime.
   where?: Prisma.warehousesWhereInput
 }
 
-/**
- * CompaniesCountOutputType without action
- */
-export type CompaniesCountOutputTypeCountDocumentSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.document_sequencesWhereInput
-}
-
-/**
- * CompaniesCountOutputType without action
- */
-export type CompaniesCountOutputTypeCountDispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.dispatch_ordersWhereInput
-}
-
-/**
- * CompaniesCountOutputType without action
- */
-export type CompaniesCountOutputTypeCountVehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.vehicle_combinationsWhereInput
-}
-
 
 export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1987,17 +2169,18 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   created_at?: boolean
   business_parties?: boolean | Prisma.companies$business_partiesArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.companies$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.companies$dispatch_ordersArgs<ExtArgs>
+  documentSequences?: boolean | Prisma.companies$documentSequencesArgs<ExtArgs>
   drivers?: boolean | Prisma.companies$driversArgs<ExtArgs>
   pallets?: boolean | Prisma.companies$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.companies$picking_ordersArgs<ExtArgs>
   products?: boolean | Prisma.companies$productsArgs<ExtArgs>
+  taxes?: boolean | Prisma.companies$taxesArgs<ExtArgs>
   trips?: boolean | Prisma.companies$tripsArgs<ExtArgs>
   users?: boolean | Prisma.companies$usersArgs<ExtArgs>
+  vehicle_combinations?: boolean | Prisma.companies$vehicle_combinationsArgs<ExtArgs>
   vehicles?: boolean | Prisma.companies$vehiclesArgs<ExtArgs>
   warehouses?: boolean | Prisma.companies$warehousesArgs<ExtArgs>
-  documentSequences?: boolean | Prisma.companies$documentSequencesArgs<ExtArgs>
-  dispatch_orders?: boolean | Prisma.companies$dispatch_ordersArgs<ExtArgs>
-  vehicle_combinations?: boolean | Prisma.companies$vehicle_combinationsArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companies"]>
 
@@ -2029,17 +2212,18 @@ export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type companiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business_parties?: boolean | Prisma.companies$business_partiesArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.companies$delivery_notesArgs<ExtArgs>
+  dispatch_orders?: boolean | Prisma.companies$dispatch_ordersArgs<ExtArgs>
+  documentSequences?: boolean | Prisma.companies$documentSequencesArgs<ExtArgs>
   drivers?: boolean | Prisma.companies$driversArgs<ExtArgs>
   pallets?: boolean | Prisma.companies$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.companies$picking_ordersArgs<ExtArgs>
   products?: boolean | Prisma.companies$productsArgs<ExtArgs>
+  taxes?: boolean | Prisma.companies$taxesArgs<ExtArgs>
   trips?: boolean | Prisma.companies$tripsArgs<ExtArgs>
   users?: boolean | Prisma.companies$usersArgs<ExtArgs>
+  vehicle_combinations?: boolean | Prisma.companies$vehicle_combinationsArgs<ExtArgs>
   vehicles?: boolean | Prisma.companies$vehiclesArgs<ExtArgs>
   warehouses?: boolean | Prisma.companies$warehousesArgs<ExtArgs>
-  documentSequences?: boolean | Prisma.companies$documentSequencesArgs<ExtArgs>
-  dispatch_orders?: boolean | Prisma.companies$dispatch_ordersArgs<ExtArgs>
-  vehicle_combinations?: boolean | Prisma.companies$vehicle_combinationsArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type companiesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2050,17 +2234,18 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     business_parties: Prisma.$business_partiesPayload<ExtArgs>[]
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs>[]
+    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
+    documentSequences: Prisma.$document_sequencesPayload<ExtArgs>[]
     drivers: Prisma.$driversPayload<ExtArgs>[]
     pallets: Prisma.$palletsPayload<ExtArgs>[]
     picking_orders: Prisma.$picking_ordersPayload<ExtArgs>[]
     products: Prisma.$productsPayload<ExtArgs>[]
+    taxes: Prisma.$taxesPayload<ExtArgs>[]
     trips: Prisma.$tripsPayload<ExtArgs>[]
     users: Prisma.$usersPayload<ExtArgs>[]
+    vehicle_combinations: Prisma.$vehicle_combinationsPayload<ExtArgs>[]
     vehicles: Prisma.$vehiclesPayload<ExtArgs>[]
     warehouses: Prisma.$warehousesPayload<ExtArgs>[]
-    documentSequences: Prisma.$document_sequencesPayload<ExtArgs>[]
-    dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
-    vehicle_combinations: Prisma.$vehicle_combinationsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2464,17 +2649,18 @@ export interface Prisma__companiesClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   business_parties<T extends Prisma.companies$business_partiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$business_partiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   delivery_notes<T extends Prisma.companies$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$delivery_notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispatch_orders<T extends Prisma.companies$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documentSequences<T extends Prisma.companies$documentSequencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$documentSequencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_sequencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   drivers<T extends Prisma.companies$driversArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$driversArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$driversPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pallets<T extends Prisma.companies$palletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$palletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$palletsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   picking_orders<T extends Prisma.companies$picking_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$picking_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.companies$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$productsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  taxes<T extends Prisma.companies$taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trips<T extends Prisma.companies$tripsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.companies$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vehicle_combinations<T extends Prisma.companies$vehicle_combinationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$vehicle_combinationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$vehicle_combinationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vehicles<T extends Prisma.companies$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$vehiclesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouses<T extends Prisma.companies$warehousesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$warehousesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  documentSequences<T extends Prisma.companies$documentSequencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$documentSequencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_sequencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  dispatch_orders<T extends Prisma.companies$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  vehicle_combinations<T extends Prisma.companies$vehicle_combinationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$vehicle_combinationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$vehicle_combinationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2945,6 +3131,54 @@ export type companies$delivery_notesArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
+ * companies.dispatch_orders
+ */
+export type companies$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
+  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
+  cursor?: Prisma.dispatch_ordersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
+}
+
+/**
+ * companies.documentSequences
+ */
+export type companies$documentSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the document_sequences
+   */
+  select?: Prisma.document_sequencesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the document_sequences
+   */
+  omit?: Prisma.document_sequencesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.document_sequencesInclude<ExtArgs> | null
+  where?: Prisma.document_sequencesWhereInput
+  orderBy?: Prisma.document_sequencesOrderByWithRelationInput | Prisma.document_sequencesOrderByWithRelationInput[]
+  cursor?: Prisma.document_sequencesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_sequencesScalarFieldEnum | Prisma.Document_sequencesScalarFieldEnum[]
+}
+
+/**
  * companies.drivers
  */
 export type companies$driversArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3041,6 +3275,30 @@ export type companies$productsArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * companies.taxes
+ */
+export type companies$taxesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the taxes
+   */
+  select?: Prisma.taxesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the taxes
+   */
+  omit?: Prisma.taxesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.taxesInclude<ExtArgs> | null
+  where?: Prisma.taxesWhereInput
+  orderBy?: Prisma.taxesOrderByWithRelationInput | Prisma.taxesOrderByWithRelationInput[]
+  cursor?: Prisma.taxesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaxesScalarFieldEnum | Prisma.TaxesScalarFieldEnum[]
+}
+
+/**
  * companies.trips
  */
 export type companies$tripsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3089,6 +3347,30 @@ export type companies$usersArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * companies.vehicle_combinations
+ */
+export type companies$vehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the vehicle_combinations
+   */
+  select?: Prisma.vehicle_combinationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the vehicle_combinations
+   */
+  omit?: Prisma.vehicle_combinationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.vehicle_combinationsInclude<ExtArgs> | null
+  where?: Prisma.vehicle_combinationsWhereInput
+  orderBy?: Prisma.vehicle_combinationsOrderByWithRelationInput | Prisma.vehicle_combinationsOrderByWithRelationInput[]
+  cursor?: Prisma.vehicle_combinationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Vehicle_combinationsScalarFieldEnum | Prisma.Vehicle_combinationsScalarFieldEnum[]
+}
+
+/**
  * companies.vehicles
  */
 export type companies$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3134,78 +3416,6 @@ export type companies$warehousesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.WarehousesScalarFieldEnum | Prisma.WarehousesScalarFieldEnum[]
-}
-
-/**
- * companies.documentSequences
- */
-export type companies$documentSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the document_sequences
-   */
-  select?: Prisma.document_sequencesSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the document_sequences
-   */
-  omit?: Prisma.document_sequencesOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.document_sequencesInclude<ExtArgs> | null
-  where?: Prisma.document_sequencesWhereInput
-  orderBy?: Prisma.document_sequencesOrderByWithRelationInput | Prisma.document_sequencesOrderByWithRelationInput[]
-  cursor?: Prisma.document_sequencesWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Document_sequencesScalarFieldEnum | Prisma.Document_sequencesScalarFieldEnum[]
-}
-
-/**
- * companies.dispatch_orders
- */
-export type companies$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the dispatch_orders
-   */
-  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the dispatch_orders
-   */
-  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
-  where?: Prisma.dispatch_ordersWhereInput
-  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
-  cursor?: Prisma.dispatch_ordersWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
-}
-
-/**
- * companies.vehicle_combinations
- */
-export type companies$vehicle_combinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the vehicle_combinations
-   */
-  select?: Prisma.vehicle_combinationsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the vehicle_combinations
-   */
-  omit?: Prisma.vehicle_combinationsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.vehicle_combinationsInclude<ExtArgs> | null
-  where?: Prisma.vehicle_combinationsWhereInput
-  orderBy?: Prisma.vehicle_combinationsOrderByWithRelationInput | Prisma.vehicle_combinationsOrderByWithRelationInput[]
-  cursor?: Prisma.vehicle_combinationsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Vehicle_combinationsScalarFieldEnum | Prisma.Vehicle_combinationsScalarFieldEnum[]
 }
 
 /**
