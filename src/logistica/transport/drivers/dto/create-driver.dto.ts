@@ -4,12 +4,13 @@ import {
   IsBoolean,
   IsArray,
   ValidateNested,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { DriverDocumentDto } from './driver-document.dto';
 
 export class CreateDriverDto {
-  @IsString()
+  @IsUUID()
   company_id!: string;
 
   @IsString()
@@ -28,7 +29,7 @@ export class CreateDriverDto {
 
   @IsOptional()
   @IsBoolean()
-  active?: boolean;
+  active?: boolean = true;
 
   @IsOptional()
   @IsArray()

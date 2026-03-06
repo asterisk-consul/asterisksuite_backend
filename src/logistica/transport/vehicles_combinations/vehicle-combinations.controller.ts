@@ -7,7 +7,6 @@ import {
   Patch,
   Delete,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 
@@ -15,6 +14,8 @@ import { VehicleCombinationsService } from './vehicle-combinations.service';
 import { CreateVehicleCombinationDto } from './dto/create-vehicle-combination.dto';
 import { UpdateVehicleCombinationDto } from './dto/update-vehicle-combination.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 
 @Controller('vehicle-combinations')
 @UseGuards(JwtAuthGuard)
@@ -89,8 +90,7 @@ export class VehicleCombinationsController {
   // --------------------------------------------------
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Req() req: any) {
-    const user_id = req.user.sub;
-    return this.service.remove(id, user_id);
+  remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.remove(id, user.id);
   }
 }

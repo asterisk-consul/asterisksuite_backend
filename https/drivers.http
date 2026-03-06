@@ -1,14 +1,11 @@
 @baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3Mjc0MzQxMywiZXhwIjoxNzcyNzQ0MzEzfQ.AHcU7A6284xvg78ff1yIvSNKI8piHcCXUgRses7HgsU
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
-@driverId = UUID_DRIVER
+@driverId = REEMPLAZAR_DRIVER_ID
 @documentTypeLicense = e90d7345-dbe6-4eb6-8034-9980359729e8
 @documentTypeMedical = UUID_DOC_TYPE_MEDICAL
 
-###
-# ==============================
-# 🔐 LOGIN
-# ==============================
+### 🔐 LOGIN
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -16,6 +13,10 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
 
 ### ======================================================
 ### 1️⃣ Crear driver SIN documentos
@@ -108,8 +109,7 @@ Content-Type: application/json
 }
 
 ### ======================================================
-### 7️⃣ Actualizar / agregar documentos del driver
-### (usa UPSERT por document_type_id)
+### 7️⃣ Actualizar / agregar documentos
 ### ======================================================
 
 PATCH {{baseUrl}}/transport/drivers/{{driverId}}

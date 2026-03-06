@@ -72,6 +72,8 @@ export class DriversService {
   async update(id: string, dto: UpdateDriverDto) {
     const { documents, ...driverData } = dto;
 
+    await this.findOne(id);
+
     return this.prisma.$transaction(async (tx) => {
       await tx.drivers.update({
         where: { id },
@@ -117,8 +119,13 @@ export class DriversService {
   }
 
   async remove(id: string) {
-    await this.prisma.drivers.delete({
+    await this.findOne(id);
+
+    await this.prisma.drivers.update({
       where: { id },
+      data: {
+        active: false,
+      },
     });
 
     return { deleted: true };
