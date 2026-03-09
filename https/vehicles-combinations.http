@@ -1,6 +1,6 @@
-//@baseUrl = https://apidonandres.asterisksuite.cloud/api
-@baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
+//@baseUrl = http://localhost:3000/api
+
 
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
 @tractorId = 15d104d7-0e1c-402e-8eb5-40b829190558
@@ -14,6 +14,7 @@
 # ==============================
 # 🔐 LOGIN
 # ==============================
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -21,6 +22,10 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+
+###  <-- este separador es clave
+
+@accessToken = {{login.response.body.accessToken}}
 
 ###
 # =========================================

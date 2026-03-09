@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3Mjc0NjIyNiwiZXhwIjoxNzcyNzQ3MTI2fQ.LC-w4Xc-pk3TDOcoLNt0GcplotOH5JNe1-VaALT-uWE
+
 
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
 @tripId = 8807e401-f0bb-49e9-a711-79c7097ad495
@@ -14,6 +14,7 @@
 # ==============================
 # 🔐 LOGIN
 # ==============================
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -22,7 +23,9 @@ Content-Type: application/json
   "password": "123456"
 }
 
+###
 
+@accessToken = {{login.response.body.accessToken}}
 ### =====================================================
 ### 1️⃣ Crear viaje
 ### =====================================================

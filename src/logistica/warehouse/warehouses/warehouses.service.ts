@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateWarehouseDto } from './dto/create-warehouse.dto';
 import { UpdateWarehouseDto } from './dto/update-warehouse.dto';
+import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class WarehousesService {
@@ -23,7 +24,6 @@ export class WarehousesService {
     return this.prisma.warehouses.findMany({
       where: {
         company_id: companyId,
-        active: true,
       },
       include: {
         locations: true,
@@ -55,12 +55,12 @@ export class WarehousesService {
 
     return this.prisma.warehouses.update({
       where: { id },
-      data: {
+      data: omitUndefined({
         name: data.name,
         code: data.code,
         location_id: data.locationId,
         active: data.active,
-      },
+      }),
     });
   }
 
@@ -71,6 +71,16 @@ export class WarehousesService {
       where: { id },
       data: {
         active: false,
+      },
+    });
+  }
+  async active(id: string) {
+    await this.findOne(id);
+
+    return this.prisma.warehouses.update({
+      where: { id },
+      data: {
+        active: true,
       },
     });
   }

@@ -1,5 +1,5 @@
-@baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3Mjc0NTU2MCwiZXhwIjoxNzcyNzQ2NDYwfQ.I36QRapw61pPjRqZJGM_Y1HvzorRvjSdX-ZojV3JP9U
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
+
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
 @rateId = a6e5b562-9187-436c-a159-151a8644902a
 
@@ -7,6 +7,7 @@
 # ==============================
 # 🔐 LOGIN
 # ==============================
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -14,6 +15,9 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+
+###
+@accessToken = {{login.response.body.accessToken}}
 
 ### ======================================================
 ### 1️⃣ Crear transfer rate

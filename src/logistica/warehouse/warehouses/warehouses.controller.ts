@@ -43,4 +43,9 @@ export class WarehousesController {
   deactivate(@Param('id') id: string) {
     return this.service.deactivate(id);
   }
+
+  @Patch(':id/activate')
+  active(@Param('id') id: string) {
+    return this.service.active(id);
+  }
 }

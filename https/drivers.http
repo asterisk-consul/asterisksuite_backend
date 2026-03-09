@@ -22,6 +22,7 @@ Content-Type: application/json
 ### 1️⃣ Crear driver SIN documentos
 ### ======================================================
 
+# @name create
 POST {{baseUrl}}/transport/drivers
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
@@ -33,7 +34,7 @@ Content-Type: application/json
   "document": "30123456",
   "phone": "3515551234"
 }
-
+@driverId = {{create.response.body.id}}
 ### ======================================================
 ### 2️⃣ Crear driver CON un documento
 ### ======================================================
