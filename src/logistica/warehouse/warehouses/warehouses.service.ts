@@ -61,6 +61,9 @@ export class WarehousesService {
         location_id: data.locationId,
         active: data.active,
       }),
+      include: {
+        locations: true,
+      },
     });
   }
 
