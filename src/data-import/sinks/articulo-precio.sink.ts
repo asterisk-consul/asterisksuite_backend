@@ -1,16 +1,27 @@
 import { Sink } from '../core/interfaces';
+import { PrismaService } from '../../prisma/prisma.service';
 
 export class ArticuloPrecioSink implements Sink<any> {
-  async send(data: any[]): Promise<void> {
-    try {
-      console.log('Guardar en BD:', data);
+  constructor(private prismaService: PrismaService) {}
 
-      // Tu lógica de guardado aquí
-      // Ejemplo:
-      // await this.articuloPrecioRepository.insert(data);
-    } catch (error) {
-      console.error('Error al guardar en BD:', error);
-      throw error;
+  async send(data: any[]) {
+    const batchSize = 500;
+
+    for (let i = 0; i < data.length; i += batchSize) {
+      const batch = data.slice(i, i + batchSize);
+
+      const queries = batch.map((item) =>
+        this.prismaService.articuloprecio.updateMany({
+          where: {
+            articuloid: item.articuloid,
+          },
+          data: {
+            precio: item.precio,
+          },
+        }),
+      );
+
+      await this.prismaService.$transaction(queries);
     }
   }
 }
