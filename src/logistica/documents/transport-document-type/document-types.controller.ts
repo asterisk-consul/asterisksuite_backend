@@ -31,4 +31,9 @@ export class DocumentTypesController {
   deactivate(@Param('id') id: string) {
     return this.service.deactivate(id);
   }
+
+  @Patch(':id/activate')
+  activate(@Param('id') id: string) {
+    return this.service.active(id);
+  }
 }

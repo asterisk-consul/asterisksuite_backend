@@ -44,7 +44,7 @@ export class WarehousesController {
   }
 
   @Patch(':id/activate')
-  active(@Param('id') id: string) {
+  activate(@Param('id') id: string) {
     return this.service.active(id);
   }
 }

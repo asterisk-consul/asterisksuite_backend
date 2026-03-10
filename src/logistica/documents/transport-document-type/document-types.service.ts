@@ -39,4 +39,19 @@ export class DocumentTypesService {
       data: { active: false },
     });
   }
+
+  async active(id: string) {
+    const exists = await this.prisma.transport_document_types.findUnique({
+      where: { id },
+    });
+
+    if (!exists) {
+      throw new BadRequestException('Tipo de documento no existe');
+    }
+
+    return this.prisma.transport_document_types.update({
+      where: { id },
+      data: { active: true },
+    });
+  }
 }
