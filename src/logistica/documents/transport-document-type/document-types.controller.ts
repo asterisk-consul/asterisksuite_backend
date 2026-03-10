@@ -27,6 +27,11 @@ export class DocumentTypesController {
     return this.service.findAll(entity);
   }
 
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: CreateDocumentTypeDto) {
+    return this.service.update(id, dto);
+  }
+
   @Patch(':id/deactivate')
   deactivate(@Param('id') id: string) {
     return this.service.deactivate(id);
