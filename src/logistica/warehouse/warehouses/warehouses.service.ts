@@ -67,7 +67,7 @@ export class WarehousesService {
     });
   }
 
-  async deactivate(id: string) {
+  async desactivate(id: string) {
     await this.findOne(id);
 
     return this.prisma.warehouses.update({

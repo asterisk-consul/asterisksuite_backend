@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Query,
-  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { WarehousesService } from './warehouses.service';
@@ -39,9 +38,9 @@ export class WarehousesController {
     return this.service.update(id, dto);
   }
 
-  @Delete(':id')
+  @Patch(':id/desactivate')
   deactivate(@Param('id') id: string) {
-    return this.service.deactivate(id);
+    return this.service.desactivate(id);
   }
 
   @Patch(':id/activate')
