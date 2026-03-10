@@ -1,5 +1,5 @@
 @baseUrl = https://apidonandres.asterisksuite.cloud/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjcxNjM5NCwiZXhwIjoxNzcyNzE3Mjk0fQ.eb1Tf_MyA6IKXeIGyVbRzjU48I__Xs8njl2ApxwL500
+
 @documentTypeId = 499866a1-97b0-4c6a-8b9b-bea198bd1be5
 
 
@@ -7,6 +7,7 @@
 # ==============================
 # 🔐 LOGIN
 # ==============================
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -14,7 +15,9 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+###  <-- este separador es clave
 
+@accessToken = {{login.response.body.accessToken}}
 ### =====================================================
 ### Crear Tipo de Documento (VEHICLE)
 ### POST /logistica/document-types
@@ -60,6 +63,14 @@ Authorization: Bearer {{accessToken}}
 
 GET {{baseUrl}}/logistica/document-types?entity=VEHICLE
 Authorization: Bearer {{accessToken}}
+
+#### =====
+PATCH {{baseUrl}}/logistica/document-types/e90d7345-dbe6-4eb6-8034-9980359729e8
+Authorization: Bearer {{accessToken}}
+
+{
+  "entity": "VEHICLE"
+}
 
 
 ### =====================================================

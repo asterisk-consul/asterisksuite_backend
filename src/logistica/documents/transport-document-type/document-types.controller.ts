@@ -11,6 +11,7 @@ import {
 import { DocumentTypesService } from './document-types.service';
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 
 @Controller('logistica/document-types')
 @UseGuards(JwtAuthGuard)
@@ -28,7 +29,7 @@ export class DocumentTypesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: CreateDocumentTypeDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateDocumentTypeDto) {
     return this.service.update(id, dto);
   }
 

@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { omitUndefined } from '@/common/utils/object.utils';
+import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 
 @Injectable()
 export class DocumentTypesService {
@@ -26,7 +27,7 @@ export class DocumentTypesService {
     });
   }
 
-  async update(id: string, dto: CreateDocumentTypeDto) {
+  async update(id: string, dto: UpdateDocumentTypeDto) {
     return this.prisma.transport_document_types.update({
       where: { id },
       data: omitUndefined({
