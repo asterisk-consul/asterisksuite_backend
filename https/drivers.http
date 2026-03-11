@@ -1,6 +1,6 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
-@driverId = REEMPLAZAR_DRIVER_ID
+@driverId = a511c365-a06b-486e-a772-e8b37b0a1b13
 @documentTypeLicense = e90d7345-dbe6-4eb6-8034-9980359729e8
 @documentTypeMedical = UUID_DOC_TYPE_MEDICAL
 
@@ -135,4 +135,12 @@ Content-Type: application/json
 ### ======================================================
 
 DELETE {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+
+
+###
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}/active
+Authorization: Bearer {{accessToken}}
+###
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}/desactivate
 Authorization: Bearer {{accessToken}}

@@ -40,11 +40,11 @@ export class DriversController {
 
   @Patch(':id/desacivate')
   desactive(@Param('id') id: string) {
-    return this.driversService.desacivate(id);
+    return this.driversService.desactivate(id);
   }
 
-  @Patch(':id/active')
+  @Patch(':id/activate')
   active(@Param('id') id: string) {
-    return this.driversService.active(id);
+    return this.driversService.activete(id);
   }
 }

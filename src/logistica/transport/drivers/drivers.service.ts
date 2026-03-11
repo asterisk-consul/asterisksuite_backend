@@ -118,7 +118,7 @@ export class DriversService {
     });
   }
 
-  async active(id: string) {
+  async activate(id: string) {
     await this.findOne(id);
 
     await this.prisma.drivers.update({
@@ -130,7 +130,7 @@ export class DriversService {
 
     return { deleted: true };
   }
-  async desacivate(id: string) {
+  async desactivate(id: string) {
     await this.findOne(id);
 
     return this.prisma.drivers.update({
