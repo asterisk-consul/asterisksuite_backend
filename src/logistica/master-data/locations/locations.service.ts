@@ -62,27 +62,27 @@ export class LocationsService {
     });
   }
 
-  async activate(id: string) {
-    await this.findOne(id);
+  // async activate(id: string) {
+  //   await this.findOne(id);
 
-    return this.prisma.locations.update({
-      where: { id },
-      data: {
-        active: true,
-      },
-    });
-  }
+  //   return this.prisma.locations.update({
+  //     where: { id },
+  //     data: {
+  //       active: true,
+  //     },
+  //   });
+  // }
 
-  async deactivate(id: string) {
-    await this.findOne(id);
+  // async deactivate(id: string) {
+  //   await this.findOne(id);
 
-    return this.prisma.locations.update({
-      where: { id },
-      data: {
-        active: false,
-      },
-    });
-  }
+  //   return this.prisma.locations.update({
+  //     where: { id },
+  //     data: {
+  //       active: false,
+  //     },
+  //   });
+  // }
 
   async remove(id: string) {
     await this.findOne(id);

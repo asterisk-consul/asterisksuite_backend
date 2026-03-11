@@ -34,8 +34,9 @@ Content-Type: application/json
   "document": "30123456",
   "phone": "3515551234"
 }
-@driverId = {{create.response.body.id}}
-### ======================================================
+
+### 
+======================================================
 ### 2️⃣ Crear driver CON un documento
 ### ======================================================
 
@@ -139,7 +140,7 @@ Authorization: Bearer {{accessToken}}
 
 
 ###
-PATCH {{baseUrl}}/transport/drivers/{{driverId}}/active
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}/activate
 Authorization: Bearer {{accessToken}}
 ###
 PATCH {{baseUrl}}/transport/drivers/{{driverId}}/desactivate
