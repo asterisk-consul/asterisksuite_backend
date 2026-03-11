@@ -37,6 +37,11 @@ export class TripsController {
     return this.service.update(id, dto);
   }
 
+  @Patch(':id/status/:status')
+  updateStatus(@Param('id') id: string, @Param('status') status: string) {
+    return this.service.updateStatus(id, status);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id);

@@ -54,6 +54,16 @@ export class TripsService {
       data: dto,
     });
   }
+  async updateStatus(id: string, status: string) {
+    await this.findOne(id);
+
+    return this.prisma.trips.update({
+      where: { id },
+      data: {
+        status,
+      },
+    });
+  }
 
   async remove(id: string) {
     await this.findOne(id);
