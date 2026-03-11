@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
+import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class DriversService {
@@ -71,13 +72,14 @@ export class DriversService {
 
   async update(id: string, dto: UpdateDriverDto) {
     const { documents, ...driverData } = dto;
+    const safeDriverData = omitUndefined(driverData);
 
     await this.findOne(id);
 
     return this.prisma.$transaction(async (tx) => {
       await tx.drivers.update({
         where: { id },
-        data: driverData,
+        data: safeDriverData, // ✅ protegido
       });
 
       if (documents) {
@@ -109,25 +111,33 @@ export class DriversService {
         where: { id },
         include: {
           driverDocuments: {
-            include: {
-              transport_document_types: true,
-            },
+            include: { transport_document_types: true },
           },
         },
       });
     });
   }
 
-  async remove(id: string) {
+  async active(id: string) {
     await this.findOne(id);
 
     await this.prisma.drivers.update({
       where: { id },
       data: {
-        active: false,
+        active: true,
       },
     });
 
     return { deleted: true };
+  }
+  async desacivate(id: string) {
+    await this.findOne(id);
+
+    return this.prisma.drivers.update({
+      where: { id },
+      data: {
+        active: false,
+      },
+    });
   }
 }

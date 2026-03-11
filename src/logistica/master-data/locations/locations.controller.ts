@@ -38,6 +38,16 @@ export class LocationsController {
     return this.service.update(id, dto);
   }
 
+  // @Patch(':id/activate')
+  // activate(@Param('id') id: string) {
+  //   return this.service.activate(id);
+  // }
+
+  // @Patch(':id/desactivate')
+  // deactivate(@Param('id') id: string) {
+  //   return this.service.deactivate(id);
+  // }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id);

@@ -94,5 +94,5 @@ Content-Type: application/json
 ### 7️⃣ Eliminar tarifa
 ### ======================================================
 
-DELETE {{baseUrl}}/transfer-rates/{{rateId}}
+PATCH  {{baseUrl}}/transfer-rates/{{rateId}}/desactivate
 Authorization: Bearer {{accessToken}}

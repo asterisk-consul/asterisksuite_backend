@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -39,8 +38,13 @@ export class DriversController {
     return this.driversService.update(id, dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.driversService.remove(id);
+  @Patch(':id/desacivate')
+  desactive(@Param('id') id: string) {
+    return this.driversService.desacivate(id);
+  }
+
+  @Patch(':id/active')
+  active(@Param('id') id: string) {
+    return this.driversService.active(id);
   }
 }
