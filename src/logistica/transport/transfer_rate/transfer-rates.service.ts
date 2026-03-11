@@ -45,4 +45,11 @@ export class TransferRatesService {
       data: { active: false },
     });
   }
+
+  async active(id: string) {
+    return this.prisma.transfer_rates.update({
+      where: { id },
+      data: { active: true },
+    });
+  }
 }

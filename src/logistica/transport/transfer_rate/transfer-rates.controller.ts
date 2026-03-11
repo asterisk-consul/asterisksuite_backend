@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Patch,
-  Delete,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -39,8 +38,13 @@ export class TransferRatesController {
     return this.service.update(id, dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Patch(':id/desactivate')
+  deactivate(@Param('id') id: string) {
     return this.service.deactivate(id);
+  }
+
+  @Patch(':id/activate')
+  activate(@Param('id') id: string) {
+    return this.service.active(id);
   }
 }
