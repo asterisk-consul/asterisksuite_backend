@@ -6,54 +6,24 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { CreateTripRateDto } from './dto/create-trip-rate.dto';
 import { UpdateTripRateDto } from './dto/update-trip-rate.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 @Controller('trips')
+@UseGuards(JwtAuthGuard)
 export class TripsController {
   constructor(private readonly service: TripsService) {}
 
-  @Get(':company_id')
-  findAll(@Param('company_id') company_id: string) {
-    return this.service.findAll(company_id);
-  }
-
+  // ✅ Rutas específicas PRIMERO
   @Get('detail/:id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
-  }
-
-  @Post()
-  create(@Body() dto: CreateTripDto) {
-    return this.service.create(dto);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTripDto) {
-    return this.service.update(id, dto);
-  }
-
-  @Patch(':id/status/:status')
-  updateStatus(@Param('id') id: string, @Param('status') status: string) {
-    return this.service.updateStatus(id, status);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(id);
-  }
-
-  // ------------------------------
-  // TRIP RATES
-  // ------------------------------
-
-  @Post(':trip_id/rates')
-  addRate(@Param('trip_id') trip_id: string, @Body() dto: CreateTripRateDto) {
-    return this.service.addRate(trip_id, dto);
   }
 
   @Patch('rates/:id')
@@ -61,8 +31,39 @@ export class TripsController {
     return this.service.updateRate(id, dto);
   }
 
-  @Delete('rates/:id')
+  @Patch(':id/status/:status') // ✅ antes de :id
+  updateStatus(@Param('id') id: string, @Param('status') status: string) {
+    return this.service.updateStatus(id, status);
+  }
+
+  // ✅ Rutas genéricas DESPUÉS
+  @Get(':company_id')
+  findAll(@Param('company_id') company_id: string) {
+    return this.service.findAll(company_id);
+  }
+
+  @Patch(':id') // ← esta debe ir después de todas las específicas
+  update(@Param('id') id: string, @Body() dto: UpdateTripDto) {
+    return this.service.update(id, dto);
+  }
+
+  @Delete('rates/:id') // ✅ antes de :id
   removeRate(@Param('id') id: string) {
     return this.service.removeRate(id);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.service.remove(id);
+  }
+
+  @Post(':trip_id/rates')
+  addRate(@Param('trip_id') trip_id: string, @Body() dto: CreateTripRateDto) {
+    return this.service.addRate(trip_id, dto);
+  }
+
+  @Post()
+  create(@Body() dto: CreateTripDto) {
+    return this.service.create(dto);
   }
 }
