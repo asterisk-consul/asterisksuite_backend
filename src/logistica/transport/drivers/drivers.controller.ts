@@ -45,6 +45,6 @@ export class DriversController {
 
   @Patch(':id/activate')
   active(@Param('id') id: string) {
-    return this.driversService.activete(id);
+    return this.driversService.activate(id);
   }
 }
