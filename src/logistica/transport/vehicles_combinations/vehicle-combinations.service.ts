@@ -7,6 +7,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { Prisma } from '@/generated/prisma/client';
 import { CreateVehicleCombinationDto } from './dto/create-vehicle-combination.dto';
 import { UpdateVehicleCombinationDto } from './dto/update-vehicle-combination.dto';
+import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class VehicleCombinationsService {
@@ -156,11 +157,11 @@ export class VehicleCombinationsService {
 
     return this.prisma.vehicle_combinations.update({
       where: { id },
-      data: {
+      data: omitUndefined({
         unit_number: dto.unit_number,
         valid_from: dto.valid_from ? new Date(dto.valid_from) : undefined,
         valid_until: dto.valid_until ? new Date(dto.valid_until) : null,
-      },
+      }),
       include: {
         tractor: true,
         trailer: true,

@@ -40,6 +40,11 @@ export class VehiclesController {
 
   @Patch(':id/deactivate')
   deactivate(@Param('id') id: string) {
-    return this.service.deactivate(id);
+    return this.service.desactivate(id);
+  }
+
+  @Patch(':id/activate')
+  activate(@Param('id') id: string) {
+    return this.service.active(id);
   }
 }

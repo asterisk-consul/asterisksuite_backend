@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class VehiclesService {
@@ -122,7 +123,7 @@ export class VehiclesService {
       // 1️⃣ Actualizar datos básicos
       await tx.vehicles.update({
         where: { id },
-        data: {
+        data: omitUndefined({
           type: dto.type,
           brand: dto.brand,
           model: dto.model,
@@ -131,7 +132,7 @@ export class VehiclesService {
           max_volume: dto.maxVolume,
           refrigeration: dto.refrigeration,
           active: dto.active,
-        },
+        }),
       });
 
       // 2️⃣ Procesar documentos
@@ -197,7 +198,11 @@ export class VehiclesService {
     });
   }
 
-  async deactivate(id: string) {
+  async desactivate(id: string) {
     return this.update(id, { active: false });
+  }
+
+  async active(id: string) {
+    return this.update(id, { active: true });
   }
 }

@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
 
 
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
@@ -26,6 +26,7 @@ Content-Type: application/json
 ###
 
 @accessToken = {{login.response.body.accessToken}}
+# @acessRefresh = {{login.response.body.refreshToken}}
 ### =====================================================
 ### 1️⃣ Crear viaje
 ### =====================================================
@@ -72,6 +73,11 @@ Content-Type: application/json
   "status": "IN_PROGRESS",
   "departure_time": "2026-03-05T11:00:00Z"
 }
+###
+
+### Update trip status
+PATCH {{baseUrl}}/trips/{{tripId}}/status/IN_PROGRESS
+Authorization: Bearer {{accessToken}}
 
 ### =====================================================
 ### 5️⃣ Finalizar viaje

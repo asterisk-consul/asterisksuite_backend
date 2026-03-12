@@ -13,7 +13,13 @@ export class TripsService {
     return this.prisma.trips.findMany({
       where: { company_id },
       include: {
-        vehicle_combination: true,
+        vehicle_combination: {
+          include: {
+            tractor: true,
+            trailer: true,
+            drivers: true,
+          },
+        },
         trip_rates: {
           include: {
             transfer_rates: true,
