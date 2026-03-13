@@ -95,7 +95,7 @@ export class ComprasTransformer implements Transformer<
 
       // Solo impuestos con monto > 0 y que existan en la BD
       const impuestosValidos = impuestosRaw
-        .filter((i) => i.amount > 0)
+        .filter((i) => i.amount > 0) //evalua si el impuesto tiene un monto mayor a 0
         .map((i) => {
           const tax = taxMap.get(i.code);
           if (!tax) throw new Error(`Impuesto no encontrado: ${i.code}`);
