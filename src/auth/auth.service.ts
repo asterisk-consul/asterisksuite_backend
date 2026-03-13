@@ -10,6 +10,12 @@ import * as crypto from 'crypto';
 import { RegisterDto } from './dto/register.dto';
 import type { AuthUser } from './types/auth-user.interface';
 
+import { Prisma } from '@/generated/prisma/client';
+
+type RefreshTokenWithUser = Prisma.refresh_tokensGetPayload<{
+  include: { users: true };
+}>;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -122,31 +128,39 @@ export class AuthService {
   // =========================
   async refresh(refreshToken: string) {
     const hashed = this.hashToken(refreshToken);
+    const now = new Date();
 
-    // ✅ Sin updated_at — no existe en el modelo
-    // La ventana de gracia la manejamos con created_at
-    const stored = await this.prisma.refresh_tokens.findFirst({
-      where: {
-        token_hash: hashed,
-        OR: [
-          { revoked: false },
-          {
-            revoked: true,
-            created_at: { gte: new Date(Date.now() - 10000) },
-          },
-        ],
-      },
-      include: { users: true }, // ✅ esto sí existe en el schema
-    });
+    const GRACE_WINDOW_MS = 60000;
 
-    if (!stored || stored.expires_at < new Date()) {
-      throw new UnauthorizedException();
+    const stored: RefreshTokenWithUser | null =
+      await this.prisma.refresh_tokens.findFirst({
+        where: {
+          token_hash: hashed,
+          expires_at: { gt: now },
+          OR: [
+            { revoked: false },
+            {
+              revoked: true,
+              revoked_at: {
+                gte: new Date(now.getTime() - GRACE_WINDOW_MS),
+              },
+            },
+          ],
+        },
+        include: { users: true },
+      });
+
+    if (!stored) {
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
     if (!stored.revoked) {
       await this.prisma.refresh_tokens.update({
         where: { id: stored.id },
-        data: { revoked: true },
+        data: {
+          revoked: true,
+          revoked_at: now,
+        },
       });
     }
 

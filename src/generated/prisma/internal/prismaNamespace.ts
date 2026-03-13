@@ -3385,6 +3385,7 @@ export const Refresh_tokensScalarFieldEnum = {
   token_hash: 'token_hash',
   expires_at: 'expires_at',
   revoked: 'revoked',
+  revoked_at: 'revoked_at',
   created_at: 'created_at'
 } as const
 
