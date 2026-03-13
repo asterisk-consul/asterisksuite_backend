@@ -126,7 +126,13 @@ export class AuthService {
     const stored = await this.prisma.refresh_tokens.findFirst({
       where: {
         token_hash: hashed,
-        revoked: false,
+        OR: [
+          { revoked: false },
+          {
+            revoked: true,
+            updated_at: { gte: new Date(Date.now() - 10000) },
+          },
+        ],
       },
       include: { users: true },
     });
@@ -135,12 +141,33 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    await this.prisma.refresh_tokens.update({
-      where: { id: stored.id },
-      data: { revoked: true },
-    });
+    if (!stored.revoked) {
+      await this.prisma.refresh_tokens.update({
+        where: { id: stored.id },
+        data: { revoked: true },
+      });
+    }
 
-    return this.generateTokens(stored.users);
+    // ✅ Mapear Prisma → AuthUser
+    const u = stored.users as {
+      id: string;
+      name: string;
+      email: string;
+      role: string | null;
+      company_id: string | null;
+      active: boolean | null;
+    };
+
+    const user: AuthUser = {
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      companyId: u.company_id,
+      active: u.active,
+    };
+
+    return this.generateTokens(user); // ← antes era this.generateTokens(stored.users)
   }
 
   // =========================
