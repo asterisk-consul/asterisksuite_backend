@@ -120,27 +120,29 @@ export class AuthService {
   // =========================
   // REFRESH (ROTATION)
   // =========================
-  // auth.service.ts
   async refresh(refreshToken: string) {
     const hashed = this.hashToken(refreshToken);
 
     const stored = await this.prisma.refresh_tokens.findFirst({
-      where: { token_hash: hashed }, // ← sin el filtro revoked para ver el estado real
+      where: {
+        token_hash: hashed,
+        revoked: false,
+      },
       include: { users: true },
     });
 
-    console.log('[refresh] token encontrado:', !!stored);
-    console.log('[refresh] revocado:', stored?.revoked);
-    console.log(
-      '[refresh] expirado:',
-      stored ? stored.expires_at < new Date() : 'N/A',
-    );
-
-    if (!stored || stored.revoked || stored.expires_at < new Date()) {
+    if (!stored || stored.expires_at < new Date()) {
       throw new UnauthorizedException();
     }
-    // ...resto igual
+
+    await this.prisma.refresh_tokens.update({
+      where: { id: stored.id },
+      data: { revoked: true },
+    });
+
+    return this.generateTokens(stored.users);
   }
+
   // =========================
   // LOGOUT
   // =========================
