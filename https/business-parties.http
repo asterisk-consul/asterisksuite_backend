@@ -1,5 +1,5 @@
-@baseUrl = http://localhost:3000/api
-
+# @baseUrl = http://localhost:3000/api
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
 @partyId = b8c46fe5-c77a-4ea3-aed5-3d73e5e27915
 
