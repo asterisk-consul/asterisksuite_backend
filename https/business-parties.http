@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjMyODU5NCwiZXhwIjoxNzcyMzI5NDk0fQ.xTp3BMJmotlimIRjcW--cVkHUH0qiZI_PRICVmkeleg
+
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
 @partyId = b8c46fe5-c77a-4ea3-aed5-3d73e5e27915
 
@@ -7,6 +7,7 @@
 # ==============================
 # 🔐 LOGIN
 # ==============================
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -14,6 +15,8 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+###
+@accessToken = {{login.response.body.accessToken}}
 
 
 ### =====================================================

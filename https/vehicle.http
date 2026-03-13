@@ -1,5 +1,5 @@
-@baseUrl = https://apidonandres.asterisksuite.cloud/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjcwOTY5NiwiZXhwIjoxNzcyNzEwNTk2fQ.6JyqOoJtEqqwg9_VRewO7UQ9ksbzT1Il5ArvoSTt0XM
+# @baseUrl = https://apidonandres.asterisksuite.cloud/api
+@baseUrl = http://localhost:3000/api
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
 @vehicleId = 3c2c3bc4-77af-4ad8-912f-3dc647aae5b0
 @documentTypeVehicle = f070d7e1-9452-4899-b201-985274be7dd9
@@ -12,6 +12,7 @@
 # ==============================
 # 🔐 LOGIN
 # ==============================
+# @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -19,6 +20,10 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "123456"
 }
+
+###  <-- este separador es clave
+
+@accessToken = {{login.response.body.accessToken}}
 
 ### =====================================================
 ### 1️⃣ Crear vehículo SIN documentos

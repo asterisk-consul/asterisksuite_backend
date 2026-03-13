@@ -35,6 +35,7 @@ export class VehiclesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateVehicleDto) {
+    console.log('PATCH BODY:', dto);
     return this.service.update(id, dto);
   }
 

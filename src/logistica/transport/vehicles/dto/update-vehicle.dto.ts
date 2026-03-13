@@ -32,6 +32,10 @@ class UpdateVehicleDocumentDto {
 export class UpdateVehicleDto {
   @IsOptional()
   @IsString()
+  plate?: string;
+
+  @IsOptional()
+  @IsString()
   type?: string;
 
   @IsOptional()
