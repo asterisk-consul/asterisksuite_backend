@@ -123,6 +123,8 @@ export class AuthService {
   async refresh(refreshToken: string) {
     const hashed = this.hashToken(refreshToken);
 
+    // ✅ Sin updated_at — no existe en el modelo
+    // La ventana de gracia la manejamos con created_at
     const stored = await this.prisma.refresh_tokens.findFirst({
       where: {
         token_hash: hashed,
@@ -130,11 +132,11 @@ export class AuthService {
           { revoked: false },
           {
             revoked: true,
-            updated_at: { gte: new Date(Date.now() - 10000) },
+            created_at: { gte: new Date(Date.now() - 10000) },
           },
         ],
       },
-      include: { users: true },
+      include: { users: true }, // ✅ esto sí existe en el schema
     });
 
     if (!stored || stored.expires_at < new Date()) {
@@ -148,26 +150,16 @@ export class AuthService {
       });
     }
 
-    // ✅ Mapear Prisma → AuthUser
-    const u = stored.users as {
-      id: string;
-      name: string;
-      email: string;
-      role: string | null;
-      company_id: string | null;
-      active: boolean | null;
-    };
-
     const user: AuthUser = {
-      id: u.id,
-      name: u.name,
-      email: u.email,
-      role: u.role,
-      companyId: u.company_id,
-      active: u.active,
+      id: stored.users.id,
+      name: stored.users.name,
+      email: stored.users.email,
+      role: stored.users.role,
+      companyId: stored.users.company_id,
+      active: stored.users.active,
     };
 
-    return this.generateTokens(user); // ← antes era this.generateTokens(stored.users)
+    return this.generateTokens(user);
   }
 
   // =========================
