@@ -124,6 +124,7 @@ export class VehiclesService {
       await tx.vehicles.update({
         where: { id },
         data: omitUndefined({
+          plate: dto.plate,
           type: dto.type,
           brand: dto.brand,
           model: dto.model,
