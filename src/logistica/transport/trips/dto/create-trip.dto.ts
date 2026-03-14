@@ -4,7 +4,31 @@ import {
   IsString,
   IsDateString,
   IsNumber,
+  ValidateNested,
+  IsArray,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class CorridorStopDto {
+  @IsUUID()
+  location_id!: string;
+
+  @IsNumber()
+  stop_order!: number;
+}
+
+class RouteDto {
+  @IsUUID()
+  origin_location_id!: string;
+
+  @IsUUID()
+  destination_location_id!: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CorridorStopDto)
+  stops!: CorridorStopDto[];
+}
 
 export class CreateTripDto {
   @IsUUID()
@@ -25,6 +49,17 @@ export class CreateTripDto {
   @IsOptional()
   @IsUUID()
   destination_location_id?: string;
+
+  // ✅ NUEVO
+  @IsOptional()
+  @IsUUID()
+  corridor_id?: string;
+
+  // ✅ NUEVO corredor dinámico
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => RouteDto)
+  route?: RouteDto;
 
   @IsOptional()
   @IsDateString()

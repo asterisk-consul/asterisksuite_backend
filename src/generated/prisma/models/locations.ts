@@ -259,6 +259,9 @@ export type locationsWhereInput = {
   trips_trips_destination_location_idTolocations?: Prisma.TripsListRelationFilter
   trips_trips_origin_location_idTolocations?: Prisma.TripsListRelationFilter
   warehouses?: Prisma.WarehousesListRelationFilter
+  corridor_origin?: Prisma.CorridorsListRelationFilter
+  corridor_destination?: Prisma.CorridorsListRelationFilter
+  corridorStops?: Prisma.Corridor_stopsListRelationFilter
 }
 
 export type locationsOrderByWithRelationInput = {
@@ -278,6 +281,9 @@ export type locationsOrderByWithRelationInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsOrderByRelationAggregateInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsOrderByRelationAggregateInput
   warehouses?: Prisma.warehousesOrderByRelationAggregateInput
+  corridor_origin?: Prisma.corridorsOrderByRelationAggregateInput
+  corridor_destination?: Prisma.corridorsOrderByRelationAggregateInput
+  corridorStops?: Prisma.corridor_stopsOrderByRelationAggregateInput
 }
 
 export type locationsWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +306,9 @@ export type locationsWhereUniqueInput = Prisma.AtLeast<{
   trips_trips_destination_location_idTolocations?: Prisma.TripsListRelationFilter
   trips_trips_origin_location_idTolocations?: Prisma.TripsListRelationFilter
   warehouses?: Prisma.WarehousesListRelationFilter
+  corridor_origin?: Prisma.CorridorsListRelationFilter
+  corridor_destination?: Prisma.CorridorsListRelationFilter
+  corridorStops?: Prisma.Corridor_stopsListRelationFilter
 }, "id">
 
 export type locationsOrderByWithAggregationInput = {
@@ -351,6 +360,9 @@ export type locationsCreateInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateInput = {
@@ -370,6 +382,9 @@ export type locationsUncheckedCreateInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUpdateInput = {
@@ -389,6 +404,9 @@ export type locationsUpdateInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateInput = {
@@ -408,6 +426,9 @@ export type locationsUncheckedUpdateInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsCreateManyInput = {
@@ -612,6 +633,48 @@ export type locationsUpdateOneWithoutWarehousesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutWarehousesInput, Prisma.locationsUpdateWithoutWarehousesInput>, Prisma.locationsUncheckedUpdateWithoutWarehousesInput>
 }
 
+export type locationsCreateNestedOneWithoutCorridor_originInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_originInput, Prisma.locationsUncheckedCreateWithoutCorridor_originInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutCorridor_originInput
+  connect?: Prisma.locationsWhereUniqueInput
+}
+
+export type locationsCreateNestedOneWithoutCorridor_destinationInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_destinationInput, Prisma.locationsUncheckedCreateWithoutCorridor_destinationInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutCorridor_destinationInput
+  connect?: Prisma.locationsWhereUniqueInput
+}
+
+export type locationsUpdateOneRequiredWithoutCorridor_originNestedInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_originInput, Prisma.locationsUncheckedCreateWithoutCorridor_originInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutCorridor_originInput
+  upsert?: Prisma.locationsUpsertWithoutCorridor_originInput
+  connect?: Prisma.locationsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutCorridor_originInput, Prisma.locationsUpdateWithoutCorridor_originInput>, Prisma.locationsUncheckedUpdateWithoutCorridor_originInput>
+}
+
+export type locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_destinationInput, Prisma.locationsUncheckedCreateWithoutCorridor_destinationInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutCorridor_destinationInput
+  upsert?: Prisma.locationsUpsertWithoutCorridor_destinationInput
+  connect?: Prisma.locationsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutCorridor_destinationInput, Prisma.locationsUpdateWithoutCorridor_destinationInput>, Prisma.locationsUncheckedUpdateWithoutCorridor_destinationInput>
+}
+
+export type locationsCreateNestedOneWithoutCorridorStopsInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutCorridorStopsInput, Prisma.locationsUncheckedCreateWithoutCorridorStopsInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutCorridorStopsInput
+  connect?: Prisma.locationsWhereUniqueInput
+}
+
+export type locationsUpdateOneRequiredWithoutCorridorStopsNestedInput = {
+  create?: Prisma.XOR<Prisma.locationsCreateWithoutCorridorStopsInput, Prisma.locationsUncheckedCreateWithoutCorridorStopsInput>
+  connectOrCreate?: Prisma.locationsCreateOrConnectWithoutCorridorStopsInput
+  upsert?: Prisma.locationsUpsertWithoutCorridorStopsInput
+  connect?: Prisma.locationsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.locationsUpdateToOneWithWhereWithoutCorridorStopsInput, Prisma.locationsUpdateWithoutCorridorStopsInput>, Prisma.locationsUncheckedUpdateWithoutCorridorStopsInput>
+}
+
 export type locationsCreateWithoutCargo_transfersInput = {
   id?: string
   address?: string | null
@@ -628,6 +691,9 @@ export type locationsCreateWithoutCargo_transfersInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutCargo_transfersInput = {
@@ -646,6 +712,9 @@ export type locationsUncheckedCreateWithoutCargo_transfersInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutCargo_transfersInput = {
@@ -680,6 +749,9 @@ export type locationsUpdateWithoutCargo_transfersInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutCargo_transfersInput = {
@@ -698,6 +770,9 @@ export type locationsUncheckedUpdateWithoutCargo_transfersInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsCreateWithoutParty_locationsInput = {
@@ -716,6 +791,9 @@ export type locationsCreateWithoutParty_locationsInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutParty_locationsInput = {
@@ -734,6 +812,9 @@ export type locationsUncheckedCreateWithoutParty_locationsInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutParty_locationsInput = {
@@ -768,6 +849,9 @@ export type locationsUpdateWithoutParty_locationsInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutParty_locationsInput = {
@@ -786,6 +870,9 @@ export type locationsUncheckedUpdateWithoutParty_locationsInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsCreateWithoutDispatch_orders_destinationInput = {
@@ -804,6 +891,9 @@ export type locationsCreateWithoutDispatch_orders_destinationInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutDispatch_orders_destinationInput = {
@@ -822,6 +912,9 @@ export type locationsUncheckedCreateWithoutDispatch_orders_destinationInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutDispatch_orders_destinationInput = {
@@ -845,6 +938,9 @@ export type locationsCreateWithoutDispatch_orders_originInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutDispatch_orders_originInput = {
@@ -863,6 +959,9 @@ export type locationsUncheckedCreateWithoutDispatch_orders_originInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutDispatch_orders_originInput = {
@@ -897,6 +996,9 @@ export type locationsUpdateWithoutDispatch_orders_destinationInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutDispatch_orders_destinationInput = {
@@ -915,6 +1017,9 @@ export type locationsUncheckedUpdateWithoutDispatch_orders_destinationInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUpsertWithoutDispatch_orders_originInput = {
@@ -944,6 +1049,9 @@ export type locationsUpdateWithoutDispatch_orders_originInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutDispatch_orders_originInput = {
@@ -962,6 +1070,9 @@ export type locationsUncheckedUpdateWithoutDispatch_orders_originInput = {
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsCreateWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -980,6 +1091,9 @@ export type locationsCreateWithoutTrips_trips_destination_location_idTolocations
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -998,6 +1112,9 @@ export type locationsUncheckedCreateWithoutTrips_trips_destination_location_idTo
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -1021,6 +1138,9 @@ export type locationsCreateWithoutTrips_trips_origin_location_idTolocationsInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1039,6 +1159,9 @@ export type locationsUncheckedCreateWithoutTrips_trips_origin_location_idTolocat
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1073,6 +1196,9 @@ export type locationsUpdateWithoutTrips_trips_destination_location_idTolocations
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutTrips_trips_destination_location_idTolocationsInput = {
@@ -1091,6 +1217,9 @@ export type locationsUncheckedUpdateWithoutTrips_trips_destination_location_idTo
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUpsertWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1120,6 +1249,9 @@ export type locationsUpdateWithoutTrips_trips_origin_location_idTolocationsInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutTrips_trips_origin_location_idTolocationsInput = {
@@ -1138,6 +1270,9 @@ export type locationsUncheckedUpdateWithoutTrips_trips_origin_location_idTolocat
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsCreateWithoutWarehousesInput = {
@@ -1156,6 +1291,9 @@ export type locationsCreateWithoutWarehousesInput = {
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
 }
 
 export type locationsUncheckedCreateWithoutWarehousesInput = {
@@ -1174,6 +1312,9 @@ export type locationsUncheckedCreateWithoutWarehousesInput = {
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type locationsCreateOrConnectWithoutWarehousesInput = {
@@ -1208,6 +1349,9 @@ export type locationsUpdateWithoutWarehousesInput = {
   party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
 }
 
 export type locationsUncheckedUpdateWithoutWarehousesInput = {
@@ -1226,6 +1370,309 @@ export type locationsUncheckedUpdateWithoutWarehousesInput = {
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
   trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
   trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type locationsCreateWithoutCorridor_originInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
+}
+
+export type locationsUncheckedCreateWithoutCorridor_originInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type locationsCreateOrConnectWithoutCorridor_originInput = {
+  where: Prisma.locationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_originInput, Prisma.locationsUncheckedCreateWithoutCorridor_originInput>
+}
+
+export type locationsCreateWithoutCorridor_destinationInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutLocationInput
+}
+
+export type locationsUncheckedCreateWithoutCorridor_destinationInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type locationsCreateOrConnectWithoutCorridor_destinationInput = {
+  where: Prisma.locationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_destinationInput, Prisma.locationsUncheckedCreateWithoutCorridor_destinationInput>
+}
+
+export type locationsUpsertWithoutCorridor_originInput = {
+  update: Prisma.XOR<Prisma.locationsUpdateWithoutCorridor_originInput, Prisma.locationsUncheckedUpdateWithoutCorridor_originInput>
+  create: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_originInput, Prisma.locationsUncheckedCreateWithoutCorridor_originInput>
+  where?: Prisma.locationsWhereInput
+}
+
+export type locationsUpdateToOneWithWhereWithoutCorridor_originInput = {
+  where?: Prisma.locationsWhereInput
+  data: Prisma.XOR<Prisma.locationsUpdateWithoutCorridor_originInput, Prisma.locationsUncheckedUpdateWithoutCorridor_originInput>
+}
+
+export type locationsUpdateWithoutCorridor_originInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
+}
+
+export type locationsUncheckedUpdateWithoutCorridor_originInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type locationsUpsertWithoutCorridor_destinationInput = {
+  update: Prisma.XOR<Prisma.locationsUpdateWithoutCorridor_destinationInput, Prisma.locationsUncheckedUpdateWithoutCorridor_destinationInput>
+  create: Prisma.XOR<Prisma.locationsCreateWithoutCorridor_destinationInput, Prisma.locationsUncheckedCreateWithoutCorridor_destinationInput>
+  where?: Prisma.locationsWhereInput
+}
+
+export type locationsUpdateToOneWithWhereWithoutCorridor_destinationInput = {
+  where?: Prisma.locationsWhereInput
+  data: Prisma.XOR<Prisma.locationsUpdateWithoutCorridor_destinationInput, Prisma.locationsUncheckedUpdateWithoutCorridor_destinationInput>
+}
+
+export type locationsUpdateWithoutCorridor_destinationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutLocationNestedInput
+}
+
+export type locationsUncheckedUpdateWithoutCorridor_destinationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type locationsCreateWithoutCorridorStopsInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersCreateNestedManyWithoutOrigin_locationInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsCreateNestedManyWithoutDestination_locationInput
+}
+
+export type locationsUncheckedCreateWithoutCorridorStopsInput = {
+  id?: string
+  address?: string | null
+  city?: string | null
+  province?: string | null
+  country?: string | null
+  postal_code?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutLocationsInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutDestination_locationInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutOrigin_locationInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutLocationsInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedCreateNestedManyWithoutLocations_trips_origin_location_idTolocationsInput
+  warehouses?: Prisma.warehousesUncheckedCreateNestedManyWithoutLocationsInput
+  corridor_origin?: Prisma.corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput
+  corridor_destination?: Prisma.corridorsUncheckedCreateNestedManyWithoutDestination_locationInput
+}
+
+export type locationsCreateOrConnectWithoutCorridorStopsInput = {
+  where: Prisma.locationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.locationsCreateWithoutCorridorStopsInput, Prisma.locationsUncheckedCreateWithoutCorridorStopsInput>
+}
+
+export type locationsUpsertWithoutCorridorStopsInput = {
+  update: Prisma.XOR<Prisma.locationsUpdateWithoutCorridorStopsInput, Prisma.locationsUncheckedUpdateWithoutCorridorStopsInput>
+  create: Prisma.XOR<Prisma.locationsCreateWithoutCorridorStopsInput, Prisma.locationsUncheckedCreateWithoutCorridorStopsInput>
+  where?: Prisma.locationsWhereInput
+}
+
+export type locationsUpdateToOneWithWhereWithoutCorridorStopsInput = {
+  where?: Prisma.locationsWhereInput
+  data: Prisma.XOR<Prisma.locationsUpdateWithoutCorridorStopsInput, Prisma.locationsUncheckedUpdateWithoutCorridorStopsInput>
+}
+
+export type locationsUpdateWithoutCorridorStopsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUpdateManyWithoutOrigin_locationNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUpdateManyWithoutDestination_locationNestedInput
+}
+
+export type locationsUncheckedUpdateWithoutCorridorStopsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postal_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutLocationsNestedInput
+  dispatch_orders_destination?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationNestedInput
+  dispatch_orders_origin?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutLocationsNestedInput
+  trips_trips_destination_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsNestedInput
+  trips_trips_origin_location_idTolocations?: Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsNestedInput
+  warehouses?: Prisma.warehousesUncheckedUpdateManyWithoutLocationsNestedInput
+  corridor_origin?: Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput
+  corridor_destination?: Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput
 }
 
 
@@ -1241,6 +1688,9 @@ export type LocationsCountOutputType = {
   trips_trips_destination_location_idTolocations: number
   trips_trips_origin_location_idTolocations: number
   warehouses: number
+  corridor_origin: number
+  corridor_destination: number
+  corridorStops: number
 }
 
 export type LocationsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1251,6 +1701,9 @@ export type LocationsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensi
   trips_trips_destination_location_idTolocations?: boolean | LocationsCountOutputTypeCountTrips_trips_destination_location_idTolocationsArgs
   trips_trips_origin_location_idTolocations?: boolean | LocationsCountOutputTypeCountTrips_trips_origin_location_idTolocationsArgs
   warehouses?: boolean | LocationsCountOutputTypeCountWarehousesArgs
+  corridor_origin?: boolean | LocationsCountOutputTypeCountCorridor_originArgs
+  corridor_destination?: boolean | LocationsCountOutputTypeCountCorridor_destinationArgs
+  corridorStops?: boolean | LocationsCountOutputTypeCountCorridorStopsArgs
 }
 
 /**
@@ -1312,6 +1765,27 @@ export type LocationsCountOutputTypeCountWarehousesArgs<ExtArgs extends runtime.
   where?: Prisma.warehousesWhereInput
 }
 
+/**
+ * LocationsCountOutputType without action
+ */
+export type LocationsCountOutputTypeCountCorridor_originArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.corridorsWhereInput
+}
+
+/**
+ * LocationsCountOutputType without action
+ */
+export type LocationsCountOutputTypeCountCorridor_destinationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.corridorsWhereInput
+}
+
+/**
+ * LocationsCountOutputType without action
+ */
+export type LocationsCountOutputTypeCountCorridorStopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.corridor_stopsWhereInput
+}
+
 
 export type locationsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1330,6 +1804,9 @@ export type locationsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   trips_trips_destination_location_idTolocations?: boolean | Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs>
   trips_trips_origin_location_idTolocations?: boolean | Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs>
   warehouses?: boolean | Prisma.locations$warehousesArgs<ExtArgs>
+  corridor_origin?: boolean | Prisma.locations$corridor_originArgs<ExtArgs>
+  corridor_destination?: boolean | Prisma.locations$corridor_destinationArgs<ExtArgs>
+  corridorStops?: boolean | Prisma.locations$corridorStopsArgs<ExtArgs>
   _count?: boolean | Prisma.LocationsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["locations"]>
 
@@ -1378,6 +1855,9 @@ export type locationsInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   trips_trips_destination_location_idTolocations?: boolean | Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs>
   trips_trips_origin_location_idTolocations?: boolean | Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs>
   warehouses?: boolean | Prisma.locations$warehousesArgs<ExtArgs>
+  corridor_origin?: boolean | Prisma.locations$corridor_originArgs<ExtArgs>
+  corridor_destination?: boolean | Prisma.locations$corridor_destinationArgs<ExtArgs>
+  corridorStops?: boolean | Prisma.locations$corridorStopsArgs<ExtArgs>
   _count?: boolean | Prisma.LocationsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type locationsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1393,6 +1873,9 @@ export type $locationsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     trips_trips_destination_location_idTolocations: Prisma.$tripsPayload<ExtArgs>[]
     trips_trips_origin_location_idTolocations: Prisma.$tripsPayload<ExtArgs>[]
     warehouses: Prisma.$warehousesPayload<ExtArgs>[]
+    corridor_origin: Prisma.$corridorsPayload<ExtArgs>[]
+    corridor_destination: Prisma.$corridorsPayload<ExtArgs>[]
+    corridorStops: Prisma.$corridor_stopsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1805,6 +2288,9 @@ export interface Prisma__locationsClient<T, Null = never, ExtArgs extends runtim
   trips_trips_destination_location_idTolocations<T extends Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$trips_trips_destination_location_idTolocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trips_trips_origin_location_idTolocations<T extends Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$trips_trips_origin_location_idTolocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouses<T extends Prisma.locations$warehousesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$warehousesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  corridor_origin<T extends Prisma.locations$corridor_originArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$corridor_originArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$corridorsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  corridor_destination<T extends Prisma.locations$corridor_destinationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$corridor_destinationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$corridorsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  corridorStops<T extends Prisma.locations$corridorStopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locations$corridorStopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$corridor_stopsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2396,6 +2882,78 @@ export type locations$warehousesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.WarehousesScalarFieldEnum | Prisma.WarehousesScalarFieldEnum[]
+}
+
+/**
+ * locations.corridor_origin
+ */
+export type locations$corridor_originArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the corridors
+   */
+  select?: Prisma.corridorsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the corridors
+   */
+  omit?: Prisma.corridorsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.corridorsInclude<ExtArgs> | null
+  where?: Prisma.corridorsWhereInput
+  orderBy?: Prisma.corridorsOrderByWithRelationInput | Prisma.corridorsOrderByWithRelationInput[]
+  cursor?: Prisma.corridorsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorridorsScalarFieldEnum | Prisma.CorridorsScalarFieldEnum[]
+}
+
+/**
+ * locations.corridor_destination
+ */
+export type locations$corridor_destinationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the corridors
+   */
+  select?: Prisma.corridorsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the corridors
+   */
+  omit?: Prisma.corridorsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.corridorsInclude<ExtArgs> | null
+  where?: Prisma.corridorsWhereInput
+  orderBy?: Prisma.corridorsOrderByWithRelationInput | Prisma.corridorsOrderByWithRelationInput[]
+  cursor?: Prisma.corridorsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CorridorsScalarFieldEnum | Prisma.CorridorsScalarFieldEnum[]
+}
+
+/**
+ * locations.corridorStops
+ */
+export type locations$corridorStopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the corridor_stops
+   */
+  select?: Prisma.corridor_stopsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the corridor_stops
+   */
+  omit?: Prisma.corridor_stopsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.corridor_stopsInclude<ExtArgs> | null
+  where?: Prisma.corridor_stopsWhereInput
+  orderBy?: Prisma.corridor_stopsOrderByWithRelationInput | Prisma.corridor_stopsOrderByWithRelationInput[]
+  cursor?: Prisma.corridor_stopsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Corridor_stopsScalarFieldEnum | Prisma.Corridor_stopsScalarFieldEnum[]
 }
 
 /**

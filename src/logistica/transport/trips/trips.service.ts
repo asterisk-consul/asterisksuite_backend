@@ -20,9 +20,23 @@ export class TripsService {
             drivers: true,
           },
         },
+
         trip_rates: {
           include: {
             transfer_rates: true,
+          },
+        },
+
+        corridors: {
+          include: {
+            origin_location: true,
+            destination_location: true,
+            corridorStops: {
+              orderBy: { stop_order: 'asc' },
+              include: {
+                location: true,
+              },
+            },
           },
         },
       },
@@ -38,6 +52,19 @@ export class TripsService {
             transfer_rates: true,
           },
         },
+
+        corridors: {
+          include: {
+            origin_location: true,
+            destination_location: true,
+            corridorStops: {
+              orderBy: { stop_order: 'asc' },
+              include: {
+                location: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -47,8 +74,44 @@ export class TripsService {
   }
 
   async create(dto: CreateTripDto) {
+    let corridorsId = dto.corridor_id;
+
+    if (dto.route) {
+      const corridor = await this.prisma.corridors.create({
+        data: {
+          company_id: dto.company_id,
+
+          origin_location_id: dto.route.origin_location_id,
+          destination_location_id: dto.route.destination_location_id,
+
+          is_template: false,
+
+          corridorStops: {
+            create: dto.route.stops.map((stop) => ({
+              location_id: stop.location_id,
+              stop_order: stop.stop_order,
+            })),
+          },
+        },
+      });
+
+      corridorsId = corridor.id;
+    }
+
     return this.prisma.trips.create({
-      data: dto,
+      data: {
+        company_id: dto.company_id,
+        reference_number: dto.reference_number,
+        vehicle_combination_id: dto.vehicle_combination_id,
+        origin_location_id: dto.origin_location_id,
+        destination_location_id: dto.destination_location_id,
+        departure_time: dto.departure_time,
+        arrival_time: dto.arrival_time,
+        status: dto.status,
+        kilometers: dto.kilometers,
+
+        corridorsId, // ✅ CORRECTO
+      },
     });
   }
 
@@ -60,6 +123,7 @@ export class TripsService {
       data: dto,
     });
   }
+
   async updateStatus(id: string, status: string) {
     await this.findOne(id);
 

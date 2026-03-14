@@ -84,7 +84,9 @@ export const ModelName = {
   documents_vehicle: 'documents_vehicle',
   documents_driver: 'documents_driver',
   transfer_rates: 'transfer_rates',
-  trip_rates: 'trip_rates'
+  trip_rates: 'trip_rates',
+  corridors: 'corridors',
+  corridor_stops: 'corridor_stops'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -378,7 +380,8 @@ export const TripsScalarFieldEnum = {
   deleted_at: 'deleted_at',
   created_at: 'created_at',
   dispatch_order_id: 'dispatch_order_id',
-  kilometers: 'kilometers'
+  kilometers: 'kilometers',
+  corridorsId: 'corridorsId'
 } as const
 
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum]
@@ -558,6 +561,37 @@ export const Trip_ratesScalarFieldEnum = {
 } as const
 
 export type Trip_ratesScalarFieldEnum = (typeof Trip_ratesScalarFieldEnum)[keyof typeof Trip_ratesScalarFieldEnum]
+
+
+export const CorridorsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  description: 'description',
+  origin_location_id: 'origin_location_id',
+  destination_location_id: 'destination_location_id',
+  is_template: 'is_template',
+  total_distance_km: 'total_distance_km',
+  estimated_minutes: 'estimated_minutes',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type CorridorsScalarFieldEnum = (typeof CorridorsScalarFieldEnum)[keyof typeof CorridorsScalarFieldEnum]
+
+
+export const Corridor_stopsScalarFieldEnum = {
+  id: 'id',
+  corridor_id: 'corridor_id',
+  location_id: 'location_id',
+  stop_order: 'stop_order',
+  stop_type: 'stop_type',
+  distance_km: 'distance_km',
+  estimated_minutes: 'estimated_minutes',
+  created_at: 'created_at'
+} as const
+
+export type Corridor_stopsScalarFieldEnum = (typeof Corridor_stopsScalarFieldEnum)[keyof typeof Corridor_stopsScalarFieldEnum]
 
 
 export const SortOrder = {

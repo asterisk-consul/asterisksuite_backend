@@ -187,3 +187,13 @@ export type transfer_rates = Prisma.transfer_ratesModel
  * 
  */
 export type trip_rates = Prisma.trip_ratesModel
+/**
+ * Model corridors
+ * 
+ */
+export type corridors = Prisma.corridorsModel
+/**
+ * Model corridor_stops
+ * 
+ */
+export type corridor_stops = Prisma.corridor_stopsModel

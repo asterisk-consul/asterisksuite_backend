@@ -137,22 +137,30 @@ model files {
 }
 
 model locations {
-  id                                             String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  address                                        String?           @db.VarChar(255)
-  city                                           String?           @db.VarChar(100)
-  province                                       String?           @db.VarChar(100)
-  country                                        String?           @db.VarChar(100)
-  postal_code                                    String?           @db.VarChar(20)
-  latitude                                       Decimal?          @db.Decimal(10, 6)
-  longitude                                      Decimal?          @db.Decimal(10, 6)
-  created_at                                     DateTime          @default(now()) @db.Timestamp(6)
-  cargo_transfers                                cargo_transfers[]
-  dispatch_orders_destination                    dispatch_orders[] @relation("dispatch_destination_location")
-  dispatch_orders_origin                         dispatch_orders[] @relation("dispatch_origin_location")
-  party_locations                                party_locations[]
-  trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
-  trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
-  warehouses                                     warehouses[]
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  address     String?  @db.VarChar(255)
+  city        String?  @db.VarChar(100)
+  province    String?  @db.VarChar(100)
+  country     String?  @db.VarChar(100)
+  postal_code String?  @db.VarChar(20)
+  latitude    Decimal? @db.Decimal(10, 6)
+  longitude   Decimal? @db.Decimal(10, 6)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+
+  cargo_transfers             cargo_transfers[]
+  dispatch_orders_destination dispatch_orders[] @relation("dispatch_destination_location")
+  dispatch_orders_origin      dispatch_orders[] @relation("dispatch_origin_location")
+  party_locations             party_locations[]
+
+  trips_trips_destination_location_idTolocations trips[] @relation("trips_destination_location_idTolocations")
+  trips_trips_origin_location_idTolocations      trips[] @relation("trips_origin_location_idTolocations")
+
+  warehouses warehouses[]
+
+  corridor_origin      corridors[] @relation("corridor_origin")
+  corridor_destination corridors[] @relation("corridor_destination")
+
+  corridorStops corridor_stops[]
 }
 
 model pallet_items {
@@ -348,6 +356,8 @@ model trips {
   party_locations_trips_origin_party_location_idToparty_locations      party_locations?        @relation("trips_origin_party_location_idToparty_locations", fields: [origin_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses_trips_origin_warehouse_idTowarehouses                     warehouses?             @relation("trips_origin_warehouse_idTowarehouses", fields: [origin_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   vehicle_combination                                                  vehicle_combinations?   @relation(fields: [vehicle_combination_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  corridors                                                            corridors?              @relation(fields: [corridorsId], references: [id])
+  corridorsId                                                          String?                 @db.Uuid
 
   @@index([company_id], map: "idx_trips_company")
   @@index([status], map: "idx_trips_status")
@@ -567,4 +577,53 @@ model trip_rates {
   created_at     DateTime?      @default(now()) @db.Timestamp(6)
   transfer_rates transfer_rates @relation(fields: [rate_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips          trips          @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model corridors {
+  id         String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  company_id String @db.Uuid
+
+  name        String? @db.VarChar(150)
+  description String? @db.VarChar(255)
+
+  origin_location_id      String @db.Uuid
+  destination_location_id String @db.Uuid
+
+  is_template Boolean @default(true)
+
+  total_distance_km Decimal? @db.Decimal(10, 2)
+  estimated_minutes Int?
+
+  active Boolean @default(true)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  origin_location      locations @relation("corridor_origin", fields: [origin_location_id], references: [id])
+  destination_location locations @relation("corridor_destination", fields: [destination_location_id], references: [id])
+
+  corridorStops corridor_stops[]
+
+  trips trips[]
+
+  @@unique([company_id, name])
+}
+
+model corridor_stops {
+  id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+
+  corridor_id String @db.Uuid
+  location_id String @db.Uuid
+
+  stop_order Int
+  stop_type  String? @db.VarChar(30)
+
+  distance_km       Decimal? @db.Decimal(10, 2)
+  estimated_minutes Int?
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  corridor corridors @relation(fields: [corridor_id], references: [id], onDelete: Cascade)
+  location locations @relation(fields: [location_id], references: [id])
+
+  @@unique([corridor_id, stop_order])
 }

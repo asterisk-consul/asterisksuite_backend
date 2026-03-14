@@ -5,6 +5,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { DriversModule } from './drivers/drivers.module';
 import { VehicleCombinationsModule } from './vehicles_combinations/vehicle-combinations.module';
 import { TransferRatesModule } from './transfer_rate/transfer-rates.module';
+import { CorridorsModule } from './corridors/corridors.module';
 @Module({
   imports: [
     TripsModule,
@@ -13,6 +14,7 @@ import { TransferRatesModule } from './transfer_rate/transfer-rates.module';
     DriversModule,
     VehicleCombinationsModule,
     TransferRatesModule,
+    CorridorsModule,
   ],
   exports: [
     TripsModule,
@@ -21,6 +23,7 @@ import { TransferRatesModule } from './transfer_rate/transfer-rates.module';
     DriversModule,
     VehicleCombinationsModule,
     TransferRatesModule,
+    CorridorsModule,
   ],
 })
 export class TransportDomainModule {}
