@@ -77,7 +77,6 @@ export class VehiclesService {
     return this.prisma.vehicles.findMany({
       where: {
         company_id: companyId,
-        active: true,
       },
       include: {
         vehicleDocuments: {
