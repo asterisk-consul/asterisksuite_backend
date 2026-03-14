@@ -14,10 +14,12 @@ export class VehicleCombinationsService {
   constructor(private prisma: PrismaService) {}
 
   // --------------------------------------------------
-  // VALIDAR CONFLICTOS ACTIVOS
+  // VALIDAR CONFLICTOS ACTIVOS (tractor, trailer, driver)
   // --------------------------------------------------
-
-  private async validateActiveConflicts(dto: CreateVehicleCombinationDto) {
+  private async validateActiveConflicts(
+    dto: CreateVehicleCombinationDto | UpdateVehicleCombinationDto,
+    idToIgnore?: string,
+  ) {
     const conditions: Prisma.vehicle_combinationsWhereInput[] = [
       { tractor_id: dto.tractor_id },
     ];
@@ -33,8 +35,10 @@ export class VehicleCombinationsService {
     const conflict = await this.prisma.vehicle_combinations.findFirst({
       where: {
         company_id: dto.company_id,
-        valid_until: null,
+        valid_until: null, // ← SOLO combinaciones activas
+        deleted_at: null,
         OR: conditions,
+        id: idToIgnore ? { not: idToIgnore } : undefined,
       },
     });
 
@@ -46,11 +50,37 @@ export class VehicleCombinationsService {
   }
 
   // --------------------------------------------------
+  // VALIDAR UNIT_NUMBER
+  // --------------------------------------------------
+  private async validateUnitNumber(
+    dto: CreateVehicleCombinationDto | UpdateVehicleCombinationDto,
+    idToIgnore?: string,
+  ) {
+    if (!dto.unit_number) return;
+
+    const existing = await this.prisma.vehicle_combinations.findFirst({
+      where: {
+        company_id: dto.company_id,
+        unit_number: dto.unit_number,
+        valid_until: null, // ← SOLO combinaciones activas
+        deleted_at: null,
+        id: idToIgnore ? { not: idToIgnore } : undefined,
+      },
+    });
+
+    if (existing) {
+      throw new BadRequestException(
+        `El número de unidad ${dto.unit_number} ya existe en otra combinación activa`,
+      );
+    }
+  }
+
+  // --------------------------------------------------
   // CREATE
   // --------------------------------------------------
-
   async create(dto: CreateVehicleCombinationDto, user_id?: string) {
     await this.validateActiveConflicts(dto);
+    await this.validateUnitNumber(dto);
 
     return this.prisma.vehicle_combinations.create({
       data: {
@@ -74,7 +104,6 @@ export class VehicleCombinationsService {
   // --------------------------------------------------
   // LISTAR TODAS
   // --------------------------------------------------
-
   async findAll(company_id: string) {
     return this.prisma.vehicle_combinations.findMany({
       where: { company_id },
@@ -83,16 +112,13 @@ export class VehicleCombinationsService {
         trailer: true,
         drivers: true,
       },
-      orderBy: {
-        created_at: 'desc',
-      },
+      orderBy: { created_at: 'desc' },
     });
   }
 
   // --------------------------------------------------
   // LISTAR ACTIVAS
   // --------------------------------------------------
-
   async findActive(company_id: string) {
     return this.prisma.vehicle_combinations.findMany({
       where: {
@@ -110,7 +136,6 @@ export class VehicleCombinationsService {
   // --------------------------------------------------
   // BUSCAR UNA
   // --------------------------------------------------
-
   async findOne(id: string) {
     const combination = await this.prisma.vehicle_combinations.findUnique({
       where: { id },
@@ -132,7 +157,6 @@ export class VehicleCombinationsService {
   // --------------------------------------------------
   // FINALIZAR COMBINACION
   // --------------------------------------------------
-
   async finishCombination(id: string) {
     const combination = await this.findOne(id);
 
@@ -142,18 +166,17 @@ export class VehicleCombinationsService {
 
     return this.prisma.vehicle_combinations.update({
       where: { id },
-      data: {
-        valid_until: new Date(),
-      },
+      data: { valid_until: new Date() },
     });
   }
 
   // --------------------------------------------------
   // UPDATE
   // --------------------------------------------------
-
   async update(id: string, dto: UpdateVehicleCombinationDto) {
     await this.findOne(id);
+    await this.validateActiveConflicts(dto, id);
+    await this.validateUnitNumber(dto, id);
 
     return this.prisma.vehicle_combinations.update({
       where: { id },
@@ -161,6 +184,9 @@ export class VehicleCombinationsService {
         unit_number: dto.unit_number,
         valid_from: dto.valid_from ? new Date(dto.valid_from) : undefined,
         valid_until: dto.valid_until ? new Date(dto.valid_until) : null,
+        tractor_id: dto.tractor_id,
+        trailer_id: dto.trailer_id,
+        driver_id: dto.driver_id,
       }),
       include: {
         tractor: true,
@@ -173,7 +199,6 @@ export class VehicleCombinationsService {
   // --------------------------------------------------
   // HISTORIAL POR VEHICULO
   // --------------------------------------------------
-
   async findByVehicle(vehicle_id: string) {
     return this.prisma.vehicle_combinations.findMany({
       where: {
@@ -184,16 +209,13 @@ export class VehicleCombinationsService {
         trailer: true,
         drivers: true,
       },
-      orderBy: {
-        valid_from: 'desc',
-      },
+      orderBy: { valid_from: 'desc' },
     });
   }
 
   // --------------------------------------------------
   // SOFT DELETE
   // --------------------------------------------------
-
   async remove(id: string, user_id?: string) {
     await this.findOne(id);
 
