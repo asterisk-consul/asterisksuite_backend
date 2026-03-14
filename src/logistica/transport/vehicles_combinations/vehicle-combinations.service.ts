@@ -157,7 +157,7 @@ export class VehicleCombinationsService {
   // --------------------------------------------------
   // FINALIZAR COMBINACION
   // --------------------------------------------------
-  async finishCombination(id: string) {
+  async finish(id: string) {
     const combination = await this.findOne(id);
 
     if (combination.valid_until) {
@@ -167,6 +167,21 @@ export class VehicleCombinationsService {
     return this.prisma.vehicle_combinations.update({
       where: { id },
       data: { valid_until: new Date() },
+      include: { tractor: true, trailer: true, drivers: true },
+    });
+  }
+
+  async activate(id: string) {
+    const combination = await this.findOne(id);
+
+    if (!combination.valid_until) {
+      throw new BadRequestException('La combinación ya está activa');
+    }
+
+    return this.prisma.vehicle_combinations.update({
+      where: { id },
+      data: { valid_until: null },
+      include: { tractor: true, trailer: true, drivers: true },
     });
   }
 

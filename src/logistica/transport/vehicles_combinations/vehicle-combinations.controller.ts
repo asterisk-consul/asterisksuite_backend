@@ -73,7 +73,16 @@ export class VehicleCombinationsController {
 
   @Patch(':id/finish')
   finish(@Param('id') id: string) {
-    return this.service.finishCombination(id);
+    return this.service.finish(id);
+  }
+
+  // --------------------------------------------------
+  // ACTIVAR COMBINACION
+  // --------------------------------------------------
+
+  @Patch(':id/activate')
+  activate(@Param('id') id: string) {
+    return this.service.activate(id);
   }
 
   // --------------------------------------------------
