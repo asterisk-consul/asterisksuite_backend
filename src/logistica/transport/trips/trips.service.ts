@@ -74,18 +74,15 @@ export class TripsService {
   }
 
   async create(dto: CreateTripDto) {
-    let corridorsId = dto.corridor_id;
+    let corridorId = dto.corridor_id ?? null;
 
     if (dto.route) {
       const corridor = await this.prisma.corridors.create({
         data: {
           company_id: dto.company_id,
-
           origin_location_id: dto.route.origin_location_id,
           destination_location_id: dto.route.destination_location_id,
-
           is_template: false,
-
           corridorStops: {
             create: dto.route.stops.map((stop) => ({
               location_id: stop.location_id,
@@ -95,7 +92,7 @@ export class TripsService {
         },
       });
 
-      corridorsId = corridor.id;
+      corridorId = corridor.id;
     }
 
     return this.prisma.trips.create({
@@ -109,8 +106,7 @@ export class TripsService {
         arrival_time: dto.arrival_time,
         status: dto.status,
         kilometers: dto.kilometers,
-
-        corridorsId, // ✅ CORRECTO
+        corridor_id: corridorId, // ✅ campo escalar directo, sin casteos
       },
     });
   }

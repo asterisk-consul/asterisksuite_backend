@@ -356,8 +356,8 @@ model trips {
   party_locations_trips_origin_party_location_idToparty_locations      party_locations?        @relation("trips_origin_party_location_idToparty_locations", fields: [origin_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses_trips_origin_warehouse_idTowarehouses                     warehouses?             @relation("trips_origin_warehouse_idTowarehouses", fields: [origin_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   vehicle_combination                                                  vehicle_combinations?   @relation(fields: [vehicle_combination_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  corridors                                                            corridors?              @relation(fields: [corridorsId], references: [id])
-  corridorsId                                                          String?                 @db.Uuid
+  corridors                                                            corridors?              @relation(fields: [corridor_id], references: [id])
+  corridor_id                                                          String?                 @db.Uuid
 
   @@index([company_id], map: "idx_trips_company")
   @@index([status], map: "idx_trips_status")

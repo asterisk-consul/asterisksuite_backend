@@ -3418,7 +3418,7 @@ export const TripsScalarFieldEnum = {
   created_at: 'created_at',
   dispatch_order_id: 'dispatch_order_id',
   kilometers: 'kilometers',
-  corridorsId: 'corridorsId'
+  corridor_id: 'corridor_id'
 } as const
 
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum]

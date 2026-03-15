@@ -54,7 +54,7 @@ export type TripsMinAggregateOutputType = {
   created_at: Date | null
   dispatch_order_id: string | null
   kilometers: runtime.Decimal | null
-  corridorsId: string | null
+  corridor_id: string | null
 }
 
 export type TripsMaxAggregateOutputType = {
@@ -77,7 +77,7 @@ export type TripsMaxAggregateOutputType = {
   created_at: Date | null
   dispatch_order_id: string | null
   kilometers: runtime.Decimal | null
-  corridorsId: string | null
+  corridor_id: string | null
 }
 
 export type TripsCountAggregateOutputType = {
@@ -100,7 +100,7 @@ export type TripsCountAggregateOutputType = {
   created_at: number
   dispatch_order_id: number
   kilometers: number
-  corridorsId: number
+  corridor_id: number
   _all: number
 }
 
@@ -133,7 +133,7 @@ export type TripsMinAggregateInputType = {
   created_at?: true
   dispatch_order_id?: true
   kilometers?: true
-  corridorsId?: true
+  corridor_id?: true
 }
 
 export type TripsMaxAggregateInputType = {
@@ -156,7 +156,7 @@ export type TripsMaxAggregateInputType = {
   created_at?: true
   dispatch_order_id?: true
   kilometers?: true
-  corridorsId?: true
+  corridor_id?: true
 }
 
 export type TripsCountAggregateInputType = {
@@ -179,7 +179,7 @@ export type TripsCountAggregateInputType = {
   created_at?: true
   dispatch_order_id?: true
   kilometers?: true
-  corridorsId?: true
+  corridor_id?: true
   _all?: true
 }
 
@@ -289,7 +289,7 @@ export type TripsGroupByOutputType = {
   created_at: Date
   dispatch_order_id: string | null
   kilometers: runtime.Decimal | null
-  corridorsId: string | null
+  corridor_id: string | null
   _count: TripsCountAggregateOutputType | null
   _avg: TripsAvgAggregateOutputType | null
   _sum: TripsSumAggregateOutputType | null
@@ -335,7 +335,7 @@ export type tripsWhereInput = {
   created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   kilometers?: Prisma.DecimalNullableFilter<"trips"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.UuidNullableFilter<"trips"> | string | null
+  corridor_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.Cargo_transfersListRelationFilter
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.Cargo_transfersListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
@@ -376,7 +376,7 @@ export type tripsOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   kilometers?: Prisma.SortOrderInput | Prisma.SortOrder
-  corridorsId?: Prisma.SortOrderInput | Prisma.SortOrder
+  corridor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersOrderByRelationAggregateInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersOrderByRelationAggregateInput
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
@@ -420,7 +420,7 @@ export type tripsWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   kilometers?: Prisma.DecimalNullableFilter<"trips"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.UuidNullableFilter<"trips"> | string | null
+  corridor_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.Cargo_transfersListRelationFilter
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.Cargo_transfersListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
@@ -461,7 +461,7 @@ export type tripsOrderByWithAggregationInput = {
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   kilometers?: Prisma.SortOrderInput | Prisma.SortOrder
-  corridorsId?: Prisma.SortOrderInput | Prisma.SortOrder
+  corridor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.tripsCountOrderByAggregateInput
   _avg?: Prisma.tripsAvgOrderByAggregateInput
   _max?: Prisma.tripsMaxOrderByAggregateInput
@@ -492,7 +492,7 @@ export type tripsScalarWhereWithAggregatesInput = {
   created_at?: Prisma.DateTimeWithAggregatesFilter<"trips"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
   kilometers?: Prisma.DecimalNullableWithAggregatesFilter<"trips"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
+  corridor_id?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
 }
 
 export type tripsCreateInput = {
@@ -545,7 +545,7 @@ export type tripsUncheckedCreateInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -605,7 +605,7 @@ export type tripsUncheckedUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -635,7 +635,7 @@ export type tripsCreateManyInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateManyMutationInput = {
@@ -670,7 +670,7 @@ export type tripsUncheckedUpdateManyInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TripsNullableScalarRelationFilter = {
@@ -713,7 +713,7 @@ export type tripsCountOrderByAggregateInput = {
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrder
   kilometers?: Prisma.SortOrder
-  corridorsId?: Prisma.SortOrder
+  corridor_id?: Prisma.SortOrder
 }
 
 export type tripsAvgOrderByAggregateInput = {
@@ -740,7 +740,7 @@ export type tripsMaxOrderByAggregateInput = {
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrder
   kilometers?: Prisma.SortOrder
-  corridorsId?: Prisma.SortOrder
+  corridor_id?: Prisma.SortOrder
 }
 
 export type tripsMinOrderByAggregateInput = {
@@ -763,7 +763,7 @@ export type tripsMinOrderByAggregateInput = {
   created_at?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrder
   kilometers?: Prisma.SortOrder
-  corridorsId?: Prisma.SortOrder
+  corridor_id?: Prisma.SortOrder
 }
 
 export type tripsSumOrderByAggregateInput = {
@@ -1387,7 +1387,7 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_from_trip
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
@@ -1450,7 +1450,7 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_to_trip_i
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
@@ -1524,7 +1524,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_from_trip
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
@@ -1593,7 +1593,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_to_trip_i
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
@@ -1650,7 +1650,7 @@ export type tripsUncheckedCreateWithoutCompaniesInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -1709,7 +1709,7 @@ export type tripsScalarWhereInput = {
   created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
   dispatch_order_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   kilometers?: Prisma.DecimalNullableFilter<"trips"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.UuidNullableFilter<"trips"> | string | null
+  corridor_id?: Prisma.UuidNullableFilter<"trips"> | string | null
 }
 
 export type tripsCreateWithoutDelivery_notesInput = {
@@ -1761,7 +1761,7 @@ export type tripsUncheckedCreateWithoutDelivery_notesInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
@@ -1835,7 +1835,7 @@ export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
@@ -1892,7 +1892,7 @@ export type tripsUncheckedCreateWithoutLocations_trips_destination_location_idTo
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -1960,7 +1960,7 @@ export type tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocat
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2060,7 +2060,7 @@ export type tripsUncheckedCreateWithoutParty_locations_trips_destination_party_l
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2128,7 +2128,7 @@ export type tripsUncheckedCreateWithoutParty_locations_trips_origin_party_locati
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2229,7 +2229,7 @@ export type tripsUncheckedCreateWithoutPicking_ordersInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2303,7 +2303,7 @@ export type tripsUncheckedUpdateWithoutPicking_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -2361,7 +2361,7 @@ export type tripsUncheckedCreateWithoutTrip_cargoInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2435,7 +2435,7 @@ export type tripsUncheckedUpdateWithoutTrip_cargoInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -2493,7 +2493,7 @@ export type tripsUncheckedCreateWithoutTrip_temperature_logsInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2567,7 +2567,7 @@ export type tripsUncheckedUpdateWithoutTrip_temperature_logsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -2624,7 +2624,7 @@ export type tripsUncheckedCreateWithoutDispatch_ordersInput = {
   deleted_at?: Date | string | null
   created_at?: Date | string
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2708,7 +2708,7 @@ export type tripsUncheckedCreateWithoutUsersInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2792,7 +2792,7 @@ export type tripsUncheckedCreateWithoutVehicle_combinationInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2876,7 +2876,7 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_destination_warehouse_id
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -2944,7 +2944,7 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_origin_warehouse_idTowar
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -3045,7 +3045,7 @@ export type tripsUncheckedCreateWithoutTrip_ratesInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
@@ -3119,7 +3119,7 @@ export type tripsUncheckedUpdateWithoutTrip_ratesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3231,7 +3231,7 @@ export type tripsCreateManyCompaniesInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutCompaniesInput = {
@@ -3282,7 +3282,7 @@ export type tripsUncheckedUpdateWithoutCompaniesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3311,7 +3311,7 @@ export type tripsUncheckedUpdateManyWithoutCompaniesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyLocations_trips_destination_location_idTolocationsInput = {
@@ -3333,7 +3333,7 @@ export type tripsCreateManyLocations_trips_destination_location_idTolocationsInp
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsCreateManyLocations_trips_origin_location_idTolocationsInput = {
@@ -3355,7 +3355,7 @@ export type tripsCreateManyLocations_trips_origin_location_idTolocationsInput = 
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -3406,7 +3406,7 @@ export type tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTo
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3435,7 +3435,7 @@ export type tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
@@ -3486,7 +3486,7 @@ export type tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocat
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3515,7 +3515,7 @@ export type tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTol
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyParty_locations_trips_destination_party_location_idToparty_locationsInput = {
@@ -3537,7 +3537,7 @@ export type tripsCreateManyParty_locations_trips_destination_party_location_idTo
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsCreateManyParty_locations_trips_origin_party_location_idToparty_locationsInput = {
@@ -3559,7 +3559,7 @@ export type tripsCreateManyParty_locations_trips_origin_party_location_idToparty
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput = {
@@ -3610,7 +3610,7 @@ export type tripsUncheckedUpdateWithoutParty_locations_trips_destination_party_l
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3639,7 +3639,7 @@ export type tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_par
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsUpdateWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput = {
@@ -3690,7 +3690,7 @@ export type tripsUncheckedUpdateWithoutParty_locations_trips_origin_party_locati
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3719,7 +3719,7 @@ export type tripsUncheckedUpdateManyWithoutParty_locations_trips_origin_party_lo
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyDispatch_ordersInput = {
@@ -3741,7 +3741,7 @@ export type tripsCreateManyDispatch_ordersInput = {
   deleted_at?: Date | string | null
   created_at?: Date | string
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutDispatch_ordersInput = {
@@ -3792,7 +3792,7 @@ export type tripsUncheckedUpdateWithoutDispatch_ordersInput = {
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3821,7 +3821,7 @@ export type tripsUncheckedUpdateManyWithoutDispatch_ordersInput = {
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyUsersInput = {
@@ -3843,7 +3843,7 @@ export type tripsCreateManyUsersInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutUsersInput = {
@@ -3894,7 +3894,7 @@ export type tripsUncheckedUpdateWithoutUsersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -3923,7 +3923,7 @@ export type tripsUncheckedUpdateManyWithoutUsersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyVehicle_combinationInput = {
@@ -3945,7 +3945,7 @@ export type tripsCreateManyVehicle_combinationInput = {
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutVehicle_combinationInput = {
@@ -3996,7 +3996,7 @@ export type tripsUncheckedUpdateWithoutVehicle_combinationInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -4025,7 +4025,7 @@ export type tripsUncheckedUpdateManyWithoutVehicle_combinationInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyWarehouses_trips_destination_warehouse_idTowarehousesInput = {
@@ -4047,7 +4047,7 @@ export type tripsCreateManyWarehouses_trips_destination_warehouse_idTowarehouses
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsCreateManyWarehouses_trips_origin_warehouse_idTowarehousesInput = {
@@ -4069,7 +4069,7 @@ export type tripsCreateManyWarehouses_trips_origin_warehouse_idTowarehousesInput
   created_at?: Date | string
   dispatch_order_id?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: string | null
+  corridor_id?: string | null
 }
 
 export type tripsUpdateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
@@ -4120,7 +4120,7 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_destination_warehouse_id
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -4149,7 +4149,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehous
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsUpdateWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
@@ -4200,7 +4200,7 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_origin_warehouse_idTowar
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
@@ -4229,7 +4229,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idT
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  corridorsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type tripsCreateManyCorridorsInput = {
@@ -4439,7 +4439,7 @@ export type tripsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   created_at?: boolean
   dispatch_order_id?: boolean
   kilometers?: boolean
-  corridorsId?: boolean
+  corridor_id?: boolean
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: boolean | Prisma.trips$cargo_transfers_cargo_transfers_from_trip_idTotripsArgs<ExtArgs>
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: boolean | Prisma.trips$cargo_transfers_cargo_transfers_to_trip_idTotripsArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.trips$delivery_notesArgs<ExtArgs>
@@ -4481,7 +4481,7 @@ export type tripsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   created_at?: boolean
   dispatch_order_id?: boolean
   kilometers?: boolean
-  corridorsId?: boolean
+  corridor_id?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
@@ -4515,7 +4515,7 @@ export type tripsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   created_at?: boolean
   dispatch_order_id?: boolean
   kilometers?: boolean
-  corridorsId?: boolean
+  corridor_id?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
@@ -4549,10 +4549,10 @@ export type tripsSelectScalar = {
   created_at?: boolean
   dispatch_order_id?: boolean
   kilometers?: boolean
-  corridorsId?: boolean
+  corridor_id?: boolean
 }
 
-export type tripsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "reference_number" | "vehicle_combination_id" | "origin_warehouse_id" | "destination_warehouse_id" | "origin_party_location_id" | "destination_party_location_id" | "origin_location_id" | "destination_location_id" | "departure_time" | "arrival_time" | "status" | "notes" | "created_by" | "deleted_at" | "created_at" | "dispatch_order_id" | "kilometers" | "corridorsId", ExtArgs["result"]["trips"]>
+export type tripsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "reference_number" | "vehicle_combination_id" | "origin_warehouse_id" | "destination_warehouse_id" | "origin_party_location_id" | "destination_party_location_id" | "origin_location_id" | "destination_location_id" | "departure_time" | "arrival_time" | "status" | "notes" | "created_by" | "deleted_at" | "created_at" | "dispatch_order_id" | "kilometers" | "corridor_id", ExtArgs["result"]["trips"]>
 export type tripsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: boolean | Prisma.trips$cargo_transfers_cargo_transfers_from_trip_idTotripsArgs<ExtArgs>
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: boolean | Prisma.trips$cargo_transfers_cargo_transfers_to_trip_idTotripsArgs<ExtArgs>
@@ -4643,7 +4643,7 @@ export type $tripsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     created_at: Date
     dispatch_order_id: string | null
     kilometers: runtime.Decimal | null
-    corridorsId: string | null
+    corridor_id: string | null
   }, ExtArgs["result"]["trips"]>
   composites: {}
 }
@@ -5104,7 +5104,7 @@ export interface tripsFieldRefs {
   readonly created_at: Prisma.FieldRef<"trips", 'DateTime'>
   readonly dispatch_order_id: Prisma.FieldRef<"trips", 'String'>
   readonly kilometers: Prisma.FieldRef<"trips", 'Decimal'>
-  readonly corridorsId: Prisma.FieldRef<"trips", 'String'>
+  readonly corridor_id: Prisma.FieldRef<"trips", 'String'>
 }
     
 
