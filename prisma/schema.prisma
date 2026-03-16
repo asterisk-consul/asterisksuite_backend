@@ -21,9 +21,14 @@ model business_parties {
   companies       companies         @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   delivery_notes  delivery_notes[]
   dispatch_orders dispatch_orders[]
+<<<<<<< HEAD
+=======
+  documents       documents[]
+>>>>>>> maxi_donandres
   party_locations party_locations[]
 
   @@index([company_id], map: "idx_parties_company")
+  @@index([tax_id], map: "idx_business_parties_tax_id")
 }
 
 model cargo_transfer_items {
@@ -66,7 +71,11 @@ model companies {
   pallets              pallets[]
   picking_orders       picking_orders[]
   products             products[]
+<<<<<<< HEAD
   transferRates        transfer_rates[]
+=======
+  taxes                taxes[]
+>>>>>>> maxi_donandres
   trips                trips[]
   users                users[]
   vehicle_combinations vehicle_combinations[]
@@ -89,7 +98,11 @@ model delivery_notes {
   cargo_transfer_items cargo_transfer_items[]
   companies            companies              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+<<<<<<< HEAD
   dispatch_orders      dispatch_orders?       @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+=======
+  dispatch_orders      dispatch_orders?       @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction)
+>>>>>>> maxi_donandres
   business_parties     business_parties?      @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
   picking_orders       picking_orders[]
@@ -137,6 +150,7 @@ model files {
 }
 
 model locations {
+<<<<<<< HEAD
   id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   address     String?  @db.VarChar(255)
   city        String?  @db.VarChar(100)
@@ -161,6 +175,24 @@ model locations {
   corridor_destination corridors[] @relation("corridor_destination")
 
   corridorStops corridor_stops[]
+=======
+  id                                             String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  address                                        String?           @db.VarChar(255)
+  city                                           String?           @db.VarChar(100)
+  province                                       String?           @db.VarChar(100)
+  country                                        String?           @db.VarChar(100)
+  postal_code                                    String?           @db.VarChar(20)
+  latitude                                       Decimal?          @db.Decimal(10, 6)
+  longitude                                      Decimal?          @db.Decimal(10, 6)
+  created_at                                     DateTime          @default(now()) @db.Timestamp(6)
+  cargo_transfers                                cargo_transfers[]
+  dispatch_orders_destination                    dispatch_orders[] @relation("dispatch_destination_location")
+  dispatch_orders_origin                         dispatch_orders[] @relation("dispatch_origin_location")
+  party_locations                                party_locations[]
+  trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
+  trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
+  warehouses                                     warehouses[]
+>>>>>>> maxi_donandres
 }
 
 model pallet_items {
@@ -230,7 +262,11 @@ model picking_orders {
   companies         companies?        @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users             users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   delivery_notes    delivery_notes?   @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+<<<<<<< HEAD
   dispatch_orders   dispatch_orders?  @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+=======
+  dispatch_orders   dispatch_orders?  @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction)
+>>>>>>> maxi_donandres
   trips             trips?            @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses        warehouses        @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_results   picking_results[]
@@ -262,6 +298,7 @@ model products {
   created_at                DateTime                    @default(now()) @db.Timestamp(6)
   pallet_items              pallet_items[]
   picking_items             picking_items[]
+  product_taxes             product_taxes[]
   companies                 companies                   @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouse_stock           warehouse_stock[]
   warehouse_stock_movements warehouse_stock_movements[]
@@ -298,19 +335,32 @@ model dispatch_orders {
   order_number            String            @db.VarChar(50)
   status                  String            @db.VarChar(20)
   requires_stock          Boolean           @default(false)
+<<<<<<< HEAD
   planned_date            DateTime?         @db.Timestamp(6)
   confirmed_at            DateTime?         @db.Timestamp(6)
+=======
+  planned_date            DateTime?
+  confirmed_at            DateTime?
+>>>>>>> maxi_donandres
   customer_id             String?           @db.Uuid
   origin_location_id      String?           @db.Uuid
   destination_location_id String?           @db.Uuid
   created_by              String?           @db.Uuid
   created_at              DateTime          @default(now()) @db.Timestamp(6)
   delivery_notes          delivery_notes[]
+<<<<<<< HEAD
   companies               companies         @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                   users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   customers               business_parties? @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   destination_location    locations?        @relation("dispatch_destination_location", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   origin_location         locations?        @relation("dispatch_origin_location", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+=======
+  companies               companies         @relation(fields: [company_id], references: [id], onDelete: NoAction)
+  users                   users?            @relation(fields: [created_by], references: [id], onDelete: NoAction)
+  customers               business_parties? @relation(fields: [customer_id], references: [id], onDelete: NoAction)
+  destination_location    locations?        @relation("dispatch_destination_location", fields: [destination_location_id], references: [id])
+  origin_location         locations?        @relation("dispatch_origin_location", fields: [origin_location_id], references: [id])
+>>>>>>> maxi_donandres
   picking_orders          picking_orders[]
   trips                   trips[]
 
@@ -324,6 +374,10 @@ model trips {
   company_id                                                           String                  @db.Uuid
   reference_number                                                     String?                 @db.VarChar(100)
   vehicle_combination_id                                               String?                 @db.Uuid
+<<<<<<< HEAD
+=======
+  driver_id                                                            String?                 @db.Uuid
+>>>>>>> maxi_donandres
   origin_warehouse_id                                                  String?                 @db.Uuid
   destination_warehouse_id                                             String?                 @db.Uuid
   origin_party_location_id                                             String?                 @db.Uuid
@@ -338,19 +392,26 @@ model trips {
   deleted_at                                                           DateTime?               @db.Timestamp(6)
   created_at                                                           DateTime                @default(now()) @db.Timestamp(6)
   dispatch_order_id                                                    String?                 @db.Uuid
+<<<<<<< HEAD
   kilometers                                                           Decimal?                @db.Decimal(10, 2)
+=======
+>>>>>>> maxi_donandres
   cargo_transfers_cargo_transfers_from_trip_idTotrips                  cargo_transfers[]       @relation("cargo_transfers_from_trip_idTotrips")
   cargo_transfers_cargo_transfers_to_trip_idTotrips                    cargo_transfers[]       @relation("cargo_transfers_to_trip_idTotrips")
   delivery_notes                                                       delivery_notes[]
   picking_orders                                                       picking_orders[]
   trip_cargo                                                           trip_cargo[]
+<<<<<<< HEAD
   trip_rates                                                           trip_rates[]
+=======
+>>>>>>> maxi_donandres
   trip_temperature_logs                                                trip_temperature_logs[]
   companies                                                            companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                                                                users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   locations_trips_destination_location_idTolocations                   locations?              @relation("trips_destination_location_idTolocations", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   party_locations_trips_destination_party_location_idToparty_locations party_locations?        @relation("trips_destination_party_location_idToparty_locations", fields: [destination_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses_trips_destination_warehouse_idTowarehouses                warehouses?             @relation("trips_destination_warehouse_idTowarehouses", fields: [destination_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+<<<<<<< HEAD
   dispatch_orders                                                      dispatch_orders?        @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   locations_trips_origin_location_idTolocations                        locations?              @relation("trips_origin_location_idTolocations", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   party_locations_trips_origin_party_location_idToparty_locations      party_locations?        @relation("trips_origin_party_location_idToparty_locations", fields: [origin_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -359,6 +420,17 @@ model trips {
   corridors                                                            corridors?              @relation(fields: [corridor_id], references: [id])
   corridor_id                                                          String?                 @db.Uuid
 
+=======
+  dispatch_orders                                                      dispatch_orders?        @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction)
+  drivers                                                              drivers?                @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  locations_trips_origin_location_idTolocations                        locations?              @relation("trips_origin_location_idTolocations", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  party_locations_trips_origin_party_location_idToparty_locations      party_locations?        @relation("trips_origin_party_location_idToparty_locations", fields: [origin_party_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouses_trips_origin_warehouse_idTowarehouses                     warehouses?             @relation("trips_origin_warehouse_idTowarehouses", fields: [origin_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vehicle_combination                                                  vehicle_combinations?   @relation(fields: [vehicle_combination_id], references: [id], onDelete: NoAction)
+
+  @@index([dispatch_order_id])
+  @@index([vehicle_combination_id])
+>>>>>>> maxi_donandres
   @@index([company_id], map: "idx_trips_company")
   @@index([status], map: "idx_trips_status")
   @@index([dispatch_order_id], map: "idx_trips_dispatch_order_id")
@@ -401,7 +473,10 @@ model vehicles {
   refrigeration                Boolean?               @default(false)
   active                       Boolean                @default(true)
   created_at                   DateTime               @default(now()) @db.Timestamp(6)
+<<<<<<< HEAD
   vehicleDocuments             documents_vehicle[]
+=======
+>>>>>>> maxi_donandres
   vehicle_combinations_tractor vehicle_combinations[] @relation("tractor_vehicle")
   vehicle_combinations_trailer vehicle_combinations[] @relation("trailer_vehicle")
   companies                    companies              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -418,6 +493,7 @@ model vehicle_combinations {
   valid_until DateTime? @db.Timestamp(6)
   created_by  String?   @db.Uuid
   created_at  DateTime  @default(now()) @db.Timestamp(6)
+<<<<<<< HEAD
   unit_number String?   @db.VarChar(50)
   driver_id   String?   @db.Uuid
   deleted_at  DateTime?
@@ -432,6 +508,17 @@ model vehicle_combinations {
   @@index([company_id], map: "idx_vehicle_combinations_company_id")
   @@index([tractor_id], map: "idx_vehicle_combinations_tractor")
   @@index([trailer_id], map: "idx_vehicle_combinations_trailer")
+=======
+  trips       trips[]
+  companies   companies @relation(fields: [company_id], references: [id], onDelete: NoAction)
+  users       users?    @relation(fields: [created_by], references: [id], onDelete: NoAction)
+  tractor     vehicles  @relation("tractor_vehicle", fields: [tractor_id], references: [id], onDelete: NoAction)
+  trailer     vehicles? @relation("trailer_vehicle", fields: [trailer_id], references: [id], onDelete: NoAction)
+
+  @@index([tractor_id])
+  @@index([trailer_id])
+  @@index([company_id])
+>>>>>>> maxi_donandres
 }
 
 model warehouse_stock {
@@ -490,6 +577,7 @@ model warehouses {
 }
 
 model document_sequences {
+<<<<<<< HEAD
   id             String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   company_id     String    @db.Uuid
   document_type  String    @db.VarChar(50)
@@ -499,6 +587,18 @@ model document_sequences {
   active         Boolean   @default(true)
   created_at     DateTime  @default(now()) @db.Timestamp(6)
   companies      companies @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+=======
+  id             String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  company_id     String           @db.Uuid
+  document_type  String           @db.VarChar(50)
+  point_of_sale  String           @db.VarChar(10)
+  current_number Int              @default(0)
+  prefix         String?          @db.VarChar(20)
+  active         Boolean          @default(true)
+  created_at     DateTime         @default(now()) @db.Timestamp(6)
+  companies      companies        @relation(fields: [company_id], references: [id])
+  document_types document_types[]
+>>>>>>> maxi_donandres
 
   @@unique([company_id, document_type, point_of_sale])
 }
@@ -597,9 +697,13 @@ model corridors {
   active Boolean @default(true)
 
   created_at DateTime @default(now()) @db.Timestamp(6)
+<<<<<<< HEAD
 
   origin_location      locations @relation("corridor_origin", fields: [origin_location_id], references: [id])
   destination_location locations @relation("corridor_destination", fields: [destination_location_id], references: [id])
+=======
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+>>>>>>> maxi_donandres
 
   corridorStops corridor_stops[]
 
@@ -626,4 +730,108 @@ model corridor_stops {
   location locations @relation(fields: [location_id], references: [id])
 
   @@unique([corridor_id, stop_order])
+}
+
+model document_item_taxes {
+  id               String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  document_item_id String         @db.Uuid
+  tax_id           String         @db.Uuid
+  tax_rate         Decimal        @db.Decimal(6, 3)
+  tax_amount       Decimal        @db.Decimal(15, 2)
+  created_at       DateTime?      @default(now()) @db.Timestamp(6)
+  document_items   document_items @relation(fields: [document_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "dit_document_item_fkey")
+  taxes            taxes          @relation(fields: [tax_id], references: [id], onUpdate: NoAction, map: "dit_tax_fkey")
+
+  @@index([document_item_id], map: "idx_document_item_taxes_document_item")
+  @@index([tax_id], map: "idx_document_item_taxes_tax")
+}
+
+model document_items {
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_id         String                @db.Uuid
+  product_id          String?               @db.Uuid
+  quantity            Decimal               @db.Decimal(15, 3)
+  price               Decimal               @db.Decimal(15, 2)
+  created_at          DateTime              @default(now()) @db.Timestamp(6)
+  unit_price          Decimal               @default(0) @db.Decimal(15, 2)
+  document_item_taxes document_item_taxes[]
+  documents           documents             @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model document_taxes {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_id  String    @db.Uuid
+  tax_id       String    @db.Uuid
+  tax_rate     Decimal   @db.Decimal(6, 3)
+  taxable_base Decimal   @db.Decimal(15, 2)
+  tax_amount   Decimal   @db.Decimal(15, 2)
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  documents    documents @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  taxes        taxes     @relation(fields: [tax_id], references: [id], onUpdate: NoAction)
+}
+
+model document_types {
+  id                   String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  document_sequence_id String?             @db.Uuid
+  code                 String              @unique @db.VarChar(20)
+  description          String              @db.VarChar(150)
+  direction            Int                 @db.SmallInt
+  affects_stock        Boolean             @default(false)
+  affects_accounting   Boolean             @default(false)
+  active               Boolean             @default(true)
+  document_sequences   document_sequences? @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  documents            documents[]
+}
+
+model documents {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_type_id String            @db.Uuid
+  party_id         String?           @db.Uuid
+  number           Int
+  date             DateTime          @db.Date
+  status           Int               @default(0) @db.SmallInt
+  created_at       DateTime          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime          @default(now()) @db.Timestamp(6)
+  subtotal         Decimal           @default(0) @db.Decimal(15, 2)
+  total_taxes      Decimal           @default(0) @db.Decimal(15, 2)
+  total            Decimal           @default(0) @db.Decimal(15, 2)
+  descrip          String?           @db.VarChar(50)
+  document_items   document_items[]
+  document_taxes   document_taxes[]
+  document_types   document_types    @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([document_type_id, number], map: "uq_document_number")
+}
+
+model product_taxes {
+  id                   String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id           String   @db.Uuid
+  tax_id               String   @db.Uuid
+  is_included_in_price Boolean  @default(false)
+  active               Boolean  @default(true)
+  created_at           DateTime @default(now()) @db.Timestamp(6)
+  products             products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  taxes                taxes    @relation(fields: [tax_id], references: [id], onUpdate: NoAction)
+
+  @@unique([product_id, tax_id], map: "uq_product_tax")
+}
+
+model taxes {
+  id                  String                @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  company_id          String                @db.Uuid
+  code                String                @db.VarChar(20)
+  name                String                @db.VarChar(100)
+  tax_type            String                @db.VarChar(30)
+  rate                Decimal               @db.Decimal(6, 3)
+  is_percentage       Boolean               @default(true)
+  active              Boolean               @default(true)
+  created_at          DateTime?             @default(now()) @db.Timestamp(6)
+  calculation_level   String                @db.VarChar(20)
+  document_item_taxes document_item_taxes[]
+  document_taxes      document_taxes[]
+  product_taxes       product_taxes[]
+  companies           companies             @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tax_type, active], map: "idx_taxes_type_active")
 }
