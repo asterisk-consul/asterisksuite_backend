@@ -43,6 +43,10 @@ export class CorridorsService {
       include: {
         origin_location: true,
         destination_location: true,
+        corridorStops: {
+          orderBy: { stop_order: 'asc' },
+          include: { location: true },
+        },
       },
     });
   }
