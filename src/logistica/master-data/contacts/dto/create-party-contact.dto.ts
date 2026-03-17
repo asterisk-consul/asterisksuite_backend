@@ -7,8 +7,9 @@ import {
 } from 'class-validator';
 
 export class CreatePartyContactDto {
+  @IsOptional()
   @IsUUID()
-  party_id!: string;
+  party_id?: string;
 
   @IsString()
   @MaxLength(100)
