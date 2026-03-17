@@ -544,10 +544,12 @@ export type business_partiesCreateNestedOneWithoutParty_contactsInput = {
   connect?: Prisma.business_partiesWhereUniqueInput
 }
 
-export type business_partiesUpdateOneRequiredWithoutParty_contactsNestedInput = {
+export type business_partiesUpdateOneWithoutParty_contactsNestedInput = {
   create?: Prisma.XOR<Prisma.business_partiesCreateWithoutParty_contactsInput, Prisma.business_partiesUncheckedCreateWithoutParty_contactsInput>
   connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutParty_contactsInput
   upsert?: Prisma.business_partiesUpsertWithoutParty_contactsInput
+  disconnect?: Prisma.business_partiesWhereInput | boolean
+  delete?: Prisma.business_partiesWhereInput | boolean
   connect?: Prisma.business_partiesWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutParty_contactsInput, Prisma.business_partiesUpdateWithoutParty_contactsInput>, Prisma.business_partiesUncheckedUpdateWithoutParty_contactsInput>
 }

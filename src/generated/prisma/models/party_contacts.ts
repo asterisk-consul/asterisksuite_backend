@@ -167,7 +167,7 @@ export type party_contactsGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 
 export type Party_contactsGroupByOutputType = {
   id: string
-  party_id: string
+  party_id: string | null
   first_name: string
   last_name: string
   role: string | null
@@ -199,19 +199,19 @@ export type party_contactsWhereInput = {
   OR?: Prisma.party_contactsWhereInput[]
   NOT?: Prisma.party_contactsWhereInput | Prisma.party_contactsWhereInput[]
   id?: Prisma.UuidFilter<"party_contacts"> | string
-  party_id?: Prisma.UuidFilter<"party_contacts"> | string
+  party_id?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
   first_name?: Prisma.StringFilter<"party_contacts"> | string
   last_name?: Prisma.StringFilter<"party_contacts"> | string
   role?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   phone?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   email?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
-  business_parties?: Prisma.XOR<Prisma.Business_partiesScalarRelationFilter, Prisma.business_partiesWhereInput>
+  business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
 }
 
 export type party_contactsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  party_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   first_name?: Prisma.SortOrder
   last_name?: Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -226,19 +226,19 @@ export type party_contactsWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.party_contactsWhereInput | Prisma.party_contactsWhereInput[]
   OR?: Prisma.party_contactsWhereInput[]
   NOT?: Prisma.party_contactsWhereInput | Prisma.party_contactsWhereInput[]
-  party_id?: Prisma.UuidFilter<"party_contacts"> | string
+  party_id?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
   first_name?: Prisma.StringFilter<"party_contacts"> | string
   last_name?: Prisma.StringFilter<"party_contacts"> | string
   role?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   phone?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   email?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
-  business_parties?: Prisma.XOR<Prisma.Business_partiesScalarRelationFilter, Prisma.business_partiesWhereInput>
+  business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
 }, "id">
 
 export type party_contactsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  party_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   first_name?: Prisma.SortOrder
   last_name?: Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -255,7 +255,7 @@ export type party_contactsScalarWhereWithAggregatesInput = {
   OR?: Prisma.party_contactsScalarWhereWithAggregatesInput[]
   NOT?: Prisma.party_contactsScalarWhereWithAggregatesInput | Prisma.party_contactsScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"party_contacts"> | string
-  party_id?: Prisma.UuidWithAggregatesFilter<"party_contacts"> | string
+  party_id?: Prisma.UuidNullableWithAggregatesFilter<"party_contacts"> | string | null
   first_name?: Prisma.StringWithAggregatesFilter<"party_contacts"> | string
   last_name?: Prisma.StringWithAggregatesFilter<"party_contacts"> | string
   role?: Prisma.StringNullableWithAggregatesFilter<"party_contacts"> | string | null
@@ -272,12 +272,12 @@ export type party_contactsCreateInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
-  business_parties: Prisma.business_partiesCreateNestedOneWithoutParty_contactsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutParty_contactsInput
 }
 
 export type party_contactsUncheckedCreateInput = {
   id?: string
-  party_id: string
+  party_id?: string | null
   first_name: string
   last_name: string
   role?: string | null
@@ -294,12 +294,12 @@ export type party_contactsUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business_parties?: Prisma.business_partiesUpdateOneRequiredWithoutParty_contactsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutParty_contactsNestedInput
 }
 
 export type party_contactsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  party_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   first_name?: Prisma.StringFieldUpdateOperationsInput | string
   last_name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -310,7 +310,7 @@ export type party_contactsUncheckedUpdateInput = {
 
 export type party_contactsCreateManyInput = {
   id?: string
-  party_id: string
+  party_id?: string | null
   first_name: string
   last_name: string
   role?: string | null
@@ -331,7 +331,7 @@ export type party_contactsUpdateManyMutationInput = {
 
 export type party_contactsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  party_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   first_name?: Prisma.StringFieldUpdateOperationsInput | string
   last_name?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -476,7 +476,7 @@ export type party_contactsScalarWhereInput = {
   OR?: Prisma.party_contactsScalarWhereInput[]
   NOT?: Prisma.party_contactsScalarWhereInput | Prisma.party_contactsScalarWhereInput[]
   id?: Prisma.UuidFilter<"party_contacts"> | string
-  party_id?: Prisma.UuidFilter<"party_contacts"> | string
+  party_id?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
   first_name?: Prisma.StringFilter<"party_contacts"> | string
   last_name?: Prisma.StringFilter<"party_contacts"> | string
   role?: Prisma.StringNullableFilter<"party_contacts"> | string | null
@@ -536,7 +536,7 @@ export type party_contactsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   phone?: boolean
   email?: boolean
   created_at?: boolean
-  business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["party_contacts"]>
 
 export type party_contactsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -548,7 +548,7 @@ export type party_contactsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   phone?: boolean
   email?: boolean
   created_at?: boolean
-  business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["party_contacts"]>
 
 export type party_contactsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -560,7 +560,7 @@ export type party_contactsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   phone?: boolean
   email?: boolean
   created_at?: boolean
-  business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["party_contacts"]>
 
 export type party_contactsSelectScalar = {
@@ -576,23 +576,23 @@ export type party_contactsSelectScalar = {
 
 export type party_contactsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "party_id" | "first_name" | "last_name" | "role" | "phone" | "email" | "created_at", ExtArgs["result"]["party_contacts"]>
 export type party_contactsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }
 export type party_contactsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }
 export type party_contactsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }
 
 export type $party_contactsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "party_contacts"
   objects: {
-    business_parties: Prisma.$business_partiesPayload<ExtArgs>
+    business_parties: Prisma.$business_partiesPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    party_id: string
+    party_id: string | null
     first_name: string
     last_name: string
     role: string | null
@@ -993,7 +993,7 @@ readonly fields: party_contactsFieldRefs;
  */
 export interface Prisma__party_contactsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  business_parties<T extends Prisma.business_partiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_partiesDefaultArgs<ExtArgs>>): Prisma.Prisma__business_partiesClient<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  business_parties<T extends Prisma.party_contacts$business_partiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.party_contacts$business_partiesArgs<ExtArgs>>): Prisma.Prisma__business_partiesClient<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1424,6 +1424,25 @@ export type party_contactsDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many party_contacts to delete.
    */
   limit?: number
+}
+
+/**
+ * party_contacts.business_parties
+ */
+export type party_contacts$business_partiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the business_parties
+   */
+  select?: Prisma.business_partiesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the business_parties
+   */
+  omit?: Prisma.business_partiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.business_partiesInclude<ExtArgs> | null
+  where?: Prisma.business_partiesWhereInput
 }
 
 /**

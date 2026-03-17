@@ -208,8 +208,8 @@ model party_locations {
 }
 
 model party_contacts {
-  id       String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  party_id String @db.Uuid
+  id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  party_id String? @db.Uuid
 
   first_name String  @db.VarChar(100)
   last_name  String  @db.VarChar(100)
@@ -219,7 +219,7 @@ model party_contacts {
 
   created_at DateTime @default(now()) @db.Timestamp(6)
 
-  business_parties business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade)
+  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: Cascade)
 
   @@index([party_id], map: "idx_party_contacts_party")
 }
