@@ -118,25 +118,39 @@ export class CorridorsService {
   }
 
   update(id: string, dto: UpdateCorridorDto) {
-    const { stops, ...rest } = dto;
+    const { stops, origin_location_id, destination_location_id, ...rest } = dto;
 
     return this.prisma.corridors.update({
       where: { id },
       data: {
         ...omitUndefined(rest),
 
+        ...(origin_location_id && {
+          origin_location: { connect: { id: origin_location_id } },
+        }),
+
+        ...(destination_location_id && {
+          destination_location: { connect: { id: destination_location_id } },
+        }),
+
         ...(stops && {
-          stops: {
+          corridorStops: {
             deleteMany: {},
-            create: stops.map((s) =>
-              omitUndefined({
-                location_id: s.location_id,
-                stop_order: s.stop_order,
-                stop_type: s.stop_type ?? undefined, // 👈 clave
-              }),
-            ),
+            create: stops.map((s) => ({
+              location_id: s.location_id,
+              stop_order: s.stop_order,
+              ...(s.stop_type !== undefined && { stop_type: s.stop_type }),
+            })),
           },
         }),
+      },
+      include: {
+        origin_location: true,
+        destination_location: true,
+        corridorStops: {
+          orderBy: { stop_order: 'asc' },
+          include: { location: true },
+        },
       },
     });
   }
