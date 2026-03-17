@@ -396,6 +396,7 @@ export const ModelName = {
   pallet_items: 'pallet_items',
   pallets: 'pallets',
   party_locations: 'party_locations',
+  party_contacts: 'party_contacts',
   picking_items: 'picking_items',
   picking_orders: 'picking_orders',
   picking_results: 'picking_results',
@@ -435,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "trip_rates" | "corridors" | "corridor_stops"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "trip_rates" | "corridors" | "corridor_stops"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1324,6 +1325,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.party_locationsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Party_locationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    party_contacts: {
+      payload: Prisma.$party_contactsPayload<ExtArgs>
+      fields: Prisma.party_contactsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.party_contactsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.party_contactsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>
+        }
+        findFirst: {
+          args: Prisma.party_contactsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.party_contactsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>
+        }
+        findMany: {
+          args: Prisma.party_contactsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>[]
+        }
+        create: {
+          args: Prisma.party_contactsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>
+        }
+        createMany: {
+          args: Prisma.party_contactsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.party_contactsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>[]
+        }
+        delete: {
+          args: Prisma.party_contactsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>
+        }
+        update: {
+          args: Prisma.party_contactsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>
+        }
+        deleteMany: {
+          args: Prisma.party_contactsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.party_contactsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.party_contactsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>[]
+        }
+        upsert: {
+          args: Prisma.party_contactsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_contactsPayload>
+        }
+        aggregate: {
+          args: Prisma.Party_contactsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateParty_contacts>
+        }
+        groupBy: {
+          args: Prisma.party_contactsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Party_contactsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.party_contactsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Party_contactsCountAggregateOutputType> | number
         }
       }
     }
@@ -3300,6 +3375,20 @@ export const Party_locationsScalarFieldEnum = {
 export type Party_locationsScalarFieldEnum = (typeof Party_locationsScalarFieldEnum)[keyof typeof Party_locationsScalarFieldEnum]
 
 
+export const Party_contactsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  role: 'role',
+  phone: 'phone',
+  email: 'email',
+  created_at: 'created_at'
+} as const
+
+export type Party_contactsScalarFieldEnum = (typeof Party_contactsScalarFieldEnum)[keyof typeof Party_contactsScalarFieldEnum]
+
+
 export const Picking_itemsScalarFieldEnum = {
   id: 'id',
   picking_order_id: 'picking_order_id',
@@ -3402,6 +3491,7 @@ export const TripsScalarFieldEnum = {
   id: 'id',
   company_id: 'company_id',
   reference_number: 'reference_number',
+  business_party_id: 'business_party_id',
   vehicle_combination_id: 'vehicle_combination_id',
   origin_warehouse_id: 'origin_warehouse_id',
   destination_warehouse_id: 'destination_warehouse_id',
@@ -3844,6 +3934,7 @@ export type GlobalOmitConfig = {
   pallet_items?: Prisma.pallet_itemsOmit
   pallets?: Prisma.palletsOmit
   party_locations?: Prisma.party_locationsOmit
+  party_contacts?: Prisma.party_contactsOmit
   picking_items?: Prisma.picking_itemsOmit
   picking_orders?: Prisma.picking_ordersOmit
   picking_results?: Prisma.picking_resultsOmit

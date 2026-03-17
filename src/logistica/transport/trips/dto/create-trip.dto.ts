@@ -75,4 +75,7 @@ export class CreateTripDto {
   @IsOptional()
   @IsNumber()
   kilometers?: number;
+  @IsOptional()
+  @IsUUID()
+  business_party_id?: string;
 }

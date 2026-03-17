@@ -78,6 +78,11 @@ export type pallets = Prisma.palletsModel
  */
 export type party_locations = Prisma.party_locationsModel
 /**
+ * Model party_contacts
+ * 
+ */
+export type party_contacts = Prisma.party_contactsModel
+/**
  * Model picking_items
  * 
  */
