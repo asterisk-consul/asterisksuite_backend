@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCorridorDto } from './dto/create-corridor.dto';
 import { UpdateCorridorDto } from './dto/update-corridor.dto';
+import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class CorridorsService {
@@ -117,9 +118,26 @@ export class CorridorsService {
   }
 
   update(id: string, dto: UpdateCorridorDto) {
+    const { stops, ...rest } = dto;
+
     return this.prisma.corridors.update({
       where: { id },
-      data: dto,
+      data: {
+        ...omitUndefined(rest),
+
+        ...(stops && {
+          stops: {
+            deleteMany: {},
+            create: stops.map((s) =>
+              omitUndefined({
+                location_id: s.location_id,
+                stop_order: s.stop_order,
+                stop_type: s.stop_type ?? undefined, // 👈 clave
+              }),
+            ),
+          },
+        }),
+      },
     });
   }
 
