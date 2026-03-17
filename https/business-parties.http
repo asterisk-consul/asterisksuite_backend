@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-# @baseUrl = http://localhost:3000/api
-@baseUrl = https://apidonandres.asterisksuite.cloud/api
+ @baseUrl = http://localhost:3000/api
+#@baseUrl = https://apidonandres.asterisksuite.cloud/api
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
-=======
-@baseUrl = http://localhost:3000/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZjZmMGQ5Ni1lOGUyLTQ5ODAtOGFiNC01NmZhNGEwZTFlZTQiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOiJjMDdjZmYxOS0xNDEyLTRkMTItOGVlMC0wODlkMmNjYWM3MjkiLCJpYXQiOjE3NzI0ODY1NDYsImV4cCI6MTc3MjQ4NzQ0Nn0.TfBa2Jit1A3Da37sZrSt6JbLMlBBuNzAGSjE-_xzbs4
-
-@refreshToken = 96bb970eaaef9fb65f9366f46602b43e04c6888b48391add1971fa3abda09ca7cf0ccaaa8b0b73b131e072fd6adbb96524ec0c0d85c6fea8f2600904cf13ec8a
->>>>>>> maxi_donandres
 @partyId = b8c46fe5-c77a-4ea3-aed5-3d73e5e27915
 
 ###

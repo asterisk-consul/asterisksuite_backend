@@ -8,6 +8,9 @@ import { CreateDeliveryNoteDto } from './dto/create-delivery-note.dto';
 import { UpdateDeliveryNoteDto } from './dto/update-delivery-note.dto';
 import { QueryDeliveryNoteDto } from './dto/query-delivery-note.dto';
 import { DocumentSequencesService } from '../document-sequences/document-sequences.service';
+import * as PdfPrinter from 'pdfmake';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 @Injectable()
 export class DeliveryNotesService {
