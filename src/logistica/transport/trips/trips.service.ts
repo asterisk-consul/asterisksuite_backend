@@ -13,6 +13,9 @@ export class TripsService {
     return this.prisma.trips.findMany({
       where: { company_id },
       include: {
+        // ✅ AGREGADO
+        business_party: true,
+
         vehicle_combination: {
           include: {
             tractor: true,
@@ -47,6 +50,9 @@ export class TripsService {
     const trip = await this.prisma.trips.findUnique({
       where: { id },
       include: {
+        // ✅ AGREGADO
+        business_party: true,
+
         trip_rates: {
           include: {
             transfer_rates: true,
@@ -99,6 +105,10 @@ export class TripsService {
       data: {
         company_id: dto.company_id,
         reference_number: dto.reference_number,
+
+        // ✅ AGREGADO
+        business_party_id: dto.business_party_id ?? null,
+
         vehicle_combination_id: dto.vehicle_combination_id,
         origin_location_id: dto.origin_location_id,
         destination_location_id: dto.destination_location_id,
@@ -106,7 +116,11 @@ export class TripsService {
         arrival_time: dto.arrival_time,
         status: dto.status,
         kilometers: dto.kilometers,
-        corridor_id: corridorId, // ✅ campo escalar directo, sin casteos
+        corridor_id: corridorId,
+      },
+      include: {
+        // 👇 opcional pero recomendado para devolver ya el nombre
+        business_party: true,
       },
     });
   }
@@ -116,7 +130,13 @@ export class TripsService {
 
     return this.prisma.trips.update({
       where: { id },
-      data: dto,
+      data: {
+        ...dto,
+        business_party_id: dto.business_party_id,
+      },
+      include: {
+        business_party: true,
+      },
     });
   }
 
