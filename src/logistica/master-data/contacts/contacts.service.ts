@@ -17,12 +17,18 @@ export class PartyContactsService {
     return this.prisma.party_contacts.findMany({
       where: party_id ? { party_id } : undefined,
       orderBy: { created_at: 'desc' },
+      include: {
+        business_parties: true,
+      },
     });
   }
 
   async findOne(id: string) {
     const contact = await this.prisma.party_contacts.findUnique({
       where: { id },
+      include: {
+        business_parties: true,
+      },
     });
 
     if (!contact) {
