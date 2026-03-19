@@ -168,6 +168,10 @@ export class VehicleCombinationsService {
       where: {
         company_id,
         deleted_at: null,
+        OR: [
+          { valid_until: null }, // ✅ activas indefinidamente
+          { valid_until: { gte: startOfDay } }, // ✅ vigentes en la fecha consultada
+        ],
         ...(busyIds.length > 0 && { id: { notIn: busyIds } }),
       },
       include: { tractor: true, trailer: true, drivers: true },
