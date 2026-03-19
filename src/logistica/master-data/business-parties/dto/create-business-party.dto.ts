@@ -1,40 +1,66 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-} from 'class-validator';
+import { IsString, IsOptional, IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class CreatePartyLocationDto {
+  @IsString()
+  location_id!: string;
+
+  @IsOptional()
+  @IsString()
+  label?: string;
+}
+
+class CreatePartyContactDto {
+  @IsString()
+  first_name!: string;
+
+  @IsString()
+  last_name!: string;
+
+  @IsOptional()
+  @IsString()
+  role?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+}
 
 export class CreateBusinessPartyDto {
-  @IsUUID()
+  @IsString()
   company_id!: string;
 
   @IsString()
-  @MaxLength(20)
-  type!: string; // client | supplier | carrier
+  type!: string;
 
   @IsString()
-  @MaxLength(255)
   name!: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(50)
   tax_id?: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(50)
   phone?: string;
 
   @IsOptional()
-  @IsEmail()
-  @MaxLength(150)
+  @IsString()
   email?: string;
 
   @IsOptional()
-  @IsBoolean()
-  active?: boolean;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePartyLocationDto)
+  locations?: CreatePartyLocationDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePartyContactDto)
+  contacts?: CreatePartyContactDto[];
 }
