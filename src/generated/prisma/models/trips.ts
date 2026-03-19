@@ -38,6 +38,7 @@ export type TripsMinAggregateOutputType = {
   id: string | null
   company_id: string | null
   reference_number: string | null
+  week: string | null
   business_party_id: string | null
   vehicle_combination_id: string | null
   origin_warehouse_id: string | null
@@ -62,6 +63,7 @@ export type TripsMaxAggregateOutputType = {
   id: string | null
   company_id: string | null
   reference_number: string | null
+  week: string | null
   business_party_id: string | null
   vehicle_combination_id: string | null
   origin_warehouse_id: string | null
@@ -86,6 +88,7 @@ export type TripsCountAggregateOutputType = {
   id: number
   company_id: number
   reference_number: number
+  week: number
   business_party_id: number
   vehicle_combination_id: number
   origin_warehouse_id: number
@@ -120,6 +123,7 @@ export type TripsMinAggregateInputType = {
   id?: true
   company_id?: true
   reference_number?: true
+  week?: true
   business_party_id?: true
   vehicle_combination_id?: true
   origin_warehouse_id?: true
@@ -144,6 +148,7 @@ export type TripsMaxAggregateInputType = {
   id?: true
   company_id?: true
   reference_number?: true
+  week?: true
   business_party_id?: true
   vehicle_combination_id?: true
   origin_warehouse_id?: true
@@ -168,6 +173,7 @@ export type TripsCountAggregateInputType = {
   id?: true
   company_id?: true
   reference_number?: true
+  week?: true
   business_party_id?: true
   vehicle_combination_id?: true
   origin_warehouse_id?: true
@@ -279,6 +285,7 @@ export type TripsGroupByOutputType = {
   id: string
   company_id: string
   reference_number: string | null
+  week: string | null
   business_party_id: string | null
   vehicle_combination_id: string | null
   origin_warehouse_id: string | null
@@ -326,6 +333,7 @@ export type tripsWhereInput = {
   id?: Prisma.UuidFilter<"trips"> | string
   company_id?: Prisma.UuidFilter<"trips"> | string
   reference_number?: Prisma.StringNullableFilter<"trips"> | string | null
+  week?: Prisma.StringNullableFilter<"trips"> | string | null
   business_party_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   vehicle_combination_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   origin_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
@@ -369,6 +377,7 @@ export type tripsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
   reference_number?: Prisma.SortOrderInput | Prisma.SortOrder
+  week?: Prisma.SortOrderInput | Prisma.SortOrder
   business_party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   vehicle_combination_id?: Prisma.SortOrderInput | Prisma.SortOrder
   origin_warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -415,6 +424,7 @@ export type tripsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.tripsWhereInput | Prisma.tripsWhereInput[]
   company_id?: Prisma.UuidFilter<"trips"> | string
   reference_number?: Prisma.StringNullableFilter<"trips"> | string | null
+  week?: Prisma.StringNullableFilter<"trips"> | string | null
   business_party_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   vehicle_combination_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   origin_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
@@ -458,6 +468,7 @@ export type tripsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
   reference_number?: Prisma.SortOrderInput | Prisma.SortOrder
+  week?: Prisma.SortOrderInput | Prisma.SortOrder
   business_party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   vehicle_combination_id?: Prisma.SortOrderInput | Prisma.SortOrder
   origin_warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -490,6 +501,7 @@ export type tripsScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"trips"> | string
   company_id?: Prisma.UuidWithAggregatesFilter<"trips"> | string
   reference_number?: Prisma.StringNullableWithAggregatesFilter<"trips"> | string | null
+  week?: Prisma.StringNullableWithAggregatesFilter<"trips"> | string | null
   business_party_id?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
   vehicle_combination_id?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
   origin_warehouse_id?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
@@ -513,6 +525,7 @@ export type tripsScalarWhereWithAggregatesInput = {
 export type tripsCreateInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -545,6 +558,7 @@ export type tripsUncheckedCreateInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -575,6 +589,7 @@ export type tripsUncheckedCreateInput = {
 export type tripsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -607,6 +622,7 @@ export type tripsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -638,6 +654,7 @@ export type tripsCreateManyInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -661,6 +678,7 @@ export type tripsCreateManyInput = {
 export type tripsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -674,6 +692,7 @@ export type tripsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -718,6 +737,7 @@ export type tripsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
   reference_number?: Prisma.SortOrder
+  week?: Prisma.SortOrder
   business_party_id?: Prisma.SortOrder
   vehicle_combination_id?: Prisma.SortOrder
   origin_warehouse_id?: Prisma.SortOrder
@@ -746,6 +766,7 @@ export type tripsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
   reference_number?: Prisma.SortOrder
+  week?: Prisma.SortOrder
   business_party_id?: Prisma.SortOrder
   vehicle_combination_id?: Prisma.SortOrder
   origin_warehouse_id?: Prisma.SortOrder
@@ -770,6 +791,7 @@ export type tripsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
   reference_number?: Prisma.SortOrder
+  week?: Prisma.SortOrder
   business_party_id?: Prisma.SortOrder
   vehicle_combination_id?: Prisma.SortOrder
   origin_warehouse_id?: Prisma.SortOrder
@@ -1407,6 +1429,7 @@ export type tripsUncheckedUpdateManyWithoutCorridorsNestedInput = {
 export type tripsCreateWithoutBusiness_partyInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -1438,6 +1461,7 @@ export type tripsUncheckedCreateWithoutBusiness_partyInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
   destination_warehouse_id?: string | null
@@ -1497,6 +1521,7 @@ export type tripsScalarWhereInput = {
   id?: Prisma.UuidFilter<"trips"> | string
   company_id?: Prisma.UuidFilter<"trips"> | string
   reference_number?: Prisma.StringNullableFilter<"trips"> | string | null
+  week?: Prisma.StringNullableFilter<"trips"> | string | null
   business_party_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   vehicle_combination_id?: Prisma.UuidNullableFilter<"trips"> | string | null
   origin_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
@@ -1520,6 +1545,7 @@ export type tripsScalarWhereInput = {
 export type tripsCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -1551,6 +1577,7 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_from_trip
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -1585,6 +1612,7 @@ export type tripsCreateOrConnectWithoutCargo_transfers_cargo_transfers_from_trip
 export type tripsCreateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -1616,6 +1644,7 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_to_trip_i
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -1661,6 +1690,7 @@ export type tripsUpdateToOneWithWhereWithoutCargo_transfers_cargo_transfers_from
 export type tripsUpdateWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1692,6 +1722,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_from_trip
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1732,6 +1763,7 @@ export type tripsUpdateToOneWithWhereWithoutCargo_transfers_cargo_transfers_to_t
 export type tripsUpdateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1763,6 +1795,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_to_trip_i
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1792,6 +1825,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_to_trip_i
 export type tripsCreateWithoutCompaniesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -1822,6 +1856,7 @@ export type tripsCreateWithoutCompaniesInput = {
 export type tripsUncheckedCreateWithoutCompaniesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -1878,6 +1913,7 @@ export type tripsUpdateManyWithWhereWithoutCompaniesInput = {
 export type tripsCreateWithoutDelivery_notesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -1909,6 +1945,7 @@ export type tripsUncheckedCreateWithoutDelivery_notesInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -1954,6 +1991,7 @@ export type tripsUpdateToOneWithWhereWithoutDelivery_notesInput = {
 export type tripsUpdateWithoutDelivery_notesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1985,6 +2023,7 @@ export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2014,6 +2053,7 @@ export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
 export type tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2045,6 +2085,7 @@ export type tripsUncheckedCreateWithoutLocations_trips_destination_location_idTo
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2084,6 +2125,7 @@ export type tripsCreateManyLocations_trips_destination_location_idTolocationsInp
 export type tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2115,6 +2157,7 @@ export type tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocat
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2186,6 +2229,7 @@ export type tripsUpdateManyWithWhereWithoutLocations_trips_origin_location_idTol
 export type tripsCreateWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2217,6 +2261,7 @@ export type tripsUncheckedCreateWithoutParty_locations_trips_destination_party_l
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2256,6 +2301,7 @@ export type tripsCreateManyParty_locations_trips_destination_party_location_idTo
 export type tripsCreateWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2287,6 +2333,7 @@ export type tripsUncheckedCreateWithoutParty_locations_trips_origin_party_locati
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2358,6 +2405,7 @@ export type tripsUpdateManyWithWhereWithoutParty_locations_trips_origin_party_lo
 export type tripsCreateWithoutPicking_ordersInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2389,6 +2437,7 @@ export type tripsUncheckedCreateWithoutPicking_ordersInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2434,6 +2483,7 @@ export type tripsUpdateToOneWithWhereWithoutPicking_ordersInput = {
 export type tripsUpdateWithoutPicking_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2465,6 +2515,7 @@ export type tripsUncheckedUpdateWithoutPicking_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2494,6 +2545,7 @@ export type tripsUncheckedUpdateWithoutPicking_ordersInput = {
 export type tripsCreateWithoutTrip_cargoInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2525,6 +2577,7 @@ export type tripsUncheckedCreateWithoutTrip_cargoInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2570,6 +2623,7 @@ export type tripsUpdateToOneWithWhereWithoutTrip_cargoInput = {
 export type tripsUpdateWithoutTrip_cargoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2601,6 +2655,7 @@ export type tripsUncheckedUpdateWithoutTrip_cargoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2630,6 +2685,7 @@ export type tripsUncheckedUpdateWithoutTrip_cargoInput = {
 export type tripsCreateWithoutTrip_temperature_logsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2661,6 +2717,7 @@ export type tripsUncheckedCreateWithoutTrip_temperature_logsInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2706,6 +2763,7 @@ export type tripsUpdateToOneWithWhereWithoutTrip_temperature_logsInput = {
 export type tripsUpdateWithoutTrip_temperature_logsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2737,6 +2795,7 @@ export type tripsUncheckedUpdateWithoutTrip_temperature_logsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2766,6 +2825,7 @@ export type tripsUncheckedUpdateWithoutTrip_temperature_logsInput = {
 export type tripsCreateWithoutDispatch_ordersInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2797,6 +2857,7 @@ export type tripsUncheckedCreateWithoutDispatch_ordersInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2852,6 +2913,7 @@ export type tripsUpdateManyWithWhereWithoutDispatch_ordersInput = {
 export type tripsCreateWithoutUsersInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2883,6 +2945,7 @@ export type tripsUncheckedCreateWithoutUsersInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -2938,6 +3001,7 @@ export type tripsUpdateManyWithWhereWithoutUsersInput = {
 export type tripsCreateWithoutVehicle_combinationInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -2969,6 +3033,7 @@ export type tripsUncheckedCreateWithoutVehicle_combinationInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   origin_warehouse_id?: string | null
   destination_warehouse_id?: string | null
@@ -3024,6 +3089,7 @@ export type tripsUpdateManyWithWhereWithoutVehicle_combinationInput = {
 export type tripsCreateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -3055,6 +3121,7 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_destination_warehouse_id
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3094,6 +3161,7 @@ export type tripsCreateManyWarehouses_trips_destination_warehouse_idTowarehouses
 export type tripsCreateWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -3125,6 +3193,7 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_origin_warehouse_idTowar
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   destination_warehouse_id?: string | null
@@ -3196,6 +3265,7 @@ export type tripsUpdateManyWithWhereWithoutWarehouses_trips_origin_warehouse_idT
 export type tripsCreateWithoutTrip_ratesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -3227,6 +3297,7 @@ export type tripsUncheckedCreateWithoutTrip_ratesInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3272,6 +3343,7 @@ export type tripsUpdateToOneWithWhereWithoutTrip_ratesInput = {
 export type tripsUpdateWithoutTrip_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3303,6 +3375,7 @@ export type tripsUncheckedUpdateWithoutTrip_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3332,6 +3405,7 @@ export type tripsUncheckedUpdateWithoutTrip_ratesInput = {
 export type tripsCreateWithoutCorridorsInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   departure_time?: Date | string | null
   arrival_time?: Date | string | null
   status: string
@@ -3363,6 +3437,7 @@ export type tripsUncheckedCreateWithoutCorridorsInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3419,6 +3494,7 @@ export type tripsCreateManyBusiness_partyInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
   destination_warehouse_id?: string | null
@@ -3441,6 +3517,7 @@ export type tripsCreateManyBusiness_partyInput = {
 export type tripsUpdateWithoutBusiness_partyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3472,6 +3549,7 @@ export type tripsUncheckedUpdateWithoutBusiness_partyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3502,6 +3580,7 @@ export type tripsUncheckedUpdateManyWithoutBusiness_partyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3524,6 +3603,7 @@ export type tripsUncheckedUpdateManyWithoutBusiness_partyInput = {
 export type tripsCreateManyCompaniesInput = {
   id?: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3547,6 +3627,7 @@ export type tripsCreateManyCompaniesInput = {
 export type tripsUpdateWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3577,6 +3658,7 @@ export type tripsUpdateWithoutCompaniesInput = {
 export type tripsUncheckedUpdateWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3607,6 +3689,7 @@ export type tripsUncheckedUpdateWithoutCompaniesInput = {
 export type tripsUncheckedUpdateManyWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3631,6 +3714,7 @@ export type tripsCreateManyLocations_trips_destination_location_idTolocationsInp
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3654,6 +3738,7 @@ export type tripsCreateManyLocations_trips_origin_location_idTolocationsInput = 
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3676,6 +3761,7 @@ export type tripsCreateManyLocations_trips_origin_location_idTolocationsInput = 
 export type tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3707,6 +3793,7 @@ export type tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTo
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3737,6 +3824,7 @@ export type tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3759,6 +3847,7 @@ export type tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_
 export type tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3790,6 +3879,7 @@ export type tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocat
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3820,6 +3910,7 @@ export type tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTol
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3843,6 +3934,7 @@ export type tripsCreateManyParty_locations_trips_destination_party_location_idTo
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3866,6 +3958,7 @@ export type tripsCreateManyParty_locations_trips_origin_party_location_idToparty
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -3888,6 +3981,7 @@ export type tripsCreateManyParty_locations_trips_origin_party_location_idToparty
 export type tripsUpdateWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3919,6 +4013,7 @@ export type tripsUncheckedUpdateWithoutParty_locations_trips_destination_party_l
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3949,6 +4044,7 @@ export type tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_par
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3971,6 +4067,7 @@ export type tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_par
 export type tripsUpdateWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4002,6 +4099,7 @@ export type tripsUncheckedUpdateWithoutParty_locations_trips_origin_party_locati
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4032,6 +4130,7 @@ export type tripsUncheckedUpdateManyWithoutParty_locations_trips_origin_party_lo
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4055,6 +4154,7 @@ export type tripsCreateManyDispatch_ordersInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -4077,6 +4177,7 @@ export type tripsCreateManyDispatch_ordersInput = {
 export type tripsUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4108,6 +4209,7 @@ export type tripsUncheckedUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4138,6 +4240,7 @@ export type tripsUncheckedUpdateManyWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4161,6 +4264,7 @@ export type tripsCreateManyUsersInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -4183,6 +4287,7 @@ export type tripsCreateManyUsersInput = {
 export type tripsUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4214,6 +4319,7 @@ export type tripsUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4244,6 +4350,7 @@ export type tripsUncheckedUpdateManyWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4267,6 +4374,7 @@ export type tripsCreateManyVehicle_combinationInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   origin_warehouse_id?: string | null
   destination_warehouse_id?: string | null
@@ -4289,6 +4397,7 @@ export type tripsCreateManyVehicle_combinationInput = {
 export type tripsUpdateWithoutVehicle_combinationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4320,6 +4429,7 @@ export type tripsUncheckedUpdateWithoutVehicle_combinationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4350,6 +4460,7 @@ export type tripsUncheckedUpdateManyWithoutVehicle_combinationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4373,6 +4484,7 @@ export type tripsCreateManyWarehouses_trips_destination_warehouse_idTowarehouses
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -4396,6 +4508,7 @@ export type tripsCreateManyWarehouses_trips_origin_warehouse_idTowarehousesInput
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   destination_warehouse_id?: string | null
@@ -4418,6 +4531,7 @@ export type tripsCreateManyWarehouses_trips_origin_warehouse_idTowarehousesInput
 export type tripsUpdateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4449,6 +4563,7 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_destination_warehouse_id
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4479,6 +4594,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehous
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4501,6 +4617,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehous
 export type tripsUpdateWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4532,6 +4649,7 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_origin_warehouse_idTowar
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4562,6 +4680,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idT
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4585,6 +4704,7 @@ export type tripsCreateManyCorridorsInput = {
   id?: string
   company_id: string
   reference_number?: string | null
+  week?: string | null
   business_party_id?: string | null
   vehicle_combination_id?: string | null
   origin_warehouse_id?: string | null
@@ -4607,6 +4727,7 @@ export type tripsCreateManyCorridorsInput = {
 export type tripsUpdateWithoutCorridorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4638,6 +4759,7 @@ export type tripsUncheckedUpdateWithoutCorridorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4668,6 +4790,7 @@ export type tripsUncheckedUpdateManyWithoutCorridorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4776,6 +4899,7 @@ export type tripsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   company_id?: boolean
   reference_number?: boolean
+  week?: boolean
   business_party_id?: boolean
   vehicle_combination_id?: boolean
   origin_warehouse_id?: boolean
@@ -4820,6 +4944,7 @@ export type tripsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   company_id?: boolean
   reference_number?: boolean
+  week?: boolean
   business_party_id?: boolean
   vehicle_combination_id?: boolean
   origin_warehouse_id?: boolean
@@ -4856,6 +4981,7 @@ export type tripsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   company_id?: boolean
   reference_number?: boolean
+  week?: boolean
   business_party_id?: boolean
   vehicle_combination_id?: boolean
   origin_warehouse_id?: boolean
@@ -4892,6 +5018,7 @@ export type tripsSelectScalar = {
   id?: boolean
   company_id?: boolean
   reference_number?: boolean
+  week?: boolean
   business_party_id?: boolean
   vehicle_combination_id?: boolean
   origin_warehouse_id?: boolean
@@ -4912,7 +5039,7 @@ export type tripsSelectScalar = {
   corridor_id?: boolean
 }
 
-export type tripsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "reference_number" | "business_party_id" | "vehicle_combination_id" | "origin_warehouse_id" | "destination_warehouse_id" | "origin_party_location_id" | "destination_party_location_id" | "origin_location_id" | "destination_location_id" | "departure_time" | "arrival_time" | "status" | "notes" | "created_by" | "deleted_at" | "created_at" | "dispatch_order_id" | "kilometers" | "corridor_id", ExtArgs["result"]["trips"]>
+export type tripsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "reference_number" | "week" | "business_party_id" | "vehicle_combination_id" | "origin_warehouse_id" | "destination_warehouse_id" | "origin_party_location_id" | "destination_party_location_id" | "origin_location_id" | "destination_location_id" | "departure_time" | "arrival_time" | "status" | "notes" | "created_by" | "deleted_at" | "created_at" | "dispatch_order_id" | "kilometers" | "corridor_id", ExtArgs["result"]["trips"]>
 export type tripsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfers_cargo_transfers_from_trip_idTotrips?: boolean | Prisma.trips$cargo_transfers_cargo_transfers_from_trip_idTotripsArgs<ExtArgs>
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: boolean | Prisma.trips$cargo_transfers_cargo_transfers_to_trip_idTotripsArgs<ExtArgs>
@@ -4991,6 +5118,7 @@ export type $tripsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     company_id: string
     reference_number: string | null
+    week: string | null
     business_party_id: string | null
     vehicle_combination_id: string | null
     origin_warehouse_id: string | null
@@ -5454,6 +5582,7 @@ export interface tripsFieldRefs {
   readonly id: Prisma.FieldRef<"trips", 'String'>
   readonly company_id: Prisma.FieldRef<"trips", 'String'>
   readonly reference_number: Prisma.FieldRef<"trips", 'String'>
+  readonly week: Prisma.FieldRef<"trips", 'String'>
   readonly business_party_id: Prisma.FieldRef<"trips", 'String'>
   readonly vehicle_combination_id: Prisma.FieldRef<"trips", 'String'>
   readonly origin_warehouse_id: Prisma.FieldRef<"trips", 'String'>

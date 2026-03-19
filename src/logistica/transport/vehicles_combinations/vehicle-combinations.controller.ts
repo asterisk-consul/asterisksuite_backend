@@ -40,6 +40,14 @@ export class VehicleCombinationsController {
     return this.service.findAll(company_id);
   }
 
+  @Get('available')
+  findAvailable(
+    @Query('company_id') company_id: string,
+    @Query('date') date: string,
+  ) {
+    return this.service.findAvailable(company_id, date);
+  }
+
   // --------------------------------------------------
   // LISTAR ACTIVAS
   // --------------------------------------------------

@@ -134,6 +134,46 @@ export class VehicleCombinationsService {
   }
 
   // --------------------------------------------------
+  // LISTAR DISPONIBLES POR FECHA
+  // --------------------------------------------------
+  async findAvailable(company_id: string, date: string) {
+    const targetDate = new Date(date);
+
+    // Inicio y fin del día
+    const startOfDay = new Date(targetDate);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(targetDate);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    return this.prisma.vehicle_combinations.findMany({
+      where: {
+        company_id,
+        valid_until: null, // solo activas
+        deleted_at: null,
+        trips: {
+          none: {
+            // sin trips en ese día
+            departure_time: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+            status: {
+              notIn: ['CANCELLED'], // ignorar cancelados
+            },
+          },
+        },
+      },
+      include: {
+        tractor: true,
+        trailer: true,
+        drivers: true,
+      },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  // --------------------------------------------------
   // BUSCAR UNA
   // --------------------------------------------------
   async findOne(id: string) {

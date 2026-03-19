@@ -3491,6 +3491,7 @@ export const TripsScalarFieldEnum = {
   id: 'id',
   company_id: 'company_id',
   reference_number: 'reference_number',
+  week: 'week',
   business_party_id: 'business_party_id',
   vehicle_combination_id: 'vehicle_combination_id',
   origin_warehouse_id: 'origin_warehouse_id',

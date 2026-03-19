@@ -342,6 +342,7 @@ model trips {
   id                                                                   String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   company_id                                                           String                  @db.Uuid
   reference_number                                                     String?                 @db.VarChar(100)
+  week                                                                 String?                 @db.VarChar(10)
   business_party_id                                                    String?                 @db.Uuid
   vehicle_combination_id                                               String?                 @db.Uuid
   origin_warehouse_id                                                  String?                 @db.Uuid
