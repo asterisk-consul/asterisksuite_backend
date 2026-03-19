@@ -8,7 +8,7 @@ import { CreateDeliveryNoteDto } from './dto/create-delivery-note.dto';
 import { UpdateDeliveryNoteDto } from './dto/update-delivery-note.dto';
 import { QueryDeliveryNoteDto } from './dto/query-delivery-note.dto';
 import { DocumentSequencesService } from '../document-sequences/document-sequences.service';
-import { generateDeliveryNotePdf } from '../delivery-notes/delivery-notes.pdf';
+import { generateDeliveryNotePdf } from './delivery-notes.pdf';
 
 @Injectable()
 export class DeliveryNotesService {
