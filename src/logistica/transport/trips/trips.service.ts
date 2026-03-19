@@ -13,9 +13,7 @@ export class TripsService {
     return this.prisma.trips.findMany({
       where: { company_id },
       include: {
-        // ✅ AGREGADO
         business_party: true,
-
         vehicle_combination: {
           include: {
             tractor: true,
@@ -23,13 +21,11 @@ export class TripsService {
             drivers: true,
           },
         },
-
         trip_rates: {
           include: {
             transfer_rates: true,
           },
         },
-
         corridors: {
           include: {
             origin_location: true,
@@ -50,15 +46,19 @@ export class TripsService {
     const trip = await this.prisma.trips.findUnique({
       where: { id },
       include: {
-        // ✅ AGREGADO
         business_party: true,
-
+        vehicle_combination: {
+          include: {
+            tractor: true,
+            trailer: true,
+            drivers: true,
+          },
+        },
         trip_rates: {
           include: {
             transfer_rates: true,
           },
         },
-
         corridors: {
           include: {
             origin_location: true,
@@ -105,10 +105,8 @@ export class TripsService {
       data: {
         company_id: dto.company_id,
         reference_number: dto.reference_number,
-
-        // ✅ AGREGADO
+        week: dto.week ?? null,
         business_party_id: dto.business_party_id ?? null,
-
         vehicle_combination_id: dto.vehicle_combination_id,
         origin_location_id: dto.origin_location_id,
         destination_location_id: dto.destination_location_id,
@@ -119,8 +117,14 @@ export class TripsService {
         corridor_id: corridorId,
       },
       include: {
-        // 👇 opcional pero recomendado para devolver ya el nombre
         business_party: true,
+        vehicle_combination: {
+          include: {
+            tractor: true,
+            trailer: true,
+            drivers: true,
+          },
+        },
       },
     });
   }
@@ -132,10 +136,18 @@ export class TripsService {
       where: { id },
       data: {
         ...dto,
+        week: dto.week ?? null,
         business_party_id: dto.business_party_id,
       },
       include: {
         business_party: true,
+        vehicle_combination: {
+          include: {
+            tractor: true,
+            trailer: true,
+            drivers: true,
+          },
+        },
       },
     });
   }
@@ -145,9 +157,7 @@ export class TripsService {
 
     return this.prisma.trips.update({
       where: { id },
-      data: {
-        status,
-      },
+      data: { status },
     });
   }
 
@@ -176,9 +186,7 @@ export class TripsService {
   async updateRate(id: string, dto: UpdateTripRateDto) {
     return this.prisma.trip_rates.update({
       where: { id },
-      data: {
-        value: dto.value,
-      },
+      data: { value: dto.value },
     });
   }
 
