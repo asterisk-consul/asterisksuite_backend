@@ -1,5 +1,5 @@
-@baseUrl = https://apidonandres.asterisksuite.cloud/api
-//@baseUrl = http://localhost:3000/api
+# @baseUrl = https://apidonandres.asterisksuite.cloud/api
+@baseUrl = http://localhost:3000/api
 
 
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
@@ -64,6 +64,16 @@ Content-Type: application/json
 # Listar todas las combinaciones
 GET {{baseUrl}}/vehicle-combinations?company_id={{companyId}}
 Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener combinaciones de vehículos disponibles
+GET {{baseUrl}}/vehicle-combinations/available
+    ?company_id=123e4567-e89b-12d3-a456-426614174000
+    &date=2026-03-12
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
 
 ###
 # Listar combinaciones ACTIVAS

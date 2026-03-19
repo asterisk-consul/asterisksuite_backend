@@ -139,40 +139,50 @@ export class VehicleCombinationsService {
   async findAvailable(company_id: string, date: string) {
     const targetDate = new Date(date);
 
-    // Inicio y fin del día
     const startOfDay = new Date(targetDate);
-    startOfDay.setHours(0, 0, 0, 0);
+    startOfDay.setUTCHours(0, 0, 0, 0);
 
     const endOfDay = new Date(targetDate);
-    endOfDay.setHours(23, 59, 59, 999);
+    endOfDay.setUTCHours(23, 59, 59, 999);
 
-    return this.prisma.vehicle_combinations.findMany({
+    const busyTrips = await this.prisma.trips.findMany({
       where: {
         company_id,
-        valid_until: null, // solo activas
-        deleted_at: null,
-        trips: {
-          none: {
-            // sin trips en ese día
-            departure_time: {
-              gte: startOfDay,
-              lte: endOfDay,
-            },
-            status: {
-              notIn: ['CANCELLED'], // ignorar cancelados
-            },
+        status: { notIn: ['CANCELLED'] },
+        vehicle_combination_id: { not: null },
+        AND: [
+          { departure_time: { lte: endOfDay } },
+          {
+            OR: [{ arrival_time: { gte: startOfDay } }, { arrival_time: null }],
           },
-        },
+        ],
       },
-      include: {
-        tractor: true,
-        trailer: true,
-        drivers: true,
+      select: { vehicle_combination_id: true },
+    });
+
+    const busyIds = busyTrips
+      .map((t) => t.vehicle_combination_id)
+      .filter(Boolean) as string[];
+
+    console.log({ busyIds });
+
+    const result = await this.prisma.vehicle_combinations.findMany({
+      where: {
+        company_id,
+        deleted_at: null,
+        // sin filtro de fechas por ahora
+        ...(busyIds.length > 0 && { id: { notIn: busyIds } }),
       },
+      include: { tractor: true, trailer: true, drivers: true },
       orderBy: { created_at: 'desc' },
     });
-  }
 
+    console.log({ returning: result.length, ids: result.map((v) => v.id) });
+
+    console.log({ returning: result.length });
+
+    return result;
+  }
   // --------------------------------------------------
   // BUSCAR UNA
   // --------------------------------------------------
