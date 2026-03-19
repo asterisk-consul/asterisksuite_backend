@@ -164,24 +164,15 @@ export class VehicleCombinationsService {
       .map((t) => t.vehicle_combination_id)
       .filter(Boolean) as string[];
 
-    console.log({ busyIds });
-
-    const result = await this.prisma.vehicle_combinations.findMany({
+    return this.prisma.vehicle_combinations.findMany({
       where: {
         company_id,
         deleted_at: null,
-        // sin filtro de fechas por ahora
         ...(busyIds.length > 0 && { id: { notIn: busyIds } }),
       },
       include: { tractor: true, trailer: true, drivers: true },
       orderBy: { created_at: 'desc' },
     });
-
-    console.log({ returning: result.length, ids: result.map((v) => v.id) });
-
-    console.log({ returning: result.length });
-
-    return result;
   }
   // --------------------------------------------------
   // BUSCAR UNA
