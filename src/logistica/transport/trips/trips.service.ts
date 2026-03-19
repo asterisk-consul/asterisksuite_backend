@@ -136,7 +136,6 @@ export class TripsService {
       where: { id },
       data: {
         ...dto,
-        week: dto.week ?? null,
         business_party_id: dto.business_party_id,
       },
       include: {
@@ -148,10 +147,26 @@ export class TripsService {
             drivers: true,
           },
         },
+        trip_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
+        corridors: {
+          include: {
+            origin_location: true,
+            destination_location: true,
+            corridorStops: {
+              orderBy: { stop_order: 'asc' },
+              include: {
+                location: true,
+              },
+            },
+          },
+        },
       },
     });
   }
-
   async updateStatus(id: string, status: string) {
     await this.findOne(id);
 
