@@ -722,7 +722,7 @@ model documents {
   document_items   document_items[]
   document_taxes   document_taxes[]
   document_types   document_types    @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  busines_parties busines_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([document_type_id, number], map: "uq_document_number")
 }
