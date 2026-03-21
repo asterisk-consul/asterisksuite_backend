@@ -39,6 +39,10 @@ export class CreateTripDto {
   reference_number?: string;
 
   @IsOptional()
+  @IsString()
+  week?: string;
+
+  @IsOptional()
   @IsUUID()
   vehicle_combination_id?: string;
 
@@ -75,4 +79,7 @@ export class CreateTripDto {
   @IsOptional()
   @IsNumber()
   kilometers?: number;
+  @IsOptional()
+  @IsUUID()
+  business_party_id?: string;
 }

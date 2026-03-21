@@ -134,6 +134,51 @@ export class VehicleCombinationsService {
   }
 
   // --------------------------------------------------
+  // LISTAR DISPONIBLES POR FECHA
+  // --------------------------------------------------
+  async findAvailable(company_id: string, date: string) {
+    const targetDate = new Date(date);
+
+    const startOfDay = new Date(targetDate);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(targetDate);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const busyTrips = await this.prisma.trips.findMany({
+      where: {
+        company_id,
+        status: { notIn: ['CANCELLED'] },
+        vehicle_combination_id: { not: null },
+        AND: [
+          { departure_time: { lte: endOfDay } },
+          {
+            OR: [{ arrival_time: { gte: startOfDay } }, { arrival_time: null }],
+          },
+        ],
+      },
+      select: { vehicle_combination_id: true },
+    });
+
+    const busyIds = busyTrips
+      .map((t) => t.vehicle_combination_id)
+      .filter(Boolean) as string[];
+
+    return this.prisma.vehicle_combinations.findMany({
+      where: {
+        company_id,
+        deleted_at: null,
+        OR: [
+          { valid_until: null }, // ✅ activas indefinidamente
+          { valid_until: { gte: startOfDay } }, // ✅ vigentes en la fecha consultada
+        ],
+        ...(busyIds.length > 0 && { id: { notIn: busyIds } }),
+      },
+      include: { tractor: true, trailer: true, drivers: true },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+  // --------------------------------------------------
   // BUSCAR UNA
   // --------------------------------------------------
   async findOne(id: string) {

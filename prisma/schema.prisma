@@ -23,6 +23,8 @@ model business_parties {
   dispatch_orders dispatch_orders[]
   documents       documents[]
   party_locations party_locations[]
+  party_contacts  party_contacts[]
+  trips           trips[]
 
   @@index([company_id], map: "idx_parties_company")
   @@index([tax_id], map: "idx_business_parties_tax_id")
@@ -208,6 +210,23 @@ model party_locations {
   trips_trips_origin_party_location_idToparty_locations      trips[]          @relation("trips_origin_party_location_idToparty_locations")
 }
 
+model party_contacts {
+  id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  party_id String? @db.Uuid
+
+  first_name String  @db.VarChar(100)
+  last_name  String  @db.VarChar(100)
+  role       String? @db.VarChar(100) // cargo
+  phone      String? @db.VarChar(50)
+  email      String? @db.VarChar(150)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: Cascade)
+
+  @@index([party_id], map: "idx_party_contacts_party")
+}
+
 model picking_items {
   id                String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   picking_order_id  String            @db.Uuid
@@ -327,6 +346,8 @@ model trips {
   id                                                                   String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   company_id                                                           String                  @db.Uuid
   reference_number                                                     String?                 @db.VarChar(100)
+  week                                                                 String?                 @db.VarChar(10)
+  business_party_id                                                    String?                 @db.Uuid
   vehicle_combination_id                                               String?                 @db.Uuid
   origin_warehouse_id                                                  String?                 @db.Uuid
   destination_warehouse_id                                             String?                 @db.Uuid
@@ -362,6 +383,7 @@ model trips {
   vehicle_combination                                                  vehicle_combinations?   @relation(fields: [vehicle_combination_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   corridors                                                            corridors?              @relation(fields: [corridor_id], references: [id])
   corridor_id                                                          String?                 @db.Uuid
+  business_party                                                       business_parties?       @relation(fields: [business_party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([company_id], map: "idx_trips_company")
   @@index([status], map: "idx_trips_status")
@@ -700,7 +722,7 @@ model documents {
   document_items   document_items[]
   document_taxes   document_taxes[]
   document_types   document_types    @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  busines_parties busines_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([document_type_id, number], map: "uq_document_number")
 }

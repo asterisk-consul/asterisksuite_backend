@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCorridorDto } from './dto/create-corridor.dto';
 import { UpdateCorridorDto } from './dto/update-corridor.dto';
+import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class CorridorsService {
@@ -43,6 +44,10 @@ export class CorridorsService {
       include: {
         origin_location: true,
         destination_location: true,
+        corridorStops: {
+          orderBy: { stop_order: 'asc' },
+          include: { location: true },
+        },
       },
     });
   }
@@ -113,9 +118,40 @@ export class CorridorsService {
   }
 
   update(id: string, dto: UpdateCorridorDto) {
+    const { stops, origin_location_id, destination_location_id, ...rest } = dto;
+
     return this.prisma.corridors.update({
       where: { id },
-      data: dto,
+      data: {
+        ...omitUndefined(rest),
+
+        ...(origin_location_id && {
+          origin_location: { connect: { id: origin_location_id } },
+        }),
+
+        ...(destination_location_id && {
+          destination_location: { connect: { id: destination_location_id } },
+        }),
+
+        ...(stops && {
+          corridorStops: {
+            deleteMany: {},
+            create: stops.map((s) => ({
+              location_id: s.location_id,
+              stop_order: s.stop_order,
+              ...(s.stop_type !== undefined && { stop_type: s.stop_type }),
+            })),
+          },
+        }),
+      },
+      include: {
+        origin_location: true,
+        destination_location: true,
+        corridorStops: {
+          orderBy: { stop_order: 'asc' },
+          include: { location: true },
+        },
+      },
     });
   }
 

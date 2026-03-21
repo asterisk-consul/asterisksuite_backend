@@ -63,6 +63,7 @@ export const ModelName = {
   pallet_items: 'pallet_items',
   pallets: 'pallets',
   party_locations: 'party_locations',
+  party_contacts: 'party_contacts',
   picking_items: 'picking_items',
   picking_orders: 'picking_orders',
   picking_results: 'picking_results',
@@ -270,6 +271,20 @@ export const Party_locationsScalarFieldEnum = {
 export type Party_locationsScalarFieldEnum = (typeof Party_locationsScalarFieldEnum)[keyof typeof Party_locationsScalarFieldEnum]
 
 
+export const Party_contactsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  role: 'role',
+  phone: 'phone',
+  email: 'email',
+  created_at: 'created_at'
+} as const
+
+export type Party_contactsScalarFieldEnum = (typeof Party_contactsScalarFieldEnum)[keyof typeof Party_contactsScalarFieldEnum]
+
+
 export const Picking_itemsScalarFieldEnum = {
   id: 'id',
   picking_order_id: 'picking_order_id',
@@ -372,6 +387,8 @@ export const TripsScalarFieldEnum = {
   id: 'id',
   company_id: 'company_id',
   reference_number: 'reference_number',
+  week: 'week',
+  business_party_id: 'business_party_id',
   vehicle_combination_id: 'vehicle_combination_id',
   origin_warehouse_id: 'origin_warehouse_id',
   destination_warehouse_id: 'destination_warehouse_id',

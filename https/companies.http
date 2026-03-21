@@ -1,4 +1,4 @@
- @baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3000/api
 #@baseUrl = https://apidonandres.asterisksuite.cloud/api
 
 @refreshToken = d9d9512c89e5c626d92933acaf8d4de09a0641afb2bdc843e05f4240bbb76c1c7be90fc90bd7fa4153f8469e69153dc58df600e184c2e86bf09e2588d48683a0

@@ -262,7 +262,7 @@ export type transfer_ratesCreateInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string | null
-  companies: Prisma.companiesCreateNestedOneWithoutTransferRatesInput
+  companies: Prisma.companiesCreateNestedOneWithoutTransfer_ratesInput
   trip_rates?: Prisma.trip_ratesCreateNestedManyWithoutTransfer_ratesInput
 }
 
@@ -284,7 +284,7 @@ export type transfer_ratesUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  companies?: Prisma.companiesUpdateOneRequiredWithoutTransferRatesNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutTransfer_ratesNestedInput
   trip_rates?: Prisma.trip_ratesUpdateManyWithoutTransfer_ratesNestedInput
 }
 
@@ -495,7 +495,7 @@ export type transfer_ratesCreateWithoutTrip_ratesInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string | null
-  companies: Prisma.companiesCreateNestedOneWithoutTransferRatesInput
+  companies: Prisma.companiesCreateNestedOneWithoutTransfer_ratesInput
 }
 
 export type transfer_ratesUncheckedCreateWithoutTrip_ratesInput = {
@@ -531,7 +531,7 @@ export type transfer_ratesUpdateWithoutTrip_ratesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  companies?: Prisma.companiesUpdateOneRequiredWithoutTransferRatesNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutTransfer_ratesNestedInput
 }
 
 export type transfer_ratesUncheckedUpdateWithoutTrip_ratesInput = {
