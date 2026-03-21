@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "business_parties" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "type" VARCHAR(20) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE "business_parties" (
 
 -- CreateTable
 CREATE TABLE "cargo_transfer_items" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "transfer_id" UUID NOT NULL,
     "pallet_id" UUID,
     "delivery_note_id" UUID,
@@ -26,7 +26,7 @@ CREATE TABLE "cargo_transfer_items" (
 
 -- CreateTable
 CREATE TABLE "cargo_transfers" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "from_trip_id" UUID,
     "to_trip_id" UUID,
     "location_id" UUID,
@@ -39,7 +39,7 @@ CREATE TABLE "cargo_transfers" (
 
 -- CreateTable
 CREATE TABLE "companies" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "tax_id" VARCHAR(50),
     "phone" VARCHAR(30),
@@ -50,7 +50,7 @@ CREATE TABLE "companies" (
 
 -- CreateTable
 CREATE TABLE "delivery_notes" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "type" VARCHAR(20) NOT NULL,
     "number" VARCHAR(50) NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE "delivery_notes" (
 
 -- CreateTable
 CREATE TABLE "drivers" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "first_name" VARCHAR(100) NOT NULL,
     "last_name" VARCHAR(100) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE "drivers" (
 
 -- CreateTable
 CREATE TABLE "entity_photos" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "entity_type" VARCHAR(30) NOT NULL,
     "entity_id" UUID NOT NULL,
     "file_id" UUID NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE "entity_photos" (
 
 -- CreateTable
 CREATE TABLE "files" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "storage_provider" VARCHAR(50),
     "file_path" TEXT NOT NULL,
     "public_url" TEXT,
@@ -108,7 +108,7 @@ CREATE TABLE "files" (
 
 -- CreateTable
 CREATE TABLE "locations" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "address" VARCHAR(255),
     "city" VARCHAR(100),
     "province" VARCHAR(100),
@@ -123,7 +123,7 @@ CREATE TABLE "locations" (
 
 -- CreateTable
 CREATE TABLE "pallet_items" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "pallet_id" UUID NOT NULL,
     "product_id" UUID NOT NULL,
     "quantity" DECIMAL(12,3) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE "pallet_items" (
 
 -- CreateTable
 CREATE TABLE "pallets" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "code" VARCHAR(100) NOT NULL,
     "warehouse_id" UUID,
@@ -147,7 +147,7 @@ CREATE TABLE "pallets" (
 
 -- CreateTable
 CREATE TABLE "party_locations" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "party_id" UUID NOT NULL,
     "location_id" UUID NOT NULL,
     "label" VARCHAR(100),
@@ -157,8 +157,22 @@ CREATE TABLE "party_locations" (
 );
 
 -- CreateTable
+CREATE TABLE "party_contacts" (
+    "id" UUID NOT NULL,
+    "party_id" UUID,
+    "first_name" VARCHAR(100) NOT NULL,
+    "last_name" VARCHAR(100) NOT NULL,
+    "role" VARCHAR(100),
+    "phone" VARCHAR(50),
+    "email" VARCHAR(150),
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "party_contacts_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "picking_items" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "picking_order_id" UUID NOT NULL,
     "product_id" UUID NOT NULL,
     "quantity_required" DECIMAL(12,3) NOT NULL,
@@ -169,7 +183,7 @@ CREATE TABLE "picking_items" (
 
 -- CreateTable
 CREATE TABLE "picking_orders" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "warehouse_id" UUID NOT NULL,
     "client_id" UUID,
     "status" VARCHAR(20) NOT NULL,
@@ -184,7 +198,7 @@ CREATE TABLE "picking_orders" (
 
 -- CreateTable
 CREATE TABLE "picking_results" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "picking_order_id" UUID NOT NULL,
     "pallet_id" UUID NOT NULL,
 
@@ -193,7 +207,7 @@ CREATE TABLE "picking_results" (
 
 -- CreateTable
 CREATE TABLE "picking_sources" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "picking_item_id" UUID NOT NULL,
     "pallet_id" UUID NOT NULL,
     "quantity" DECIMAL(12,3) NOT NULL,
@@ -203,7 +217,7 @@ CREATE TABLE "picking_sources" (
 
 -- CreateTable
 CREATE TABLE "products" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "sku" VARCHAR(100),
@@ -215,7 +229,7 @@ CREATE TABLE "products" (
 
 -- CreateTable
 CREATE TABLE "trip_cargo" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "trip_id" UUID NOT NULL,
     "pallet_id" UUID,
     "delivery_note_id" UUID,
@@ -227,7 +241,7 @@ CREATE TABLE "trip_cargo" (
 
 -- CreateTable
 CREATE TABLE "trip_temperature_logs" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "trip_id" UUID NOT NULL,
     "temperature" DECIMAL(5,2) NOT NULL,
     "recorded_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -238,7 +252,7 @@ CREATE TABLE "trip_temperature_logs" (
 
 -- CreateTable
 CREATE TABLE "dispatch_orders" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "order_number" VARCHAR(50) NOT NULL,
     "status" VARCHAR(20) NOT NULL,
@@ -256,9 +270,11 @@ CREATE TABLE "dispatch_orders" (
 
 -- CreateTable
 CREATE TABLE "trips" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "reference_number" VARCHAR(100),
+    "week" VARCHAR(10),
+    "business_party_id" UUID,
     "vehicle_combination_id" UUID,
     "origin_warehouse_id" UUID,
     "destination_warehouse_id" UUID,
@@ -282,7 +298,7 @@ CREATE TABLE "trips" (
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID,
     "name" VARCHAR(255) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
@@ -296,7 +312,7 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "vehicles" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "type" VARCHAR(30) NOT NULL,
     "plate" VARCHAR(20) NOT NULL,
@@ -314,7 +330,7 @@ CREATE TABLE "vehicles" (
 
 -- CreateTable
 CREATE TABLE "vehicle_combinations" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "tractor_id" UUID NOT NULL,
     "trailer_id" UUID,
@@ -332,7 +348,7 @@ CREATE TABLE "vehicle_combinations" (
 
 -- CreateTable
 CREATE TABLE "warehouse_stock" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "warehouse_id" UUID NOT NULL,
     "product_id" UUID NOT NULL,
     "quantity" DECIMAL(12,3) NOT NULL DEFAULT 0,
@@ -344,7 +360,7 @@ CREATE TABLE "warehouse_stock" (
 
 -- CreateTable
 CREATE TABLE "warehouse_stock_movements" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "warehouse_id" UUID NOT NULL,
     "product_id" UUID NOT NULL,
     "movement_type" VARCHAR(20) NOT NULL,
@@ -361,7 +377,7 @@ CREATE TABLE "warehouse_stock_movements" (
 
 -- CreateTable
 CREATE TABLE "warehouses" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "location_id" UUID,
     "name" VARCHAR(255) NOT NULL,
@@ -374,7 +390,7 @@ CREATE TABLE "warehouses" (
 
 -- CreateTable
 CREATE TABLE "document_sequences" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "document_type" VARCHAR(50) NOT NULL,
     "point_of_sale" VARCHAR(10) NOT NULL,
@@ -388,7 +404,7 @@ CREATE TABLE "document_sequences" (
 
 -- CreateTable
 CREATE TABLE "refresh_tokens" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "token_hash" VARCHAR(255) NOT NULL,
     "expires_at" TIMESTAMP(6) NOT NULL,
@@ -401,7 +417,7 @@ CREATE TABLE "refresh_tokens" (
 
 -- CreateTable
 CREATE TABLE "transport_document_types" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "entity" VARCHAR(20) NOT NULL,
     "active" BOOLEAN DEFAULT true,
@@ -412,7 +428,7 @@ CREATE TABLE "transport_document_types" (
 
 -- CreateTable
 CREATE TABLE "documents_vehicle" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "vehicle_id" UUID NOT NULL,
     "document_type_id" UUID NOT NULL,
     "expiration_date" DATE,
@@ -423,7 +439,7 @@ CREATE TABLE "documents_vehicle" (
 
 -- CreateTable
 CREATE TABLE "documents_driver" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "driver_id" UUID NOT NULL,
     "document_type_id" UUID NOT NULL,
     "expiration_date" DATE,
@@ -434,7 +450,7 @@ CREATE TABLE "documents_driver" (
 
 -- CreateTable
 CREATE TABLE "transfer_rates" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "rate_type" VARCHAR(20) NOT NULL,
@@ -447,7 +463,7 @@ CREATE TABLE "transfer_rates" (
 
 -- CreateTable
 CREATE TABLE "trip_rates" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "trip_id" UUID NOT NULL,
     "rate_id" UUID NOT NULL,
     "value" DECIMAL(12,2) NOT NULL,
@@ -458,7 +474,7 @@ CREATE TABLE "trip_rates" (
 
 -- CreateTable
 CREATE TABLE "corridors" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "company_id" UUID NOT NULL,
     "name" VARCHAR(150),
     "description" VARCHAR(255),
@@ -475,7 +491,7 @@ CREATE TABLE "corridors" (
 
 -- CreateTable
 CREATE TABLE "corridor_stops" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "corridor_id" UUID NOT NULL,
     "location_id" UUID NOT NULL,
     "stop_order" INTEGER NOT NULL,
@@ -487,8 +503,109 @@ CREATE TABLE "corridor_stops" (
     CONSTRAINT "corridor_stops_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "document_item_taxes" (
+    "id" UUID NOT NULL,
+    "document_item_id" UUID NOT NULL,
+    "tax_id" UUID NOT NULL,
+    "tax_rate" DECIMAL(6,3) NOT NULL,
+    "tax_amount" DECIMAL(15,2) NOT NULL,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "document_item_taxes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "document_items" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "document_id" UUID NOT NULL,
+    "product_id" UUID,
+    "quantity" DECIMAL(15,3) NOT NULL,
+    "price" DECIMAL(15,2) NOT NULL,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "unit_price" DECIMAL(15,2) NOT NULL DEFAULT 0,
+
+    CONSTRAINT "document_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "document_taxes" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "document_id" UUID NOT NULL,
+    "tax_id" UUID NOT NULL,
+    "tax_rate" DECIMAL(6,3) NOT NULL,
+    "taxable_base" DECIMAL(15,2) NOT NULL,
+    "tax_amount" DECIMAL(15,2) NOT NULL,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "document_taxes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "document_types" (
+    "id" UUID NOT NULL,
+    "document_sequence_id" UUID,
+    "code" VARCHAR(20) NOT NULL,
+    "description" VARCHAR(150) NOT NULL,
+    "direction" SMALLINT NOT NULL,
+    "affects_stock" BOOLEAN NOT NULL DEFAULT false,
+    "affects_accounting" BOOLEAN NOT NULL DEFAULT false,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+
+    CONSTRAINT "document_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "documents" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "document_type_id" UUID NOT NULL,
+    "party_id" UUID,
+    "number" INTEGER NOT NULL,
+    "date" DATE NOT NULL,
+    "status" SMALLINT NOT NULL DEFAULT 0,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "subtotal" DECIMAL(15,2) NOT NULL DEFAULT 0,
+    "total_taxes" DECIMAL(15,2) NOT NULL DEFAULT 0,
+    "total" DECIMAL(15,2) NOT NULL DEFAULT 0,
+    "descrip" VARCHAR(50),
+
+    CONSTRAINT "documents_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "product_taxes" (
+    "id" UUID NOT NULL,
+    "product_id" UUID NOT NULL,
+    "tax_id" UUID NOT NULL,
+    "is_included_in_price" BOOLEAN NOT NULL DEFAULT false,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "product_taxes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "taxes" (
+    "id" UUID NOT NULL,
+    "company_id" UUID NOT NULL,
+    "code" VARCHAR(20) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "tax_type" VARCHAR(30) NOT NULL,
+    "rate" DECIMAL(6,3) NOT NULL,
+    "is_percentage" BOOLEAN NOT NULL DEFAULT true,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "calculation_level" VARCHAR(20) NOT NULL,
+
+    CONSTRAINT "taxes_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE INDEX "idx_parties_company" ON "business_parties"("company_id");
+
+-- CreateIndex
+CREATE INDEX "idx_business_parties_tax_id" ON "business_parties"("tax_id");
 
 -- CreateIndex
 CREATE INDEX "idx_entity_photos" ON "entity_photos"("entity_type", "entity_id");
@@ -498,6 +615,9 @@ CREATE UNIQUE INDEX "pallet_items_pallet_id_product_id_key" ON "pallet_items"("p
 
 -- CreateIndex
 CREATE UNIQUE INDEX "pallets_code_key" ON "pallets"("code");
+
+-- CreateIndex
+CREATE INDEX "idx_party_contacts_party" ON "party_contacts"("party_id");
 
 -- CreateIndex
 CREATE INDEX "idx_trip_cargo_pallet" ON "trip_cargo"("pallet_id");
@@ -592,6 +712,24 @@ CREATE UNIQUE INDEX "corridors_company_id_name_key" ON "corridors"("company_id",
 -- CreateIndex
 CREATE UNIQUE INDEX "corridor_stops_corridor_id_stop_order_key" ON "corridor_stops"("corridor_id", "stop_order");
 
+-- CreateIndex
+CREATE INDEX "idx_document_item_taxes_document_item" ON "document_item_taxes"("document_item_id");
+
+-- CreateIndex
+CREATE INDEX "idx_document_item_taxes_tax" ON "document_item_taxes"("tax_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "document_types_code_key" ON "document_types"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "uq_document_number" ON "documents"("document_type_id", "number");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "uq_product_tax" ON "product_taxes"("product_id", "tax_id");
+
+-- CreateIndex
+CREATE INDEX "idx_taxes_type_active" ON "taxes"("tax_type", "active");
+
 -- AddForeignKey
 ALTER TABLE "business_parties" ADD CONSTRAINT "business_parties_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -660,6 +798,9 @@ ALTER TABLE "party_locations" ADD CONSTRAINT "party_locations_location_id_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "party_locations" ADD CONSTRAINT "party_locations_party_id_fkey" FOREIGN KEY ("party_id") REFERENCES "business_parties"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "party_contacts" ADD CONSTRAINT "party_contacts_party_id_fkey" FOREIGN KEY ("party_id") REFERENCES "business_parties"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "picking_items" ADD CONSTRAINT "picking_items_picking_order_id_fkey" FOREIGN KEY ("picking_order_id") REFERENCES "picking_orders"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
@@ -764,6 +905,9 @@ ALTER TABLE "trips" ADD CONSTRAINT "trips_vehicle_combination_id_fkey" FOREIGN K
 ALTER TABLE "trips" ADD CONSTRAINT "trips_corridor_id_fkey" FOREIGN KEY ("corridor_id") REFERENCES "corridors"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "trips" ADD CONSTRAINT "trips_business_party_id_fkey" FOREIGN KEY ("business_party_id") REFERENCES "business_parties"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
@@ -806,7 +950,7 @@ ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_company_id_fkey" FOREIGN KEY
 ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "locations"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "document_sequences" ADD CONSTRAINT "document_sequences_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "document_sequences" ADD CONSTRAINT "document_sequences_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
@@ -843,3 +987,36 @@ ALTER TABLE "corridor_stops" ADD CONSTRAINT "corridor_stops_corridor_id_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "corridor_stops" ADD CONSTRAINT "corridor_stops_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "locations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "document_item_taxes" ADD CONSTRAINT "dit_document_item_fkey" FOREIGN KEY ("document_item_id") REFERENCES "document_items"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "document_item_taxes" ADD CONSTRAINT "dit_tax_fkey" FOREIGN KEY ("tax_id") REFERENCES "taxes"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "document_items" ADD CONSTRAINT "document_items_document_id_fkey" FOREIGN KEY ("document_id") REFERENCES "documents"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "document_taxes" ADD CONSTRAINT "document_taxes_document_id_fkey" FOREIGN KEY ("document_id") REFERENCES "documents"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "document_taxes" ADD CONSTRAINT "document_taxes_tax_id_fkey" FOREIGN KEY ("tax_id") REFERENCES "taxes"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "document_types" ADD CONSTRAINT "document_types_document_sequence_id_fkey" FOREIGN KEY ("document_sequence_id") REFERENCES "document_sequences"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "documents" ADD CONSTRAINT "documents_document_type_id_fkey" FOREIGN KEY ("document_type_id") REFERENCES "document_types"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "documents" ADD CONSTRAINT "documents_party_id_fkey" FOREIGN KEY ("party_id") REFERENCES "business_parties"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "product_taxes" ADD CONSTRAINT "product_taxes_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "product_taxes" ADD CONSTRAINT "product_taxes_tax_id_fkey" FOREIGN KEY ("tax_id") REFERENCES "taxes"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "taxes" ADD CONSTRAINT "taxes_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

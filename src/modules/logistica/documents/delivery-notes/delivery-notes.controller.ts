@@ -8,9 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
-  Res, // ← agregado
 } from '@nestjs/common';
-import type { Response } from 'express';
 import { DeliveryNotesService } from './delivery-notes.service';
 import { CreateDeliveryNoteDto } from './dto/create-delivery-note.dto';
 import { UpdateDeliveryNoteDto } from './dto/update-delivery-note.dto';
@@ -40,23 +38,7 @@ export class DeliveryNotesController {
     return this.service.findAll(query);
   }
 
-  @Get(':id/pdf') // ← tiene que ir ANTES de :id
-  async downloadPdf(
-    @Param('id') id: string,
-    @Res() res: Response, // ← Res importado de @nestjs/common
-  ) {
-    const buffer = await this.service.generatePdf(id); // ← this.service no this.deliveryNotesService
-
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="remito-${id}.pdf"`,
-      'Content-Length': buffer.length,
-    });
-
-    res.end(buffer);
-  }
-
-  @Get(':id') // ← tiene que ir DESPUÉS de :id/pdf
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }

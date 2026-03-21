@@ -8,7 +8,6 @@ import { CreateDeliveryNoteDto } from './dto/create-delivery-note.dto';
 import { UpdateDeliveryNoteDto } from './dto/update-delivery-note.dto';
 import { QueryDeliveryNoteDto } from './dto/query-delivery-note.dto';
 import { DocumentSequencesService } from '../document-sequences/document-sequences.service';
-import { generateDeliveryNotePdf } from './delivery-notes.pdf';
 
 @Injectable()
 export class DeliveryNotesService {
@@ -65,7 +64,7 @@ export class DeliveryNotesService {
           : undefined,
       },
       include: {
-        busines_parties: true,
+        business_parties: true,
         trips: true,
       },
       orderBy: {
@@ -78,7 +77,7 @@ export class DeliveryNotesService {
     const note = await this.prisma.delivery_notes.findFirst({
       where: { id, deleted_at: null },
       include: {
-        busines_parties: true,
+        business_parties: true,
         trips: true,
         picking_orders: true,
         trip_cargo: true,
@@ -168,26 +167,5 @@ export class DeliveryNotesService {
         data: { status: 'CONFIRMED' },
       });
     });
-  }
-
-  async generatePdf(id: string): Promise<Buffer> {
-    const note = await this.prisma.trips.findFirst({
-      where: { id, deleted_at: null },
-      include: {
-        busines_parties: true,
-        trips: true,
-        picking_orders: {
-          include: {
-            picking_items: {
-              include: { products: true },
-            },
-          },
-        },
-      },
-    });
-
-    if (!note) throw new NotFoundException('Delivery note not found');
-
-    return generateDeliveryNotePdf(note); // ← delega toda la generación
   }
 }
