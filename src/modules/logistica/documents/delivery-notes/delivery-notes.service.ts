@@ -65,7 +65,7 @@ export class DeliveryNotesService {
           : undefined,
       },
       include: {
-        business_parties: true,
+        busines_parties: true,
         trips: true,
       },
       orderBy: {
@@ -78,7 +78,7 @@ export class DeliveryNotesService {
     const note = await this.prisma.delivery_notes.findFirst({
       where: { id, deleted_at: null },
       include: {
-        business_parties: true,
+        busines_parties: true,
         trips: true,
         picking_orders: true,
         trip_cargo: true,
@@ -174,7 +174,7 @@ export class DeliveryNotesService {
     const note = await this.prisma.trips.findFirst({
       where: { id, deleted_at: null },
       include: {
-        business_parties: true,
+        busines_parties: true,
         trips: true,
         picking_orders: {
           include: {

@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { BusinessPartiesModule } from './busines-parties/busines-parties.module';
+import { BusinesPartiesModule } from './busines-parties/busines-parties.module';
 import { LocationsModule } from './locations/locations.module';
 import { ProductsModule } from './products/products.module';
-import { PartyContactsModule } from './contacts/contacts.module';
+import { PartyContactModule } from './contact/contact.module';
 @Module({
   imports: [
-    BusinessPartiesModule,
+    BusinesPartiesModule,
     LocationsModule,
     ProductsModule,
     PartyContactsModule,
   ],
   exports: [
-    BusinessPartiesModule,
+    BusinesPartiesModule,
     LocationsModule,
     ProductsModule,
     PartyContactsModule,
