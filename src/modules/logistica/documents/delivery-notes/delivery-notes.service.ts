@@ -7,7 +7,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateDeliveryNoteDto } from './dto/create-delivery-note.dto';
 import { UpdateDeliveryNoteDto } from './dto/update-delivery-note.dto';
 import { QueryDeliveryNoteDto } from './dto/query-delivery-note.dto';
-import { DocumentSequencesService } from '../document-sequences/document-sequences.service';
+import { DocumentSequencesService } from '../../../master-data/document-sequences/document-sequences.service';
 
 @Injectable()
 export class DeliveryNotesService {

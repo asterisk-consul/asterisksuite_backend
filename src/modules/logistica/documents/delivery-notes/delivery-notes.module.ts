@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DeliveryNotesService } from './delivery-notes.service';
 import { DeliveryNotesController } from './delivery-notes.controller';
 import { PrismaService } from '@/prisma/prisma.service';
-import { DocumentSequencesModule } from '../document-sequences/document-sequences.module';
+import { DocumentSequencesModule } from '../../../master-data/document-sequences/document-sequences.module';
 
 @Module({
   imports: [DocumentSequencesModule],

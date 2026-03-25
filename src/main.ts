@@ -17,7 +17,7 @@ async function bootstrap() {
       'http://localhost:5500', // ← Live Server
       'http://127.0.0.1:5500', // ← Live Server (alternativo)
       'null',
-      'http://192.168.18.3:3008',
+      'http://192.168.18.13:3008',
       'https://dev.astreisksuite.cloud',
       'http://dev.astreisksuite.cloud',
     ],
