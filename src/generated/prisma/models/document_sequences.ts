@@ -27,17 +27,24 @@ export type AggregateDocument_sequences = {
 }
 
 export type Document_sequencesAvgAggregateOutputType = {
+  range_start: number | null
+  range_end: number | null
   current_number: number | null
 }
 
 export type Document_sequencesSumAggregateOutputType = {
+  range_start: number | null
+  range_end: number | null
   current_number: number | null
 }
 
 export type Document_sequencesMinAggregateOutputType = {
   id: string | null
   company_id: string | null
-  document_type: string | null
+  name: string | null
+  automatic: boolean | null
+  range_start: number | null
+  range_end: number | null
   point_of_sale: string | null
   current_number: number | null
   prefix: string | null
@@ -48,7 +55,10 @@ export type Document_sequencesMinAggregateOutputType = {
 export type Document_sequencesMaxAggregateOutputType = {
   id: string | null
   company_id: string | null
-  document_type: string | null
+  name: string | null
+  automatic: boolean | null
+  range_start: number | null
+  range_end: number | null
   point_of_sale: string | null
   current_number: number | null
   prefix: string | null
@@ -59,7 +69,10 @@ export type Document_sequencesMaxAggregateOutputType = {
 export type Document_sequencesCountAggregateOutputType = {
   id: number
   company_id: number
-  document_type: number
+  name: number
+  automatic: number
+  range_start: number
+  range_end: number
   point_of_sale: number
   current_number: number
   prefix: number
@@ -70,17 +83,24 @@ export type Document_sequencesCountAggregateOutputType = {
 
 
 export type Document_sequencesAvgAggregateInputType = {
+  range_start?: true
+  range_end?: true
   current_number?: true
 }
 
 export type Document_sequencesSumAggregateInputType = {
+  range_start?: true
+  range_end?: true
   current_number?: true
 }
 
 export type Document_sequencesMinAggregateInputType = {
   id?: true
   company_id?: true
-  document_type?: true
+  name?: true
+  automatic?: true
+  range_start?: true
+  range_end?: true
   point_of_sale?: true
   current_number?: true
   prefix?: true
@@ -91,7 +111,10 @@ export type Document_sequencesMinAggregateInputType = {
 export type Document_sequencesMaxAggregateInputType = {
   id?: true
   company_id?: true
-  document_type?: true
+  name?: true
+  automatic?: true
+  range_start?: true
+  range_end?: true
   point_of_sale?: true
   current_number?: true
   prefix?: true
@@ -102,7 +125,10 @@ export type Document_sequencesMaxAggregateInputType = {
 export type Document_sequencesCountAggregateInputType = {
   id?: true
   company_id?: true
-  document_type?: true
+  name?: true
+  automatic?: true
+  range_start?: true
+  range_end?: true
   point_of_sale?: true
   current_number?: true
   prefix?: true
@@ -200,7 +226,10 @@ export type document_sequencesGroupByArgs<ExtArgs extends runtime.Types.Extensio
 export type Document_sequencesGroupByOutputType = {
   id: string
   company_id: string
-  document_type: string
+  name: string
+  automatic: boolean
+  range_start: number | null
+  range_end: number | null
   point_of_sale: string
   current_number: number
   prefix: string | null
@@ -234,7 +263,10 @@ export type document_sequencesWhereInput = {
   NOT?: Prisma.document_sequencesWhereInput | Prisma.document_sequencesWhereInput[]
   id?: Prisma.UuidFilter<"document_sequences"> | string
   company_id?: Prisma.UuidFilter<"document_sequences"> | string
-  document_type?: Prisma.StringFilter<"document_sequences"> | string
+  name?: Prisma.StringFilter<"document_sequences"> | string
+  automatic?: Prisma.BoolFilter<"document_sequences"> | boolean
+  range_start?: Prisma.IntNullableFilter<"document_sequences"> | number | null
+  range_end?: Prisma.IntNullableFilter<"document_sequences"> | number | null
   point_of_sale?: Prisma.StringFilter<"document_sequences"> | string
   current_number?: Prisma.IntFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
@@ -247,7 +279,10 @@ export type document_sequencesWhereInput = {
 export type document_sequencesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
-  document_type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  automatic?: Prisma.SortOrder
+  range_start?: Prisma.SortOrderInput | Prisma.SortOrder
+  range_end?: Prisma.SortOrderInput | Prisma.SortOrder
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -259,12 +294,15 @@ export type document_sequencesOrderByWithRelationInput = {
 
 export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  company_id_document_type_point_of_sale?: Prisma.document_sequencesCompany_idDocument_typePoint_of_saleCompoundUniqueInput
+  company_id_point_of_sale?: Prisma.document_sequencesCompany_idPoint_of_saleCompoundUniqueInput
   AND?: Prisma.document_sequencesWhereInput | Prisma.document_sequencesWhereInput[]
   OR?: Prisma.document_sequencesWhereInput[]
   NOT?: Prisma.document_sequencesWhereInput | Prisma.document_sequencesWhereInput[]
   company_id?: Prisma.UuidFilter<"document_sequences"> | string
-  document_type?: Prisma.StringFilter<"document_sequences"> | string
+  name?: Prisma.StringFilter<"document_sequences"> | string
+  automatic?: Prisma.BoolFilter<"document_sequences"> | boolean
+  range_start?: Prisma.IntNullableFilter<"document_sequences"> | number | null
+  range_end?: Prisma.IntNullableFilter<"document_sequences"> | number | null
   point_of_sale?: Prisma.StringFilter<"document_sequences"> | string
   current_number?: Prisma.IntFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
@@ -272,12 +310,15 @@ export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   document_types?: Prisma.Document_typesListRelationFilter
-}, "id" | "company_id_document_type_point_of_sale">
+}, "id" | "company_id_point_of_sale">
 
 export type document_sequencesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
-  document_type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  automatic?: Prisma.SortOrder
+  range_start?: Prisma.SortOrderInput | Prisma.SortOrder
+  range_end?: Prisma.SortOrderInput | Prisma.SortOrder
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -296,7 +337,10 @@ export type document_sequencesScalarWhereWithAggregatesInput = {
   NOT?: Prisma.document_sequencesScalarWhereWithAggregatesInput | Prisma.document_sequencesScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"document_sequences"> | string
   company_id?: Prisma.UuidWithAggregatesFilter<"document_sequences"> | string
-  document_type?: Prisma.StringWithAggregatesFilter<"document_sequences"> | string
+  name?: Prisma.StringWithAggregatesFilter<"document_sequences"> | string
+  automatic?: Prisma.BoolWithAggregatesFilter<"document_sequences"> | boolean
+  range_start?: Prisma.IntNullableWithAggregatesFilter<"document_sequences"> | number | null
+  range_end?: Prisma.IntNullableWithAggregatesFilter<"document_sequences"> | number | null
   point_of_sale?: Prisma.StringWithAggregatesFilter<"document_sequences"> | string
   current_number?: Prisma.IntWithAggregatesFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableWithAggregatesFilter<"document_sequences"> | string | null
@@ -306,20 +350,26 @@ export type document_sequencesScalarWhereWithAggregatesInput = {
 
 export type document_sequencesCreateInput = {
   id?: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
-  companies: Prisma.companiesCreateNestedOneWithoutDocumentSequencesInput
+  companies: Prisma.companiesCreateNestedOneWithoutDocument_equencesInput
   document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUncheckedCreateInput = {
   id?: string
   company_id: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
@@ -330,20 +380,26 @@ export type document_sequencesUncheckedCreateInput = {
 
 export type document_sequencesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companies?: Prisma.companiesUpdateOneRequiredWithoutDocumentSequencesNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutDocument_equencesNestedInput
   document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -355,7 +411,10 @@ export type document_sequencesUncheckedUpdateInput = {
 export type document_sequencesCreateManyInput = {
   id?: string
   company_id: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
@@ -365,7 +424,10 @@ export type document_sequencesCreateManyInput = {
 
 export type document_sequencesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -376,7 +438,10 @@ export type document_sequencesUpdateManyMutationInput = {
 export type document_sequencesUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -394,16 +459,18 @@ export type document_sequencesOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type document_sequencesCompany_idDocument_typePoint_of_saleCompoundUniqueInput = {
+export type document_sequencesCompany_idPoint_of_saleCompoundUniqueInput = {
   company_id: string
-  document_type: string
   point_of_sale: string
 }
 
 export type document_sequencesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
-  document_type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  automatic?: Prisma.SortOrder
+  range_start?: Prisma.SortOrder
+  range_end?: Prisma.SortOrder
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrder
@@ -412,13 +479,18 @@ export type document_sequencesCountOrderByAggregateInput = {
 }
 
 export type document_sequencesAvgOrderByAggregateInput = {
+  range_start?: Prisma.SortOrder
+  range_end?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
 }
 
 export type document_sequencesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
-  document_type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  automatic?: Prisma.SortOrder
+  range_start?: Prisma.SortOrder
+  range_end?: Prisma.SortOrder
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrder
@@ -429,7 +501,10 @@ export type document_sequencesMaxOrderByAggregateInput = {
 export type document_sequencesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   company_id?: Prisma.SortOrder
-  document_type?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  automatic?: Prisma.SortOrder
+  range_start?: Prisma.SortOrder
+  range_end?: Prisma.SortOrder
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrder
@@ -438,6 +513,8 @@ export type document_sequencesMinOrderByAggregateInput = {
 }
 
 export type document_sequencesSumOrderByAggregateInput = {
+  range_start?: Prisma.SortOrder
+  range_end?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
 }
 
@@ -514,7 +591,10 @@ export type document_sequencesUpdateOneWithoutDocument_typesNestedInput = {
 
 export type document_sequencesCreateWithoutCompaniesInput = {
   id?: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
@@ -525,7 +605,10 @@ export type document_sequencesCreateWithoutCompaniesInput = {
 
 export type document_sequencesUncheckedCreateWithoutCompaniesInput = {
   id?: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
@@ -566,7 +649,10 @@ export type document_sequencesScalarWhereInput = {
   NOT?: Prisma.document_sequencesScalarWhereInput | Prisma.document_sequencesScalarWhereInput[]
   id?: Prisma.UuidFilter<"document_sequences"> | string
   company_id?: Prisma.UuidFilter<"document_sequences"> | string
-  document_type?: Prisma.StringFilter<"document_sequences"> | string
+  name?: Prisma.StringFilter<"document_sequences"> | string
+  automatic?: Prisma.BoolFilter<"document_sequences"> | boolean
+  range_start?: Prisma.IntNullableFilter<"document_sequences"> | number | null
+  range_end?: Prisma.IntNullableFilter<"document_sequences"> | number | null
   point_of_sale?: Prisma.StringFilter<"document_sequences"> | string
   current_number?: Prisma.IntFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
@@ -576,19 +662,25 @@ export type document_sequencesScalarWhereInput = {
 
 export type document_sequencesCreateWithoutDocument_typesInput = {
   id?: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
-  companies: Prisma.companiesCreateNestedOneWithoutDocumentSequencesInput
+  companies: Prisma.companiesCreateNestedOneWithoutDocument_equencesInput
 }
 
 export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
   id?: string
   company_id: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
@@ -614,19 +706,25 @@ export type document_sequencesUpdateToOneWithWhereWithoutDocument_typesInput = {
 
 export type document_sequencesUpdateWithoutDocument_typesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companies?: Prisma.companiesUpdateOneRequiredWithoutDocumentSequencesNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutDocument_equencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   company_id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -636,7 +734,10 @@ export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
 
 export type document_sequencesCreateManyCompaniesInput = {
   id?: string
-  document_type: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
   point_of_sale: string
   current_number?: number
   prefix?: string | null
@@ -646,7 +747,10 @@ export type document_sequencesCreateManyCompaniesInput = {
 
 export type document_sequencesUpdateWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -657,7 +761,10 @@ export type document_sequencesUpdateWithoutCompaniesInput = {
 
 export type document_sequencesUncheckedUpdateWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -668,7 +775,10 @@ export type document_sequencesUncheckedUpdateWithoutCompaniesInput = {
 
 export type document_sequencesUncheckedUpdateManyWithoutCompaniesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -710,7 +820,10 @@ export type Document_sequencesCountOutputTypeCountDocument_typesArgs<ExtArgs ext
 export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   company_id?: boolean
-  document_type?: boolean
+  name?: boolean
+  automatic?: boolean
+  range_start?: boolean
+  range_end?: boolean
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
@@ -724,7 +837,10 @@ export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.In
 export type document_sequencesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   company_id?: boolean
-  document_type?: boolean
+  name?: boolean
+  automatic?: boolean
+  range_start?: boolean
+  range_end?: boolean
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
@@ -736,7 +852,10 @@ export type document_sequencesSelectCreateManyAndReturn<ExtArgs extends runtime.
 export type document_sequencesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   company_id?: boolean
-  document_type?: boolean
+  name?: boolean
+  automatic?: boolean
+  range_start?: boolean
+  range_end?: boolean
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
@@ -748,7 +867,10 @@ export type document_sequencesSelectUpdateManyAndReturn<ExtArgs extends runtime.
 export type document_sequencesSelectScalar = {
   id?: boolean
   company_id?: boolean
-  document_type?: boolean
+  name?: boolean
+  automatic?: boolean
+  range_start?: boolean
+  range_end?: boolean
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
@@ -756,7 +878,7 @@ export type document_sequencesSelectScalar = {
   created_at?: boolean
 }
 
-export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "document_type" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at", ExtArgs["result"]["document_sequences"]>
+export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "name" | "automatic" | "range_start" | "range_end" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at", ExtArgs["result"]["document_sequences"]>
 export type document_sequencesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
@@ -778,7 +900,10 @@ export type $document_sequencesPayload<ExtArgs extends runtime.Types.Extensions.
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     company_id: string
-    document_type: string
+    name: string
+    automatic: boolean
+    range_start: number | null
+    range_end: number | null
     point_of_sale: string
     current_number: number
     prefix: string | null
@@ -1211,7 +1336,10 @@ export interface Prisma__document_sequencesClient<T, Null = never, ExtArgs exten
 export interface document_sequencesFieldRefs {
   readonly id: Prisma.FieldRef<"document_sequences", 'String'>
   readonly company_id: Prisma.FieldRef<"document_sequences", 'String'>
-  readonly document_type: Prisma.FieldRef<"document_sequences", 'String'>
+  readonly name: Prisma.FieldRef<"document_sequences", 'String'>
+  readonly automatic: Prisma.FieldRef<"document_sequences", 'Boolean'>
+  readonly range_start: Prisma.FieldRef<"document_sequences", 'Int'>
+  readonly range_end: Prisma.FieldRef<"document_sequences", 'Int'>
   readonly point_of_sale: Prisma.FieldRef<"document_sequences", 'String'>
   readonly current_number: Prisma.FieldRef<"document_sequences", 'Int'>
   readonly prefix: Prisma.FieldRef<"document_sequences", 'String'>

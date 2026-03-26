@@ -70,7 +70,7 @@ model companies {
   business_parties     business_parties[]
   delivery_notes       delivery_notes[]
   dispatch_orders      dispatch_orders[]
-  documentSequences    document_sequences[]
+  document_equences    document_sequences[]
   drivers              drivers[]
   pallets              pallets[]
   picking_orders       picking_orders[]
@@ -523,16 +523,19 @@ model warehouses {
 model document_sequences {
   id             String           @id @default(uuid()) @db.Uuid
   company_id     String           @db.Uuid
-  document_type  String           @db.VarChar(50)
+  name           String           @db.VarChar(50)
+  automatic      Boolean          @default(true)
+  range_start    Int?
+  range_end      Int?
   point_of_sale  String           @db.VarChar(10)
   current_number Int              @default(0)
   prefix         String?          @db.VarChar(20)
   active         Boolean          @default(true)
   created_at     DateTime         @default(now()) @db.Timestamp(6)
-  companies      companies        @relation(fields: [company_id], references: [id])
+  companies companies @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   document_types document_types[]
 
-  @@unique([company_id, document_type, point_of_sale])
+  @@unique([company_id, point_of_sale])
 }
 
 model refresh_tokens {

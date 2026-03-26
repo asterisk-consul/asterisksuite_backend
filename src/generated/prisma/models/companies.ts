@@ -185,7 +185,7 @@ export type companiesWhereInput = {
   business_parties?: Prisma.Business_partiesListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
-  documentSequences?: Prisma.Document_sequencesListRelationFilter
+  document_equences?: Prisma.Document_sequencesListRelationFilter
   drivers?: Prisma.DriversListRelationFilter
   pallets?: Prisma.PalletsListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
@@ -208,7 +208,7 @@ export type companiesOrderByWithRelationInput = {
   business_parties?: Prisma.business_partiesOrderByRelationAggregateInput
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
   dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
-  documentSequences?: Prisma.document_sequencesOrderByRelationAggregateInput
+  document_equences?: Prisma.document_sequencesOrderByRelationAggregateInput
   drivers?: Prisma.driversOrderByRelationAggregateInput
   pallets?: Prisma.palletsOrderByRelationAggregateInput
   picking_orders?: Prisma.picking_ordersOrderByRelationAggregateInput
@@ -234,7 +234,7 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   business_parties?: Prisma.Business_partiesListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
-  documentSequences?: Prisma.Document_sequencesListRelationFilter
+  document_equences?: Prisma.Document_sequencesListRelationFilter
   drivers?: Prisma.DriversListRelationFilter
   pallets?: Prisma.PalletsListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
@@ -279,7 +279,7 @@ export type companiesCreateInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -302,7 +302,7 @@ export type companiesUncheckedCreateInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -325,7 +325,7 @@ export type companiesUpdateInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -348,7 +348,7 @@ export type companiesUncheckedUpdateInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -592,18 +592,18 @@ export type companiesUpdateOneRequiredWithoutWarehousesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutWarehousesInput, Prisma.companiesUpdateWithoutWarehousesInput>, Prisma.companiesUncheckedUpdateWithoutWarehousesInput>
 }
 
-export type companiesCreateNestedOneWithoutDocumentSequencesInput = {
-  create?: Prisma.XOR<Prisma.companiesCreateWithoutDocumentSequencesInput, Prisma.companiesUncheckedCreateWithoutDocumentSequencesInput>
-  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutDocumentSequencesInput
+export type companiesCreateNestedOneWithoutDocument_equencesInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutDocument_equencesInput, Prisma.companiesUncheckedCreateWithoutDocument_equencesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutDocument_equencesInput
   connect?: Prisma.companiesWhereUniqueInput
 }
 
-export type companiesUpdateOneRequiredWithoutDocumentSequencesNestedInput = {
-  create?: Prisma.XOR<Prisma.companiesCreateWithoutDocumentSequencesInput, Prisma.companiesUncheckedCreateWithoutDocumentSequencesInput>
-  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutDocumentSequencesInput
-  upsert?: Prisma.companiesUpsertWithoutDocumentSequencesInput
+export type companiesUpdateOneRequiredWithoutDocument_equencesNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutDocument_equencesInput, Prisma.companiesUncheckedCreateWithoutDocument_equencesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutDocument_equencesInput
+  upsert?: Prisma.companiesUpsertWithoutDocument_equencesInput
   connect?: Prisma.companiesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutDocumentSequencesInput, Prisma.companiesUpdateWithoutDocumentSequencesInput>, Prisma.companiesUncheckedUpdateWithoutDocumentSequencesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutDocument_equencesInput, Prisma.companiesUpdateWithoutDocument_equencesInput>, Prisma.companiesUncheckedUpdateWithoutDocument_equencesInput>
 }
 
 export type companiesCreateNestedOneWithoutTransfer_ratesInput = {
@@ -642,7 +642,7 @@ export type companiesCreateWithoutBusiness_partiesInput = {
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -664,7 +664,7 @@ export type companiesUncheckedCreateWithoutBusiness_partiesInput = {
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -702,7 +702,7 @@ export type companiesUpdateWithoutBusiness_partiesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -724,7 +724,7 @@ export type companiesUncheckedUpdateWithoutBusiness_partiesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -746,7 +746,7 @@ export type companiesCreateWithoutDelivery_notesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -768,7 +768,7 @@ export type companiesUncheckedCreateWithoutDelivery_notesInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -806,7 +806,7 @@ export type companiesUpdateWithoutDelivery_notesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -828,7 +828,7 @@ export type companiesUncheckedUpdateWithoutDelivery_notesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -851,7 +851,7 @@ export type companiesCreateWithoutDriversInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
@@ -873,7 +873,7 @@ export type companiesUncheckedCreateWithoutDriversInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
@@ -911,7 +911,7 @@ export type companiesUpdateWithoutDriversInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
@@ -933,7 +933,7 @@ export type companiesUncheckedUpdateWithoutDriversInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -955,7 +955,7 @@ export type companiesCreateWithoutPalletsInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
@@ -977,7 +977,7 @@ export type companiesUncheckedCreateWithoutPalletsInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1015,7 +1015,7 @@ export type companiesUpdateWithoutPalletsInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
@@ -1037,7 +1037,7 @@ export type companiesUncheckedUpdateWithoutPalletsInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1059,7 +1059,7 @@ export type companiesCreateWithoutPicking_ordersInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsCreateNestedManyWithoutCompaniesInput
@@ -1081,7 +1081,7 @@ export type companiesUncheckedCreateWithoutPicking_ordersInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   products?: Prisma.productsUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1119,7 +1119,7 @@ export type companiesUpdateWithoutPicking_ordersInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUpdateManyWithoutCompaniesNestedInput
@@ -1141,7 +1141,7 @@ export type companiesUncheckedUpdateWithoutPicking_ordersInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   products?: Prisma.productsUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1163,7 +1163,7 @@ export type companiesCreateWithoutProductsInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1185,7 +1185,7 @@ export type companiesUncheckedCreateWithoutProductsInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1223,7 +1223,7 @@ export type companiesUpdateWithoutProductsInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1245,7 +1245,7 @@ export type companiesUncheckedUpdateWithoutProductsInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1266,7 +1266,7 @@ export type companiesCreateWithoutDispatch_ordersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1288,7 +1288,7 @@ export type companiesUncheckedCreateWithoutDispatch_ordersInput = {
   created_at?: Date | string
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1326,7 +1326,7 @@ export type companiesUpdateWithoutDispatch_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1348,7 +1348,7 @@ export type companiesUncheckedUpdateWithoutDispatch_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1371,7 +1371,7 @@ export type companiesCreateWithoutTripsInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1393,7 +1393,7 @@ export type companiesUncheckedCreateWithoutTripsInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1431,7 +1431,7 @@ export type companiesUpdateWithoutTripsInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1453,7 +1453,7 @@ export type companiesUncheckedUpdateWithoutTripsInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1475,7 +1475,7 @@ export type companiesCreateWithoutUsersInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1497,7 +1497,7 @@ export type companiesUncheckedCreateWithoutUsersInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1535,7 +1535,7 @@ export type companiesUpdateWithoutUsersInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1557,7 +1557,7 @@ export type companiesUncheckedUpdateWithoutUsersInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1579,7 +1579,7 @@ export type companiesCreateWithoutVehiclesInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1601,7 +1601,7 @@ export type companiesUncheckedCreateWithoutVehiclesInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1639,7 +1639,7 @@ export type companiesUpdateWithoutVehiclesInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1661,7 +1661,7 @@ export type companiesUncheckedUpdateWithoutVehiclesInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1683,7 +1683,7 @@ export type companiesCreateWithoutVehicle_combinationsInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1705,7 +1705,7 @@ export type companiesUncheckedCreateWithoutVehicle_combinationsInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1743,7 +1743,7 @@ export type companiesUpdateWithoutVehicle_combinationsInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1765,7 +1765,7 @@ export type companiesUncheckedUpdateWithoutVehicle_combinationsInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1787,7 +1787,7 @@ export type companiesCreateWithoutWarehousesInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -1809,7 +1809,7 @@ export type companiesUncheckedCreateWithoutWarehousesInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -1847,7 +1847,7 @@ export type companiesUpdateWithoutWarehousesInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -1869,7 +1869,7 @@ export type companiesUncheckedUpdateWithoutWarehousesInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -1882,7 +1882,7 @@ export type companiesUncheckedUpdateWithoutWarehousesInput = {
   transfer_rates?: Prisma.transfer_ratesUncheckedUpdateManyWithoutCompaniesNestedInput
 }
 
-export type companiesCreateWithoutDocumentSequencesInput = {
+export type companiesCreateWithoutDocument_equencesInput = {
   id?: string
   name: string
   tax_id?: string | null
@@ -1904,7 +1904,7 @@ export type companiesCreateWithoutDocumentSequencesInput = {
   transfer_rates?: Prisma.transfer_ratesCreateNestedManyWithoutCompaniesInput
 }
 
-export type companiesUncheckedCreateWithoutDocumentSequencesInput = {
+export type companiesUncheckedCreateWithoutDocument_equencesInput = {
   id?: string
   name: string
   tax_id?: string | null
@@ -1926,23 +1926,23 @@ export type companiesUncheckedCreateWithoutDocumentSequencesInput = {
   transfer_rates?: Prisma.transfer_ratesUncheckedCreateNestedManyWithoutCompaniesInput
 }
 
-export type companiesCreateOrConnectWithoutDocumentSequencesInput = {
+export type companiesCreateOrConnectWithoutDocument_equencesInput = {
   where: Prisma.companiesWhereUniqueInput
-  create: Prisma.XOR<Prisma.companiesCreateWithoutDocumentSequencesInput, Prisma.companiesUncheckedCreateWithoutDocumentSequencesInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutDocument_equencesInput, Prisma.companiesUncheckedCreateWithoutDocument_equencesInput>
 }
 
-export type companiesUpsertWithoutDocumentSequencesInput = {
-  update: Prisma.XOR<Prisma.companiesUpdateWithoutDocumentSequencesInput, Prisma.companiesUncheckedUpdateWithoutDocumentSequencesInput>
-  create: Prisma.XOR<Prisma.companiesCreateWithoutDocumentSequencesInput, Prisma.companiesUncheckedCreateWithoutDocumentSequencesInput>
+export type companiesUpsertWithoutDocument_equencesInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutDocument_equencesInput, Prisma.companiesUncheckedUpdateWithoutDocument_equencesInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutDocument_equencesInput, Prisma.companiesUncheckedCreateWithoutDocument_equencesInput>
   where?: Prisma.companiesWhereInput
 }
 
-export type companiesUpdateToOneWithWhereWithoutDocumentSequencesInput = {
+export type companiesUpdateToOneWithWhereWithoutDocument_equencesInput = {
   where?: Prisma.companiesWhereInput
-  data: Prisma.XOR<Prisma.companiesUpdateWithoutDocumentSequencesInput, Prisma.companiesUncheckedUpdateWithoutDocumentSequencesInput>
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutDocument_equencesInput, Prisma.companiesUncheckedUpdateWithoutDocument_equencesInput>
 }
 
-export type companiesUpdateWithoutDocumentSequencesInput = {
+export type companiesUpdateWithoutDocument_equencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1964,7 +1964,7 @@ export type companiesUpdateWithoutDocumentSequencesInput = {
   transfer_rates?: Prisma.transfer_ratesUpdateManyWithoutCompaniesNestedInput
 }
 
-export type companiesUncheckedUpdateWithoutDocumentSequencesInput = {
+export type companiesUncheckedUpdateWithoutDocument_equencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1995,7 +1995,7 @@ export type companiesCreateWithoutTransfer_ratesInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -2017,7 +2017,7 @@ export type companiesUncheckedCreateWithoutTransfer_ratesInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -2055,7 +2055,7 @@ export type companiesUpdateWithoutTransfer_ratesInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -2077,7 +2077,7 @@ export type companiesUncheckedUpdateWithoutTransfer_ratesInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -2099,7 +2099,7 @@ export type companiesCreateWithoutTaxesInput = {
   business_parties?: Prisma.business_partiesCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutCompaniesInput
@@ -2121,7 +2121,7 @@ export type companiesUncheckedCreateWithoutTaxesInput = {
   business_parties?: Prisma.business_partiesUncheckedCreateNestedManyWithoutCompaniesInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutCompaniesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCompaniesInput
-  documentSequences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
+  document_equences?: Prisma.document_sequencesUncheckedCreateNestedManyWithoutCompaniesInput
   drivers?: Prisma.driversUncheckedCreateNestedManyWithoutCompaniesInput
   pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutCompaniesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -2159,7 +2159,7 @@ export type companiesUpdateWithoutTaxesInput = {
   business_parties?: Prisma.business_partiesUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutCompaniesNestedInput
@@ -2181,7 +2181,7 @@ export type companiesUncheckedUpdateWithoutTaxesInput = {
   business_parties?: Prisma.business_partiesUncheckedUpdateManyWithoutCompaniesNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutCompaniesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
-  documentSequences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
+  document_equences?: Prisma.document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput
   drivers?: Prisma.driversUncheckedUpdateManyWithoutCompaniesNestedInput
   pallets?: Prisma.palletsUncheckedUpdateManyWithoutCompaniesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -2203,7 +2203,7 @@ export type CompaniesCountOutputType = {
   business_parties: number
   delivery_notes: number
   dispatch_orders: number
-  documentSequences: number
+  document_equences: number
   drivers: number
   pallets: number
   picking_orders: number
@@ -2221,7 +2221,7 @@ export type CompaniesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensi
   business_parties?: boolean | CompaniesCountOutputTypeCountBusiness_partiesArgs
   delivery_notes?: boolean | CompaniesCountOutputTypeCountDelivery_notesArgs
   dispatch_orders?: boolean | CompaniesCountOutputTypeCountDispatch_ordersArgs
-  documentSequences?: boolean | CompaniesCountOutputTypeCountDocumentSequencesArgs
+  document_equences?: boolean | CompaniesCountOutputTypeCountDocument_equencesArgs
   drivers?: boolean | CompaniesCountOutputTypeCountDriversArgs
   pallets?: boolean | CompaniesCountOutputTypeCountPalletsArgs
   picking_orders?: boolean | CompaniesCountOutputTypeCountPicking_ordersArgs
@@ -2269,7 +2269,7 @@ export type CompaniesCountOutputTypeCountDispatch_ordersArgs<ExtArgs extends run
 /**
  * CompaniesCountOutputType without action
  */
-export type CompaniesCountOutputTypeCountDocumentSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CompaniesCountOutputTypeCountDocument_equencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.document_sequencesWhereInput
 }
 
@@ -2360,7 +2360,7 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   business_parties?: boolean | Prisma.companies$business_partiesArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.companies$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.companies$dispatch_ordersArgs<ExtArgs>
-  documentSequences?: boolean | Prisma.companies$documentSequencesArgs<ExtArgs>
+  document_equences?: boolean | Prisma.companies$document_equencesArgs<ExtArgs>
   drivers?: boolean | Prisma.companies$driversArgs<ExtArgs>
   pallets?: boolean | Prisma.companies$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.companies$picking_ordersArgs<ExtArgs>
@@ -2404,7 +2404,7 @@ export type companiesInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   business_parties?: boolean | Prisma.companies$business_partiesArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.companies$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.companies$dispatch_ordersArgs<ExtArgs>
-  documentSequences?: boolean | Prisma.companies$documentSequencesArgs<ExtArgs>
+  document_equences?: boolean | Prisma.companies$document_equencesArgs<ExtArgs>
   drivers?: boolean | Prisma.companies$driversArgs<ExtArgs>
   pallets?: boolean | Prisma.companies$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.companies$picking_ordersArgs<ExtArgs>
@@ -2427,7 +2427,7 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     business_parties: Prisma.$business_partiesPayload<ExtArgs>[]
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs>[]
     dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
-    documentSequences: Prisma.$document_sequencesPayload<ExtArgs>[]
+    document_equences: Prisma.$document_sequencesPayload<ExtArgs>[]
     drivers: Prisma.$driversPayload<ExtArgs>[]
     pallets: Prisma.$palletsPayload<ExtArgs>[]
     picking_orders: Prisma.$picking_ordersPayload<ExtArgs>[]
@@ -2843,7 +2843,7 @@ export interface Prisma__companiesClient<T, Null = never, ExtArgs extends runtim
   business_parties<T extends Prisma.companies$business_partiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$business_partiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   delivery_notes<T extends Prisma.companies$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$delivery_notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dispatch_orders<T extends Prisma.companies$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  documentSequences<T extends Prisma.companies$documentSequencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$documentSequencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_sequencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_equences<T extends Prisma.companies$document_equencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$document_equencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_sequencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   drivers<T extends Prisma.companies$driversArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$driversArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$driversPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pallets<T extends Prisma.companies$palletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$palletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$palletsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   picking_orders<T extends Prisma.companies$picking_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$picking_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3349,9 +3349,9 @@ export type companies$dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * companies.documentSequences
+ * companies.document_equences
  */
-export type companies$documentSequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type companies$document_equencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the document_sequences
    */

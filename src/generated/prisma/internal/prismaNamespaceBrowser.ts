@@ -506,7 +506,10 @@ export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof
 export const Document_sequencesScalarFieldEnum = {
   id: 'id',
   company_id: 'company_id',
-  document_type: 'document_type',
+  name: 'name',
+  automatic: 'automatic',
+  range_start: 'range_start',
+  range_end: 'range_end',
   point_of_sale: 'point_of_sale',
   current_number: 'current_number',
   prefix: 'prefix',
