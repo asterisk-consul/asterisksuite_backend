@@ -14,8 +14,8 @@ async function bootstrap() {
       'http://localhost:3008',
       'http://localhost:3001',
       'http://192.168.18.3:3008',
-      'https://dev.astreisksuite.cloud',
-      'http://dev.astreisksuite.cloud',
+      'https://alona.astreisksuite.cloud',
+      'http://alona.astreisksuite.cloud',
     ],
   });
 
