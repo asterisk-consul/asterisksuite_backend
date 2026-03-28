@@ -128,6 +128,26 @@ export type dispatch_orders = Prisma.dispatch_ordersModel
  */
 export type trips = Prisma.tripsModel
 /**
+ * Model trip_stops
+ * 
+ */
+export type trip_stops = Prisma.trip_stopsModel
+/**
+ * Model trip_stop_orders
+ * 
+ */
+export type trip_stop_orders = Prisma.trip_stop_ordersModel
+/**
+ * Model corridors
+ * 
+ */
+export type corridors = Prisma.corridorsModel
+/**
+ * Model corridor_stops
+ * 
+ */
+export type corridor_stops = Prisma.corridor_stopsModel
+/**
  * Model users
  * 
  */
@@ -192,16 +212,6 @@ export type transfer_rates = Prisma.transfer_ratesModel
  * 
  */
 export type trip_rates = Prisma.trip_ratesModel
-/**
- * Model corridors
- * 
- */
-export type corridors = Prisma.corridorsModel
-/**
- * Model corridor_stops
- * 
- */
-export type corridor_stops = Prisma.corridor_stopsModel
 /**
  * Model document_item_taxes
  * 

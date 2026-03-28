@@ -406,6 +406,10 @@ export const ModelName = {
   trip_temperature_logs: 'trip_temperature_logs',
   dispatch_orders: 'dispatch_orders',
   trips: 'trips',
+  trip_stops: 'trip_stops',
+  trip_stop_orders: 'trip_stop_orders',
+  corridors: 'corridors',
+  corridor_stops: 'corridor_stops',
   users: 'users',
   vehicles: 'vehicles',
   vehicle_combinations: 'vehicle_combinations',
@@ -419,8 +423,6 @@ export const ModelName = {
   documents_driver: 'documents_driver',
   transfer_rates: 'transfer_rates',
   trip_rates: 'trip_rates',
-  corridors: 'corridors',
-  corridor_stops: 'corridor_stops',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
   document_taxes: 'document_taxes',
@@ -443,7 +445,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "trip_rates" | "corridors" | "corridor_stops" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "trip_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2075,6 +2077,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    trip_stops: {
+      payload: Prisma.$trip_stopsPayload<ExtArgs>
+      fields: Prisma.trip_stopsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.trip_stopsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.trip_stopsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>
+        }
+        findFirst: {
+          args: Prisma.trip_stopsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.trip_stopsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>
+        }
+        findMany: {
+          args: Prisma.trip_stopsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>[]
+        }
+        create: {
+          args: Prisma.trip_stopsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>
+        }
+        createMany: {
+          args: Prisma.trip_stopsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.trip_stopsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>[]
+        }
+        delete: {
+          args: Prisma.trip_stopsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>
+        }
+        update: {
+          args: Prisma.trip_stopsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>
+        }
+        deleteMany: {
+          args: Prisma.trip_stopsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.trip_stopsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.trip_stopsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>[]
+        }
+        upsert: {
+          args: Prisma.trip_stopsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stopsPayload>
+        }
+        aggregate: {
+          args: Prisma.Trip_stopsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTrip_stops>
+        }
+        groupBy: {
+          args: Prisma.trip_stopsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Trip_stopsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.trip_stopsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Trip_stopsCountAggregateOutputType> | number
+        }
+      }
+    }
+    trip_stop_orders: {
+      payload: Prisma.$trip_stop_ordersPayload<ExtArgs>
+      fields: Prisma.trip_stop_ordersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.trip_stop_ordersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.trip_stop_ordersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>
+        }
+        findFirst: {
+          args: Prisma.trip_stop_ordersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.trip_stop_ordersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>
+        }
+        findMany: {
+          args: Prisma.trip_stop_ordersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>[]
+        }
+        create: {
+          args: Prisma.trip_stop_ordersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>
+        }
+        createMany: {
+          args: Prisma.trip_stop_ordersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.trip_stop_ordersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>[]
+        }
+        delete: {
+          args: Prisma.trip_stop_ordersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>
+        }
+        update: {
+          args: Prisma.trip_stop_ordersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>
+        }
+        deleteMany: {
+          args: Prisma.trip_stop_ordersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.trip_stop_ordersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.trip_stop_ordersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>[]
+        }
+        upsert: {
+          args: Prisma.trip_stop_ordersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_stop_ordersPayload>
+        }
+        aggregate: {
+          args: Prisma.Trip_stop_ordersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTrip_stop_orders>
+        }
+        groupBy: {
+          args: Prisma.trip_stop_ordersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Trip_stop_ordersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.trip_stop_ordersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Trip_stop_ordersCountAggregateOutputType> | number
+        }
+      }
+    }
+    corridors: {
+      payload: Prisma.$corridorsPayload<ExtArgs>
+      fields: Prisma.corridorsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.corridorsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.corridorsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
+        }
+        findFirst: {
+          args: Prisma.corridorsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.corridorsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
+        }
+        findMany: {
+          args: Prisma.corridorsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>[]
+        }
+        create: {
+          args: Prisma.corridorsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
+        }
+        createMany: {
+          args: Prisma.corridorsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.corridorsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>[]
+        }
+        delete: {
+          args: Prisma.corridorsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
+        }
+        update: {
+          args: Prisma.corridorsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
+        }
+        deleteMany: {
+          args: Prisma.corridorsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.corridorsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.corridorsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>[]
+        }
+        upsert: {
+          args: Prisma.corridorsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
+        }
+        aggregate: {
+          args: Prisma.CorridorsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCorridors>
+        }
+        groupBy: {
+          args: Prisma.corridorsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CorridorsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.corridorsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CorridorsCountAggregateOutputType> | number
+        }
+      }
+    }
+    corridor_stops: {
+      payload: Prisma.$corridor_stopsPayload<ExtArgs>
+      fields: Prisma.corridor_stopsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.corridor_stopsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.corridor_stopsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
+        }
+        findFirst: {
+          args: Prisma.corridor_stopsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.corridor_stopsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
+        }
+        findMany: {
+          args: Prisma.corridor_stopsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>[]
+        }
+        create: {
+          args: Prisma.corridor_stopsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
+        }
+        createMany: {
+          args: Prisma.corridor_stopsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.corridor_stopsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>[]
+        }
+        delete: {
+          args: Prisma.corridor_stopsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
+        }
+        update: {
+          args: Prisma.corridor_stopsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
+        }
+        deleteMany: {
+          args: Prisma.corridor_stopsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.corridor_stopsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.corridor_stopsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>[]
+        }
+        upsert: {
+          args: Prisma.corridor_stopsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
+        }
+        aggregate: {
+          args: Prisma.Corridor_stopsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCorridor_stops>
+        }
+        groupBy: {
+          args: Prisma.corridor_stopsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Corridor_stopsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.corridor_stopsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Corridor_stopsCountAggregateOutputType> | number
+        }
+      }
+    }
     users: {
       payload: Prisma.$usersPayload<ExtArgs>
       fields: Prisma.usersFieldRefs
@@ -3037,154 +3335,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    corridors: {
-      payload: Prisma.$corridorsPayload<ExtArgs>
-      fields: Prisma.corridorsFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.corridorsFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.corridorsFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
-        }
-        findFirst: {
-          args: Prisma.corridorsFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.corridorsFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
-        }
-        findMany: {
-          args: Prisma.corridorsFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>[]
-        }
-        create: {
-          args: Prisma.corridorsCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
-        }
-        createMany: {
-          args: Prisma.corridorsCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.corridorsCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>[]
-        }
-        delete: {
-          args: Prisma.corridorsDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
-        }
-        update: {
-          args: Prisma.corridorsUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
-        }
-        deleteMany: {
-          args: Prisma.corridorsDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.corridorsUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.corridorsUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>[]
-        }
-        upsert: {
-          args: Prisma.corridorsUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridorsPayload>
-        }
-        aggregate: {
-          args: Prisma.CorridorsAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCorridors>
-        }
-        groupBy: {
-          args: Prisma.corridorsGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CorridorsGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.corridorsCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CorridorsCountAggregateOutputType> | number
-        }
-      }
-    }
-    corridor_stops: {
-      payload: Prisma.$corridor_stopsPayload<ExtArgs>
-      fields: Prisma.corridor_stopsFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.corridor_stopsFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.corridor_stopsFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
-        }
-        findFirst: {
-          args: Prisma.corridor_stopsFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.corridor_stopsFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
-        }
-        findMany: {
-          args: Prisma.corridor_stopsFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>[]
-        }
-        create: {
-          args: Prisma.corridor_stopsCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
-        }
-        createMany: {
-          args: Prisma.corridor_stopsCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.corridor_stopsCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>[]
-        }
-        delete: {
-          args: Prisma.corridor_stopsDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
-        }
-        update: {
-          args: Prisma.corridor_stopsUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
-        }
-        deleteMany: {
-          args: Prisma.corridor_stopsDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.corridor_stopsUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.corridor_stopsUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>[]
-        }
-        upsert: {
-          args: Prisma.corridor_stopsUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$corridor_stopsPayload>
-        }
-        aggregate: {
-          args: Prisma.Corridor_stopsAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCorridor_stops>
-        }
-        groupBy: {
-          args: Prisma.corridor_stopsGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Corridor_stopsGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.corridor_stopsCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Corridor_stopsCountAggregateOutputType> | number
-        }
-      }
-    }
     document_item_taxes: {
       payload: Prisma.$document_item_taxesPayload<ExtArgs>
       fields: Prisma.document_item_taxesFieldRefs
@@ -3748,8 +3898,6 @@ export const Business_partiesScalarFieldEnum = {
   type: 'type',
   name: 'name',
   tax_id: 'tax_id',
-  phone: 'phone',
-  email: 'email',
   active: 'active',
   created_at: 'created_at'
 } as const
@@ -4005,6 +4153,7 @@ export const Dispatch_ordersScalarFieldEnum = {
   customer_id: 'customer_id',
   origin_location_id: 'origin_location_id',
   destination_location_id: 'destination_location_id',
+  corridor_id: 'corridor_id',
   created_by: 'created_by',
   created_at: 'created_at'
 } as const
@@ -4032,12 +4181,66 @@ export const TripsScalarFieldEnum = {
   created_by: 'created_by',
   deleted_at: 'deleted_at',
   created_at: 'created_at',
-  dispatch_order_id: 'dispatch_order_id',
   kilometers: 'kilometers',
-  corridor_id: 'corridor_id'
+  corridor_id: 'corridor_id',
+  dispatch_ordersId: 'dispatch_ordersId'
 } as const
 
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum]
+
+
+export const Trip_stopsScalarFieldEnum = {
+  id: 'id',
+  trip_id: 'trip_id',
+  location_id: 'location_id',
+  stop_order: 'stop_order',
+  stop_type: 'stop_type',
+  created_at: 'created_at'
+} as const
+
+export type Trip_stopsScalarFieldEnum = (typeof Trip_stopsScalarFieldEnum)[keyof typeof Trip_stopsScalarFieldEnum]
+
+
+export const Trip_stop_ordersScalarFieldEnum = {
+  id: 'id',
+  trip_stop_id: 'trip_stop_id',
+  dispatch_order_id: 'dispatch_order_id',
+  action: 'action',
+  created_at: 'created_at'
+} as const
+
+export type Trip_stop_ordersScalarFieldEnum = (typeof Trip_stop_ordersScalarFieldEnum)[keyof typeof Trip_stop_ordersScalarFieldEnum]
+
+
+export const CorridorsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  description: 'description',
+  origin_location_id: 'origin_location_id',
+  destination_location_id: 'destination_location_id',
+  is_template: 'is_template',
+  total_distance_km: 'total_distance_km',
+  estimated_minutes: 'estimated_minutes',
+  active: 'active',
+  created_at: 'created_at'
+} as const
+
+export type CorridorsScalarFieldEnum = (typeof CorridorsScalarFieldEnum)[keyof typeof CorridorsScalarFieldEnum]
+
+
+export const Corridor_stopsScalarFieldEnum = {
+  id: 'id',
+  corridor_id: 'corridor_id',
+  location_id: 'location_id',
+  stop_order: 'stop_order',
+  stop_type: 'stop_type',
+  distance_km: 'distance_km',
+  estimated_minutes: 'estimated_minutes',
+  created_at: 'created_at'
+} as const
+
+export type Corridor_stopsScalarFieldEnum = (typeof Corridor_stopsScalarFieldEnum)[keyof typeof Corridor_stopsScalarFieldEnum]
 
 
 export const UsersScalarFieldEnum = {
@@ -4214,37 +4417,6 @@ export const Trip_ratesScalarFieldEnum = {
 } as const
 
 export type Trip_ratesScalarFieldEnum = (typeof Trip_ratesScalarFieldEnum)[keyof typeof Trip_ratesScalarFieldEnum]
-
-
-export const CorridorsScalarFieldEnum = {
-  id: 'id',
-  company_id: 'company_id',
-  name: 'name',
-  description: 'description',
-  origin_location_id: 'origin_location_id',
-  destination_location_id: 'destination_location_id',
-  is_template: 'is_template',
-  total_distance_km: 'total_distance_km',
-  estimated_minutes: 'estimated_minutes',
-  active: 'active',
-  created_at: 'created_at'
-} as const
-
-export type CorridorsScalarFieldEnum = (typeof CorridorsScalarFieldEnum)[keyof typeof CorridorsScalarFieldEnum]
-
-
-export const Corridor_stopsScalarFieldEnum = {
-  id: 'id',
-  corridor_id: 'corridor_id',
-  location_id: 'location_id',
-  stop_order: 'stop_order',
-  stop_type: 'stop_type',
-  distance_km: 'distance_km',
-  estimated_minutes: 'estimated_minutes',
-  created_at: 'created_at'
-} as const
-
-export type Corridor_stopsScalarFieldEnum = (typeof Corridor_stopsScalarFieldEnum)[keyof typeof Corridor_stopsScalarFieldEnum]
 
 
 export const Document_item_taxesScalarFieldEnum = {
@@ -4568,6 +4740,10 @@ export type GlobalOmitConfig = {
   trip_temperature_logs?: Prisma.trip_temperature_logsOmit
   dispatch_orders?: Prisma.dispatch_ordersOmit
   trips?: Prisma.tripsOmit
+  trip_stops?: Prisma.trip_stopsOmit
+  trip_stop_orders?: Prisma.trip_stop_ordersOmit
+  corridors?: Prisma.corridorsOmit
+  corridor_stops?: Prisma.corridor_stopsOmit
   users?: Prisma.usersOmit
   vehicles?: Prisma.vehiclesOmit
   vehicle_combinations?: Prisma.vehicle_combinationsOmit
@@ -4581,8 +4757,6 @@ export type GlobalOmitConfig = {
   documents_driver?: Prisma.documents_driverOmit
   transfer_rates?: Prisma.transfer_ratesOmit
   trip_rates?: Prisma.trip_ratesOmit
-  corridors?: Prisma.corridorsOmit
-  corridor_stops?: Prisma.corridor_stopsOmit
   document_item_taxes?: Prisma.document_item_taxesOmit
   document_items?: Prisma.document_itemsOmit
   document_taxes?: Prisma.document_taxesOmit

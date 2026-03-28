@@ -45,14 +45,6 @@ export class CreateBusinessPartyDto {
   tax_id?: string;
 
   @IsOptional()
-  @IsString()
-  phone?: string;
-
-  @IsOptional()
-  @IsString()
-  email?: string;
-
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePartyLocationDto)

@@ -1,5 +1,7 @@
 # @baseUrl = http://localhost:3000/api
- @baseUrl = https://apidonandres.asterisksuite.cloud/api
+# @baseUrl = https://apidonandres.asterisksuite.cloud/api
+
+ @baseUrl = https://devdonandres.asterisksuite.cloud/api
 
 @corridorId = 89989adf-71c2-496a-8035-ea6c5190a451
 @companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e

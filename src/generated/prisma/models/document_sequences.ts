@@ -488,14 +488,6 @@ export type document_sequencesUncheckedUpdateManyWithoutCompaniesNestedInput = {
   deleteMany?: Prisma.document_sequencesScalarWhereInput | Prisma.document_sequencesScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type document_sequencesCreateNestedOneWithoutDocument_typesInput = {
   create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_typesInput>
   connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocument_typesInput

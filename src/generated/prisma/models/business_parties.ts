@@ -30,8 +30,6 @@ export type Business_partiesMinAggregateOutputType = {
   type: string | null
   name: string | null
   tax_id: string | null
-  phone: string | null
-  email: string | null
   active: boolean | null
   created_at: Date | null
 }
@@ -42,8 +40,6 @@ export type Business_partiesMaxAggregateOutputType = {
   type: string | null
   name: string | null
   tax_id: string | null
-  phone: string | null
-  email: string | null
   active: boolean | null
   created_at: Date | null
 }
@@ -54,8 +50,6 @@ export type Business_partiesCountAggregateOutputType = {
   type: number
   name: number
   tax_id: number
-  phone: number
-  email: number
   active: number
   created_at: number
   _all: number
@@ -68,8 +62,6 @@ export type Business_partiesMinAggregateInputType = {
   type?: true
   name?: true
   tax_id?: true
-  phone?: true
-  email?: true
   active?: true
   created_at?: true
 }
@@ -80,8 +72,6 @@ export type Business_partiesMaxAggregateInputType = {
   type?: true
   name?: true
   tax_id?: true
-  phone?: true
-  email?: true
   active?: true
   created_at?: true
 }
@@ -92,8 +82,6 @@ export type Business_partiesCountAggregateInputType = {
   type?: true
   name?: true
   tax_id?: true
-  phone?: true
-  email?: true
   active?: true
   created_at?: true
   _all?: true
@@ -177,8 +165,6 @@ export type Business_partiesGroupByOutputType = {
   type: string
   name: string
   tax_id: string | null
-  phone: string | null
-  email: string | null
   active: boolean
   created_at: Date
   _count: Business_partiesCountAggregateOutputType | null
@@ -210,8 +196,6 @@ export type business_partiesWhereInput = {
   type?: Prisma.StringFilter<"business_parties"> | string
   name?: Prisma.StringFilter<"business_parties"> | string
   tax_id?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  phone?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  email?: Prisma.StringNullableFilter<"business_parties"> | string | null
   active?: Prisma.BoolFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeFilter<"business_parties"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
@@ -229,8 +213,6 @@ export type business_partiesOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   companies?: Prisma.companiesOrderByWithRelationInput
@@ -251,8 +233,6 @@ export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.StringFilter<"business_parties"> | string
   name?: Prisma.StringFilter<"business_parties"> | string
   tax_id?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  phone?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  email?: Prisma.StringNullableFilter<"business_parties"> | string | null
   active?: Prisma.BoolFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeFilter<"business_parties"> | Date | string
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
@@ -270,8 +250,6 @@ export type business_partiesOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.business_partiesCountOrderByAggregateInput
@@ -288,8 +266,6 @@ export type business_partiesScalarWhereWithAggregatesInput = {
   type?: Prisma.StringWithAggregatesFilter<"business_parties"> | string
   name?: Prisma.StringWithAggregatesFilter<"business_parties"> | string
   tax_id?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
-  phone?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
-  email?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
   active?: Prisma.BoolWithAggregatesFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"business_parties"> | Date | string
 }
@@ -299,8 +275,6 @@ export type business_partiesCreateInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -318,8 +292,6 @@ export type business_partiesUncheckedCreateInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -335,8 +307,6 @@ export type business_partiesUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -354,8 +324,6 @@ export type business_partiesUncheckedUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -372,8 +340,6 @@ export type business_partiesCreateManyInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
 }
@@ -383,8 +349,6 @@ export type business_partiesUpdateManyMutationInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -395,8 +359,6 @@ export type business_partiesUncheckedUpdateManyInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -407,8 +369,6 @@ export type business_partiesCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
-  phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -419,8 +379,6 @@ export type business_partiesMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
-  phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -431,8 +389,6 @@ export type business_partiesMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
-  phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -614,8 +570,6 @@ export type business_partiesCreateWithoutCompaniesInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
@@ -631,8 +585,6 @@ export type business_partiesUncheckedCreateWithoutCompaniesInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -678,8 +630,6 @@ export type business_partiesScalarWhereInput = {
   type?: Prisma.StringFilter<"business_parties"> | string
   name?: Prisma.StringFilter<"business_parties"> | string
   tax_id?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  phone?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  email?: Prisma.StringNullableFilter<"business_parties"> | string | null
   active?: Prisma.BoolFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeFilter<"business_parties"> | Date | string
 }
@@ -689,8 +639,6 @@ export type business_partiesCreateWithoutDelivery_notesInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -707,8 +655,6 @@ export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
@@ -739,8 +685,6 @@ export type business_partiesUpdateWithoutDelivery_notesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -757,8 +701,6 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
@@ -773,8 +715,6 @@ export type business_partiesCreateWithoutParty_locationsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -791,8 +731,6 @@ export type business_partiesUncheckedCreateWithoutParty_locationsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -823,8 +761,6 @@ export type business_partiesUpdateWithoutParty_locationsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -841,8 +777,6 @@ export type business_partiesUncheckedUpdateWithoutParty_locationsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -857,8 +791,6 @@ export type business_partiesCreateWithoutParty_contactsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -875,8 +807,6 @@ export type business_partiesUncheckedCreateWithoutParty_contactsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -907,8 +837,6 @@ export type business_partiesUpdateWithoutParty_contactsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -925,8 +853,6 @@ export type business_partiesUncheckedUpdateWithoutParty_contactsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -941,8 +867,6 @@ export type business_partiesCreateWithoutDispatch_ordersInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -959,8 +883,6 @@ export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -991,8 +913,6 @@ export type business_partiesUpdateWithoutDispatch_ordersInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -1009,8 +929,6 @@ export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1025,8 +943,6 @@ export type business_partiesCreateWithoutTripsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -1043,8 +959,6 @@ export type business_partiesUncheckedCreateWithoutTripsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1075,8 +989,6 @@ export type business_partiesUpdateWithoutTripsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -1093,8 +1005,6 @@ export type business_partiesUncheckedUpdateWithoutTripsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1109,8 +1019,6 @@ export type business_partiesCreateWithoutDocumentsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   companies: Prisma.companiesCreateNestedOneWithoutBusiness_partiesInput
@@ -1127,8 +1035,6 @@ export type business_partiesUncheckedCreateWithoutDocumentsInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1159,8 +1065,6 @@ export type business_partiesUpdateWithoutDocumentsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companies?: Prisma.companiesUpdateOneRequiredWithoutBusiness_partiesNestedInput
@@ -1177,8 +1081,6 @@ export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1193,8 +1095,6 @@ export type business_partiesCreateManyCompaniesInput = {
   type: string
   name: string
   tax_id?: string | null
-  phone?: string | null
-  email?: string | null
   active?: boolean
   created_at?: Date | string
 }
@@ -1204,8 +1104,6 @@ export type business_partiesUpdateWithoutCompaniesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
@@ -1221,8 +1119,6 @@ export type business_partiesUncheckedUpdateWithoutCompaniesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1238,8 +1134,6 @@ export type business_partiesUncheckedUpdateManyWithoutCompaniesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1326,8 +1220,6 @@ export type business_partiesSelect<ExtArgs extends runtime.Types.Extensions.Inte
   type?: boolean
   name?: boolean
   tax_id?: boolean
-  phone?: boolean
-  email?: boolean
   active?: boolean
   created_at?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
@@ -1346,8 +1238,6 @@ export type business_partiesSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   type?: boolean
   name?: boolean
   tax_id?: boolean
-  phone?: boolean
-  email?: boolean
   active?: boolean
   created_at?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
@@ -1359,8 +1249,6 @@ export type business_partiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   type?: boolean
   name?: boolean
   tax_id?: boolean
-  phone?: boolean
-  email?: boolean
   active?: boolean
   created_at?: boolean
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
@@ -1372,13 +1260,11 @@ export type business_partiesSelectScalar = {
   type?: boolean
   name?: boolean
   tax_id?: boolean
-  phone?: boolean
-  email?: boolean
   active?: boolean
   created_at?: boolean
 }
 
-export type business_partiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "type" | "name" | "tax_id" | "phone" | "email" | "active" | "created_at", ExtArgs["result"]["business_parties"]>
+export type business_partiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company_id" | "type" | "name" | "tax_id" | "active" | "created_at", ExtArgs["result"]["business_parties"]>
 export type business_partiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.business_parties$delivery_notesArgs<ExtArgs>
@@ -1413,8 +1299,6 @@ export type $business_partiesPayload<ExtArgs extends runtime.Types.Extensions.In
     type: string
     name: string
     tax_id: string | null
-    phone: string | null
-    email: string | null
     active: boolean
     created_at: Date
   }, ExtArgs["result"]["business_parties"]>
@@ -1852,8 +1736,6 @@ export interface business_partiesFieldRefs {
   readonly type: Prisma.FieldRef<"business_parties", 'String'>
   readonly name: Prisma.FieldRef<"business_parties", 'String'>
   readonly tax_id: Prisma.FieldRef<"business_parties", 'String'>
-  readonly phone: Prisma.FieldRef<"business_parties", 'String'>
-  readonly email: Prisma.FieldRef<"business_parties", 'String'>
   readonly active: Prisma.FieldRef<"business_parties", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"business_parties", 'DateTime'>
 }

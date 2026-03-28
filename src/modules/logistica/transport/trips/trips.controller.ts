@@ -57,6 +57,11 @@ export class TripsController {
     return this.service.remove(id);
   }
 
+  @Post(':id/assign-orders')
+  assignOrders(@Param('id') id: string, @Body() dto: any) {
+    return this.service.assignOrders(id, dto);
+  }
+
   @Post(':trip_id/rates')
   addRate(@Param('trip_id') trip_id: string, @Body() dto: CreateTripRateDto) {
     return this.service.addRate(trip_id, dto);

@@ -151,7 +151,7 @@ export class AuthService {
       });
 
     if (!stored) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException('Refresh token invalido');
     }
 
     if (!stored.revoked) {
