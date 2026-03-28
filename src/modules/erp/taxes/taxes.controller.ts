@@ -23,4 +23,14 @@ export class TaxesController {
   create(@Body() dto: CreateTaxDto) {
     return this.taxesService.create(dto);
   }
+
+  @Get()
+  findAll(@Query('company_id') companyId: string) {
+    return this.taxesService.findAll(companyId);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateTaxDto) {
+    return this.taxesService.update(id, dto);
+  }
 }
