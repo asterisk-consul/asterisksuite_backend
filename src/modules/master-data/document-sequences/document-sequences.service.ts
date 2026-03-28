@@ -103,18 +103,28 @@ export class DocumentSequencesService {
 
   // ── Lógica de numeración ───────────────────────────────────────────────────
 
-  async getNextNumber(id: string): Promise<{ raw: number; formatted: string }> {
-    const sequence = await this.findOne(id);
+  async getNextNumber(
+    tx: any,
+    companyId: string,
+    documentType: string,
+    pointOfSale: string,
+  ): Promise<{ raw: number; formatted: string }> {
+    const sequence = await tx.document_sequences.findFirst({
+      where: {
+        company_id: companyId,
+        point_of_sale: pointOfSale,
+        active: true,
+      },
+    });
 
-    if (!sequence.active) {
+    if (!sequence) {
       throw new BadRequestException(
-        `La secuencia "${sequence.name}" está inactiva.`,
+        `No existe secuencia para ${documentType} en POS ${pointOfSale}`,
       );
     }
 
     const next = sequence.current_number + 1;
 
-    // Validar límite solo cuando el usuario definió el rango
     if (!sequence.automatic) {
       if (next > sequence.range_end!) {
         throw new BadRequestException(
@@ -123,12 +133,15 @@ export class DocumentSequencesService {
       }
     }
 
-    await this.prisma.document_sequences.update({
-      where: { id },
+    await tx.document_sequences.update({
+      where: { id: sequence.id },
       data: { current_number: next },
     });
 
-    return { raw: next, formatted: this.formatNumber(next, sequence.prefix) };
+    return {
+      raw: next,
+      formatted: this.formatNumber(next, sequence.prefix),
+    };
   }
 
   async getCurrentNumber(id: string): Promise<{

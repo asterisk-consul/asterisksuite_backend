@@ -29,7 +29,7 @@ export class DeliveryNotesService {
         data: {
           company_id: dto.companyId,
           type: dto.type,
-          number,
+          number: number.formatted,
           status: 'DRAFT',
           party_id: dto.partyId,
           trip_id: dto.tripId,

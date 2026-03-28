@@ -70,7 +70,7 @@ model companies {
   business_parties     business_parties[]
   delivery_notes       delivery_notes[]
   dispatch_orders      dispatch_orders[]
-  document_equences    document_sequences[]
+  document_sequences    document_sequences[]
   drivers              drivers[]
   pallets              pallets[]
   picking_orders       picking_orders[]

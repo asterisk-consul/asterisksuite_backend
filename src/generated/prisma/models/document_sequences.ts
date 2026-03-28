@@ -359,7 +359,7 @@ export type document_sequencesCreateInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
-  companies: Prisma.companiesCreateNestedOneWithoutDocument_equencesInput
+  companies: Prisma.companiesCreateNestedOneWithoutDocument_sequencesInput
   document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
 }
 
@@ -389,7 +389,7 @@ export type document_sequencesUpdateInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companies?: Prisma.companiesUpdateOneRequiredWithoutDocument_equencesNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutDocument_sequencesNestedInput
   document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
 }
 
@@ -671,7 +671,7 @@ export type document_sequencesCreateWithoutDocument_typesInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
-  companies: Prisma.companiesCreateNestedOneWithoutDocument_equencesInput
+  companies: Prisma.companiesCreateNestedOneWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
@@ -715,7 +715,7 @@ export type document_sequencesUpdateWithoutDocument_typesInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companies?: Prisma.companiesUpdateOneRequiredWithoutDocument_equencesNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
