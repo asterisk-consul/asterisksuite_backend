@@ -1,0 +1,50 @@
+{
+  "name": "frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prebuild": "node -e \"try { const fs = require('fs'); if (fs.existsSync('node_modules/oxc-parser')) { console.log('oxc-parser presente') } } catch(e) {}\"",
+    "build": "OXC_BINDINGS_FORCE_BUILD=1 nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "typecheck": "nuxt typecheck",
+    "start": "nuxt start"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.98",
+    "@iconify-json/simple-icons": "^1.2.74",
+    "@nuxt/ui": "^4.5.1",
+    "@nuxtjs/mdc": "^0.20.2",
+    "@pinia/nuxt": "^0.11.3",
+    "@unovis/ts": "^1.6.4",
+    "@unovis/vue": "^1.6.4",
+    "@vueuse/nuxt": "^13.9.0",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.20",
+    "leaflet": "^1.9.4",
+    "nuxt": "^4.4.2",
+    "papaparse": "^5.5.3",
+    "pinia": "^3.0.4",
+    "vue-draggable-plus": "^0.6.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.15.2",
+    "@types/google.maps": "^3.58.1",
+    "@types/leaflet": "^1.9.21",
+    "@types/papaparse": "^5.5.2",
+    "eslint": "^9.39.4",
+    "postcss": "^8.5.8",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.2.6"
+  },
+  "packageManager": "pnpm@10.27.0",
+  "optionalDependencies": {
+    "@oxc-parser/binding-linux-x64-gnu": "^0.99.0"
+  }
+}

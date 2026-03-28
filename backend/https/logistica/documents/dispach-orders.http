@@ -1,0 +1,104 @@
+### dispatch-orders.http
+
+@baseUrl = http://localhost:3000/api
+@orderId = {{createOrder.response.body.id}}
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###  <-- este separador es clave
+
+@accessToken = {{login.response.body.accessToken}}
+
+### ─── CREATE ───────────────────────────────────────────
+
+# @name createOrder
+POST {{baseUrl}}/dispatch-orders
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "order_number": "ORD-001",
+  "status": "pending",
+  "requires_stock": true,
+  "customer_id": "7bfc63cb-1e53-4047-885c-f72440c22d15",
+  "origin_location_id": "c2fe8089-0a84-47d6-87e2-aa6e02e8bceb",
+  "destination_location_id": "18e35baa-1ac0-4441-b1da-f3b4c3101f3b",
+  "planned_date": "2026-04-15T10:00:00.000Z"
+}
+
+### CREATE — mínimo (solo order_number)
+POST {{baseUrl}}/dispatch-orders
+Content-Type: application/json
+
+{
+  "order_number": "ORD-002"
+}
+
+### ─── READ ────────────────────────────────────────────
+
+### GET all
+GET {{baseUrl}}/dispatch-orders
+
+### GET one (usa id del createOrder)
+GET {{baseUrl}}/dispatch-orders/{{orderId}}
+
+### GET one — id hardcodeado
+GET {{baseUrl}}/dispatch-orders/00000000-0000-0000-0000-000000000001
+
+### ─── UPDATE ──────────────────────────────────────────
+
+### PATCH — cambiar status
+PATCH {{baseUrl}}/dispatch-orders/{{orderId}}
+Content-Type: application/json
+
+{
+  "status": "in_progress"
+}
+
+### PATCH — actualizar varios campos
+PATCH {{baseUrl}}/dispatch-orders/{{orderId}}
+Content-Type: application/json
+
+{
+  "status": "completed",
+  "requires_stock": false,
+  "planned_date": "2026-04-20T08:00:00.000Z"
+}
+
+### ─── DELETE ──────────────────────────────────────────
+
+### DELETE
+DELETE {{baseUrl}}/dispatch-orders/{{orderId}}
+
+### ─── ERROR CASES ─────────────────────────────────────
+
+### 404 — id inexistente
+GET {{baseUrl}}/dispatch-orders/00000000-0000-0000-0000-999999999999
+
+### 400 — sin order_number (campo requerido)
+POST {{baseUrl}}/dispatch-orders
+Content-Type: application/json
+
+{
+  "status": "pending"
+}
+
+### 400 — customer_id no es UUID válido
+POST {{baseUrl}}/dispatch-orders
+Content-Type: application/json
+
+{
+  "order_number": "ORD-003",
+  "customer_id": "not-a-uuid"
+}

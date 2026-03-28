@@ -1,0 +1,126 @@
+[
+  {
+    "version": "0.0.0-alpha",
+    "date": "2026-03-01",
+    "stage": "alpha",
+    "notes": "Inicio del proyecto",
+    "changes": [
+      {
+        "type": "added",
+        "title": "Inicialización del sistema"
+      },
+      {
+        "type": "added",
+        "title": "Módulo base de transporte"
+      }
+    ],
+    "modules": [
+      {
+        "name": "transporte",
+        "version": "0.6.0-alpha"
+      }
+    ]
+  },
+  {
+    "version": "0.0.1-alpha",
+    "date": "2026-03-13",
+    "stage": "alpha",
+    "notes": "Correcciones iniciales en UI y lógica",
+    "changes": [
+      {
+        "id": "DON-111",
+        "title": "Corrección en carga de clientes",
+        "type": "fix",
+        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-111"
+      },
+      {
+        "id": "DON-110",
+        "title": "Validación en tipo de vehículo",
+        "type": "fix",
+        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-110"
+      },
+      {
+        "id": "DON-109",
+        "title": "Corrección de timeout en UI",
+        "type": "fix",
+        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-109"
+      },
+      {
+        "id": "DON-108",
+        "title": "Campo chofer en flota",
+        "type": "fix",
+        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-108"
+      },
+      {
+        "id": "DON-106",
+        "title": "Corrección en lógica de refrigerado",
+        "type": "fix",
+        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-106"
+      },
+      {
+        "title": "Corrección en update de estados",
+        "type": "fix"
+      },
+      {
+        "title": "Fix en endpoint de vehículos",
+        "type": "fix"
+      }
+    ],
+    "modules": [
+      {
+        "name": "transporte",
+        "version": "1.0.1-alpha"
+      }
+    ]
+  },
+  {
+    "version": "1.1.1-alpha",
+    "date": "2026-03-17",
+    "stage": "alpha",
+    "notes": "Integración de corredores con trips",
+    "changes": [
+      {
+        "title": "Integración completa de corredores con trips",
+        "type": "changed"
+      },
+      {
+        "id": "DON-107",
+        "title": "Actualización de registros en nueva flota",
+        "type": "fix",
+        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-107"
+      }
+    ],
+    "modules": [
+      {
+        "name": "transporte",
+        "version": "1.1.1-alpha"
+      }
+    ]
+  },
+  {
+    "version": "0.1.5-alpha",
+    "date": "2026-03-20",
+    "stage": "alpha",
+    "notes": "Refactor de updates en clientes, unidades y viajes",
+    "changes": [
+      {
+        "title": "Corrección en lógica de updates en clientes, unidades y viajes",
+        "type": "fix"
+      },
+      {
+        "title": "Refactor de de company_id Harcodeado",
+        "type": "fix"
+      },
+      {
+        "title": "Refactor de Create.vue y Edit.vue en clientes, viajes y corredores",
+        "type": "changed"
+      }
+    ],
+    "modules": [
+      {
+        "name": "transporte",
+        "version": "1.1.6-alpha"
+      }
+    ]
+  }
+]
