@@ -62,11 +62,9 @@ export class ComprasTransformer implements Transformer<
     const partyMap = new Map(parties.map((p) => [p.name, p]));
     const productMap = new Map(products.map((p) => [p.name, p]));
     const taxMap = new Map(taxes.map((t) => [t.code, t]));
-    const documentTypeMap = new Map(
-      documentTypes.map((dt) => [dt.description, dt]),
-    );
+    const documentTypeMap = new Map(documentTypes.map((dt) => [dt.code, dt]));
 
-    const documentType = documentTypeMap.get('Factura de Compra');
+    const documentType = documentTypeMap.get('COM');
     if (!documentType) {
       throw new Error(
         'Tipo de documento "Factura de Compra" no encontrado en la BD',

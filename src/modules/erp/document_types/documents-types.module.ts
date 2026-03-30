@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { DocumentsTypesController } from './document_types/documents-types.controller';
-import { DocumentsTypesService } from './document_types/documents-types.service';
+import { DocumentsTypesController } from './documents-types.controller';
+import { DocumentsTypesService } from './documents-types.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Module({
@@ -8,4 +8,4 @@ import { PrismaService } from '@/prisma/prisma.service';
   providers: [DocumentsTypesService, PrismaService],
   exports: [DocumentsTypesService],
 })
-export class DocumentTypesModule {}
+export class DocumentsTypesErpModule {}

@@ -667,7 +667,10 @@ export const Document_typesScalarFieldEnum = {
   direction: 'direction',
   affects_stock: 'affects_stock',
   affects_accounting: 'affects_accounting',
-  active: 'active'
+  affects_tax_book: 'affects_tax_book',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]

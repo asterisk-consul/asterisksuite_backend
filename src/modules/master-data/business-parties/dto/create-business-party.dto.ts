@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsArray, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+  IsBoolean,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class CreatePartyLocationDto {
@@ -31,6 +37,9 @@ class CreatePartyContactDto {
 }
 
 export class CreateBusinessPartyDto {
+  @IsBoolean()
+  active: boolean;
+
   @IsString()
   company_id!: string;
 
