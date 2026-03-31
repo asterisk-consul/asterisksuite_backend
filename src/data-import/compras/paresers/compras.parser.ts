@@ -8,6 +8,25 @@ import { ZodError } from 'zod';
 
 type FacturaCompraRow = Record<string, unknown>;
 
+function parseExcelDate(value: unknown): Date | null {
+  if (!value) return null;
+
+  // caso Excel number (serial date)
+  if (typeof value === 'number') {
+    const excelEpoch = new Date(1899, 11, 30);
+    const ms = value * 86400000;
+    return new Date(excelEpoch.getTime() + ms);
+  }
+
+  // caso string
+  if (typeof value === 'string') {
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) return date;
+  }
+
+  return null;
+}
+
 function normalizeRow(row: FacturaCompraRow): Record<string, unknown> {
   return Object.keys(row).reduce(
     (acc, key) => {
@@ -25,7 +44,7 @@ function mapRow(normalized: Record<string, unknown>) {
     Nombre: normalized.NOMBRE, // ← corregido (era DESCRIP)
     Motivo_det: normalized.MOTIVO_DET,
     Concepto: normalized.CONCEPTO,
-    Fecha: normalized.FECHA,
+    Fecha: parseExcelDate(normalized.FECHA),
     Imp_gravado: normalized.IMP_GRAVADO, // ← capitalización correcta
     Imp_total: normalized.IMP_TOTAL,
     Imp_IVA1: normalized.IMP_IVA1,
