@@ -6,9 +6,9 @@ import type {
   DocumentEntity
 } from '~/modulos/logistica/documents/documents-types/document-types.types'
 import StatusToggle from '@/components/ui/PopoverTableActive.vue'
-import '@tanstack/table-core'
+import '@tanstack/vue-table'
 
-declare module '@tanstack/table-core' {
+declare module '@tanstack/vue-table' {
   interface ColumnMeta<TData, TValue> {
     filterType?: 'text' | 'date-range'
   }

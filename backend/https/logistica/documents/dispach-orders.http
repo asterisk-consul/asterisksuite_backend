@@ -40,6 +40,7 @@ Authorization: Bearer {{accessToken}}
 ### CREATE — mínimo (solo order_number)
 POST {{baseUrl}}/dispatch-orders
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "order_number": "ORD-002"
@@ -49,6 +50,7 @@ Content-Type: application/json
 
 ### GET all
 GET {{baseUrl}}/dispatch-orders
+Authorization: Bearer {{accessToken}}
 
 ### GET one (usa id del createOrder)
 GET {{baseUrl}}/dispatch-orders/{{orderId}}

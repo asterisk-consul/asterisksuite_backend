@@ -6,11 +6,7 @@ import type {
 
 export const useChoferesService = () => {
   const baseUrl = '/api/logistica/transport/drivers'
-  const getAll = (company_id: string) =>
-    $fetch<Driver[]>(`${baseUrl}`, {
-      query: { company_id }
-    })
-
+  const getAll = () => $fetch<Driver[]>(`${baseUrl}`)
   const getById = (id: string) => $fetch<Driver>(`${baseUrl}/${id}`)
 
   const create = (body: CreateDriverInput) =>

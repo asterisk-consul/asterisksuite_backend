@@ -1,18 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
-import { CreateTripRateDto } from './dto/create-trip-rate.dto';
-import { UpdateTripRateDto } from './dto/update-trip-rate.dto';
 
-@Injectable()
 export class TripsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
     return this.prisma.trips.findMany({
       include: {
-        business_party: true,
         vehicle_combination: {
           include: {
             tractor: true,
@@ -20,23 +16,7 @@ export class TripsService {
             drivers: true,
           },
         },
-        trip_rates: {
-          include: {
-            transfer_rates: true,
-          },
-        },
-        corridors: {
-          include: {
-            origin_location: true,
-            destination_location: true,
-            corridorStops: {
-              orderBy: { stop_order: 'asc' },
-              include: {
-                location: true,
-              },
-            },
-          },
-        },
+
         trip_stops: {
           orderBy: { stop_order: 'asc' },
           include: {
@@ -62,29 +42,11 @@ export class TripsService {
     const trip = await this.prisma.trips.findUnique({
       where: { id },
       include: {
-        business_party: true,
         vehicle_combination: {
           include: {
             tractor: true,
             trailer: true,
             drivers: true,
-          },
-        },
-        trip_rates: {
-          include: {
-            transfer_rates: true,
-          },
-        },
-        corridors: {
-          include: {
-            origin_location: true,
-            destination_location: true,
-            corridorStops: {
-              orderBy: { stop_order: 'asc' },
-              include: {
-                location: true,
-              },
-            },
           },
         },
 
@@ -114,31 +76,11 @@ export class TripsService {
   }
 
   async create(dto: CreateTripDto) {
-    let corridorId = dto.corridor_id ?? null;
-
-    if (dto.route) {
-      const corridor = await this.prisma.corridors.create({
-        data: {
-          origin_location_id: dto.route.origin_location_id,
-          destination_location_id: dto.route.destination_location_id,
-          is_template: false,
-          corridorStops: {
-            create: dto.route.stops.map((stop) => ({
-              location_id: stop.location_id,
-              stop_order: stop.stop_order,
-            })),
-          },
-        },
-      });
-
-      corridorId = corridor.id;
-    }
-
     return this.prisma.trips.create({
       data: {
         reference_number: dto.reference_number,
         week: dto.week ?? null,
-        business_party_id: dto.business_party_id ?? null,
+
         vehicle_combination_id: dto.vehicle_combination_id,
         origin_location_id: dto.origin_location_id,
         destination_location_id: dto.destination_location_id,
@@ -146,10 +88,8 @@ export class TripsService {
         arrival_time: dto.arrival_time,
         status: dto.status,
         kilometers: dto.kilometers,
-        corridor_id: corridorId,
       },
       include: {
-        business_party: true,
         vehicle_combination: {
           include: {
             tractor: true,
@@ -168,32 +108,13 @@ export class TripsService {
       where: { id },
       data: {
         ...dto,
-        business_party_id: dto.business_party_id,
       },
       include: {
-        business_party: true,
         vehicle_combination: {
           include: {
             tractor: true,
             trailer: true,
             drivers: true,
-          },
-        },
-        trip_rates: {
-          include: {
-            transfer_rates: true,
-          },
-        },
-        corridors: {
-          include: {
-            origin_location: true,
-            destination_location: true,
-            corridorStops: {
-              orderBy: { stop_order: 'asc' },
-              include: {
-                location: true,
-              },
-            },
           },
         },
       },
@@ -307,30 +228,30 @@ export class TripsService {
     });
   }
 
-  // ------------------------------
-  // TRIP RATES
-  // ------------------------------
+  //   // ------------------------------
+  //   // TRIP RATES
+  //   // ------------------------------
 
-  async addRate(trip_id: string, dto: CreateTripRateDto) {
-    return this.prisma.trip_rates.create({
-      data: {
-        trip_id,
-        rate_id: dto.rate_id,
-        value: dto.value,
-      },
-    });
-  }
+  //   async addRate(trip_id: string, dto: CreateTripRateDto) {
+  //     return this.prisma.trip_rates.create({
+  //       data: {
+  //         trip_id,
+  //         rate_id: dto.rate_id,
+  //         value: dto.value,
+  //       },
+  //     });
+  //   }
 
-  async updateRate(id: string, dto: UpdateTripRateDto) {
-    return this.prisma.trip_rates.update({
-      where: { id },
-      data: { value: dto.value },
-    });
-  }
+  //   async updateRate(id: string, dto: UpdateTripRateDto) {
+  //     return this.prisma.trip_rates.update({
+  //       where: { id },
+  //       data: { value: dto.value },
+  //     });
+  //   }
 
-  async removeRate(id: string) {
-    return this.prisma.trip_rates.delete({
-      where: { id },
-    });
-  }
+  //   async removeRate(id: string) {
+  //     return this.prisma.trip_rates.delete({
+  //       where: { id },
+  //     });
+  //   }
 }

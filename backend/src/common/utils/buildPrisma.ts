@@ -38,7 +38,7 @@ type RelationConfig<T> = {
 };
 
 // 🔹 Builder principal
-export function buildPrismaUpdate<T extends AnyRecord>(
+export function buildPrismaUpdate<T extends object>(
   dto: T,
   relations?: RelationConfig<T>,
 ) {
@@ -46,11 +46,13 @@ export function buildPrismaUpdate<T extends AnyRecord>(
 
   for (const key in dto) {
     const value = dto[key];
+
+    // ✅ solo ignorar undefined
     if (value === undefined) continue;
 
     const relationConfig = relations?.[key as keyof T];
 
-    // ✅ Relaciones tipo array
+    // ✅ relaciones
     if (
       relationConfig &&
       relationConfig.type === 'array' &&
@@ -65,9 +67,13 @@ export function buildPrismaUpdate<T extends AnyRecord>(
       continue;
     }
 
-    // 🔹 evitar null
-    if (value === null) continue;
+    // 🔥 manejo de fechas
+    if (key === 'planned_date' && value) {
+      data[key] = new Date(value as string);
+      continue;
+    }
 
+    // ✅ permitir null
     data[key] = value;
   }
 

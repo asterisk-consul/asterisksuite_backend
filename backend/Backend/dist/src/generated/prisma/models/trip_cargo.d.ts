@@ -1,0 +1,811 @@
+import type * as runtime from "@prisma/client/runtime/client";
+import type * as Prisma from "../internal/prismaNamespace.js";
+export type trip_cargoModel = runtime.Types.Result.DefaultSelection<Prisma.$trip_cargoPayload>;
+export type AggregateTrip_cargo = {
+    _count: Trip_cargoCountAggregateOutputType | null;
+    _min: Trip_cargoMinAggregateOutputType | null;
+    _max: Trip_cargoMaxAggregateOutputType | null;
+};
+export type Trip_cargoMinAggregateOutputType = {
+    id: string | null;
+    trip_id: string | null;
+    pallet_id: string | null;
+    delivery_note_id: string | null;
+    loaded_at: Date | null;
+    unloaded_at: Date | null;
+};
+export type Trip_cargoMaxAggregateOutputType = {
+    id: string | null;
+    trip_id: string | null;
+    pallet_id: string | null;
+    delivery_note_id: string | null;
+    loaded_at: Date | null;
+    unloaded_at: Date | null;
+};
+export type Trip_cargoCountAggregateOutputType = {
+    id: number;
+    trip_id: number;
+    pallet_id: number;
+    delivery_note_id: number;
+    loaded_at: number;
+    unloaded_at: number;
+    _all: number;
+};
+export type Trip_cargoMinAggregateInputType = {
+    id?: true;
+    trip_id?: true;
+    pallet_id?: true;
+    delivery_note_id?: true;
+    loaded_at?: true;
+    unloaded_at?: true;
+};
+export type Trip_cargoMaxAggregateInputType = {
+    id?: true;
+    trip_id?: true;
+    pallet_id?: true;
+    delivery_note_id?: true;
+    loaded_at?: true;
+    unloaded_at?: true;
+};
+export type Trip_cargoCountAggregateInputType = {
+    id?: true;
+    trip_id?: true;
+    pallet_id?: true;
+    delivery_note_id?: true;
+    loaded_at?: true;
+    unloaded_at?: true;
+    _all?: true;
+};
+export type Trip_cargoAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.trip_cargoWhereInput;
+    orderBy?: Prisma.trip_cargoOrderByWithRelationInput | Prisma.trip_cargoOrderByWithRelationInput[];
+    cursor?: Prisma.trip_cargoWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    _count?: true | Trip_cargoCountAggregateInputType;
+    _min?: Trip_cargoMinAggregateInputType;
+    _max?: Trip_cargoMaxAggregateInputType;
+};
+export type GetTrip_cargoAggregateType<T extends Trip_cargoAggregateArgs> = {
+    [P in keyof T & keyof AggregateTrip_cargo]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateTrip_cargo[P]> : Prisma.GetScalarType<T[P], AggregateTrip_cargo[P]>;
+};
+export type trip_cargoGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.trip_cargoWhereInput;
+    orderBy?: Prisma.trip_cargoOrderByWithAggregationInput | Prisma.trip_cargoOrderByWithAggregationInput[];
+    by: Prisma.Trip_cargoScalarFieldEnum[] | Prisma.Trip_cargoScalarFieldEnum;
+    having?: Prisma.trip_cargoScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: Trip_cargoCountAggregateInputType | true;
+    _min?: Trip_cargoMinAggregateInputType;
+    _max?: Trip_cargoMaxAggregateInputType;
+};
+export type Trip_cargoGroupByOutputType = {
+    id: string;
+    trip_id: string;
+    pallet_id: string | null;
+    delivery_note_id: string | null;
+    loaded_at: Date | null;
+    unloaded_at: Date | null;
+    _count: Trip_cargoCountAggregateOutputType | null;
+    _min: Trip_cargoMinAggregateOutputType | null;
+    _max: Trip_cargoMaxAggregateOutputType | null;
+};
+export type GetTrip_cargoGroupByPayload<T extends trip_cargoGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<Trip_cargoGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof Trip_cargoGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], Trip_cargoGroupByOutputType[P]> : Prisma.GetScalarType<T[P], Trip_cargoGroupByOutputType[P]>;
+}>>;
+export type trip_cargoWhereInput = {
+    AND?: Prisma.trip_cargoWhereInput | Prisma.trip_cargoWhereInput[];
+    OR?: Prisma.trip_cargoWhereInput[];
+    NOT?: Prisma.trip_cargoWhereInput | Prisma.trip_cargoWhereInput[];
+    id?: Prisma.UuidFilter<"trip_cargo"> | string;
+    trip_id?: Prisma.UuidFilter<"trip_cargo"> | string;
+    pallet_id?: Prisma.UuidNullableFilter<"trip_cargo"> | string | null;
+    delivery_note_id?: Prisma.UuidNullableFilter<"trip_cargo"> | string | null;
+    loaded_at?: Prisma.DateTimeNullableFilter<"trip_cargo"> | Date | string | null;
+    unloaded_at?: Prisma.DateTimeNullableFilter<"trip_cargo"> | Date | string | null;
+    delivery_notes?: Prisma.XOR<Prisma.Delivery_notesNullableScalarRelationFilter, Prisma.delivery_notesWhereInput> | null;
+    pallets?: Prisma.XOR<Prisma.PalletsNullableScalarRelationFilter, Prisma.palletsWhereInput> | null;
+    trips?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>;
+};
+export type trip_cargoOrderByWithRelationInput = {
+    id?: Prisma.SortOrder;
+    trip_id?: Prisma.SortOrder;
+    pallet_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    delivery_note_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    loaded_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    unloaded_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    delivery_notes?: Prisma.delivery_notesOrderByWithRelationInput;
+    pallets?: Prisma.palletsOrderByWithRelationInput;
+    trips?: Prisma.tripsOrderByWithRelationInput;
+};
+export type trip_cargoWhereUniqueInput = Prisma.AtLeast<{
+    id?: string;
+    AND?: Prisma.trip_cargoWhereInput | Prisma.trip_cargoWhereInput[];
+    OR?: Prisma.trip_cargoWhereInput[];
+    NOT?: Prisma.trip_cargoWhereInput | Prisma.trip_cargoWhereInput[];
+    trip_id?: Prisma.UuidFilter<"trip_cargo"> | string;
+    pallet_id?: Prisma.UuidNullableFilter<"trip_cargo"> | string | null;
+    delivery_note_id?: Prisma.UuidNullableFilter<"trip_cargo"> | string | null;
+    loaded_at?: Prisma.DateTimeNullableFilter<"trip_cargo"> | Date | string | null;
+    unloaded_at?: Prisma.DateTimeNullableFilter<"trip_cargo"> | Date | string | null;
+    delivery_notes?: Prisma.XOR<Prisma.Delivery_notesNullableScalarRelationFilter, Prisma.delivery_notesWhereInput> | null;
+    pallets?: Prisma.XOR<Prisma.PalletsNullableScalarRelationFilter, Prisma.palletsWhereInput> | null;
+    trips?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>;
+}, "id">;
+export type trip_cargoOrderByWithAggregationInput = {
+    id?: Prisma.SortOrder;
+    trip_id?: Prisma.SortOrder;
+    pallet_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    delivery_note_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    loaded_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    unloaded_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    _count?: Prisma.trip_cargoCountOrderByAggregateInput;
+    _max?: Prisma.trip_cargoMaxOrderByAggregateInput;
+    _min?: Prisma.trip_cargoMinOrderByAggregateInput;
+};
+export type trip_cargoScalarWhereWithAggregatesInput = {
+    AND?: Prisma.trip_cargoScalarWhereWithAggregatesInput | Prisma.trip_cargoScalarWhereWithAggregatesInput[];
+    OR?: Prisma.trip_cargoScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.trip_cargoScalarWhereWithAggregatesInput | Prisma.trip_cargoScalarWhereWithAggregatesInput[];
+    id?: Prisma.UuidWithAggregatesFilter<"trip_cargo"> | string;
+    trip_id?: Prisma.UuidWithAggregatesFilter<"trip_cargo"> | string;
+    pallet_id?: Prisma.UuidNullableWithAggregatesFilter<"trip_cargo"> | string | null;
+    delivery_note_id?: Prisma.UuidNullableWithAggregatesFilter<"trip_cargo"> | string | null;
+    loaded_at?: Prisma.DateTimeNullableWithAggregatesFilter<"trip_cargo"> | Date | string | null;
+    unloaded_at?: Prisma.DateTimeNullableWithAggregatesFilter<"trip_cargo"> | Date | string | null;
+};
+export type trip_cargoCreateInput = {
+    id?: string;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+    delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutTrip_cargoInput;
+    pallets?: Prisma.palletsCreateNestedOneWithoutTrip_cargoInput;
+    trips: Prisma.tripsCreateNestedOneWithoutTrip_cargoInput;
+};
+export type trip_cargoUncheckedCreateInput = {
+    id?: string;
+    trip_id: string;
+    pallet_id?: string | null;
+    delivery_note_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    delivery_notes?: Prisma.delivery_notesUpdateOneWithoutTrip_cargoNestedInput;
+    pallets?: Prisma.palletsUpdateOneWithoutTrip_cargoNestedInput;
+    trips?: Prisma.tripsUpdateOneRequiredWithoutTrip_cargoNestedInput;
+};
+export type trip_cargoUncheckedUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    trip_id?: Prisma.StringFieldUpdateOperationsInput | string;
+    pallet_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoCreateManyInput = {
+    id?: string;
+    trip_id: string;
+    pallet_id?: string | null;
+    delivery_note_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoUpdateManyMutationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoUncheckedUpdateManyInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    trip_id?: Prisma.StringFieldUpdateOperationsInput | string;
+    pallet_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type Trip_cargoListRelationFilter = {
+    every?: Prisma.trip_cargoWhereInput;
+    some?: Prisma.trip_cargoWhereInput;
+    none?: Prisma.trip_cargoWhereInput;
+};
+export type trip_cargoOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type trip_cargoCountOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    trip_id?: Prisma.SortOrder;
+    pallet_id?: Prisma.SortOrder;
+    delivery_note_id?: Prisma.SortOrder;
+    loaded_at?: Prisma.SortOrder;
+    unloaded_at?: Prisma.SortOrder;
+};
+export type trip_cargoMaxOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    trip_id?: Prisma.SortOrder;
+    pallet_id?: Prisma.SortOrder;
+    delivery_note_id?: Prisma.SortOrder;
+    loaded_at?: Prisma.SortOrder;
+    unloaded_at?: Prisma.SortOrder;
+};
+export type trip_cargoMinOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    trip_id?: Prisma.SortOrder;
+    pallet_id?: Prisma.SortOrder;
+    delivery_note_id?: Prisma.SortOrder;
+    loaded_at?: Prisma.SortOrder;
+    unloaded_at?: Prisma.SortOrder;
+};
+export type trip_cargoCreateNestedManyWithoutDelivery_notesInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput> | Prisma.trip_cargoCreateWithoutDelivery_notesInput[] | Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput | Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput[];
+    createMany?: Prisma.trip_cargoCreateManyDelivery_notesInputEnvelope;
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+};
+export type trip_cargoUncheckedCreateNestedManyWithoutDelivery_notesInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput> | Prisma.trip_cargoCreateWithoutDelivery_notesInput[] | Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput | Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput[];
+    createMany?: Prisma.trip_cargoCreateManyDelivery_notesInputEnvelope;
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+};
+export type trip_cargoUpdateManyWithoutDelivery_notesNestedInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput> | Prisma.trip_cargoCreateWithoutDelivery_notesInput[] | Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput | Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput[];
+    upsert?: Prisma.trip_cargoUpsertWithWhereUniqueWithoutDelivery_notesInput | Prisma.trip_cargoUpsertWithWhereUniqueWithoutDelivery_notesInput[];
+    createMany?: Prisma.trip_cargoCreateManyDelivery_notesInputEnvelope;
+    set?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    disconnect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    delete?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    update?: Prisma.trip_cargoUpdateWithWhereUniqueWithoutDelivery_notesInput | Prisma.trip_cargoUpdateWithWhereUniqueWithoutDelivery_notesInput[];
+    updateMany?: Prisma.trip_cargoUpdateManyWithWhereWithoutDelivery_notesInput | Prisma.trip_cargoUpdateManyWithWhereWithoutDelivery_notesInput[];
+    deleteMany?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+};
+export type trip_cargoUncheckedUpdateManyWithoutDelivery_notesNestedInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput> | Prisma.trip_cargoCreateWithoutDelivery_notesInput[] | Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput | Prisma.trip_cargoCreateOrConnectWithoutDelivery_notesInput[];
+    upsert?: Prisma.trip_cargoUpsertWithWhereUniqueWithoutDelivery_notesInput | Prisma.trip_cargoUpsertWithWhereUniqueWithoutDelivery_notesInput[];
+    createMany?: Prisma.trip_cargoCreateManyDelivery_notesInputEnvelope;
+    set?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    disconnect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    delete?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    update?: Prisma.trip_cargoUpdateWithWhereUniqueWithoutDelivery_notesInput | Prisma.trip_cargoUpdateWithWhereUniqueWithoutDelivery_notesInput[];
+    updateMany?: Prisma.trip_cargoUpdateManyWithWhereWithoutDelivery_notesInput | Prisma.trip_cargoUpdateManyWithWhereWithoutDelivery_notesInput[];
+    deleteMany?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+};
+export type trip_cargoCreateNestedManyWithoutPalletsInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutPalletsInput, Prisma.trip_cargoUncheckedCreateWithoutPalletsInput> | Prisma.trip_cargoCreateWithoutPalletsInput[] | Prisma.trip_cargoUncheckedCreateWithoutPalletsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutPalletsInput | Prisma.trip_cargoCreateOrConnectWithoutPalletsInput[];
+    createMany?: Prisma.trip_cargoCreateManyPalletsInputEnvelope;
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+};
+export type trip_cargoUncheckedCreateNestedManyWithoutPalletsInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutPalletsInput, Prisma.trip_cargoUncheckedCreateWithoutPalletsInput> | Prisma.trip_cargoCreateWithoutPalletsInput[] | Prisma.trip_cargoUncheckedCreateWithoutPalletsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutPalletsInput | Prisma.trip_cargoCreateOrConnectWithoutPalletsInput[];
+    createMany?: Prisma.trip_cargoCreateManyPalletsInputEnvelope;
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+};
+export type trip_cargoUpdateManyWithoutPalletsNestedInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutPalletsInput, Prisma.trip_cargoUncheckedCreateWithoutPalletsInput> | Prisma.trip_cargoCreateWithoutPalletsInput[] | Prisma.trip_cargoUncheckedCreateWithoutPalletsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutPalletsInput | Prisma.trip_cargoCreateOrConnectWithoutPalletsInput[];
+    upsert?: Prisma.trip_cargoUpsertWithWhereUniqueWithoutPalletsInput | Prisma.trip_cargoUpsertWithWhereUniqueWithoutPalletsInput[];
+    createMany?: Prisma.trip_cargoCreateManyPalletsInputEnvelope;
+    set?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    disconnect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    delete?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    update?: Prisma.trip_cargoUpdateWithWhereUniqueWithoutPalletsInput | Prisma.trip_cargoUpdateWithWhereUniqueWithoutPalletsInput[];
+    updateMany?: Prisma.trip_cargoUpdateManyWithWhereWithoutPalletsInput | Prisma.trip_cargoUpdateManyWithWhereWithoutPalletsInput[];
+    deleteMany?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+};
+export type trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutPalletsInput, Prisma.trip_cargoUncheckedCreateWithoutPalletsInput> | Prisma.trip_cargoCreateWithoutPalletsInput[] | Prisma.trip_cargoUncheckedCreateWithoutPalletsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutPalletsInput | Prisma.trip_cargoCreateOrConnectWithoutPalletsInput[];
+    upsert?: Prisma.trip_cargoUpsertWithWhereUniqueWithoutPalletsInput | Prisma.trip_cargoUpsertWithWhereUniqueWithoutPalletsInput[];
+    createMany?: Prisma.trip_cargoCreateManyPalletsInputEnvelope;
+    set?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    disconnect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    delete?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    update?: Prisma.trip_cargoUpdateWithWhereUniqueWithoutPalletsInput | Prisma.trip_cargoUpdateWithWhereUniqueWithoutPalletsInput[];
+    updateMany?: Prisma.trip_cargoUpdateManyWithWhereWithoutPalletsInput | Prisma.trip_cargoUpdateManyWithWhereWithoutPalletsInput[];
+    deleteMany?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+};
+export type trip_cargoCreateNestedManyWithoutTripsInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutTripsInput, Prisma.trip_cargoUncheckedCreateWithoutTripsInput> | Prisma.trip_cargoCreateWithoutTripsInput[] | Prisma.trip_cargoUncheckedCreateWithoutTripsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutTripsInput | Prisma.trip_cargoCreateOrConnectWithoutTripsInput[];
+    createMany?: Prisma.trip_cargoCreateManyTripsInputEnvelope;
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+};
+export type trip_cargoUncheckedCreateNestedManyWithoutTripsInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutTripsInput, Prisma.trip_cargoUncheckedCreateWithoutTripsInput> | Prisma.trip_cargoCreateWithoutTripsInput[] | Prisma.trip_cargoUncheckedCreateWithoutTripsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutTripsInput | Prisma.trip_cargoCreateOrConnectWithoutTripsInput[];
+    createMany?: Prisma.trip_cargoCreateManyTripsInputEnvelope;
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+};
+export type trip_cargoUpdateManyWithoutTripsNestedInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutTripsInput, Prisma.trip_cargoUncheckedCreateWithoutTripsInput> | Prisma.trip_cargoCreateWithoutTripsInput[] | Prisma.trip_cargoUncheckedCreateWithoutTripsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutTripsInput | Prisma.trip_cargoCreateOrConnectWithoutTripsInput[];
+    upsert?: Prisma.trip_cargoUpsertWithWhereUniqueWithoutTripsInput | Prisma.trip_cargoUpsertWithWhereUniqueWithoutTripsInput[];
+    createMany?: Prisma.trip_cargoCreateManyTripsInputEnvelope;
+    set?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    disconnect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    delete?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    update?: Prisma.trip_cargoUpdateWithWhereUniqueWithoutTripsInput | Prisma.trip_cargoUpdateWithWhereUniqueWithoutTripsInput[];
+    updateMany?: Prisma.trip_cargoUpdateManyWithWhereWithoutTripsInput | Prisma.trip_cargoUpdateManyWithWhereWithoutTripsInput[];
+    deleteMany?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+};
+export type trip_cargoUncheckedUpdateManyWithoutTripsNestedInput = {
+    create?: Prisma.XOR<Prisma.trip_cargoCreateWithoutTripsInput, Prisma.trip_cargoUncheckedCreateWithoutTripsInput> | Prisma.trip_cargoCreateWithoutTripsInput[] | Prisma.trip_cargoUncheckedCreateWithoutTripsInput[];
+    connectOrCreate?: Prisma.trip_cargoCreateOrConnectWithoutTripsInput | Prisma.trip_cargoCreateOrConnectWithoutTripsInput[];
+    upsert?: Prisma.trip_cargoUpsertWithWhereUniqueWithoutTripsInput | Prisma.trip_cargoUpsertWithWhereUniqueWithoutTripsInput[];
+    createMany?: Prisma.trip_cargoCreateManyTripsInputEnvelope;
+    set?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    disconnect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    delete?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    connect?: Prisma.trip_cargoWhereUniqueInput | Prisma.trip_cargoWhereUniqueInput[];
+    update?: Prisma.trip_cargoUpdateWithWhereUniqueWithoutTripsInput | Prisma.trip_cargoUpdateWithWhereUniqueWithoutTripsInput[];
+    updateMany?: Prisma.trip_cargoUpdateManyWithWhereWithoutTripsInput | Prisma.trip_cargoUpdateManyWithWhereWithoutTripsInput[];
+    deleteMany?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+};
+export type trip_cargoCreateWithoutDelivery_notesInput = {
+    id?: string;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+    pallets?: Prisma.palletsCreateNestedOneWithoutTrip_cargoInput;
+    trips: Prisma.tripsCreateNestedOneWithoutTrip_cargoInput;
+};
+export type trip_cargoUncheckedCreateWithoutDelivery_notesInput = {
+    id?: string;
+    trip_id: string;
+    pallet_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoCreateOrConnectWithoutDelivery_notesInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    create: Prisma.XOR<Prisma.trip_cargoCreateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput>;
+};
+export type trip_cargoCreateManyDelivery_notesInputEnvelope = {
+    data: Prisma.trip_cargoCreateManyDelivery_notesInput | Prisma.trip_cargoCreateManyDelivery_notesInput[];
+    skipDuplicates?: boolean;
+};
+export type trip_cargoUpsertWithWhereUniqueWithoutDelivery_notesInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    update: Prisma.XOR<Prisma.trip_cargoUpdateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedUpdateWithoutDelivery_notesInput>;
+    create: Prisma.XOR<Prisma.trip_cargoCreateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedCreateWithoutDelivery_notesInput>;
+};
+export type trip_cargoUpdateWithWhereUniqueWithoutDelivery_notesInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateWithoutDelivery_notesInput, Prisma.trip_cargoUncheckedUpdateWithoutDelivery_notesInput>;
+};
+export type trip_cargoUpdateManyWithWhereWithoutDelivery_notesInput = {
+    where: Prisma.trip_cargoScalarWhereInput;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateManyMutationInput, Prisma.trip_cargoUncheckedUpdateManyWithoutDelivery_notesInput>;
+};
+export type trip_cargoScalarWhereInput = {
+    AND?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+    OR?: Prisma.trip_cargoScalarWhereInput[];
+    NOT?: Prisma.trip_cargoScalarWhereInput | Prisma.trip_cargoScalarWhereInput[];
+    id?: Prisma.UuidFilter<"trip_cargo"> | string;
+    trip_id?: Prisma.UuidFilter<"trip_cargo"> | string;
+    pallet_id?: Prisma.UuidNullableFilter<"trip_cargo"> | string | null;
+    delivery_note_id?: Prisma.UuidNullableFilter<"trip_cargo"> | string | null;
+    loaded_at?: Prisma.DateTimeNullableFilter<"trip_cargo"> | Date | string | null;
+    unloaded_at?: Prisma.DateTimeNullableFilter<"trip_cargo"> | Date | string | null;
+};
+export type trip_cargoCreateWithoutPalletsInput = {
+    id?: string;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+    delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutTrip_cargoInput;
+    trips: Prisma.tripsCreateNestedOneWithoutTrip_cargoInput;
+};
+export type trip_cargoUncheckedCreateWithoutPalletsInput = {
+    id?: string;
+    trip_id: string;
+    delivery_note_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoCreateOrConnectWithoutPalletsInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    create: Prisma.XOR<Prisma.trip_cargoCreateWithoutPalletsInput, Prisma.trip_cargoUncheckedCreateWithoutPalletsInput>;
+};
+export type trip_cargoCreateManyPalletsInputEnvelope = {
+    data: Prisma.trip_cargoCreateManyPalletsInput | Prisma.trip_cargoCreateManyPalletsInput[];
+    skipDuplicates?: boolean;
+};
+export type trip_cargoUpsertWithWhereUniqueWithoutPalletsInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    update: Prisma.XOR<Prisma.trip_cargoUpdateWithoutPalletsInput, Prisma.trip_cargoUncheckedUpdateWithoutPalletsInput>;
+    create: Prisma.XOR<Prisma.trip_cargoCreateWithoutPalletsInput, Prisma.trip_cargoUncheckedCreateWithoutPalletsInput>;
+};
+export type trip_cargoUpdateWithWhereUniqueWithoutPalletsInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateWithoutPalletsInput, Prisma.trip_cargoUncheckedUpdateWithoutPalletsInput>;
+};
+export type trip_cargoUpdateManyWithWhereWithoutPalletsInput = {
+    where: Prisma.trip_cargoScalarWhereInput;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateManyMutationInput, Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsInput>;
+};
+export type trip_cargoCreateWithoutTripsInput = {
+    id?: string;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+    delivery_notes?: Prisma.delivery_notesCreateNestedOneWithoutTrip_cargoInput;
+    pallets?: Prisma.palletsCreateNestedOneWithoutTrip_cargoInput;
+};
+export type trip_cargoUncheckedCreateWithoutTripsInput = {
+    id?: string;
+    pallet_id?: string | null;
+    delivery_note_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoCreateOrConnectWithoutTripsInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    create: Prisma.XOR<Prisma.trip_cargoCreateWithoutTripsInput, Prisma.trip_cargoUncheckedCreateWithoutTripsInput>;
+};
+export type trip_cargoCreateManyTripsInputEnvelope = {
+    data: Prisma.trip_cargoCreateManyTripsInput | Prisma.trip_cargoCreateManyTripsInput[];
+    skipDuplicates?: boolean;
+};
+export type trip_cargoUpsertWithWhereUniqueWithoutTripsInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    update: Prisma.XOR<Prisma.trip_cargoUpdateWithoutTripsInput, Prisma.trip_cargoUncheckedUpdateWithoutTripsInput>;
+    create: Prisma.XOR<Prisma.trip_cargoCreateWithoutTripsInput, Prisma.trip_cargoUncheckedCreateWithoutTripsInput>;
+};
+export type trip_cargoUpdateWithWhereUniqueWithoutTripsInput = {
+    where: Prisma.trip_cargoWhereUniqueInput;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateWithoutTripsInput, Prisma.trip_cargoUncheckedUpdateWithoutTripsInput>;
+};
+export type trip_cargoUpdateManyWithWhereWithoutTripsInput = {
+    where: Prisma.trip_cargoScalarWhereInput;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateManyMutationInput, Prisma.trip_cargoUncheckedUpdateManyWithoutTripsInput>;
+};
+export type trip_cargoCreateManyDelivery_notesInput = {
+    id?: string;
+    trip_id: string;
+    pallet_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoUpdateWithoutDelivery_notesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    pallets?: Prisma.palletsUpdateOneWithoutTrip_cargoNestedInput;
+    trips?: Prisma.tripsUpdateOneRequiredWithoutTrip_cargoNestedInput;
+};
+export type trip_cargoUncheckedUpdateWithoutDelivery_notesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    trip_id?: Prisma.StringFieldUpdateOperationsInput | string;
+    pallet_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoUncheckedUpdateManyWithoutDelivery_notesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    trip_id?: Prisma.StringFieldUpdateOperationsInput | string;
+    pallet_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoCreateManyPalletsInput = {
+    id?: string;
+    trip_id: string;
+    delivery_note_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoUpdateWithoutPalletsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    delivery_notes?: Prisma.delivery_notesUpdateOneWithoutTrip_cargoNestedInput;
+    trips?: Prisma.tripsUpdateOneRequiredWithoutTrip_cargoNestedInput;
+};
+export type trip_cargoUncheckedUpdateWithoutPalletsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    trip_id?: Prisma.StringFieldUpdateOperationsInput | string;
+    delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoUncheckedUpdateManyWithoutPalletsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    trip_id?: Prisma.StringFieldUpdateOperationsInput | string;
+    delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoCreateManyTripsInput = {
+    id?: string;
+    pallet_id?: string | null;
+    delivery_note_id?: string | null;
+    loaded_at?: Date | string | null;
+    unloaded_at?: Date | string | null;
+};
+export type trip_cargoUpdateWithoutTripsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    delivery_notes?: Prisma.delivery_notesUpdateOneWithoutTrip_cargoNestedInput;
+    pallets?: Prisma.palletsUpdateOneWithoutTrip_cargoNestedInput;
+};
+export type trip_cargoUncheckedUpdateWithoutTripsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    pallet_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoUncheckedUpdateManyWithoutTripsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    pallet_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    loaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    unloaded_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type trip_cargoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    trip_id?: boolean;
+    pallet_id?: boolean;
+    delivery_note_id?: boolean;
+    loaded_at?: boolean;
+    unloaded_at?: boolean;
+    delivery_notes?: boolean | Prisma.trip_cargo$delivery_notesArgs<ExtArgs>;
+    pallets?: boolean | Prisma.trip_cargo$palletsArgs<ExtArgs>;
+    trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["trip_cargo"]>;
+export type trip_cargoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    trip_id?: boolean;
+    pallet_id?: boolean;
+    delivery_note_id?: boolean;
+    loaded_at?: boolean;
+    unloaded_at?: boolean;
+    delivery_notes?: boolean | Prisma.trip_cargo$delivery_notesArgs<ExtArgs>;
+    pallets?: boolean | Prisma.trip_cargo$palletsArgs<ExtArgs>;
+    trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["trip_cargo"]>;
+export type trip_cargoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    trip_id?: boolean;
+    pallet_id?: boolean;
+    delivery_note_id?: boolean;
+    loaded_at?: boolean;
+    unloaded_at?: boolean;
+    delivery_notes?: boolean | Prisma.trip_cargo$delivery_notesArgs<ExtArgs>;
+    pallets?: boolean | Prisma.trip_cargo$palletsArgs<ExtArgs>;
+    trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["trip_cargo"]>;
+export type trip_cargoSelectScalar = {
+    id?: boolean;
+    trip_id?: boolean;
+    pallet_id?: boolean;
+    delivery_note_id?: boolean;
+    loaded_at?: boolean;
+    unloaded_at?: boolean;
+};
+export type trip_cargoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trip_id" | "pallet_id" | "delivery_note_id" | "loaded_at" | "unloaded_at", ExtArgs["result"]["trip_cargo"]>;
+export type trip_cargoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    delivery_notes?: boolean | Prisma.trip_cargo$delivery_notesArgs<ExtArgs>;
+    pallets?: boolean | Prisma.trip_cargo$palletsArgs<ExtArgs>;
+    trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>;
+};
+export type trip_cargoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    delivery_notes?: boolean | Prisma.trip_cargo$delivery_notesArgs<ExtArgs>;
+    pallets?: boolean | Prisma.trip_cargo$palletsArgs<ExtArgs>;
+    trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>;
+};
+export type trip_cargoIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    delivery_notes?: boolean | Prisma.trip_cargo$delivery_notesArgs<ExtArgs>;
+    pallets?: boolean | Prisma.trip_cargo$palletsArgs<ExtArgs>;
+    trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>;
+};
+export type $trip_cargoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "trip_cargo";
+    objects: {
+        delivery_notes: Prisma.$delivery_notesPayload<ExtArgs> | null;
+        pallets: Prisma.$palletsPayload<ExtArgs> | null;
+        trips: Prisma.$tripsPayload<ExtArgs>;
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        id: string;
+        trip_id: string;
+        pallet_id: string | null;
+        delivery_note_id: string | null;
+        loaded_at: Date | null;
+        unloaded_at: Date | null;
+    }, ExtArgs["result"]["trip_cargo"]>;
+    composites: {};
+};
+export type trip_cargoGetPayload<S extends boolean | null | undefined | trip_cargoDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload, S>;
+export type trip_cargoCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<trip_cargoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: Trip_cargoCountAggregateInputType | true;
+};
+export interface trip_cargoDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['trip_cargo'];
+        meta: {
+            name: 'trip_cargo';
+        };
+    };
+    findUnique<T extends trip_cargoFindUniqueArgs>(args: Prisma.SelectSubset<T, trip_cargoFindUniqueArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends trip_cargoFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, trip_cargoFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends trip_cargoFindFirstArgs>(args?: Prisma.SelectSubset<T, trip_cargoFindFirstArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends trip_cargoFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, trip_cargoFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends trip_cargoFindManyArgs>(args?: Prisma.SelectSubset<T, trip_cargoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends trip_cargoCreateArgs>(args: Prisma.SelectSubset<T, trip_cargoCreateArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createMany<T extends trip_cargoCreateManyArgs>(args?: Prisma.SelectSubset<T, trip_cargoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    createManyAndReturn<T extends trip_cargoCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, trip_cargoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends trip_cargoDeleteArgs>(args: Prisma.SelectSubset<T, trip_cargoDeleteArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends trip_cargoUpdateArgs>(args: Prisma.SelectSubset<T, trip_cargoUpdateArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    deleteMany<T extends trip_cargoDeleteManyArgs>(args?: Prisma.SelectSubset<T, trip_cargoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    updateMany<T extends trip_cargoUpdateManyArgs>(args: Prisma.SelectSubset<T, trip_cargoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    updateManyAndReturn<T extends trip_cargoUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, trip_cargoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends trip_cargoUpsertArgs>(args: Prisma.SelectSubset<T, trip_cargoUpsertArgs<ExtArgs>>): Prisma.Prisma__trip_cargoClient<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    count<T extends trip_cargoCountArgs>(args?: Prisma.Subset<T, trip_cargoCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Trip_cargoCountAggregateOutputType> : number>;
+    aggregate<T extends Trip_cargoAggregateArgs>(args: Prisma.Subset<T, Trip_cargoAggregateArgs>): Prisma.PrismaPromise<GetTrip_cargoAggregateType<T>>;
+    groupBy<T extends trip_cargoGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: trip_cargoGroupByArgs['orderBy'];
+    } : {
+        orderBy?: trip_cargoGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, trip_cargoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTrip_cargoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    readonly fields: trip_cargoFieldRefs;
+}
+export interface Prisma__trip_cargoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    delivery_notes<T extends Prisma.trip_cargo$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trip_cargo$delivery_notesArgs<ExtArgs>>): Prisma.Prisma__delivery_notesClient<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    pallets<T extends Prisma.trip_cargo$palletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trip_cargo$palletsArgs<ExtArgs>>): Prisma.Prisma__palletsClient<runtime.Types.Result.GetResult<Prisma.$palletsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    trips<T extends Prisma.tripsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tripsDefaultArgs<ExtArgs>>): Prisma.Prisma__tripsClient<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+export interface trip_cargoFieldRefs {
+    readonly id: Prisma.FieldRef<"trip_cargo", 'String'>;
+    readonly trip_id: Prisma.FieldRef<"trip_cargo", 'String'>;
+    readonly pallet_id: Prisma.FieldRef<"trip_cargo", 'String'>;
+    readonly delivery_note_id: Prisma.FieldRef<"trip_cargo", 'String'>;
+    readonly loaded_at: Prisma.FieldRef<"trip_cargo", 'DateTime'>;
+    readonly unloaded_at: Prisma.FieldRef<"trip_cargo", 'DateTime'>;
+}
+export type trip_cargoFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where: Prisma.trip_cargoWhereUniqueInput;
+};
+export type trip_cargoFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where: Prisma.trip_cargoWhereUniqueInput;
+};
+export type trip_cargoFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where?: Prisma.trip_cargoWhereInput;
+    orderBy?: Prisma.trip_cargoOrderByWithRelationInput | Prisma.trip_cargoOrderByWithRelationInput[];
+    cursor?: Prisma.trip_cargoWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Trip_cargoScalarFieldEnum | Prisma.Trip_cargoScalarFieldEnum[];
+};
+export type trip_cargoFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where?: Prisma.trip_cargoWhereInput;
+    orderBy?: Prisma.trip_cargoOrderByWithRelationInput | Prisma.trip_cargoOrderByWithRelationInput[];
+    cursor?: Prisma.trip_cargoWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Trip_cargoScalarFieldEnum | Prisma.Trip_cargoScalarFieldEnum[];
+};
+export type trip_cargoFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where?: Prisma.trip_cargoWhereInput;
+    orderBy?: Prisma.trip_cargoOrderByWithRelationInput | Prisma.trip_cargoOrderByWithRelationInput[];
+    cursor?: Prisma.trip_cargoWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Trip_cargoScalarFieldEnum | Prisma.Trip_cargoScalarFieldEnum[];
+};
+export type trip_cargoCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.trip_cargoCreateInput, Prisma.trip_cargoUncheckedCreateInput>;
+};
+export type trip_cargoCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    data: Prisma.trip_cargoCreateManyInput | Prisma.trip_cargoCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+export type trip_cargoCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelectCreateManyAndReturn<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    data: Prisma.trip_cargoCreateManyInput | Prisma.trip_cargoCreateManyInput[];
+    skipDuplicates?: boolean;
+    include?: Prisma.trip_cargoIncludeCreateManyAndReturn<ExtArgs> | null;
+};
+export type trip_cargoUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateInput, Prisma.trip_cargoUncheckedUpdateInput>;
+    where: Prisma.trip_cargoWhereUniqueInput;
+};
+export type trip_cargoUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    data: Prisma.XOR<Prisma.trip_cargoUpdateManyMutationInput, Prisma.trip_cargoUncheckedUpdateManyInput>;
+    where?: Prisma.trip_cargoWhereInput;
+    limit?: number;
+};
+export type trip_cargoUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelectUpdateManyAndReturn<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.trip_cargoUpdateManyMutationInput, Prisma.trip_cargoUncheckedUpdateManyInput>;
+    where?: Prisma.trip_cargoWhereInput;
+    limit?: number;
+    include?: Prisma.trip_cargoIncludeUpdateManyAndReturn<ExtArgs> | null;
+};
+export type trip_cargoUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where: Prisma.trip_cargoWhereUniqueInput;
+    create: Prisma.XOR<Prisma.trip_cargoCreateInput, Prisma.trip_cargoUncheckedCreateInput>;
+    update: Prisma.XOR<Prisma.trip_cargoUpdateInput, Prisma.trip_cargoUncheckedUpdateInput>;
+};
+export type trip_cargoDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+    where: Prisma.trip_cargoWhereUniqueInput;
+};
+export type trip_cargoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.trip_cargoWhereInput;
+    limit?: number;
+};
+export type trip_cargo$delivery_notesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.delivery_notesSelect<ExtArgs> | null;
+    omit?: Prisma.delivery_notesOmit<ExtArgs> | null;
+    include?: Prisma.delivery_notesInclude<ExtArgs> | null;
+    where?: Prisma.delivery_notesWhereInput;
+};
+export type trip_cargo$palletsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.palletsSelect<ExtArgs> | null;
+    omit?: Prisma.palletsOmit<ExtArgs> | null;
+    include?: Prisma.palletsInclude<ExtArgs> | null;
+    where?: Prisma.palletsWhereInput;
+};
+export type trip_cargoDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.trip_cargoSelect<ExtArgs> | null;
+    omit?: Prisma.trip_cargoOmit<ExtArgs> | null;
+    include?: Prisma.trip_cargoInclude<ExtArgs> | null;
+};

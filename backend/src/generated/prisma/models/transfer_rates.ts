@@ -190,7 +190,7 @@ export type transfer_ratesWhereInput = {
   description?: Prisma.StringNullableFilter<"transfer_rates"> | string | null
   active?: Prisma.BoolNullableFilter<"transfer_rates"> | boolean | null
   created_at?: Prisma.DateTimeNullableFilter<"transfer_rates"> | Date | string | null
-  trip_rates?: Prisma.Trip_ratesListRelationFilter
+  dispatch_rates?: Prisma.Dispatch_ratesListRelationFilter
 }
 
 export type transfer_ratesOrderByWithRelationInput = {
@@ -200,7 +200,7 @@ export type transfer_ratesOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  trip_rates?: Prisma.trip_ratesOrderByRelationAggregateInput
+  dispatch_rates?: Prisma.dispatch_ratesOrderByRelationAggregateInput
 }
 
 export type transfer_ratesWhereUniqueInput = Prisma.AtLeast<{
@@ -213,7 +213,7 @@ export type transfer_ratesWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"transfer_rates"> | string | null
   active?: Prisma.BoolNullableFilter<"transfer_rates"> | boolean | null
   created_at?: Prisma.DateTimeNullableFilter<"transfer_rates"> | Date | string | null
-  trip_rates?: Prisma.Trip_ratesListRelationFilter
+  dispatch_rates?: Prisma.Dispatch_ratesListRelationFilter
 }, "id">
 
 export type transfer_ratesOrderByWithAggregationInput = {
@@ -247,7 +247,7 @@ export type transfer_ratesCreateInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string | null
-  trip_rates?: Prisma.trip_ratesCreateNestedManyWithoutTransfer_ratesInput
+  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutTransfer_ratesInput
 }
 
 export type transfer_ratesUncheckedCreateInput = {
@@ -257,7 +257,7 @@ export type transfer_ratesUncheckedCreateInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string | null
-  trip_rates?: Prisma.trip_ratesUncheckedCreateNestedManyWithoutTransfer_ratesInput
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutTransfer_ratesInput
 }
 
 export type transfer_ratesUpdateInput = {
@@ -267,7 +267,7 @@ export type transfer_ratesUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  trip_rates?: Prisma.trip_ratesUpdateManyWithoutTransfer_ratesNestedInput
+  dispatch_rates?: Prisma.dispatch_ratesUpdateManyWithoutTransfer_ratesNestedInput
 }
 
 export type transfer_ratesUncheckedUpdateInput = {
@@ -277,7 +277,7 @@ export type transfer_ratesUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  trip_rates?: Prisma.trip_ratesUncheckedUpdateManyWithoutTransfer_ratesNestedInput
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesNestedInput
 }
 
 export type transfer_ratesCreateManyInput = {
@@ -339,21 +339,21 @@ export type Transfer_ratesScalarRelationFilter = {
   isNot?: Prisma.transfer_ratesWhereInput
 }
 
-export type transfer_ratesCreateNestedOneWithoutTrip_ratesInput = {
-  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutTrip_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutTrip_ratesInput>
-  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutTrip_ratesInput
+export type transfer_ratesCreateNestedOneWithoutDispatch_ratesInput = {
+  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutDispatch_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutDispatch_ratesInput>
+  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutDispatch_ratesInput
   connect?: Prisma.transfer_ratesWhereUniqueInput
 }
 
-export type transfer_ratesUpdateOneRequiredWithoutTrip_ratesNestedInput = {
-  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutTrip_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutTrip_ratesInput>
-  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutTrip_ratesInput
-  upsert?: Prisma.transfer_ratesUpsertWithoutTrip_ratesInput
+export type transfer_ratesUpdateOneRequiredWithoutDispatch_ratesNestedInput = {
+  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutDispatch_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutDispatch_ratesInput>
+  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutDispatch_ratesInput
+  upsert?: Prisma.transfer_ratesUpsertWithoutDispatch_ratesInput
   connect?: Prisma.transfer_ratesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.transfer_ratesUpdateToOneWithWhereWithoutTrip_ratesInput, Prisma.transfer_ratesUpdateWithoutTrip_ratesInput>, Prisma.transfer_ratesUncheckedUpdateWithoutTrip_ratesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.transfer_ratesUpdateToOneWithWhereWithoutDispatch_ratesInput, Prisma.transfer_ratesUpdateWithoutDispatch_ratesInput>, Prisma.transfer_ratesUncheckedUpdateWithoutDispatch_ratesInput>
 }
 
-export type transfer_ratesCreateWithoutTrip_ratesInput = {
+export type transfer_ratesCreateWithoutDispatch_ratesInput = {
   id?: string
   name: string
   rate_type: string
@@ -362,7 +362,7 @@ export type transfer_ratesCreateWithoutTrip_ratesInput = {
   created_at?: Date | string | null
 }
 
-export type transfer_ratesUncheckedCreateWithoutTrip_ratesInput = {
+export type transfer_ratesUncheckedCreateWithoutDispatch_ratesInput = {
   id?: string
   name: string
   rate_type: string
@@ -371,23 +371,23 @@ export type transfer_ratesUncheckedCreateWithoutTrip_ratesInput = {
   created_at?: Date | string | null
 }
 
-export type transfer_ratesCreateOrConnectWithoutTrip_ratesInput = {
+export type transfer_ratesCreateOrConnectWithoutDispatch_ratesInput = {
   where: Prisma.transfer_ratesWhereUniqueInput
-  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutTrip_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutTrip_ratesInput>
+  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutDispatch_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutDispatch_ratesInput>
 }
 
-export type transfer_ratesUpsertWithoutTrip_ratesInput = {
-  update: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutTrip_ratesInput, Prisma.transfer_ratesUncheckedUpdateWithoutTrip_ratesInput>
-  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutTrip_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutTrip_ratesInput>
+export type transfer_ratesUpsertWithoutDispatch_ratesInput = {
+  update: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutDispatch_ratesInput, Prisma.transfer_ratesUncheckedUpdateWithoutDispatch_ratesInput>
+  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutDispatch_ratesInput, Prisma.transfer_ratesUncheckedCreateWithoutDispatch_ratesInput>
   where?: Prisma.transfer_ratesWhereInput
 }
 
-export type transfer_ratesUpdateToOneWithWhereWithoutTrip_ratesInput = {
+export type transfer_ratesUpdateToOneWithWhereWithoutDispatch_ratesInput = {
   where?: Prisma.transfer_ratesWhereInput
-  data: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutTrip_ratesInput, Prisma.transfer_ratesUncheckedUpdateWithoutTrip_ratesInput>
+  data: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutDispatch_ratesInput, Prisma.transfer_ratesUncheckedUpdateWithoutDispatch_ratesInput>
 }
 
-export type transfer_ratesUpdateWithoutTrip_ratesInput = {
+export type transfer_ratesUpdateWithoutDispatch_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate_type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -396,7 +396,7 @@ export type transfer_ratesUpdateWithoutTrip_ratesInput = {
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type transfer_ratesUncheckedUpdateWithoutTrip_ratesInput = {
+export type transfer_ratesUncheckedUpdateWithoutDispatch_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate_type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -411,11 +411,11 @@ export type transfer_ratesUncheckedUpdateWithoutTrip_ratesInput = {
  */
 
 export type Transfer_ratesCountOutputType = {
-  trip_rates: number
+  dispatch_rates: number
 }
 
 export type Transfer_ratesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip_rates?: boolean | Transfer_ratesCountOutputTypeCountTrip_ratesArgs
+  dispatch_rates?: boolean | Transfer_ratesCountOutputTypeCountDispatch_ratesArgs
 }
 
 /**
@@ -431,8 +431,8 @@ export type Transfer_ratesCountOutputTypeDefaultArgs<ExtArgs extends runtime.Typ
 /**
  * Transfer_ratesCountOutputType without action
  */
-export type Transfer_ratesCountOutputTypeCountTrip_ratesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.trip_ratesWhereInput
+export type Transfer_ratesCountOutputTypeCountDispatch_ratesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.dispatch_ratesWhereInput
 }
 
 
@@ -443,7 +443,7 @@ export type transfer_ratesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   description?: boolean
   active?: boolean
   created_at?: boolean
-  trip_rates?: boolean | Prisma.transfer_rates$trip_ratesArgs<ExtArgs>
+  dispatch_rates?: boolean | Prisma.transfer_rates$dispatch_ratesArgs<ExtArgs>
   _count?: boolean | Prisma.Transfer_ratesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transfer_rates"]>
 
@@ -476,7 +476,7 @@ export type transfer_ratesSelectScalar = {
 
 export type transfer_ratesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "rate_type" | "description" | "active" | "created_at", ExtArgs["result"]["transfer_rates"]>
 export type transfer_ratesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip_rates?: boolean | Prisma.transfer_rates$trip_ratesArgs<ExtArgs>
+  dispatch_rates?: boolean | Prisma.transfer_rates$dispatch_ratesArgs<ExtArgs>
   _count?: boolean | Prisma.Transfer_ratesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type transfer_ratesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -485,7 +485,7 @@ export type transfer_ratesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type $transfer_ratesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "transfer_rates"
   objects: {
-    trip_rates: Prisma.$trip_ratesPayload<ExtArgs>[]
+    dispatch_rates: Prisma.$dispatch_ratesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -888,7 +888,7 @@ readonly fields: transfer_ratesFieldRefs;
  */
 export interface Prisma__transfer_ratesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  trip_rates<T extends Prisma.transfer_rates$trip_ratesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transfer_rates$trip_ratesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_ratesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispatch_rates<T extends Prisma.transfer_rates$dispatch_ratesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transfer_rates$dispatch_ratesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ratesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1317,27 +1317,27 @@ export type transfer_ratesDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * transfer_rates.trip_rates
+ * transfer_rates.dispatch_rates
  */
-export type transfer_rates$trip_ratesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type transfer_rates$dispatch_ratesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the trip_rates
+   * Select specific fields to fetch from the dispatch_rates
    */
-  select?: Prisma.trip_ratesSelect<ExtArgs> | null
+  select?: Prisma.dispatch_ratesSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the trip_rates
+   * Omit specific fields from the dispatch_rates
    */
-  omit?: Prisma.trip_ratesOmit<ExtArgs> | null
+  omit?: Prisma.dispatch_ratesOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.trip_ratesInclude<ExtArgs> | null
-  where?: Prisma.trip_ratesWhereInput
-  orderBy?: Prisma.trip_ratesOrderByWithRelationInput | Prisma.trip_ratesOrderByWithRelationInput[]
-  cursor?: Prisma.trip_ratesWhereUniqueInput
+  include?: Prisma.dispatch_ratesInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ratesWhereInput
+  orderBy?: Prisma.dispatch_ratesOrderByWithRelationInput | Prisma.dispatch_ratesOrderByWithRelationInput[]
+  cursor?: Prisma.dispatch_ratesWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.Trip_ratesScalarFieldEnum | Prisma.Trip_ratesScalarFieldEnum[]
+  distinct?: Prisma.Dispatch_ratesScalarFieldEnum | Prisma.Dispatch_ratesScalarFieldEnum[]
 }
 
 /**

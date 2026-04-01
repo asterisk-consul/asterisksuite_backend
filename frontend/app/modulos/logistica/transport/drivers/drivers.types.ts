@@ -5,7 +5,7 @@ export interface DriverDocument {
 
 export interface Driver {
   id: string
-  company_id: string
+
   first_name: string
   last_name: string
   document?: string
@@ -23,7 +23,6 @@ export interface Driver {
 }
 
 export interface CreateDriverInput {
-  company_id: string
   first_name: string
   last_name: string
   document?: string

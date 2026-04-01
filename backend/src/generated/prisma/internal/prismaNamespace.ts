@@ -422,7 +422,7 @@ export const ModelName = {
   documents_vehicle: 'documents_vehicle',
   documents_driver: 'documents_driver',
   transfer_rates: 'transfer_rates',
-  trip_rates: 'trip_rates',
+  dispatch_rates: 'dispatch_rates',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
   document_taxes: 'document_taxes',
@@ -445,7 +445,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "trip_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3261,77 +3261,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    trip_rates: {
-      payload: Prisma.$trip_ratesPayload<ExtArgs>
-      fields: Prisma.trip_ratesFieldRefs
+    dispatch_rates: {
+      payload: Prisma.$dispatch_ratesPayload<ExtArgs>
+      fields: Prisma.dispatch_ratesFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.trip_ratesFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload> | null
+          args: Prisma.dispatch_ratesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.trip_ratesFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+          args: Prisma.dispatch_ratesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>
         }
         findFirst: {
-          args: Prisma.trip_ratesFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload> | null
+          args: Prisma.dispatch_ratesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.trip_ratesFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+          args: Prisma.dispatch_ratesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>
         }
         findMany: {
-          args: Prisma.trip_ratesFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>[]
+          args: Prisma.dispatch_ratesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>[]
         }
         create: {
-          args: Prisma.trip_ratesCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+          args: Prisma.dispatch_ratesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>
         }
         createMany: {
-          args: Prisma.trip_ratesCreateManyArgs<ExtArgs>
+          args: Prisma.dispatch_ratesCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.trip_ratesCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>[]
+          args: Prisma.dispatch_ratesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>[]
         }
         delete: {
-          args: Prisma.trip_ratesDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+          args: Prisma.dispatch_ratesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>
         }
         update: {
-          args: Prisma.trip_ratesUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+          args: Prisma.dispatch_ratesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>
         }
         deleteMany: {
-          args: Prisma.trip_ratesDeleteManyArgs<ExtArgs>
+          args: Prisma.dispatch_ratesDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.trip_ratesUpdateManyArgs<ExtArgs>
+          args: Prisma.dispatch_ratesUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.trip_ratesUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>[]
+          args: Prisma.dispatch_ratesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>[]
         }
         upsert: {
-          args: Prisma.trip_ratesUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$trip_ratesPayload>
+          args: Prisma.dispatch_ratesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$dispatch_ratesPayload>
         }
         aggregate: {
-          args: Prisma.Trip_ratesAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTrip_rates>
+          args: Prisma.Dispatch_ratesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDispatch_rates>
         }
         groupBy: {
-          args: Prisma.trip_ratesGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Trip_ratesGroupByOutputType>[]
+          args: Prisma.dispatch_ratesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Dispatch_ratesGroupByOutputType>[]
         }
         count: {
-          args: Prisma.trip_ratesCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Trip_ratesCountAggregateOutputType> | number
+          args: Prisma.dispatch_ratesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Dispatch_ratesCountAggregateOutputType> | number
         }
       }
     }
@@ -4159,12 +4159,9 @@ export const TripsScalarFieldEnum = {
   id: 'id',
   reference_number: 'reference_number',
   week: 'week',
-  business_party_id: 'business_party_id',
   vehicle_combination_id: 'vehicle_combination_id',
   origin_warehouse_id: 'origin_warehouse_id',
   destination_warehouse_id: 'destination_warehouse_id',
-  origin_party_location_id: 'origin_party_location_id',
-  destination_party_location_id: 'destination_party_location_id',
   origin_location_id: 'origin_location_id',
   destination_location_id: 'destination_location_id',
   departure_time: 'departure_time',
@@ -4394,15 +4391,15 @@ export const Transfer_ratesScalarFieldEnum = {
 export type Transfer_ratesScalarFieldEnum = (typeof Transfer_ratesScalarFieldEnum)[keyof typeof Transfer_ratesScalarFieldEnum]
 
 
-export const Trip_ratesScalarFieldEnum = {
+export const Dispatch_ratesScalarFieldEnum = {
   id: 'id',
-  trip_id: 'trip_id',
+  dispatch_id: 'dispatch_id',
   rate_id: 'rate_id',
   value: 'value',
   created_at: 'created_at'
 } as const
 
-export type Trip_ratesScalarFieldEnum = (typeof Trip_ratesScalarFieldEnum)[keyof typeof Trip_ratesScalarFieldEnum]
+export type Dispatch_ratesScalarFieldEnum = (typeof Dispatch_ratesScalarFieldEnum)[keyof typeof Dispatch_ratesScalarFieldEnum]
 
 
 export const Document_item_taxesScalarFieldEnum = {
@@ -4741,7 +4738,7 @@ export type GlobalOmitConfig = {
   documents_vehicle?: Prisma.documents_vehicleOmit
   documents_driver?: Prisma.documents_driverOmit
   transfer_rates?: Prisma.transfer_ratesOmit
-  trip_rates?: Prisma.trip_ratesOmit
+  dispatch_rates?: Prisma.dispatch_ratesOmit
   document_item_taxes?: Prisma.document_item_taxesOmit
   document_items?: Prisma.document_itemsOmit
   document_taxes?: Prisma.document_taxesOmit

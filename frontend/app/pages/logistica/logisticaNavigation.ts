@@ -5,23 +5,28 @@ export const links: NavigationMenuItem[][] = [
     {
       label: 'Viajes',
       icon: 'i-heroicons-truck',
-      to: '/logistica/transport/trips',
+      to: '/logistica/viajes/',
       defaultOpen: false,
       children: [
         {
+          label: 'Orden de despacho',
+          icon: 'i-heroicons-truck',
+          to: '/logistica/viajes/dispatch-orders'
+        },
+        {
           label: 'Corredores',
           icon: 'i-lucide-map',
-          to: '/logistica/transport/corridors/'
+          to: '/logistica/viajes/corridors/'
         },
         {
           label: 'Choferes',
           icon: 'i-heroicons-users',
-          to: '/logistica/transport/drivers/'
+          to: '/logistica/viajes/drivers/'
         },
         {
           label: 'Locaciones',
           icon: 'i-lucide-map-pin',
-          to: '/logistica/master-data/locaciones/'
+          to: '/logistica/viajes/locaciones/'
         }
       ]
     },
@@ -34,51 +39,43 @@ export const links: NavigationMenuItem[][] = [
         {
           label: 'Productos',
           icon: 'i-heroicons-cube',
-          to: '/logistica/master-data/productos/'
+          to: '/logistica/warehouse/productos/'
         }
       ]
     },
-    {
-      label: 'Picking',
-      icon: 'i-heroicons-clipboard-document-list',
-      to: '/'
-    },
-    { label: 'Stock', icon: 'i-heroicons-archive-box', to: '/' },
+    // {
+    //   label: 'Picking',
+    //   icon: 'i-heroicons-clipboard-document-list',
+    //   to: '/'
+    // },
     {
       label: 'Flota',
       icon: 'i-heroicons-wrench-screwdriver',
-      to: '/logistica/transport/vehicles-combinations/',
+      to: '/logistica/vehicles-combinations/',
       children: [
         {
           label: 'Vehículos',
           icon: 'i-lucide-bus-front',
-          to: '/logistica/transport/vehicles/'
+          to: '/logistica/vehicles-combinations/vehicles/'
         }
       ]
     },
     {
       label: 'Clientes',
       icon: 'i-heroicons-building-office-2',
-      to: '/logistica/master-data/business-parties/',
+      to: '/logistica/business-parties/',
       children: [
         {
           label: 'Contactos',
           icon: 'i-heroicons-users',
-          to: '/logistica/master-data/contacts/'
+          to: '/logistica/business-parties/contacts/'
         }
       ]
     },
     {
       label: 'Reportes',
       icon: 'i-heroicons-chart-bar',
-      to: '/logistica/master-data/ReporteBipages/',
-      children: [
-        {
-          label: 'Logistica trips BI',
-          icon: 'i-heroicons-chart-bar',
-          to: '/logistica/master-data/ReporteBipages/'
-        }
-      ]
+      to: '/reportes/ReporteBipages/'
     },
     {
       label: 'Configuraciones',
@@ -87,12 +84,12 @@ export const links: NavigationMenuItem[][] = [
         {
           label: 'Documentacion de transporte',
           icon: 'i-heroicons-book-open',
-          to: '/logistica/transport-document/'
+          to: '/logistica/configuraciones/transport-document/'
         },
         {
           label: 'Tarifas',
           icon: 'i-heroicons-banknotes',
-          to: '/logistica/master-data/tarifas/'
+          to: '/logistica/configuraciones/tarifas/'
         }
       ]
     }

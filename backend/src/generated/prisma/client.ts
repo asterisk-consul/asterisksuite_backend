@@ -230,10 +230,10 @@ export type documents_driver = Prisma.documents_driverModel
  */
 export type transfer_rates = Prisma.transfer_ratesModel
 /**
- * Model trip_rates
+ * Model dispatch_rates
  * 
  */
-export type trip_rates = Prisma.trip_ratesModel
+export type dispatch_rates = Prisma.dispatch_ratesModel
 /**
  * Model document_item_taxes
  * 

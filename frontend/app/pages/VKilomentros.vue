@@ -255,7 +255,7 @@ const hasPairsDetected = computed(() => csvStore.detectedPairs.length > 0)
               <UButton
                 variant="outline"
                 color="primary"
-                class="w-full justify-start min-h-[38px] h-auto py-1.5"
+                class="w-full justify-start min-h-9.5 h-auto py-1.5"
                 block
               >
                 <div class="flex items-center gap-1 flex-wrap w-full">

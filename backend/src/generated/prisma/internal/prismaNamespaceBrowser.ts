@@ -89,7 +89,7 @@ export const ModelName = {
   documents_vehicle: 'documents_vehicle',
   documents_driver: 'documents_driver',
   transfer_rates: 'transfer_rates',
-  trip_rates: 'trip_rates',
+  dispatch_rates: 'dispatch_rates',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
   document_taxes: 'document_taxes',
@@ -382,12 +382,9 @@ export const TripsScalarFieldEnum = {
   id: 'id',
   reference_number: 'reference_number',
   week: 'week',
-  business_party_id: 'business_party_id',
   vehicle_combination_id: 'vehicle_combination_id',
   origin_warehouse_id: 'origin_warehouse_id',
   destination_warehouse_id: 'destination_warehouse_id',
-  origin_party_location_id: 'origin_party_location_id',
-  destination_party_location_id: 'destination_party_location_id',
   origin_location_id: 'origin_location_id',
   destination_location_id: 'destination_location_id',
   departure_time: 'departure_time',
@@ -617,15 +614,15 @@ export const Transfer_ratesScalarFieldEnum = {
 export type Transfer_ratesScalarFieldEnum = (typeof Transfer_ratesScalarFieldEnum)[keyof typeof Transfer_ratesScalarFieldEnum]
 
 
-export const Trip_ratesScalarFieldEnum = {
+export const Dispatch_ratesScalarFieldEnum = {
   id: 'id',
-  trip_id: 'trip_id',
+  dispatch_id: 'dispatch_id',
   rate_id: 'rate_id',
   value: 'value',
   created_at: 'created_at'
 } as const
 
-export type Trip_ratesScalarFieldEnum = (typeof Trip_ratesScalarFieldEnum)[keyof typeof Trip_ratesScalarFieldEnum]
+export type Dispatch_ratesScalarFieldEnum = (typeof Dispatch_ratesScalarFieldEnum)[keyof typeof Dispatch_ratesScalarFieldEnum]
 
 
 export const Document_item_taxesScalarFieldEnum = {

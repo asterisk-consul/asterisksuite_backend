@@ -1,111 +1,107 @@
-import { h } from 'vue'
-import { UBadge } from '#components'
 import type { TableColumn } from '@nuxt/ui'
-import type { VehicleCombination } from '~/modulos/logistica/transport/vehicles-combinations/vehicles-combinations.types'
-import {
-  useInlineEdit,
-  type EditableValue
-} from '~/composables/table/useInlineEdit'
-type Row = VehicleCombination
+import type { VehicleCombination } from '~/modulos/logistica/transport/vehicles-combinations/types/vehicles-combinations.types'
 import StatusToggle from '@/components/ui/PopoverTableActive.vue'
 
-type OptionValue = string | boolean
-
-type EditableField = 'unit_number'
-
+import { createTableBuilder } from '@/composables/table/createColumns'
 import { useSelectColumn } from '@/composables/table/useSelectColumn'
 import { useIdColumn } from '@/composables/table/useIdColumn'
-import { useDateColumn } from '~/composables/table/useDateColumn'
 
-const { editableCell } = useInlineEdit<VehicleCombination, EditableField>()
-const createdDate = useDateColumn('es-AR')
+type Row = VehicleCombination
 
 export const VehicleCombinationColumns = (actions: {
-  onInlineSave?: (row: Row, field: EditableField, value: EditableValue) => void
+  onInlineSave?: (row: Row, field: 'unit_number', value: any) => void
   onToggleActive?: (row: Row, value: boolean) => void
   onEdit?: (row: Row) => void
-}): TableColumn<Row>[] => [
-  // ♻️ si querés selección múltiple
-  useSelectColumn<Row>(),
+}): TableColumn<Row>[] => {
+  const build = createTableBuilder<Row>({ locale: 'es-AR' })
 
-  // ♻️ si Driver tiene id:string y querés click para editar
-  useIdColumn<Row>(actions.onEdit),
+  return [
+    useSelectColumn<Row>(),
+    useIdColumn<Row>(actions.onEdit),
 
-  {
-    accessorKey: 'unit_number',
-    header: 'N° Unidad',
-    cell: ({ row }) => editableCell('unit_number', row.original, actions)
-  },
+    ...build([
+      {
+        key: 'unit_number',
+        label: 'N° Unidad',
+        sortable: true,
+        editable: true,
+        editField: 'unit_number'
+      },
 
-  {
-    accessorKey: 'status',
-    header: 'Estado',
-    cell: ({ row }) =>
-      h(StatusToggle, {
-        modelValue:
-          !row.original.valid_until ||
-          new Date(row.original.valid_until) >= new Date(),
-        title: 'Cambiar estado',
-        options: [
-          { label: 'Activo', value: true, color: 'success' },
-          { label: 'Histórico', value: false, color: 'neutral' }
-        ],
-        'onUpdate:modelValue': (value: OptionValue) =>
-          actions.onToggleActive?.(row.original, value as boolean)
-      })
-  },
-  {
-    id: 'tractor',
-    header: 'Tractor',
-    cell: ({ row }) => {
-      const t = row.original.tractor
-      if (!t) return '—'
+      {
+        key: 'status',
+        label: 'Estado',
+        sortable: true,
 
-      // Solo añadir guion si hay brand o model
-      const details = [t.brand, t.model].filter(Boolean).join(' ')
-      return details ? `${t.plate} - ${details}` : t.plate
-    }
-  },
-  {
-    id: 'trailer',
-    header: 'Trailer',
-    cell: ({ row }) => {
-      const t = row.original.trailer
-      if (!t) return '—'
+        enum: {
+          options: [
+            { label: 'Activo', value: true, color: 'success' },
+            { label: 'Histórico', value: false, color: 'neutral' }
+          ],
+          toggle: {
+            component: StatusToggle,
+            title: 'Cambiar estado',
+            onChange: (row) => {
+              const isActive =
+                !row.valid_until || new Date(row.valid_until) >= new Date()
 
-      const details = [t.brand, t.model].filter(Boolean).join(' ')
-      return details ? `${t.plate} - ${details}` : t.plate
-    }
-  },
-  {
-    id: 'driver',
-    header: 'Chofer',
-    cell: ({ row }) => {
-      const d = row.original.drivers
+              actions.onToggleActive?.(row, !isActive)
+            }
+          }
+        }
+      },
 
-      return d ? `${d.first_name} ${d.last_name}` : '—'
-    }
-  },
+      {
+        id: 'tractor',
+        label: 'Tractor',
+        cell: ({ row }) => {
+          const t = row.original.tractor
+          if (!t) return '—'
+          const details = [t.brand, t.model].filter(Boolean).join(' ')
+          return details ? `${t.plate} - ${details}` : t.plate
+        }
+      },
 
-  {
-    accessorKey: 'valid_from', // 👈 camelCase si normalizaste API
-    header: 'Válido desde',
-    meta: createdDate.meta,
-    filterFn: createdDate.filterFn,
-    cell: ({ row }) => createdDate.format(row.getValue<string>('valid_from'))
-  },
-  {
-    accessorKey: 'valid_until', // 👈 camelCase si normalizaste API
-    header: 'Válido hasta',
-    meta: createdDate.meta,
-    filterFn: createdDate.filterFn,
-    cell: ({ row }) => createdDate.format(row.getValue<string>('valid_until'))
-  },
-  {
-    accessorKey: 'created_at', // 👈 camelCase si normalizaste API
-    header: 'Creado',
-    meta: createdDate.meta,
-    filterFn: createdDate.filterFn,
-    cell: ({ row }) => createdDate.format(row.getValue<string>('created_at'))
-  }
-]
+      {
+        id: 'trailer',
+        label: 'Trailer',
+        cell: ({ row }) => {
+          const t = row.original.trailer
+          if (!t) return '—'
+          const details = [t.brand, t.model].filter(Boolean).join(' ')
+          return details ? `${t.plate} - ${details}` : t.plate
+        }
+      },
+
+      {
+        id: 'driver',
+        label: 'Chofer',
+        cell: ({ row }) => {
+          const d = row.original.drivers
+          return d ? `${d.first_name} ${d.last_name}` : '—'
+        }
+      },
+
+      {
+        key: 'valid_from',
+        label: 'Válido desde',
+        sortable: true,
+        date: true
+      },
+
+      {
+        key: 'valid_until',
+        label: 'Válido hasta',
+        sortable: true,
+        date: true
+      },
+
+      {
+        key: 'created_at',
+        label: 'Creado',
+        sortable: true,
+        date: true
+      }
+    ])
+  ]
+}

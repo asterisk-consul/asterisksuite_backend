@@ -32,11 +32,10 @@ export const useBusinessPartiesStore = defineStore('businessParties', () => {
   // =========================
   // LOAD ALL
   // =========================
-  const fetchAll = async (companyId: string) => {
+  const fetchAll = async () => {
     try {
       loading.value = true
-      currentCompanyId.value = companyId
-      items.value = await service.findAll(companyId)
+      items.value = await service.findAll()
     } finally {
       loading.value = false
     }

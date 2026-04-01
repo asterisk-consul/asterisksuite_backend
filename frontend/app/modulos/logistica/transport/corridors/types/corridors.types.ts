@@ -23,7 +23,6 @@ export interface CorridorStop extends CorridorStopDto {
 // ==========================================
 
 export interface CreateCorridorDto {
-  company_id: string
   name?: string
   origin_location_id: string
   destination_location_id: string

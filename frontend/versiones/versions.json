@@ -122,5 +122,43 @@
         "version": "1.1.6-alpha"
       }
     ]
+  },
+  {
+    "version": "0.3.5-alpha",
+    "date": "2026-03-31",
+    "stage": "alpha",
+    "notes": "Refactor de updates en clientes, unidades y viajes",
+    "changes": [
+      {
+        "title": "Correccion de trips de corredores",
+        "type": "fix"
+      },
+      {
+        "title": "Se crea boton crear para crea desde cualquier parte de logistica",
+        "type": "changed"
+      },
+      {
+        "title": "Se crea tabla dispach-order(Ordenes de Despacho) y se crea la vista de la misma en el frontend",
+        "type": "changed"
+      },
+      {
+        "title": "Se agrega a las tablas la posibilidad de ordenar por columnas, se agrega la posibilidad de seleccionar las columnas a mostrar",
+        "type": "changed"
+      },
+      {
+        "title": "Se acomoda el navegadro de logistica",
+        "type": "changed"
+      },
+      {
+        "title": "Se agrega Breadcumps a las vistas de logistica, pemitiendo navegar entre vistas",
+        "type": "changed"
+      }
+    ],
+    "modules": [
+      {
+        "name": "transporte",
+        "version": "2.1.2-alpha"
+      }
+    ]
   }
 ]

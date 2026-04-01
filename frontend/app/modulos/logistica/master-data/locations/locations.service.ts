@@ -5,7 +5,7 @@ import type {
 } from '~/modulos/logistica/master-data/locations/types/locations.types'
 
 export const useLocationsService = () => {
-  const apiBase = 'api/logistica/transport/locations'
+  const apiBase = '/api/logistica/transport/locations'
   const getAll = () => $fetch<Location[]>(`${apiBase}`)
 
   const getOne = (id: string) => $fetch<Location>(`${apiBase}/${id}`)

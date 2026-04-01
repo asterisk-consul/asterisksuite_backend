@@ -8,8 +8,6 @@ import type {
   CreateCorridorDto
 } from '~/modulos/logistica/transport/corridors/types/corridors.types'
 
-const COMPANY_ID = 'a060f7ff-0281-4df4-b5b3-cbdf940be31e'
-
 const props = defineProps<{
   corridor?: CorridorWithRelations
 }>()
@@ -25,7 +23,6 @@ const { items: locations } = storeToRefs(locationsStore)
 const isEdit = computed(() => !!props.corridor)
 
 const form = reactive<CreateCorridorDto>({
-  company_id: COMPANY_ID,
   name: props.corridor?.name ?? '',
   origin_location_id: props.corridor?.origin_location_id ?? '',
   destination_location_id: props.corridor?.destination_location_id ?? '',

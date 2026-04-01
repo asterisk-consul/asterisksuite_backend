@@ -19,6 +19,7 @@ const open = defineModel<boolean>('open', { default: false })
 const store = useCorridorsStore()
 
 const submit = async (dto: CreateCorridorDto) => {
+  console.log(dto)
   const result = props.corridor
     ? await store.updateCorridor(props.corridor.id, dto)
     : await store.createCorridor(dto)

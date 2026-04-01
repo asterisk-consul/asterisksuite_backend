@@ -1,10 +1,10 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { ref, computed, watch, onMounted } from 'vue'
 import { getPaginationRowModel } from '@tanstack/vue-table'
-import { useDebounceFn } from '@vueuse/core'
 import type { TableColumn } from '@nuxt/ui'
 import type { ComponentPublicInstance } from 'vue'
 
+import { useColumnVisibility } from '@/composables/table/useColumnVisibility'
 import DeleteConfirmModal from './DeleteConfirmModal.vue'
 import TableSelectionBar from './TableSelectionBar.vue'
 import DateRangePicker, {
@@ -14,6 +14,7 @@ import DateRangePicker, {
 /* ========================
    Tipos
 ======================== */
+
 type FilterType = 'text' | 'date-range'
 
 type ExtendedColumn<T> = TableColumn<T> & {
@@ -43,10 +44,21 @@ interface TableApi<T> {
   getColumn: (id: string) =>
     | {
         setFilterValue: (v: unknown) => void
+        toggleVisibility?: (value?: boolean) => void
+        getIsVisible?: () => boolean
+        getCanHide?: () => boolean
       }
     | undefined
 
   setGlobalFilter: (v: unknown) => void
+
+  // 👇 🔥 ESTO ES LO QUE FALTA
+  getAllColumns: () => Array<{
+    id: string
+    getIsVisible: () => boolean
+    getCanHide: () => boolean
+    toggleVisibility: (value?: boolean) => void
+  }>
 }
 interface UTableInstance<T> extends ComponentPublicInstance {
   tableApi: TableApi<T> | null
@@ -71,7 +83,7 @@ const emit = defineEmits<{
 const table = useTemplateRef<UTableInstance<T>>('table')
 const rowSelection = ref<Record<string, boolean>>({})
 const showDeleteModal = ref(false)
-
+const { columnVisibility, columnVisibilityItems } = useColumnVisibility(table)
 /* ========================
    Filtros dinámicos
 ======================== */
@@ -86,12 +98,13 @@ const searchRange = ref<DateRange>({
 
 const columnFilters = ref<any[]>([])
 const globalFilter = ref<string>('')
-
 const filterableColumns = computed(() =>
   props.columns
     .filter((c) => c.accessorKey)
-    .map((c) => ({
-      label: String((c as any).header ?? c.accessorKey),
+    .map((c: any) => ({
+      label:
+        c.meta?.label ??
+        (typeof c.header === 'string' ? c.header : c.accessorKey),
       value: String(c.accessorKey)
     }))
 )
@@ -240,20 +253,32 @@ function confirmDelete(): void {
 <template>
   <div class="flex-1 w-full pb-20">
     <!-- Buscador dinámico -->
-    <div class="flex items-center gap-2 px-4 py-3.5 border-b border-accented">
-      <USelect v-model="selectedColumn" :items="columnOptions" class="w-44" />
+    <div
+      class="flex items-center justify-between gap-2 py-3.5 border-b border-accented"
+    >
+      <div class="flex items-center gap-2">
+        <USelect v-model="selectedColumn" :items="columnOptions" class="w-44" />
 
-      <!-- Texto -->
-      <UInput
-        v-if="!isDateRangeFilter"
-        v-model="searchText"
-        placeholder="Buscar..."
-        class="max-w-sm"
-        icon="i-lucide-search"
-      />
+        <!-- Texto -->
+        <UInput
+          v-if="!isDateRangeFilter"
+          v-model="searchText"
+          placeholder="Buscar..."
+          class="max-w-sm"
+          icon="i-lucide-search"
+        />
 
-      <!-- Rango fechas -->
-      <DateRangePicker v-else v-model="searchRange" />
+        <!-- Rango fechas -->
+        <DateRangePicker v-else v-model="searchRange" />
+      </div>
+      <UDropdownMenu :items="columnVisibilityItems" :content="{ align: 'end' }">
+        <UButton
+          label="Display"
+          color="neutral"
+          variant="outline"
+          trailing-icon="i-lucide-settings-2"
+        />
+      </UDropdownMenu>
     </div>
 
     <!-- Tabla -->
@@ -261,6 +286,7 @@ function confirmDelete(): void {
       ref="table"
       v-model:pagination="pagination"
       v-model:row-selection="rowSelection"
+      v-model:column-visibility="columnVisibility"
       v-model:column-filters="columnFilters"
       v-model:global-filter="globalFilter"
       sticky

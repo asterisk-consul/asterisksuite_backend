@@ -184,8 +184,6 @@ export type party_locationsWhereInput = {
   created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
   locations?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   business_parties?: Prisma.XOR<Prisma.Business_partiesScalarRelationFilter, Prisma.business_partiesWhereInput>
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.TripsListRelationFilter
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.TripsListRelationFilter
 }
 
 export type party_locationsOrderByWithRelationInput = {
@@ -196,8 +194,6 @@ export type party_locationsOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   locations?: Prisma.locationsOrderByWithRelationInput
   business_parties?: Prisma.business_partiesOrderByWithRelationInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsOrderByRelationAggregateInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsOrderByRelationAggregateInput
 }
 
 export type party_locationsWhereUniqueInput = Prisma.AtLeast<{
@@ -211,8 +207,6 @@ export type party_locationsWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
   locations?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   business_parties?: Prisma.XOR<Prisma.Business_partiesScalarRelationFilter, Prisma.business_partiesWhereInput>
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.TripsListRelationFilter
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.TripsListRelationFilter
 }, "id">
 
 export type party_locationsOrderByWithAggregationInput = {
@@ -243,8 +237,6 @@ export type party_locationsCreateInput = {
   created_at?: Date | string
   locations: Prisma.locationsCreateNestedOneWithoutParty_locationsInput
   business_parties: Prisma.business_partiesCreateNestedOneWithoutParty_locationsInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
 }
 
 export type party_locationsUncheckedCreateInput = {
@@ -253,8 +245,6 @@ export type party_locationsUncheckedCreateInput = {
   location_id: string
   label?: string | null
   created_at?: Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
 }
 
 export type party_locationsUpdateInput = {
@@ -263,8 +253,6 @@ export type party_locationsUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   locations?: Prisma.locationsUpdateOneRequiredWithoutParty_locationsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneRequiredWithoutParty_locationsNestedInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
 }
 
 export type party_locationsUncheckedUpdateInput = {
@@ -273,8 +261,6 @@ export type party_locationsUncheckedUpdateInput = {
   location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
 }
 
 export type party_locationsCreateManyInput = {
@@ -331,11 +317,6 @@ export type party_locationsMinOrderByAggregateInput = {
   location_id?: Prisma.SortOrder
   label?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-}
-
-export type Party_locationsNullableScalarRelationFilter = {
-  is?: Prisma.party_locationsWhereInput | null
-  isNot?: Prisma.party_locationsWhereInput | null
 }
 
 export type party_locationsCreateNestedManyWithoutBusiness_partiesInput = {
@@ -422,45 +403,11 @@ export type party_locationsUncheckedUpdateManyWithoutLocationsNestedInput = {
   deleteMany?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
 }
 
-export type party_locationsCreateNestedOneWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutTrips_trips_destination_party_location_idToparty_locationsInput
-  connect?: Prisma.party_locationsWhereUniqueInput
-}
-
-export type party_locationsCreateNestedOneWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutTrips_trips_origin_party_location_idToparty_locationsInput
-  connect?: Prisma.party_locationsWhereUniqueInput
-}
-
-export type party_locationsUpdateOneWithoutTrips_trips_destination_party_location_idToparty_locationsNestedInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutTrips_trips_destination_party_location_idToparty_locationsInput
-  upsert?: Prisma.party_locationsUpsertWithoutTrips_trips_destination_party_location_idToparty_locationsInput
-  disconnect?: Prisma.party_locationsWhereInput | boolean
-  delete?: Prisma.party_locationsWhereInput | boolean
-  connect?: Prisma.party_locationsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.party_locationsUpdateToOneWithWhereWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>, Prisma.party_locationsUncheckedUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-}
-
-export type party_locationsUpdateOneWithoutTrips_trips_origin_party_location_idToparty_locationsNestedInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutTrips_trips_origin_party_location_idToparty_locationsInput
-  upsert?: Prisma.party_locationsUpsertWithoutTrips_trips_origin_party_location_idToparty_locationsInput
-  disconnect?: Prisma.party_locationsWhereInput | boolean
-  delete?: Prisma.party_locationsWhereInput | boolean
-  connect?: Prisma.party_locationsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.party_locationsUpdateToOneWithWhereWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>, Prisma.party_locationsUncheckedUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-}
-
 export type party_locationsCreateWithoutBusiness_partiesInput = {
   id?: string
   label?: string | null
   created_at?: Date | string
   locations: Prisma.locationsCreateNestedOneWithoutParty_locationsInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
 }
 
 export type party_locationsUncheckedCreateWithoutBusiness_partiesInput = {
@@ -468,8 +415,6 @@ export type party_locationsUncheckedCreateWithoutBusiness_partiesInput = {
   location_id: string
   label?: string | null
   created_at?: Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
 }
 
 export type party_locationsCreateOrConnectWithoutBusiness_partiesInput = {
@@ -514,8 +459,6 @@ export type party_locationsCreateWithoutLocationsInput = {
   label?: string | null
   created_at?: Date | string
   business_parties: Prisma.business_partiesCreateNestedOneWithoutParty_locationsInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
 }
 
 export type party_locationsUncheckedCreateWithoutLocationsInput = {
@@ -523,8 +466,6 @@ export type party_locationsUncheckedCreateWithoutLocationsInput = {
   party_id: string
   label?: string | null
   created_at?: Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
 }
 
 export type party_locationsCreateOrConnectWithoutLocationsInput = {
@@ -553,110 +494,6 @@ export type party_locationsUpdateManyWithWhereWithoutLocationsInput = {
   data: Prisma.XOR<Prisma.party_locationsUpdateManyMutationInput, Prisma.party_locationsUncheckedUpdateManyWithoutLocationsInput>
 }
 
-export type party_locationsCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  id?: string
-  label?: string | null
-  created_at?: Date | string
-  locations: Prisma.locationsCreateNestedOneWithoutParty_locationsInput
-  business_parties: Prisma.business_partiesCreateNestedOneWithoutParty_locationsInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
-}
-
-export type party_locationsUncheckedCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  id?: string
-  party_id: string
-  location_id: string
-  label?: string | null
-  created_at?: Date | string
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsInput
-}
-
-export type party_locationsCreateOrConnectWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  where: Prisma.party_locationsWhereUniqueInput
-  create: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-}
-
-export type party_locationsCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  id?: string
-  label?: string | null
-  created_at?: Date | string
-  locations: Prisma.locationsCreateNestedOneWithoutParty_locationsInput
-  business_parties: Prisma.business_partiesCreateNestedOneWithoutParty_locationsInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-}
-
-export type party_locationsUncheckedCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  id?: string
-  party_id: string
-  location_id: string
-  label?: string | null
-  created_at?: Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedCreateNestedManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsInput
-}
-
-export type party_locationsCreateOrConnectWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  where: Prisma.party_locationsWhereUniqueInput
-  create: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-}
-
-export type party_locationsUpsertWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  update: Prisma.XOR<Prisma.party_locationsUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-  create: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-  where?: Prisma.party_locationsWhereInput
-}
-
-export type party_locationsUpdateToOneWithWhereWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  where?: Prisma.party_locationsWhereInput
-  data: Prisma.XOR<Prisma.party_locationsUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput>
-}
-
-export type party_locationsUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  locations?: Prisma.locationsUpdateOneRequiredWithoutParty_locationsNestedInput
-  business_parties?: Prisma.business_partiesUpdateOneRequiredWithoutParty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
-}
-
-export type party_locationsUncheckedUpdateWithoutTrips_trips_destination_party_location_idToparty_locationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  party_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
-}
-
-export type party_locationsUpsertWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  update: Prisma.XOR<Prisma.party_locationsUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-  create: Prisma.XOR<Prisma.party_locationsCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedCreateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-  where?: Prisma.party_locationsWhereInput
-}
-
-export type party_locationsUpdateToOneWithWhereWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  where?: Prisma.party_locationsWhereInput
-  data: Prisma.XOR<Prisma.party_locationsUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput, Prisma.party_locationsUncheckedUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput>
-}
-
-export type party_locationsUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  locations?: Prisma.locationsUpdateOneRequiredWithoutParty_locationsNestedInput
-  business_parties?: Prisma.business_partiesUpdateOneRequiredWithoutParty_locationsNestedInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-}
-
-export type party_locationsUncheckedUpdateWithoutTrips_trips_origin_party_location_idToparty_locationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  party_id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-}
-
 export type party_locationsCreateManyBusiness_partiesInput = {
   id?: string
   location_id: string
@@ -669,8 +506,6 @@ export type party_locationsUpdateWithoutBusiness_partiesInput = {
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   locations?: Prisma.locationsUpdateOneRequiredWithoutParty_locationsNestedInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
 }
 
 export type party_locationsUncheckedUpdateWithoutBusiness_partiesInput = {
@@ -678,8 +513,6 @@ export type party_locationsUncheckedUpdateWithoutBusiness_partiesInput = {
   location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
 }
 
 export type party_locationsUncheckedUpdateManyWithoutBusiness_partiesInput = {
@@ -701,8 +534,6 @@ export type party_locationsUpdateWithoutLocationsInput = {
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business_parties?: Prisma.business_partiesUpdateOneRequiredWithoutParty_locationsNestedInput
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
 }
 
 export type party_locationsUncheckedUpdateWithoutLocationsInput = {
@@ -710,8 +541,6 @@ export type party_locationsUncheckedUpdateWithoutLocationsInput = {
   party_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trips_trips_destination_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_destination_party_location_idToparty_locationsNestedInput
-  trips_trips_origin_party_location_idToparty_locations?: Prisma.tripsUncheckedUpdateManyWithoutParty_locations_trips_origin_party_location_idToparty_locationsNestedInput
 }
 
 export type party_locationsUncheckedUpdateManyWithoutLocationsInput = {
@@ -722,44 +551,6 @@ export type party_locationsUncheckedUpdateManyWithoutLocationsInput = {
 }
 
 
-/**
- * Count Type Party_locationsCountOutputType
- */
-
-export type Party_locationsCountOutputType = {
-  trips_trips_destination_party_location_idToparty_locations: number
-  trips_trips_origin_party_location_idToparty_locations: number
-}
-
-export type Party_locationsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trips_trips_destination_party_location_idToparty_locations?: boolean | Party_locationsCountOutputTypeCountTrips_trips_destination_party_location_idToparty_locationsArgs
-  trips_trips_origin_party_location_idToparty_locations?: boolean | Party_locationsCountOutputTypeCountTrips_trips_origin_party_location_idToparty_locationsArgs
-}
-
-/**
- * Party_locationsCountOutputType without action
- */
-export type Party_locationsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Party_locationsCountOutputType
-   */
-  select?: Prisma.Party_locationsCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * Party_locationsCountOutputType without action
- */
-export type Party_locationsCountOutputTypeCountTrips_trips_destination_party_location_idToparty_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.tripsWhereInput
-}
-
-/**
- * Party_locationsCountOutputType without action
- */
-export type Party_locationsCountOutputTypeCountTrips_trips_origin_party_location_idToparty_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.tripsWhereInput
-}
-
 
 export type party_locationsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -769,9 +560,6 @@ export type party_locationsSelect<ExtArgs extends runtime.Types.Extensions.Inter
   created_at?: boolean
   locations?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
-  trips_trips_destination_party_location_idToparty_locations?: boolean | Prisma.party_locations$trips_trips_destination_party_location_idToparty_locationsArgs<ExtArgs>
-  trips_trips_origin_party_location_idToparty_locations?: boolean | Prisma.party_locations$trips_trips_origin_party_location_idToparty_locationsArgs<ExtArgs>
-  _count?: boolean | Prisma.Party_locationsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["party_locations"]>
 
 export type party_locationsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -806,9 +594,6 @@ export type party_locationsOmit<ExtArgs extends runtime.Types.Extensions.Interna
 export type party_locationsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   locations?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   business_parties?: boolean | Prisma.business_partiesDefaultArgs<ExtArgs>
-  trips_trips_destination_party_location_idToparty_locations?: boolean | Prisma.party_locations$trips_trips_destination_party_location_idToparty_locationsArgs<ExtArgs>
-  trips_trips_origin_party_location_idToparty_locations?: boolean | Prisma.party_locations$trips_trips_origin_party_location_idToparty_locationsArgs<ExtArgs>
-  _count?: boolean | Prisma.Party_locationsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type party_locationsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   locations?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
@@ -824,8 +609,6 @@ export type $party_locationsPayload<ExtArgs extends runtime.Types.Extensions.Int
   objects: {
     locations: Prisma.$locationsPayload<ExtArgs>
     business_parties: Prisma.$business_partiesPayload<ExtArgs>
-    trips_trips_destination_party_location_idToparty_locations: Prisma.$tripsPayload<ExtArgs>[]
-    trips_trips_origin_party_location_idToparty_locations: Prisma.$tripsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1229,8 +1012,6 @@ export interface Prisma__party_locationsClient<T, Null = never, ExtArgs extends 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   locations<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   business_parties<T extends Prisma.business_partiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_partiesDefaultArgs<ExtArgs>>): Prisma.Prisma__business_partiesClient<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  trips_trips_destination_party_location_idToparty_locations<T extends Prisma.party_locations$trips_trips_destination_party_location_idToparty_locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.party_locations$trips_trips_destination_party_location_idToparty_locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  trips_trips_origin_party_location_idToparty_locations<T extends Prisma.party_locations$trips_trips_origin_party_location_idToparty_locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.party_locations$trips_trips_origin_party_location_idToparty_locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1663,54 +1444,6 @@ export type party_locationsDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many party_locations to delete.
    */
   limit?: number
-}
-
-/**
- * party_locations.trips_trips_destination_party_location_idToparty_locations
- */
-export type party_locations$trips_trips_destination_party_location_idToparty_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the trips
-   */
-  select?: Prisma.tripsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the trips
-   */
-  omit?: Prisma.tripsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.tripsInclude<ExtArgs> | null
-  where?: Prisma.tripsWhereInput
-  orderBy?: Prisma.tripsOrderByWithRelationInput | Prisma.tripsOrderByWithRelationInput[]
-  cursor?: Prisma.tripsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TripsScalarFieldEnum | Prisma.TripsScalarFieldEnum[]
-}
-
-/**
- * party_locations.trips_trips_origin_party_location_idToparty_locations
- */
-export type party_locations$trips_trips_origin_party_location_idToparty_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the trips
-   */
-  select?: Prisma.tripsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the trips
-   */
-  omit?: Prisma.tripsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.tripsInclude<ExtArgs> | null
-  where?: Prisma.tripsWhereInput
-  orderBy?: Prisma.tripsOrderByWithRelationInput | Prisma.tripsOrderByWithRelationInput[]
-  cursor?: Prisma.tripsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TripsScalarFieldEnum | Prisma.TripsScalarFieldEnum[]
 }
 
 /**

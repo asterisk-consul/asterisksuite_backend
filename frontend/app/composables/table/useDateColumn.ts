@@ -1,4 +1,4 @@
-import type { Row } from '@tanstack/table-core'
+import type { Row } from '@tanstack/vue-table'
 
 export interface TableDateRange {
   start?: Date

@@ -4,6 +4,7 @@ import {
   CreateDispatchOrderDto,
   UpdateDispatchOrderDto,
 } from './dto/dispatch-order.dto';
+import { buildPrismaUpdate } from '@/common/utils/buildPrisma';
 
 @Injectable()
 export class DispatchOrdersService {
@@ -11,18 +12,52 @@ export class DispatchOrdersService {
 
   // service
   async create(dto: CreateDispatchOrderDto, userId: string) {
-    return this.prisma.dispatch_orders.create({
-      data: {
-        order_number: dto.order_number,
-        status: dto.status ?? 'pending',
-        requires_stock: dto.requires_stock,
-        customer_id: dto.customer_id,
-        origin_location_id: dto.origin_location_id,
-        destination_location_id: dto.destination_location_id,
-        planned_date: dto.planned_date,
-        created_by: userId, // ✅ viene del JWT, no del body
-      },
-    });
+    try {
+      return this.prisma.dispatch_orders.create({
+        data: {
+          order_number: dto.order_number,
+          status: dto.status ?? 'pending',
+          requires_stock: dto.requires_stock ?? false,
+
+          customer_id: dto.customer_id,
+          origin_location_id: dto.origin_location_id,
+          destination_location_id: dto.destination_location_id,
+          corridor_id: dto.corridor_id,
+
+          planned_date: dto.planned_date
+            ? new Date(dto.planned_date)
+            : undefined,
+
+          created_by: userId,
+
+          // 🔥 rates
+          dispatch_rates: dto.rates?.length
+            ? {
+                create: dto.rates.map((r) => ({
+                  rate_id: r.rate_id,
+                  value: r.value,
+                })),
+              }
+            : undefined,
+        },
+
+        include: {
+          customers: true,
+          origin_location: true,
+          destination_location: true,
+          corridors: true,
+
+          dispatch_rates: {
+            include: {
+              transfer_rates: true,
+            },
+          },
+        },
+      });
+    } catch (e) {
+      console.error('🔥 PRISMA ERROR:', e);
+      throw e;
+    }
   }
 
   async findAll() {
@@ -32,6 +67,8 @@ export class DispatchOrdersService {
         origin_location: true,
         destination_location: true,
         trips: true,
+        dispatch_rates: true,
+        corridors: true,
       },
     });
   }
@@ -44,6 +81,8 @@ export class DispatchOrdersService {
         origin_location: true,
         destination_location: true,
         trips: true,
+        dispatch_rates: true,
+        corridors: true,
       },
     });
     if (!order) throw new NotFoundException('Dispatch order not found');
@@ -51,9 +90,12 @@ export class DispatchOrdersService {
   }
 
   async update(id: string, dto: UpdateDispatchOrderDto) {
+    const data = buildPrismaUpdate(dto);
+    // console.log(dto);
+
     return this.prisma.dispatch_orders.update({
       where: { id },
-      data: dto,
+      data,
     });
   }
 

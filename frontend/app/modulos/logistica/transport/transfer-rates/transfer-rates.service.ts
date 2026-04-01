@@ -6,8 +6,7 @@ import type {
 
 export const useTransferRatesService = () => {
   const base = '/api/logistica/transfer-rate'
-  const getAll = (company_id: string) =>
-    $fetch<TransferRate[]>(`${base}`, { query: { company_id } })
+  const getAll = () => $fetch<TransferRate[]>(`${base}`)
 
   const getById = (id: string) => $fetch<TransferRate>(`${base}+${id}`)
 

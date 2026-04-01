@@ -15,11 +15,11 @@ export const useTransferRatesStore = defineStore('transferRates', () => {
 
   const service = useTransferRatesService()
 
-  const fetchAll = async (company_id: string) => {
+  const fetchAll = async () => {
     loading.value = true
     error.value = null
     try {
-      items.value = await service.getAll(company_id)
+      items.value = await service.getAll()
     } catch (err: any) {
       error.value = err?.data?.message || err.message
     } finally {

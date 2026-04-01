@@ -1,21 +1,15 @@
-import { h } from 'vue'
-import { UBadge, UCheckbox } from '#components'
 import type { TableColumn } from '@nuxt/ui'
 import type { Trip } from '~/modulos/logistica/transport/trips/types/trips.types'
 import StatusToggle from '@/components/ui/PopoverTableActive.vue'
-type OptionValue = string | boolean
 
-import { useInlineEdit } from '~/composables/table/useInlineEdit'
-import type { EditableValue } from '~/composables/table/useInlineEdit'
-import { useDateColumn } from '~/composables/table/useDateColumn'
+import { createTableBuilder } from '@/composables/table/createColumns'
 import { useSelectColumn } from '@/composables/table/useSelectColumn'
 import { useIdColumn } from '@/composables/table/useIdColumn'
 
-const { editableCell } = useInlineEdit<Trip, EditableField>()
+type Row = Trip
 
-const createdDate = useDateColumn('es-AR')
+export type TripStatus = 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
 
-type TripStatus = 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
 type BadgeColor =
   | 'error'
   | 'primary'
@@ -35,124 +29,123 @@ const tripStatusConfig: Record<
   CANCELLED: { label: 'Cancelado', color: 'error' }
 }
 
-type Row = Trip
-type EditableField = 'reference_number' | 'kilometers' | 'week'
-
 export const tripsColumns = (actions: {
   onToggleStatus?: (row: Row, value: TripStatus) => void
-  onInlineSave?: (row: Row, field: EditableField, value: EditableValue) => void
+  onInlineSave?: (row: Row, field: any, value: any) => void
   onEdit?: (row: Row) => void
-}): TableColumn<Row>[] => [
-  useSelectColumn<Row>(),
-  useIdColumn<Row>(actions.onEdit),
+}): TableColumn<Row>[] => {
+  const build = createTableBuilder<Row>({ locale: 'es-AR' })
 
-  {
-    accessorKey: 'reference_number',
-    header: 'Referencia de Viaje',
-    cell: ({ row }) => editableCell('reference_number', row.original, actions)
-  },
-  {
-    accessorKey: 'week',
-    header: 'Semana',
-    cell: ({ row }) => editableCell('week', row.original, actions)
-  },
-  {
-    accessorKey: 'status',
-    header: 'Estado',
+  return [
+    useSelectColumn<Row>(),
+    useIdColumn<Row>(actions.onEdit),
 
-    accessorFn: (row) => tripStatusConfig[row.status as TripStatus]?.label,
+    ...build([
+      {
+        key: 'reference_number',
+        label: 'Referencia de Viaje',
+        sortable: true,
+        editable: true,
+        editField: 'reference_number'
+      },
 
-    cell: ({ row }) =>
-      h(StatusToggle, {
-        modelValue: row.original.status,
-        title: 'Cambiar estado',
-        options: [
-          { label: 'Planificado', value: 'PLANNED', color: 'info' },
-          { label: 'En curso', value: 'IN_PROGRESS', color: 'warning' },
-          { label: 'Completado', value: 'COMPLETED', color: 'success' },
-          { label: 'Cancelado', value: 'CANCELLED', color: 'error' }
-        ],
-        'onUpdate:modelValue': (value: OptionValue) =>
-          actions.onToggleStatus?.(row.original, value as TripStatus)
-      })
-  },
-  {
-    id: 'business_party',
-    header: 'Cliente',
-    cell: ({ row }) => row.original.business_party?.name
-  },
-  {
-    id: 'vehicle_combination',
-    header: 'Combinación',
-    cell: ({ row }) => {
-      const vc = row.original.vehicle_combination
-      if (!vc) return '—'
+      {
+        key: 'week',
+        label: 'Semana',
+        sortable: true,
+        editable: true,
+        editField: 'week'
+      },
 
-      // Mostrá unit_number si existe, sino un ID corto como fallback
-      return vc.unit_number || `VC-${vc.id.slice(0, 8)}`
-    }
-  },
-  {
-    accessorKey: 'corridos',
-    header: 'Corredor',
-    cell: ({ row }) => {
-      const corridor = row.original.corridors
+      {
+        key: 'status',
+        label: 'Estado',
+        sortable: true,
 
-      return corridor?.name || '—'
-    }
-  },
-  {
-    accessorKey: 'kilometers',
-    header: 'Km',
-    cell: ({ row }) =>
-      row.original.corridors?.total_distance_km
-        ? `${row.original.corridors?.total_distance_km} km`
-        : '—'
-  },
-  {
-    id: 'trip_rates',
-    header: 'Tarifas',
-    cell: ({ row }) => {
-      const rates = row.original.trip_rates
-      if (!rates?.length) return '—'
+        enum: {
+          options: Object.entries(tripStatusConfig).map(([value, config]) => ({
+            value,
+            label: config.label,
+            color: config.color
+          })),
+          toggle: {
+            component: StatusToggle,
+            title: 'Cambiar estado',
+            onChange: (row, value) =>
+              actions.onToggleStatus?.(row, value as TripStatus)
+          }
+        }
+      },
 
-      return h(
-        'div',
-        { class: 'flex flex-wrap gap-1' },
-        rates.map((r) =>
-          h(
-            UBadge,
-            {
-              variant: 'subtle',
-              color:
-                r.transfer_rates.rate_type === 'CLIENT' ? 'info' : 'success'
-            },
-            () => `${r.transfer_rates.name}: $${r.value}`
-          )
-        )
-      )
-    }
-  },
-  {
-    accessorKey: 'departure_time',
-    header: 'Salida',
-    meta: createdDate.meta,
-    filterFn: createdDate.filterFn,
-    cell: ({ row }) =>
-      createdDate.format(row.getValue<string>('departure_time'))
-  },
-  {
-    accessorKey: 'arrival_time',
-    header: 'Llegada',
-    meta: createdDate.meta,
-    filterFn: createdDate.filterFn,
-    cell: ({ row }) => createdDate.format(row.getValue<string>('arrival_time'))
-  },
-  {
-    accessorKey: 'created_at',
-    header: 'Creado',
-    meta: createdDate.meta,
-    filterFn: createdDate.filterFn,
-    cell: ({ row }) => createdDate.format(row.getValue<string>('created_at'))
-  }
-]
+      {
+        id: 'business_party',
+        label: 'Cliente',
+        cell: ({ row }) => row.original.business_party?.name || '—'
+      },
+
+      {
+        id: 'vehicle_combination',
+        label: 'Combinación',
+        cell: ({ row }) => {
+          const vc = row.original.vehicle_combination
+          if (!vc) return '—'
+          return vc.unit_number || `VC-${vc.id.slice(0, 8)}`
+        }
+      },
+
+      {
+        key: 'corridors',
+        label: 'Corredor',
+        cell: ({ row }) => row.original.corridors?.name || '—'
+      },
+
+      {
+        key: 'kilometers',
+        label: 'Km',
+        sortable: true,
+        cell: ({ row }) =>
+          row.original.corridors?.total_distance_km
+            ? `${row.original.corridors.total_distance_km} km`
+            : '—'
+      },
+
+      {
+        id: 'trip_rates',
+        label: 'Tarifas',
+        badge: {
+          resolve: (row) => {
+            const rates = row.trip_rates
+            if (!rates?.length) return { label: '—', color: 'neutral' }
+
+            return {
+              label: `${rates.length} tarifas`,
+              color: 'info'
+            }
+          }
+        }
+        // si querés mantener el render original, podés dejar cell en vez de badge
+      },
+
+      {
+        key: 'departure_time',
+        label: 'Salida',
+        sortable: true,
+        date: true
+      },
+
+      {
+        key: 'arrival_time',
+        label: 'Llegada',
+        sortable: true,
+        date: true
+      },
+
+      {
+        key: 'created_at',
+        label: 'Creado',
+        sortable: true,
+        date: true
+      }
+    ])
+  ]
+}

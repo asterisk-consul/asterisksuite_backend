@@ -18,6 +18,7 @@
     "@nuxt/ui": "^4.5.1",
     "@nuxtjs/mdc": "^0.20.2",
     "@pinia/nuxt": "^0.11.3",
+    "@tanstack/vue-table": "^8.21.3",
     "@unovis/ts": "^1.6.4",
     "@unovis/vue": "^1.6.4",
     "@vueuse/nuxt": "^13.9.0",

@@ -191,7 +191,7 @@ const submit = () => {
  */
 onMounted(async () => {
   await Promise.all([
-    businessPartiesStore.fetchAll(props.companyId),
+    businessPartiesStore.fetchAll(),
     corridorsStore.fetchCorridors(),
     locationsStore.fetchAll(),
     vehicleCombinationsStore.fetchAll(props.companyId)
