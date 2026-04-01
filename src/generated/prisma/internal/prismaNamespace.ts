@@ -4317,7 +4317,8 @@ export const DocumentsScalarFieldEnum = {
   subtotal: 'subtotal',
   total_taxes: 'total_taxes',
   total: 'total',
-  descrip: 'descrip'
+  descrip: 'descrip',
+  ref: 'ref'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]

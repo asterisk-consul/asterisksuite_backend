@@ -196,6 +196,7 @@ export type productsWhereInput = {
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  document_items?: Prisma.Document_itemsListRelationFilter
 }
 
 export type productsOrderByWithRelationInput = {
@@ -211,6 +212,7 @@ export type productsOrderByWithRelationInput = {
   companies?: Prisma.companiesOrderByWithRelationInput
   warehouse_stock?: Prisma.warehouse_stockOrderByRelationAggregateInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
+  document_items?: Prisma.document_itemsOrderByRelationAggregateInput
 }
 
 export type productsWhereUniqueInput = Prisma.AtLeast<{
@@ -229,6 +231,7 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   companies?: Prisma.XOR<Prisma.CompaniesScalarRelationFilter, Prisma.companiesWhereInput>
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  document_items?: Prisma.Document_itemsListRelationFilter
 }, "id">
 
 export type productsOrderByWithAggregationInput = {
@@ -267,6 +270,7 @@ export type productsCreateInput = {
   companies: Prisma.companiesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateInput = {
@@ -281,6 +285,7 @@ export type productsUncheckedCreateInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsUpdateInput = {
@@ -295,6 +300,7 @@ export type productsUpdateInput = {
   companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateInput = {
@@ -309,6 +315,7 @@ export type productsUncheckedUpdateInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateManyInput = {
@@ -377,6 +384,11 @@ export type productsMinOrderByAggregateInput = {
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+}
+
+export type ProductsNullableScalarRelationFilter = {
+  is?: Prisma.productsWhereInput | null
+  isNot?: Prisma.productsWhereInput | null
 }
 
 export type productsCreateNestedManyWithoutCompaniesInput = {
@@ -481,6 +493,22 @@ export type productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.productsUpdateWithoutWarehouse_stock_movementsInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
 }
 
+export type productsCreateNestedOneWithoutDocument_itemsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutDocument_itemsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneWithoutDocument_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutDocument_itemsInput
+  upsert?: Prisma.productsUpsertWithoutDocument_itemsInput
+  disconnect?: Prisma.productsWhereInput | boolean
+  delete?: Prisma.productsWhereInput | boolean
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutDocument_itemsInput, Prisma.productsUpdateWithoutDocument_itemsInput>, Prisma.productsUncheckedUpdateWithoutDocument_itemsInput>
+}
+
 export type productsCreateNestedOneWithoutProduct_taxesInput = {
   create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
   connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_taxesInput
@@ -506,6 +534,7 @@ export type productsCreateWithoutCompaniesInput = {
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutCompaniesInput = {
@@ -519,6 +548,7 @@ export type productsUncheckedCreateWithoutCompaniesInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutCompaniesInput = {
@@ -570,6 +600,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   companies: Prisma.companiesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutPallet_itemsInput = {
@@ -583,6 +614,7 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutPallet_itemsInput = {
@@ -612,6 +644,7 @@ export type productsUpdateWithoutPallet_itemsInput = {
   companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutPallet_itemsInput = {
@@ -625,6 +658,7 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutPicking_itemsInput = {
@@ -638,6 +672,7 @@ export type productsCreateWithoutPicking_itemsInput = {
   companies: Prisma.companiesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutPicking_itemsInput = {
@@ -651,6 +686,7 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutPicking_itemsInput = {
@@ -680,6 +716,7 @@ export type productsUpdateWithoutPicking_itemsInput = {
   companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutPicking_itemsInput = {
@@ -693,6 +730,7 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutWarehouse_stockInput = {
@@ -706,6 +744,7 @@ export type productsCreateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   companies: Prisma.companiesCreateNestedOneWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutWarehouse_stockInput = {
@@ -719,6 +758,7 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutWarehouse_stockInput = {
@@ -748,6 +788,7 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
@@ -761,6 +802,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutWarehouse_stock_movementsInput = {
@@ -774,6 +816,7 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   companies: Prisma.companiesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
@@ -787,6 +830,7 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutWarehouse_stock_movementsInput = {
@@ -816,6 +860,7 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
@@ -829,6 +874,79 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsCreateWithoutDocument_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  created_at?: Date | string
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  companies: Prisma.companiesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutDocument_itemsInput = {
+  id?: string
+  company_id: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  created_at?: Date | string
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutDocument_itemsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
+}
+
+export type productsUpsertWithoutDocument_itemsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutDocument_itemsInput, Prisma.productsUncheckedUpdateWithoutDocument_itemsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutDocument_itemsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutDocument_itemsInput, Prisma.productsUncheckedUpdateWithoutDocument_itemsInput>
+}
+
+export type productsUpdateWithoutDocument_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutDocument_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  company_id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutProduct_taxesInput = {
@@ -842,6 +960,7 @@ export type productsCreateWithoutProduct_taxesInput = {
   companies: Prisma.companiesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutProduct_taxesInput = {
@@ -855,6 +974,7 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutProduct_taxesInput = {
@@ -884,6 +1004,7 @@ export type productsUpdateWithoutProduct_taxesInput = {
   companies?: Prisma.companiesUpdateOneRequiredWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutProduct_taxesInput = {
@@ -897,6 +1018,7 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateManyCompaniesInput = {
@@ -918,6 +1040,7 @@ export type productsUpdateWithoutCompaniesInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutCompaniesInput = {
@@ -931,6 +1054,7 @@ export type productsUncheckedUpdateWithoutCompaniesInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateManyWithoutCompaniesInput = {
@@ -952,6 +1076,7 @@ export type ProductsCountOutputType = {
   product_taxes: number
   warehouse_stock: number
   warehouse_stock_movements: number
+  document_items: number
 }
 
 export type ProductsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -960,6 +1085,7 @@ export type ProductsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   product_taxes?: boolean | ProductsCountOutputTypeCountProduct_taxesArgs
   warehouse_stock?: boolean | ProductsCountOutputTypeCountWarehouse_stockArgs
   warehouse_stock_movements?: boolean | ProductsCountOutputTypeCountWarehouse_stock_movementsArgs
+  document_items?: boolean | ProductsCountOutputTypeCountDocument_itemsArgs
 }
 
 /**
@@ -1007,6 +1133,13 @@ export type ProductsCountOutputTypeCountWarehouse_stock_movementsArgs<ExtArgs ex
   where?: Prisma.warehouse_stock_movementsWhereInput
 }
 
+/**
+ * ProductsCountOutputType without action
+ */
+export type ProductsCountOutputTypeCountDocument_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_itemsWhereInput
+}
+
 
 export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1021,6 +1154,7 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
+  document_items?: boolean | Prisma.products$document_itemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
 
@@ -1061,6 +1195,7 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   companies?: boolean | Prisma.companiesDefaultArgs<ExtArgs>
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
+  document_items?: boolean | Prisma.products$document_itemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type productsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1079,6 +1214,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     companies: Prisma.$companiesPayload<ExtArgs>
     warehouse_stock: Prisma.$warehouse_stockPayload<ExtArgs>[]
     warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
+    document_items: Prisma.$document_itemsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1487,6 +1623,7 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
   companies<T extends Prisma.companiesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companiesDefaultArgs<ExtArgs>>): Prisma.Prisma__companiesClient<runtime.Types.Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   warehouse_stock<T extends Prisma.products$warehouse_stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock_movements<T extends Prisma.products$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_items<T extends Prisma.products$document_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$document_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2035,6 +2172,30 @@ export type products$warehouse_stock_movementsArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
+}
+
+/**
+ * products.document_items
+ */
+export type products$document_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the document_items
+   */
+  select?: Prisma.document_itemsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the document_items
+   */
+  omit?: Prisma.document_itemsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.document_itemsInclude<ExtArgs> | null
+  where?: Prisma.document_itemsWhereInput
+  orderBy?: Prisma.document_itemsOrderByWithRelationInput | Prisma.document_itemsOrderByWithRelationInput[]
+  cursor?: Prisma.document_itemsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_itemsScalarFieldEnum | Prisma.Document_itemsScalarFieldEnum[]
 }
 
 /**

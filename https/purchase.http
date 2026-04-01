@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:3000/api
+#@baseUrl = https://apidonandres.asterisksuite.cloud/api
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+###
+@accessToken = {{login.response.body.accessToken}}
+
+
+### =====================================================
+### 📊 Resumen de compras por producto
+### GET /purchases/summary
+### =====================================================
+
+### Resumen completo (todos los productos)
+GET {{baseUrl}}/purchases/summary
+Authorization: Bearer {{accessToken}}
+
+### Resumen filtrado por fechas
+GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-12-31
+Authorization: Bearer {{accessToken}}
+
+### Resumen filtrado por proveedor

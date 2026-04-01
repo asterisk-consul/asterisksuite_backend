@@ -24,8 +24,8 @@ Content-Type: application/json
 
 {
   "document_sequence_id": "45b6b231-4de2-41c4-9b5d-ada23d451298",
-  "code": "REM",
-  "description": "Remito",
+  "code": "COM",
+  "description": "Factura de compra",
   "direction": -1,
   "affects_stock": true,
   "affects_accounting": true,
