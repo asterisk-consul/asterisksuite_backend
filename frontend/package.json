@@ -28,7 +28,7 @@
     "nuxt": "^4.4.2",
     "papaparse": "^5.5.3",
     "pinia": "^3.0.4",
-    "vue-draggable-plus": "^0.6.1",
+    "vuedraggable": "^4.1.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "zod": "^3.25.76"
   },

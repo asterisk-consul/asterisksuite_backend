@@ -3,8 +3,10 @@ definePageMeta({
   layout: 'logistica',
   middleware: ['auth']
 })
+import type { TabsItem } from '@nuxt/ui'
 import { storeToRefs } from 'pinia'
 import LogisticaTable from '~/components/Tablas/LogisticaTable.vue'
+import TripPlanner from '~/modulos/logistica/transport/trips/planners/TripPlanner.vue'
 //stores
 import { useTripsStore } from '~/modulos/logistica/transport/trips/trips.store'
 
@@ -42,7 +44,8 @@ function openCreate() {
 }
 
 function openEdit(row: any) {
-  router.push(`/logistica/viajes/${row.id}/edit`)
+  console.log(row.id)
+  router.push(`/logistica/viajes/${row.id}`)
 }
 
 const columns = tripsColumns({
@@ -82,10 +85,27 @@ const columns = tripsColumns({
 // ========================================
 
 onMounted(async () => {
-  const companyId = 'a060f7ff-0281-4df4-b5b3-cbdf940be31e'
-  await store.fetchAll(companyId)
+  await store.fetchAll()
+  console.log(items)
   loading.value = store.loading
 })
+
+const activeTab = ref('viajes')
+
+const itemsTabs: TabsItem[] = [
+  { label: 'Viajes', value: 'viajes' },
+  { label: 'Otro', value: 'otro' }
+]
+
+const title = computed(() =>
+  activeTab.value === 'viajes' ? 'Viajes' : 'Otro módulo'
+)
+
+const description = computed(() =>
+  activeTab.value === 'viajes'
+    ? 'Listado de Viajes'
+    : 'Otra funcionalidad distinta'
+)
 
 const links = ref<ButtonProps[]>([
   {
@@ -100,7 +120,7 @@ const links = ref<ButtonProps[]>([
 
 <template>
   <UPage class="space-y-4">
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-2">
       <div>
         <UButton
           icon="i-lucide-layout-panel-left"
@@ -110,13 +130,34 @@ const links = ref<ButtonProps[]>([
           @click="toggleModuleSidebar"
         />
       </div>
+
+      <!-- 🔥 Tabs controlados -->
+      <UTabs
+        v-model="activeTab"
+        :items="itemsTabs"
+        color="neutral"
+        variant="link"
+        :content="false"
+        class="w-full"
+      />
+
+      <!-- 🔥 Header dinámico -->
       <UPageHeader
-        title="Viajes"
-        description="Listado de Viajes"
+        :title="title"
+        :description="description"
         :links="links"
         class="mb-4 w-full"
       />
     </div>
-    <LogisticaTable :loading="loading" :data="items" :columns="columns" />
+
+    <!-- 🔥 Contenido dinámico -->
+    <LogisticaTable
+      v-if="activeTab === 'viajes'"
+      :loading="loading"
+      :data="items"
+      :columns="columns"
+    />
+
+    <TripPlanner :tripId="'12'" v-else />
   </UPage>
 </template>

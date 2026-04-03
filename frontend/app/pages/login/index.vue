@@ -55,8 +55,19 @@ function closeAlert() {
         icon="i-lucide-user"
         @submit="onSubmit"
       >
+        <template #description>
+          No tienes una cuenta?
+          <ULink to="/register" class="text-primary font-medium">
+            Registrate
+          </ULink>
+          .
+        </template>
         <template #password-hint>
-          <ULink to="#" class="text-primary font-medium" tabindex="-1">
+          <ULink
+            to="/change-password"
+            class="text-primary font-medium"
+            tabindex="-1"
+          >
             Olvidaste tu contraseña?
           </ULink>
         </template>

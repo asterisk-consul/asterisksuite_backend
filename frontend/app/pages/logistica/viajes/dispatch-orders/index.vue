@@ -5,10 +5,7 @@ definePageMeta({
 })
 const moduleCollapsed = inject('moduleSidebarCollapsed') as Ref<boolean>
 import type { ButtonProps } from '@nuxt/ui'
-import type {
-  EditableField,
-  DispatchStatus
-} from '~/modulos/logistica/documents/dispatch-orders/dispatch-order.columns'
+import type { EditableField } from '~/modulos/logistica/documents/dispatch-orders/dispatch-order.columns'
 import type { EditableValue } from '~/composables/table/useInlineEdit'
 function toggleModuleSidebar() {
   moduleCollapsed.value = !moduleCollapsed.value

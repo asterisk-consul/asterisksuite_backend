@@ -1,6 +1,5 @@
 import { apiProxy } from '~~/server/utils/api-proxy'
 
 export default defineEventHandler((event) => {
-  const company_id = getQuery(event).company_id as string
-  return apiProxy(event, `/trips/${company_id}`)
+  return apiProxy(event, `/trips`)
 })

@@ -7,12 +7,9 @@ export const mapFormToBusinessPartyDto = (
   form: BusinessPartyForm
 ): CreateBusinessPartyInput => {
   return {
-    company_id: form.company_id,
     type: form.type,
     name: form.name,
     tax_id: form.tax_id,
-    phone: form.phone,
-    email: form.email,
 
     locations: form.locations
       .filter((l) => l.location_id)
@@ -37,13 +34,11 @@ export const mapBusinessPartyToForm = (
 ): BusinessPartyForm => {
   return {
     id: party.id,
-    company_id: party.company_id,
+
     type: party.type?.toLowerCase() as 'client' | 'supplier',
 
     name: party.name,
     tax_id: party.tax_id ?? '',
-    phone: party.phone ?? '',
-    email: party.email ?? '',
 
     locations:
       party.party_locations?.map((l) => ({

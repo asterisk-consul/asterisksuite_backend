@@ -4,31 +4,9 @@ import {
   IsString,
   IsDateString,
   IsNumber,
-  ValidateNested,
-  IsArray,
+  IsEnum,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-
-class CorridorStopDto {
-  @IsUUID()
-  location_id!: string;
-
-  @IsNumber()
-  stop_order!: number;
-}
-
-class RouteDto {
-  @IsUUID()
-  origin_location_id!: string;
-
-  @IsUUID()
-  destination_location_id!: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CorridorStopDto)
-  stops!: CorridorStopDto[];
-}
+import { TripStatus } from '@/generated/prisma/enums';
 
 export class CreateTripDto {
   @IsOptional()
@@ -51,17 +29,6 @@ export class CreateTripDto {
   @IsUUID()
   destination_location_id?: string;
 
-  // ✅ NUEVO
-  @IsOptional()
-  @IsUUID()
-  corridor_id?: string;
-
-  // ✅ NUEVO corredor dinámico
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => RouteDto)
-  route?: RouteDto;
-
   @IsOptional()
   @IsDateString()
   departure_time?: Date;
@@ -70,13 +37,10 @@ export class CreateTripDto {
   @IsDateString()
   arrival_time?: Date;
 
-  @IsString()
-  status!: string;
+  @IsEnum(TripStatus)
+  status!: TripStatus;
 
   @IsOptional()
   @IsNumber()
   kilometers?: number;
-  @IsOptional()
-  @IsUUID()
-  business_party_id?: string;
 }

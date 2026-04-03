@@ -51,11 +51,8 @@ const { items } = useBusinessParties(businessParties)
 
 const { items: transferRatesItems } = useTransferRate(transferRates)
 
-const { items: corridorsItems } = useCorridorForm(
-  undefined,
-  undefined,
-  corridors
-)
+const { items: corridorsItems } = useCorridorForm(undefined, corridors)
+
 const showCorridorModal = ref(false)
 const selectedCorridor = ref<Corridor | undefined>(undefined)
 
@@ -108,27 +105,31 @@ const destinationItems = computed(() => {
       item.value !== form.origin_location_id
   )
 })
+
 const corridorLocationIds = computed(() => {
   const corridor = selectedCorridorData.value
   if (!corridor) return []
 
-  // ✅ caso 1: tiene stops
-  if (corridor.corridorStops?.length) {
-    return corridor.corridorStops.map((s) => s.location_id)
-  }
+  const stopIds = corridor.corridorStops?.map((s) => s.location_id) ?? []
 
-  // ✅ caso 2: fallback simple (origen/destino)
-  const ids = [corridor.origin_location_id, corridor.destination_location_id]
-
-  return ids.filter(Boolean)
+  return [
+    corridor.origin_location_id,
+    ...stopIds,
+    corridor.destination_location_id
+  ].filter(Boolean)
 })
+
+const isValidCorridorLocation = (id?: string) => {
+  if (!selectedCorridorData.value) return true
+  return corridorLocationIds.value.includes(id!)
+}
 
 //FORM
 
 const form = reactive<CreateDispatchOrderDto>({
   order_number: props.dispatch_order?.order_number ?? '',
 
-  status: props.dispatch_order?.status ?? 'pending',
+  status: props.dispatch_order?.status ?? 'PENDING',
 
   requires_stock: props.dispatch_order?.requires_stock ?? false,
 
@@ -169,11 +170,11 @@ const selectedCustomer = computed({
 })
 
 const statusOptions = [
-  { label: 'Pendiente', value: 'pending', chip: { color: 'neutral' } },
-  { label: 'Asignado', value: 'assigned', chip: { color: 'warning' } },
-  { label: 'En progreso', value: 'in_progress', chip: { color: 'secondary' } },
-  { label: 'Completado', value: 'completed', chip: { color: 'success' } },
-  { label: 'Cancelado', value: 'cancelled', chip: { color: 'error' } }
+  { label: 'Pendiente', value: 'PENDING', chip: { color: 'neutral' } },
+  { label: 'Asignado', value: 'ASSIGNED', chip: { color: 'warning' } },
+  { label: 'En progreso', value: 'IN_PROGRESS', chip: { color: 'secondary' } },
+  { label: 'Completado', value: 'COMPLETED', chip: { color: 'success' } },
+  { label: 'Cancelado', value: 'CANCELLED', chip: { color: 'error' } }
 ] satisfies (SelectMenuItem & {
   value: DispatchStatus
   chip?: ChipProps
@@ -377,7 +378,10 @@ watch(
             placeholder="Seleccionar destino"
           />
         </UFormField>
-        <div class="flex flex-col gap-3">
+        <div
+          class="flex flex-col gap-3 col-span-2 p-4 border-2 border-gray-200 rounded-xl dark:border-neutral-800"
+        >
+          <h3 class="font-semibold">Tarifas</h3>
           <!-- LISTA -->
           <div
             v-for="(rate, index) in form.rates"
@@ -391,13 +395,14 @@ watch(
               option-attribute="label"
               class="w-full"
             />
-
-            <UInput
-              v-model.number="rate.value"
-              type="number"
-              placeholder="Valor"
-              class="w-32"
-            />
+            <UFormField label="Valor" orientation="horizontal">
+              <UInput
+                v-model.number="rate.value"
+                type="number"
+                placeholder="Valor"
+                class="w-32"
+              />
+            </UFormField>
 
             <UButton
               @click="removeRate(index)"
@@ -419,7 +424,7 @@ watch(
         <div class="flex justify-end gap-2">
           <UButton variant="ghost" @click="emit('cancel')">Cancelar</UButton>
           <UButton type="submit">
-            {{ isEdit ? 'Guardar cambios' : 'Crear corredor' }}
+            {{ isEdit ? 'Guardar cambios' : 'Crear Orden' }}
           </UButton>
         </div>
       </template>

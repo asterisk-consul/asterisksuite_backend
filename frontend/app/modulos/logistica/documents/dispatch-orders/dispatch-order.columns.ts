@@ -1,5 +1,8 @@
 import type { TableColumn } from '@nuxt/ui'
-import type { DispatchOrder } from '~/modulos/logistica/documents/dispatch-orders/types/dispatch-orders.types'
+import type {
+  DispatchOrder,
+  DispatchStatus
+} from '~/modulos/logistica/documents/dispatch-orders/types/dispatch-orders.types'
 
 import StatusToggle from '@/components/ui/PopoverTableActive.vue'
 
@@ -8,12 +11,6 @@ import { useSelectColumn } from '@/composables/table/useSelectColumn'
 import { useIdColumn } from '@/composables/table/useIdColumn'
 type Row = DispatchOrder
 import type { EditableValue } from '~/composables/table/useInlineEdit'
-export type DispatchStatus =
-  | 'pending'
-  | 'assigned'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled'
 
 type BadgeColor =
   | 'error'
@@ -30,11 +27,11 @@ const dispatchStatusConfig: Record<
   DispatchStatus,
   { label: string; color: BadgeColor }
 > = {
-  pending: { label: 'Pendiente', color: 'warning' },
-  assigned: { label: 'Asignado', color: 'info' },
-  in_progress: { label: 'En curso', color: 'primary' },
-  completed: { label: 'Completado', color: 'success' },
-  cancelled: { label: 'Cancelado', color: 'error' }
+  PENDING: { label: 'Pendiente', color: 'warning' },
+  ASSIGNED: { label: 'Asignado', color: 'info' },
+  IN_PROGRESS: { label: 'En curso', color: 'primary' },
+  COMPLETED: { label: 'Completado', color: 'success' },
+  CANCELLED: { label: 'Cancelado', color: 'error' }
 }
 
 export const dispatchOrdersColumns = (actions: {

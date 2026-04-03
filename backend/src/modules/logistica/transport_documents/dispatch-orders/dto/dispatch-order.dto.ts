@@ -7,9 +7,11 @@ import {
   ValidateNested,
   IsArray,
   IsNumber,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PartialType } from '@nestjs/mapped-types';
+import { DispatchStatus } from '@/generated/prisma/enums';
 
 /**
  * 🔹 Rates
@@ -29,9 +31,8 @@ export class CreateDispatchOrderDto {
   @IsString()
   order_number!: string;
 
-  @IsOptional()
-  @IsString()
-  status?: string;
+  @IsEnum(DispatchStatus)
+  status?: DispatchStatus;
 
   @IsOptional()
   @IsBoolean()

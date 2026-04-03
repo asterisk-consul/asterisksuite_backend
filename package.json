@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "dev:back": "pnpm --filter backend start:dev",
+  "dev:front": "pnpm --filter frontend dev",  
     "dev": "concurrently -n BACK,FRONT -c blue,green --prefix \"[{name}]\" \"pnpm --filter backend start:dev\" \"pnpm --filter frontend dev\""
   }
 }

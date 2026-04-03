@@ -283,8 +283,6 @@ export declare const TripsScalarFieldEnum: {
     readonly deleted_at: "deleted_at";
     readonly created_at: "created_at";
     readonly kilometers: "kilometers";
-    readonly corridor_id: "corridor_id";
-    readonly dispatch_ordersId: "dispatch_ordersId";
 };
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum];
 export declare const Trip_stopsScalarFieldEnum: {

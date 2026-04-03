@@ -5,43 +5,69 @@ definePageMeta({
 
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { useAuthStore } from '~/modulos/auth/auth.store'
+
+const auth = useAuthStore()
+const toast = useToast()
 
 const fileRef = ref<HTMLInputElement>()
 
 const profileSchema = z.object({
-  name: z.string().min(2, 'Too short'),
-  email: z.string().email('Invalid email'),
-  username: z.string().min(2, 'Too short'),
+  name: z.string().min(2, 'Muy corto'),
+  email: z.string().email('Email inválido'),
   avatar: z.string().optional(),
   bio: z.string().optional()
 })
 
 type ProfileSchema = z.output<typeof profileSchema>
 
+// ✅ Estado basado en el usuario real
 const profile = reactive<Partial<ProfileSchema>>({
-  name: 'Benjamin Canac',
-  email: 'ben@nuxtlabs.com',
-  username: 'benjamincanac',
+  name: '',
+  email: '',
   avatar: undefined,
   bio: undefined
 })
-const toast = useToast()
+
+// ✅ Cargar datos reales
+onMounted(async () => {
+  if (!auth.user) {
+    await auth.fetchMe()
+  }
+
+  if (auth.user) {
+    profile.name = auth.user.name
+    profile.email = auth.user.email
+  }
+})
+
+// ✅ Submit (por ahora mock hasta que tengas endpoint)
 async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
-  toast.add({
-    title: 'Success',
-    description: 'Your settings have been updated.',
-    icon: 'i-lucide-check',
-    color: 'success'
-  })
-  console.log(event.data)
+  try {
+    // 🔥 cuando tengas endpoint:
+    // await authService.updateProfile(event.data)
+
+    toast.add({
+      title: 'Perfil actualizado',
+      description: 'Los cambios fueron guardados',
+      color: 'success'
+    })
+
+    console.log('DATA A ENVIAR:', event.data)
+  } catch (err: any) {
+    toast.add({
+      title: 'Error',
+      description: err?.message || 'No se pudo actualizar',
+      color: 'error'
+    })
+  }
 }
 
+// Avatar
 function onFileChange(e: Event) {
   const input = e.target as HTMLInputElement
 
-  if (!input.files?.length) {
-    return
-  }
+  if (!input.files?.length) return
 
   profile.avatar = URL.createObjectURL(input.files[0]!)
 }
@@ -102,7 +128,7 @@ function onFileClick() {
         required
         class="flex max-sm:flex-col justify-between items-start gap-4"
       >
-        <UInput v-model="profile.username" type="username" autocomplete="off" />
+        <UInput v-model="profile.name" type="username" autocomplete="off" />
       </UFormField>
       <USeparator />
       <UFormField

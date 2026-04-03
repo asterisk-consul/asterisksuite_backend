@@ -1,10 +1,10 @@
 // 🔹 status
 export type DispatchStatus =
-  | 'pending'
-  | 'assigned'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled'
+  | 'PENDING'
+  | 'ASSIGNED'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'CANCELLED'
 
 // 🔹 customer
 export interface DispatchCustomer {

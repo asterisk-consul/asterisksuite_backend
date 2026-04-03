@@ -16,6 +16,9 @@
 
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true // SOLO aplica reglas de ESLint que no sean estilo
+  },
 
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -29,10 +32,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
-
   "graalvm.home": "",
-  "netbeans.jdkhome": ""
+  "netbeans.jdkhome": "",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }

@@ -1,3 +1,4 @@
+import type { ApiLoginResponse } from '~/modulos/auth/auth.types'
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const config = useRuntimeConfig()
@@ -24,11 +25,9 @@ export default defineEventHandler(async (event) => {
 
     return { user: api.user }
   } catch (e: any) {
-    console.error('LOGIN ERROR:', e?.data || e)
-
     throw createError({
       statusCode: e?.status || 500,
-      statusMessage: 'Login failed',
+      statusMessage: 'Usuario o contraseña incorrectos',
       data: {
         message: e?.data?.message || 'Credenciales inválidas'
       }

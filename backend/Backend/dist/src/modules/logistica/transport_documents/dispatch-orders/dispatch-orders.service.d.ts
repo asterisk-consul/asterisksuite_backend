@@ -1,5 +1,6 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateDispatchOrderDto, UpdateDispatchOrderDto } from './dto/dispatch-order.dto';
+import { DispatchStatus } from '@/generated/prisma/enums';
 export declare class DispatchOrdersService {
     private prisma;
     constructor(prisma: PrismaService);
@@ -65,7 +66,7 @@ export declare class DispatchOrdersService {
     } & {
         id: string;
         created_at: Date;
-        status: string;
+        status: DispatchStatus;
         order_number: string;
         requires_stock: boolean;
         planned_date: Date | null;
@@ -77,26 +78,6 @@ export declare class DispatchOrdersService {
         destination_location_id: string | null;
     }>;
     findAll(): Promise<({
-        trips: {
-            id: string;
-            created_at: Date;
-            week: string | null;
-            status: string;
-            notes: string | null;
-            origin_location_id: string | null;
-            corridor_id: string | null;
-            created_by: string | null;
-            destination_location_id: string | null;
-            reference_number: string | null;
-            departure_time: Date | null;
-            arrival_time: Date | null;
-            deleted_at: Date | null;
-            kilometers: import("@prisma/client/runtime/client").Decimal | null;
-            vehicle_combination_id: string | null;
-            origin_warehouse_id: string | null;
-            destination_warehouse_id: string | null;
-            dispatch_ordersId: string | null;
-        }[];
         corridors: {
             name: string | null;
             id: string;
@@ -135,6 +116,41 @@ export declare class DispatchOrdersService {
             longitude: import("@prisma/client/runtime/client").Decimal | null;
             postal_code: string | null;
         } | null;
+        tripStopOrders: ({
+            trip_stop: {
+                trip: {
+                    id: string;
+                    created_at: Date;
+                    week: string | null;
+                    status: import("@/generated/prisma/enums").TripStatus;
+                    notes: string | null;
+                    origin_location_id: string | null;
+                    created_by: string | null;
+                    destination_location_id: string | null;
+                    reference_number: string | null;
+                    departure_time: Date | null;
+                    arrival_time: Date | null;
+                    deleted_at: Date | null;
+                    kilometers: import("@prisma/client/runtime/client").Decimal | null;
+                    vehicle_combination_id: string | null;
+                    origin_warehouse_id: string | null;
+                    destination_warehouse_id: string | null;
+                };
+            } & {
+                id: string;
+                created_at: Date;
+                location_id: string;
+                stop_order: number;
+                stop_type: string | null;
+                trip_id: string;
+            };
+        } & {
+            id: string;
+            created_at: Date;
+            dispatch_order_id: string;
+            trip_stop_id: string;
+            action: string;
+        })[];
         destination_location: {
             id: string;
             created_at: Date;
@@ -149,7 +165,7 @@ export declare class DispatchOrdersService {
     } & {
         id: string;
         created_at: Date;
-        status: string;
+        status: DispatchStatus;
         order_number: string;
         requires_stock: boolean;
         planned_date: Date | null;
@@ -161,26 +177,6 @@ export declare class DispatchOrdersService {
         destination_location_id: string | null;
     })[]>;
     findOne(id: string): Promise<{
-        trips: {
-            id: string;
-            created_at: Date;
-            week: string | null;
-            status: string;
-            notes: string | null;
-            origin_location_id: string | null;
-            corridor_id: string | null;
-            created_by: string | null;
-            destination_location_id: string | null;
-            reference_number: string | null;
-            departure_time: Date | null;
-            arrival_time: Date | null;
-            deleted_at: Date | null;
-            kilometers: import("@prisma/client/runtime/client").Decimal | null;
-            vehicle_combination_id: string | null;
-            origin_warehouse_id: string | null;
-            destination_warehouse_id: string | null;
-            dispatch_ordersId: string | null;
-        }[];
         corridors: {
             name: string | null;
             id: string;
@@ -219,6 +215,41 @@ export declare class DispatchOrdersService {
             longitude: import("@prisma/client/runtime/client").Decimal | null;
             postal_code: string | null;
         } | null;
+        tripStopOrders: ({
+            trip_stop: {
+                trip: {
+                    id: string;
+                    created_at: Date;
+                    week: string | null;
+                    status: import("@/generated/prisma/enums").TripStatus;
+                    notes: string | null;
+                    origin_location_id: string | null;
+                    created_by: string | null;
+                    destination_location_id: string | null;
+                    reference_number: string | null;
+                    departure_time: Date | null;
+                    arrival_time: Date | null;
+                    deleted_at: Date | null;
+                    kilometers: import("@prisma/client/runtime/client").Decimal | null;
+                    vehicle_combination_id: string | null;
+                    origin_warehouse_id: string | null;
+                    destination_warehouse_id: string | null;
+                };
+            } & {
+                id: string;
+                created_at: Date;
+                location_id: string;
+                stop_order: number;
+                stop_type: string | null;
+                trip_id: string;
+            };
+        } & {
+            id: string;
+            created_at: Date;
+            dispatch_order_id: string;
+            trip_stop_id: string;
+            action: string;
+        })[];
         destination_location: {
             id: string;
             created_at: Date;
@@ -233,7 +264,7 @@ export declare class DispatchOrdersService {
     } & {
         id: string;
         created_at: Date;
-        status: string;
+        status: DispatchStatus;
         order_number: string;
         requires_stock: boolean;
         planned_date: Date | null;
@@ -247,7 +278,7 @@ export declare class DispatchOrdersService {
     update(id: string, dto: UpdateDispatchOrderDto): Promise<{
         id: string;
         created_at: Date;
-        status: string;
+        status: DispatchStatus;
         order_number: string;
         requires_stock: boolean;
         planned_date: Date | null;
@@ -261,7 +292,7 @@ export declare class DispatchOrdersService {
     remove(id: string): Promise<{
         id: string;
         created_at: Date;
-        status: string;
+        status: DispatchStatus;
         order_number: string;
         requires_stock: boolean;
         planned_date: Date | null;

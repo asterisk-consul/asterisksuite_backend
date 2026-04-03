@@ -18,11 +18,11 @@ export const useVehicleCombinationsStore = defineStore(
 
     const service = useVehicleCombinationsService()
 
-    const fetchAll = async (company_id: string) => {
+    const fetchAll = async () => {
       loading.value = true
       error.value = null
       try {
-        items.value = await service.getAll(company_id)
+        items.value = await service.getAll()
       } catch (err: any) {
         error.value = err?.data?.message || err.message
       } finally {
@@ -73,12 +73,12 @@ export const useVehicleCombinationsStore = defineStore(
         loading.value = false
       }
     }
-    const fetchAvailable = async (company_id: string, date: string) => {
+    const fetchAvailable = async (date: string) => {
       loading.value = true
       error.value = null
 
       try {
-        available.value = await service.getAvailable(company_id, date)
+        available.value = await service.getAvailable(date)
       } catch (err: any) {
         error.value = err?.data?.message || err.message
       } finally {

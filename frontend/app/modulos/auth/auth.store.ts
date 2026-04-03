@@ -1,32 +1,47 @@
 import { defineStore } from 'pinia'
-import type { AuthUser } from '~/modulos/auth/auth.types'
+import { authService } from './auth.service'
+import type { AuthUser } from './auth.types'
 
 export const useAuthStore = defineStore('auth', () => {
-  const fetchApi = import.meta.client ? $fetch : useRequestFetch()
-
   const user = ref<AuthUser | null>(null)
   const initialized = ref(false)
   const loading = ref(false)
+  const error = ref<string | null>(null)
 
   const isLogged = computed(() => !!user.value)
-
-  const error = ref<string | null>(null)
 
   async function login(email: string, password: string) {
     loading.value = true
     error.value = null
 
     try {
-      const res = await fetchApi<{ user: AuthUser }>('/api/auth/login', {
-        method: 'POST',
-        body: { email, password },
-        credentials: 'include'
-      })
-
+      const res = await authService.login(email, password)
       user.value = res.user
     } catch (e: any) {
       error.value =
         e?.data?.message || e?.statusMessage || 'Error al iniciar sesión'
+
+      throw new Error(error.value ?? 'Error al iniciar sesión')
+    } finally {
+      loading.value = false
+    }
+  }
+  async function register(data: {
+    name: string
+    email: string
+    password: string
+  }) {
+    loading.value = true
+    error.value = null
+
+    try {
+      const res = await authService.register(data)
+      user.value = res.user
+    } catch (e: any) {
+      error.value =
+        e?.data?.message || e?.statusMessage || 'Error al registrarse'
+
+      throw new Error(error.value ?? 'Error al registrarse')
     } finally {
       loading.value = false
     }
@@ -34,35 +49,49 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchMe() {
     try {
-      const res = await fetchApi<AuthUser>('/api/auth/me', {
-        credentials: 'include'
-      })
-      user.value = res
+      user.value = await authService.me()
     } catch {
       user.value = null
     }
   }
 
-  // 🚀 INIT — solo obtiene el usuario, el refresh lo maneja apiProxy
   async function init() {
     if (initialized.value) return
     initialized.value = true
-    await fetchMe() // ✅ apiProxy se encarga del refresh si es necesario
+    await fetchMe()
+  }
+  async function changePassword(data: {
+    currentPassword: string
+    newPassword: string
+  }) {
+    loading.value = true
+    error.value = null
+
+    try {
+      await authService.changePassword(data)
+    } catch (e: any) {
+      error.value =
+        e?.data?.message || e?.statusMessage || 'Error al cambiar contraseña'
+
+      throw new Error(error.value ?? 'Error al cambiar contraseña')
+    } finally {
+      loading.value = false
+    }
   }
 
   async function logout() {
-    await fetchApi('/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include'
-    })
+    await authService.logout()
     user.value = null
   }
 
   return {
     user,
     loading,
+    register,
+    changePassword,
     initialized,
     isLogged,
+    error,
     login,
     fetchMe,
     init,

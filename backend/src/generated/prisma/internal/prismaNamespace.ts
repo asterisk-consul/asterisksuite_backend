@@ -4171,9 +4171,7 @@ export const TripsScalarFieldEnum = {
   created_by: 'created_by',
   deleted_at: 'deleted_at',
   created_at: 'created_at',
-  kilometers: 'kilometers',
-  corridor_id: 'corridor_id',
-  dispatch_ordersId: 'dispatch_ordersId'
+  kilometers: 'kilometers'
 } as const
 
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum]
@@ -4589,6 +4587,34 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DispatchStatus'
+ */
+export type EnumDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DispatchStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DispatchStatus[]'
+ */
+export type ListEnumDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DispatchStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TripStatus'
+ */
+export type EnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TripStatus[]'
+ */
+export type ListEnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripStatus[]'>
     
 
 

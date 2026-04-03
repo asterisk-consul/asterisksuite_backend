@@ -12,12 +12,10 @@ export interface SelectMenuItem {
 }
 
 export function useCorridorForm(
-  companyId?: string,
   corridor?: Corridor, // ✅ uno solo, para el form
   corridors?: Ref<Corridor[]> // ✅ array, para el select
 ) {
   const form = reactive<CreateCorridorDto>({
-    company_id: companyId ?? '',
     name: corridor?.name ?? '',
     origin_location_id: corridor?.origin_location_id ?? '',
     destination_location_id: corridor?.destination_location_id ?? '',

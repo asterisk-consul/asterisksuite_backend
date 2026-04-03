@@ -3871,8 +3871,6 @@ export declare const TripsScalarFieldEnum: {
     readonly deleted_at: "deleted_at";
     readonly created_at: "created_at";
     readonly kilometers: "kilometers";
-    readonly corridor_id: "corridor_id";
-    readonly dispatch_ordersId: "dispatch_ordersId";
 };
 export type TripsScalarFieldEnum = (typeof TripsScalarFieldEnum)[keyof typeof TripsScalarFieldEnum];
 export declare const Trip_stopsScalarFieldEnum: {
@@ -4147,6 +4145,10 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>;
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>;
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>;
+export type EnumDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DispatchStatus'>;
+export type ListEnumDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DispatchStatus[]'>;
+export type EnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripStatus'>;
+export type ListEnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripStatus[]'>;
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>;
 export type BatchPayload = {

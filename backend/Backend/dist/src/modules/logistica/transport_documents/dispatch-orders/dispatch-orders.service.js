@@ -13,52 +13,45 @@ exports.DispatchOrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../../../prisma/prisma.service");
 const buildPrisma_1 = require("../../../../common/utils/buildPrisma");
+const enums_1 = require("../../../../generated/prisma/enums");
 let DispatchOrdersService = class DispatchOrdersService {
     prisma;
     constructor(prisma) {
         this.prisma = prisma;
     }
     async create(dto, userId) {
-        try {
-            return this.prisma.dispatch_orders.create({
-                data: {
-                    order_number: dto.order_number,
-                    status: dto.status ?? 'pending',
-                    requires_stock: dto.requires_stock ?? false,
-                    customer_id: dto.customer_id,
-                    origin_location_id: dto.origin_location_id,
-                    destination_location_id: dto.destination_location_id,
-                    corridor_id: dto.corridor_id,
-                    planned_date: dto.planned_date
-                        ? new Date(dto.planned_date)
-                        : undefined,
-                    created_by: userId,
-                    dispatch_rates: dto.rates?.length
-                        ? {
-                            create: dto.rates.map((r) => ({
-                                rate_id: r.rate_id,
-                                value: r.value,
-                            })),
-                        }
-                        : undefined,
-                },
-                include: {
-                    customers: true,
-                    origin_location: true,
-                    destination_location: true,
-                    corridors: true,
-                    dispatch_rates: {
-                        include: {
-                            transfer_rates: true,
-                        },
+        return this.prisma.dispatch_orders.create({
+            data: {
+                order_number: dto.order_number,
+                status: dto.status ?? enums_1.DispatchStatus.PENDING,
+                requires_stock: dto.requires_stock ?? false,
+                customer_id: dto.customer_id,
+                origin_location_id: dto.origin_location_id,
+                destination_location_id: dto.destination_location_id,
+                corridor_id: dto.corridor_id,
+                planned_date: dto.planned_date ? new Date(dto.planned_date) : undefined,
+                created_by: userId,
+                dispatch_rates: dto.rates?.length
+                    ? {
+                        create: dto.rates.map((r) => ({
+                            rate_id: r.rate_id,
+                            value: r.value,
+                        })),
+                    }
+                    : undefined,
+            },
+            include: {
+                customers: true,
+                origin_location: true,
+                destination_location: true,
+                corridors: true,
+                dispatch_rates: {
+                    include: {
+                        transfer_rates: true,
                     },
                 },
-            });
-        }
-        catch (e) {
-            console.error('🔥 PRISMA ERROR:', e);
-            throw e;
-        }
+            },
+        });
     }
     async findAll() {
         return this.prisma.dispatch_orders.findMany({
@@ -66,7 +59,15 @@ let DispatchOrdersService = class DispatchOrdersService {
                 customers: true,
                 origin_location: true,
                 destination_location: true,
-                trips: true,
+                tripStopOrders: {
+                    include: {
+                        trip_stop: {
+                            include: {
+                                trip: true,
+                            },
+                        },
+                    },
+                },
                 dispatch_rates: true,
                 corridors: true,
             },
@@ -79,7 +80,15 @@ let DispatchOrdersService = class DispatchOrdersService {
                 customers: true,
                 origin_location: true,
                 destination_location: true,
-                trips: true,
+                tripStopOrders: {
+                    include: {
+                        trip_stop: {
+                            include: {
+                                trip: true,
+                            },
+                        },
+                    },
+                },
                 dispatch_rates: true,
                 corridors: true,
             },
@@ -89,7 +98,17 @@ let DispatchOrdersService = class DispatchOrdersService {
         return order;
     }
     async update(id, dto) {
-        const data = (0, buildPrisma_1.buildPrismaUpdate)(dto);
+        const { rates, ...rest } = dto;
+        const data = (0, buildPrisma_1.buildPrismaUpdate)(rest);
+        if (rates) {
+            data.dispatch_rates = {
+                deleteMany: {},
+                create: rates.map((r) => ({
+                    rate_id: r.rate_id,
+                    value: r.value,
+                })),
+            };
+        }
         return this.prisma.dispatch_orders.update({
             where: { id },
             data,

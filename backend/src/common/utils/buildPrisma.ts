@@ -79,3 +79,18 @@ export function buildPrismaUpdate<T extends object>(
 
   return data;
 }
+
+export function buildPrismaCreate<T extends object>(dto: T) {
+  const data: AnyRecord = {};
+
+  for (const key in dto) {
+    const value = dto[key];
+
+    // 🔥 ignorar null y undefined
+    if (value === undefined || value === null) continue;
+
+    data[key] = value;
+  }
+
+  return data;
+}

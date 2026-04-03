@@ -152,6 +152,10 @@
       {
         "title": "Se agrega Breadcumps a las vistas de logistica, pemitiendo navegar entre vistas",
         "type": "changed"
+      },
+      {
+        "title": "Se crea pagina de register y cambiar la contraseña",
+        "type": "changed"
       }
     ],
     "modules": [

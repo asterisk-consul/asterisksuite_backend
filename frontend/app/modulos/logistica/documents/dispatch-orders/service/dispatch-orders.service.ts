@@ -18,12 +18,11 @@ export const useDispatchOrdersService = () => {
 
   const findOne = (id: string) => fetch<DispatchOrder>(`${urlBase}/${id}`)
 
-  const update = (id: string, data: UpdateDispatchOrderDto) => {
+  const update = (id: string, data: UpdateDispatchOrderDto) =>
     fetch<DispatchOrder>(`${urlBase}/${id}`, {
       method: 'PATCH',
       body: data
     })
-  }
 
   const remove = (id: string) =>
     fetch<void>(`${urlBase}/${id}`, {

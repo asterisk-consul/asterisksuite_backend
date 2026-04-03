@@ -2,16 +2,13 @@ import type {
   Trip,
   CreateTripInput,
   UpdateTripInput,
-  TripRate,
-  CreateTripRateInput,
-  UpdateTripRateInput
+  AssignOrdersDto
 } from '~/modulos/logistica/transport/trips/types/trips.types'
 
 export const useTripsService = () => {
   const base = '/api/logistica/transport/trips'
 
-  const getAll = (company_id: string) =>
-    $fetch<Trip[]>(base, { query: { company_id } })
+  const getAll = () => $fetch<Trip[]>(base)
 
   const getById = (id: string) => $fetch<Trip>(`${base}/${id}`)
 
@@ -31,15 +28,13 @@ export const useTripsService = () => {
       method: 'PATCH'
     })
   }
+
+  const assignOrders = (tripId: string, body: AssignOrdersDto) =>
+    $fetch<Trip>(`${base}/${tripId}/assign-orders`, {
+      method: 'POST',
+      body
+    })
   // rates
-  const addRate = (id: string, body: CreateTripRateInput) =>
-    $fetch<TripRate>(`${base}/${id}/rates`, { method: 'POST', body })
-
-  const updateRate = (id: string, body: UpdateTripRateInput) =>
-    $fetch<TripRate>(`${base}/rates/${id}`, { method: 'PATCH', body })
-
-  const removeRate = (id: string) =>
-    $fetch<{ deleted: boolean }>(`${base}/rates/${id}`, { method: 'DELETE' })
 
   return {
     getAll,
@@ -48,8 +43,6 @@ export const useTripsService = () => {
     update,
     remove,
     updateStatus,
-    addRate,
-    updateRate,
-    removeRate
+    assignOrders
   }
 }

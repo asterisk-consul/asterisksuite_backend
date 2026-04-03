@@ -13,6 +13,7 @@ exports.UpdateDispatchOrderDto = exports.CreateDispatchOrderDto = exports.Dispat
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const mapped_types_1 = require("@nestjs/mapped-types");
+const enums_1 = require("../../../../../generated/prisma/enums");
 class DispatchRateDto {
     rate_id;
     value;
@@ -43,8 +44,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateDispatchOrderDto.prototype, "order_number", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsEnum)(enums_1.DispatchStatus),
     __metadata("design:type", String)
 ], CreateDispatchOrderDto.prototype, "status", void 0);
 __decorate([

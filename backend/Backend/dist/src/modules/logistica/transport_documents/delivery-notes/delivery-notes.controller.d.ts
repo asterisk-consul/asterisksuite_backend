@@ -43,10 +43,9 @@ export declare class DeliveryNotesController {
             id: string;
             created_at: Date;
             week: string | null;
-            status: string;
+            status: import("../../../../generated/prisma/enums").TripStatus;
             notes: string | null;
             origin_location_id: string | null;
-            corridor_id: string | null;
             created_by: string | null;
             destination_location_id: string | null;
             reference_number: string | null;
@@ -57,7 +56,6 @@ export declare class DeliveryNotesController {
             vehicle_combination_id: string | null;
             origin_warehouse_id: string | null;
             destination_warehouse_id: string | null;
-            dispatch_ordersId: string | null;
         } | null;
     } & {
         number: string;
@@ -103,10 +101,9 @@ export declare class DeliveryNotesController {
             id: string;
             created_at: Date;
             week: string | null;
-            status: string;
+            status: import("../../../../generated/prisma/enums").TripStatus;
             notes: string | null;
             origin_location_id: string | null;
-            corridor_id: string | null;
             created_by: string | null;
             destination_location_id: string | null;
             reference_number: string | null;
@@ -117,7 +114,6 @@ export declare class DeliveryNotesController {
             vehicle_combination_id: string | null;
             origin_warehouse_id: string | null;
             destination_warehouse_id: string | null;
-            dispatch_ordersId: string | null;
         } | null;
     } & {
         number: string;

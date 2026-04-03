@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.omitUndefinedDeep = omitUndefinedDeep;
 exports.buildPrismaUpdate = buildPrismaUpdate;
+exports.buildPrismaCreate = buildPrismaCreate;
 function omitUndefinedDeep(obj) {
     if (Array.isArray(obj)) {
         const arr = obj;
@@ -39,6 +40,16 @@ function buildPrismaUpdate(dto, relations) {
             data[key] = new Date(value);
             continue;
         }
+        data[key] = value;
+    }
+    return data;
+}
+function buildPrismaCreate(dto) {
+    const data = {};
+    for (const key in dto) {
+        const value = dto[key];
+        if (value === undefined || value === null)
+            continue;
         data[key] = value;
     }
     return data;

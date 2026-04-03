@@ -5,12 +5,9 @@ import type {
 } from '~/modulos/logistica/transport/vehicles-combinations/types/vehicles-combinations.types'
 
 export const useVehicleCombinationsService = () => {
-  const getAll = (company_id: string) =>
+  const getAll = () =>
     $fetch<VehicleCombination[]>(
-      '/api/logistica/transport/vehicles-combinations',
-      {
-        query: { company_id }
-      }
+      '/api/logistica/transport/vehicles-combinations'
     )
 
   const getActive = (company_id: string) =>
@@ -59,12 +56,11 @@ export const useVehicleCombinationsService = () => {
         method: 'PATCH'
       }
     )
-  const getAvailable = (company_id: string, date: string) =>
+  const getAvailable = (date: string) =>
     $fetch<VehicleCombination[]>(
       '/api/logistica/transport/vehicles-combinations/available',
       {
         query: {
-          company_id,
           date
         }
       }

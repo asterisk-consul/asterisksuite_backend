@@ -46,13 +46,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     }>;
     findAll(): Promise<({
         drivers: {
@@ -95,13 +95,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     })[]>;
     findAvailable(date: string): Promise<({
         drivers: {
@@ -144,13 +144,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     })[]>;
     findActive(): Promise<({
         drivers: {
@@ -193,13 +193,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     })[]>;
     findByVehicle(vehicle_id: string): Promise<({
         drivers: {
@@ -242,13 +242,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     })[]>;
     findOne(id: string): Promise<{
         drivers: {
@@ -264,10 +264,9 @@ export declare class VehicleCombinationsController {
             id: string;
             created_at: Date;
             week: string | null;
-            status: string;
+            status: import("../../../../generated/prisma/enums").TripStatus;
             notes: string | null;
             origin_location_id: string | null;
-            corridor_id: string | null;
             created_by: string | null;
             destination_location_id: string | null;
             reference_number: string | null;
@@ -278,7 +277,6 @@ export declare class VehicleCombinationsController {
             vehicle_combination_id: string | null;
             origin_warehouse_id: string | null;
             destination_warehouse_id: string | null;
-            dispatch_ordersId: string | null;
         }[];
         tractor: {
             id: string;
@@ -311,13 +309,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     }>;
     finish(id: string): Promise<{
         drivers: {
@@ -360,13 +358,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     }>;
     activate(id: string): Promise<{
         drivers: {
@@ -409,13 +407,13 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     }>;
     update(id: string, dto: UpdateVehicleCombinationDto): Promise<{
         drivers: {
@@ -458,25 +456,25 @@ export declare class VehicleCombinationsController {
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     }>;
     remove(id: string, user: AuthUser): Promise<{
         id: string;
         created_at: Date;
         created_by: string | null;
         deleted_at: Date | null;
+        tractor_id: string;
+        trailer_id: string | null;
         valid_from: Date;
         valid_until: Date | null;
         unit_number: string | null;
-        deleted_by: string | null;
-        trailer_id: string | null;
         driver_id: string | null;
-        tractor_id: string;
+        deleted_by: string | null;
     }>;
 }

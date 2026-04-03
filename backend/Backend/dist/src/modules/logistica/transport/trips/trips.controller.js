@@ -18,6 +18,7 @@ const trips_service_1 = require("./trips.service");
 const create_trip_dto_1 = require("./dto/create-trip.dto");
 const update_trip_dto_1 = require("./dto/update-trip.dto");
 const jwt_auth_guard_1 = require("../../../../auth/jwt/jwt-auth.guard");
+const enums_1 = require("../../../../generated/prisma/enums");
 let TripsController = class TripsController {
     service;
     constructor(service) {
@@ -62,7 +63,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TripsController.prototype, "updateStatus", null);
 __decorate([
-    (0, common_1.Get)(':company_id'),
+    (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

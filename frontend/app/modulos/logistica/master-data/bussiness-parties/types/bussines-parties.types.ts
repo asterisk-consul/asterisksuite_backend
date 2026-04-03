@@ -35,12 +35,11 @@ export interface PartyContact {
 // ------------------
 export interface BusinessParty {
   id: string
-  company_id: string
+
   type: BusinessPartyType
   name: string
   tax_id?: string
-  phone?: string
-  email?: string
+
   active?: boolean
   created_at?: string
 
@@ -52,12 +51,9 @@ export interface BusinessParty {
 // INPUTS (API)
 // ------------------
 export type CreateBusinessPartyInput = {
-  company_id: string
   type: BusinessPartyType
   name: string
   tax_id?: string
-  phone?: string
-  email?: string
 
   locations?: {
     location_id: string
@@ -80,13 +76,9 @@ export type UpdateBusinessPartyInput = Partial<CreateBusinessPartyInput>
 // ------------------
 export interface BusinessPartyForm {
   id?: string
-  company_id: string
   type: BusinessPartyType
   name: string
   tax_id?: string
-  phone?: string
-  email?: string
-
   locations: {
     location_id: string
     label?: string

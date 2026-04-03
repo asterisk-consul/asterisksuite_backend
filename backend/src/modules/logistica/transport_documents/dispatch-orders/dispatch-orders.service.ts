@@ -5,6 +5,7 @@ import {
   UpdateDispatchOrderDto,
 } from './dto/dispatch-order.dto';
 import { buildPrismaUpdate } from '@/common/utils/buildPrisma';
+import { DispatchStatus } from '@/generated/prisma/enums';
 
 @Injectable()
 export class DispatchOrdersService {
@@ -12,52 +13,45 @@ export class DispatchOrdersService {
 
   // service
   async create(dto: CreateDispatchOrderDto, userId: string) {
-    try {
-      return this.prisma.dispatch_orders.create({
-        data: {
-          order_number: dto.order_number,
-          status: dto.status ?? 'pending',
-          requires_stock: dto.requires_stock ?? false,
+    return this.prisma.dispatch_orders.create({
+      data: {
+        order_number: dto.order_number,
+        status: dto.status ?? DispatchStatus.PENDING,
+        requires_stock: dto.requires_stock ?? false,
 
-          customer_id: dto.customer_id,
-          origin_location_id: dto.origin_location_id,
-          destination_location_id: dto.destination_location_id,
-          corridor_id: dto.corridor_id,
+        customer_id: dto.customer_id,
+        origin_location_id: dto.origin_location_id,
+        destination_location_id: dto.destination_location_id,
+        corridor_id: dto.corridor_id,
 
-          planned_date: dto.planned_date
-            ? new Date(dto.planned_date)
-            : undefined,
+        planned_date: dto.planned_date ? new Date(dto.planned_date) : undefined,
 
-          created_by: userId,
+        created_by: userId,
 
-          // 🔥 rates
-          dispatch_rates: dto.rates?.length
-            ? {
-                create: dto.rates.map((r) => ({
-                  rate_id: r.rate_id,
-                  value: r.value,
-                })),
-              }
-            : undefined,
-        },
+        // 🔥 rates
+        dispatch_rates: dto.rates?.length
+          ? {
+              create: dto.rates.map((r) => ({
+                rate_id: r.rate_id,
+                value: r.value,
+              })),
+            }
+          : undefined,
+      },
 
-        include: {
-          customers: true,
-          origin_location: true,
-          destination_location: true,
-          corridors: true,
+      include: {
+        customers: true,
+        origin_location: true,
+        destination_location: true,
+        corridors: true,
 
-          dispatch_rates: {
-            include: {
-              transfer_rates: true,
-            },
+        dispatch_rates: {
+          include: {
+            transfer_rates: true,
           },
         },
-      });
-    } catch (e) {
-      console.error('🔥 PRISMA ERROR:', e);
-      throw e;
-    }
+      },
+    });
   }
 
   async findAll() {
@@ -66,7 +60,17 @@ export class DispatchOrdersService {
         customers: true,
         origin_location: true,
         destination_location: true,
-        trips: true,
+
+        tripStopOrders: {
+          include: {
+            trip_stop: {
+              include: {
+                trip: true,
+              },
+            },
+          },
+        },
+
         dispatch_rates: true,
         corridors: true,
       },
@@ -80,7 +84,16 @@ export class DispatchOrdersService {
         customers: true,
         origin_location: true,
         destination_location: true,
-        trips: true,
+
+        tripStopOrders: {
+          include: {
+            trip_stop: {
+              include: {
+                trip: true,
+              },
+            },
+          },
+        },
         dispatch_rates: true,
         corridors: true,
       },
@@ -90,8 +103,20 @@ export class DispatchOrdersService {
   }
 
   async update(id: string, dto: UpdateDispatchOrderDto) {
-    const data = buildPrismaUpdate(dto);
-    // console.log(dto);
+    const { rates, ...rest } = dto;
+
+    const data = buildPrismaUpdate(rest);
+
+    // 🔥 manejar relación manualmente
+    if (rates) {
+      data.dispatch_rates = {
+        deleteMany: {}, // limpia existentes
+        create: rates.map((r) => ({
+          rate_id: r.rate_id,
+          value: r.value,
+        })),
+      };
+    }
 
     return this.prisma.dispatch_orders.update({
       where: { id },

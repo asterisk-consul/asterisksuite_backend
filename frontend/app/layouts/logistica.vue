@@ -76,16 +76,15 @@ defineShortcuts(extractShortcuts(items))
       <!-- BODY -->
       <template #body>
         <div class="flex h-full">
-          <!-- SIDEBAR DE MÓDULO -->
           <SidebarModules
             :links="logistica"
             v-model:collapsed="moduleCollapsed"
           />
 
-          <!-- CONTENIDO -->
-          <main class="flex-1 overflow-hidden">
+          <main class="flex-1 flex flex-col">
             <UBreadcrumb :items="breadcrumbs" class="pl-6 pt-6" />
-            <div class="h-full overflow-y-auto p-6">
+
+            <div class="flex-1 overflow-y-auto p-6">
               <slot />
             </div>
           </main>

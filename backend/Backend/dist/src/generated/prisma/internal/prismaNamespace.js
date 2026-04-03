@@ -309,9 +309,7 @@ exports.TripsScalarFieldEnum = {
     created_by: 'created_by',
     deleted_at: 'deleted_at',
     created_at: 'created_at',
-    kilometers: 'kilometers',
-    corridor_id: 'corridor_id',
-    dispatch_ordersId: 'dispatch_ordersId'
+    kilometers: 'kilometers'
 };
 exports.Trip_stopsScalarFieldEnum = {
     id: 'id',

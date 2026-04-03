@@ -17,8 +17,8 @@ export declare class DriversService {
             id: string;
             created_at: Date | null;
             document_type_id: string;
-            expiration_date: Date | null;
             driver_id: string;
+            expiration_date: Date | null;
         })[];
     } & {
         id: string;
@@ -42,8 +42,8 @@ export declare class DriversService {
             id: string;
             created_at: Date | null;
             document_type_id: string;
-            expiration_date: Date | null;
             driver_id: string;
+            expiration_date: Date | null;
         })[];
     } & {
         id: string;
@@ -67,8 +67,8 @@ export declare class DriversService {
             id: string;
             created_at: Date | null;
             document_type_id: string;
-            expiration_date: Date | null;
             driver_id: string;
+            expiration_date: Date | null;
         })[];
     } & {
         id: string;
@@ -92,8 +92,8 @@ export declare class DriversService {
             id: string;
             created_at: Date | null;
             document_type_id: string;
-            expiration_date: Date | null;
             driver_id: string;
+            expiration_date: Date | null;
         })[];
     } & {
         id: string;

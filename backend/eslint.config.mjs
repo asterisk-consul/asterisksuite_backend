@@ -1,8 +1,4 @@
-// @ts-check
-import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
@@ -10,7 +6,7 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
+  // NO incluir prettierRecommended aquí para evitar conflictos con VSCode
   {
     languageOptions: {
       globals: {
@@ -29,7 +25,7 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
-      "prettier/prettier": ["error", { endOfLine: "auto" }],
+      // Puedes quitar prettier/prettier aquí si VSCode ya lo hace
     },
   },
 );
