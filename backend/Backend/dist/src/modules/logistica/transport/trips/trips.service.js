@@ -202,7 +202,7 @@ let TripsService = class TripsService {
             const orderIds = tripOrdersData.map((o) => o.dispatch_order_id);
             await tx.dispatch_orders.updateMany({
                 where: { id: { in: orderIds } },
-                data: { status: client_1.DispatchStatus.PENDING },
+                data: { status: client_1.DispatchStatus.ASSIGNED },
             });
             await tx.trips.update({
                 where: { id: tripId },
@@ -213,6 +213,26 @@ let TripsService = class TripsService {
             });
             return { success: true };
         });
+    }
+    async removeOrderFromTrip(tripId, dispatchOrderId) {
+        const trip = await this.prisma.trips.findUnique({
+            where: { id: tripId },
+            include: { trip_stops: true },
+        });
+        if (!trip)
+            throw new common_1.NotFoundException('Trip not found');
+        const stopIds = trip.trip_stops.map((s) => s.id);
+        await this.prisma.trip_stop_orders.deleteMany({
+            where: {
+                trip_stop_id: { in: stopIds },
+                dispatch_order_id: dispatchOrderId,
+            },
+        });
+        await this.prisma.dispatch_orders.update({
+            where: { id: dispatchOrderId },
+            data: { status: client_1.DispatchStatus.PENDING },
+        });
+        return { success: true };
     }
 };
 exports.TripsService = TripsService;

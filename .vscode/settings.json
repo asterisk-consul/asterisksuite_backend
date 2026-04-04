@@ -17,7 +17,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true // SOLO aplica reglas de ESLint que no sean estilo
+    "source.fixAll.eslint": "explicit"
   },
 
   "[vue]": {

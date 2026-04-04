@@ -193,4 +193,7 @@ export declare class TripsService {
     }): Promise<{
         success: boolean;
     }>;
+    removeOrderFromTrip(tripId: string, dispatchOrderId: string): Promise<{
+        success: boolean;
+    }>;
 }

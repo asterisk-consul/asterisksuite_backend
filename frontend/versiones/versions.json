@@ -124,7 +124,7 @@
     ]
   },
   {
-    "version": "0.3.5-alpha",
+    "version": "0.7.2-alpha",
     "date": "2026-03-31",
     "stage": "alpha",
     "notes": "Refactor de updates en clientes, unidades y viajes",
@@ -154,7 +154,7 @@
         "type": "changed"
       },
       {
-        "title": "Se crea pagina de register y cambiar la contraseña",
+        "title": "Se crea pagina de register, profile y  cambiar la contraseña",
         "type": "changed"
       }
     ],

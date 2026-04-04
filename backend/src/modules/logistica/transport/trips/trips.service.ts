@@ -248,7 +248,7 @@ export class TripsService {
       const orderIds = tripOrdersData.map((o) => o.dispatch_order_id);
       await tx.dispatch_orders.updateMany({
         where: { id: { in: orderIds } },
-        data: { status: DispatchStatus.PENDING },
+        data: { status: DispatchStatus.ASSIGNED },
       });
 
       await tx.trips.update({
@@ -261,5 +261,34 @@ export class TripsService {
 
       return { success: true };
     });
+  }
+  /* =========================
+   REMOVE ORDER FROM TRIP
+========================= */
+  async removeOrderFromTrip(tripId: string, dispatchOrderId: string) {
+    const trip = await this.prisma.trips.findUnique({
+      where: { id: tripId },
+      include: { trip_stops: true },
+    });
+    if (!trip) throw new NotFoundException('Trip not found');
+
+    // Buscar todos los stops de ese trip
+    const stopIds = trip.trip_stops.map((s) => s.id);
+
+    // Borrar la relación de esa orden en todos los stops
+    await this.prisma.trip_stop_orders.deleteMany({
+      where: {
+        trip_stop_id: { in: stopIds },
+        dispatch_order_id: dispatchOrderId,
+      },
+    });
+
+    // Opcional: actualizar status de la orden a PENDING o PLANIFICADA
+    await this.prisma.dispatch_orders.update({
+      where: { id: dispatchOrderId },
+      data: { status: DispatchStatus.PENDING },
+    });
+
+    return { success: true };
   }
 }
