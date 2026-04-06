@@ -12,10 +12,10 @@ const items = [
   {
     label: 'Crear Viaje',
     icon: 'i-lucide-plus',
-    to: '/logistica/transport/trips/create',
+    to: '/logistica/viajes/trips/create',
     kbds: ['meta', 'v'],
     onSelect() {
-      navigateTo('/logistica/transport/trips/create')
+      navigateTo('/logistica/viajes/create')
     }
   },
   {
@@ -24,16 +24,16 @@ const items = [
     to: '/logistica/transport/dispatch-orders/create',
     kbds: ['meta', 'd'],
     onSelect() {
-      navigateTo('/logistica/transport/dispatch-orders/create')
+      navigateTo('/logistica/viajes/dispatch-orders/create')
     }
   },
   {
     label: 'Crear un Corredor',
     icon: 'i-lucide-plus',
-    to: '/logistica/transport/corridors/create',
+    to: '/logistica/viajes/corridors/create',
     kbds: ['meta', 'e'],
     onSelect() {
-      navigateTo('/logistica/transport/corridors/create')
+      navigateTo('/logistica/viajas/corridors/create')
     }
   }
 ]
