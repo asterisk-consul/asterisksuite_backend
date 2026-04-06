@@ -14,8 +14,7 @@ Content-Type: application/json
   "name": "Administrador",
   "email": "admin@mail.com",
   "password": "123456",
-  "role": "admin",
-  "companyId": null
+  "role": "admin"
 }
 
 ###

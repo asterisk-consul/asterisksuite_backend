@@ -9,6 +9,7 @@ exports.default = (0, config_1.defineConfig)({
     },
     datasource: {
         url: (0, config_1.env)('DATABASE_URL'),
+        shadowDatabaseUrl: (0, config_1.env)('SHADOW_DATABASE_URL'),
     },
 });
 //# sourceMappingURL=prisma.config.js.map

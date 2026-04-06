@@ -4,73 +4,17 @@ definePageMeta({
   layout: 'changelog'
 })
 
-import rawVersions from '~~/versiones/versions.json'
+import type { ChangelogVersion } from '~~/server/api/changelog'
 
-const versions = rawVersions
-  .slice()
-  .reverse()
-  .map((v) => ({
-    tag: v.version,
-    title: `v${v.version}`,
-    date: v.date,
-    markdown: generateMarkdown(v)
-  }))
+const { data: versions } = await useFetch<ChangelogVersion[]>('/api/changelog')
+const safeVersions = computed(() => versions.value || [])
 
-function generateMarkdown(v: any) {
-  let md = ''
-
-  // 🧠 NOTAS
-  if (v.notes) {
-    md += `${v.notes}\n\n`
-  }
-
-  // 🧩 CAMBIOS agrupados por tipo
-  if (v.changes) {
-    const grouped: Record<string, any[]> = {
-      added: [],
-      changed: [],
-      fix: []
-    }
-
-    v.changes.forEach((c: any) => {
-      if (!c.type) return
-      grouped[c.type]?.push(c)
-    })
-
-    // Render dinámico
-    Object.entries(grouped).forEach(([type, items]) => {
-      if (!items.length) return
-
-      const titleMap: Record<string, string> = {
-        added: '🚀 Nuevas funcionalidades',
-        changed: '✨ Mejoras',
-        fix: '🐛 Correcciones'
-      }
-
-      md += `### ${titleMap[type]}\n\n`
-
-      items.forEach((c: any) => {
-        if (c.url) {
-          md += `- [${c.id}](${c.url}) - ${c.title}\n`
-        } else {
-          md += `- ${c.title}\n`
-        }
-      })
-
-      md += `\n`
-    })
-  }
-
-  // 📦 MÓDULOS
-  if (v.modules?.length) {
-    md += `### Módulos\n\n`
-
-    v.modules.forEach((m: any) => {
-      md += `- **${m.name}**: ${m.version}\n`
-    })
-  }
-
-  return md
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('es-AR', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
 }
 </script>
 
@@ -79,25 +23,26 @@ function generateMarkdown(v: any) {
     as="main"
     :indicator-motion="false"
     :ui="{
-      root: 'py-6 sm:py-24 lg:py-32 w-full max-w-5xl mx-auto',
+      root: 'py-4 sm:py-22 lg:py-30 w-full max-w-5xl mx-auto',
       indicator: 'inset-y-0'
     }"
   >
     <UChangelogVersion
-      v-for="version in versions"
+      v-for="version in safeVersions"
       :key="version.tag"
-      v-bind="version"
+      :title="version.title"
+      :date="formatDate(version.date)"
       :ui="{
-        root: 'flex items-start',
+        root: 'flex items-start py-2',
         container: 'flex-1 w-full',
-        header: 'border-b border-default pb-4',
-        title: 'text-3xl',
-        date: 'text-xs/9 text-highlighted font-mono',
-        indicator: 'sticky top-0 pt-16'
+        header: 'border-b border-default pb-2', // antes era pb-4
+        title: 'text-xl font-semibold', // antes text-3xl
+        date: 'text-xs/9 text-toned whitespace-nowrap',
+        indicator: 'sticky top-0 pt-2'
       }"
     >
       <template #body>
-        <MDC v-if="version.markdown" :value="version.markdown" />
+        <MDCRenderer v-if="version.body" :body="version.body" />
       </template>
     </UChangelogVersion>
   </UChangelogVersions>

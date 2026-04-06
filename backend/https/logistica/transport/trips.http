@@ -36,7 +36,6 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "{{companyId}}",
   "reference_number": "TRIP-0001",
   "vehicle_combination_id": "{{vehicle-combinations}}",
   "origin_location_id": "{{location-origin}}",

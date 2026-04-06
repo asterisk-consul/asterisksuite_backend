@@ -6,11 +6,13 @@
     "notes": "Inicio del proyecto",
     "changes": [
       {
-        "type": "added",
+        "type": "feat",
+        "scope": "core",
         "title": "Inicialización del sistema"
       },
       {
-        "type": "added",
+        "type": "feat",
+        "scope": "transporte",
         "title": "Módulo base de transporte"
       }
     ],
@@ -28,42 +30,44 @@
     "notes": "Correcciones iniciales en UI y lógica",
     "changes": [
       {
+        "type": "fix",
+        "scope": "clientes",
         "id": "DON-111",
-        "title": "Corrección en carga de clientes",
-        "type": "fix",
-        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-111"
+        "title": "Corrección en carga de clientes"
       },
       {
+        "type": "fix",
+        "scope": "vehiculos",
         "id": "DON-110",
-        "title": "Validación en tipo de vehículo",
-        "type": "fix",
-        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-110"
+        "title": "Validación en tipo de vehículo"
       },
       {
+        "type": "fix",
+        "scope": "ui",
         "id": "DON-109",
-        "title": "Corrección de timeout en UI",
-        "type": "fix",
-        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-109"
+        "title": "Corrección de timeout en UI"
       },
       {
+        "type": "fix",
+        "scope": "flota",
         "id": "DON-108",
-        "title": "Campo chofer en flota",
-        "type": "fix",
-        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-108"
+        "title": "Campo chofer en flota"
       },
       {
+        "type": "fix",
+        "scope": "logica",
         "id": "DON-106",
-        "title": "Corrección en lógica de refrigerado",
+        "title": "Corrección en lógica de refrigerado"
+      },
+      {
         "type": "fix",
-        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-106"
+        "scope": "general",
+        "title": "Corrección en update de estados"
       },
       {
-        "title": "Corrección en update de estados",
-        "type": "fix"
-      },
-      {
-        "title": "Fix en endpoint de vehículos",
-        "type": "fix"
+        "type": "fix",
+        "scope": "api",
+        "title": "Fix en endpoint de vehículos"
       }
     ],
     "modules": [
@@ -74,20 +78,21 @@
     ]
   },
   {
-    "version": "1.1.1-alpha",
+    "version": "0.1.1-alpha",
     "date": "2026-03-17",
     "stage": "alpha",
     "notes": "Integración de corredores con trips",
     "changes": [
       {
-        "title": "Integración completa de corredores con trips",
-        "type": "changed"
+        "type": "feat",
+        "scope": "trips",
+        "title": "Integración completa de corredores con trips"
       },
       {
-        "id": "DON-107",
-        "title": "Actualización de registros en nueva flota",
         "type": "fix",
-        "url": "https://asteriskconsul-1753224743977.atlassian.net/browse/DON-107"
+        "scope": "flota",
+        "id": "DON-107",
+        "title": "Actualización de registros en nueva flota"
       }
     ],
     "modules": [
@@ -104,16 +109,19 @@
     "notes": "Refactor de updates en clientes, unidades y viajes",
     "changes": [
       {
-        "title": "Corrección en lógica de updates en clientes, unidades y viajes",
-        "type": "fix"
+        "type": "fix",
+        "scope": "clientes",
+        "title": "Corrección en lógica de updates en clientes, unidades y viajes"
       },
       {
-        "title": "Refactor de de company_id Harcodeado",
-        "type": "fix"
+        "type": "refactor",
+        "scope": "core",
+        "title": "Eliminación de company_id hardcodeado"
       },
       {
-        "title": "Refactor de Create.vue y Edit.vue en clientes, viajes y corredores",
-        "type": "changed"
+        "type": "refactor",
+        "scope": "ui",
+        "title": "Refactor de Create.vue y Edit.vue"
       }
     ],
     "modules": [
@@ -124,38 +132,45 @@
     ]
   },
   {
-    "version": "0.7.2-alpha",
+    "version": "0.7.3-alpha",
     "date": "2026-03-31",
     "stage": "alpha",
-    "notes": "Refactor de updates en clientes, unidades y viajes",
+    "notes": "Mejoras generales en logística",
     "changes": [
       {
-        "title": "Correccion de trips de corredores",
-        "type": "fix"
+        "type": "fix",
+        "scope": "trips",
+        "title": "Corrección de trips de corredores"
       },
       {
-        "title": "Se crea boton crear para crea desde cualquier parte de logistica",
-        "type": "changed"
+        "type": "feat",
+        "scope": "dispatch",
+        "title": "Se crea tabla dispatch-order y vista en frontend"
       },
       {
-        "title": "Se crea tabla dispach-order(Ordenes de Despacho) y se crea la vista de la misma en el frontend",
-        "type": "changed"
+        "type": "feat",
+        "scope": "ui",
+        "title": "Ordenamiento y selección de columnas en tablas"
       },
       {
-        "title": "Se agrega a las tablas la posibilidad de ordenar por columnas, se agrega la posibilidad de seleccionar las columnas a mostrar",
-        "type": "changed"
+        "type": "refactor",
+        "scope": "layout",
+        "title": "Mejora del navegador de logística"
       },
       {
-        "title": "Se acomoda el navegadro de logistica",
-        "type": "changed"
+        "type": "feat",
+        "scope": "ui",
+        "title": "Breadcrumbs en vistas de logística"
       },
       {
-        "title": "Se agrega Breadcumps a las vistas de logistica, pemitiendo navegar entre vistas",
-        "type": "changed"
+        "type": "feat",
+        "scope": "auth",
+        "title": "Register, profile y cambio de contraseña"
       },
       {
-        "title": "Se crea pagina de register, profile y  cambiar la contraseña",
-        "type": "changed"
+        "type": "fix",
+        "scope": "changelog",
+        "title": "Correccion de versiones de frontend"
       }
     ],
     "modules": [
