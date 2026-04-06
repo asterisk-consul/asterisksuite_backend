@@ -68,7 +68,7 @@ export class NotaTransformer implements Transformer<
         : Number(baseRef) || 0;
       const number = count === 0 ? baseNumber : duplicateCounter--;
 
-      const date = nota.Fecha ?? nota.Fec_Vto ?? new Date();
+      const date = nota.fecha_carga ?? nota.Fec_Vto ?? new Date();
 
       // Solo impuestos reales — sin IMP_EXENTO
       const impuestosRaw = [

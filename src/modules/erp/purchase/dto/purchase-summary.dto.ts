@@ -19,6 +19,7 @@ export interface GlobalPurchaseSummaryResponseDto {
   globalTotal: number;
   globalTaxes: number;
   globalExempt: number;
+  globalPurchaseTotal: number;
   globalTransactionCount: number;
   totalProducts: number;
   products: ProductSummaryDto[];

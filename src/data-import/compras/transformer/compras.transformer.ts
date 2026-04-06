@@ -120,7 +120,7 @@ export class ComprasTransformer implements Transformer<
         document_type_id: documentType.id,
         party_id: party.id,
         number,
-        date: factura.Fecha,
+        date: factura.fecha_carga,
         status: 1,
         subtotal: factura.Imp_gravado,
         exempt_amount: factura.Imp_Excento,

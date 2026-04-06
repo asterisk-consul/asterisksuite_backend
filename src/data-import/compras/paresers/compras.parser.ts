@@ -4,46 +4,69 @@ import {
   FacturaCompraRaw,
   facturaCompraSchema,
 } from '../schemas/compras.schema';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 
 type FacturaCompraRow = Record<string, unknown>;
 
+/* =========================
+   💰 PARSER DE DINERO PRO
+========================= */
+function parseMoney(value: unknown): number | null {
+  if (value === null || value === undefined || value === '') return null;
+
+  // Si ya es número → confiar
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    let cleaned = value.trim();
+    if (!cleaned) return null;
+
+    const hasCommaDecimal = cleaned.includes(',');
+
+    if (hasCommaDecimal) {
+      // Formato europeo: 1.234.567,89
+      cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+    } else {
+      // Formato US: 1,234,567.89
+      cleaned = cleaned.replace(/,/g, '');
+    }
+
+    const parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? null : parsed;
+  }
+
+  return null;
+}
+
+/* =========================
+   📅 PARSER DE FECHAS
+========================= */
 function parseExcelDate(value: unknown): Date | null {
   if (value === null || value === undefined || value === '') return null;
 
-  // Si es número (formato fecha de Excel)
   if (typeof value === 'number') {
     if (value <= 0) return null;
 
-    // Excel cuenta desde 1900-01-01, pero tiene un bug que considera 1900 como año bisiesto
-    // Por eso se ajusta con 1899-12-30
     const excelEpoch = new Date(1899, 11, 30);
     const date = new Date(excelEpoch.getTime() + value * 86400000);
 
-    // Validar que la fecha sea válida
-    if (!isNaN(date.getTime())) {
-      return date;
-    }
-    return null;
+    return isNaN(date.getTime()) ? null : date;
   }
 
-  // Si es string
   if (typeof value === 'string') {
     const trimmed = value.trim();
     if (!trimmed) return null;
 
-    // Verificar si es un número dentro de un string (formato Excel a veces viene así)
     const numberValue = parseFloat(trimmed);
     if (!isNaN(numberValue) && trimmed.match(/^\d+(\.\d+)?$/)) {
       return parseExcelDate(numberValue);
     }
 
-    // Intentar parsear la fecha
     let date = new Date(trimmed);
 
-    // Si la fecha no es válida, intentar con formato DD/MM/YYYY o MM/DD/YYYY
     if (isNaN(date.getTime())) {
-      // Intentar con formato YYYY-MM-DD (ISO)
       const isoMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
       if (isoMatch) {
         date = new Date(
@@ -52,7 +75,6 @@ function parseExcelDate(value: unknown): Date | null {
           parseInt(isoMatch[3]),
         );
       } else {
-        // Intentar con formato DD/MM/YYYY
         const dmYMatch = trimmed.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
         if (dmYMatch) {
           date = new Date(
@@ -64,38 +86,66 @@ function parseExcelDate(value: unknown): Date | null {
       }
     }
 
-    // Validar si la fecha es válida
-    if (!isNaN(date.getTime())) {
-      return date;
-    }
-
-    // Si llegamos aquí, la fecha no es válida
-    return null;
+    return isNaN(date.getTime()) ? null : date;
   }
 
   return null;
 }
 
+/* =========================
+   🔄 NORMALIZADOR
+========================= */
 function normalizeRow(row: FacturaCompraRow): Record<string, unknown> {
+  const monetaryFields = new Set([
+    'IMP_GRAVADO',
+    'IMP_IVA1',
+    'IMP_IVA2',
+    'IMP_IVA3',
+    'COM_PERC_IVA',
+    'COM_PERC_MUN',
+    'COM_PERC_IIBB',
+    'IMP_EXENTO',
+    'IMP_TOTAL',
+  ]);
+
   return Object.keys(row).reduce(
     (acc, key) => {
-      acc[key.toUpperCase().replace(/\s+/g, '_')] = row[key];
+      const normalizedKey = key.toUpperCase().replace(/\s+/g, '_');
+      const value = row[key];
+
+      if (monetaryFields.has(normalizedKey)) {
+        const parsed = parseMoney(value);
+
+        if (parsed === null && value !== null && value !== '') {
+          console.warn('⚠️ Error parseando dinero', {
+            field: normalizedKey,
+            value,
+          });
+        }
+
+        acc[normalizedKey] = parsed;
+      } else {
+        acc[normalizedKey] = value;
+      }
+
       return acc;
     },
     {} as Record<string, unknown>,
   );
 }
 
-// Función auxiliar para no repetir el mapeo en parse y parseWithErrors
+/* =========================
+   🧩 MAPPER
+========================= */
 function mapRow(normalized: Record<string, unknown>) {
-  const fecha = parseExcelDate(normalized.FECHA);
+  const fechaCarga = parseExcelDate(normalized.FECHA_CARGA);
 
   return facturaCompraSchema.parse({
     Comprobante: normalized.COMPROBANTE,
     Nombre: normalized.NOMBRE,
     Motivo_det: normalized.MOTIVO_DET,
     Concepto: normalized.CONCEPTO,
-    Fecha: fecha,
+    fecha_carga: fechaCarga,
     Imp_gravado: normalized.IMP_GRAVADO,
     Imp_total: normalized.IMP_TOTAL,
     Imp_IVA1: normalized.IMP_IVA1,
@@ -108,6 +158,9 @@ function mapRow(normalized: Record<string, unknown>) {
   });
 }
 
+/* =========================
+   🚀 PARSER
+========================= */
 export class FacturaCompraParser implements Parser<FacturaCompraRaw> {
   parse(raw: unknown[]): FacturaCompraRaw[] {
     return raw.map((row) => mapRow(normalizeRow(row as FacturaCompraRow)));

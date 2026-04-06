@@ -157,6 +157,8 @@ export class PurchasesService {
 
     const globalExempt = products.reduce((sum, p) => sum + p.totalExempt, 0);
 
+    const globalPurchaseTotal = globalTotal + globalTaxes + globalExempt;
+
     const globalTransactionCount = products.reduce(
       (sum, p) => sum + p.transactionCount,
       0,
@@ -166,6 +168,7 @@ export class PurchasesService {
       globalTotal,
       globalTaxes,
       globalExempt,
+      globalPurchaseTotal,
       globalTransactionCount,
       totalProducts: products.length,
       products,

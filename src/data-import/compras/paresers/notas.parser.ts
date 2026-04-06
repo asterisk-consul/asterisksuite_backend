@@ -105,7 +105,7 @@ function mapRow(n: Record<string, unknown>): NotaRaw {
     // opcionales que puede traer FC también
     Comprobante: n.COMPROBANTE,
     Concepto: n.CONCEPTO,
-    Fecha: parseExcelDate(n.FECHA),
+    fecha_carga: parseExcelDate(n.FECHA_CARGA),
   });
 }
 
