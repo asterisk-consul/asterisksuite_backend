@@ -9,66 +9,51 @@ export class FacturaSink implements Sink<ComprasTransformado> {
     for (const doc of data) {
       const { ref, document_taxes, document_items, ...docData } = doc;
 
-      // Convertir number explícitamente
       const documentNumber = Number(docData.number);
 
-      // 1. Verificar si el documento ya existe por REF (identificador único del documento original)
+      // 1. Verificar duplicado por ref
       const existingDocument = await this.prisma.documents.findFirst({
-        where: {
-          ref: ref, // ← Usar ref para identificar duplicados
-        },
+        where: { ref },
       });
 
-      // Si ya existe, saltar este documento
       if (existingDocument) {
-        console.log(`Documento con ref ${ref} ya existe, saltando...`);
+        console.log(`⏭️  Documento ${ref} ya existe, saltando...`);
         continue;
       }
 
-      // 2. Verificar si ya existe una combinación document_type_id + number
-      // pero si el ref es único, esta verificación es opcional
-      const existingByNumber = await this.prisma.documents.findFirst({
-        where: {
-          document_type_id: docData.document_type_id,
-          number: documentNumber,
-        },
-      });
+      // 2. Insertar en transacción — si falla un hijo, se revierte todo
+      await this.prisma.$transaction(async (tx) => {
+        const inserted = await tx.documents.create({
+          data: {
+            ...docData,
+            number: documentNumber,
+            ref,
+            // exempt_amount llega en docData automáticamente via spread
+          },
+        });
 
-      if (existingByNumber) {
+        if (document_taxes.length > 0) {
+          await tx.document_taxes.createMany({
+            data: document_taxes.map((t) => ({
+              ...t,
+              document_id: inserted.id,
+            })),
+          });
+        }
+
+        if (document_items.length > 0) {
+          await tx.document_items.createMany({
+            data: document_items.map((i) => ({
+              ...i,
+              document_id: inserted.id,
+            })),
+          });
+        }
+
         console.log(
-          `⚠️ Advertencia: Ya existe documento tipo ${docData.document_type_id} con número ${documentNumber}, pero ref ${ref} es diferente`,
+          `✅ ${ref} insertado (taxes: ${document_taxes.length}, items: ${document_items.length})`,
         );
-        // Puedes decidir si continuar o no
-      }
-
-      // 3. Insertar documento principal con ref
-      const inserted = await this.prisma.documents.create({
-        data: {
-          ...docData,
-          number: documentNumber,
-          ref: ref, // ← Incluir ref
-        },
       });
-
-      // 4. Insertar impuestos asociados al documento
-      if (document_taxes.length > 0) {
-        await this.prisma.document_taxes.createMany({
-          data: document_taxes.map((t) => ({
-            ...t,
-            document_id: inserted.id,
-          })),
-        });
-      }
-
-      // 5. Insertar ítems asociados al documento
-      if (document_items.length > 0) {
-        await this.prisma.document_items.createMany({
-          data: document_items.map((i) => ({
-            ...i,
-            document_id: inserted.id,
-          })),
-        });
-      }
     }
   }
 }

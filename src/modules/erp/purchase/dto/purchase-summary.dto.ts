@@ -6,6 +6,7 @@ export interface ProductSummaryDto {
   productCategory: string;
   totalPurchases: number;
   totalTaxes: number;
+  totalExempt: number;
   transactionCount: number;
   invoiceCount: number;
   creditNoteCount: number;
@@ -17,6 +18,7 @@ export interface ProductSummaryDto {
 export interface GlobalPurchaseSummaryResponseDto {
   globalTotal: number;
   globalTaxes: number;
+  globalExempt: number;
   globalTransactionCount: number;
   totalProducts: number;
   products: ProductSummaryDto[];

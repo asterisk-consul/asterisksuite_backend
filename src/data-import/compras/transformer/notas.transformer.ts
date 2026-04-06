@@ -1,4 +1,3 @@
-// compras/transformers/nota.transformer.ts
 import { Transformer } from '../../core/interfaces';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotaRaw } from '../schemas/notas.schema';
@@ -21,7 +20,6 @@ export class NotaTransformer implements Transformer<
   async transform(documents: NotaRaw[]): Promise<ComprasTransformado[]> {
     const resultado: ComprasTransformado[] = [];
 
-    // ── 1. Catálogos ─────────────────────────────────────
     const [parties, products, taxes, documentTypes] = await Promise.all([
       this.prisma.business_parties.findMany(),
       this.prisma.products.findMany(),
@@ -29,7 +27,6 @@ export class NotaTransformer implements Transformer<
       this.prisma.document_types.findMany(),
     ]);
 
-    // ── 2. Maps O(1) ─────────────────────────────────────
     const partyMap = new Map(parties.map((p) => [p.name, p]));
     const productMap = new Map(products.map((p) => [p.name, p]));
     const taxMap = new Map(taxes.map((t) => [t.code, t]));
@@ -42,50 +39,58 @@ export class NotaTransformer implements Transformer<
       );
     }
 
-    // Producto genérico fallback
     const productoGenerico = productMap.get('SERVICIOS');
     if (!productoGenerico) {
       throw new Error('Producto genérico "SERVICIOS" no encontrado en la BD');
     }
 
-    // ── 3. Transformación ─────────────────────────────────
+    const refCounts = new Map<string, number>();
+
+    let duplicateCounter = -1;
+
     for (const nota of documents) {
       const party = partyMap.get(nota.Nombre);
       if (!party) {
-        throw new Error(`Party no encontrado: ${nota.Nombre}`);
+        console.warn(`⚠️  Party no encontrado: "${nota.Nombre}" — se omite`);
+        continue;
       }
 
-      // Concepto opcional
       const conceptoKey = nota.Concepto ?? nota.Nombre;
       const product = productMap.get(conceptoKey) ?? productoGenerico;
 
-      const ref = nota.Comprobante ?? '0';
+      const baseRef = nota.Comprobante ?? '0';
+      const count = refCounts.get(baseRef) ?? 0;
+      refCounts.set(baseRef, count + 1);
+      const ref = count === 0 ? baseRef : `${baseRef}-${count}`;
 
-      const number = ref.includes('-') ? extractNumber(ref) : Number(ref) || 0;
+      const baseNumber = baseRef.includes('-')
+        ? extractNumber(baseRef)
+        : Number(baseRef) || 0;
+      const number = count === 0 ? baseNumber : duplicateCounter--;
 
-      // Fecha
       const date = nota.Fecha ?? nota.Fec_Vto ?? new Date();
 
-      // ── Impuestos opcionales ───────────────────────────
+      // Solo impuestos reales — sin IMP_EXENTO
       const impuestosRaw = [
         { code: 'IMP_IVA1', amount: nota.Imp_IVA1 ?? 0 },
         { code: 'COM_PERC_IIBB', amount: nota.COM_Perc_IIBB ?? 0 },
         { code: 'COM_PERC_MUN', amount: nota.COM_Perc_Mun ?? 0 },
         { code: 'COM_PERC_IVA', amount: nota.COM_Perc_IVA ?? 0 },
-        { code: 'IMP_EXENTO', amount: nota.Imp_Exento ?? 0 },
       ];
 
       const impuestosValidos = impuestosRaw
         .filter((i) => i.amount > 0)
         .flatMap((i) => {
           const tax = taxMap.get(i.code);
-          if (!tax) return [];
+          if (!tax) {
+            console.warn(`⚠️  Impuesto no encontrado: ${i.code} — se omite`);
+            return [];
+          }
           return [{ tax, amount: i.amount }];
         });
 
       const totalTaxes = impuestosValidos.reduce((acc, i) => acc + i.amount, 0);
 
-      // ── Resultado final ────────────────────────────────
       resultado.push({
         ref,
         document_type_id: documentType.id,
@@ -94,6 +99,7 @@ export class NotaTransformer implements Transformer<
         date,
         status: 1,
         subtotal: nota.Imp_Gravado ?? 0,
+        exempt_amount: nota.Imp_Exento ?? 0,
         total_taxes: totalTaxes,
         total: nota.Imp_Total ?? 0,
 

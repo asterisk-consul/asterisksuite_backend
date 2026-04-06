@@ -686,6 +686,7 @@ export const DocumentsScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   subtotal: 'subtotal',
+  exempt_amount: 'exempt_amount',
   total_taxes: 'total_taxes',
   total: 'total',
   descrip: 'descrip',

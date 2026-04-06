@@ -52,6 +52,7 @@ export class PurchasesService {
         productName: string;
         totalPurchases: number;
         totalTaxes: number;
+        totalExempt: number;
         transactionCount: number;
         invoiceCount: number;
         creditNoteCount: number;
@@ -86,6 +87,7 @@ export class PurchasesService {
           productName: product.name,
           totalPurchases: 0,
           totalTaxes: 0,
+          totalExempt: 0,
           transactionCount: 0,
           invoiceCount: 0,
           creditNoteCount: 0,
@@ -98,8 +100,12 @@ export class PurchasesService {
           return sum + Number(tax.tax_amount) * proportion * sign;
         }, 0);
 
+        const productExempt =
+          Number(doc.exempt_amount || 0) * proportion * sign;
+
         current.totalPurchases += productValue;
         current.totalTaxes += productTaxes;
+        current.totalExempt += productExempt;
         current.transactionCount += 1;
 
         if (isInvoice) {
@@ -111,9 +117,11 @@ export class PurchasesService {
         current.purchaseValues.push(productValue);
 
         const docDate = new Date(doc.date);
+
         if (!current.firstPurchaseDate || docDate < current.firstPurchaseDate) {
           current.firstPurchaseDate = docDate;
         }
+
         if (!current.lastPurchaseDate || docDate > current.lastPurchaseDate) {
           current.lastPurchaseDate = docDate;
         }
@@ -130,6 +138,7 @@ export class PurchasesService {
         productCategory: '',
         totalPurchases: data.totalPurchases,
         totalTaxes: data.totalTaxes,
+        totalExempt: data.totalExempt,
         transactionCount: data.transactionCount,
         invoiceCount: data.invoiceCount,
         creditNoteCount: data.creditNoteCount,
@@ -143,7 +152,11 @@ export class PurchasesService {
       .sort((a, b) => b.totalPurchases - a.totalPurchases);
 
     const globalTotal = products.reduce((sum, p) => sum + p.totalPurchases, 0);
+
     const globalTaxes = products.reduce((sum, p) => sum + p.totalTaxes, 0);
+
+    const globalExempt = products.reduce((sum, p) => sum + p.totalExempt, 0);
+
     const globalTransactionCount = products.reduce(
       (sum, p) => sum + p.transactionCount,
       0,
@@ -152,6 +165,7 @@ export class PurchasesService {
     return {
       globalTotal,
       globalTaxes,
+      globalExempt,
       globalTransactionCount,
       totalProducts: products.length,
       products,
@@ -162,14 +176,12 @@ export class PurchasesService {
     id: string,
     query: QueryPurchasesDto,
   ): Promise<ProductPurchaseDetailResponseDto> {
-    const productId = id;
-
     const product = await this.prisma.products.findUnique({
-      where: { id: productId },
+      where: { id },
     });
 
     if (!product) {
-      throw new NotFoundException(`Producto con ID ${productId} no encontrado`);
+      throw new NotFoundException(`Producto con ID ${id} no encontrado`);
     }
 
     const whereCondition = this.buildWhereCondition(query);
@@ -182,14 +194,14 @@ export class PurchasesService {
         },
         document_items: {
           some: {
-            product_id: productId,
+            product_id: id,
           },
         },
       },
       include: {
         document_items: {
           where: {
-            product_id: productId,
+            product_id: id,
           },
           include: {
             products: true,
@@ -208,6 +220,7 @@ export class PurchasesService {
     const suppliersMap = new Map<string, SupplierDetailDto>();
     const documentTypesMap = new Map<string, DocumentTypeDetailDto>();
     const taxesMap = new Map<string, TaxDetailDto>();
+
     let totalGeneral = 0;
     let totalTaxes = 0;
 
@@ -228,13 +241,14 @@ export class PurchasesService {
       const productProportion =
         documentTotal !== 0 ? productTotal / documentTotal : 0;
 
-      // Por proveedor
       if (doc.business_parties) {
         const supplierId = doc.business_parties.id;
         const existingSupplier = suppliersMap.get(supplierId);
+
         if (existingSupplier) {
           existingSupplier.totalBySupplier += productTotal;
           existingSupplier.transactionCount += 1;
+
           if (doc.date > existingSupplier.lastPurchaseDate) {
             existingSupplier.lastPurchaseDate = doc.date;
           }
@@ -250,9 +264,9 @@ export class PurchasesService {
         }
       }
 
-      // Por tipo de documento
       const docTypeId = doc.document_type_id;
       const existingDocType = documentTypesMap.get(docTypeId);
+
       if (existingDocType) {
         existingDocType.totalByDocumentType += productTotal;
         existingDocType.transactionCount += 1;
@@ -266,13 +280,14 @@ export class PurchasesService {
         });
       }
 
-      // Por impuesto
       for (const tax of doc.document_taxes) {
         const taxAmount = Number(tax.tax_amount) * productProportion * sign;
+
         totalTaxes += taxAmount;
 
         const taxId = tax.tax_id;
         const existingTax = taxesMap.get(taxId);
+
         if (existingTax) {
           existingTax.totalTaxByProduct += taxAmount;
           existingTax.taxableBase += productTotal;
@@ -301,7 +316,6 @@ export class PurchasesService {
       taxes: Array.from(taxesMap.values()),
     };
   }
-
   async getPurchaseMovements(
     query: QueryPurchasesDto,
   ): Promise<PurchaseMovementResponseDto[]> {
@@ -343,6 +357,7 @@ export class PurchasesService {
       if (!doc.document_types) continue;
 
       const sign = this.getDocumentSign(doc.document_types.code);
+
       const transactionType = sign === 1 ? 'Compra' : 'Nota Crédito/Débito';
 
       for (const item of doc.document_items) {
@@ -366,16 +381,21 @@ export class PurchasesService {
           itemSubtotal: itemValue,
           documentSubtotal: Number(doc.subtotal),
           documentTotal: Number(doc.total),
+
           taxCode: doc.document_taxes.map((t) => t.taxes.code).join(', '),
           taxName: doc.document_taxes.map((t) => t.taxes.name).join(', '),
+
           taxAmount: doc.document_taxes.reduce(
             (sum, t) => sum + Number(t.tax_amount),
             0,
           ),
+
           sequenceNumber:
             doc.document_types.document_sequences?.current_number?.toString() ||
             '',
+
           transactionType,
+
           adjustedValue: itemValue * sign,
         });
       }
@@ -383,7 +403,6 @@ export class PurchasesService {
 
     return movements;
   }
-
   async getAvailableProducts(): Promise<AvailableProductResponseDto[]> {
     const products = await this.prisma.products.findMany({
       where: {
@@ -420,9 +439,11 @@ export class PurchasesService {
     if (query) {
       if (query.startDate || query.endDate) {
         where.date = {};
+
         if (query.startDate) {
           where.date.gte = new Date(query.startDate);
         }
+
         if (query.endDate) {
           where.date.lte = new Date(query.endDate);
         }
@@ -452,13 +473,14 @@ export class PurchasesService {
     const positiveDocuments = [
       'FC',
       'FACT',
-      'COMPRA',
+      'COM',
       'FCA',
       'FCB',
       'FCC',
       'FCE',
       'FCR',
     ];
+
     const negativeDocuments = [
       'NC',
       'ND',
@@ -470,9 +492,12 @@ export class PurchasesService {
 
     if (positiveDocuments.includes(documentCode)) {
       return 1;
-    } else if (negativeDocuments.includes(documentCode)) {
+    }
+
+    if (negativeDocuments.includes(documentCode)) {
       return -1;
     }
+
     return 1;
   }
 }

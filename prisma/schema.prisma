@@ -729,6 +729,7 @@ model documents {
   created_at       DateTime          @default(now()) @db.Timestamp(6)
   updated_at       DateTime          @default(now()) @db.Timestamp(6)
   subtotal         Decimal           @default(0) @db.Decimal(15, 2)
+  exempt_amount    Decimal           @default(0) @db.Decimal(15, 2)
   total_taxes      Decimal           @default(0) @db.Decimal(15, 2)
   total            Decimal           @default(0) @db.Decimal(15, 2)
   descrip          String?           @db.VarChar(50)
