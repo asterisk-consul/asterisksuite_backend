@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { SshModule } from '../ssh/ssh.module';
 
 @Module({
-  imports: [SshModule],
+  imports: [],
   providers: [PrismaService],
   exports: [PrismaService],
 })

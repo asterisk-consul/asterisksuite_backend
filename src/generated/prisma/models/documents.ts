@@ -27,93 +27,127 @@ export type AggregateDocuments = {
 }
 
 export type DocumentsAvgAggregateOutputType = {
-  id: number | null
-  perfilid: number | null
-  tamano: number | null
-  actividadid: number | null
+  number: number | null
+  status: number | null
+  subtotal: runtime.Decimal | null
+  total_taxes: runtime.Decimal | null
+  total: runtime.Decimal | null
 }
 
 export type DocumentsSumAggregateOutputType = {
-  id: bigint | null
-  perfilid: bigint | null
-  tamano: bigint | null
-  actividadid: bigint | null
+  number: number | null
+  status: number | null
+  subtotal: runtime.Decimal | null
+  total_taxes: runtime.Decimal | null
+  total: runtime.Decimal | null
 }
 
 export type DocumentsMinAggregateOutputType = {
-  id: bigint | null
-  name: string | null
+  id: string | null
+  document_type_id: string | null
+  party_id: string | null
+  number: number | null
+  date: Date | null
+  status: number | null
+  created_at: Date | null
+  updated_at: Date | null
+  subtotal: runtime.Decimal | null
+  total_taxes: runtime.Decimal | null
+  total: runtime.Decimal | null
   descrip: string | null
-  perfilid: bigint | null
-  mime: string | null
-  tamano: bigint | null
-  actividadid: bigint | null
 }
 
 export type DocumentsMaxAggregateOutputType = {
-  id: bigint | null
-  name: string | null
+  id: string | null
+  document_type_id: string | null
+  party_id: string | null
+  number: number | null
+  date: Date | null
+  status: number | null
+  created_at: Date | null
+  updated_at: Date | null
+  subtotal: runtime.Decimal | null
+  total_taxes: runtime.Decimal | null
+  total: runtime.Decimal | null
   descrip: string | null
-  perfilid: bigint | null
-  mime: string | null
-  tamano: bigint | null
-  actividadid: bigint | null
 }
 
 export type DocumentsCountAggregateOutputType = {
   id: number
-  name: number
+  document_type_id: number
+  party_id: number
+  number: number
+  date: number
+  status: number
+  created_at: number
+  updated_at: number
+  subtotal: number
+  total_taxes: number
+  total: number
   descrip: number
-  perfilid: number
-  mime: number
-  tamano: number
-  actividadid: number
   _all: number
 }
 
 
 export type DocumentsAvgAggregateInputType = {
-  id?: true
-  perfilid?: true
-  tamano?: true
-  actividadid?: true
+  number?: true
+  status?: true
+  subtotal?: true
+  total_taxes?: true
+  total?: true
 }
 
 export type DocumentsSumAggregateInputType = {
-  id?: true
-  perfilid?: true
-  tamano?: true
-  actividadid?: true
+  number?: true
+  status?: true
+  subtotal?: true
+  total_taxes?: true
+  total?: true
 }
 
 export type DocumentsMinAggregateInputType = {
   id?: true
-  name?: true
+  document_type_id?: true
+  party_id?: true
+  number?: true
+  date?: true
+  status?: true
+  created_at?: true
+  updated_at?: true
+  subtotal?: true
+  total_taxes?: true
+  total?: true
   descrip?: true
-  perfilid?: true
-  mime?: true
-  tamano?: true
-  actividadid?: true
 }
 
 export type DocumentsMaxAggregateInputType = {
   id?: true
-  name?: true
+  document_type_id?: true
+  party_id?: true
+  number?: true
+  date?: true
+  status?: true
+  created_at?: true
+  updated_at?: true
+  subtotal?: true
+  total_taxes?: true
+  total?: true
   descrip?: true
-  perfilid?: true
-  mime?: true
-  tamano?: true
-  actividadid?: true
 }
 
 export type DocumentsCountAggregateInputType = {
   id?: true
-  name?: true
+  document_type_id?: true
+  party_id?: true
+  number?: true
+  date?: true
+  status?: true
+  created_at?: true
+  updated_at?: true
+  subtotal?: true
+  total_taxes?: true
+  total?: true
   descrip?: true
-  perfilid?: true
-  mime?: true
-  tamano?: true
-  actividadid?: true
   _all?: true
 }
 
@@ -204,13 +238,18 @@ export type documentsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 export type DocumentsGroupByOutputType = {
-  id: bigint
-  name: string | null
+  id: string
+  document_type_id: string
+  party_id: string | null
+  number: number
+  date: Date
+  status: number
+  created_at: Date
+  updated_at: Date
+  subtotal: runtime.Decimal
+  total_taxes: runtime.Decimal
+  total: runtime.Decimal
   descrip: string | null
-  perfilid: bigint | null
-  mime: string | null
-  tamano: bigint | null
-  actividadid: bigint | null
   _count: DocumentsCountAggregateOutputType | null
   _avg: DocumentsAvgAggregateOutputType | null
   _sum: DocumentsSumAggregateOutputType | null
@@ -218,7 +257,7 @@ export type DocumentsGroupByOutputType = {
   _max: DocumentsMaxAggregateOutputType | null
 }
 
-type GetDocumentsGroupByPayload<T extends documentsGroupByArgs> = Prisma.PrismaPromise<
+export type GetDocumentsGroupByPayload<T extends documentsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DocumentsGroupByOutputType, T['by']> &
       {
@@ -237,58 +276,79 @@ export type documentsWhereInput = {
   AND?: Prisma.documentsWhereInput | Prisma.documentsWhereInput[]
   OR?: Prisma.documentsWhereInput[]
   NOT?: Prisma.documentsWhereInput | Prisma.documentsWhereInput[]
-  id?: Prisma.BigIntFilter<"documents"> | bigint | number
-  name?: Prisma.StringNullableFilter<"documents"> | string | null
+  id?: Prisma.UuidFilter<"documents"> | string
+  document_type_id?: Prisma.UuidFilter<"documents"> | string
+  party_id?: Prisma.UuidNullableFilter<"documents"> | string | null
+  number?: Prisma.IntFilter<"documents"> | number
+  date?: Prisma.DateTimeFilter<"documents"> | Date | string
+  status?: Prisma.IntFilter<"documents"> | number
+  created_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  subtotal?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
-  perfilid?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  mime?: Prisma.StringNullableFilter<"documents"> | string | null
-  tamano?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  actividadid?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  perfiles?: Prisma.XOR<Prisma.PerfilesNullableScalarRelationFilter, Prisma.perfilesWhereInput> | null
-  perfildocuments?: Prisma.PerfildocumentsListRelationFilter
-  registrocabdocuments?: Prisma.RegistrocabdocumentsListRelationFilter
-  tareasexecdocuments?: Prisma.TareasexecdocumentsListRelationFilter
+  document_items?: Prisma.Document_itemsListRelationFilter
+  document_taxes?: Prisma.Document_taxesListRelationFilter
+  document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
+  business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
 }
 
 export type documentsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  document_type_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  number?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
-  perfilid?: Prisma.SortOrderInput | Prisma.SortOrder
-  mime?: Prisma.SortOrderInput | Prisma.SortOrder
-  tamano?: Prisma.SortOrderInput | Prisma.SortOrder
-  actividadid?: Prisma.SortOrderInput | Prisma.SortOrder
-  perfiles?: Prisma.perfilesOrderByWithRelationInput
-  perfildocuments?: Prisma.perfildocumentsOrderByRelationAggregateInput
-  registrocabdocuments?: Prisma.registrocabdocumentsOrderByRelationAggregateInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsOrderByRelationAggregateInput
+  document_items?: Prisma.document_itemsOrderByRelationAggregateInput
+  document_taxes?: Prisma.document_taxesOrderByRelationAggregateInput
+  document_types?: Prisma.document_typesOrderByWithRelationInput
+  business_parties?: Prisma.business_partiesOrderByWithRelationInput
 }
 
 export type documentsWhereUniqueInput = Prisma.AtLeast<{
-  id?: bigint | number
+  id?: string
+  document_type_id_number?: Prisma.documentsDocument_type_idNumberCompoundUniqueInput
   AND?: Prisma.documentsWhereInput | Prisma.documentsWhereInput[]
   OR?: Prisma.documentsWhereInput[]
   NOT?: Prisma.documentsWhereInput | Prisma.documentsWhereInput[]
-  name?: Prisma.StringNullableFilter<"documents"> | string | null
+  document_type_id?: Prisma.UuidFilter<"documents"> | string
+  party_id?: Prisma.UuidNullableFilter<"documents"> | string | null
+  number?: Prisma.IntFilter<"documents"> | number
+  date?: Prisma.DateTimeFilter<"documents"> | Date | string
+  status?: Prisma.IntFilter<"documents"> | number
+  created_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  subtotal?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
-  perfilid?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  mime?: Prisma.StringNullableFilter<"documents"> | string | null
-  tamano?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  actividadid?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  perfiles?: Prisma.XOR<Prisma.PerfilesNullableScalarRelationFilter, Prisma.perfilesWhereInput> | null
-  perfildocuments?: Prisma.PerfildocumentsListRelationFilter
-  registrocabdocuments?: Prisma.RegistrocabdocumentsListRelationFilter
-  tareasexecdocuments?: Prisma.TareasexecdocumentsListRelationFilter
-}, "id">
+  document_items?: Prisma.Document_itemsListRelationFilter
+  document_taxes?: Prisma.Document_taxesListRelationFilter
+  document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
+  business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
+}, "id" | "document_type_id_number">
 
 export type documentsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  document_type_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  number?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
-  perfilid?: Prisma.SortOrderInput | Prisma.SortOrder
-  mime?: Prisma.SortOrderInput | Prisma.SortOrder
-  tamano?: Prisma.SortOrderInput | Prisma.SortOrder
-  actividadid?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.documentsCountOrderByAggregateInput
   _avg?: Prisma.documentsAvgOrderByAggregateInput
   _max?: Prisma.documentsMaxOrderByAggregateInput
@@ -300,143 +360,129 @@ export type documentsScalarWhereWithAggregatesInput = {
   AND?: Prisma.documentsScalarWhereWithAggregatesInput | Prisma.documentsScalarWhereWithAggregatesInput[]
   OR?: Prisma.documentsScalarWhereWithAggregatesInput[]
   NOT?: Prisma.documentsScalarWhereWithAggregatesInput | Prisma.documentsScalarWhereWithAggregatesInput[]
-  id?: Prisma.BigIntWithAggregatesFilter<"documents"> | bigint | number
-  name?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
+  id?: Prisma.UuidWithAggregatesFilter<"documents"> | string
+  document_type_id?: Prisma.UuidWithAggregatesFilter<"documents"> | string
+  party_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
+  number?: Prisma.IntWithAggregatesFilter<"documents"> | number
+  date?: Prisma.DateTimeWithAggregatesFilter<"documents"> | Date | string
+  status?: Prisma.IntWithAggregatesFilter<"documents"> | number
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"documents"> | Date | string
+  subtotal?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
-  perfilid?: Prisma.BigIntNullableWithAggregatesFilter<"documents"> | bigint | number | null
-  mime?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
-  tamano?: Prisma.BigIntNullableWithAggregatesFilter<"documents"> | bigint | number | null
-  actividadid?: Prisma.BigIntNullableWithAggregatesFilter<"documents"> | bigint | number | null
 }
 
 export type documentsCreateInput = {
-  id?: bigint | number
-  name?: string | null
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfiles?: Prisma.perfilesCreateNestedOneWithoutDocumentsInput
-  perfildocuments?: Prisma.perfildocumentsCreateNestedManyWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsCreateNestedManyWithoutDocumentsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
 }
 
 export type documentsUncheckedCreateInput = {
-  id?: bigint | number
-  name?: string | null
+  id?: string
+  document_type_id: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  perfilid?: bigint | number | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
 export type documentsUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfiles?: Prisma.perfilesUpdateOneWithoutDocumentsNestedInput
-  perfildocuments?: Prisma.perfildocumentsUpdateManyWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUpdateManyWithoutDocumentsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
 }
 
 export type documentsUncheckedUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  perfilid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
 }
 
 export type documentsCreateManyInput = {
-  id?: bigint | number
-  name?: string | null
+  id?: string
+  document_type_id: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  perfilid?: bigint | number | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
 }
 
 export type documentsUpdateManyMutationInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type documentsUncheckedUpdateManyInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  perfilid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-}
-
-export type documentsCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  descrip?: Prisma.SortOrder
-  perfilid?: Prisma.SortOrder
-  mime?: Prisma.SortOrder
-  tamano?: Prisma.SortOrder
-  actividadid?: Prisma.SortOrder
-}
-
-export type documentsAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  perfilid?: Prisma.SortOrder
-  tamano?: Prisma.SortOrder
-  actividadid?: Prisma.SortOrder
-}
-
-export type documentsMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  descrip?: Prisma.SortOrder
-  perfilid?: Prisma.SortOrder
-  mime?: Prisma.SortOrder
-  tamano?: Prisma.SortOrder
-  actividadid?: Prisma.SortOrder
-}
-
-export type documentsMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  descrip?: Prisma.SortOrder
-  perfilid?: Prisma.SortOrder
-  mime?: Prisma.SortOrder
-  tamano?: Prisma.SortOrder
-  actividadid?: Prisma.SortOrder
-}
-
-export type documentsSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  perfilid?: Prisma.SortOrder
-  tamano?: Prisma.SortOrder
-  actividadid?: Prisma.SortOrder
-}
-
-export type DocumentsNullableScalarRelationFilter = {
-  is?: Prisma.documentsWhereInput | null
-  isNot?: Prisma.documentsWhereInput | null
 }
 
 export type DocumentsListRelationFilter = {
@@ -449,391 +495,601 @@ export type documentsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type documentsCreateNestedOneWithoutPerfildocumentsInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutPerfildocumentsInput, Prisma.documentsUncheckedCreateWithoutPerfildocumentsInput>
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPerfildocumentsInput
-  connect?: Prisma.documentsWhereUniqueInput
+export type DocumentsScalarRelationFilter = {
+  is?: Prisma.documentsWhereInput
+  isNot?: Prisma.documentsWhereInput
 }
 
-export type documentsUpdateOneWithoutPerfildocumentsNestedInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutPerfildocumentsInput, Prisma.documentsUncheckedCreateWithoutPerfildocumentsInput>
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPerfildocumentsInput
-  upsert?: Prisma.documentsUpsertWithoutPerfildocumentsInput
-  disconnect?: Prisma.documentsWhereInput | boolean
-  delete?: Prisma.documentsWhereInput | boolean
-  connect?: Prisma.documentsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutPerfildocumentsInput, Prisma.documentsUpdateWithoutPerfildocumentsInput>, Prisma.documentsUncheckedUpdateWithoutPerfildocumentsInput>
+export type documentsDocument_type_idNumberCompoundUniqueInput = {
+  document_type_id: string
+  number: number
 }
 
-export type documentsCreateNestedManyWithoutPerfilesInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutPerfilesInput, Prisma.documentsUncheckedCreateWithoutPerfilesInput> | Prisma.documentsCreateWithoutPerfilesInput[] | Prisma.documentsUncheckedCreateWithoutPerfilesInput[]
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPerfilesInput | Prisma.documentsCreateOrConnectWithoutPerfilesInput[]
-  createMany?: Prisma.documentsCreateManyPerfilesInputEnvelope
+export type documentsCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  document_type_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
+  descrip?: Prisma.SortOrder
+}
+
+export type documentsAvgOrderByAggregateInput = {
+  number?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
+}
+
+export type documentsMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  document_type_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
+  descrip?: Prisma.SortOrder
+}
+
+export type documentsMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  document_type_id?: Prisma.SortOrder
+  party_id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
+  descrip?: Prisma.SortOrder
+}
+
+export type documentsSumOrderByAggregateInput = {
+  number?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  total_taxes?: Prisma.SortOrder
+  total?: Prisma.SortOrder
+}
+
+export type documentsCreateNestedManyWithoutBusiness_partiesInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutBusiness_partiesInput, Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.documentsCreateWithoutBusiness_partiesInput[] | Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput | Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput[]
+  createMany?: Prisma.documentsCreateManyBusiness_partiesInputEnvelope
   connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
 }
 
-export type documentsUncheckedCreateNestedManyWithoutPerfilesInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutPerfilesInput, Prisma.documentsUncheckedCreateWithoutPerfilesInput> | Prisma.documentsCreateWithoutPerfilesInput[] | Prisma.documentsUncheckedCreateWithoutPerfilesInput[]
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPerfilesInput | Prisma.documentsCreateOrConnectWithoutPerfilesInput[]
-  createMany?: Prisma.documentsCreateManyPerfilesInputEnvelope
+export type documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutBusiness_partiesInput, Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.documentsCreateWithoutBusiness_partiesInput[] | Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput | Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput[]
+  createMany?: Prisma.documentsCreateManyBusiness_partiesInputEnvelope
   connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
 }
 
-export type documentsUpdateManyWithoutPerfilesNestedInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutPerfilesInput, Prisma.documentsUncheckedCreateWithoutPerfilesInput> | Prisma.documentsCreateWithoutPerfilesInput[] | Prisma.documentsUncheckedCreateWithoutPerfilesInput[]
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPerfilesInput | Prisma.documentsCreateOrConnectWithoutPerfilesInput[]
-  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutPerfilesInput | Prisma.documentsUpsertWithWhereUniqueWithoutPerfilesInput[]
-  createMany?: Prisma.documentsCreateManyPerfilesInputEnvelope
+export type documentsUpdateManyWithoutBusiness_partiesNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutBusiness_partiesInput, Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.documentsCreateWithoutBusiness_partiesInput[] | Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput | Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput[]
+  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutBusiness_partiesInput | Prisma.documentsUpsertWithWhereUniqueWithoutBusiness_partiesInput[]
+  createMany?: Prisma.documentsCreateManyBusiness_partiesInputEnvelope
   set?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
   disconnect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
   delete?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
   connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
-  update?: Prisma.documentsUpdateWithWhereUniqueWithoutPerfilesInput | Prisma.documentsUpdateWithWhereUniqueWithoutPerfilesInput[]
-  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutPerfilesInput | Prisma.documentsUpdateManyWithWhereWithoutPerfilesInput[]
+  update?: Prisma.documentsUpdateWithWhereUniqueWithoutBusiness_partiesInput | Prisma.documentsUpdateWithWhereUniqueWithoutBusiness_partiesInput[]
+  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutBusiness_partiesInput | Prisma.documentsUpdateManyWithWhereWithoutBusiness_partiesInput[]
   deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
 }
 
-export type documentsUncheckedUpdateManyWithoutPerfilesNestedInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutPerfilesInput, Prisma.documentsUncheckedCreateWithoutPerfilesInput> | Prisma.documentsCreateWithoutPerfilesInput[] | Prisma.documentsUncheckedCreateWithoutPerfilesInput[]
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPerfilesInput | Prisma.documentsCreateOrConnectWithoutPerfilesInput[]
-  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutPerfilesInput | Prisma.documentsUpsertWithWhereUniqueWithoutPerfilesInput[]
-  createMany?: Prisma.documentsCreateManyPerfilesInputEnvelope
+export type documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutBusiness_partiesInput, Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.documentsCreateWithoutBusiness_partiesInput[] | Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput | Prisma.documentsCreateOrConnectWithoutBusiness_partiesInput[]
+  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutBusiness_partiesInput | Prisma.documentsUpsertWithWhereUniqueWithoutBusiness_partiesInput[]
+  createMany?: Prisma.documentsCreateManyBusiness_partiesInputEnvelope
   set?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
   disconnect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
   delete?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
   connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
-  update?: Prisma.documentsUpdateWithWhereUniqueWithoutPerfilesInput | Prisma.documentsUpdateWithWhereUniqueWithoutPerfilesInput[]
-  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutPerfilesInput | Prisma.documentsUpdateManyWithWhereWithoutPerfilesInput[]
+  update?: Prisma.documentsUpdateWithWhereUniqueWithoutBusiness_partiesInput | Prisma.documentsUpdateWithWhereUniqueWithoutBusiness_partiesInput[]
+  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutBusiness_partiesInput | Prisma.documentsUpdateManyWithWhereWithoutBusiness_partiesInput[]
   deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
 }
 
-export type documentsCreateNestedOneWithoutRegistrocabdocumentsInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutRegistrocabdocumentsInput, Prisma.documentsUncheckedCreateWithoutRegistrocabdocumentsInput>
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutRegistrocabdocumentsInput
+export type documentsCreateNestedOneWithoutDocument_itemsInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_itemsInput, Prisma.documentsUncheckedCreateWithoutDocument_itemsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_itemsInput
   connect?: Prisma.documentsWhereUniqueInput
 }
 
-export type documentsUpdateOneWithoutRegistrocabdocumentsNestedInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutRegistrocabdocumentsInput, Prisma.documentsUncheckedCreateWithoutRegistrocabdocumentsInput>
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutRegistrocabdocumentsInput
-  upsert?: Prisma.documentsUpsertWithoutRegistrocabdocumentsInput
-  disconnect?: Prisma.documentsWhereInput | boolean
-  delete?: Prisma.documentsWhereInput | boolean
+export type documentsUpdateOneRequiredWithoutDocument_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_itemsInput, Prisma.documentsUncheckedCreateWithoutDocument_itemsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_itemsInput
+  upsert?: Prisma.documentsUpsertWithoutDocument_itemsInput
   connect?: Prisma.documentsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutRegistrocabdocumentsInput, Prisma.documentsUpdateWithoutRegistrocabdocumentsInput>, Prisma.documentsUncheckedUpdateWithoutRegistrocabdocumentsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutDocument_itemsInput, Prisma.documentsUpdateWithoutDocument_itemsInput>, Prisma.documentsUncheckedUpdateWithoutDocument_itemsInput>
 }
 
-export type documentsCreateNestedOneWithoutTareasexecdocumentsInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutTareasexecdocumentsInput, Prisma.documentsUncheckedCreateWithoutTareasexecdocumentsInput>
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutTareasexecdocumentsInput
+export type documentsCreateNestedOneWithoutDocument_taxesInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_taxesInput, Prisma.documentsUncheckedCreateWithoutDocument_taxesInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_taxesInput
   connect?: Prisma.documentsWhereUniqueInput
 }
 
-export type documentsUpdateOneWithoutTareasexecdocumentsNestedInput = {
-  create?: Prisma.XOR<Prisma.documentsCreateWithoutTareasexecdocumentsInput, Prisma.documentsUncheckedCreateWithoutTareasexecdocumentsInput>
-  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutTareasexecdocumentsInput
-  upsert?: Prisma.documentsUpsertWithoutTareasexecdocumentsInput
-  disconnect?: Prisma.documentsWhereInput | boolean
-  delete?: Prisma.documentsWhereInput | boolean
+export type documentsUpdateOneRequiredWithoutDocument_taxesNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_taxesInput, Prisma.documentsUncheckedCreateWithoutDocument_taxesInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_taxesInput
+  upsert?: Prisma.documentsUpsertWithoutDocument_taxesInput
   connect?: Prisma.documentsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutTareasexecdocumentsInput, Prisma.documentsUpdateWithoutTareasexecdocumentsInput>, Prisma.documentsUncheckedUpdateWithoutTareasexecdocumentsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutDocument_taxesInput, Prisma.documentsUpdateWithoutDocument_taxesInput>, Prisma.documentsUncheckedUpdateWithoutDocument_taxesInput>
 }
 
-export type documentsCreateWithoutPerfildocumentsInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsCreateNestedManyWithoutDocument_typesInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_typesInput, Prisma.documentsUncheckedCreateWithoutDocument_typesInput> | Prisma.documentsCreateWithoutDocument_typesInput[] | Prisma.documentsUncheckedCreateWithoutDocument_typesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_typesInput | Prisma.documentsCreateOrConnectWithoutDocument_typesInput[]
+  createMany?: Prisma.documentsCreateManyDocument_typesInputEnvelope
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+}
+
+export type documentsUncheckedCreateNestedManyWithoutDocument_typesInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_typesInput, Prisma.documentsUncheckedCreateWithoutDocument_typesInput> | Prisma.documentsCreateWithoutDocument_typesInput[] | Prisma.documentsUncheckedCreateWithoutDocument_typesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_typesInput | Prisma.documentsCreateOrConnectWithoutDocument_typesInput[]
+  createMany?: Prisma.documentsCreateManyDocument_typesInputEnvelope
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+}
+
+export type documentsUpdateManyWithoutDocument_typesNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_typesInput, Prisma.documentsUncheckedCreateWithoutDocument_typesInput> | Prisma.documentsCreateWithoutDocument_typesInput[] | Prisma.documentsUncheckedCreateWithoutDocument_typesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_typesInput | Prisma.documentsCreateOrConnectWithoutDocument_typesInput[]
+  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutDocument_typesInput | Prisma.documentsUpsertWithWhereUniqueWithoutDocument_typesInput[]
+  createMany?: Prisma.documentsCreateManyDocument_typesInputEnvelope
+  set?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  disconnect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  delete?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  update?: Prisma.documentsUpdateWithWhereUniqueWithoutDocument_typesInput | Prisma.documentsUpdateWithWhereUniqueWithoutDocument_typesInput[]
+  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutDocument_typesInput | Prisma.documentsUpdateManyWithWhereWithoutDocument_typesInput[]
+  deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
+}
+
+export type documentsUncheckedUpdateManyWithoutDocument_typesNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDocument_typesInput, Prisma.documentsUncheckedCreateWithoutDocument_typesInput> | Prisma.documentsCreateWithoutDocument_typesInput[] | Prisma.documentsUncheckedCreateWithoutDocument_typesInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDocument_typesInput | Prisma.documentsCreateOrConnectWithoutDocument_typesInput[]
+  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutDocument_typesInput | Prisma.documentsUpsertWithWhereUniqueWithoutDocument_typesInput[]
+  createMany?: Prisma.documentsCreateManyDocument_typesInputEnvelope
+  set?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  disconnect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  delete?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  update?: Prisma.documentsUpdateWithWhereUniqueWithoutDocument_typesInput | Prisma.documentsUpdateWithWhereUniqueWithoutDocument_typesInput[]
+  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutDocument_typesInput | Prisma.documentsUpdateManyWithWhereWithoutDocument_typesInput[]
+  deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
+}
+
+export type documentsCreateWithoutBusiness_partiesInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfiles?: Prisma.perfilesCreateNestedOneWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsCreateNestedManyWithoutDocumentsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
 }
 
-export type documentsUncheckedCreateWithoutPerfildocumentsInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
+  id?: string
+  document_type_id: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  perfilid?: bigint | number | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
-export type documentsCreateOrConnectWithoutPerfildocumentsInput = {
+export type documentsCreateOrConnectWithoutBusiness_partiesInput = {
   where: Prisma.documentsWhereUniqueInput
-  create: Prisma.XOR<Prisma.documentsCreateWithoutPerfildocumentsInput, Prisma.documentsUncheckedCreateWithoutPerfildocumentsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutBusiness_partiesInput, Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput>
 }
 
-export type documentsUpsertWithoutPerfildocumentsInput = {
-  update: Prisma.XOR<Prisma.documentsUpdateWithoutPerfildocumentsInput, Prisma.documentsUncheckedUpdateWithoutPerfildocumentsInput>
-  create: Prisma.XOR<Prisma.documentsCreateWithoutPerfildocumentsInput, Prisma.documentsUncheckedCreateWithoutPerfildocumentsInput>
-  where?: Prisma.documentsWhereInput
-}
-
-export type documentsUpdateToOneWithWhereWithoutPerfildocumentsInput = {
-  where?: Prisma.documentsWhereInput
-  data: Prisma.XOR<Prisma.documentsUpdateWithoutPerfildocumentsInput, Prisma.documentsUncheckedUpdateWithoutPerfildocumentsInput>
-}
-
-export type documentsUpdateWithoutPerfildocumentsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfiles?: Prisma.perfilesUpdateOneWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUpdateManyWithoutDocumentsNestedInput
-}
-
-export type documentsUncheckedUpdateWithoutPerfildocumentsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  perfilid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-}
-
-export type documentsCreateWithoutPerfilesInput = {
-  id?: bigint | number
-  name?: string | null
-  descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsCreateNestedManyWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsCreateNestedManyWithoutDocumentsInput
-}
-
-export type documentsUncheckedCreateWithoutPerfilesInput = {
-  id?: bigint | number
-  name?: string | null
-  descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-}
-
-export type documentsCreateOrConnectWithoutPerfilesInput = {
-  where: Prisma.documentsWhereUniqueInput
-  create: Prisma.XOR<Prisma.documentsCreateWithoutPerfilesInput, Prisma.documentsUncheckedCreateWithoutPerfilesInput>
-}
-
-export type documentsCreateManyPerfilesInputEnvelope = {
-  data: Prisma.documentsCreateManyPerfilesInput | Prisma.documentsCreateManyPerfilesInput[]
+export type documentsCreateManyBusiness_partiesInputEnvelope = {
+  data: Prisma.documentsCreateManyBusiness_partiesInput | Prisma.documentsCreateManyBusiness_partiesInput[]
   skipDuplicates?: boolean
 }
 
-export type documentsUpsertWithWhereUniqueWithoutPerfilesInput = {
+export type documentsUpsertWithWhereUniqueWithoutBusiness_partiesInput = {
   where: Prisma.documentsWhereUniqueInput
-  update: Prisma.XOR<Prisma.documentsUpdateWithoutPerfilesInput, Prisma.documentsUncheckedUpdateWithoutPerfilesInput>
-  create: Prisma.XOR<Prisma.documentsCreateWithoutPerfilesInput, Prisma.documentsUncheckedCreateWithoutPerfilesInput>
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutBusiness_partiesInput, Prisma.documentsUncheckedUpdateWithoutBusiness_partiesInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutBusiness_partiesInput, Prisma.documentsUncheckedCreateWithoutBusiness_partiesInput>
 }
 
-export type documentsUpdateWithWhereUniqueWithoutPerfilesInput = {
+export type documentsUpdateWithWhereUniqueWithoutBusiness_partiesInput = {
   where: Prisma.documentsWhereUniqueInput
-  data: Prisma.XOR<Prisma.documentsUpdateWithoutPerfilesInput, Prisma.documentsUncheckedUpdateWithoutPerfilesInput>
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutBusiness_partiesInput, Prisma.documentsUncheckedUpdateWithoutBusiness_partiesInput>
 }
 
-export type documentsUpdateManyWithWhereWithoutPerfilesInput = {
+export type documentsUpdateManyWithWhereWithoutBusiness_partiesInput = {
   where: Prisma.documentsScalarWhereInput
-  data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutPerfilesInput>
+  data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesInput>
 }
 
 export type documentsScalarWhereInput = {
   AND?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
   OR?: Prisma.documentsScalarWhereInput[]
   NOT?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
-  id?: Prisma.BigIntFilter<"documents"> | bigint | number
-  name?: Prisma.StringNullableFilter<"documents"> | string | null
+  id?: Prisma.UuidFilter<"documents"> | string
+  document_type_id?: Prisma.UuidFilter<"documents"> | string
+  party_id?: Prisma.UuidNullableFilter<"documents"> | string | null
+  number?: Prisma.IntFilter<"documents"> | number
+  date?: Prisma.DateTimeFilter<"documents"> | Date | string
+  status?: Prisma.IntFilter<"documents"> | number
+  created_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  subtotal?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
-  perfilid?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  mime?: Prisma.StringNullableFilter<"documents"> | string | null
-  tamano?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
-  actividadid?: Prisma.BigIntNullableFilter<"documents"> | bigint | number | null
 }
 
-export type documentsCreateWithoutRegistrocabdocumentsInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsCreateWithoutDocument_itemsInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfiles?: Prisma.perfilesCreateNestedOneWithoutDocumentsInput
-  perfildocuments?: Prisma.perfildocumentsCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
 }
 
-export type documentsUncheckedCreateWithoutRegistrocabdocumentsInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsUncheckedCreateWithoutDocument_itemsInput = {
+  id?: string
+  document_type_id: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  perfilid?: bigint | number | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
-export type documentsCreateOrConnectWithoutRegistrocabdocumentsInput = {
+export type documentsCreateOrConnectWithoutDocument_itemsInput = {
   where: Prisma.documentsWhereUniqueInput
-  create: Prisma.XOR<Prisma.documentsCreateWithoutRegistrocabdocumentsInput, Prisma.documentsUncheckedCreateWithoutRegistrocabdocumentsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDocument_itemsInput, Prisma.documentsUncheckedCreateWithoutDocument_itemsInput>
 }
 
-export type documentsUpsertWithoutRegistrocabdocumentsInput = {
-  update: Prisma.XOR<Prisma.documentsUpdateWithoutRegistrocabdocumentsInput, Prisma.documentsUncheckedUpdateWithoutRegistrocabdocumentsInput>
-  create: Prisma.XOR<Prisma.documentsCreateWithoutRegistrocabdocumentsInput, Prisma.documentsUncheckedCreateWithoutRegistrocabdocumentsInput>
+export type documentsUpsertWithoutDocument_itemsInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutDocument_itemsInput, Prisma.documentsUncheckedUpdateWithoutDocument_itemsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDocument_itemsInput, Prisma.documentsUncheckedCreateWithoutDocument_itemsInput>
   where?: Prisma.documentsWhereInput
 }
 
-export type documentsUpdateToOneWithWhereWithoutRegistrocabdocumentsInput = {
+export type documentsUpdateToOneWithWhereWithoutDocument_itemsInput = {
   where?: Prisma.documentsWhereInput
-  data: Prisma.XOR<Prisma.documentsUpdateWithoutRegistrocabdocumentsInput, Prisma.documentsUncheckedUpdateWithoutRegistrocabdocumentsInput>
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutDocument_itemsInput, Prisma.documentsUncheckedUpdateWithoutDocument_itemsInput>
 }
 
-export type documentsUpdateWithoutRegistrocabdocumentsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type documentsUpdateWithoutDocument_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfiles?: Prisma.perfilesUpdateOneWithoutDocumentsNestedInput
-  perfildocuments?: Prisma.perfildocumentsUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
 }
 
-export type documentsUncheckedUpdateWithoutRegistrocabdocumentsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  perfilid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
 }
 
-export type documentsCreateWithoutTareasexecdocumentsInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsCreateWithoutDocument_taxesInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfiles?: Prisma.perfilesCreateNestedOneWithoutDocumentsInput
-  perfildocuments?: Prisma.perfildocumentsCreateNestedManyWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsCreateNestedManyWithoutDocumentsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
 }
 
-export type documentsUncheckedCreateWithoutTareasexecdocumentsInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsUncheckedCreateWithoutDocument_taxesInput = {
+  id?: string
+  document_type_id: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  perfilid?: bigint | number | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedCreateNestedManyWithoutDocumentsInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
-export type documentsCreateOrConnectWithoutTareasexecdocumentsInput = {
+export type documentsCreateOrConnectWithoutDocument_taxesInput = {
   where: Prisma.documentsWhereUniqueInput
-  create: Prisma.XOR<Prisma.documentsCreateWithoutTareasexecdocumentsInput, Prisma.documentsUncheckedCreateWithoutTareasexecdocumentsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDocument_taxesInput, Prisma.documentsUncheckedCreateWithoutDocument_taxesInput>
 }
 
-export type documentsUpsertWithoutTareasexecdocumentsInput = {
-  update: Prisma.XOR<Prisma.documentsUpdateWithoutTareasexecdocumentsInput, Prisma.documentsUncheckedUpdateWithoutTareasexecdocumentsInput>
-  create: Prisma.XOR<Prisma.documentsCreateWithoutTareasexecdocumentsInput, Prisma.documentsUncheckedCreateWithoutTareasexecdocumentsInput>
+export type documentsUpsertWithoutDocument_taxesInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutDocument_taxesInput, Prisma.documentsUncheckedUpdateWithoutDocument_taxesInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDocument_taxesInput, Prisma.documentsUncheckedCreateWithoutDocument_taxesInput>
   where?: Prisma.documentsWhereInput
 }
 
-export type documentsUpdateToOneWithWhereWithoutTareasexecdocumentsInput = {
+export type documentsUpdateToOneWithWhereWithoutDocument_taxesInput = {
   where?: Prisma.documentsWhereInput
-  data: Prisma.XOR<Prisma.documentsUpdateWithoutTareasexecdocumentsInput, Prisma.documentsUncheckedUpdateWithoutTareasexecdocumentsInput>
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutDocument_taxesInput, Prisma.documentsUncheckedUpdateWithoutDocument_taxesInput>
 }
 
-export type documentsUpdateWithoutTareasexecdocumentsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type documentsUpdateWithoutDocument_taxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfiles?: Prisma.perfilesUpdateOneWithoutDocumentsNestedInput
-  perfildocuments?: Prisma.perfildocumentsUpdateManyWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUpdateManyWithoutDocumentsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
 }
 
-export type documentsUncheckedUpdateWithoutTareasexecdocumentsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  perfilid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
 }
 
-export type documentsCreateManyPerfilesInput = {
-  id?: bigint | number
-  name?: string | null
+export type documentsCreateWithoutDocument_typesInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
-  mime?: string | null
-  tamano?: bigint | number | null
-  actividadid?: bigint | number | null
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
 }
 
-export type documentsUpdateWithoutPerfilesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUpdateManyWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUpdateManyWithoutDocumentsNestedInput
+export type documentsUncheckedCreateWithoutDocument_typesInput = {
+  id?: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
-export type documentsUncheckedUpdateWithoutPerfilesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  perfildocuments?: Prisma.perfildocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  registrocabdocuments?: Prisma.registrocabdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
-  tareasexecdocuments?: Prisma.tareasexecdocumentsUncheckedUpdateManyWithoutDocumentsNestedInput
+export type documentsCreateOrConnectWithoutDocument_typesInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDocument_typesInput, Prisma.documentsUncheckedCreateWithoutDocument_typesInput>
 }
 
-export type documentsUncheckedUpdateManyWithoutPerfilesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type documentsCreateManyDocument_typesInputEnvelope = {
+  data: Prisma.documentsCreateManyDocument_typesInput | Prisma.documentsCreateManyDocument_typesInput[]
+  skipDuplicates?: boolean
+}
+
+export type documentsUpsertWithWhereUniqueWithoutDocument_typesInput = {
+  where: Prisma.documentsWhereUniqueInput
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutDocument_typesInput, Prisma.documentsUncheckedUpdateWithoutDocument_typesInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDocument_typesInput, Prisma.documentsUncheckedCreateWithoutDocument_typesInput>
+}
+
+export type documentsUpdateWithWhereUniqueWithoutDocument_typesInput = {
+  where: Prisma.documentsWhereUniqueInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutDocument_typesInput, Prisma.documentsUncheckedUpdateWithoutDocument_typesInput>
+}
+
+export type documentsUpdateManyWithWhereWithoutDocument_typesInput = {
+  where: Prisma.documentsScalarWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutDocument_typesInput>
+}
+
+export type documentsCreateManyBusiness_partiesInput = {
+  id?: string
+  document_type_id: string
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+}
+
+export type documentsUpdateWithoutBusiness_partiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tamano?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  actividadid?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+}
+
+export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type documentsCreateManyDocument_typesInput = {
+  id?: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+}
+
+export type documentsUpdateWithoutDocument_typesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutDocument_typesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+}
+
+export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -842,15 +1098,13 @@ export type documentsUncheckedUpdateManyWithoutPerfilesInput = {
  */
 
 export type DocumentsCountOutputType = {
-  perfildocuments: number
-  registrocabdocuments: number
-  tareasexecdocuments: number
+  document_items: number
+  document_taxes: number
 }
 
 export type DocumentsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  perfildocuments?: boolean | DocumentsCountOutputTypeCountPerfildocumentsArgs
-  registrocabdocuments?: boolean | DocumentsCountOutputTypeCountRegistrocabdocumentsArgs
-  tareasexecdocuments?: boolean | DocumentsCountOutputTypeCountTareasexecdocumentsArgs
+  document_items?: boolean | DocumentsCountOutputTypeCountDocument_itemsArgs
+  document_taxes?: boolean | DocumentsCountOutputTypeCountDocument_taxesArgs
 }
 
 /**
@@ -866,103 +1120,125 @@ export type DocumentsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * DocumentsCountOutputType without action
  */
-export type DocumentsCountOutputTypeCountPerfildocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.perfildocumentsWhereInput
+export type DocumentsCountOutputTypeCountDocument_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_itemsWhereInput
 }
 
 /**
  * DocumentsCountOutputType without action
  */
-export type DocumentsCountOutputTypeCountRegistrocabdocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.registrocabdocumentsWhereInput
-}
-
-/**
- * DocumentsCountOutputType without action
- */
-export type DocumentsCountOutputTypeCountTareasexecdocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.tareasexecdocumentsWhereInput
+export type DocumentsCountOutputTypeCountDocument_taxesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_taxesWhereInput
 }
 
 
 export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  document_type_id?: boolean
+  party_id?: boolean
+  number?: boolean
+  date?: boolean
+  status?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  subtotal?: boolean
+  total_taxes?: boolean
+  total?: boolean
   descrip?: boolean
-  perfilid?: boolean
-  mime?: boolean
-  tamano?: boolean
-  actividadid?: boolean
-  perfiles?: boolean | Prisma.documents$perfilesArgs<ExtArgs>
-  perfildocuments?: boolean | Prisma.documents$perfildocumentsArgs<ExtArgs>
-  registrocabdocuments?: boolean | Prisma.documents$registrocabdocumentsArgs<ExtArgs>
-  tareasexecdocuments?: boolean | Prisma.documents$tareasexecdocumentsArgs<ExtArgs>
+  document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
+  document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
 export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  document_type_id?: boolean
+  party_id?: boolean
+  number?: boolean
+  date?: boolean
+  status?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  subtotal?: boolean
+  total_taxes?: boolean
+  total?: boolean
   descrip?: boolean
-  perfilid?: boolean
-  mime?: boolean
-  tamano?: boolean
-  actividadid?: boolean
-  perfiles?: boolean | Prisma.documents$perfilesArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
 export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  document_type_id?: boolean
+  party_id?: boolean
+  number?: boolean
+  date?: boolean
+  status?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  subtotal?: boolean
+  total_taxes?: boolean
+  total?: boolean
   descrip?: boolean
-  perfilid?: boolean
-  mime?: boolean
-  tamano?: boolean
-  actividadid?: boolean
-  perfiles?: boolean | Prisma.documents$perfilesArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
 export type documentsSelectScalar = {
   id?: boolean
-  name?: boolean
+  document_type_id?: boolean
+  party_id?: boolean
+  number?: boolean
+  date?: boolean
+  status?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  subtotal?: boolean
+  total_taxes?: boolean
+  total?: boolean
   descrip?: boolean
-  perfilid?: boolean
-  mime?: boolean
-  tamano?: boolean
-  actividadid?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "descrip" | "perfilid" | "mime" | "tamano" | "actividadid", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "created_at" | "updated_at" | "subtotal" | "total_taxes" | "total" | "descrip", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  perfiles?: boolean | Prisma.documents$perfilesArgs<ExtArgs>
-  perfildocuments?: boolean | Prisma.documents$perfildocumentsArgs<ExtArgs>
-  registrocabdocuments?: boolean | Prisma.documents$registrocabdocumentsArgs<ExtArgs>
-  tareasexecdocuments?: boolean | Prisma.documents$tareasexecdocumentsArgs<ExtArgs>
+  document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
+  document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type documentsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  perfiles?: boolean | Prisma.documents$perfilesArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
 }
 export type documentsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  perfiles?: boolean | Prisma.documents$perfilesArgs<ExtArgs>
+  document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
+  business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
 }
 
 export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "documents"
   objects: {
-    perfiles: Prisma.$perfilesPayload<ExtArgs> | null
-    perfildocuments: Prisma.$perfildocumentsPayload<ExtArgs>[]
-    registrocabdocuments: Prisma.$registrocabdocumentsPayload<ExtArgs>[]
-    tareasexecdocuments: Prisma.$tareasexecdocumentsPayload<ExtArgs>[]
+    document_items: Prisma.$document_itemsPayload<ExtArgs>[]
+    document_taxes: Prisma.$document_taxesPayload<ExtArgs>[]
+    document_types: Prisma.$document_typesPayload<ExtArgs>
+    business_parties: Prisma.$business_partiesPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: bigint
-    name: string | null
+    id: string
+    document_type_id: string
+    party_id: string | null
+    number: number
+    date: Date
+    status: number
+    created_at: Date
+    updated_at: Date
+    subtotal: runtime.Decimal
+    total_taxes: runtime.Decimal
+    total: runtime.Decimal
     descrip: string | null
-    perfilid: bigint | null
-    mime: string | null
-    tamano: bigint | null
-    actividadid: bigint | null
   }, ExtArgs["result"]["documents"]>
   composites: {}
 }
@@ -1357,10 +1633,10 @@ readonly fields: documentsFieldRefs;
  */
 export interface Prisma__documentsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  perfiles<T extends Prisma.documents$perfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$perfilesArgs<ExtArgs>>): Prisma.Prisma__perfilesClient<runtime.Types.Result.GetResult<Prisma.$perfilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  perfildocuments<T extends Prisma.documents$perfildocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$perfildocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$perfildocumentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  registrocabdocuments<T extends Prisma.documents$registrocabdocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$registrocabdocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$registrocabdocumentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  tareasexecdocuments<T extends Prisma.documents$tareasexecdocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$tareasexecdocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tareasexecdocumentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_items<T extends Prisma.documents$document_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$document_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_taxes<T extends Prisma.documents$document_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$document_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_types<T extends Prisma.document_typesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_typesDefaultArgs<ExtArgs>>): Prisma.Prisma__document_typesClient<runtime.Types.Result.GetResult<Prisma.$document_typesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  business_parties<T extends Prisma.documents$business_partiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$business_partiesArgs<ExtArgs>>): Prisma.Prisma__business_partiesClient<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1390,13 +1666,18 @@ export interface Prisma__documentsClient<T, Null = never, ExtArgs extends runtim
  * Fields of the documents model
  */
 export interface documentsFieldRefs {
-  readonly id: Prisma.FieldRef<"documents", 'BigInt'>
-  readonly name: Prisma.FieldRef<"documents", 'String'>
+  readonly id: Prisma.FieldRef<"documents", 'String'>
+  readonly document_type_id: Prisma.FieldRef<"documents", 'String'>
+  readonly party_id: Prisma.FieldRef<"documents", 'String'>
+  readonly number: Prisma.FieldRef<"documents", 'Int'>
+  readonly date: Prisma.FieldRef<"documents", 'DateTime'>
+  readonly status: Prisma.FieldRef<"documents", 'Int'>
+  readonly created_at: Prisma.FieldRef<"documents", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"documents", 'DateTime'>
+  readonly subtotal: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly total_taxes: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly total: Prisma.FieldRef<"documents", 'Decimal'>
   readonly descrip: Prisma.FieldRef<"documents", 'String'>
-  readonly perfilid: Prisma.FieldRef<"documents", 'BigInt'>
-  readonly mime: Prisma.FieldRef<"documents", 'String'>
-  readonly tamano: Prisma.FieldRef<"documents", 'BigInt'>
-  readonly actividadid: Prisma.FieldRef<"documents", 'BigInt'>
 }
     
 
@@ -1593,6 +1874,11 @@ export type documentsFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` documents.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of documents.
+   */
   distinct?: Prisma.DocumentsScalarFieldEnum | Prisma.DocumentsScalarFieldEnum[]
 }
 
@@ -1615,7 +1901,7 @@ export type documentsCreateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * The data needed to create a documents.
    */
-  data?: Prisma.XOR<Prisma.documentsCreateInput, Prisma.documentsUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.documentsCreateInput, Prisma.documentsUncheckedCreateInput>
 }
 
 /**
@@ -1793,94 +2079,70 @@ export type documentsDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * documents.perfiles
+ * documents.document_items
  */
-export type documents$perfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type documents$document_itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the perfiles
+   * Select specific fields to fetch from the document_items
    */
-  select?: Prisma.perfilesSelect<ExtArgs> | null
+  select?: Prisma.document_itemsSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the perfiles
+   * Omit specific fields from the document_items
    */
-  omit?: Prisma.perfilesOmit<ExtArgs> | null
+  omit?: Prisma.document_itemsOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.perfilesInclude<ExtArgs> | null
-  where?: Prisma.perfilesWhereInput
+  include?: Prisma.document_itemsInclude<ExtArgs> | null
+  where?: Prisma.document_itemsWhereInput
+  orderBy?: Prisma.document_itemsOrderByWithRelationInput | Prisma.document_itemsOrderByWithRelationInput[]
+  cursor?: Prisma.document_itemsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_itemsScalarFieldEnum | Prisma.Document_itemsScalarFieldEnum[]
 }
 
 /**
- * documents.perfildocuments
+ * documents.document_taxes
  */
-export type documents$perfildocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type documents$document_taxesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the perfildocuments
+   * Select specific fields to fetch from the document_taxes
    */
-  select?: Prisma.perfildocumentsSelect<ExtArgs> | null
+  select?: Prisma.document_taxesSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the perfildocuments
+   * Omit specific fields from the document_taxes
    */
-  omit?: Prisma.perfildocumentsOmit<ExtArgs> | null
+  omit?: Prisma.document_taxesOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.perfildocumentsInclude<ExtArgs> | null
-  where?: Prisma.perfildocumentsWhereInput
-  orderBy?: Prisma.perfildocumentsOrderByWithRelationInput | Prisma.perfildocumentsOrderByWithRelationInput[]
-  cursor?: Prisma.perfildocumentsWhereUniqueInput
+  include?: Prisma.document_taxesInclude<ExtArgs> | null
+  where?: Prisma.document_taxesWhereInput
+  orderBy?: Prisma.document_taxesOrderByWithRelationInput | Prisma.document_taxesOrderByWithRelationInput[]
+  cursor?: Prisma.document_taxesWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PerfildocumentsScalarFieldEnum | Prisma.PerfildocumentsScalarFieldEnum[]
+  distinct?: Prisma.Document_taxesScalarFieldEnum | Prisma.Document_taxesScalarFieldEnum[]
 }
 
 /**
- * documents.registrocabdocuments
+ * documents.business_parties
  */
-export type documents$registrocabdocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type documents$business_partiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the registrocabdocuments
+   * Select specific fields to fetch from the business_parties
    */
-  select?: Prisma.registrocabdocumentsSelect<ExtArgs> | null
+  select?: Prisma.business_partiesSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the registrocabdocuments
+   * Omit specific fields from the business_parties
    */
-  omit?: Prisma.registrocabdocumentsOmit<ExtArgs> | null
+  omit?: Prisma.business_partiesOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.registrocabdocumentsInclude<ExtArgs> | null
-  where?: Prisma.registrocabdocumentsWhereInput
-  orderBy?: Prisma.registrocabdocumentsOrderByWithRelationInput | Prisma.registrocabdocumentsOrderByWithRelationInput[]
-  cursor?: Prisma.registrocabdocumentsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.RegistrocabdocumentsScalarFieldEnum | Prisma.RegistrocabdocumentsScalarFieldEnum[]
-}
-
-/**
- * documents.tareasexecdocuments
- */
-export type documents$tareasexecdocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the tareasexecdocuments
-   */
-  select?: Prisma.tareasexecdocumentsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the tareasexecdocuments
-   */
-  omit?: Prisma.tareasexecdocumentsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.tareasexecdocumentsInclude<ExtArgs> | null
-  where?: Prisma.tareasexecdocumentsWhereInput
-  orderBy?: Prisma.tareasexecdocumentsOrderByWithRelationInput | Prisma.tareasexecdocumentsOrderByWithRelationInput[]
-  cursor?: Prisma.tareasexecdocumentsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TareasexecdocumentsScalarFieldEnum | Prisma.TareasexecdocumentsScalarFieldEnum[]
+  include?: Prisma.business_partiesInclude<ExtArgs> | null
+  where?: Prisma.business_partiesWhereInput
 }
 
 /**

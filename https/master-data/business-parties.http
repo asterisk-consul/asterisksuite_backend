@@ -1,0 +1,80 @@
+ @baseUrl = http://localhost:3000/api
+#@baseUrl = https://apidonandres.asterisksuite.cloud/api
+@partyId = b8c46fe5-c77a-4ea3-aed5-3d73e5e27915
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+###
+@accessToken = {{login.response.body.accessToken}}
+
+
+### =====================================================
+### Crear Business Party
+### POST /master-data/business-parties
+### =====================================================
+
+POST {{baseUrl}}/master-data/business-parties
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+"name":"Agustin Yedro",
+"tax_id":"303030030",
+"type":"supplier"
+}
+
+
+
+
+### =====================================================
+### Listar Business Parties por empresa
+### GET /master-data/business-parties?company_id=
+### =====================================================
+
+GET {{baseUrl}}/master-data/business-parties?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Obtener Business Party por ID
+### (incluye party_locations y locations)
+### GET /master-data/business-parties/:id
+### =====================================================
+
+GET {{baseUrl}}/master-data/business-parties/{{partyId}}
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Actualizar Business Party
+### PATCH /master-data/business-parties/:id
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/business-parties/{{partyId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Cliente Demo Actualizado SA",
+  "phone": "3514448888",
+  "email": "nuevoemail@demo.com"
+}
+
+
+### =====================================================
+### Soft Delete (active = false)
+### DELETE /master-data/business-parties/:id
+### =====================================================
+
+DELETE {{baseUrl}}/master-data/business-parties/{{partyId}}
+Authorization: Bearer {{accessToken}}

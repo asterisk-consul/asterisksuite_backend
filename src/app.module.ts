@@ -1,28 +1,20 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppConfigModule } from './config/config.module.js';
-// Assuming you have a module that provides PrismaService
-import { PrismaModule } from './prisma/prisma.module'; // <-- Add/identify this
-import { SshModule } from './ssh/ssh.module';
-// import { BootstrapModule } from './bootstrap/bootstrap.module';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
-import { ArticulosModule } from './articulos/articulos.module';
-import { CategoriasModule } from './categorias/categorias.module';
-import { TableModule } from './tables/table.module';
-import { DataImportModule } from './data-import/data-import.module.js';
+import { DataImportModule } from './data-import/data-import.module';
+import { modulesmodule } from './modules/modules.module';
+import { DocumentTypesModule } from './modules/erp/erp.modules';
 
 @Module({
   imports: [
-    // 1. Load the configuration FIRST.
-    AppConfigModule,
-    SshModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
-    // BootstrapModule,
     AuthModule,
-    TableModule,
-    ArticulosModule,
-    CategoriasModule,
     DataImportModule,
+    modulesmodule,
+    DocumentTypesModule,
   ],
 })
 export class AppModule {}

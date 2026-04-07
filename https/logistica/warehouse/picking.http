@@ -1,0 +1,64 @@
+@baseUrl = http://localhost:3000
+@accessToken = TU_TOKEN_JWT_AQUI
+
+@warehouseId = UUID_DEPOSITO_ORIGEN
+@warehouseDestinoId = UUID_DEPOSITO_DESTINO
+@companyId = UUID_EMPRESA
+@userId = UUID_USUARIO
+@productId1 = UUID_PRODUCTO_1
+@productId2 = UUID_PRODUCTO_2
+@palletId = UUID_PALLET
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+### =====================================================
+### Crear Picking (descuenta stock)
+### POST /logistica/picking
+### =====================================================
+
+POST {{baseUrl}}/logistica/picking
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "warehouse_id": "{{warehouseId}}",
+  "company_id": "{{companyId}}",
+  "created_by": "{{userId}}",
+  "items": [
+    {
+      "product_id": "{{productId1}}",
+      "quantity": "10.00"
+    },
+    {
+      "product_id": "{{productId2}}",
+      "quantity": "5.50"
+    }
+  ]
+}
+
+
+### =====================================================
+### Transferir pallet entre depósitos
+### PATCH /logistica/picking/transfer
+### =====================================================
+
+PATCH {{baseUrl}}/logistica/picking/transfer
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "pallet_id": "{{palletId}}",
+  "from_warehouse_id": "{{warehouseId}}",
+  "to_warehouse_id": "{{warehouseDestinoId}}",
+  "user_id": "{{userId}}"
+}

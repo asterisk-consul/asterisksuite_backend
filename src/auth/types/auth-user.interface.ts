@@ -1,7 +1,7 @@
 export interface AuthUser {
-  id: number;
-  username: string;
-  roles: string[];
-  permissions?: string[];
-  perfilid?: number;
+  id: string;
+  name: string;
+  email: string;
+  role?: string | null;
+  active?: boolean | null;
 }

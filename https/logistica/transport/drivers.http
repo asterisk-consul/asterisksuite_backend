@@ -1,0 +1,147 @@
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@driverId = a511c365-a06b-486e-a772-e8b37b0a1b13
+@documentTypeLicense = e90d7345-dbe6-4eb6-8034-9980359729e8
+@documentTypeMedical = UUID_DOC_TYPE_MEDICAL
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+### ======================================================
+### 1️⃣ Crear driver SIN documentos
+### ======================================================
+
+# @name create
+POST {{baseUrl}}/transport/drivers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "first_name": "Juan",
+  "last_name": "Pérez",
+  "document": "30123456",
+  "phone": "3515551234"
+}
+
+### 
+======================================================
+### 2️⃣ Crear driver CON un documento
+### ======================================================
+
+POST {{baseUrl}}/transport/drivers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "first_name": "Carlos",
+  "last_name": "Gómez",
+  "document": "28456789",
+  "phone": "3514448899",
+  "documents": [
+    {
+      "document_type_id": "{{documentTypeLicense}}",
+      "expiration_date": "2026-05-01"
+    }
+  ]
+}
+
+### ======================================================
+### 3️⃣ Crear driver CON múltiples documentos
+### ======================================================
+
+POST {{baseUrl}}/transport/drivers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "{{companyId}}",
+  "first_name": "Miguel",
+  "last_name": "Fernandez",
+  "document": "30999888",
+  "phone": "3516667777",
+  "documents": [
+    {
+      "document_type_id": "{{documentTypeLicense}}",
+      "expiration_date": "2026-05-01"
+    },
+    {
+      "document_type_id": "{{documentTypeMedical}}",
+      "expiration_date": "2025-11-15"
+    }
+  ]
+}
+
+### ======================================================
+### 4️⃣ Obtener todos los drivers de una empresa
+### ======================================================
+
+GET {{baseUrl}}/transport/drivers?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+### ======================================================
+### 5️⃣ Obtener driver por ID
+### ======================================================
+
+GET {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+
+### ======================================================
+### 6️⃣ Actualizar datos del driver
+### ======================================================
+
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "phone": "3519990000"
+}
+
+### ======================================================
+### 7️⃣ Actualizar / agregar documentos
+### ======================================================
+
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "documents": [
+    {
+      "document_type_id": "{{documentTypeLicense}}",
+      "expiration_date": "2027-01-01"
+    },
+    {
+      "document_type_id": "{{documentTypeMedical}}",
+      "expiration_date": "2026-10-10"
+    }
+  ]
+}
+
+### ======================================================
+### 8️⃣ Eliminar driver
+### ======================================================
+
+DELETE {{baseUrl}}/transport/drivers/{{driverId}}
+Authorization: Bearer {{accessToken}}
+
+
+###
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}/activate
+Authorization: Bearer {{accessToken}}
+###
+PATCH {{baseUrl}}/transport/drivers/{{driverId}}/desactivate
+Authorization: Bearer {{accessToken}}
