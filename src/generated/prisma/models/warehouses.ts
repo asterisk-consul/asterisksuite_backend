@@ -165,7 +165,7 @@ export type WarehousesGroupByOutputType = {
   _max: WarehousesMaxAggregateOutputType | null
 }
 
-export type GetWarehousesGroupByPayload<T extends warehousesGroupByArgs> = Prisma.PrismaPromise<
+type GetWarehousesGroupByPayload<T extends warehousesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<WarehousesGroupByOutputType, T['by']> &
       {
@@ -1855,11 +1855,6 @@ export type warehousesFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` warehouses.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of warehouses.
-   */
   distinct?: Prisma.WarehousesScalarFieldEnum | Prisma.WarehousesScalarFieldEnum[]
 }
 

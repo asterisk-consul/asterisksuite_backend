@@ -269,7 +269,7 @@ export type TripsGroupByOutputType = {
   _max: TripsMaxAggregateOutputType | null
 }
 
-export type GetTripsGroupByPayload<T extends tripsGroupByArgs> = Prisma.PrismaPromise<
+type GetTripsGroupByPayload<T extends tripsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TripsGroupByOutputType, T['by']> &
       {
@@ -3743,11 +3743,6 @@ export type tripsFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Skip the first `n` trips.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of trips.
-   */
   distinct?: Prisma.TripsScalarFieldEnum | Prisma.TripsScalarFieldEnum[]
 }
 

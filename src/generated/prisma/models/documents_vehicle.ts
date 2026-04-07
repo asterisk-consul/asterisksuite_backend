@@ -158,7 +158,7 @@ export type Documents_vehicleGroupByOutputType = {
   _max: Documents_vehicleMaxAggregateOutputType | null
 }
 
-export type GetDocuments_vehicleGroupByPayload<T extends documents_vehicleGroupByArgs> = Prisma.PrismaPromise<
+type GetDocuments_vehicleGroupByPayload<T extends documents_vehicleGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Documents_vehicleGroupByOutputType, T['by']> &
       {
@@ -1248,11 +1248,6 @@ export type documents_vehicleFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` documents_vehicles.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of documents_vehicles.
-   */
   distinct?: Prisma.Documents_vehicleScalarFieldEnum | Prisma.Documents_vehicleScalarFieldEnum[]
 }
 

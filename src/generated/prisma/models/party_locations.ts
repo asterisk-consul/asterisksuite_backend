@@ -158,7 +158,7 @@ export type Party_locationsGroupByOutputType = {
   _max: Party_locationsMaxAggregateOutputType | null
 }
 
-export type GetParty_locationsGroupByPayload<T extends party_locationsGroupByArgs> = Prisma.PrismaPromise<
+type GetParty_locationsGroupByPayload<T extends party_locationsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Party_locationsGroupByOutputType, T['by']> &
       {
@@ -1242,11 +1242,6 @@ export type party_locationsFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` party_locations.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of party_locations.
-   */
   distinct?: Prisma.Party_locationsScalarFieldEnum | Prisma.Party_locationsScalarFieldEnum[]
 }
 

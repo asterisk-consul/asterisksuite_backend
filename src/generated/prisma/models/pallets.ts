@@ -172,7 +172,7 @@ export type PalletsGroupByOutputType = {
   _max: PalletsMaxAggregateOutputType | null
 }
 
-export type GetPalletsGroupByPayload<T extends palletsGroupByArgs> = Prisma.PrismaPromise<
+type GetPalletsGroupByPayload<T extends palletsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PalletsGroupByOutputType, T['by']> &
       {
@@ -1930,11 +1930,6 @@ export type palletsFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Skip the first `n` pallets.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of pallets.
-   */
   distinct?: Prisma.PalletsScalarFieldEnum | Prisma.PalletsScalarFieldEnum[]
 }
 

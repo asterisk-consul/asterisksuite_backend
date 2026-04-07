@@ -1,8 +1,18 @@
-@baseUrl = https://apidonandres.asterisksuite.cloud/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWZhYmYxYi1jODlkLTQ1ZTgtODNhOS1lNTIzNTJlZDAxNTkiLCJuYW1lIjoiQWRtaW5pc3RyYWRvciIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJjb21wYW55SWQiOm51bGwsImlhdCI6MTc3MjU3NDgzNSwiZXhwIjoxNzcyNTc1NzM1fQ.LqLpp30xlnMpuctrvPmYmuHrCs5hFW48oKTqBCggPJI
-@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
-@productId = 72756cfa-7fab-4272-8543-f505d288f869
+@baseUrl = http://localhost:3000/api
 
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
 ###
 # ==============================
 # 🔐 LOGIN
@@ -26,8 +36,8 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "{{companyId}}",
-  "name": "Producto Demo",
+  "company_id": "21f611eb-1f24-4a85-9b82-efc5ba78ef71",
+  "name": "COMBUSTIBLE CISTERNA",
   "sku": "SKU-001",
   "requires_refrigeration": false
 }

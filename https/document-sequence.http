@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+### Crear secuencia
+POST {{baseUrl}}/document-sequence
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "9af6e716-d26a-45f3-9afa-68c346e1628f",
+  "name": "Secuencia compras",
+  "automatic": true,
+  "range_start": 1,
+  "range_end": 9999,
+  "point_of_sale": "0002",
+  "prefix": "COM",
+  "active": true
+}

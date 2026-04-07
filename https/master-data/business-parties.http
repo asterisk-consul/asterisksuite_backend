@@ -28,7 +28,15 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
+<<<<<<< HEAD:https/master-data/business-parties.http
 "name":"Agustin Yedro",
+=======
+"active": true,
+"company_id":"21f611eb-1f24-4a85-9b82-efc5ba78ef71",
+"email":"agustinyedro@gmail.com",
+"name":"POSTA DEL MERCOSUR SRL",
+"phone":"3513075338",
+>>>>>>> maxi_donandres_erp:https/business-parties.http
 "tax_id":"303030030",
 "type":"supplier"
 }

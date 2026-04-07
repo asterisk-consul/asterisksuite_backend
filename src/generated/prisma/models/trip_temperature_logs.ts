@@ -192,7 +192,7 @@ export type Trip_temperature_logsGroupByOutputType = {
   _max: Trip_temperature_logsMaxAggregateOutputType | null
 }
 
-export type GetTrip_temperature_logsGroupByPayload<T extends trip_temperature_logsGroupByArgs> = Prisma.PrismaPromise<
+type GetTrip_temperature_logsGroupByPayload<T extends trip_temperature_logsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Trip_temperature_logsGroupByOutputType, T['by']> &
       {
@@ -1286,11 +1286,6 @@ export type trip_temperature_logsFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` trip_temperature_logs.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of trip_temperature_logs.
-   */
   distinct?: Prisma.Trip_temperature_logsScalarFieldEnum | Prisma.Trip_temperature_logsScalarFieldEnum[]
 }
 

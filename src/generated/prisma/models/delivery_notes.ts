@@ -193,7 +193,7 @@ export type Delivery_notesGroupByOutputType = {
   _max: Delivery_notesMaxAggregateOutputType | null
 }
 
-export type GetDelivery_notesGroupByPayload<T extends delivery_notesGroupByArgs> = Prisma.PrismaPromise<
+type GetDelivery_notesGroupByPayload<T extends delivery_notesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Delivery_notesGroupByOutputType, T['by']> &
       {
@@ -2162,11 +2162,6 @@ export type delivery_notesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` delivery_notes.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of delivery_notes.
-   */
   distinct?: Prisma.Delivery_notesScalarFieldEnum | Prisma.Delivery_notesScalarFieldEnum[]
 }
 

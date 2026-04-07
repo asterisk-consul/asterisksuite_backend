@@ -5,7 +5,11 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { DataImportModule } from './data-import/data-import.module';
 import { modulesmodule } from './modules/modules.module';
-import { DocumentTypesModule } from './modules/erp/erp.modules';
+import { DocumentsTypesErpModule } from './modules/erp/document_types/documents-types.module';
+import { DocumentsTypesModule } from './modules/master-data/documents-types/documents-types.module';
+import { TaxesModule } from './modules/erp/taxes/taxes.module';
+import { DocumentsModule } from './modules/erp/documents/documents.module';
+import { PurchasesModule } from './modules/erp/purchase/purchases.module';
 
 @Module({
   imports: [
@@ -14,7 +18,11 @@ import { DocumentTypesModule } from './modules/erp/erp.modules';
     AuthModule,
     DataImportModule,
     modulesmodule,
-    DocumentTypesModule,
+    DocumentsTypesErpModule,
+    DocumentsTypesModule,
+    TaxesModule,
+    DocumentsModule,
+    PurchasesModule,
   ],
 })
 export class AppModule {}

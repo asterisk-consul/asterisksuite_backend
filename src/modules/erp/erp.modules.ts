@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { DocumentTypesController } from './documents/documents-types/documents-types.controller';
-import { DocumentTypesService } from './documents/documents-types/documents-types.service';
+import { DocumentsTypesController } from './document_types/documents-types.controller';
+import { DocumentsTypesService } from './document_types/documents-types.service';
+import { PurchasesController } from './purchase/purchases.controller';
+import { PurchasesService } from './purchase/purchases.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Module({
-  controllers: [DocumentTypesController],
-  providers: [DocumentTypesService, PrismaService],
-  exports: [DocumentTypesService],
+  controllers: [DocumentsTypesController, PurchasesController],
+  providers: [DocumentsTypesService, PurchasesService, PrismaService],
+  exports: [DocumentsTypesService],
 })
 export class DocumentTypesModule {}

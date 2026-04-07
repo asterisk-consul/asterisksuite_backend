@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.6.0
- * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+ * Prisma Client JS version: 7.1.0
+ * Query Engine version: ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.6.0",
-  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
+  client: "7.1.0",
+  engine: "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba"
 }
 
 /**
@@ -4320,7 +4320,10 @@ export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof
 
 export const Document_sequencesScalarFieldEnum = {
   id: 'id',
-  document_type: 'document_type',
+  name: 'name',
+  automatic: 'automatic',
+  range_start: 'range_start',
+  range_end: 'range_end',
   point_of_sale: 'point_of_sale',
   current_number: 'current_number',
   prefix: 'prefix',
@@ -4446,7 +4449,10 @@ export const Document_typesScalarFieldEnum = {
   direction: 'direction',
   affects_stock: 'affects_stock',
   affects_accounting: 'affects_accounting',
-  active: 'active'
+  affects_tax_book: 'affects_tax_book',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
@@ -4462,9 +4468,11 @@ export const DocumentsScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   subtotal: 'subtotal',
+  exempt_amount: 'exempt_amount',
   total_taxes: 'total_taxes',
   total: 'total',
-  descrip: 'descrip'
+  descrip: 'descrip',
+  ref: 'ref'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]

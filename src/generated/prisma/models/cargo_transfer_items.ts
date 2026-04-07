@@ -192,7 +192,7 @@ export type Cargo_transfer_itemsGroupByOutputType = {
   _max: Cargo_transfer_itemsMaxAggregateOutputType | null
 }
 
-export type GetCargo_transfer_itemsGroupByPayload<T extends cargo_transfer_itemsGroupByArgs> = Prisma.PrismaPromise<
+type GetCargo_transfer_itemsGroupByPayload<T extends cargo_transfer_itemsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Cargo_transfer_itemsGroupByOutputType, T['by']> &
       {
@@ -1414,11 +1414,6 @@ export type cargo_transfer_itemsFindManyArgs<ExtArgs extends runtime.Types.Exten
    * Skip the first `n` cargo_transfer_items.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of cargo_transfer_items.
-   */
   distinct?: Prisma.Cargo_transfer_itemsScalarFieldEnum | Prisma.Cargo_transfer_itemsScalarFieldEnum[]
 }
 

@@ -165,7 +165,7 @@ export type Transfer_ratesGroupByOutputType = {
   _max: Transfer_ratesMaxAggregateOutputType | null
 }
 
-export type GetTransfer_ratesGroupByPayload<T extends transfer_ratesGroupByArgs> = Prisma.PrismaPromise<
+type GetTransfer_ratesGroupByPayload<T extends transfer_ratesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Transfer_ratesGroupByOutputType, T['by']> &
       {
@@ -1120,11 +1120,6 @@ export type transfer_ratesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` transfer_rates.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of transfer_rates.
-   */
   distinct?: Prisma.Transfer_ratesScalarFieldEnum | Prisma.Transfer_ratesScalarFieldEnum[]
 }
 

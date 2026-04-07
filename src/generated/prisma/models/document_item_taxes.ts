@@ -203,7 +203,7 @@ export type Document_item_taxesGroupByOutputType = {
   _max: Document_item_taxesMaxAggregateOutputType | null
 }
 
-export type GetDocument_item_taxesGroupByPayload<T extends document_item_taxesGroupByArgs> = Prisma.PrismaPromise<
+type GetDocument_item_taxesGroupByPayload<T extends document_item_taxesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Document_item_taxesGroupByOutputType, T['by']> &
       {
@@ -1333,11 +1333,6 @@ export type document_item_taxesFindManyArgs<ExtArgs extends runtime.Types.Extens
    * Skip the first `n` document_item_taxes.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of document_item_taxes.
-   */
   distinct?: Prisma.Document_item_taxesScalarFieldEnum | Prisma.Document_item_taxesScalarFieldEnum[]
 }
 

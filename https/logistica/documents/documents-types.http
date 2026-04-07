@@ -1,10 +1,9 @@
+### ➕ Crear Document Type
+
 
 @baseUrl = http://localhost:3000/api
 
-###
-# ==============================
-# 🔐 LOGIN
-# ==============================
+### 🔐 LOGIN
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
@@ -17,21 +16,20 @@ Content-Type: application/json
 ###
 
 @accessToken = {{login.response.body.accessToken}}
-# @acessRefresh = {{login.response.body.refreshToken}}
-### =====================================================
-### 1️⃣ Crear viaje
-### =====================================================
 
-POST {{baseUrl}}/document-types
+
+POST {{baseUrl}}/documents-types
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "document_sequence_id": "1",
-  "code": "COM",
-  "description": "FACT COM",
+  "document_sequence_id": "3e2a2d2c-4dea-4b64-a50c-d4e5dee55ece",
+  "code": "NC",
+  "description": "Nota de Crédito",
   "direction": -1,
   "affects_stock": true,
   "affects_accounting": true,
+  "affects_tax_book": true,
   "active": true
 }
+

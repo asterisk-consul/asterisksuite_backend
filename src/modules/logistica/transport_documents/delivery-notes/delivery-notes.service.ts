@@ -27,7 +27,7 @@ export class DeliveryNotesService {
       const deliveryNote = await tx.delivery_notes.create({
         data: {
           type: dto.type,
-          number,
+          number: number.formatted,
           status: 'DRAFT',
           party_id: dto.partyId,
           trip_id: dto.tripId,

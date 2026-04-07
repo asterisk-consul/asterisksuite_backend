@@ -1,0 +1,27 @@
+// src/modules/erp/purchases/dto/purchase-summary-response.dto.ts
+export interface ProductSummaryDto {
+  productId: string;
+  productCode: string;
+  productName: string;
+  productCategory: string;
+  totalPurchases: number;
+  totalTaxes: number;
+  totalExempt: number;
+  transactionCount: number;
+  invoiceCount: number;
+  creditNoteCount: number;
+  firstPurchaseDate: Date | null;
+  lastPurchaseDate: Date | null;
+  avgPurchaseValue: number;
+}
+
+export interface GlobalPurchaseSummaryResponseDto {
+  globalTotal: number;
+  globalTaxes: number;
+  globalExempt: number;
+  globalPurchaseTotal: number;
+  globalTransactionCount: number;
+  negTotal: number;
+  totalProducts: number;
+  products: ProductSummaryDto[];
+}

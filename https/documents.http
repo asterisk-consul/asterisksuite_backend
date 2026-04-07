@@ -1,0 +1,55 @@
+### ➕ Crear Document
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+POST {{baseUrl}}/documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "document_type_id": "UUID-DEL-DOCUMENT-TYPE",
+  "party_id": "UUID-DEL-PARTY",
+  "number": 1,
+  "date": "2026-03-30",
+  "status": 0,
+  "subtotal": 1000.00,
+  "total_taxes": 210.00,
+  "total": 1210.00,
+  "descrip": "Factura de compra"
+}
+
+###
+
+### 📋 Listar Documents por tipo
+GET {{baseUrl}}/documents?document_type_id=91a9b49a-88b2-40a7-ba8d-d14ce3b57754
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🔍 Buscar Document por ID
+GET {{baseUrl}}/documents/UUID-DEL-DOCUMENT
+Authorization: Bearer {{accessToken}}
+
+###
+
+### ✏️ Actualizar Document
+PATCH {{baseUrl}}/documents/UUID-DEL-DOCUMENT
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": 1,
+  "descrip": "Documento actualizado"
+}

@@ -42,7 +42,10 @@ export type Document_typesMinAggregateOutputType = {
   direction: number | null
   affects_stock: boolean | null
   affects_accounting: boolean | null
+  affects_tax_book: boolean | null
   active: boolean | null
+  created_at: Date | null
+  updated_at: Date | null
 }
 
 export type Document_typesMaxAggregateOutputType = {
@@ -53,7 +56,10 @@ export type Document_typesMaxAggregateOutputType = {
   direction: number | null
   affects_stock: boolean | null
   affects_accounting: boolean | null
+  affects_tax_book: boolean | null
   active: boolean | null
+  created_at: Date | null
+  updated_at: Date | null
 }
 
 export type Document_typesCountAggregateOutputType = {
@@ -64,7 +70,10 @@ export type Document_typesCountAggregateOutputType = {
   direction: number
   affects_stock: number
   affects_accounting: number
+  affects_tax_book: number
   active: number
+  created_at: number
+  updated_at: number
   _all: number
 }
 
@@ -85,7 +94,10 @@ export type Document_typesMinAggregateInputType = {
   direction?: true
   affects_stock?: true
   affects_accounting?: true
+  affects_tax_book?: true
   active?: true
+  created_at?: true
+  updated_at?: true
 }
 
 export type Document_typesMaxAggregateInputType = {
@@ -96,7 +108,10 @@ export type Document_typesMaxAggregateInputType = {
   direction?: true
   affects_stock?: true
   affects_accounting?: true
+  affects_tax_book?: true
   active?: true
+  created_at?: true
+  updated_at?: true
 }
 
 export type Document_typesCountAggregateInputType = {
@@ -107,7 +122,10 @@ export type Document_typesCountAggregateInputType = {
   direction?: true
   affects_stock?: true
   affects_accounting?: true
+  affects_tax_book?: true
   active?: true
+  created_at?: true
+  updated_at?: true
   _all?: true
 }
 
@@ -205,7 +223,10 @@ export type Document_typesGroupByOutputType = {
   direction: number
   affects_stock: boolean
   affects_accounting: boolean
+  affects_tax_book: boolean
   active: boolean
+  created_at: Date
+  updated_at: Date
   _count: Document_typesCountAggregateOutputType | null
   _avg: Document_typesAvgAggregateOutputType | null
   _sum: Document_typesSumAggregateOutputType | null
@@ -213,7 +234,7 @@ export type Document_typesGroupByOutputType = {
   _max: Document_typesMaxAggregateOutputType | null
 }
 
-export type GetDocument_typesGroupByPayload<T extends document_typesGroupByArgs> = Prisma.PrismaPromise<
+type GetDocument_typesGroupByPayload<T extends document_typesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Document_typesGroupByOutputType, T['by']> &
       {
@@ -239,7 +260,10 @@ export type document_typesWhereInput = {
   direction?: Prisma.IntFilter<"document_types"> | number
   affects_stock?: Prisma.BoolFilter<"document_types"> | boolean
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
+  affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
+  created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   document_sequences?: Prisma.XOR<Prisma.Document_sequencesNullableScalarRelationFilter, Prisma.document_sequencesWhereInput> | null
   documents?: Prisma.DocumentsListRelationFilter
 }
@@ -252,7 +276,10 @@ export type document_typesOrderByWithRelationInput = {
   direction?: Prisma.SortOrder
   affects_stock?: Prisma.SortOrder
   affects_accounting?: Prisma.SortOrder
+  affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
   document_sequences?: Prisma.document_sequencesOrderByWithRelationInput
   documents?: Prisma.documentsOrderByRelationAggregateInput
 }
@@ -268,7 +295,10 @@ export type document_typesWhereUniqueInput = Prisma.AtLeast<{
   direction?: Prisma.IntFilter<"document_types"> | number
   affects_stock?: Prisma.BoolFilter<"document_types"> | boolean
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
+  affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
+  created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   document_sequences?: Prisma.XOR<Prisma.Document_sequencesNullableScalarRelationFilter, Prisma.document_sequencesWhereInput> | null
   documents?: Prisma.DocumentsListRelationFilter
 }, "id" | "code">
@@ -281,7 +311,10 @@ export type document_typesOrderByWithAggregationInput = {
   direction?: Prisma.SortOrder
   affects_stock?: Prisma.SortOrder
   affects_accounting?: Prisma.SortOrder
+  affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
   _count?: Prisma.document_typesCountOrderByAggregateInput
   _avg?: Prisma.document_typesAvgOrderByAggregateInput
   _max?: Prisma.document_typesMaxOrderByAggregateInput
@@ -300,7 +333,10 @@ export type document_typesScalarWhereWithAggregatesInput = {
   direction?: Prisma.IntWithAggregatesFilter<"document_types"> | number
   affects_stock?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   affects_accounting?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  affects_tax_book?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"document_types"> | Date | string
 }
 
 export type document_typesCreateInput = {
@@ -310,7 +346,10 @@ export type document_typesCreateInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
   document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocument_typesInput
   documents?: Prisma.documentsCreateNestedManyWithoutDocument_typesInput
 }
@@ -323,7 +362,10 @@ export type document_typesUncheckedCreateInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutDocument_typesInput
 }
 
@@ -334,7 +376,10 @@ export type document_typesUpdateInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocument_typesNestedInput
   documents?: Prisma.documentsUpdateManyWithoutDocument_typesNestedInput
 }
@@ -347,7 +392,10 @@ export type document_typesUncheckedUpdateInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.documentsUncheckedUpdateManyWithoutDocument_typesNestedInput
 }
 
@@ -359,7 +407,10 @@ export type document_typesCreateManyInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type document_typesUpdateManyMutationInput = {
@@ -369,7 +420,10 @@ export type document_typesUpdateManyMutationInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type document_typesUncheckedUpdateManyInput = {
@@ -380,7 +434,10 @@ export type document_typesUncheckedUpdateManyInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type Document_typesListRelationFilter = {
@@ -401,7 +458,10 @@ export type document_typesCountOrderByAggregateInput = {
   direction?: Prisma.SortOrder
   affects_stock?: Prisma.SortOrder
   affects_accounting?: Prisma.SortOrder
+  affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type document_typesAvgOrderByAggregateInput = {
@@ -416,7 +476,10 @@ export type document_typesMaxOrderByAggregateInput = {
   direction?: Prisma.SortOrder
   affects_stock?: Prisma.SortOrder
   affects_accounting?: Prisma.SortOrder
+  affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type document_typesMinOrderByAggregateInput = {
@@ -427,7 +490,10 @@ export type document_typesMinOrderByAggregateInput = {
   direction?: Prisma.SortOrder
   affects_stock?: Prisma.SortOrder
   affects_accounting?: Prisma.SortOrder
+  affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type document_typesSumOrderByAggregateInput = {
@@ -502,7 +568,10 @@ export type document_typesCreateWithoutDocument_sequencesInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
   documents?: Prisma.documentsCreateNestedManyWithoutDocument_typesInput
 }
 
@@ -513,7 +582,10 @@ export type document_typesUncheckedCreateWithoutDocument_sequencesInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutDocument_typesInput
 }
 
@@ -554,7 +626,10 @@ export type document_typesScalarWhereInput = {
   direction?: Prisma.IntFilter<"document_types"> | number
   affects_stock?: Prisma.BoolFilter<"document_types"> | boolean
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
+  affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
+  created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
 }
 
 export type document_typesCreateWithoutDocumentsInput = {
@@ -564,7 +639,10 @@ export type document_typesCreateWithoutDocumentsInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
   document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocument_typesInput
 }
 
@@ -576,7 +654,10 @@ export type document_typesUncheckedCreateWithoutDocumentsInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type document_typesCreateOrConnectWithoutDocumentsInput = {
@@ -602,7 +683,10 @@ export type document_typesUpdateWithoutDocumentsInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocument_typesNestedInput
 }
 
@@ -614,7 +698,10 @@ export type document_typesUncheckedUpdateWithoutDocumentsInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type document_typesCreateManyDocument_sequencesInput = {
@@ -624,7 +711,10 @@ export type document_typesCreateManyDocument_sequencesInput = {
   direction: number
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type document_typesUpdateWithoutDocument_sequencesInput = {
@@ -634,7 +724,10 @@ export type document_typesUpdateWithoutDocument_sequencesInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.documentsUpdateManyWithoutDocument_typesNestedInput
 }
 
@@ -645,7 +738,10 @@ export type document_typesUncheckedUpdateWithoutDocument_sequencesInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.documentsUncheckedUpdateManyWithoutDocument_typesNestedInput
 }
 
@@ -656,7 +752,10 @@ export type document_typesUncheckedUpdateManyWithoutDocument_sequencesInput = {
   direction?: Prisma.IntFieldUpdateOperationsInput | number
   affects_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -698,7 +797,10 @@ export type document_typesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   direction?: boolean
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
   documents?: boolean | Prisma.document_types$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.Document_typesCountOutputTypeDefaultArgs<ExtArgs>
@@ -712,7 +814,10 @@ export type document_typesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   direction?: boolean
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
 }, ExtArgs["result"]["document_types"]>
 
@@ -724,7 +829,10 @@ export type document_typesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   direction?: boolean
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
 }, ExtArgs["result"]["document_types"]>
 
@@ -736,10 +844,13 @@ export type document_typesSelectScalar = {
   direction?: boolean
   affects_stock?: boolean
   affects_accounting?: boolean
+  affects_tax_book?: boolean
   active?: boolean
+  created_at?: boolean
+  updated_at?: boolean
 }
 
-export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "active", ExtArgs["result"]["document_types"]>
+export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "active" | "created_at" | "updated_at", ExtArgs["result"]["document_types"]>
 export type document_typesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
   documents?: boolean | Prisma.document_types$documentsArgs<ExtArgs>
@@ -766,7 +877,10 @@ export type $document_typesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     direction: number
     affects_stock: boolean
     affects_accounting: boolean
+    affects_tax_book: boolean
     active: boolean
+    created_at: Date
+    updated_at: Date
   }, ExtArgs["result"]["document_types"]>
   composites: {}
 }
@@ -1199,7 +1313,10 @@ export interface document_typesFieldRefs {
   readonly direction: Prisma.FieldRef<"document_types", 'Int'>
   readonly affects_stock: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly affects_accounting: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly affects_tax_book: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly active: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly created_at: Prisma.FieldRef<"document_types", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"document_types", 'DateTime'>
 }
     
 
@@ -1396,11 +1513,6 @@ export type document_typesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` document_types.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of document_types.
-   */
   distinct?: Prisma.Document_typesScalarFieldEnum | Prisma.Document_typesScalarFieldEnum[]
 }
 

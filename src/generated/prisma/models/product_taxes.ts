@@ -165,7 +165,7 @@ export type Product_taxesGroupByOutputType = {
   _max: Product_taxesMaxAggregateOutputType | null
 }
 
-export type GetProduct_taxesGroupByPayload<T extends product_taxesGroupByArgs> = Prisma.PrismaPromise<
+type GetProduct_taxesGroupByPayload<T extends product_taxesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Product_taxesGroupByOutputType, T['by']> &
       {
@@ -1289,11 +1289,6 @@ export type product_taxesFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` product_taxes.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of product_taxes.
-   */
   distinct?: Prisma.Product_taxesScalarFieldEnum | Prisma.Product_taxesScalarFieldEnum[]
 }
 

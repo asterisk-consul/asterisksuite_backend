@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+### ➕ Crear Tax
+POST {{baseUrl}}/taxes
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company_id": "9af6e716-d26a-45f3-9afa-68c346e1628f",
+  "code": "IMP_IVA1",
+  "name": "IMP_IVA1",
+  "tax_type": "IVA",
+  "rate": 21.000,
+  "is_percentage": true,
+  "active": true,
+  "calculation_level": "LINE"
+}
+
+###
+
+### 📋 Listar Taxes por empresa
+GET {{baseUrl}}/taxes?company_id=9af6e716-d26a-45f3-9afa-68c346e1628f
+Authorization: Bearer {{accessToken}}
+
+###
+
+### ✏️ Actualizar Tax
+PATCH {{baseUrl}}/taxes/b30a27ed-2ab6-42ae-b178-54077b6854ca
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "IVA2"
+  
+}

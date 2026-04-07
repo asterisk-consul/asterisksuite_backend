@@ -105,12 +105,12 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  * Enums
  */
 
-export const TransactionIsolationLevel = runtime.makeStrictEnum({
+export const TransactionIsolationLevel = {
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
   RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
-} as const)
+} as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
@@ -543,7 +543,10 @@ export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof
 
 export const Document_sequencesScalarFieldEnum = {
   id: 'id',
-  document_type: 'document_type',
+  name: 'name',
+  automatic: 'automatic',
+  range_start: 'range_start',
+  range_end: 'range_end',
   point_of_sale: 'point_of_sale',
   current_number: 'current_number',
   prefix: 'prefix',
@@ -669,7 +672,10 @@ export const Document_typesScalarFieldEnum = {
   direction: 'direction',
   affects_stock: 'affects_stock',
   affects_accounting: 'affects_accounting',
-  active: 'active'
+  affects_tax_book: 'affects_tax_book',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
@@ -685,9 +691,11 @@ export const DocumentsScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   subtotal: 'subtotal',
+  exempt_amount: 'exempt_amount',
   total_taxes: 'total_taxes',
   total: 'total',
-  descrip: 'descrip'
+  descrip: 'descrip',
+  ref: 'ref'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
