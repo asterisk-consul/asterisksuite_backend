@@ -433,15 +433,10 @@ CREATE TABLE "warehouses" (
 -- CreateTable
 CREATE TABLE "document_sequences" (
     "id" UUID NOT NULL,
-<<<<<<<< HEAD:prisma/migrations/20260407193235_primera/migration.sql
-    "document_type" VARCHAR(50) NOT NULL,
-========
-    "company_id" UUID NOT NULL,
     "name" VARCHAR(50) NOT NULL,
     "automatic" BOOLEAN NOT NULL DEFAULT true,
     "range_start" INTEGER,
     "range_end" INTEGER,
->>>>>>>> maxi_donandres_erp:prisma/migrations/20260401202727_init/migration.sql
     "point_of_sale" VARCHAR(10) NOT NULL,
     "current_number" INTEGER NOT NULL DEFAULT 0,
     "prefix" VARCHAR(20),
@@ -586,6 +581,7 @@ CREATE TABLE "documents" (
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "subtotal" DECIMAL(15,2) NOT NULL DEFAULT 0,
+    "exempt_amount" DECIMAL(15,2) NOT NULL DEFAULT 0,
     "total_taxes" DECIMAL(15,2) NOT NULL DEFAULT 0,
     "total" DECIMAL(15,2) NOT NULL DEFAULT 0,
     "descrip" VARCHAR(50),
@@ -694,11 +690,7 @@ CREATE INDEX "idx_stock_movements_warehouse" ON "warehouse_stock_movements"("war
 CREATE UNIQUE INDEX "warehouses_code_key" ON "warehouses"("code");
 
 -- CreateIndex
-<<<<<<<< HEAD:prisma/migrations/20260407193235_primera/migration.sql
-CREATE UNIQUE INDEX "document_sequences_document_type_point_of_sale_key" ON "document_sequences"("document_type", "point_of_sale");
-========
-CREATE UNIQUE INDEX "document_sequences_company_id_point_of_sale_key" ON "document_sequences"("company_id", "point_of_sale");
->>>>>>>> maxi_donandres_erp:prisma/migrations/20260401202727_init/migration.sql
+CREATE UNIQUE INDEX "document_sequences_point_of_sale_key" ON "document_sequences"("point_of_sale");
 
 -- CreateIndex
 CREATE INDEX "idx_refresh_tokens_token_hash" ON "refresh_tokens"("token_hash");
@@ -938,12 +930,6 @@ ALTER TABLE "warehouse_stock_movements" ADD CONSTRAINT "warehouse_stock_movement
 ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "locations"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-<<<<<<<< HEAD:prisma/migrations/20260407193235_primera/migration.sql
-========
-ALTER TABLE "document_sequences" ADD CONSTRAINT "document_sequences_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
->>>>>>>> maxi_donandres_erp:prisma/migrations/20260401202727_init/migration.sql
 ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
