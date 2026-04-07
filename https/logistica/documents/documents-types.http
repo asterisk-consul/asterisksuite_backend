@@ -1,0 +1,37 @@
+
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+# @acessRefresh = {{login.response.body.refreshToken}}
+### =====================================================
+### 1️⃣ Crear viaje
+### =====================================================
+
+POST {{baseUrl}}/document-types
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "document_sequence_id": "1",
+  "code": "COM",
+  "description": "FACT COM",
+  "direction": -1,
+  "affects_stock": true,
+  "affects_accounting": true,
+  "active": true
+}

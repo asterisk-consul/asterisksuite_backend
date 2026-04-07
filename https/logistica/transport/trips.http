@@ -1,0 +1,179 @@
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
+
+
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@tripId = 8807e401-f0bb-49e9-a711-79c7097ad495
+@rateId = 6212c6a8-aece-4308-b924-8c0ddfd0a6b4
+@tripRateId = 250c3083-1a96-41a4-8b62-b72236a358ea
+
+@vehicle-combinations = b00399d8-97da-4c6d-ab03-b74dae2bab30
+@location-origin = fe9e89c1-a3a2-4a99-a0e3-2b0bef3422c3
+@location-destination = 8dc20266-15e0-4ecd-be0d-780a748191e3
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+# @acessRefresh = {{login.response.body.refreshToken}}
+### =====================================================
+### 1️⃣ Crear viaje
+### =====================================================
+
+POST {{baseUrl}}/trips
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "reference_number": "TRIP-0001",
+  "vehicle_combination_id": "{{vehicle-combinations}}",
+  "origin_location_id": "{{location-origin}}",
+  "destination_location_id": "{{location-destination}}",
+  "departure_time": "2026-03-05T10:00:00Z",
+  "arrival_time": "2026-03-05T16:00:00Z",
+  "status": "PLANNED",
+  "kilometers": 320
+}
+
+### =====================================================
+### 2️⃣ Obtener viajes de una empresa
+### =====================================================
+
+GET {{baseUrl}}/trips/{{companyId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 3️⃣ Obtener detalle de viaje
+### =====================================================
+
+GET {{baseUrl}}/trips/detail/{{tripId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 4️⃣ Actualizar viaje
+### =====================================================
+
+PATCH {{baseUrl}}/trips/{{tripId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS",
+  "departure_time": "2026-03-05T11:00:00Z"
+}
+###
+
+### Update trip status
+PATCH {{baseUrl}}/trips/{{tripId}}/status/IN_PROGRESS
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 5️⃣ Finalizar viaje
+### =====================================================
+
+PATCH {{baseUrl}}/trips/{{tripId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "COMPLETED",
+  "arrival_time": "2026-03-05T17:30:00Z"
+}
+
+### =====================================================
+### 6️⃣ Eliminar viaje
+### =====================================================
+
+DELETE {{baseUrl}}/trips/{{tripId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 7️⃣ Agregar tarifa a un viaje
+### =====================================================
+
+POST {{baseUrl}}/trips/{{tripId}}/rates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "rate_id": "{{rateId}}",
+  "value": 150000
+}
+
+### =====================================================
+### 8️⃣ Agregar otra tarifa
+### =====================================================
+
+POST {{baseUrl}}/trips/{{tripId}}/rates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "rate_id": "{{rateId}}",
+  "value": 50000
+}
+
+### =====================================================
+### 9️⃣ Actualizar tarifa del viaje
+### =====================================================
+
+PATCH {{baseUrl}}/trips/rates/{{tripRateId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "value": 175000
+}
+
+### =====================================================
+### 🔟 Eliminar tarifa del viaje
+### =====================================================
+
+DELETE {{baseUrl}}/trips/rates/{{tripRateId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### 1️⃣1️⃣ Asignar órdenes a un viaje (planificación)
+### =====================================================
+
+POST {{baseUrl}}/trips/{{tripId}}/assign-orders
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "stops": [
+    {
+      "location_id": "{{location-origin}}",
+      "stop_order": 1,
+      "stop_type": "ORIGIN",
+      "orders": [
+        {
+          "dispatch_order_id": "ORDER_ID_1",
+          "action": "PICKUP"
+        }
+      ]
+    },
+    {
+      "location_id": "{{location-destination}}",
+      "stop_order": 2,
+      "stop_type": "DESTINATION",
+      "orders": [
+        {
+          "dispatch_order_id": "ORDER_ID_1",
+          "action": "DELIVERY"
+        }
+      ]
+    }
+  ]
+}

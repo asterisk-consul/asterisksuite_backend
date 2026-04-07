@@ -1,0 +1,113 @@
+@baseUrl = https://apidonandres.asterisksuite.cloud/api
+@companyId = a060f7ff-0281-4df4-b5b3-cbdf940be31e
+@warehouseId = ce63037a-4a81-432a-8d01-336f6a45f188
+@locationId = 8590f4d9-582c-43d4-bbbd-0161ec8afb80
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+### ==================================================
+### Listar todas las Locations
+### GET /locations
+### ==================================================
+
+GET {{baseUrl}}/locations
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Crear Warehouse
+### POST /warehouses
+### =====================================================
+
+POST {{baseUrl}}/warehouses
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "name": "Depósito Central",
+  "code": "WH-CENTRAL",
+  "locationId": "{{locationId}}",
+  "active": true
+}
+
+
+### =====================================================
+### Crear Warehouse (mínimo requerido)
+### =====================================================
+
+POST {{baseUrl}}/warehouses
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "companyId": "{{companyId}}",
+  "name": "Depósito Secundario"
+}
+
+
+### =====================================================
+### Listar Warehouses activos por empresa
+### GET /warehouses?companyId=
+### =====================================================
+
+GET {{baseUrl}}/warehouses?companyId={{companyId}}
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Obtener Warehouse por ID
+### (incluye locations y warehouse_stock)
+### GET /warehouses/:id
+### =====================================================
+
+GET {{baseUrl}}/warehouses/{{warehouseId}}
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Actualizar Warehouse
+### PATCH /warehouses/:id
+### =====================================================
+
+PATCH {{baseUrl}}/warehouses/{{warehouseId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Depósito Central Actualizado",
+  "code": "WH-NEW",
+  "locationId": "{{locationId}}",
+  "active": true
+}
+
+
+### =====================================================
+### Desactivar Warehouse (soft delete)
+### DELETE /warehouses/:id
+### =====================================================
+
+PATCH  {{baseUrl}}/warehouses/a17c6178-5fb2-4815-8231-e93f14cee732/desactivate
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### Desactivar Warehouse (soft delete)
+### DELETE /warehouses/:id
+### =====================================================
+
+PATCH  {{baseUrl}}/warehouses/a17c6178-5fb2-4815-8231-e93f14cee732/activate
+Authorization: Bearer {{accessToken}}
