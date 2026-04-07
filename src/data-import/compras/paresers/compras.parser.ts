@@ -14,32 +14,60 @@ type FacturaCompraRow = Record<string, unknown>;
 function parseMoney(value: unknown): number | null {
   if (value === null || value === undefined || value === '') return null;
 
-  // Si ya es número → confiar
+  // Si ya es número (Excel suele mandar number)
   if (typeof value === 'number') {
-    return value;
+    return Number(value.toFixed(2));
   }
 
-  if (typeof value === 'string') {
-    let cleaned = value.trim();
-    if (!cleaned) return null;
+  if (typeof value !== 'string') return null;
 
-    const hasCommaDecimal = cleaned.includes(',');
+  let cleaned = value.trim();
 
-    if (hasCommaDecimal) {
-      // Formato europeo: 1.234.567,89
-      cleaned = cleaned.replace(/\./g, '').replace(',', '.');
-    } else {
-      // Formato US: 1,234,567.89
-      cleaned = cleaned.replace(/,/g, '');
-    }
+  if (!cleaned) return null;
 
-    const parsed = parseFloat(cleaned);
-    return isNaN(parsed) ? null : parsed;
+  // eliminar espacios
+  cleaned = cleaned.replace(/\s/g, '');
+
+  const hasDot = cleaned.includes('.');
+  const hasComma = cleaned.includes(',');
+
+  // FORMATO LATAM / EUROPEO
+  // 1.234.567,89
+  if (
+    hasDot &&
+    hasComma &&
+    cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')
+  ) {
+    cleaned = cleaned.replace(/\./g, '').replace(',', '.');
   }
 
-  return null;
+  // FORMATO US
+  // 1,234,567.89
+  else if (
+    hasDot &&
+    hasComma &&
+    cleaned.lastIndexOf('.') > cleaned.lastIndexOf(',')
+  ) {
+    cleaned = cleaned.replace(/,/g, '');
+  }
+
+  // FORMATO SIMPLE
+  // 1234567,89
+  else if (hasComma && !hasDot) {
+    cleaned = cleaned.replace(',', '.');
+  }
+
+  // 1234567.89 -> correcto
+
+  const parsed = Number(cleaned);
+
+  if (isNaN(parsed)) {
+    console.warn('⚠️ Error parseando dinero:', value);
+    return null;
+  }
+
+  return Number(parsed.toFixed(2));
 }
-
 /* =========================
    📅 PARSER DE FECHAS
 ========================= */
@@ -132,6 +160,22 @@ function normalizeRow(row: FacturaCompraRow): Record<string, unknown> {
     },
     {} as Record<string, unknown>,
   );
+}
+
+function validateInvoice(row: any) {
+  const gravado = row.IMP_GRAVADO ?? 0;
+  const iva1 = row.IMP_IVA1 ?? 0;
+  const total = row.IMP_TOTAL ?? 0;
+
+  const calculated = gravado + iva1;
+
+  if (Math.abs(calculated - total) > 1) {
+    console.warn('⚠️ Posible error de parseo en factura:', {
+      gravado,
+      iva1,
+      total,
+    });
+  }
 }
 
 /* =========================

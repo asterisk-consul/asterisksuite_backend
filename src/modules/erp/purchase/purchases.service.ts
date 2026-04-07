@@ -48,6 +48,7 @@ export class PurchasesService {
     const productTotals = new Map<
       string,
       {
+        productId: number;
         productCode: string;
         productName: string;
         totalPurchases: number;
@@ -66,6 +67,8 @@ export class PurchasesService {
       if (!doc.document_types) continue;
 
       const sign = this.getDocumentSign(doc.document_types.code);
+
+      // esto me dice que es una compra
       const isInvoice = sign === 1;
 
       const documentSubtotal = Number(doc.subtotal) * sign;
@@ -83,6 +86,7 @@ export class PurchasesService {
         const productValue = itemValue * sign;
 
         const current = productTotals.get(productId) || {
+          productId: parseInt(productId),
           productCode: product.sku || '',
           productName: product.name,
           totalPurchases: 0,
@@ -132,7 +136,7 @@ export class PurchasesService {
 
     const products: ProductSummaryDto[] = Array.from(productTotals.entries())
       .map(([productId, data]) => ({
-        productId: parseInt(productId),
+        productId: productId,
         productCode: data.productCode,
         productName: data.productName,
         productCategory: '',
@@ -164,12 +168,22 @@ export class PurchasesService {
       0,
     );
 
+    const negTotal = documents.reduce((sum, doc) => {
+      if (!doc.document_types) return sum;
+      const sign = this.getDocumentSign(doc.document_types.code);
+      if (sign === -1) {
+        return sum + Number(doc.subtotal);
+      }
+      return sum;
+    }, 0);
+
     return {
       globalTotal,
       globalTaxes,
       globalExempt,
       globalPurchaseTotal,
       globalTransactionCount,
+      negTotal,
       totalProducts: products.length,
       products,
     };

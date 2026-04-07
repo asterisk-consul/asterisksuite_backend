@@ -1,6 +1,6 @@
 // src/modules/erp/purchases/dto/purchase-summary-response.dto.ts
 export interface ProductSummaryDto {
-  productId: number;
+  productId: string;
   productCode: string;
   productName: string;
   productCategory: string;
@@ -21,6 +21,7 @@ export interface GlobalPurchaseSummaryResponseDto {
   globalExempt: number;
   globalPurchaseTotal: number;
   globalTransactionCount: number;
+  negTotal: number;
   totalProducts: number;
   products: ProductSummaryDto[];
 }

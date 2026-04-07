@@ -1,7 +1,6 @@
 @baseUrl = http://localhost:3000/api
 #@baseUrl = https://apidonandres.asterisksuite.cloud/api
 
-
 ###
 # ==============================
 # 🔐 LOGIN
@@ -19,7 +18,7 @@ Content-Type: application/json
 
 
 ### =====================================================
-### 📊 Resumen de compras por producto
+### 📊 RESUMEN DE COMPRAS
 ### GET /purchases/summary
 ### =====================================================
 
@@ -32,3 +31,79 @@ GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-12-31
 Authorization: Bearer {{accessToken}}
 
 ### Resumen filtrado por proveedor
+GET {{baseUrl}}/purchases/summary?supplierId=123
+Authorization: Bearer {{accessToken}}
+
+### Resumen filtrado por tipo de documento
+GET {{baseUrl}}/purchases/summary?documentTypeId=1
+Authorization: Bearer {{accessToken}}
+
+### Resumen filtrado por producto
+GET {{baseUrl}}/purchases/summary?productId=ce03a1cc-7b18-4ca0-b7f4-5f7052b609eb
+Authorization: Bearer {{accessToken}}
+
+### Resumen con todos los filtros combinados
+GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### 🔍 DETALLE DE COMPRAS POR PRODUCTO
+### GET /purchases/products/:id
+### =====================================================
+
+### Detalle de un producto específico
+GET {{baseUrl}}/purchases/products/1
+Authorization: Bearer {{accessToken}}
+
+### Detalle filtrado por fechas
+GET {{baseUrl}}/purchases/products/1?startDate=2026-01-01&endDate=2026-12-31
+Authorization: Bearer {{accessToken}}
+
+### Detalle filtrado por proveedor
+GET {{baseUrl}}/purchases/products/1?supplierId=123
+Authorization: Bearer {{accessToken}}
+
+### Detalle con todos los filtros
+GET {{baseUrl}}/purchases/products/1?startDate=2026-01-01&endDate=2026-12-31&supplierId=123
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### 📋 MOVIMIENTOS DE COMPRAS
+### GET /purchases/movements
+### =====================================================
+
+### Todos los movimientos
+GET {{baseUrl}}/purchases/movements
+Authorization: Bearer {{accessToken}}
+
+### Movimientos filtrados por fechas
+GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31
+Authorization: Bearer {{accessToken}}
+
+### Movimientos filtrados por proveedor
+GET {{baseUrl}}/purchases/movements?supplierId=123
+Authorization: Bearer {{accessToken}}
+
+### Movimientos filtrados por tipo de documento
+GET {{baseUrl}}/purchases/movements?documentTypeId=1
+Authorization: Bearer {{accessToken}}
+
+### Movimientos filtrados por producto
+GET {{baseUrl}}/purchases/movements?productId=456
+Authorization: Bearer {{accessToken}}
+
+### Movimientos con todos los filtros
+GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
+Authorization: Bearer {{accessToken}}
+
+
+### =====================================================
+### 📦 PRODUCTOS DISPONIBLES
+### GET /purchases/products
+### =====================================================
+
+### Listar todos los productos con compras
+GET {{baseUrl}}/purchases/products
+Authorization: Bearer {{accessToken}}
