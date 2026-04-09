@@ -36,7 +36,7 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
+      expiresIn: '24h',
     });
 
     const refreshToken = crypto.randomBytes(64).toString('hex');
