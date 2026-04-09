@@ -144,12 +144,10 @@ export class VehicleCombinationsService {
       where: {
         status: { notIn: ['CANCELLED'] },
         vehicle_combination_id: { not: null },
-        AND: [
-          { departure_time: { lte: endOfDay } },
-          {
-            OR: [{ arrival_time: { gte: startOfDay } }, { arrival_time: null }],
-          },
-        ],
+        departure_time: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
       },
       select: { vehicle_combination_id: true },
     });
@@ -161,10 +159,7 @@ export class VehicleCombinationsService {
     return this.prisma.vehicle_combinations.findMany({
       where: {
         deleted_at: null,
-        OR: [
-          { valid_until: null }, // ✅ activas indefinidamente
-          { valid_until: { gte: startOfDay } }, // ✅ vigentes en la fecha consultada
-        ],
+        OR: [{ valid_until: null }, { valid_until: { gte: startOfDay } }],
         ...(busyIds.length > 0 && { id: { notIn: busyIds } }),
       },
       include: { tractor: true, trailer: true, drivers: true },
