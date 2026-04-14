@@ -2,9 +2,10 @@
 import { SupplierDetailDto } from './supplier-detail.dto';
 import { DocumentTypeDetailDto } from './document-type-detail.dto';
 import { TaxDetailDto } from './tax-detail.dto';
+import { PurchaseMovementResponseDto } from './purchase-movement-response.dto';
 
 export interface ProductPurchaseDetailResponseDto {
-  productId: number;
+  productId: string;
   productCode: string;
   productName: string;
   productCategory: string;
@@ -13,4 +14,5 @@ export interface ProductPurchaseDetailResponseDto {
   suppliers: SupplierDetailDto[];
   documentTypes: DocumentTypeDetailDto[];
   taxes: TaxDetailDto[];
+  movements: PurchaseMovementResponseDto[];
 }

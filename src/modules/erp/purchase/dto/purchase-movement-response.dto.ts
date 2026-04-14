@@ -1,11 +1,12 @@
 // src/modules/erp/purchases/dto/purchase-movement-response.dto.ts
+
 export interface PurchaseMovementResponseDto {
   ref: string;
   number: string;
   date: Date;
   supplierName: string;
   supplierCode: string;
-  productId: number;
+  productId: string;
   productCode: string;
   productName: string;
   documentTypeCode: string;

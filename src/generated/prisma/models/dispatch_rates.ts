@@ -192,7 +192,7 @@ export type Dispatch_ratesGroupByOutputType = {
   _max: Dispatch_ratesMaxAggregateOutputType | null
 }
 
-type GetDispatch_ratesGroupByPayload<T extends dispatch_ratesGroupByArgs> = Prisma.PrismaPromise<
+export type GetDispatch_ratesGroupByPayload<T extends dispatch_ratesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Dispatch_ratesGroupByOutputType, T['by']> &
       {
@@ -1286,6 +1286,11 @@ export type dispatch_ratesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` dispatch_rates.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of dispatch_rates.
+   */
   distinct?: Prisma.Dispatch_ratesScalarFieldEnum | Prisma.Dispatch_ratesScalarFieldEnum[]
 }
 

@@ -221,7 +221,7 @@ export type Corridor_stopsGroupByOutputType = {
   _max: Corridor_stopsMaxAggregateOutputType | null
 }
 
-type GetCorridor_stopsGroupByPayload<T extends corridor_stopsGroupByArgs> = Prisma.PrismaPromise<
+export type GetCorridor_stopsGroupByPayload<T extends corridor_stopsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Corridor_stopsGroupByOutputType, T['by']> &
       {
@@ -1427,6 +1427,11 @@ export type corridor_stopsFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` corridor_stops.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of corridor_stops.
+   */
   distinct?: Prisma.Corridor_stopsScalarFieldEnum | Prisma.Corridor_stopsScalarFieldEnum[]
 }
 

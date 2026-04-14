@@ -91,7 +91,7 @@ GET {{baseUrl}}/purchases/movements?documentTypeId=1
 Authorization: Bearer {{accessToken}}
 
 ### Movimientos filtrados por producto
-GET {{baseUrl}}/purchases/movements?productId=456
+GET {{baseUrl}}/purchases/movements?productId=fe8abe1b-337a-482d-b037-82ab6365d3dc
 Authorization: Bearer {{accessToken}}
 
 ### Movimientos con todos los filtros

@@ -230,7 +230,11 @@ export class PurchasesService {
           },
         },
         business_parties: true,
-        document_types: true,
+        document_types: {
+          include: {
+            document_sequences: true,
+          },
+        },
       },
     });
 
@@ -240,6 +244,9 @@ export class PurchasesService {
 
     let totalGeneral = 0;
     let totalTaxes = 0;
+
+    // 🔥 CORRECTO: declarado fuera del loop
+    const movements: PurchaseMovementResponseDto[] = [];
 
     for (const doc of documents) {
       if (!doc.document_types) continue;
@@ -252,12 +259,58 @@ export class PurchasesService {
           return sum + itemValue;
         }, 0) * sign;
 
+      // 🔥 MOVIMIENTOS
+      for (const item of doc.document_items) {
+        if (!item.products) continue;
+
+        const itemValue = Number(item.quantity) * Number(item.price);
+        movements.push({
+          ref: doc.ref || '',
+          number: doc.number?.toString() || '',
+          date: doc.date,
+
+          supplierName: doc.business_parties?.name || '',
+          supplierCode: doc.business_parties?.id || '',
+
+          productId: item.products.id,
+          productCode: item.products.sku || '',
+          productName: item.products.name,
+
+          documentTypeCode: doc.document_types.code,
+          documentTypeName: doc.document_types.description,
+
+          quantity: Number(item.quantity),
+          unitPrice: Number(item.price),
+          itemSubtotal: itemValue,
+
+          documentSubtotal: Number(doc.subtotal),
+          documentTotal: Number(doc.total),
+
+          taxCode: doc.document_taxes.map((t) => t.taxes.code).join(', '),
+          taxName: doc.document_taxes.map((t) => t.taxes.name).join(', '),
+
+          taxAmount: doc.document_taxes.reduce(
+            (sum, t) => sum + Number(t.tax_amount),
+            0,
+          ),
+
+          sequenceNumber:
+            doc.document_types?.document_sequences?.current_number?.toString() ||
+            '',
+
+          transactionType: sign === 1 ? 'Compra' : 'Nota Crédito/Débito',
+
+          adjustedValue: itemValue * sign,
+        });
+      }
+
       totalGeneral += productTotal;
 
       const documentTotal = Number(doc.total) * sign;
       const productProportion =
         documentTotal !== 0 ? productTotal / documentTotal : 0;
 
+      // 🔹 PROVEEDORES
       if (doc.business_parties) {
         const supplierId = doc.business_parties.id;
         const existingSupplier = suppliersMap.get(supplierId);
@@ -271,7 +324,7 @@ export class PurchasesService {
           }
         } else {
           suppliersMap.set(supplierId, {
-            supplierId: parseInt(supplierId),
+            supplierId: parseInt(supplierId), // ⚠️ si esto también es UUID, habría que cambiarlo
             supplierCode: doc.business_parties.id || '',
             supplierName: doc.business_parties.name,
             totalBySupplier: productTotal,
@@ -281,6 +334,7 @@ export class PurchasesService {
         }
       }
 
+      // 🔹 TIPOS DE DOCUMENTO
       const docTypeId = doc.document_type_id;
       const existingDocType = documentTypesMap.get(docTypeId);
 
@@ -297,6 +351,7 @@ export class PurchasesService {
         });
       }
 
+      // 🔹 IMPUESTOS
       for (const tax of doc.document_taxes) {
         const taxAmount = Number(tax.tax_amount) * productProportion * sign;
 
@@ -321,8 +376,9 @@ export class PurchasesService {
       }
     }
 
+    // 🔥 RETURN FINAL CORREGIDO
     return {
-      productId: parseInt(product.id),
+      productId: product.id, // ✅ sin parseInt
       productCode: product.sku || '',
       productName: product.name,
       productCategory: '',
@@ -331,6 +387,7 @@ export class PurchasesService {
       suppliers: Array.from(suppliersMap.values()),
       documentTypes: Array.from(documentTypesMap.values()),
       taxes: Array.from(taxesMap.values()),
+      movements, // ✅ agregado
     };
   }
   async getPurchaseMovements(
@@ -347,6 +404,9 @@ export class PurchasesService {
       },
       include: {
         document_items: {
+          where: {
+            product_id: query.productId, // 🔥 ESTE ES EL FIX
+          },
           include: {
             products: true,
           },
@@ -388,7 +448,7 @@ export class PurchasesService {
           date: doc.date,
           supplierName: doc.business_parties?.name || '',
           supplierCode: doc.business_parties?.id || '',
-          productId: parseInt(item.products.id),
+          productId: item.products.id,
           productCode: item.products.sku || '',
           productName: item.products.name,
           documentTypeCode: doc.document_types.code,

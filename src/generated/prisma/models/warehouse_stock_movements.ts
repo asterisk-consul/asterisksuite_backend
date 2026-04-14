@@ -234,7 +234,7 @@ export type Warehouse_stock_movementsGroupByOutputType = {
   _max: Warehouse_stock_movementsMaxAggregateOutputType | null
 }
 
-type GetWarehouse_stock_movementsGroupByPayload<T extends warehouse_stock_movementsGroupByArgs> = Prisma.PrismaPromise<
+export type GetWarehouse_stock_movementsGroupByPayload<T extends warehouse_stock_movementsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Warehouse_stock_movementsGroupByOutputType, T['by']> &
       {
@@ -1688,6 +1688,11 @@ export type warehouse_stock_movementsFindManyArgs<ExtArgs extends runtime.Types.
    * Skip the first `n` warehouse_stock_movements.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of warehouse_stock_movements.
+   */
   distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
 }
 

@@ -158,7 +158,7 @@ export type Trip_stop_ordersGroupByOutputType = {
   _max: Trip_stop_ordersMaxAggregateOutputType | null
 }
 
-type GetTrip_stop_ordersGroupByPayload<T extends trip_stop_ordersGroupByArgs> = Prisma.PrismaPromise<
+export type GetTrip_stop_ordersGroupByPayload<T extends trip_stop_ordersGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Trip_stop_ordersGroupByOutputType, T['by']> &
       {
@@ -1242,6 +1242,11 @@ export type trip_stop_ordersFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` trip_stop_orders.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of trip_stop_orders.
+   */
   distinct?: Prisma.Trip_stop_ordersScalarFieldEnum | Prisma.Trip_stop_ordersScalarFieldEnum[]
 }
 

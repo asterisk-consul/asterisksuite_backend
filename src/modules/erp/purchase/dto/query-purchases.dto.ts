@@ -4,10 +4,8 @@ import { Type } from 'class-transformer';
 
 export class QueryPurchasesDto {
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  productId?: number;
+  @IsUUID()
+  productId?: string;
 
   @IsOptional()
   @IsDateString()
