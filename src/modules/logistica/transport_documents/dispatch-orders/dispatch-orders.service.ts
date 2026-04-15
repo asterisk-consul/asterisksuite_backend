@@ -56,6 +56,7 @@ export class DispatchOrdersService {
 
   async findAll() {
     return this.prisma.dispatch_orders.findMany({
+      orderBy: { created_at: 'desc' },
       include: {
         customers: true,
         origin_location: true,
@@ -71,7 +72,11 @@ export class DispatchOrdersService {
           },
         },
 
-        dispatch_rates: true,
+        dispatch_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
         corridors: true,
       },
     });
@@ -94,7 +99,11 @@ export class DispatchOrdersService {
             },
           },
         },
-        dispatch_rates: true,
+        dispatch_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
         corridors: true,
       },
     });

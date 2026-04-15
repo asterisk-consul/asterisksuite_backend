@@ -167,16 +167,13 @@ export class TripsService {
      UPDATE
   ========================= */
   async update(id: string, dto: UpdateTripDto) {
-    await this.findOne(id);
-    return this.prisma.trips.update({
+    await this.prisma.trips.update({
       where: { id },
-      data: { ...dto },
-      include: {
-        vehicle_combination: {
-          include: { tractor: true, trailer: true, drivers: true },
-        },
-      },
+      data: dto,
     });
+
+    // 🔥 CLAVE: reutilizar findOne
+    return this.findOne(id);
   }
 
   async updateStatus(id: string, status: TripStatus) {
