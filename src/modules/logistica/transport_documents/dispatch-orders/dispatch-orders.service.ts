@@ -71,7 +71,11 @@ export class DispatchOrdersService {
           },
         },
 
-        dispatch_rates: true,
+        dispatch_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
         corridors: true,
       },
     });
@@ -94,7 +98,11 @@ export class DispatchOrdersService {
             },
           },
         },
-        dispatch_rates: true,
+        dispatch_rates: {
+          include: {
+            transfer_rates: true,
+          },
+        },
         corridors: true,
       },
     });

@@ -37,6 +37,7 @@ class CreatePartyContactDto {
 }
 
 export class CreateBusinessPartyDto {
+  
   @IsBoolean()
   active: boolean;
 
