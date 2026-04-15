@@ -56,6 +56,7 @@ export class DispatchOrdersService {
 
   async findAll() {
     return this.prisma.dispatch_orders.findMany({
+      orderBy: { created_at: 'desc' },
       include: {
         customers: true,
         origin_location: true,
