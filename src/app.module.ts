@@ -10,6 +10,7 @@ import { DocumentsTypesModule } from './modules/master-data/documents-types/docu
 import { TaxesModule } from './modules/erp/taxes/taxes.module';
 import { DocumentsModule } from './modules/erp/documents/documents.module';
 import { PurchasesModule } from './modules/erp/purchase/purchases.module';
+import { ReporteChoferesModule } from './modules/logistica/reports/drivers/dispatch_rates.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PurchasesModule } from './modules/erp/purchase/purchases.module';
     TaxesModule,
     DocumentsModule,
     PurchasesModule,
+    ReporteChoferesModule,
   ],
 })
 export class AppModule {}

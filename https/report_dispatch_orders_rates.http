@@ -1,0 +1,58 @@
+### 🚚 Reporte Choferes
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+### 📋 Obtener reporte (sin filtros)
+GET {{baseUrl}}/reportes/choferes
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 📅 Filtrar por rango de fechas
+GET {{baseUrl}}/reportes/choferes?fechaDesde=2024-01-01&fechaHasta=2024-12-31
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🚛 Filtrar por chofer
+GET {{baseUrl}}/reportes/choferes?choferId=UUID-DEL-CHOFER
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 📆 Filtrar por mes
+GET {{baseUrl}}/reportes/choferes?mes=2024-03
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🧾 Filtrar por cliente
+GET {{baseUrl}}/reportes/choferes?cliente=ACME
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🛣️ Filtrar por corredor
+GET {{baseUrl}}/reportes/choferes?corredor=Juan
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 📊 Filtros combinados + paginación
+GET {{baseUrl}}/reportes/choferes?fechaDesde=2024-01-01&fechaHasta=2024-12-31&choferId=UUID-DEL-CHOFER&cliente=ACME&corredor=Juan&page=1&limit=50
+Authorization: Bearer {{accessToken}}
+
+###
