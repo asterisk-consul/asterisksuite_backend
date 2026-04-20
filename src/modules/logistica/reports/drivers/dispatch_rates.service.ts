@@ -24,36 +24,57 @@ export class ReporteChoferesService {
       page = 1,
       limit = 50,
     } = query;
+
     const offset = (page - 1) * limit;
 
-    // ── Condiciones WHERE dinámicas ──────────────────────────────────────────
+    // ── Helpers robustos ────────────────────────────────────────────────
+    const isValid = (v: any) => v !== undefined && v !== null && v !== '';
+
+    const isValidDate = (v: any) => {
+      if (!isValid(v)) return false;
+      const d = new Date(v);
+      return !isNaN(d.getTime());
+    };
+
+    // ── Condiciones WHERE dinámicas ─────────────────────────────────────
     const conditions: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
 
-    if (fechaDesde) {
+    if (isValidDate(fechaDesde)) {
+      const fd = new Date(fechaDesde as string);
       conditions.push(`d.planned_date >= $${paramIndex++}`);
-      params.push(new Date(fechaDesde));
+      params.push(fd);
     }
-    if (fechaHasta) {
+
+    if (isValidDate(fechaHasta)) {
+      const fh = new Date(fechaHasta as string);
       conditions.push(`d.planned_date <= $${paramIndex++}`);
-      params.push(new Date(fechaHasta));
+      params.push(fh);
     }
-    if (choferId) {
+
+    if (isValid(choferId)) {
       conditions.push(`td.driver_id = $${paramIndex++}::uuid`);
       params.push(choferId);
     }
-    if (mes) {
-      conditions.push(
-        `date_trunc('month', d.planned_date) = date_trunc('month', $${paramIndex++}::timestamptz)`,
-      );
-      params.push(new Date(mes + '-01'));
+
+    if (isValid(mes)) {
+      const mesDate = new Date(`${mes}-01`);
+      if (!isNaN(mesDate.getTime())) {
+        conditions.push(`
+          date_trunc('month', d.planned_date) =
+          date_trunc('month', $${paramIndex++}::timestamptz)
+        `);
+        params.push(mesDate);
+      }
     }
-    if (cliente) {
+
+    if (isValid(cliente)) {
       conditions.push(`bp.name ILIKE $${paramIndex++}`);
       params.push(`%${cliente}%`);
     }
-    if (corredor) {
+
+    if (isValid(corredor)) {
       conditions.push(`c.name ILIKE $${paramIndex++}`);
       params.push(`%${corredor}%`);
     }
@@ -61,32 +82,34 @@ export class ReporteChoferesService {
     const whereClause =
       conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    // ── Query principal ──────────────────────────────────────────────────────
+    // ── Query principal ────────────────────────────────────────────────
     const mainQuery = `
       SELECT
         dr.id,
         td.driver_id                                                     AS "choferId",
-        td.first_name                                                     AS "nombre",
-        td.last_name                                                      AS "apellido",
-        (td.first_name::text || ' ' || td.last_name::text)              AS "chofer",
-        td.unit_number                                                    AS "unidad",
-        d.id                                                              AS "despachoId",
-        d.order_number                                                    AS "numeroCarga",
-        d.planned_date                                                    AS "fecha",
-        date_trunc('month', d.planned_date)                              AS "mes",
+        td.first_name                                                    AS "nombre",
+        td.last_name                                                     AS "apellido",
+      TRIM(
+  COALESCE(td.first_name, '') || ' ' || COALESCE(td.last_name, '')
+) AS "chofer",
+        td.unit_number                                                   AS "unidad",
+        d.id                                                             AS "despachoId",
+        d.order_number                                                   AS "numeroCarga",
+        d.planned_date                                                   AS "fecha",
+        date_trunc('month', d.planned_date)                             AS "mes",
         (l.city::text || ' / ' || l2.city::text)                        AS "origenDestino",
-        l.city                                                            AS "origen",
-        l2.city                                                           AS "destino",
-        bp.name                                                           AS "cliente",
-        c.name                                                            AS "corredor",
-        t.reference_number                                                AS "numeroViaje",
-        round(dr.value::numeric, 2)                                      AS "tarifa",
-        COALESCE(ag.total_adicional_0, 0::numeric)                       AS "adicional0",
-        COALESCE(ag.total_adicional_1, 0::numeric)                       AS "adicional1",
-        COALESCE(ag.total_adicional_2, 0::numeric)                       AS "adicional2",
-        COALESCE(ag.total_adicional_3, 0::numeric)                       AS "adicional3",
-        COALESCE(ag.total_adicional_4, 0::numeric)                       AS "adicional4",
-        COALESCE(ag.total_adicional_5, 0::numeric)                       AS "adicional5",
+        l.city                                                           AS "origen",
+        l2.city                                                          AS "destino",
+        bp.name                                                          AS "cliente",
+        c.name                                                           AS "corredor",
+        t.reference_number                                               AS "numeroViaje",
+        round(dr.value::numeric, 2)                                     AS "tarifa",
+        COALESCE(ag.total_adicional_0, 0::numeric)                      AS "adicional0",
+        COALESCE(ag.total_adicional_1, 0::numeric)                      AS "adicional1",
+        COALESCE(ag.total_adicional_2, 0::numeric)                      AS "adicional2",
+        COALESCE(ag.total_adicional_3, 0::numeric)                      AS "adicional3",
+        COALESCE(ag.total_adicional_4, 0::numeric)                      AS "adicional4",
+        COALESCE(ag.total_adicional_5, 0::numeric)                      AS "adicional5",
         round(
           COALESCE(dr.value::numeric, 0) +
           COALESCE(ag.total_adicional_0, 0) +
@@ -114,7 +137,7 @@ export class ReporteChoferesService {
           COALESCE(ag.total_adicional_5, 0)
         ) * 0.15, 2)) OVER (
           PARTITION BY td.driver_id, date_trunc('month', d.planned_date)
-        )                                                                AS "totalMesChofer"
+        )                                                               AS "totalMesChofer"
       FROM dispatch_rates dr
         JOIN dispatch_orders d        ON d.id = dr.dispatch_id
         JOIN business_parties bp      ON bp.id = d.customer_id
@@ -148,7 +171,7 @@ export class ReporteChoferesService {
       ...params,
     );
 
-    // ── Count total (sin paginación) ─────────────────────────────────────────
+    // ── Count ───────────────────────────────────────────────────────────
     const countQuery = `
       SELECT COUNT(*) AS count
       FROM dispatch_rates dr
@@ -164,8 +187,8 @@ export class ReporteChoferesService {
       ${whereClause}
     `;
 
-    // Para el count usamos los params sin limit/offset
     const countParams = params.slice(0, -2);
+
     const countResult = await this.prisma.$queryRawUnsafe<[{ count: bigint }]>(
       countQuery,
       ...countParams,
