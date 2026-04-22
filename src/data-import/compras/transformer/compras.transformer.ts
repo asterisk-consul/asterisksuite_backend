@@ -130,7 +130,7 @@ export class ComprasTransformer implements Transformer<
         document_taxes: impuestosValidos.map(({ tax, amount }) => ({
           tax_id: tax.id,
           tax_rate: tax.rate.toNumber(),
-          taxable_base: 0,
+          taxable_base: factura.Imp_gravado,
           tax_amount: amount,
         })),
 
