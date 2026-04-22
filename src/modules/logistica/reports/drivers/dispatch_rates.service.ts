@@ -21,6 +21,7 @@ export class ReporteChoferesService {
       mes,
       cliente,
       corredor,
+      numeroViaje,
       page = 1,
       limit = 50,
     } = query;
@@ -77,6 +78,10 @@ export class ReporteChoferesService {
     if (isValid(corredor)) {
       conditions.push(`c.name ILIKE $${paramIndex++}`);
       params.push(`%${corredor}%`);
+    }
+    if (isValid(numeroViaje)) {
+      conditions.push(`t.reference_number ILIKE $${paramIndex++}`);
+      params.push(`%${numeroViaje}%`);
     }
 
     const whereClause =

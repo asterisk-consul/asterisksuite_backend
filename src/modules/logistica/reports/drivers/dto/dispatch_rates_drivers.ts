@@ -47,6 +47,10 @@ export class ReporteChoferesQueryDto {
   @Min(1)
   @Max(500)
   limit?: number = 50;
+
+  @IsOptional()
+  @IsString()
+  numeroViaje?: string;
 }
 
 // ─── Item de respuesta (interfaz, no clase) ───────────────────────────────────
