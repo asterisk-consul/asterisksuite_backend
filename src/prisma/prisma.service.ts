@@ -1,7 +1,7 @@
-// src/prisma/prisma.service.ts
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client';
+import { withAudit } from './audit.extension';
 
 @Injectable()
 export class PrismaService
@@ -11,11 +11,19 @@ export class PrismaService
   constructor() {
     const connectionString = process.env.DATABASE_URL;
     const adapter = new PrismaPg({ connectionString });
+
+    const client = new PrismaClient({ adapter });
+
+    // 🔥 aplicamos extensión
+    const extended = withAudit(client);
+
     super({ adapter });
+
+    // ⚠️ reemplazamos internamente el client
+    Object.assign(this, extended);
   }
 
   async onModuleInit() {
-    // 🔴 RECIÉN AHORA conecta Prisma
     await this.$connect();
   }
 

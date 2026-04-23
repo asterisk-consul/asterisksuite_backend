@@ -28,3 +28,13 @@ export const TripStatus = {
 } as const
 
 export type TripStatus = (typeof TripStatus)[keyof typeof TripStatus]
+
+
+export const AuditAction = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  RESTORE: 'RESTORE'
+} as const
+
+export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]

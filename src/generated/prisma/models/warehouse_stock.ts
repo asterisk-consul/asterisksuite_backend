@@ -42,7 +42,12 @@ export type Warehouse_stockMinAggregateOutputType = {
   product_id: string | null
   quantity: runtime.Decimal | null
   reserved_quantity: runtime.Decimal | null
+  created_at: Date | null
   updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Warehouse_stockMaxAggregateOutputType = {
@@ -51,7 +56,12 @@ export type Warehouse_stockMaxAggregateOutputType = {
   product_id: string | null
   quantity: runtime.Decimal | null
   reserved_quantity: runtime.Decimal | null
+  created_at: Date | null
   updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Warehouse_stockCountAggregateOutputType = {
@@ -60,7 +70,12 @@ export type Warehouse_stockCountAggregateOutputType = {
   product_id: number
   quantity: number
   reserved_quantity: number
+  created_at: number
   updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -81,7 +96,12 @@ export type Warehouse_stockMinAggregateInputType = {
   product_id?: true
   quantity?: true
   reserved_quantity?: true
+  created_at?: true
   updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Warehouse_stockMaxAggregateInputType = {
@@ -90,7 +110,12 @@ export type Warehouse_stockMaxAggregateInputType = {
   product_id?: true
   quantity?: true
   reserved_quantity?: true
+  created_at?: true
   updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Warehouse_stockCountAggregateInputType = {
@@ -99,7 +124,12 @@ export type Warehouse_stockCountAggregateInputType = {
   product_id?: true
   quantity?: true
   reserved_quantity?: true
+  created_at?: true
   updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -195,7 +225,12 @@ export type Warehouse_stockGroupByOutputType = {
   product_id: string
   quantity: runtime.Decimal
   reserved_quantity: runtime.Decimal
+  created_at: Date
   updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: Warehouse_stockCountAggregateOutputType | null
   _avg: Warehouse_stockAvgAggregateOutputType | null
   _sum: Warehouse_stockSumAggregateOutputType | null
@@ -227,7 +262,12 @@ export type warehouse_stockWhereInput = {
   product_id?: Prisma.UuidFilter<"warehouse_stock"> | string
   quantity?: Prisma.DecimalFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFilter<"warehouse_stock"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"warehouse_stock"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"warehouse_stock"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
   products?: Prisma.XOR<Prisma.ProductsScalarRelationFilter, Prisma.productsWhereInput>
   warehouses?: Prisma.XOR<Prisma.WarehousesScalarRelationFilter, Prisma.warehousesWhereInput>
 }
@@ -238,7 +278,12 @@ export type warehouse_stockOrderByWithRelationInput = {
   product_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reserved_quantity?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   products?: Prisma.productsOrderByWithRelationInput
   warehouses?: Prisma.warehousesOrderByWithRelationInput
 }
@@ -253,7 +298,12 @@ export type warehouse_stockWhereUniqueInput = Prisma.AtLeast<{
   product_id?: Prisma.UuidFilter<"warehouse_stock"> | string
   quantity?: Prisma.DecimalFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFilter<"warehouse_stock"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"warehouse_stock"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"warehouse_stock"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
   products?: Prisma.XOR<Prisma.ProductsScalarRelationFilter, Prisma.productsWhereInput>
   warehouses?: Prisma.XOR<Prisma.WarehousesScalarRelationFilter, Prisma.warehousesWhereInput>
 }, "id" | "warehouse_id_product_id">
@@ -264,7 +314,12 @@ export type warehouse_stockOrderByWithAggregationInput = {
   product_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reserved_quantity?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.warehouse_stockCountOrderByAggregateInput
   _avg?: Prisma.warehouse_stockAvgOrderByAggregateInput
   _max?: Prisma.warehouse_stockMaxOrderByAggregateInput
@@ -281,14 +336,24 @@ export type warehouse_stockScalarWhereWithAggregatesInput = {
   product_id?: Prisma.UuidWithAggregatesFilter<"warehouse_stock"> | string
   quantity?: Prisma.DecimalWithAggregatesFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalWithAggregatesFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"warehouse_stock"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"warehouse_stock"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"warehouse_stock"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock"> | string | null
 }
 
 export type warehouse_stockCreateInput = {
   id?: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   products: Prisma.productsCreateNestedOneWithoutWarehouse_stockInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutWarehouse_stockInput
 }
@@ -299,14 +364,24 @@ export type warehouse_stockUncheckedCreateInput = {
   product_id: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stockUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   products?: Prisma.productsUpdateOneRequiredWithoutWarehouse_stockNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutWarehouse_stockNestedInput
 }
@@ -317,7 +392,12 @@ export type warehouse_stockUncheckedUpdateInput = {
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stockCreateManyInput = {
@@ -326,14 +406,24 @@ export type warehouse_stockCreateManyInput = {
   product_id: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stockUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stockUncheckedUpdateManyInput = {
@@ -342,7 +432,12 @@ export type warehouse_stockUncheckedUpdateManyInput = {
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type Warehouse_stockListRelationFilter = {
@@ -366,7 +461,12 @@ export type warehouse_stockCountOrderByAggregateInput = {
   product_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reserved_quantity?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type warehouse_stockAvgOrderByAggregateInput = {
@@ -380,7 +480,12 @@ export type warehouse_stockMaxOrderByAggregateInput = {
   product_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reserved_quantity?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type warehouse_stockMinOrderByAggregateInput = {
@@ -389,7 +494,12 @@ export type warehouse_stockMinOrderByAggregateInput = {
   product_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reserved_quantity?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type warehouse_stockSumOrderByAggregateInput = {
@@ -485,7 +595,12 @@ export type warehouse_stockCreateWithoutProductsInput = {
   id?: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   warehouses: Prisma.warehousesCreateNestedOneWithoutWarehouse_stockInput
 }
 
@@ -494,7 +609,12 @@ export type warehouse_stockUncheckedCreateWithoutProductsInput = {
   warehouse_id: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stockCreateOrConnectWithoutProductsInput = {
@@ -532,14 +652,24 @@ export type warehouse_stockScalarWhereInput = {
   product_id?: Prisma.UuidFilter<"warehouse_stock"> | string
   quantity?: Prisma.DecimalFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFilter<"warehouse_stock"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFilter<"warehouse_stock"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"warehouse_stock"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"warehouse_stock"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"warehouse_stock"> | string | null
 }
 
 export type warehouse_stockCreateWithoutWarehousesInput = {
   id?: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   products: Prisma.productsCreateNestedOneWithoutWarehouse_stockInput
 }
 
@@ -548,7 +678,12 @@ export type warehouse_stockUncheckedCreateWithoutWarehousesInput = {
   product_id: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stockCreateOrConnectWithoutWarehousesInput = {
@@ -582,14 +717,24 @@ export type warehouse_stockCreateManyProductsInput = {
   warehouse_id: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stockUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutWarehouse_stockNestedInput
 }
 
@@ -598,7 +743,12 @@ export type warehouse_stockUncheckedUpdateWithoutProductsInput = {
   warehouse_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stockUncheckedUpdateManyWithoutProductsInput = {
@@ -606,7 +756,12 @@ export type warehouse_stockUncheckedUpdateManyWithoutProductsInput = {
   warehouse_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stockCreateManyWarehousesInput = {
@@ -614,14 +769,24 @@ export type warehouse_stockCreateManyWarehousesInput = {
   product_id: string
   quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
   updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stockUpdateWithoutWarehousesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   products?: Prisma.productsUpdateOneRequiredWithoutWarehouse_stockNestedInput
 }
 
@@ -630,7 +795,12 @@ export type warehouse_stockUncheckedUpdateWithoutWarehousesInput = {
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stockUncheckedUpdateManyWithoutWarehousesInput = {
@@ -638,7 +808,12 @@ export type warehouse_stockUncheckedUpdateManyWithoutWarehousesInput = {
   product_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   reserved_quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -649,7 +824,12 @@ export type warehouse_stockSelect<ExtArgs extends runtime.Types.Extensions.Inter
   product_id?: boolean
   quantity?: boolean
   reserved_quantity?: boolean
+  created_at?: boolean
   updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["warehouse_stock"]>
@@ -660,7 +840,12 @@ export type warehouse_stockSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   product_id?: boolean
   quantity?: boolean
   reserved_quantity?: boolean
+  created_at?: boolean
   updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["warehouse_stock"]>
@@ -671,7 +856,12 @@ export type warehouse_stockSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   product_id?: boolean
   quantity?: boolean
   reserved_quantity?: boolean
+  created_at?: boolean
   updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["warehouse_stock"]>
@@ -682,10 +872,15 @@ export type warehouse_stockSelectScalar = {
   product_id?: boolean
   quantity?: boolean
   reserved_quantity?: boolean
+  created_at?: boolean
   updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type warehouse_stockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "warehouse_id" | "product_id" | "quantity" | "reserved_quantity" | "updated_at", ExtArgs["result"]["warehouse_stock"]>
+export type warehouse_stockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "warehouse_id" | "product_id" | "quantity" | "reserved_quantity" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["warehouse_stock"]>
 export type warehouse_stockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
@@ -711,7 +906,12 @@ export type $warehouse_stockPayload<ExtArgs extends runtime.Types.Extensions.Int
     product_id: string
     quantity: runtime.Decimal
     reserved_quantity: runtime.Decimal
+    created_at: Date
     updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["warehouse_stock"]>
   composites: {}
 }
@@ -1142,7 +1342,12 @@ export interface warehouse_stockFieldRefs {
   readonly product_id: Prisma.FieldRef<"warehouse_stock", 'String'>
   readonly quantity: Prisma.FieldRef<"warehouse_stock", 'Decimal'>
   readonly reserved_quantity: Prisma.FieldRef<"warehouse_stock", 'Decimal'>
+  readonly created_at: Prisma.FieldRef<"warehouse_stock", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"warehouse_stock", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"warehouse_stock", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"warehouse_stock", 'String'>
+  readonly updated_by: Prisma.FieldRef<"warehouse_stock", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"warehouse_stock", 'String'>
 }
     
 

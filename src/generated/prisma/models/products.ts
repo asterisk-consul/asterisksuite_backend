@@ -30,6 +30,12 @@ export type ProductsMinAggregateOutputType = {
   sku: string | null
   requires_refrigeration: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
+  active: boolean | null
 }
 
 export type ProductsMaxAggregateOutputType = {
@@ -38,6 +44,12 @@ export type ProductsMaxAggregateOutputType = {
   sku: string | null
   requires_refrigeration: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
+  active: boolean | null
 }
 
 export type ProductsCountAggregateOutputType = {
@@ -46,6 +58,12 @@ export type ProductsCountAggregateOutputType = {
   sku: number
   requires_refrigeration: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
+  active: number
   _all: number
 }
 
@@ -56,6 +74,12 @@ export type ProductsMinAggregateInputType = {
   sku?: true
   requires_refrigeration?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
+  active?: true
 }
 
 export type ProductsMaxAggregateInputType = {
@@ -64,6 +88,12 @@ export type ProductsMaxAggregateInputType = {
   sku?: true
   requires_refrigeration?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
+  active?: true
 }
 
 export type ProductsCountAggregateInputType = {
@@ -72,6 +102,12 @@ export type ProductsCountAggregateInputType = {
   sku?: true
   requires_refrigeration?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
+  active?: true
   _all?: true
 }
 
@@ -153,6 +189,12 @@ export type ProductsGroupByOutputType = {
   sku: string | null
   requires_refrigeration: boolean | null
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
+  active: boolean | null
   _count: ProductsCountAggregateOutputType | null
   _min: ProductsMinAggregateOutputType | null
   _max: ProductsMaxAggregateOutputType | null
@@ -182,6 +224,12 @@ export type productsWhereInput = {
   sku?: Prisma.StringNullableFilter<"products"> | string | null
   requires_refrigeration?: Prisma.BoolNullableFilter<"products"> | boolean | null
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   pallet_items?: Prisma.Pallet_itemsListRelationFilter
   picking_items?: Prisma.Picking_itemsListRelationFilter
   product_taxes?: Prisma.Product_taxesListRelationFilter
@@ -196,6 +244,12 @@ export type productsOrderByWithRelationInput = {
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  active?: Prisma.SortOrderInput | Prisma.SortOrder
   pallet_items?: Prisma.pallet_itemsOrderByRelationAggregateInput
   picking_items?: Prisma.picking_itemsOrderByRelationAggregateInput
   product_taxes?: Prisma.product_taxesOrderByRelationAggregateInput
@@ -213,6 +267,12 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   sku?: Prisma.StringNullableFilter<"products"> | string | null
   requires_refrigeration?: Prisma.BoolNullableFilter<"products"> | boolean | null
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   pallet_items?: Prisma.Pallet_itemsListRelationFilter
   picking_items?: Prisma.Picking_itemsListRelationFilter
   product_taxes?: Prisma.Product_taxesListRelationFilter
@@ -227,6 +287,12 @@ export type productsOrderByWithAggregationInput = {
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  active?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.productsCountOrderByAggregateInput
   _max?: Prisma.productsMaxOrderByAggregateInput
   _min?: Prisma.productsMinOrderByAggregateInput
@@ -241,6 +307,12 @@ export type productsScalarWhereWithAggregatesInput = {
   sku?: Prisma.StringNullableWithAggregatesFilter<"products"> | string | null
   requires_refrigeration?: Prisma.BoolNullableWithAggregatesFilter<"products"> | boolean | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"products"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"products"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"products"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  active?: Prisma.BoolNullableWithAggregatesFilter<"products"> | boolean | null
 }
 
 export type productsCreateInput = {
@@ -249,6 +321,12 @@ export type productsCreateInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
@@ -263,6 +341,12 @@ export type productsUncheckedCreateInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
@@ -277,6 +361,12 @@ export type productsUpdateInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
@@ -291,6 +381,12 @@ export type productsUncheckedUpdateInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
@@ -305,6 +401,12 @@ export type productsCreateManyInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
 }
 
 export type productsUpdateManyMutationInput = {
@@ -313,6 +415,12 @@ export type productsUpdateManyMutationInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type productsUncheckedUpdateManyInput = {
@@ -321,6 +429,12 @@ export type productsUncheckedUpdateManyInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type ProductsScalarRelationFilter = {
@@ -334,6 +448,12 @@ export type productsCountOrderByAggregateInput = {
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
+  active?: Prisma.SortOrder
 }
 
 export type productsMaxOrderByAggregateInput = {
@@ -342,6 +462,12 @@ export type productsMaxOrderByAggregateInput = {
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
+  active?: Prisma.SortOrder
 }
 
 export type productsMinOrderByAggregateInput = {
@@ -350,6 +476,12 @@ export type productsMinOrderByAggregateInput = {
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
+  active?: Prisma.SortOrder
 }
 
 export type ProductsNullableScalarRelationFilter = {
@@ -453,6 +585,12 @@ export type productsCreateWithoutPallet_itemsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
@@ -466,6 +604,12 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
@@ -495,6 +639,12 @@ export type productsUpdateWithoutPallet_itemsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
@@ -508,6 +658,12 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
@@ -521,6 +677,12 @@ export type productsCreateWithoutPicking_itemsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
@@ -534,6 +696,12 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
@@ -563,6 +731,12 @@ export type productsUpdateWithoutPicking_itemsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
@@ -576,6 +750,12 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
@@ -589,6 +769,12 @@ export type productsCreateWithoutWarehouse_stockInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
@@ -602,6 +788,12 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
@@ -631,6 +823,12 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
@@ -644,6 +842,12 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
@@ -657,6 +861,12 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
@@ -670,6 +880,12 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
@@ -699,6 +915,12 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
@@ -712,6 +934,12 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
@@ -725,6 +953,12 @@ export type productsCreateWithoutDocument_itemsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
@@ -738,6 +972,12 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
@@ -767,6 +1007,12 @@ export type productsUpdateWithoutDocument_itemsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
@@ -780,6 +1026,12 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
@@ -793,6 +1045,12 @@ export type productsCreateWithoutProduct_taxesInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
@@ -806,6 +1064,12 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   sku?: string | null
   requires_refrigeration?: boolean | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
@@ -835,6 +1099,12 @@ export type productsUpdateWithoutProduct_taxesInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
@@ -848,6 +1118,12 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
@@ -937,6 +1213,12 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   sku?: boolean
   requires_refrigeration?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
+  active?: boolean
   pallet_items?: boolean | Prisma.products$pallet_itemsArgs<ExtArgs>
   picking_items?: boolean | Prisma.products$picking_itemsArgs<ExtArgs>
   product_taxes?: boolean | Prisma.products$product_taxesArgs<ExtArgs>
@@ -952,6 +1234,12 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   sku?: boolean
   requires_refrigeration?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
+  active?: boolean
 }, ExtArgs["result"]["products"]>
 
 export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -960,6 +1248,12 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   sku?: boolean
   requires_refrigeration?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
+  active?: boolean
 }, ExtArgs["result"]["products"]>
 
 export type productsSelectScalar = {
@@ -968,9 +1262,15 @@ export type productsSelectScalar = {
   sku?: boolean
   requires_refrigeration?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
+  active?: boolean
 }
 
-export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "created_at", ExtArgs["result"]["products"]>
+export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "active", ExtArgs["result"]["products"]>
 export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pallet_items?: boolean | Prisma.products$pallet_itemsArgs<ExtArgs>
   picking_items?: boolean | Prisma.products$picking_itemsArgs<ExtArgs>
@@ -999,6 +1299,12 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     sku: string | null
     requires_refrigeration: boolean | null
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
+    active: boolean | null
   }, ExtArgs["result"]["products"]>
   composites: {}
 }
@@ -1433,6 +1739,12 @@ export interface productsFieldRefs {
   readonly sku: Prisma.FieldRef<"products", 'String'>
   readonly requires_refrigeration: Prisma.FieldRef<"products", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"products", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"products", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"products", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"products", 'String'>
+  readonly updated_by: Prisma.FieldRef<"products", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"products", 'String'>
+  readonly active: Prisma.FieldRef<"products", 'Boolean'>
 }
     
 

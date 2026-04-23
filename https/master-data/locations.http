@@ -57,18 +57,17 @@ Authorization: Bearer {{accessToken}}
 ### PATCH /locations/:id
 ### ==================================================
 
-PATCH {{baseUrl}}/locations/8dc20266-15e0-4ecd-be0d-780a748191e3
+PATCH {{baseUrl}}/locations/9f9fd44b-9d29-4113-ad09-ccb65e9c22e4
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "address": "Nueva Dirección 999",
-  "city": "Córdoba Capital",
-  "province": "Córdoba",
-  "country": "Argentina",
-  "postalCode": "5000",
-  "latitude": -31.4201,
-  "longitude": -64.1888
+"address": "agus",
+    "city": "Rosario",
+    "province": "Santa Fe",
+    "country": "Argentina",
+    "latitude": null,
+    "longitude": null
 }
 
 
@@ -77,5 +76,14 @@ Content-Type: application/json
 ### DELETE /locations/:id
 ### ==================================================
 
-DELETE {{baseUrl}}/locations/40b9e81d-8952-4b1f-a10b-8ac50ad2da4f
+DELETE {{baseUrl}}/trash/locations/9f9fd44b-9d29-4113-ad09-ccb65e9c22e4
+Authorization: Bearer {{accessToken}}
+
+
+### ==================================================
+### Restaurar Location
+### PATCH /locations/:id
+### ==================================================
+
+PATCH {{baseUrl}}/trash/locations/9f9fd44b-9d29-4113-ad09-ccb65e9c22e4
 Authorization: Bearer {{accessToken}}

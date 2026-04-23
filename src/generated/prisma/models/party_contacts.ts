@@ -33,6 +33,11 @@ export type Party_contactsMinAggregateOutputType = {
   phone: string | null
   email: string | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Party_contactsMaxAggregateOutputType = {
@@ -44,6 +49,11 @@ export type Party_contactsMaxAggregateOutputType = {
   phone: string | null
   email: string | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Party_contactsCountAggregateOutputType = {
@@ -55,6 +65,11 @@ export type Party_contactsCountAggregateOutputType = {
   phone: number
   email: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -68,6 +83,11 @@ export type Party_contactsMinAggregateInputType = {
   phone?: true
   email?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Party_contactsMaxAggregateInputType = {
@@ -79,6 +99,11 @@ export type Party_contactsMaxAggregateInputType = {
   phone?: true
   email?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Party_contactsCountAggregateInputType = {
@@ -90,6 +115,11 @@ export type Party_contactsCountAggregateInputType = {
   phone?: true
   email?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -174,6 +204,11 @@ export type Party_contactsGroupByOutputType = {
   phone: string | null
   email: string | null
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: Party_contactsCountAggregateOutputType | null
   _min: Party_contactsMinAggregateOutputType | null
   _max: Party_contactsMaxAggregateOutputType | null
@@ -206,6 +241,11 @@ export type party_contactsWhereInput = {
   phone?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   email?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"party_contacts"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
   business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
 }
 
@@ -218,6 +258,11 @@ export type party_contactsOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   business_parties?: Prisma.business_partiesOrderByWithRelationInput
 }
 
@@ -233,6 +278,11 @@ export type party_contactsWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   email?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"party_contacts"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
   business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
 }, "id">
 
@@ -245,6 +295,11 @@ export type party_contactsOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.party_contactsCountOrderByAggregateInput
   _max?: Prisma.party_contactsMaxOrderByAggregateInput
   _min?: Prisma.party_contactsMinOrderByAggregateInput
@@ -262,6 +317,11 @@ export type party_contactsScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"party_contacts"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"party_contacts"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"party_contacts"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"party_contacts"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"party_contacts"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"party_contacts"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"party_contacts"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"party_contacts"> | string | null
 }
 
 export type party_contactsCreateInput = {
@@ -272,6 +332,11 @@ export type party_contactsCreateInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutParty_contactsInput
 }
 
@@ -284,6 +349,11 @@ export type party_contactsUncheckedCreateInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type party_contactsUpdateInput = {
@@ -294,6 +364,11 @@ export type party_contactsUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   business_parties?: Prisma.business_partiesUpdateOneWithoutParty_contactsNestedInput
 }
 
@@ -306,6 +381,11 @@ export type party_contactsUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type party_contactsCreateManyInput = {
@@ -317,6 +397,11 @@ export type party_contactsCreateManyInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type party_contactsUpdateManyMutationInput = {
@@ -327,6 +412,11 @@ export type party_contactsUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type party_contactsUncheckedUpdateManyInput = {
@@ -338,6 +428,11 @@ export type party_contactsUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type Party_contactsListRelationFilter = {
@@ -359,6 +454,11 @@ export type party_contactsCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type party_contactsMaxOrderByAggregateInput = {
@@ -370,6 +470,11 @@ export type party_contactsMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type party_contactsMinOrderByAggregateInput = {
@@ -381,6 +486,11 @@ export type party_contactsMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type party_contactsCreateNestedManyWithoutBusiness_partiesInput = {
@@ -433,6 +543,11 @@ export type party_contactsCreateWithoutBusiness_partiesInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type party_contactsUncheckedCreateWithoutBusiness_partiesInput = {
@@ -443,6 +558,11 @@ export type party_contactsUncheckedCreateWithoutBusiness_partiesInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type party_contactsCreateOrConnectWithoutBusiness_partiesInput = {
@@ -483,6 +603,11 @@ export type party_contactsScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   email?: Prisma.StringNullableFilter<"party_contacts"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"party_contacts"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"party_contacts"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"party_contacts"> | string | null
 }
 
 export type party_contactsCreateManyBusiness_partiesInput = {
@@ -493,6 +618,11 @@ export type party_contactsCreateManyBusiness_partiesInput = {
   phone?: string | null
   email?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type party_contactsUpdateWithoutBusiness_partiesInput = {
@@ -503,6 +633,11 @@ export type party_contactsUpdateWithoutBusiness_partiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type party_contactsUncheckedUpdateWithoutBusiness_partiesInput = {
@@ -513,6 +648,11 @@ export type party_contactsUncheckedUpdateWithoutBusiness_partiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type party_contactsUncheckedUpdateManyWithoutBusiness_partiesInput = {
@@ -523,6 +663,11 @@ export type party_contactsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -536,6 +681,11 @@ export type party_contactsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   phone?: boolean
   email?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["party_contacts"]>
 
@@ -548,6 +698,11 @@ export type party_contactsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   phone?: boolean
   email?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["party_contacts"]>
 
@@ -560,6 +715,11 @@ export type party_contactsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   phone?: boolean
   email?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["party_contacts"]>
 
@@ -572,9 +732,14 @@ export type party_contactsSelectScalar = {
   phone?: boolean
   email?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type party_contactsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "party_id" | "first_name" | "last_name" | "role" | "phone" | "email" | "created_at", ExtArgs["result"]["party_contacts"]>
+export type party_contactsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "party_id" | "first_name" | "last_name" | "role" | "phone" | "email" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["party_contacts"]>
 export type party_contactsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business_parties?: boolean | Prisma.party_contacts$business_partiesArgs<ExtArgs>
 }
@@ -599,6 +764,11 @@ export type $party_contactsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     phone: string | null
     email: string | null
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["party_contacts"]>
   composites: {}
 }
@@ -1031,6 +1201,11 @@ export interface party_contactsFieldRefs {
   readonly phone: Prisma.FieldRef<"party_contacts", 'String'>
   readonly email: Prisma.FieldRef<"party_contacts", 'String'>
   readonly created_at: Prisma.FieldRef<"party_contacts", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"party_contacts", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"party_contacts", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"party_contacts", 'String'>
+  readonly updated_by: Prisma.FieldRef<"party_contacts", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"party_contacts", 'String'>
 }
     
 

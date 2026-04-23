@@ -31,9 +31,12 @@ export type Delivery_notesMinAggregateOutputType = {
   status: string | null
   party_id: string | null
   trip_id: string | null
-  created_by: string | null
-  deleted_at: Date | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   dispatch_order_id: string | null
 }
 
@@ -44,9 +47,12 @@ export type Delivery_notesMaxAggregateOutputType = {
   status: string | null
   party_id: string | null
   trip_id: string | null
-  created_by: string | null
-  deleted_at: Date | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   dispatch_order_id: string | null
 }
 
@@ -57,9 +63,12 @@ export type Delivery_notesCountAggregateOutputType = {
   status: number
   party_id: number
   trip_id: number
-  created_by: number
-  deleted_at: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   dispatch_order_id: number
   _all: number
 }
@@ -72,9 +81,12 @@ export type Delivery_notesMinAggregateInputType = {
   status?: true
   party_id?: true
   trip_id?: true
-  created_by?: true
-  deleted_at?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   dispatch_order_id?: true
 }
 
@@ -85,9 +97,12 @@ export type Delivery_notesMaxAggregateInputType = {
   status?: true
   party_id?: true
   trip_id?: true
-  created_by?: true
-  deleted_at?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   dispatch_order_id?: true
 }
 
@@ -98,9 +113,12 @@ export type Delivery_notesCountAggregateInputType = {
   status?: true
   party_id?: true
   trip_id?: true
-  created_by?: true
-  deleted_at?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   dispatch_order_id?: true
   _all?: true
 }
@@ -184,9 +202,12 @@ export type Delivery_notesGroupByOutputType = {
   status: string
   party_id: string | null
   trip_id: string | null
-  created_by: string | null
-  deleted_at: Date | null
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   dispatch_order_id: string | null
   _count: Delivery_notesCountAggregateOutputType | null
   _min: Delivery_notesMinAggregateOutputType | null
@@ -218,9 +239,12 @@ export type delivery_notesWhereInput = {
   status?: Prisma.StringFilter<"delivery_notes"> | string
   party_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   trip_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   cargo_transfer_items?: Prisma.Cargo_transfer_itemsListRelationFilter
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
@@ -238,9 +262,12 @@ export type delivery_notesOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   trip_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   cargo_transfer_items?: Prisma.cargo_transfer_itemsOrderByRelationAggregateInput
   users?: Prisma.usersOrderByWithRelationInput
@@ -261,9 +288,12 @@ export type delivery_notesWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"delivery_notes"> | string
   party_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   trip_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   cargo_transfer_items?: Prisma.Cargo_transfer_itemsListRelationFilter
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
@@ -281,9 +311,12 @@ export type delivery_notesOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   trip_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.delivery_notesCountOrderByAggregateInput
   _max?: Prisma.delivery_notesMaxOrderByAggregateInput
@@ -300,9 +333,12 @@ export type delivery_notesScalarWhereWithAggregatesInput = {
   status?: Prisma.StringWithAggregatesFilter<"delivery_notes"> | string
   party_id?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
   trip_id?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
-  created_by?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
-  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"delivery_notes"> | Date | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"delivery_notes"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"delivery_notes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"delivery_notes"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
   dispatch_order_id?: Prisma.UuidNullableWithAggregatesFilter<"delivery_notes"> | string | null
 }
 
@@ -311,8 +347,11 @@ export type delivery_notesCreateInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
@@ -329,9 +368,12 @@ export type delivery_notesUncheckedCreateInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -343,8 +385,11 @@ export type delivery_notesUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
@@ -361,9 +406,12 @@ export type delivery_notesUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -377,9 +425,12 @@ export type delivery_notesCreateManyInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
 }
 
@@ -388,8 +439,11 @@ export type delivery_notesUpdateManyMutationInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type delivery_notesUncheckedUpdateManyInput = {
@@ -399,9 +453,12 @@ export type delivery_notesUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -427,9 +484,12 @@ export type delivery_notesCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   party_id?: Prisma.SortOrder
   trip_id?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrder
 }
 
@@ -440,9 +500,12 @@ export type delivery_notesMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   party_id?: Prisma.SortOrder
   trip_id?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrder
 }
 
@@ -453,9 +516,12 @@ export type delivery_notesMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   party_id?: Prisma.SortOrder
   trip_id?: Prisma.SortOrder
-  created_by?: Prisma.SortOrder
-  deleted_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
   dispatch_order_id?: Prisma.SortOrder
 }
 
@@ -515,10 +581,6 @@ export type delivery_notesUpdateOneWithoutCargo_transfer_itemsNestedInput = {
   delete?: Prisma.delivery_notesWhereInput | boolean
   connect?: Prisma.delivery_notesWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.delivery_notesUpdateToOneWithWhereWithoutCargo_transfer_itemsInput, Prisma.delivery_notesUpdateWithoutCargo_transfer_itemsInput>, Prisma.delivery_notesUncheckedUpdateWithoutCargo_transfer_itemsInput>
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
 }
 
 export type delivery_notesCreateNestedOneWithoutPicking_ordersInput = {
@@ -684,8 +746,11 @@ export type delivery_notesCreateWithoutBusiness_partiesInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
@@ -700,9 +765,12 @@ export type delivery_notesUncheckedCreateWithoutBusiness_partiesInput = {
   number: string
   status: string
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -745,9 +813,12 @@ export type delivery_notesScalarWhereInput = {
   status?: Prisma.StringFilter<"delivery_notes"> | string
   party_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   trip_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
   created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
   dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
 }
 
@@ -756,8 +827,11 @@ export type delivery_notesCreateWithoutCargo_transfer_itemsInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
@@ -773,9 +847,12 @@ export type delivery_notesUncheckedCreateWithoutCargo_transfer_itemsInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -802,8 +879,11 @@ export type delivery_notesUpdateWithoutCargo_transfer_itemsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
@@ -819,9 +899,12 @@ export type delivery_notesUncheckedUpdateWithoutCargo_transfer_itemsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -832,8 +915,11 @@ export type delivery_notesCreateWithoutPicking_ordersInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
@@ -849,9 +935,12 @@ export type delivery_notesUncheckedCreateWithoutPicking_ordersInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -878,8 +967,11 @@ export type delivery_notesUpdateWithoutPicking_ordersInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
@@ -895,9 +987,12 @@ export type delivery_notesUncheckedUpdateWithoutPicking_ordersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -908,8 +1003,11 @@ export type delivery_notesCreateWithoutTrip_cargoInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
@@ -925,9 +1023,12 @@ export type delivery_notesUncheckedCreateWithoutTrip_cargoInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -954,8 +1055,11 @@ export type delivery_notesUpdateWithoutTrip_cargoInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
@@ -971,9 +1075,12 @@ export type delivery_notesUncheckedUpdateWithoutTrip_cargoInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -984,8 +1091,11 @@ export type delivery_notesCreateWithoutDispatch_ordersInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
@@ -1001,9 +1111,12 @@ export type delivery_notesUncheckedCreateWithoutDispatch_ordersInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -1040,8 +1153,11 @@ export type delivery_notesCreateWithoutTripsInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   users?: Prisma.usersCreateNestedOneWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
@@ -1056,9 +1172,12 @@ export type delivery_notesUncheckedCreateWithoutTripsInput = {
   number: string
   status: string
   party_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -1096,8 +1215,11 @@ export type delivery_notesCreateWithoutUsersInput = {
   type: string
   number: string
   status: string
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
@@ -1113,8 +1235,11 @@ export type delivery_notesUncheckedCreateWithoutUsersInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
@@ -1153,9 +1278,12 @@ export type delivery_notesCreateManyBusiness_partiesInput = {
   number: string
   status: string
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
 }
 
@@ -1164,8 +1292,11 @@ export type delivery_notesUpdateWithoutBusiness_partiesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
@@ -1180,9 +1311,12 @@ export type delivery_notesUncheckedUpdateWithoutBusiness_partiesInput = {
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -1195,9 +1329,12 @@ export type delivery_notesUncheckedUpdateManyWithoutBusiness_partiesInput = {
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -1208,9 +1345,12 @@ export type delivery_notesCreateManyDispatch_ordersInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type delivery_notesUpdateWithoutDispatch_ordersInput = {
@@ -1218,8 +1358,11 @@ export type delivery_notesUpdateWithoutDispatch_ordersInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
@@ -1235,9 +1378,12 @@ export type delivery_notesUncheckedUpdateWithoutDispatch_ordersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -1250,9 +1396,12 @@ export type delivery_notesUncheckedUpdateManyWithoutDispatch_ordersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type delivery_notesCreateManyTripsInput = {
@@ -1261,9 +1410,12 @@ export type delivery_notesCreateManyTripsInput = {
   number: string
   status: string
   party_id?: string | null
-  created_by?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
 }
 
@@ -1272,8 +1424,11 @@ export type delivery_notesUpdateWithoutTripsInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   users?: Prisma.usersUpdateOneWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
@@ -1288,9 +1443,12 @@ export type delivery_notesUncheckedUpdateWithoutTripsInput = {
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -1303,9 +1461,12 @@ export type delivery_notesUncheckedUpdateManyWithoutTripsInput = {
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -1316,8 +1477,11 @@ export type delivery_notesCreateManyUsersInput = {
   status: string
   party_id?: string | null
   trip_id?: string | null
-  deleted_at?: Date | string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_order_id?: string | null
 }
 
@@ -1326,8 +1490,11 @@ export type delivery_notesUpdateWithoutUsersInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
@@ -1343,8 +1510,11 @@ export type delivery_notesUncheckedUpdateWithoutUsersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
@@ -1358,8 +1528,11 @@ export type delivery_notesUncheckedUpdateManyWithoutUsersInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -1419,9 +1592,12 @@ export type delivery_notesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   status?: boolean
   party_id?: boolean
   trip_id?: boolean
-  created_by?: boolean
-  deleted_at?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_order_id?: boolean
   cargo_transfer_items?: boolean | Prisma.delivery_notes$cargo_transfer_itemsArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
@@ -1440,9 +1616,12 @@ export type delivery_notesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   status?: boolean
   party_id?: boolean
   trip_id?: boolean
-  created_by?: boolean
-  deleted_at?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_order_id?: boolean
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
@@ -1457,9 +1636,12 @@ export type delivery_notesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   status?: boolean
   party_id?: boolean
   trip_id?: boolean
-  created_by?: boolean
-  deleted_at?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_order_id?: boolean
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.delivery_notes$dispatch_ordersArgs<ExtArgs>
@@ -1474,13 +1656,16 @@ export type delivery_notesSelectScalar = {
   status?: boolean
   party_id?: boolean
   trip_id?: boolean
-  created_by?: boolean
-  deleted_at?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_order_id?: boolean
 }
 
-export type delivery_notesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "number" | "status" | "party_id" | "trip_id" | "created_by" | "deleted_at" | "created_at" | "dispatch_order_id", ExtArgs["result"]["delivery_notes"]>
+export type delivery_notesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "number" | "status" | "party_id" | "trip_id" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "dispatch_order_id", ExtArgs["result"]["delivery_notes"]>
 export type delivery_notesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cargo_transfer_items?: boolean | Prisma.delivery_notes$cargo_transfer_itemsArgs<ExtArgs>
   users?: boolean | Prisma.delivery_notes$usersArgs<ExtArgs>
@@ -1522,9 +1707,12 @@ export type $delivery_notesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     status: string
     party_id: string | null
     trip_id: string | null
-    created_by: string | null
-    deleted_at: Date | null
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
     dispatch_order_id: string | null
   }, ExtArgs["result"]["delivery_notes"]>
   composites: {}
@@ -1962,9 +2150,12 @@ export interface delivery_notesFieldRefs {
   readonly status: Prisma.FieldRef<"delivery_notes", 'String'>
   readonly party_id: Prisma.FieldRef<"delivery_notes", 'String'>
   readonly trip_id: Prisma.FieldRef<"delivery_notes", 'String'>
-  readonly created_by: Prisma.FieldRef<"delivery_notes", 'String'>
-  readonly deleted_at: Prisma.FieldRef<"delivery_notes", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"delivery_notes", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"delivery_notes", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"delivery_notes", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"delivery_notes", 'String'>
+  readonly updated_by: Prisma.FieldRef<"delivery_notes", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"delivery_notes", 'String'>
   readonly dispatch_order_id: Prisma.FieldRef<"delivery_notes", 'String'>
 }
     

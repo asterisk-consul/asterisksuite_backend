@@ -49,6 +49,11 @@ export type Document_sequencesMinAggregateOutputType = {
   prefix: string | null
   active: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Document_sequencesMaxAggregateOutputType = {
@@ -62,6 +67,11 @@ export type Document_sequencesMaxAggregateOutputType = {
   prefix: string | null
   active: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Document_sequencesCountAggregateOutputType = {
@@ -75,6 +85,11 @@ export type Document_sequencesCountAggregateOutputType = {
   prefix: number
   active: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -102,6 +117,11 @@ export type Document_sequencesMinAggregateInputType = {
   prefix?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Document_sequencesMaxAggregateInputType = {
@@ -115,6 +135,11 @@ export type Document_sequencesMaxAggregateInputType = {
   prefix?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Document_sequencesCountAggregateInputType = {
@@ -128,6 +153,11 @@ export type Document_sequencesCountAggregateInputType = {
   prefix?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -228,6 +258,11 @@ export type Document_sequencesGroupByOutputType = {
   prefix: string | null
   active: boolean
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: Document_sequencesCountAggregateOutputType | null
   _avg: Document_sequencesAvgAggregateOutputType | null
   _sum: Document_sequencesSumAggregateOutputType | null
@@ -264,6 +299,11 @@ export type document_sequencesWhereInput = {
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
   active?: Prisma.BoolFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"document_sequences"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
   document_types?: Prisma.Document_typesListRelationFilter
 }
 
@@ -278,6 +318,11 @@ export type document_sequencesOrderByWithRelationInput = {
   prefix?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   document_types?: Prisma.document_typesOrderByRelationAggregateInput
 }
 
@@ -295,6 +340,11 @@ export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
   active?: Prisma.BoolFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"document_sequences"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
   document_types?: Prisma.Document_typesListRelationFilter
 }, "id" | "point_of_sale">
 
@@ -309,6 +359,11 @@ export type document_sequencesOrderByWithAggregationInput = {
   prefix?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.document_sequencesCountOrderByAggregateInput
   _avg?: Prisma.document_sequencesAvgOrderByAggregateInput
   _max?: Prisma.document_sequencesMaxOrderByAggregateInput
@@ -330,6 +385,11 @@ export type document_sequencesScalarWhereWithAggregatesInput = {
   prefix?: Prisma.StringNullableWithAggregatesFilter<"document_sequences"> | string | null
   active?: Prisma.BoolWithAggregatesFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_sequences"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"document_sequences"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_sequences"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"document_sequences"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"document_sequences"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"document_sequences"> | string | null
 }
 
 export type document_sequencesCreateInput = {
@@ -343,6 +403,11 @@ export type document_sequencesCreateInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
 }
 
@@ -357,6 +422,11 @@ export type document_sequencesUncheckedCreateInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   document_types?: Prisma.document_typesUncheckedCreateNestedManyWithoutDocument_sequencesInput
 }
 
@@ -371,6 +441,11 @@ export type document_sequencesUpdateInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
 }
 
@@ -385,6 +460,11 @@ export type document_sequencesUncheckedUpdateInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_types?: Prisma.document_typesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
 }
 
@@ -399,6 +479,11 @@ export type document_sequencesCreateManyInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_sequencesUpdateManyMutationInput = {
@@ -412,6 +497,11 @@ export type document_sequencesUpdateManyMutationInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_sequencesUncheckedUpdateManyInput = {
@@ -425,6 +515,11 @@ export type document_sequencesUncheckedUpdateManyInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_sequencesCountOrderByAggregateInput = {
@@ -438,6 +533,11 @@ export type document_sequencesCountOrderByAggregateInput = {
   prefix?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type document_sequencesAvgOrderByAggregateInput = {
@@ -457,6 +557,11 @@ export type document_sequencesMaxOrderByAggregateInput = {
   prefix?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type document_sequencesMinOrderByAggregateInput = {
@@ -470,6 +575,11 @@ export type document_sequencesMinOrderByAggregateInput = {
   prefix?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type document_sequencesSumOrderByAggregateInput = {
@@ -510,6 +620,11 @@ export type document_sequencesCreateWithoutDocument_typesInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
@@ -523,6 +638,11 @@ export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
   prefix?: string | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_sequencesCreateOrConnectWithoutDocument_typesInput = {
@@ -552,6 +672,11 @@ export type document_sequencesUpdateWithoutDocument_typesInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
@@ -565,6 +690,11 @@ export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -609,6 +739,11 @@ export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.In
   prefix?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
   _count?: boolean | Prisma.Document_sequencesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_sequences"]>
@@ -624,6 +759,11 @@ export type document_sequencesSelectCreateManyAndReturn<ExtArgs extends runtime.
   prefix?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["document_sequences"]>
 
 export type document_sequencesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -637,6 +777,11 @@ export type document_sequencesSelectUpdateManyAndReturn<ExtArgs extends runtime.
   prefix?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["document_sequences"]>
 
 export type document_sequencesSelectScalar = {
@@ -650,9 +795,14 @@ export type document_sequencesSelectScalar = {
   prefix?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "automatic" | "range_start" | "range_end" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at", ExtArgs["result"]["document_sequences"]>
+export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "automatic" | "range_start" | "range_end" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_sequences"]>
 export type document_sequencesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
   _count?: boolean | Prisma.Document_sequencesCountOutputTypeDefaultArgs<ExtArgs>
@@ -676,6 +826,11 @@ export type $document_sequencesPayload<ExtArgs extends runtime.Types.Extensions.
     prefix: string | null
     active: boolean
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["document_sequences"]>
   composites: {}
 }
@@ -1110,6 +1265,11 @@ export interface document_sequencesFieldRefs {
   readonly prefix: Prisma.FieldRef<"document_sequences", 'String'>
   readonly active: Prisma.FieldRef<"document_sequences", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"document_sequences", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"document_sequences", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"document_sequences", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"document_sequences", 'String'>
+  readonly updated_by: Prisma.FieldRef<"document_sequences", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"document_sequences", 'String'>
 }
     
 

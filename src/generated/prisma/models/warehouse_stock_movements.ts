@@ -45,7 +45,11 @@ export type Warehouse_stock_movementsMinAggregateOutputType = {
   reference_id: string | null
   notes: string | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
   created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Warehouse_stock_movementsMaxAggregateOutputType = {
@@ -59,7 +63,11 @@ export type Warehouse_stock_movementsMaxAggregateOutputType = {
   reference_id: string | null
   notes: string | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
   created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Warehouse_stock_movementsCountAggregateOutputType = {
@@ -73,7 +81,11 @@ export type Warehouse_stock_movementsCountAggregateOutputType = {
   reference_id: number
   notes: number
   created_at: number
+  updated_at: number
+  deleted_at: number
   created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -97,7 +109,11 @@ export type Warehouse_stock_movementsMinAggregateInputType = {
   reference_id?: true
   notes?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
   created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Warehouse_stock_movementsMaxAggregateInputType = {
@@ -111,7 +127,11 @@ export type Warehouse_stock_movementsMaxAggregateInputType = {
   reference_id?: true
   notes?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
   created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Warehouse_stock_movementsCountAggregateInputType = {
@@ -125,7 +145,11 @@ export type Warehouse_stock_movementsCountAggregateInputType = {
   reference_id?: true
   notes?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
   created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -226,7 +250,11 @@ export type Warehouse_stock_movementsGroupByOutputType = {
   reference_id: string | null
   notes: string | null
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
   created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: Warehouse_stock_movementsCountAggregateOutputType | null
   _avg: Warehouse_stock_movementsAvgAggregateOutputType | null
   _sum: Warehouse_stock_movementsSumAggregateOutputType | null
@@ -263,7 +291,11 @@ export type warehouse_stock_movementsWhereInput = {
   reference_id?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
   notes?: Prisma.StringNullableFilter<"warehouse_stock_movements"> | string | null
   created_at?: Prisma.DateTimeFilter<"warehouse_stock_movements"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"warehouse_stock_movements"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"warehouse_stock_movements"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   products?: Prisma.XOR<Prisma.ProductsScalarRelationFilter, Prisma.productsWhereInput>
   warehouses?: Prisma.XOR<Prisma.WarehousesScalarRelationFilter, Prisma.warehousesWhereInput>
@@ -280,7 +312,11 @@ export type warehouse_stock_movementsOrderByWithRelationInput = {
   reference_id?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   users?: Prisma.usersOrderByWithRelationInput
   products?: Prisma.productsOrderByWithRelationInput
   warehouses?: Prisma.warehousesOrderByWithRelationInput
@@ -300,7 +336,11 @@ export type warehouse_stock_movementsWhereUniqueInput = Prisma.AtLeast<{
   reference_id?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
   notes?: Prisma.StringNullableFilter<"warehouse_stock_movements"> | string | null
   created_at?: Prisma.DateTimeFilter<"warehouse_stock_movements"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"warehouse_stock_movements"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"warehouse_stock_movements"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   products?: Prisma.XOR<Prisma.ProductsScalarRelationFilter, Prisma.productsWhereInput>
   warehouses?: Prisma.XOR<Prisma.WarehousesScalarRelationFilter, Prisma.warehousesWhereInput>
@@ -317,7 +357,11 @@ export type warehouse_stock_movementsOrderByWithAggregationInput = {
   reference_id?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.warehouse_stock_movementsCountOrderByAggregateInput
   _avg?: Prisma.warehouse_stock_movementsAvgOrderByAggregateInput
   _max?: Prisma.warehouse_stock_movementsMaxOrderByAggregateInput
@@ -339,7 +383,11 @@ export type warehouse_stock_movementsScalarWhereWithAggregatesInput = {
   reference_id?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock_movements"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"warehouse_stock_movements"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"warehouse_stock_movements"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"warehouse_stock_movements"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"warehouse_stock_movements"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock_movements"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock_movements"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"warehouse_stock_movements"> | string | null
 }
 
 export type warehouse_stock_movementsCreateInput = {
@@ -351,6 +399,10 @@ export type warehouse_stock_movementsCreateInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   users?: Prisma.usersCreateNestedOneWithoutWarehouse_stock_movementsInput
   products: Prisma.productsCreateNestedOneWithoutWarehouse_stock_movementsInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutWarehouse_stock_movementsInput
@@ -367,7 +419,11 @@ export type warehouse_stock_movementsUncheckedCreateInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
   created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsUpdateInput = {
@@ -379,6 +435,10 @@ export type warehouse_stock_movementsUpdateInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   users?: Prisma.usersUpdateOneWithoutWarehouse_stock_movementsNestedInput
   products?: Prisma.productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
@@ -395,7 +455,11 @@ export type warehouse_stock_movementsUncheckedUpdateInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsCreateManyInput = {
@@ -409,7 +473,11 @@ export type warehouse_stock_movementsCreateManyInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
   created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsUpdateManyMutationInput = {
@@ -421,6 +489,10 @@ export type warehouse_stock_movementsUpdateManyMutationInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsUncheckedUpdateManyInput = {
@@ -434,7 +506,11 @@ export type warehouse_stock_movementsUncheckedUpdateManyInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type Warehouse_stock_movementsListRelationFilter = {
@@ -458,7 +534,11 @@ export type warehouse_stock_movementsCountOrderByAggregateInput = {
   reference_id?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type warehouse_stock_movementsAvgOrderByAggregateInput = {
@@ -476,7 +556,11 @@ export type warehouse_stock_movementsMaxOrderByAggregateInput = {
   reference_id?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type warehouse_stock_movementsMinOrderByAggregateInput = {
@@ -490,7 +574,11 @@ export type warehouse_stock_movementsMinOrderByAggregateInput = {
   reference_id?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type warehouse_stock_movementsSumOrderByAggregateInput = {
@@ -632,6 +720,10 @@ export type warehouse_stock_movementsCreateWithoutProductsInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   users?: Prisma.usersCreateNestedOneWithoutWarehouse_stock_movementsInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutWarehouse_stock_movementsInput
 }
@@ -646,7 +738,11 @@ export type warehouse_stock_movementsUncheckedCreateWithoutProductsInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
   created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsCreateOrConnectWithoutProductsInput = {
@@ -689,7 +785,11 @@ export type warehouse_stock_movementsScalarWhereInput = {
   reference_id?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
   notes?: Prisma.StringNullableFilter<"warehouse_stock_movements"> | string | null
   created_at?: Prisma.DateTimeFilter<"warehouse_stock_movements"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"warehouse_stock_movements"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"warehouse_stock_movements"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"warehouse_stock_movements"> | string | null
 }
 
 export type warehouse_stock_movementsCreateWithoutUsersInput = {
@@ -701,6 +801,10 @@ export type warehouse_stock_movementsCreateWithoutUsersInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   products: Prisma.productsCreateNestedOneWithoutWarehouse_stock_movementsInput
   warehouses: Prisma.warehousesCreateNestedOneWithoutWarehouse_stock_movementsInput
 }
@@ -716,6 +820,10 @@ export type warehouse_stock_movementsUncheckedCreateWithoutUsersInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsCreateOrConnectWithoutUsersInput = {
@@ -753,6 +861,10 @@ export type warehouse_stock_movementsCreateWithoutWarehousesInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   users?: Prisma.usersCreateNestedOneWithoutWarehouse_stock_movementsInput
   products: Prisma.productsCreateNestedOneWithoutWarehouse_stock_movementsInput
 }
@@ -767,7 +879,11 @@ export type warehouse_stock_movementsUncheckedCreateWithoutWarehousesInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
   created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsCreateOrConnectWithoutWarehousesInput = {
@@ -806,7 +922,11 @@ export type warehouse_stock_movementsCreateManyProductsInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
   created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsUpdateWithoutProductsInput = {
@@ -818,6 +938,10 @@ export type warehouse_stock_movementsUpdateWithoutProductsInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   users?: Prisma.usersUpdateOneWithoutWarehouse_stock_movementsNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
 }
@@ -832,7 +956,11 @@ export type warehouse_stock_movementsUncheckedUpdateWithoutProductsInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsUncheckedUpdateManyWithoutProductsInput = {
@@ -845,7 +973,11 @@ export type warehouse_stock_movementsUncheckedUpdateManyWithoutProductsInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsCreateManyUsersInput = {
@@ -859,6 +991,10 @@ export type warehouse_stock_movementsCreateManyUsersInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsUpdateWithoutUsersInput = {
@@ -870,6 +1006,10 @@ export type warehouse_stock_movementsUpdateWithoutUsersInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   products?: Prisma.productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
   warehouses?: Prisma.warehousesUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
 }
@@ -885,6 +1025,10 @@ export type warehouse_stock_movementsUncheckedUpdateWithoutUsersInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsUncheckedUpdateManyWithoutUsersInput = {
@@ -898,6 +1042,10 @@ export type warehouse_stock_movementsUncheckedUpdateManyWithoutUsersInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsCreateManyWarehousesInput = {
@@ -910,7 +1058,11 @@ export type warehouse_stock_movementsCreateManyWarehousesInput = {
   reference_id?: string | null
   notes?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
   created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type warehouse_stock_movementsUpdateWithoutWarehousesInput = {
@@ -922,6 +1074,10 @@ export type warehouse_stock_movementsUpdateWithoutWarehousesInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   users?: Prisma.usersUpdateOneWithoutWarehouse_stock_movementsNestedInput
   products?: Prisma.productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
 }
@@ -936,7 +1092,11 @@ export type warehouse_stock_movementsUncheckedUpdateWithoutWarehousesInput = {
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesInput = {
@@ -949,7 +1109,11 @@ export type warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesInput =
   reference_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -965,7 +1129,11 @@ export type warehouse_stock_movementsSelect<ExtArgs extends runtime.Types.Extens
   reference_id?: boolean
   notes?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
   created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   users?: boolean | Prisma.warehouse_stock_movements$usersArgs<ExtArgs>
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
@@ -982,7 +1150,11 @@ export type warehouse_stock_movementsSelectCreateManyAndReturn<ExtArgs extends r
   reference_id?: boolean
   notes?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
   created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   users?: boolean | Prisma.warehouse_stock_movements$usersArgs<ExtArgs>
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
@@ -999,7 +1171,11 @@ export type warehouse_stock_movementsSelectUpdateManyAndReturn<ExtArgs extends r
   reference_id?: boolean
   notes?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
   created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   users?: boolean | Prisma.warehouse_stock_movements$usersArgs<ExtArgs>
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
   warehouses?: boolean | Prisma.warehousesDefaultArgs<ExtArgs>
@@ -1016,10 +1192,14 @@ export type warehouse_stock_movementsSelectScalar = {
   reference_id?: boolean
   notes?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
   created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type warehouse_stock_movementsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "warehouse_id" | "product_id" | "movement_type" | "direction" | "quantity" | "reference_type" | "reference_id" | "notes" | "created_at" | "created_by", ExtArgs["result"]["warehouse_stock_movements"]>
+export type warehouse_stock_movementsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "warehouse_id" | "product_id" | "movement_type" | "direction" | "quantity" | "reference_type" | "reference_id" | "notes" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["warehouse_stock_movements"]>
 export type warehouse_stock_movementsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.warehouse_stock_movements$usersArgs<ExtArgs>
   products?: boolean | Prisma.productsDefaultArgs<ExtArgs>
@@ -1054,7 +1234,11 @@ export type $warehouse_stock_movementsPayload<ExtArgs extends runtime.Types.Exte
     reference_id: string | null
     notes: string | null
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
     created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["warehouse_stock_movements"]>
   composites: {}
 }
@@ -1491,7 +1675,11 @@ export interface warehouse_stock_movementsFieldRefs {
   readonly reference_id: Prisma.FieldRef<"warehouse_stock_movements", 'String'>
   readonly notes: Prisma.FieldRef<"warehouse_stock_movements", 'String'>
   readonly created_at: Prisma.FieldRef<"warehouse_stock_movements", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"warehouse_stock_movements", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"warehouse_stock_movements", 'DateTime'>
   readonly created_by: Prisma.FieldRef<"warehouse_stock_movements", 'String'>
+  readonly updated_by: Prisma.FieldRef<"warehouse_stock_movements", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"warehouse_stock_movements", 'String'>
 }
     
 

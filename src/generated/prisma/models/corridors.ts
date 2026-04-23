@@ -47,6 +47,11 @@ export type CorridorsMinAggregateOutputType = {
   estimated_minutes: number | null
   active: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type CorridorsMaxAggregateOutputType = {
@@ -60,6 +65,11 @@ export type CorridorsMaxAggregateOutputType = {
   estimated_minutes: number | null
   active: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type CorridorsCountAggregateOutputType = {
@@ -73,6 +83,11 @@ export type CorridorsCountAggregateOutputType = {
   estimated_minutes: number
   active: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -98,6 +113,11 @@ export type CorridorsMinAggregateInputType = {
   estimated_minutes?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type CorridorsMaxAggregateInputType = {
@@ -111,6 +131,11 @@ export type CorridorsMaxAggregateInputType = {
   estimated_minutes?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type CorridorsCountAggregateInputType = {
@@ -124,6 +149,11 @@ export type CorridorsCountAggregateInputType = {
   estimated_minutes?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -224,6 +254,11 @@ export type CorridorsGroupByOutputType = {
   estimated_minutes: number | null
   active: boolean
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: CorridorsCountAggregateOutputType | null
   _avg: CorridorsAvgAggregateOutputType | null
   _sum: CorridorsSumAggregateOutputType | null
@@ -260,6 +295,11 @@ export type corridorsWhereInput = {
   estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
   active?: Prisma.BoolFilter<"corridors"> | boolean
   created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"corridors"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
   origin_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   destination_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   corridorStops?: Prisma.Corridor_stopsListRelationFilter
@@ -277,6 +317,11 @@ export type corridorsOrderByWithRelationInput = {
   estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   origin_location?: Prisma.locationsOrderByWithRelationInput
   destination_location?: Prisma.locationsOrderByWithRelationInput
   corridorStops?: Prisma.corridor_stopsOrderByRelationAggregateInput
@@ -297,6 +342,11 @@ export type corridorsWhereUniqueInput = Prisma.AtLeast<{
   estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
   active?: Prisma.BoolFilter<"corridors"> | boolean
   created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"corridors"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
   origin_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   destination_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   corridorStops?: Prisma.Corridor_stopsListRelationFilter
@@ -314,6 +364,11 @@ export type corridorsOrderByWithAggregationInput = {
   estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.corridorsCountOrderByAggregateInput
   _avg?: Prisma.corridorsAvgOrderByAggregateInput
   _max?: Prisma.corridorsMaxOrderByAggregateInput
@@ -335,6 +390,11 @@ export type corridorsScalarWhereWithAggregatesInput = {
   estimated_minutes?: Prisma.IntNullableWithAggregatesFilter<"corridors"> | number | null
   active?: Prisma.BoolWithAggregatesFilter<"corridors"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"corridors"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"corridors"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"corridors"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"corridors"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"corridors"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"corridors"> | string | null
 }
 
 export type corridorsCreateInput = {
@@ -346,6 +406,11 @@ export type corridorsCreateInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
@@ -363,6 +428,11 @@ export type corridorsUncheckedCreateInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutCorridorInput
   dispatchOrders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput
 }
@@ -376,6 +446,11 @@ export type corridorsUpdateInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
@@ -393,6 +468,11 @@ export type corridorsUncheckedUpdateInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
 }
@@ -408,6 +488,11 @@ export type corridorsCreateManyInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type corridorsUpdateManyMutationInput = {
@@ -419,6 +504,11 @@ export type corridorsUpdateManyMutationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type corridorsUncheckedUpdateManyInput = {
@@ -432,6 +522,11 @@ export type corridorsUncheckedUpdateManyInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type CorridorsListRelationFilter = {
@@ -460,6 +555,11 @@ export type corridorsCountOrderByAggregateInput = {
   estimated_minutes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type corridorsAvgOrderByAggregateInput = {
@@ -478,6 +578,11 @@ export type corridorsMaxOrderByAggregateInput = {
   estimated_minutes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type corridorsMinOrderByAggregateInput = {
@@ -491,6 +596,11 @@ export type corridorsMinOrderByAggregateInput = {
   estimated_minutes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type corridorsSumOrderByAggregateInput = {
@@ -626,6 +736,11 @@ export type corridorsCreateWithoutOrigin_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
   dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
@@ -641,6 +756,11 @@ export type corridorsUncheckedCreateWithoutOrigin_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutCorridorInput
   dispatchOrders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput
 }
@@ -664,6 +784,11 @@ export type corridorsCreateWithoutDestination_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
   dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
@@ -679,6 +804,11 @@ export type corridorsUncheckedCreateWithoutDestination_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutCorridorInput
   dispatchOrders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput
 }
@@ -723,6 +853,11 @@ export type corridorsScalarWhereInput = {
   estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
   active?: Prisma.BoolFilter<"corridors"> | boolean
   created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"corridors"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"corridors"> | string | null
 }
 
 export type corridorsUpsertWithWhereUniqueWithoutDestination_locationInput = {
@@ -750,6 +885,11 @@ export type corridorsCreateWithoutDispatchOrdersInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
@@ -766,6 +906,11 @@ export type corridorsUncheckedCreateWithoutDispatchOrdersInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutCorridorInput
 }
 
@@ -794,6 +939,11 @@ export type corridorsUpdateWithoutDispatchOrdersInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
@@ -810,6 +960,11 @@ export type corridorsUncheckedUpdateWithoutDispatchOrdersInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput
 }
 
@@ -822,6 +977,11 @@ export type corridorsCreateWithoutCorridorStopsInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
   dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
@@ -838,6 +998,11 @@ export type corridorsUncheckedCreateWithoutCorridorStopsInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatchOrders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput
 }
 
@@ -866,6 +1031,11 @@ export type corridorsUpdateWithoutCorridorStopsInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
@@ -882,6 +1052,11 @@ export type corridorsUncheckedUpdateWithoutCorridorStopsInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
 }
 
@@ -895,6 +1070,11 @@ export type corridorsCreateManyOrigin_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type corridorsCreateManyDestination_locationInput = {
@@ -907,6 +1087,11 @@ export type corridorsCreateManyDestination_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type corridorsUpdateWithoutOrigin_locationInput = {
@@ -918,6 +1103,11 @@ export type corridorsUpdateWithoutOrigin_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
@@ -933,6 +1123,11 @@ export type corridorsUncheckedUpdateWithoutOrigin_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
 }
@@ -947,6 +1142,11 @@ export type corridorsUncheckedUpdateManyWithoutOrigin_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type corridorsUpdateWithoutDestination_locationInput = {
@@ -958,6 +1158,11 @@ export type corridorsUpdateWithoutDestination_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
@@ -973,6 +1178,11 @@ export type corridorsUncheckedUpdateWithoutDestination_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
 }
@@ -987,6 +1197,11 @@ export type corridorsUncheckedUpdateManyWithoutDestination_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1040,6 +1255,11 @@ export type corridorsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   corridorStops?: boolean | Prisma.corridors$corridorStopsArgs<ExtArgs>
@@ -1058,6 +1278,11 @@ export type corridorsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["corridors"]>
@@ -1073,6 +1298,11 @@ export type corridorsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["corridors"]>
@@ -1088,9 +1318,14 @@ export type corridorsSelectScalar = {
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type corridorsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "origin_location_id" | "destination_location_id" | "is_template" | "total_distance_km" | "estimated_minutes" | "active" | "created_at", ExtArgs["result"]["corridors"]>
+export type corridorsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "origin_location_id" | "destination_location_id" | "is_template" | "total_distance_km" | "estimated_minutes" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["corridors"]>
 export type corridorsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
@@ -1126,6 +1361,11 @@ export type $corridorsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     estimated_minutes: number | null
     active: boolean
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["corridors"]>
   composites: {}
 }
@@ -1563,6 +1803,11 @@ export interface corridorsFieldRefs {
   readonly estimated_minutes: Prisma.FieldRef<"corridors", 'Int'>
   readonly active: Prisma.FieldRef<"corridors", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"corridors", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"corridors", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"corridors", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"corridors", 'String'>
+  readonly updated_by: Prisma.FieldRef<"corridors", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"corridors", 'String'>
 }
     
 
