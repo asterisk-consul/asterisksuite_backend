@@ -1,0 +1,195 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+@docId = REEMPLAZAR_CON_ID_REAL
+@tripId = REEMPLAZAR_CON_ID_REAL
+@partyId = REEMPLAZAR_CON_ID_REAL
+@taxId = REEMPLAZAR_CON_ID_REAL
+@productId = REEMPLAZAR_CON_ID_REAL
+@docTypeId = 84052621-1431-425b-a301-ce6429fafb6a
+
+### =====================================================
+### 🚀 Generar borradores de TODOS los viajes completados
+### Corré esto UNA VEZ para los viajes preexistentes
+### =====================================================
+
+POST {{baseUrl}}/documents/sales/generate-from-all-completed-trips
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Generar borrador de un viaje específico
+### =====================================================
+
+POST {{baseUrl}}/documents/sales/generate-from-trip/{{tripId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar todos los documentos de venta
+### =====================================================
+
+GET {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar solo pendientes (status=1)
+### =====================================================
+
+GET {{baseUrl}}/documents/sales?status=1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar solo borradores (status=0)
+### =====================================================
+
+GET {{baseUrl}}/documents/sales?status=0
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar por tipo de documento
+### =====================================================
+
+GET {{baseUrl}}/documents/sales?documentTypeId={{docTypeId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Obtener documento por ID
+### =====================================================
+
+GET {{baseUrl}}/documents/sales/{{docId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Crear documento manual (factura)
+### =====================================================
+
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "document_type_id": "{{docTypeId}}",
+  "party_id": "{{partyId}}",
+  "date": "2026-04-23",
+  "descrip": "Factura manual",
+  "ref": "REF-001",
+  "subtotal": 1000,
+  "exempt_amount": 0,
+  "total_taxes": 210,
+  "total": 1210,
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 1,
+      "unit_price": 1000,
+      "price": 1000,
+      "taxes": [
+        {
+          "tax_id": "{{taxId}}",
+          "tax_rate": 21,
+          "tax_amount": 210
+        }
+      ]
+    }
+  ],
+  "taxes": [
+    {
+      "tax_id": "{{taxId}}",
+      "tax_rate": 21,
+      "taxable_base": 1000,
+      "tax_amount": 210
+    }
+  ]
+}
+
+###
+
+### =====================================================
+### Actualizar documento (agregar ítem, cambiar totales)
+### =====================================================
+
+PATCH {{baseUrl}}/documents/sales/{{docId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "subtotal": 2000,
+  "exempt_amount": 0,
+  "total_taxes": 420,
+  "total": 2420,
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 2,
+      "unit_price": 1000,
+      "price": 2000,
+      "taxes": [
+        {
+          "tax_id": "{{taxId}}",
+          "tax_rate": 21,
+          "tax_amount": 420
+        }
+      ]
+    }
+  ],
+  "taxes": [
+    {
+      "tax_id": "{{taxId}}",
+      "tax_rate": 21,
+      "taxable_base": 2000,
+      "tax_amount": 420
+    }
+  ]
+}
+
+###
+
+### =====================================================
+### Confirmar documento (status 1 → 2)
+### =====================================================
+
+PATCH {{baseUrl}}/documents/sales/{{docId}}/confirm
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Anular documento
+### =====================================================
+
+PATCH {{baseUrl}}/documents/sales/{{docId}}/cancel
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Eliminar documento (solo borradores status=0)
+### =====================================================
+
+DELETE {{baseUrl}}/documents/sales/{{docId}}
+Authorization: Bearer {{accessToken}}

@@ -108,6 +108,11 @@ export type picking_sources = Prisma.picking_sourcesModel
  */
 export type products = Prisma.productsModel
 /**
+ * Model product_price
+ * 
+ */
+export type product_price = Prisma.product_priceModel
+/**
  * Model trip_cargo
  * 
  */

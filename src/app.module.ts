@@ -11,6 +11,7 @@ import { TaxesModule } from './modules/erp/taxes/taxes.module';
 import { DocumentsModule } from './modules/erp/documents/documents.module';
 import { PurchasesModule } from './modules/erp/purchase/purchases.module';
 import { ReporteChoferesModule } from './modules/logistica/reports/drivers/dispatch_rates.module';
+import { DocumentsSalesModule } from './modules/erp/documents-sales/documents_sales.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ReporteChoferesModule } from './modules/logistica/reports/drivers/dispa
     DocumentsModule,
     PurchasesModule,
     ReporteChoferesModule,
+    DocumentsSalesModule,
   ],
 })
 export class AppModule {}

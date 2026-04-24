@@ -224,9 +224,9 @@ export type trip_stopsWhereInput = {
   stop_order?: Prisma.IntFilter<"trip_stops"> | number
   stop_type?: Prisma.StringNullableFilter<"trip_stops"> | string | null
   created_at?: Prisma.DateTimeFilter<"trip_stops"> | Date | string
-  trip?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>
-  location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   trip_orders?: Prisma.Trip_stop_ordersListRelationFilter
+  location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
+  trip?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>
 }
 
 export type trip_stopsOrderByWithRelationInput = {
@@ -236,9 +236,9 @@ export type trip_stopsOrderByWithRelationInput = {
   stop_order?: Prisma.SortOrder
   stop_type?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  trip?: Prisma.tripsOrderByWithRelationInput
-  location?: Prisma.locationsOrderByWithRelationInput
   trip_orders?: Prisma.trip_stop_ordersOrderByRelationAggregateInput
+  location?: Prisma.locationsOrderByWithRelationInput
+  trip?: Prisma.tripsOrderByWithRelationInput
 }
 
 export type trip_stopsWhereUniqueInput = Prisma.AtLeast<{
@@ -251,9 +251,9 @@ export type trip_stopsWhereUniqueInput = Prisma.AtLeast<{
   stop_order?: Prisma.IntFilter<"trip_stops"> | number
   stop_type?: Prisma.StringNullableFilter<"trip_stops"> | string | null
   created_at?: Prisma.DateTimeFilter<"trip_stops"> | Date | string
-  trip?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>
-  location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   trip_orders?: Prisma.Trip_stop_ordersListRelationFilter
+  location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
+  trip?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>
 }, "id">
 
 export type trip_stopsOrderByWithAggregationInput = {
@@ -287,9 +287,9 @@ export type trip_stopsCreateInput = {
   stop_order: number
   stop_type?: string | null
   created_at?: Date | string
-  trip: Prisma.tripsCreateNestedOneWithoutTrip_stopsInput
-  location: Prisma.locationsCreateNestedOneWithoutTripStopsInput
   trip_orders?: Prisma.trip_stop_ordersCreateNestedManyWithoutTrip_stopInput
+  location: Prisma.locationsCreateNestedOneWithoutTripStopsInput
+  trip: Prisma.tripsCreateNestedOneWithoutTrip_stopsInput
 }
 
 export type trip_stopsUncheckedCreateInput = {
@@ -307,9 +307,9 @@ export type trip_stopsUpdateInput = {
   stop_order?: Prisma.IntFieldUpdateOperationsInput | number
   stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trip?: Prisma.tripsUpdateOneRequiredWithoutTrip_stopsNestedInput
-  location?: Prisma.locationsUpdateOneRequiredWithoutTripStopsNestedInput
   trip_orders?: Prisma.trip_stop_ordersUpdateManyWithoutTrip_stopNestedInput
+  location?: Prisma.locationsUpdateOneRequiredWithoutTripStopsNestedInput
+  trip?: Prisma.tripsUpdateOneRequiredWithoutTrip_stopsNestedInput
 }
 
 export type trip_stopsUncheckedUpdateInput = {
@@ -508,8 +508,8 @@ export type trip_stopsCreateWithoutLocationInput = {
   stop_order: number
   stop_type?: string | null
   created_at?: Date | string
-  trip: Prisma.tripsCreateNestedOneWithoutTrip_stopsInput
   trip_orders?: Prisma.trip_stop_ordersCreateNestedManyWithoutTrip_stopInput
+  trip: Prisma.tripsCreateNestedOneWithoutTrip_stopsInput
 }
 
 export type trip_stopsUncheckedCreateWithoutLocationInput = {
@@ -564,8 +564,8 @@ export type trip_stopsCreateWithoutTripInput = {
   stop_order: number
   stop_type?: string | null
   created_at?: Date | string
-  location: Prisma.locationsCreateNestedOneWithoutTripStopsInput
   trip_orders?: Prisma.trip_stop_ordersCreateNestedManyWithoutTrip_stopInput
+  location: Prisma.locationsCreateNestedOneWithoutTripStopsInput
 }
 
 export type trip_stopsUncheckedCreateWithoutTripInput = {
@@ -608,8 +608,8 @@ export type trip_stopsCreateWithoutTrip_ordersInput = {
   stop_order: number
   stop_type?: string | null
   created_at?: Date | string
-  trip: Prisma.tripsCreateNestedOneWithoutTrip_stopsInput
   location: Prisma.locationsCreateNestedOneWithoutTripStopsInput
+  trip: Prisma.tripsCreateNestedOneWithoutTrip_stopsInput
 }
 
 export type trip_stopsUncheckedCreateWithoutTrip_ordersInput = {
@@ -642,8 +642,8 @@ export type trip_stopsUpdateWithoutTrip_ordersInput = {
   stop_order?: Prisma.IntFieldUpdateOperationsInput | number
   stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trip?: Prisma.tripsUpdateOneRequiredWithoutTrip_stopsNestedInput
   location?: Prisma.locationsUpdateOneRequiredWithoutTripStopsNestedInput
+  trip?: Prisma.tripsUpdateOneRequiredWithoutTrip_stopsNestedInput
 }
 
 export type trip_stopsUncheckedUpdateWithoutTrip_ordersInput = {
@@ -668,8 +668,8 @@ export type trip_stopsUpdateWithoutLocationInput = {
   stop_order?: Prisma.IntFieldUpdateOperationsInput | number
   stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trip?: Prisma.tripsUpdateOneRequiredWithoutTrip_stopsNestedInput
   trip_orders?: Prisma.trip_stop_ordersUpdateManyWithoutTrip_stopNestedInput
+  trip?: Prisma.tripsUpdateOneRequiredWithoutTrip_stopsNestedInput
 }
 
 export type trip_stopsUncheckedUpdateWithoutLocationInput = {
@@ -702,8 +702,8 @@ export type trip_stopsUpdateWithoutTripInput = {
   stop_order?: Prisma.IntFieldUpdateOperationsInput | number
   stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  location?: Prisma.locationsUpdateOneRequiredWithoutTripStopsNestedInput
   trip_orders?: Prisma.trip_stop_ordersUpdateManyWithoutTrip_stopNestedInput
+  location?: Prisma.locationsUpdateOneRequiredWithoutTripStopsNestedInput
 }
 
 export type trip_stopsUncheckedUpdateWithoutTripInput = {
@@ -761,9 +761,9 @@ export type trip_stopsSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   stop_order?: boolean
   stop_type?: boolean
   created_at?: boolean
-  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   trip_orders?: boolean | Prisma.trip_stops$trip_ordersArgs<ExtArgs>
+  location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.Trip_stopsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_stops"]>
 
@@ -774,8 +774,8 @@ export type trip_stopsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   stop_order?: boolean
   stop_type?: boolean
   created_at?: boolean
-  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
   location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_stops"]>
 
 export type trip_stopsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -785,8 +785,8 @@ export type trip_stopsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   stop_order?: boolean
   stop_type?: boolean
   created_at?: boolean
-  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
   location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_stops"]>
 
 export type trip_stopsSelectScalar = {
@@ -800,26 +800,26 @@ export type trip_stopsSelectScalar = {
 
 export type trip_stopsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trip_id" | "location_id" | "stop_order" | "stop_type" | "created_at", ExtArgs["result"]["trip_stops"]>
 export type trip_stopsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   trip_orders?: boolean | Prisma.trip_stops$trip_ordersArgs<ExtArgs>
+  location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.Trip_stopsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type trip_stopsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
   location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }
 export type trip_stopsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
   location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  trip?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }
 
 export type $trip_stopsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "trip_stops"
   objects: {
-    trip: Prisma.$tripsPayload<ExtArgs>
-    location: Prisma.$locationsPayload<ExtArgs>
     trip_orders: Prisma.$trip_stop_ordersPayload<ExtArgs>[]
+    location: Prisma.$locationsPayload<ExtArgs>
+    trip: Prisma.$tripsPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1222,9 +1222,9 @@ readonly fields: trip_stopsFieldRefs;
  */
 export interface Prisma__trip_stopsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  trip<T extends Prisma.tripsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tripsDefaultArgs<ExtArgs>>): Prisma.Prisma__tripsClient<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  location<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   trip_orders<T extends Prisma.trip_stops$trip_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trip_stops$trip_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_stop_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  location<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  trip<T extends Prisma.tripsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tripsDefaultArgs<ExtArgs>>): Prisma.Prisma__tripsClient<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

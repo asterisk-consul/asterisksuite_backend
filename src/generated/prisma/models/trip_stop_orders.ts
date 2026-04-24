@@ -182,8 +182,8 @@ export type trip_stop_ordersWhereInput = {
   dispatch_order_id?: Prisma.UuidFilter<"trip_stop_orders"> | string
   action?: Prisma.StringFilter<"trip_stop_orders"> | string
   created_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
-  trip_stop?: Prisma.XOR<Prisma.Trip_stopsScalarRelationFilter, Prisma.trip_stopsWhereInput>
   dispatch_order?: Prisma.XOR<Prisma.Dispatch_ordersScalarRelationFilter, Prisma.dispatch_ordersWhereInput>
+  trip_stop?: Prisma.XOR<Prisma.Trip_stopsScalarRelationFilter, Prisma.trip_stopsWhereInput>
 }
 
 export type trip_stop_ordersOrderByWithRelationInput = {
@@ -192,8 +192,8 @@ export type trip_stop_ordersOrderByWithRelationInput = {
   dispatch_order_id?: Prisma.SortOrder
   action?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  trip_stop?: Prisma.trip_stopsOrderByWithRelationInput
   dispatch_order?: Prisma.dispatch_ordersOrderByWithRelationInput
+  trip_stop?: Prisma.trip_stopsOrderByWithRelationInput
 }
 
 export type trip_stop_ordersWhereUniqueInput = Prisma.AtLeast<{
@@ -205,8 +205,8 @@ export type trip_stop_ordersWhereUniqueInput = Prisma.AtLeast<{
   dispatch_order_id?: Prisma.UuidFilter<"trip_stop_orders"> | string
   action?: Prisma.StringFilter<"trip_stop_orders"> | string
   created_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
-  trip_stop?: Prisma.XOR<Prisma.Trip_stopsScalarRelationFilter, Prisma.trip_stopsWhereInput>
   dispatch_order?: Prisma.XOR<Prisma.Dispatch_ordersScalarRelationFilter, Prisma.dispatch_ordersWhereInput>
+  trip_stop?: Prisma.XOR<Prisma.Trip_stopsScalarRelationFilter, Prisma.trip_stopsWhereInput>
 }, "id">
 
 export type trip_stop_ordersOrderByWithAggregationInput = {
@@ -235,8 +235,8 @@ export type trip_stop_ordersCreateInput = {
   id?: string
   action: string
   created_at?: Date | string
-  trip_stop: Prisma.trip_stopsCreateNestedOneWithoutTrip_ordersInput
   dispatch_order: Prisma.dispatch_ordersCreateNestedOneWithoutTripStopOrdersInput
+  trip_stop: Prisma.trip_stopsCreateNestedOneWithoutTrip_ordersInput
 }
 
 export type trip_stop_ordersUncheckedCreateInput = {
@@ -251,8 +251,8 @@ export type trip_stop_ordersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trip_stop?: Prisma.trip_stopsUpdateOneRequiredWithoutTrip_ordersNestedInput
   dispatch_order?: Prisma.dispatch_ordersUpdateOneRequiredWithoutTripStopOrdersNestedInput
+  trip_stop?: Prisma.trip_stopsUpdateOneRequiredWithoutTrip_ordersNestedInput
 }
 
 export type trip_stop_ordersUncheckedUpdateInput = {
@@ -558,8 +558,8 @@ export type trip_stop_ordersSelect<ExtArgs extends runtime.Types.Extensions.Inte
   dispatch_order_id?: boolean
   action?: boolean
   created_at?: boolean
-  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
   dispatch_order?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
+  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_stop_orders"]>
 
 export type trip_stop_ordersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -568,8 +568,8 @@ export type trip_stop_ordersSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   dispatch_order_id?: boolean
   action?: boolean
   created_at?: boolean
-  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
   dispatch_order?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
+  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_stop_orders"]>
 
 export type trip_stop_ordersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -578,8 +578,8 @@ export type trip_stop_ordersSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   dispatch_order_id?: boolean
   action?: boolean
   created_at?: boolean
-  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
   dispatch_order?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
+  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_stop_orders"]>
 
 export type trip_stop_ordersSelectScalar = {
@@ -592,23 +592,23 @@ export type trip_stop_ordersSelectScalar = {
 
 export type trip_stop_ordersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trip_stop_id" | "dispatch_order_id" | "action" | "created_at", ExtArgs["result"]["trip_stop_orders"]>
 export type trip_stop_ordersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
   dispatch_order?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
+  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
 }
 export type trip_stop_ordersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
   dispatch_order?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
+  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
 }
 export type trip_stop_ordersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
   dispatch_order?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
+  trip_stop?: boolean | Prisma.trip_stopsDefaultArgs<ExtArgs>
 }
 
 export type $trip_stop_ordersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "trip_stop_orders"
   objects: {
-    trip_stop: Prisma.$trip_stopsPayload<ExtArgs>
     dispatch_order: Prisma.$dispatch_ordersPayload<ExtArgs>
+    trip_stop: Prisma.$trip_stopsPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1010,8 +1010,8 @@ readonly fields: trip_stop_ordersFieldRefs;
  */
 export interface Prisma__trip_stop_ordersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  trip_stop<T extends Prisma.trip_stopsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trip_stopsDefaultArgs<ExtArgs>>): Prisma.Prisma__trip_stopsClient<runtime.Types.Result.GetResult<Prisma.$trip_stopsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   dispatch_order<T extends Prisma.dispatch_ordersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.dispatch_ordersDefaultArgs<ExtArgs>>): Prisma.Prisma__dispatch_ordersClient<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  trip_stop<T extends Prisma.trip_stopsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trip_stopsDefaultArgs<ExtArgs>>): Prisma.Prisma__trip_stopsClient<runtime.Types.Result.GetResult<Prisma.$trip_stopsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

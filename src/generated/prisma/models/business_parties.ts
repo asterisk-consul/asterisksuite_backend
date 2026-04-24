@@ -193,8 +193,8 @@ export type business_partiesWhereInput = {
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   documents?: Prisma.DocumentsListRelationFilter
-  party_locations?: Prisma.Party_locationsListRelationFilter
   party_contacts?: Prisma.Party_contactsListRelationFilter
+  party_locations?: Prisma.Party_locationsListRelationFilter
 }
 
 export type business_partiesOrderByWithRelationInput = {
@@ -207,8 +207,8 @@ export type business_partiesOrderByWithRelationInput = {
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
   dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
   documents?: Prisma.documentsOrderByRelationAggregateInput
-  party_locations?: Prisma.party_locationsOrderByRelationAggregateInput
   party_contacts?: Prisma.party_contactsOrderByRelationAggregateInput
+  party_locations?: Prisma.party_locationsOrderByRelationAggregateInput
 }
 
 export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
@@ -224,8 +224,8 @@ export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   documents?: Prisma.DocumentsListRelationFilter
-  party_locations?: Prisma.Party_locationsListRelationFilter
   party_contacts?: Prisma.Party_contactsListRelationFilter
+  party_locations?: Prisma.Party_locationsListRelationFilter
 }, "id">
 
 export type business_partiesOrderByWithAggregationInput = {
@@ -262,8 +262,8 @@ export type business_partiesCreateInput = {
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesUncheckedCreateInput = {
@@ -276,8 +276,8 @@ export type business_partiesUncheckedCreateInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesUpdateInput = {
@@ -290,8 +290,8 @@ export type business_partiesUpdateInput = {
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesUncheckedUpdateInput = {
@@ -304,8 +304,8 @@ export type business_partiesUncheckedUpdateInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesCreateManyInput = {
@@ -475,8 +475,8 @@ export type business_partiesCreateWithoutDelivery_notesInput = {
   created_at?: Date | string
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
@@ -488,8 +488,8 @@ export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
   created_at?: Date | string
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesCreateOrConnectWithoutDelivery_notesInput = {
@@ -517,8 +517,8 @@ export type business_partiesUpdateWithoutDelivery_notesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
@@ -530,8 +530,8 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesCreateWithoutParty_locationsInput = {
@@ -679,8 +679,8 @@ export type business_partiesCreateWithoutDispatch_ordersInput = {
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
@@ -692,8 +692,8 @@ export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesCreateOrConnectWithoutDispatch_ordersInput = {
@@ -721,8 +721,8 @@ export type business_partiesUpdateWithoutDispatch_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
@@ -734,8 +734,8 @@ export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesCreateWithoutDocumentsInput = {
@@ -747,8 +747,8 @@ export type business_partiesCreateWithoutDocumentsInput = {
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesUncheckedCreateWithoutDocumentsInput = {
@@ -760,8 +760,8 @@ export type business_partiesUncheckedCreateWithoutDocumentsInput = {
   created_at?: Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
 }
 
 export type business_partiesCreateOrConnectWithoutDocumentsInput = {
@@ -789,8 +789,8 @@ export type business_partiesUpdateWithoutDocumentsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
@@ -802,8 +802,8 @@ export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 
@@ -815,16 +815,16 @@ export type Business_partiesCountOutputType = {
   delivery_notes: number
   dispatch_orders: number
   documents: number
-  party_locations: number
   party_contacts: number
+  party_locations: number
 }
 
 export type Business_partiesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   delivery_notes?: boolean | Business_partiesCountOutputTypeCountDelivery_notesArgs
   dispatch_orders?: boolean | Business_partiesCountOutputTypeCountDispatch_ordersArgs
   documents?: boolean | Business_partiesCountOutputTypeCountDocumentsArgs
-  party_locations?: boolean | Business_partiesCountOutputTypeCountParty_locationsArgs
   party_contacts?: boolean | Business_partiesCountOutputTypeCountParty_contactsArgs
+  party_locations?: boolean | Business_partiesCountOutputTypeCountParty_locationsArgs
 }
 
 /**
@@ -861,15 +861,15 @@ export type Business_partiesCountOutputTypeCountDocumentsArgs<ExtArgs extends ru
 /**
  * Business_partiesCountOutputType without action
  */
-export type Business_partiesCountOutputTypeCountParty_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.party_locationsWhereInput
+export type Business_partiesCountOutputTypeCountParty_contactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.party_contactsWhereInput
 }
 
 /**
  * Business_partiesCountOutputType without action
  */
-export type Business_partiesCountOutputTypeCountParty_contactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.party_contactsWhereInput
+export type Business_partiesCountOutputTypeCountParty_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.party_locationsWhereInput
 }
 
 
@@ -883,8 +883,8 @@ export type business_partiesSelect<ExtArgs extends runtime.Types.Extensions.Inte
   delivery_notes?: boolean | Prisma.business_parties$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.business_parties$dispatch_ordersArgs<ExtArgs>
   documents?: boolean | Prisma.business_parties$documentsArgs<ExtArgs>
-  party_locations?: boolean | Prisma.business_parties$party_locationsArgs<ExtArgs>
   party_contacts?: boolean | Prisma.business_parties$party_contactsArgs<ExtArgs>
+  party_locations?: boolean | Prisma.business_parties$party_locationsArgs<ExtArgs>
   _count?: boolean | Prisma.Business_partiesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business_parties"]>
 
@@ -920,8 +920,8 @@ export type business_partiesInclude<ExtArgs extends runtime.Types.Extensions.Int
   delivery_notes?: boolean | Prisma.business_parties$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.business_parties$dispatch_ordersArgs<ExtArgs>
   documents?: boolean | Prisma.business_parties$documentsArgs<ExtArgs>
-  party_locations?: boolean | Prisma.business_parties$party_locationsArgs<ExtArgs>
   party_contacts?: boolean | Prisma.business_parties$party_contactsArgs<ExtArgs>
+  party_locations?: boolean | Prisma.business_parties$party_locationsArgs<ExtArgs>
   _count?: boolean | Prisma.Business_partiesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type business_partiesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -933,8 +933,8 @@ export type $business_partiesPayload<ExtArgs extends runtime.Types.Extensions.In
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs>[]
     dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
     documents: Prisma.$documentsPayload<ExtArgs>[]
-    party_locations: Prisma.$party_locationsPayload<ExtArgs>[]
     party_contacts: Prisma.$party_contactsPayload<ExtArgs>[]
+    party_locations: Prisma.$party_locationsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1340,8 +1340,8 @@ export interface Prisma__business_partiesClient<T, Null = never, ExtArgs extends
   delivery_notes<T extends Prisma.business_parties$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$delivery_notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dispatch_orders<T extends Prisma.business_parties$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.business_parties$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  party_locations<T extends Prisma.business_parties$party_locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$party_locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_locationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   party_contacts<T extends Prisma.business_parties$party_contactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$party_contactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_contactsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  party_locations<T extends Prisma.business_parties$party_locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$party_locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_locationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1842,30 +1842,6 @@ export type business_parties$documentsArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * business_parties.party_locations
- */
-export type business_parties$party_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the party_locations
-   */
-  select?: Prisma.party_locationsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the party_locations
-   */
-  omit?: Prisma.party_locationsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.party_locationsInclude<ExtArgs> | null
-  where?: Prisma.party_locationsWhereInput
-  orderBy?: Prisma.party_locationsOrderByWithRelationInput | Prisma.party_locationsOrderByWithRelationInput[]
-  cursor?: Prisma.party_locationsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Party_locationsScalarFieldEnum | Prisma.Party_locationsScalarFieldEnum[]
-}
-
-/**
  * business_parties.party_contacts
  */
 export type business_parties$party_contactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1887,6 +1863,30 @@ export type business_parties$party_contactsArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.Party_contactsScalarFieldEnum | Prisma.Party_contactsScalarFieldEnum[]
+}
+
+/**
+ * business_parties.party_locations
+ */
+export type business_parties$party_locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the party_locations
+   */
+  select?: Prisma.party_locationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the party_locations
+   */
+  omit?: Prisma.party_locationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.party_locationsInclude<ExtArgs> | null
+  where?: Prisma.party_locationsWhereInput
+  orderBy?: Prisma.party_locationsOrderByWithRelationInput | Prisma.party_locationsOrderByWithRelationInput[]
+  cursor?: Prisma.party_locationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Party_locationsScalarFieldEnum | Prisma.Party_locationsScalarFieldEnum[]
 }
 
 /**

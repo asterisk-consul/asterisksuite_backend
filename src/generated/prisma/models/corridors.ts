@@ -260,9 +260,9 @@ export type corridorsWhereInput = {
   estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
   active?: Prisma.BoolFilter<"corridors"> | boolean
   created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
-  origin_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
-  destination_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   corridorStops?: Prisma.Corridor_stopsListRelationFilter
+  destination_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
+  origin_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   dispatchOrders?: Prisma.Dispatch_ordersListRelationFilter
 }
 
@@ -277,9 +277,9 @@ export type corridorsOrderByWithRelationInput = {
   estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  origin_location?: Prisma.locationsOrderByWithRelationInput
-  destination_location?: Prisma.locationsOrderByWithRelationInput
   corridorStops?: Prisma.corridor_stopsOrderByRelationAggregateInput
+  destination_location?: Prisma.locationsOrderByWithRelationInput
+  origin_location?: Prisma.locationsOrderByWithRelationInput
   dispatchOrders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
 }
 
@@ -297,9 +297,9 @@ export type corridorsWhereUniqueInput = Prisma.AtLeast<{
   estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
   active?: Prisma.BoolFilter<"corridors"> | boolean
   created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
-  origin_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
-  destination_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   corridorStops?: Prisma.Corridor_stopsListRelationFilter
+  destination_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
+  origin_location?: Prisma.XOR<Prisma.LocationsScalarRelationFilter, Prisma.locationsWhereInput>
   dispatchOrders?: Prisma.Dispatch_ordersListRelationFilter
 }, "id">
 
@@ -346,9 +346,9 @@ export type corridorsCreateInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
-  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
-  destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
+  destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
+  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
 }
 
@@ -376,9 +376,9 @@ export type corridorsUpdateInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
-  destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
+  destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
+  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
 }
 
@@ -503,13 +503,6 @@ export type CorridorsScalarRelationFilter = {
   isNot?: Prisma.corridorsWhereInput
 }
 
-export type corridorsCreateNestedManyWithoutOrigin_locationInput = {
-  create?: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput> | Prisma.corridorsCreateWithoutOrigin_locationInput[] | Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput[]
-  connectOrCreate?: Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput | Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput[]
-  createMany?: Prisma.corridorsCreateManyOrigin_locationInputEnvelope
-  connect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
-}
-
 export type corridorsCreateNestedManyWithoutDestination_locationInput = {
   create?: Prisma.XOR<Prisma.corridorsCreateWithoutDestination_locationInput, Prisma.corridorsUncheckedCreateWithoutDestination_locationInput> | Prisma.corridorsCreateWithoutDestination_locationInput[] | Prisma.corridorsUncheckedCreateWithoutDestination_locationInput[]
   connectOrCreate?: Prisma.corridorsCreateOrConnectWithoutDestination_locationInput | Prisma.corridorsCreateOrConnectWithoutDestination_locationInput[]
@@ -517,7 +510,7 @@ export type corridorsCreateNestedManyWithoutDestination_locationInput = {
   connect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
 }
 
-export type corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput = {
+export type corridorsCreateNestedManyWithoutOrigin_locationInput = {
   create?: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput> | Prisma.corridorsCreateWithoutOrigin_locationInput[] | Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput[]
   connectOrCreate?: Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput | Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput[]
   createMany?: Prisma.corridorsCreateManyOrigin_locationInputEnvelope
@@ -531,18 +524,11 @@ export type corridorsUncheckedCreateNestedManyWithoutDestination_locationInput =
   connect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
 }
 
-export type corridorsUpdateManyWithoutOrigin_locationNestedInput = {
+export type corridorsUncheckedCreateNestedManyWithoutOrigin_locationInput = {
   create?: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput> | Prisma.corridorsCreateWithoutOrigin_locationInput[] | Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput[]
   connectOrCreate?: Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput | Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput[]
-  upsert?: Prisma.corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput | Prisma.corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput[]
   createMany?: Prisma.corridorsCreateManyOrigin_locationInputEnvelope
-  set?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
-  disconnect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
-  delete?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
   connect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
-  update?: Prisma.corridorsUpdateWithWhereUniqueWithoutOrigin_locationInput | Prisma.corridorsUpdateWithWhereUniqueWithoutOrigin_locationInput[]
-  updateMany?: Prisma.corridorsUpdateManyWithWhereWithoutOrigin_locationInput | Prisma.corridorsUpdateManyWithWhereWithoutOrigin_locationInput[]
-  deleteMany?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
 }
 
 export type corridorsUpdateManyWithoutDestination_locationNestedInput = {
@@ -559,7 +545,7 @@ export type corridorsUpdateManyWithoutDestination_locationNestedInput = {
   deleteMany?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
 }
 
-export type corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput = {
+export type corridorsUpdateManyWithoutOrigin_locationNestedInput = {
   create?: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput> | Prisma.corridorsCreateWithoutOrigin_locationInput[] | Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput[]
   connectOrCreate?: Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput | Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput[]
   upsert?: Prisma.corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput | Prisma.corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput[]
@@ -584,6 +570,20 @@ export type corridorsUncheckedUpdateManyWithoutDestination_locationNestedInput =
   connect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
   update?: Prisma.corridorsUpdateWithWhereUniqueWithoutDestination_locationInput | Prisma.corridorsUpdateWithWhereUniqueWithoutDestination_locationInput[]
   updateMany?: Prisma.corridorsUpdateManyWithWhereWithoutDestination_locationInput | Prisma.corridorsUpdateManyWithWhereWithoutDestination_locationInput[]
+  deleteMany?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
+}
+
+export type corridorsUncheckedUpdateManyWithoutOrigin_locationNestedInput = {
+  create?: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput> | Prisma.corridorsCreateWithoutOrigin_locationInput[] | Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput[]
+  connectOrCreate?: Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput | Prisma.corridorsCreateOrConnectWithoutOrigin_locationInput[]
+  upsert?: Prisma.corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput | Prisma.corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput[]
+  createMany?: Prisma.corridorsCreateManyOrigin_locationInputEnvelope
+  set?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
+  disconnect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
+  delete?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
+  connect?: Prisma.corridorsWhereUniqueInput | Prisma.corridorsWhereUniqueInput[]
+  update?: Prisma.corridorsUpdateWithWhereUniqueWithoutOrigin_locationInput | Prisma.corridorsUpdateWithWhereUniqueWithoutOrigin_locationInput[]
+  updateMany?: Prisma.corridorsUpdateManyWithWhereWithoutOrigin_locationInput | Prisma.corridorsUpdateManyWithWhereWithoutOrigin_locationInput[]
   deleteMany?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
 }
 
@@ -617,44 +617,6 @@ export type corridorsUpdateOneRequiredWithoutCorridorStopsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.corridorsUpdateToOneWithWhereWithoutCorridorStopsInput, Prisma.corridorsUpdateWithoutCorridorStopsInput>, Prisma.corridorsUncheckedUpdateWithoutCorridorStopsInput>
 }
 
-export type corridorsCreateWithoutOrigin_locationInput = {
-  id?: string
-  name?: string | null
-  description?: string | null
-  is_template?: boolean
-  total_distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: number | null
-  active?: boolean
-  created_at?: Date | string
-  destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
-  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
-  dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
-}
-
-export type corridorsUncheckedCreateWithoutOrigin_locationInput = {
-  id?: string
-  name?: string | null
-  description?: string | null
-  destination_location_id: string
-  is_template?: boolean
-  total_distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: number | null
-  active?: boolean
-  created_at?: Date | string
-  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutCorridorInput
-  dispatchOrders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput
-}
-
-export type corridorsCreateOrConnectWithoutOrigin_locationInput = {
-  where: Prisma.corridorsWhereUniqueInput
-  create: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput>
-}
-
-export type corridorsCreateManyOrigin_locationInputEnvelope = {
-  data: Prisma.corridorsCreateManyOrigin_locationInput | Prisma.corridorsCreateManyOrigin_locationInput[]
-  skipDuplicates?: boolean
-}
-
 export type corridorsCreateWithoutDestination_locationInput = {
   id?: string
   name?: string | null
@@ -664,8 +626,8 @@ export type corridorsCreateWithoutDestination_locationInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
-  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
+  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
 }
 
@@ -693,36 +655,42 @@ export type corridorsCreateManyDestination_locationInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput = {
+export type corridorsCreateWithoutOrigin_locationInput = {
+  id?: string
+  name?: string | null
+  description?: string | null
+  is_template?: boolean
+  total_distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: number | null
+  active?: boolean
+  created_at?: Date | string
+  corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
+  destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
+  dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
+}
+
+export type corridorsUncheckedCreateWithoutOrigin_locationInput = {
+  id?: string
+  name?: string | null
+  description?: string | null
+  destination_location_id: string
+  is_template?: boolean
+  total_distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: number | null
+  active?: boolean
+  created_at?: Date | string
+  corridorStops?: Prisma.corridor_stopsUncheckedCreateNestedManyWithoutCorridorInput
+  dispatchOrders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput
+}
+
+export type corridorsCreateOrConnectWithoutOrigin_locationInput = {
   where: Prisma.corridorsWhereUniqueInput
-  update: Prisma.XOR<Prisma.corridorsUpdateWithoutOrigin_locationInput, Prisma.corridorsUncheckedUpdateWithoutOrigin_locationInput>
   create: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput>
 }
 
-export type corridorsUpdateWithWhereUniqueWithoutOrigin_locationInput = {
-  where: Prisma.corridorsWhereUniqueInput
-  data: Prisma.XOR<Prisma.corridorsUpdateWithoutOrigin_locationInput, Prisma.corridorsUncheckedUpdateWithoutOrigin_locationInput>
-}
-
-export type corridorsUpdateManyWithWhereWithoutOrigin_locationInput = {
-  where: Prisma.corridorsScalarWhereInput
-  data: Prisma.XOR<Prisma.corridorsUpdateManyMutationInput, Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationInput>
-}
-
-export type corridorsScalarWhereInput = {
-  AND?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
-  OR?: Prisma.corridorsScalarWhereInput[]
-  NOT?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"corridors"> | string
-  name?: Prisma.StringNullableFilter<"corridors"> | string | null
-  description?: Prisma.StringNullableFilter<"corridors"> | string | null
-  origin_location_id?: Prisma.UuidFilter<"corridors"> | string
-  destination_location_id?: Prisma.UuidFilter<"corridors"> | string
-  is_template?: Prisma.BoolFilter<"corridors"> | boolean
-  total_distance_km?: Prisma.DecimalNullableFilter<"corridors"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
-  active?: Prisma.BoolFilter<"corridors"> | boolean
-  created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+export type corridorsCreateManyOrigin_locationInputEnvelope = {
+  data: Prisma.corridorsCreateManyOrigin_locationInput | Prisma.corridorsCreateManyOrigin_locationInput[]
+  skipDuplicates?: boolean
 }
 
 export type corridorsUpsertWithWhereUniqueWithoutDestination_locationInput = {
@@ -741,6 +709,38 @@ export type corridorsUpdateManyWithWhereWithoutDestination_locationInput = {
   data: Prisma.XOR<Prisma.corridorsUpdateManyMutationInput, Prisma.corridorsUncheckedUpdateManyWithoutDestination_locationInput>
 }
 
+export type corridorsScalarWhereInput = {
+  AND?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
+  OR?: Prisma.corridorsScalarWhereInput[]
+  NOT?: Prisma.corridorsScalarWhereInput | Prisma.corridorsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"corridors"> | string
+  name?: Prisma.StringNullableFilter<"corridors"> | string | null
+  description?: Prisma.StringNullableFilter<"corridors"> | string | null
+  origin_location_id?: Prisma.UuidFilter<"corridors"> | string
+  destination_location_id?: Prisma.UuidFilter<"corridors"> | string
+  is_template?: Prisma.BoolFilter<"corridors"> | boolean
+  total_distance_km?: Prisma.DecimalNullableFilter<"corridors"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.IntNullableFilter<"corridors"> | number | null
+  active?: Prisma.BoolFilter<"corridors"> | boolean
+  created_at?: Prisma.DateTimeFilter<"corridors"> | Date | string
+}
+
+export type corridorsUpsertWithWhereUniqueWithoutOrigin_locationInput = {
+  where: Prisma.corridorsWhereUniqueInput
+  update: Prisma.XOR<Prisma.corridorsUpdateWithoutOrigin_locationInput, Prisma.corridorsUncheckedUpdateWithoutOrigin_locationInput>
+  create: Prisma.XOR<Prisma.corridorsCreateWithoutOrigin_locationInput, Prisma.corridorsUncheckedCreateWithoutOrigin_locationInput>
+}
+
+export type corridorsUpdateWithWhereUniqueWithoutOrigin_locationInput = {
+  where: Prisma.corridorsWhereUniqueInput
+  data: Prisma.XOR<Prisma.corridorsUpdateWithoutOrigin_locationInput, Prisma.corridorsUncheckedUpdateWithoutOrigin_locationInput>
+}
+
+export type corridorsUpdateManyWithWhereWithoutOrigin_locationInput = {
+  where: Prisma.corridorsScalarWhereInput
+  data: Prisma.XOR<Prisma.corridorsUpdateManyMutationInput, Prisma.corridorsUncheckedUpdateManyWithoutOrigin_locationInput>
+}
+
 export type corridorsCreateWithoutDispatchOrdersInput = {
   id?: string
   name?: string | null
@@ -750,9 +750,9 @@ export type corridorsCreateWithoutDispatchOrdersInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
-  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
-  destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
   corridorStops?: Prisma.corridor_stopsCreateNestedManyWithoutCorridorInput
+  destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
+  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
 }
 
 export type corridorsUncheckedCreateWithoutDispatchOrdersInput = {
@@ -794,9 +794,9 @@ export type corridorsUpdateWithoutDispatchOrdersInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
-  destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
+  destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
+  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
 }
 
 export type corridorsUncheckedUpdateWithoutDispatchOrdersInput = {
@@ -822,8 +822,8 @@ export type corridorsCreateWithoutCorridorStopsInput = {
   estimated_minutes?: number | null
   active?: boolean
   created_at?: Date | string
-  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   destination_location: Prisma.locationsCreateNestedOneWithoutCorridor_destinationInput
+  origin_location: Prisma.locationsCreateNestedOneWithoutCorridor_originInput
   dispatchOrders?: Prisma.dispatch_ordersCreateNestedManyWithoutCorridorsInput
 }
 
@@ -866,8 +866,8 @@ export type corridorsUpdateWithoutCorridorStopsInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
+  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
 }
 
@@ -885,18 +885,6 @@ export type corridorsUncheckedUpdateWithoutCorridorStopsInput = {
   dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
 }
 
-export type corridorsCreateManyOrigin_locationInput = {
-  id?: string
-  name?: string | null
-  description?: string | null
-  destination_location_id: string
-  is_template?: boolean
-  total_distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: number | null
-  active?: boolean
-  created_at?: Date | string
-}
-
 export type corridorsCreateManyDestination_locationInput = {
   id?: string
   name?: string | null
@@ -909,44 +897,16 @@ export type corridorsCreateManyDestination_locationInput = {
   created_at?: Date | string
 }
 
-export type corridorsUpdateWithoutOrigin_locationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
-  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
-  dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
-}
-
-export type corridorsUncheckedUpdateWithoutOrigin_locationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput
-  dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
-}
-
-export type corridorsUncheckedUpdateManyWithoutOrigin_locationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type corridorsCreateManyOrigin_locationInput = {
+  id?: string
+  name?: string | null
+  description?: string | null
+  destination_location_id: string
+  is_template?: boolean
+  total_distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: number | null
+  active?: boolean
+  created_at?: Date | string
 }
 
 export type corridorsUpdateWithoutDestination_locationInput = {
@@ -958,8 +918,8 @@ export type corridorsUpdateWithoutDestination_locationInput = {
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
+  origin_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_originNestedInput
   dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
 }
 
@@ -982,6 +942,46 @@ export type corridorsUncheckedUpdateManyWithoutDestination_locationInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location_id?: Prisma.StringFieldUpdateOperationsInput | string
+  is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type corridorsUpdateWithoutOrigin_locationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  corridorStops?: Prisma.corridor_stopsUpdateManyWithoutCorridorNestedInput
+  destination_location?: Prisma.locationsUpdateOneRequiredWithoutCorridor_destinationNestedInput
+  dispatchOrders?: Prisma.dispatch_ordersUpdateManyWithoutCorridorsNestedInput
+}
+
+export type corridorsUncheckedUpdateWithoutOrigin_locationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_location_id?: Prisma.StringFieldUpdateOperationsInput | string
+  is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  corridorStops?: Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput
+  dispatchOrders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput
+}
+
+export type corridorsUncheckedUpdateManyWithoutOrigin_locationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_location_id?: Prisma.StringFieldUpdateOperationsInput | string
   is_template?: Prisma.BoolFieldUpdateOperationsInput | boolean
   total_distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1040,9 +1040,9 @@ export type corridorsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
-  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
-  destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   corridorStops?: boolean | Prisma.corridors$corridorStopsArgs<ExtArgs>
+  destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   dispatchOrders?: boolean | Prisma.corridors$dispatchOrdersArgs<ExtArgs>
   _count?: boolean | Prisma.CorridorsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["corridors"]>
@@ -1058,8 +1058,8 @@ export type corridorsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
-  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["corridors"]>
 
 export type corridorsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1073,8 +1073,8 @@ export type corridorsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   estimated_minutes?: boolean
   active?: boolean
   created_at?: boolean
-  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["corridors"]>
 
 export type corridorsSelectScalar = {
@@ -1092,27 +1092,27 @@ export type corridorsSelectScalar = {
 
 export type corridorsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "origin_location_id" | "destination_location_id" | "is_template" | "total_distance_km" | "estimated_minutes" | "active" | "created_at", ExtArgs["result"]["corridors"]>
 export type corridorsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
-  destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   corridorStops?: boolean | Prisma.corridors$corridorStopsArgs<ExtArgs>
+  destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   dispatchOrders?: boolean | Prisma.corridors$dispatchOrdersArgs<ExtArgs>
   _count?: boolean | Prisma.CorridorsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type corridorsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
 }
 export type corridorsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
   destination_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
+  origin_location?: boolean | Prisma.locationsDefaultArgs<ExtArgs>
 }
 
 export type $corridorsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "corridors"
   objects: {
-    origin_location: Prisma.$locationsPayload<ExtArgs>
-    destination_location: Prisma.$locationsPayload<ExtArgs>
     corridorStops: Prisma.$corridor_stopsPayload<ExtArgs>[]
+    destination_location: Prisma.$locationsPayload<ExtArgs>
+    origin_location: Prisma.$locationsPayload<ExtArgs>
     dispatchOrders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1520,9 +1520,9 @@ readonly fields: corridorsFieldRefs;
  */
 export interface Prisma__corridorsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  origin_location<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  destination_location<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   corridorStops<T extends Prisma.corridors$corridorStopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.corridors$corridorStopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$corridor_stopsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  destination_location<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  origin_location<T extends Prisma.locationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.locationsDefaultArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   dispatchOrders<T extends Prisma.corridors$dispatchOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.corridors$dispatchOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

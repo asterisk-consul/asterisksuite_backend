@@ -402,6 +402,7 @@ export const ModelName = {
   picking_results: 'picking_results',
   picking_sources: 'picking_sources',
   products: 'products',
+  product_price: 'product_price',
   trip_cargo: 'trip_cargo',
   trip_temperature_logs: 'trip_temperature_logs',
   dispatch_orders: 'dispatch_orders',
@@ -445,7 +446,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "product_price" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1778,6 +1779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.productsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProductsCountAggregateOutputType> | number
+        }
+      }
+    }
+    product_price: {
+      payload: Prisma.$product_pricePayload<ExtArgs>
+      fields: Prisma.product_priceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.product_priceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.product_priceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>
+        }
+        findFirst: {
+          args: Prisma.product_priceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.product_priceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>
+        }
+        findMany: {
+          args: Prisma.product_priceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>[]
+        }
+        create: {
+          args: Prisma.product_priceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>
+        }
+        createMany: {
+          args: Prisma.product_priceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.product_priceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>[]
+        }
+        delete: {
+          args: Prisma.product_priceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>
+        }
+        update: {
+          args: Prisma.product_priceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>
+        }
+        deleteMany: {
+          args: Prisma.product_priceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.product_priceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.product_priceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>[]
+        }
+        upsert: {
+          args: Prisma.product_priceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_pricePayload>
+        }
+        aggregate: {
+          args: Prisma.Product_priceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProduct_price>
+        }
+        groupBy: {
+          args: Prisma.product_priceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_priceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.product_priceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_priceCountAggregateOutputType> | number
         }
       }
     }
@@ -4108,10 +4183,26 @@ export const ProductsScalarFieldEnum = {
   name: 'name',
   sku: 'sku',
   requires_refrigeration: 'requires_refrigeration',
-  created_at: 'created_at'
+  price_enabled: 'price_enabled',
+  is_rate_type: 'is_rate_type',
+  rate_id: 'rate_id',
+  created_at: 'created_at',
+  taxId: 'taxId'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
+
+
+export const Product_priceScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  price: 'price',
+  exemptionRate: 'exemptionRate',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Product_priceScalarFieldEnum = (typeof Product_priceScalarFieldEnum)[keyof typeof Product_priceScalarFieldEnum]
 
 
 export const Trip_cargoScalarFieldEnum = {
@@ -4499,7 +4590,8 @@ export const TaxesScalarFieldEnum = {
   is_percentage: 'is_percentage',
   active: 'active',
   created_at: 'created_at',
-  calculation_level: 'calculation_level'
+  calculation_level: 'calculation_level',
+  company_id: 'company_id'
 } as const
 
 export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
@@ -4752,6 +4844,7 @@ export type GlobalOmitConfig = {
   picking_results?: Prisma.picking_resultsOmit
   picking_sources?: Prisma.picking_sourcesOmit
   products?: Prisma.productsOmit
+  product_price?: Prisma.product_priceOmit
   trip_cargo?: Prisma.trip_cargoOmit
   trip_temperature_logs?: Prisma.trip_temperature_logsOmit
   dispatch_orders?: Prisma.dispatch_ordersOmit
