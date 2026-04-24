@@ -30,6 +30,11 @@ export type CompaniesMinAggregateOutputType = {
   tax_id: string | null
   phone: string | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type CompaniesMaxAggregateOutputType = {
@@ -38,6 +43,11 @@ export type CompaniesMaxAggregateOutputType = {
   tax_id: string | null
   phone: string | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type CompaniesCountAggregateOutputType = {
@@ -46,6 +56,11 @@ export type CompaniesCountAggregateOutputType = {
   tax_id: number
   phone: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -56,6 +71,11 @@ export type CompaniesMinAggregateInputType = {
   tax_id?: true
   phone?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type CompaniesMaxAggregateInputType = {
@@ -64,6 +84,11 @@ export type CompaniesMaxAggregateInputType = {
   tax_id?: true
   phone?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type CompaniesCountAggregateInputType = {
@@ -72,6 +97,11 @@ export type CompaniesCountAggregateInputType = {
   tax_id?: true
   phone?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -153,6 +183,11 @@ export type CompaniesGroupByOutputType = {
   tax_id: string | null
   phone: string | null
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: CompaniesCountAggregateOutputType | null
   _min: CompaniesMinAggregateOutputType | null
   _max: CompaniesMaxAggregateOutputType | null
@@ -182,6 +217,11 @@ export type companiesWhereInput = {
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"companies"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"companies"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"companies"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"companies"> | string | null
 }
 
 export type companiesOrderByWithRelationInput = {
@@ -190,6 +230,11 @@ export type companiesOrderByWithRelationInput = {
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type companiesWhereUniqueInput = Prisma.AtLeast<{
@@ -201,6 +246,11 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"companies"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"companies"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"companies"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"companies"> | string | null
 }, "id">
 
 export type companiesOrderByWithAggregationInput = {
@@ -209,6 +259,11 @@ export type companiesOrderByWithAggregationInput = {
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.companiesCountOrderByAggregateInput
   _max?: Prisma.companiesMaxOrderByAggregateInput
   _min?: Prisma.companiesMinOrderByAggregateInput
@@ -223,6 +278,11 @@ export type companiesScalarWhereWithAggregatesInput = {
   tax_id?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"companies"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"companies"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"companies"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"companies"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"companies"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"companies"> | string | null
 }
 
 export type companiesCreateInput = {
@@ -231,6 +291,11 @@ export type companiesCreateInput = {
   tax_id?: string | null
   phone?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type companiesUncheckedCreateInput = {
@@ -239,6 +304,11 @@ export type companiesUncheckedCreateInput = {
   tax_id?: string | null
   phone?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type companiesUpdateInput = {
@@ -247,6 +317,11 @@ export type companiesUpdateInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type companiesUncheckedUpdateInput = {
@@ -255,6 +330,11 @@ export type companiesUncheckedUpdateInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type companiesCreateManyInput = {
@@ -263,6 +343,11 @@ export type companiesCreateManyInput = {
   tax_id?: string | null
   phone?: string | null
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type companiesUpdateManyMutationInput = {
@@ -271,6 +356,11 @@ export type companiesUpdateManyMutationInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type companiesUncheckedUpdateManyInput = {
@@ -279,6 +369,11 @@ export type companiesUncheckedUpdateManyInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type companiesCountOrderByAggregateInput = {
@@ -287,6 +382,11 @@ export type companiesCountOrderByAggregateInput = {
   tax_id?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type companiesMaxOrderByAggregateInput = {
@@ -295,6 +395,11 @@ export type companiesMaxOrderByAggregateInput = {
   tax_id?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type companiesMinOrderByAggregateInput = {
@@ -303,6 +408,11 @@ export type companiesMinOrderByAggregateInput = {
   tax_id?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 
@@ -313,6 +423,11 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   tax_id?: boolean
   phone?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["companies"]>
 
 export type companiesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -321,6 +436,11 @@ export type companiesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   tax_id?: boolean
   phone?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["companies"]>
 
 export type companiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -329,6 +449,11 @@ export type companiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   tax_id?: boolean
   phone?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["companies"]>
 
 export type companiesSelectScalar = {
@@ -337,9 +462,14 @@ export type companiesSelectScalar = {
   tax_id?: boolean
   phone?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tax_id" | "phone" | "created_at", ExtArgs["result"]["companies"]>
+export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tax_id" | "phone" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["companies"]>
 
 export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "companies"
@@ -350,6 +480,11 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     tax_id: string | null
     phone: string | null
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["companies"]>
   composites: {}
 }
@@ -778,6 +913,11 @@ export interface companiesFieldRefs {
   readonly tax_id: Prisma.FieldRef<"companies", 'String'>
   readonly phone: Prisma.FieldRef<"companies", 'String'>
   readonly created_at: Prisma.FieldRef<"companies", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"companies", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"companies", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"companies", 'String'>
+  readonly updated_by: Prisma.FieldRef<"companies", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"companies", 'String'>
 }
     
 

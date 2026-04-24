@@ -46,6 +46,11 @@ export type Document_taxesMinAggregateOutputType = {
   taxable_base: runtime.Decimal | null
   tax_amount: runtime.Decimal | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Document_taxesMaxAggregateOutputType = {
@@ -56,6 +61,11 @@ export type Document_taxesMaxAggregateOutputType = {
   taxable_base: runtime.Decimal | null
   tax_amount: runtime.Decimal | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Document_taxesCountAggregateOutputType = {
@@ -66,6 +76,11 @@ export type Document_taxesCountAggregateOutputType = {
   taxable_base: number
   tax_amount: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -90,6 +105,11 @@ export type Document_taxesMinAggregateInputType = {
   taxable_base?: true
   tax_amount?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Document_taxesMaxAggregateInputType = {
@@ -100,6 +120,11 @@ export type Document_taxesMaxAggregateInputType = {
   taxable_base?: true
   tax_amount?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Document_taxesCountAggregateInputType = {
@@ -110,6 +135,11 @@ export type Document_taxesCountAggregateInputType = {
   taxable_base?: true
   tax_amount?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -207,6 +237,11 @@ export type Document_taxesGroupByOutputType = {
   taxable_base: runtime.Decimal
   tax_amount: runtime.Decimal
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: Document_taxesCountAggregateOutputType | null
   _avg: Document_taxesAvgAggregateOutputType | null
   _sum: Document_taxesSumAggregateOutputType | null
@@ -240,6 +275,11 @@ export type document_taxesWhereInput = {
   taxable_base?: Prisma.DecimalFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"document_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_taxes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"document_taxes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
   documents?: Prisma.XOR<Prisma.DocumentsScalarRelationFilter, Prisma.documentsWhereInput>
   taxes?: Prisma.XOR<Prisma.TaxesScalarRelationFilter, Prisma.taxesWhereInput>
 }
@@ -252,6 +292,11 @@ export type document_taxesOrderByWithRelationInput = {
   taxable_base?: Prisma.SortOrder
   tax_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   documents?: Prisma.documentsOrderByWithRelationInput
   taxes?: Prisma.taxesOrderByWithRelationInput
 }
@@ -267,6 +312,11 @@ export type document_taxesWhereUniqueInput = Prisma.AtLeast<{
   taxable_base?: Prisma.DecimalFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"document_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_taxes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"document_taxes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
   documents?: Prisma.XOR<Prisma.DocumentsScalarRelationFilter, Prisma.documentsWhereInput>
   taxes?: Prisma.XOR<Prisma.TaxesScalarRelationFilter, Prisma.taxesWhereInput>
 }, "id">
@@ -279,6 +329,11 @@ export type document_taxesOrderByWithAggregationInput = {
   taxable_base?: Prisma.SortOrder
   tax_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.document_taxesCountOrderByAggregateInput
   _avg?: Prisma.document_taxesAvgOrderByAggregateInput
   _max?: Prisma.document_taxesMaxOrderByAggregateInput
@@ -297,6 +352,11 @@ export type document_taxesScalarWhereWithAggregatesInput = {
   taxable_base?: Prisma.DecimalWithAggregatesFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalWithAggregatesFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"document_taxes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_taxes"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"document_taxes"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"document_taxes"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"document_taxes"> | string | null
 }
 
 export type document_taxesCreateInput = {
@@ -305,6 +365,11 @@ export type document_taxesCreateInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   documents: Prisma.documentsCreateNestedOneWithoutDocument_taxesInput
   taxes: Prisma.taxesCreateNestedOneWithoutDocument_taxesInput
 }
@@ -317,6 +382,11 @@ export type document_taxesUncheckedCreateInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_taxesUpdateInput = {
@@ -325,6 +395,11 @@ export type document_taxesUpdateInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_taxesNestedInput
   taxes?: Prisma.taxesUpdateOneRequiredWithoutDocument_taxesNestedInput
 }
@@ -337,6 +412,11 @@ export type document_taxesUncheckedUpdateInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_taxesCreateManyInput = {
@@ -347,6 +427,11 @@ export type document_taxesCreateManyInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_taxesUpdateManyMutationInput = {
@@ -355,6 +440,11 @@ export type document_taxesUpdateManyMutationInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_taxesUncheckedUpdateManyInput = {
@@ -365,6 +455,11 @@ export type document_taxesUncheckedUpdateManyInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_taxesCountOrderByAggregateInput = {
@@ -375,6 +470,11 @@ export type document_taxesCountOrderByAggregateInput = {
   taxable_base?: Prisma.SortOrder
   tax_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type document_taxesAvgOrderByAggregateInput = {
@@ -391,6 +491,11 @@ export type document_taxesMaxOrderByAggregateInput = {
   taxable_base?: Prisma.SortOrder
   tax_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type document_taxesMinOrderByAggregateInput = {
@@ -401,6 +506,11 @@ export type document_taxesMinOrderByAggregateInput = {
   taxable_base?: Prisma.SortOrder
   tax_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type document_taxesSumOrderByAggregateInput = {
@@ -509,6 +619,11 @@ export type document_taxesCreateWithoutDocumentsInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   taxes: Prisma.taxesCreateNestedOneWithoutDocument_taxesInput
 }
 
@@ -519,6 +634,11 @@ export type document_taxesUncheckedCreateWithoutDocumentsInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_taxesCreateOrConnectWithoutDocumentsInput = {
@@ -558,6 +678,11 @@ export type document_taxesScalarWhereInput = {
   taxable_base?: Prisma.DecimalFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFilter<"document_taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"document_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"document_taxes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"document_taxes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"document_taxes"> | string | null
 }
 
 export type document_taxesCreateWithoutTaxesInput = {
@@ -566,6 +691,11 @@ export type document_taxesCreateWithoutTaxesInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   documents: Prisma.documentsCreateNestedOneWithoutDocument_taxesInput
 }
 
@@ -576,6 +706,11 @@ export type document_taxesUncheckedCreateWithoutTaxesInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_taxesCreateOrConnectWithoutTaxesInput = {
@@ -611,6 +746,11 @@ export type document_taxesCreateManyDocumentsInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_taxesUpdateWithoutDocumentsInput = {
@@ -619,6 +759,11 @@ export type document_taxesUpdateWithoutDocumentsInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxes?: Prisma.taxesUpdateOneRequiredWithoutDocument_taxesNestedInput
 }
 
@@ -629,6 +774,11 @@ export type document_taxesUncheckedUpdateWithoutDocumentsInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_taxesUncheckedUpdateManyWithoutDocumentsInput = {
@@ -638,6 +788,11 @@ export type document_taxesUncheckedUpdateManyWithoutDocumentsInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_taxesCreateManyTaxesInput = {
@@ -647,6 +802,11 @@ export type document_taxesCreateManyTaxesInput = {
   taxable_base: runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type document_taxesUpdateWithoutTaxesInput = {
@@ -655,6 +815,11 @@ export type document_taxesUpdateWithoutTaxesInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_taxesNestedInput
 }
 
@@ -665,6 +830,11 @@ export type document_taxesUncheckedUpdateWithoutTaxesInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type document_taxesUncheckedUpdateManyWithoutTaxesInput = {
@@ -674,6 +844,11 @@ export type document_taxesUncheckedUpdateManyWithoutTaxesInput = {
   taxable_base?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -686,6 +861,11 @@ export type document_taxesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   taxable_base?: boolean
   tax_amount?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   taxes?: boolean | Prisma.taxesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_taxes"]>
@@ -698,6 +878,11 @@ export type document_taxesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   taxable_base?: boolean
   tax_amount?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   taxes?: boolean | Prisma.taxesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_taxes"]>
@@ -710,6 +895,11 @@ export type document_taxesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   taxable_base?: boolean
   tax_amount?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   taxes?: boolean | Prisma.taxesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_taxes"]>
@@ -722,9 +912,14 @@ export type document_taxesSelectScalar = {
   taxable_base?: boolean
   tax_amount?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type document_taxesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "tax_id" | "tax_rate" | "taxable_base" | "tax_amount" | "created_at", ExtArgs["result"]["document_taxes"]>
+export type document_taxesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "tax_id" | "tax_rate" | "taxable_base" | "tax_amount" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_taxes"]>
 export type document_taxesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   taxes?: boolean | Prisma.taxesDefaultArgs<ExtArgs>
@@ -752,6 +947,11 @@ export type $document_taxesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     taxable_base: runtime.Decimal
     tax_amount: runtime.Decimal
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["document_taxes"]>
   composites: {}
 }
@@ -1184,6 +1384,11 @@ export interface document_taxesFieldRefs {
   readonly taxable_base: Prisma.FieldRef<"document_taxes", 'Decimal'>
   readonly tax_amount: Prisma.FieldRef<"document_taxes", 'Decimal'>
   readonly created_at: Prisma.FieldRef<"document_taxes", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"document_taxes", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"document_taxes", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"document_taxes", 'String'>
+  readonly updated_by: Prisma.FieldRef<"document_taxes", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"document_taxes", 'String'>
 }
     
 

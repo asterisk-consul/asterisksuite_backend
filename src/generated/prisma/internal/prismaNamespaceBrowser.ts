@@ -97,7 +97,8 @@ export const ModelName = {
   document_types: 'document_types',
   documents: 'documents',
   product_taxes: 'product_taxes',
-  taxes: 'taxes'
+  taxes: 'taxes',
+  audit_logs: 'audit_logs'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -122,7 +123,12 @@ export const Business_partiesScalarFieldEnum = {
   name: 'name',
   tax_id: 'tax_id',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Business_partiesScalarFieldEnum = (typeof Business_partiesScalarFieldEnum)[keyof typeof Business_partiesScalarFieldEnum]
@@ -157,7 +163,12 @@ export const CompaniesScalarFieldEnum = {
   name: 'name',
   tax_id: 'tax_id',
   phone: 'phone',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
@@ -170,9 +181,12 @@ export const Delivery_notesScalarFieldEnum = {
   status: 'status',
   party_id: 'party_id',
   trip_id: 'trip_id',
-  created_by: 'created_by',
-  deleted_at: 'deleted_at',
   created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by',
   dispatch_order_id: 'dispatch_order_id'
 } as const
 
@@ -186,7 +200,12 @@ export const DriversScalarFieldEnum = {
   document: 'document',
   phone: 'phone',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type DriversScalarFieldEnum = (typeof DriversScalarFieldEnum)[keyof typeof DriversScalarFieldEnum]
@@ -198,7 +217,12 @@ export const Entity_photosScalarFieldEnum = {
   entity_id: 'entity_id',
   file_id: 'file_id',
   photo_type: 'photo_type',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Entity_photosScalarFieldEnum = (typeof Entity_photosScalarFieldEnum)[keyof typeof Entity_photosScalarFieldEnum]
@@ -213,7 +237,12 @@ export const FilesScalarFieldEnum = {
   mime_type: 'mime_type',
   file_size: 'file_size',
   uploaded_by: 'uploaded_by',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
@@ -228,7 +257,12 @@ export const LocationsScalarFieldEnum = {
   postal_code: 'postal_code',
   latitude: 'latitude',
   longitude: 'longitude',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type LocationsScalarFieldEnum = (typeof LocationsScalarFieldEnum)[keyof typeof LocationsScalarFieldEnum]
@@ -249,9 +283,12 @@ export const PalletsScalarFieldEnum = {
   code: 'code',
   warehouse_id: 'warehouse_id',
   status: 'status',
-  created_by: 'created_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
   deleted_at: 'deleted_at',
-  created_at: 'created_at'
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type PalletsScalarFieldEnum = (typeof PalletsScalarFieldEnum)[keyof typeof PalletsScalarFieldEnum]
@@ -262,7 +299,12 @@ export const Party_locationsScalarFieldEnum = {
   party_id: 'party_id',
   location_id: 'location_id',
   label: 'label',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Party_locationsScalarFieldEnum = (typeof Party_locationsScalarFieldEnum)[keyof typeof Party_locationsScalarFieldEnum]
@@ -276,7 +318,12 @@ export const Party_contactsScalarFieldEnum = {
   role: 'role',
   phone: 'phone',
   email: 'email',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Party_contactsScalarFieldEnum = (typeof Party_contactsScalarFieldEnum)[keyof typeof Party_contactsScalarFieldEnum]
@@ -300,8 +347,12 @@ export const Picking_ordersScalarFieldEnum = {
   status: 'status',
   delivery_note_id: 'delivery_note_id',
   trip_id: 'trip_id',
-  created_by: 'created_by',
   created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by',
   dispatch_order_id: 'dispatch_order_id'
 } as const
 
@@ -335,8 +386,14 @@ export const ProductsScalarFieldEnum = {
   price_enabled: 'price_enabled',
   is_rate_type: 'is_rate_type',
   rate_id: 'rate_id',
+  taxId: 'taxId',
   created_at: 'created_at',
-  taxId: 'taxId'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by',
+  active: 'active'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
@@ -348,7 +405,11 @@ export const Product_priceScalarFieldEnum = {
   price: 'price',
   exemptionRate: 'exemptionRate',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Product_priceScalarFieldEnum = (typeof Product_priceScalarFieldEnum)[keyof typeof Product_priceScalarFieldEnum]
@@ -388,8 +449,12 @@ export const Dispatch_ordersScalarFieldEnum = {
   origin_location_id: 'origin_location_id',
   destination_location_id: 'destination_location_id',
   corridor_id: 'corridor_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
   created_by: 'created_by',
-  created_at: 'created_at'
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Dispatch_ordersScalarFieldEnum = (typeof Dispatch_ordersScalarFieldEnum)[keyof typeof Dispatch_ordersScalarFieldEnum]
@@ -408,9 +473,12 @@ export const TripsScalarFieldEnum = {
   arrival_time: 'arrival_time',
   status: 'status',
   notes: 'notes',
-  created_by: 'created_by',
-  deleted_at: 'deleted_at',
   created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by',
   kilometers: 'kilometers'
 } as const
 
@@ -423,7 +491,12 @@ export const Trip_stopsScalarFieldEnum = {
   location_id: 'location_id',
   stop_order: 'stop_order',
   stop_type: 'stop_type',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Trip_stopsScalarFieldEnum = (typeof Trip_stopsScalarFieldEnum)[keyof typeof Trip_stopsScalarFieldEnum]
@@ -434,7 +507,12 @@ export const Trip_stop_ordersScalarFieldEnum = {
   trip_stop_id: 'trip_stop_id',
   dispatch_order_id: 'dispatch_order_id',
   action: 'action',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Trip_stop_ordersScalarFieldEnum = (typeof Trip_stop_ordersScalarFieldEnum)[keyof typeof Trip_stop_ordersScalarFieldEnum]
@@ -450,7 +528,12 @@ export const CorridorsScalarFieldEnum = {
   total_distance_km: 'total_distance_km',
   estimated_minutes: 'estimated_minutes',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type CorridorsScalarFieldEnum = (typeof CorridorsScalarFieldEnum)[keyof typeof CorridorsScalarFieldEnum]
@@ -464,7 +547,12 @@ export const Corridor_stopsScalarFieldEnum = {
   stop_type: 'stop_type',
   distance_km: 'distance_km',
   estimated_minutes: 'estimated_minutes',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Corridor_stopsScalarFieldEnum = (typeof Corridor_stopsScalarFieldEnum)[keyof typeof Corridor_stopsScalarFieldEnum]
@@ -477,7 +565,12 @@ export const UsersScalarFieldEnum = {
   password_hash: 'password_hash',
   role: 'role',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
@@ -494,7 +587,12 @@ export const VehiclesScalarFieldEnum = {
   max_volume: 'max_volume',
   refrigeration: 'refrigeration',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type VehiclesScalarFieldEnum = (typeof VehiclesScalarFieldEnum)[keyof typeof VehiclesScalarFieldEnum]
@@ -506,11 +604,13 @@ export const Vehicle_combinationsScalarFieldEnum = {
   trailer_id: 'trailer_id',
   valid_from: 'valid_from',
   valid_until: 'valid_until',
-  created_by: 'created_by',
-  created_at: 'created_at',
   unit_number: 'unit_number',
   driver_id: 'driver_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
   deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
   deleted_by: 'deleted_by'
 } as const
 
@@ -523,7 +623,12 @@ export const Warehouse_stockScalarFieldEnum = {
   product_id: 'product_id',
   quantity: 'quantity',
   reserved_quantity: 'reserved_quantity',
-  updated_at: 'updated_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Warehouse_stockScalarFieldEnum = (typeof Warehouse_stockScalarFieldEnum)[keyof typeof Warehouse_stockScalarFieldEnum]
@@ -540,7 +645,11 @@ export const Warehouse_stock_movementsScalarFieldEnum = {
   reference_id: 'reference_id',
   notes: 'notes',
   created_at: 'created_at',
-  created_by: 'created_by'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Warehouse_stock_movementsScalarFieldEnum = (typeof Warehouse_stock_movementsScalarFieldEnum)[keyof typeof Warehouse_stock_movementsScalarFieldEnum]
@@ -552,7 +661,12 @@ export const WarehousesScalarFieldEnum = {
   name: 'name',
   code: 'code',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof typeof WarehousesScalarFieldEnum]
@@ -568,7 +682,12 @@ export const Document_sequencesScalarFieldEnum = {
   current_number: 'current_number',
   prefix: 'prefix',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
@@ -592,7 +711,12 @@ export const Transport_document_typesScalarFieldEnum = {
   name: 'name',
   entity: 'entity',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Transport_document_typesScalarFieldEnum = (typeof Transport_document_typesScalarFieldEnum)[keyof typeof Transport_document_typesScalarFieldEnum]
@@ -603,7 +727,12 @@ export const Documents_vehicleScalarFieldEnum = {
   vehicle_id: 'vehicle_id',
   document_type_id: 'document_type_id',
   expiration_date: 'expiration_date',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Documents_vehicleScalarFieldEnum = (typeof Documents_vehicleScalarFieldEnum)[keyof typeof Documents_vehicleScalarFieldEnum]
@@ -614,7 +743,12 @@ export const Documents_driverScalarFieldEnum = {
   driver_id: 'driver_id',
   document_type_id: 'document_type_id',
   expiration_date: 'expiration_date',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Documents_driverScalarFieldEnum = (typeof Documents_driverScalarFieldEnum)[keyof typeof Documents_driverScalarFieldEnum]
@@ -626,7 +760,12 @@ export const Transfer_ratesScalarFieldEnum = {
   rate_type: 'rate_type',
   description: 'description',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Transfer_ratesScalarFieldEnum = (typeof Transfer_ratesScalarFieldEnum)[keyof typeof Transfer_ratesScalarFieldEnum]
@@ -637,7 +776,12 @@ export const Dispatch_ratesScalarFieldEnum = {
   dispatch_id: 'dispatch_id',
   rate_id: 'rate_id',
   value: 'value',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Dispatch_ratesScalarFieldEnum = (typeof Dispatch_ratesScalarFieldEnum)[keyof typeof Dispatch_ratesScalarFieldEnum]
@@ -649,7 +793,12 @@ export const Document_item_taxesScalarFieldEnum = {
   tax_id: 'tax_id',
   tax_rate: 'tax_rate',
   tax_amount: 'tax_amount',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Document_item_taxesScalarFieldEnum = (typeof Document_item_taxesScalarFieldEnum)[keyof typeof Document_item_taxesScalarFieldEnum]
@@ -661,8 +810,13 @@ export const Document_itemsScalarFieldEnum = {
   product_id: 'product_id',
   quantity: 'quantity',
   price: 'price',
+  unit_price: 'unit_price',
   created_at: 'created_at',
-  unit_price: 'unit_price'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Document_itemsScalarFieldEnum = (typeof Document_itemsScalarFieldEnum)[keyof typeof Document_itemsScalarFieldEnum]
@@ -675,7 +829,12 @@ export const Document_taxesScalarFieldEnum = {
   tax_rate: 'tax_rate',
   taxable_base: 'taxable_base',
   tax_amount: 'tax_amount',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Document_taxesScalarFieldEnum = (typeof Document_taxesScalarFieldEnum)[keyof typeof Document_taxesScalarFieldEnum]
@@ -692,7 +851,11 @@ export const Document_typesScalarFieldEnum = {
   affects_tax_book: 'affects_tax_book',
   active: 'active',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
@@ -705,14 +868,18 @@ export const DocumentsScalarFieldEnum = {
   number: 'number',
   date: 'date',
   status: 'status',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
   subtotal: 'subtotal',
   exempt_amount: 'exempt_amount',
   total_taxes: 'total_taxes',
   total: 'total',
   descrip: 'descrip',
-  ref: 'ref'
+  ref: 'ref',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
@@ -724,7 +891,12 @@ export const Product_taxesScalarFieldEnum = {
   tax_id: 'tax_id',
   is_included_in_price: 'is_included_in_price',
   active: 'active',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type Product_taxesScalarFieldEnum = (typeof Product_taxesScalarFieldEnum)[keyof typeof Product_taxesScalarFieldEnum]
@@ -738,12 +910,32 @@ export const TaxesScalarFieldEnum = {
   rate: 'rate',
   is_percentage: 'is_percentage',
   active: 'active',
-  created_at: 'created_at',
   calculation_level: 'calculation_level',
-  company_id: 'company_id'
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
+
+
+export const Audit_logsScalarFieldEnum = {
+  id: 'id',
+  table_name: 'table_name',
+  record_id: 'record_id',
+  old_data: 'old_data',
+  new_data: 'new_data',
+  changed_by: 'changed_by',
+  changed_at: 'changed_at',
+  ip_address: 'ip_address',
+  request_id: 'request_id',
+  action: 'action'
+} as const
+
+export type Audit_logsScalarFieldEnum = (typeof Audit_logsScalarFieldEnum)[keyof typeof Audit_logsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -752,6 +944,14 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -768,4 +968,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

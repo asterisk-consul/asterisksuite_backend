@@ -50,6 +50,11 @@ export type VehiclesMinAggregateOutputType = {
   refrigeration: boolean | null
   active: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type VehiclesMaxAggregateOutputType = {
@@ -64,6 +69,11 @@ export type VehiclesMaxAggregateOutputType = {
   refrigeration: boolean | null
   active: boolean | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type VehiclesCountAggregateOutputType = {
@@ -78,6 +88,11 @@ export type VehiclesCountAggregateOutputType = {
   refrigeration: number
   active: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -106,6 +121,11 @@ export type VehiclesMinAggregateInputType = {
   refrigeration?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type VehiclesMaxAggregateInputType = {
@@ -120,6 +140,11 @@ export type VehiclesMaxAggregateInputType = {
   refrigeration?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type VehiclesCountAggregateInputType = {
@@ -134,6 +159,11 @@ export type VehiclesCountAggregateInputType = {
   refrigeration?: true
   active?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -235,6 +265,11 @@ export type VehiclesGroupByOutputType = {
   refrigeration: boolean | null
   active: boolean
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: VehiclesCountAggregateOutputType | null
   _avg: VehiclesAvgAggregateOutputType | null
   _sum: VehiclesSumAggregateOutputType | null
@@ -272,6 +307,11 @@ export type vehiclesWhereInput = {
   refrigeration?: Prisma.BoolNullableFilter<"vehicles"> | boolean | null
   active?: Prisma.BoolFilter<"vehicles"> | boolean
   created_at?: Prisma.DateTimeFilter<"vehicles"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"vehicles"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"vehicles"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"vehicles"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"vehicles"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"vehicles"> | string | null
   vehicleDocuments?: Prisma.Documents_vehicleListRelationFilter
   vehicle_combinations_tractor?: Prisma.Vehicle_combinationsListRelationFilter
   vehicle_combinations_trailer?: Prisma.Vehicle_combinationsListRelationFilter
@@ -289,6 +329,11 @@ export type vehiclesOrderByWithRelationInput = {
   refrigeration?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   vehicleDocuments?: Prisma.documents_vehicleOrderByRelationAggregateInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsOrderByRelationAggregateInput
@@ -309,6 +354,11 @@ export type vehiclesWhereUniqueInput = Prisma.AtLeast<{
   refrigeration?: Prisma.BoolNullableFilter<"vehicles"> | boolean | null
   active?: Prisma.BoolFilter<"vehicles"> | boolean
   created_at?: Prisma.DateTimeFilter<"vehicles"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"vehicles"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"vehicles"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"vehicles"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"vehicles"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"vehicles"> | string | null
   vehicleDocuments?: Prisma.Documents_vehicleListRelationFilter
   vehicle_combinations_tractor?: Prisma.Vehicle_combinationsListRelationFilter
   vehicle_combinations_trailer?: Prisma.Vehicle_combinationsListRelationFilter
@@ -326,6 +376,11 @@ export type vehiclesOrderByWithAggregationInput = {
   refrigeration?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.vehiclesCountOrderByAggregateInput
   _avg?: Prisma.vehiclesAvgOrderByAggregateInput
   _max?: Prisma.vehiclesMaxOrderByAggregateInput
@@ -348,6 +403,11 @@ export type vehiclesScalarWhereWithAggregatesInput = {
   refrigeration?: Prisma.BoolNullableWithAggregatesFilter<"vehicles"> | boolean | null
   active?: Prisma.BoolWithAggregatesFilter<"vehicles"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"vehicles"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"vehicles"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"vehicles"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"vehicles"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"vehicles"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"vehicles"> | string | null
 }
 
 export type vehiclesCreateInput = {
@@ -362,6 +422,11 @@ export type vehiclesCreateInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
@@ -379,6 +444,11 @@ export type vehiclesUncheckedCreateInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
@@ -396,6 +466,11 @@ export type vehiclesUpdateInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
@@ -413,6 +488,11 @@ export type vehiclesUncheckedUpdateInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
@@ -430,6 +510,11 @@ export type vehiclesCreateManyInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type vehiclesUpdateManyMutationInput = {
@@ -444,6 +529,11 @@ export type vehiclesUpdateManyMutationInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type vehiclesUncheckedUpdateManyInput = {
@@ -458,6 +548,11 @@ export type vehiclesUncheckedUpdateManyInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type vehiclesCountOrderByAggregateInput = {
@@ -472,6 +567,11 @@ export type vehiclesCountOrderByAggregateInput = {
   refrigeration?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type vehiclesAvgOrderByAggregateInput = {
@@ -492,6 +592,11 @@ export type vehiclesMaxOrderByAggregateInput = {
   refrigeration?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type vehiclesMinOrderByAggregateInput = {
@@ -506,6 +611,11 @@ export type vehiclesMinOrderByAggregateInput = {
   refrigeration?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type vehiclesSumOrderByAggregateInput = {
@@ -580,6 +690,11 @@ export type vehiclesCreateWithoutVehicle_combinations_tractorInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
 }
@@ -596,6 +711,11 @@ export type vehiclesUncheckedCreateWithoutVehicle_combinations_tractorInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
 }
@@ -617,6 +737,11 @@ export type vehiclesCreateWithoutVehicle_combinations_trailerInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicleDocuments?: Prisma.documents_vehicleCreateNestedManyWithoutVehiclesInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
 }
@@ -633,6 +758,11 @@ export type vehiclesUncheckedCreateWithoutVehicle_combinations_trailerInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicleDocuments?: Prisma.documents_vehicleUncheckedCreateNestedManyWithoutVehiclesInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
 }
@@ -665,6 +795,11 @@ export type vehiclesUpdateWithoutVehicle_combinations_tractorInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
 }
@@ -681,6 +816,11 @@ export type vehiclesUncheckedUpdateWithoutVehicle_combinations_tractorInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
 }
@@ -708,6 +848,11 @@ export type vehiclesUpdateWithoutVehicle_combinations_trailerInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicleDocuments?: Prisma.documents_vehicleUpdateManyWithoutVehiclesNestedInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
 }
@@ -724,6 +869,11 @@ export type vehiclesUncheckedUpdateWithoutVehicle_combinations_trailerInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicleDocuments?: Prisma.documents_vehicleUncheckedUpdateManyWithoutVehiclesNestedInput
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
 }
@@ -740,6 +890,11 @@ export type vehiclesCreateWithoutVehicleDocumentsInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsCreateNestedManyWithoutTrailerInput
 }
@@ -756,6 +911,11 @@ export type vehiclesUncheckedCreateWithoutVehicleDocumentsInput = {
   refrigeration?: boolean | null
   active?: boolean
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTractorInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutTrailerInput
 }
@@ -788,6 +948,11 @@ export type vehiclesUpdateWithoutVehicleDocumentsInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUpdateManyWithoutTrailerNestedInput
 }
@@ -804,6 +969,11 @@ export type vehiclesUncheckedUpdateWithoutVehicleDocumentsInput = {
   refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vehicle_combinations_tractor?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTractorNestedInput
   vehicle_combinations_trailer?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput
 }
@@ -869,6 +1039,11 @@ export type vehiclesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   refrigeration?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   vehicleDocuments?: boolean | Prisma.vehicles$vehicleDocumentsArgs<ExtArgs>
   vehicle_combinations_tractor?: boolean | Prisma.vehicles$vehicle_combinations_tractorArgs<ExtArgs>
   vehicle_combinations_trailer?: boolean | Prisma.vehicles$vehicle_combinations_trailerArgs<ExtArgs>
@@ -887,6 +1062,11 @@ export type vehiclesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   refrigeration?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["vehicles"]>
 
 export type vehiclesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -901,6 +1081,11 @@ export type vehiclesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   refrigeration?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }, ExtArgs["result"]["vehicles"]>
 
 export type vehiclesSelectScalar = {
@@ -915,9 +1100,14 @@ export type vehiclesSelectScalar = {
   refrigeration?: boolean
   active?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type vehiclesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "plate" | "brand" | "model" | "year" | "max_weight" | "max_volume" | "refrigeration" | "active" | "created_at", ExtArgs["result"]["vehicles"]>
+export type vehiclesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "plate" | "brand" | "model" | "year" | "max_weight" | "max_volume" | "refrigeration" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["vehicles"]>
 export type vehiclesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vehicleDocuments?: boolean | Prisma.vehicles$vehicleDocumentsArgs<ExtArgs>
   vehicle_combinations_tractor?: boolean | Prisma.vehicles$vehicle_combinations_tractorArgs<ExtArgs>
@@ -946,6 +1136,11 @@ export type $vehiclesPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     refrigeration: boolean | null
     active: boolean
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["vehicles"]>
   composites: {}
 }
@@ -1383,6 +1578,11 @@ export interface vehiclesFieldRefs {
   readonly refrigeration: Prisma.FieldRef<"vehicles", 'Boolean'>
   readonly active: Prisma.FieldRef<"vehicles", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"vehicles", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"vehicles", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"vehicles", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"vehicles", 'String'>
+  readonly updated_by: Prisma.FieldRef<"vehicles", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"vehicles", 'String'>
 }
     
 

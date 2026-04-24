@@ -40,6 +40,11 @@ export type Dispatch_ratesMinAggregateOutputType = {
   rate_id: string | null
   value: runtime.Decimal | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Dispatch_ratesMaxAggregateOutputType = {
@@ -48,6 +53,11 @@ export type Dispatch_ratesMaxAggregateOutputType = {
   rate_id: string | null
   value: runtime.Decimal | null
   created_at: Date | null
+  updated_at: Date | null
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
 }
 
 export type Dispatch_ratesCountAggregateOutputType = {
@@ -56,6 +66,11 @@ export type Dispatch_ratesCountAggregateOutputType = {
   rate_id: number
   value: number
   created_at: number
+  updated_at: number
+  deleted_at: number
+  created_by: number
+  updated_by: number
+  deleted_by: number
   _all: number
 }
 
@@ -74,6 +89,11 @@ export type Dispatch_ratesMinAggregateInputType = {
   rate_id?: true
   value?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Dispatch_ratesMaxAggregateInputType = {
@@ -82,6 +102,11 @@ export type Dispatch_ratesMaxAggregateInputType = {
   rate_id?: true
   value?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
 }
 
 export type Dispatch_ratesCountAggregateInputType = {
@@ -90,6 +115,11 @@ export type Dispatch_ratesCountAggregateInputType = {
   rate_id?: true
   value?: true
   created_at?: true
+  updated_at?: true
+  deleted_at?: true
+  created_by?: true
+  updated_by?: true
+  deleted_by?: true
   _all?: true
 }
 
@@ -185,6 +215,11 @@ export type Dispatch_ratesGroupByOutputType = {
   rate_id: string
   value: runtime.Decimal
   created_at: Date
+  updated_at: Date
+  deleted_at: Date | null
+  created_by: string | null
+  updated_by: string | null
+  deleted_by: string | null
   _count: Dispatch_ratesCountAggregateOutputType | null
   _avg: Dispatch_ratesAvgAggregateOutputType | null
   _sum: Dispatch_ratesSumAggregateOutputType | null
@@ -216,6 +251,11 @@ export type dispatch_ratesWhereInput = {
   rate_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
   dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersScalarRelationFilter, Prisma.dispatch_ordersWhereInput>
   transfer_rates?: Prisma.XOR<Prisma.Transfer_ratesScalarRelationFilter, Prisma.transfer_ratesWhereInput>
 }
@@ -226,6 +266,11 @@ export type dispatch_ratesOrderByWithRelationInput = {
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   dispatch_orders?: Prisma.dispatch_ordersOrderByWithRelationInput
   transfer_rates?: Prisma.transfer_ratesOrderByWithRelationInput
 }
@@ -239,6 +284,11 @@ export type dispatch_ratesWhereUniqueInput = Prisma.AtLeast<{
   rate_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
   dispatch_orders?: Prisma.XOR<Prisma.Dispatch_ordersScalarRelationFilter, Prisma.dispatch_ordersWhereInput>
   transfer_rates?: Prisma.XOR<Prisma.Transfer_ratesScalarRelationFilter, Prisma.transfer_ratesWhereInput>
 }, "id">
@@ -249,6 +299,11 @@ export type dispatch_ratesOrderByWithAggregationInput = {
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.dispatch_ratesCountOrderByAggregateInput
   _avg?: Prisma.dispatch_ratesAvgOrderByAggregateInput
   _max?: Prisma.dispatch_ratesMaxOrderByAggregateInput
@@ -265,12 +320,22 @@ export type dispatch_ratesScalarWhereWithAggregatesInput = {
   rate_id?: Prisma.UuidWithAggregatesFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalWithAggregatesFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"dispatch_rates"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"dispatch_rates"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"dispatch_rates"> | Date | string | null
+  created_by?: Prisma.UuidNullableWithAggregatesFilter<"dispatch_rates"> | string | null
+  updated_by?: Prisma.UuidNullableWithAggregatesFilter<"dispatch_rates"> | string | null
+  deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"dispatch_rates"> | string | null
 }
 
 export type dispatch_ratesCreateInput = {
   id?: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_orders: Prisma.dispatch_ordersCreateNestedOneWithoutDispatch_ratesInput
   transfer_rates: Prisma.transfer_ratesCreateNestedOneWithoutDispatch_ratesInput
 }
@@ -281,12 +346,22 @@ export type dispatch_ratesUncheckedCreateInput = {
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type dispatch_ratesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneRequiredWithoutDispatch_ratesNestedInput
   transfer_rates?: Prisma.transfer_ratesUpdateOneRequiredWithoutDispatch_ratesNestedInput
 }
@@ -297,6 +372,11 @@ export type dispatch_ratesUncheckedUpdateInput = {
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type dispatch_ratesCreateManyInput = {
@@ -305,12 +385,22 @@ export type dispatch_ratesCreateManyInput = {
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type dispatch_ratesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type dispatch_ratesUncheckedUpdateManyInput = {
@@ -319,6 +409,11 @@ export type dispatch_ratesUncheckedUpdateManyInput = {
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type Dispatch_ratesListRelationFilter = {
@@ -337,6 +432,11 @@ export type dispatch_ratesCountOrderByAggregateInput = {
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type dispatch_ratesAvgOrderByAggregateInput = {
@@ -349,6 +449,11 @@ export type dispatch_ratesMaxOrderByAggregateInput = {
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type dispatch_ratesMinOrderByAggregateInput = {
@@ -357,6 +462,11 @@ export type dispatch_ratesMinOrderByAggregateInput = {
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
+  created_by?: Prisma.SortOrder
+  updated_by?: Prisma.SortOrder
+  deleted_by?: Prisma.SortOrder
 }
 
 export type dispatch_ratesSumOrderByAggregateInput = {
@@ -451,6 +561,11 @@ export type dispatch_ratesCreateWithoutDispatch_ordersInput = {
   id?: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   transfer_rates: Prisma.transfer_ratesCreateNestedOneWithoutDispatch_ratesInput
 }
 
@@ -459,6 +574,11 @@ export type dispatch_ratesUncheckedCreateWithoutDispatch_ordersInput = {
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type dispatch_ratesCreateOrConnectWithoutDispatch_ordersInput = {
@@ -496,12 +616,22 @@ export type dispatch_ratesScalarWhereInput = {
   rate_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"dispatch_rates"> | string | null
 }
 
 export type dispatch_ratesCreateWithoutTransfer_ratesInput = {
   id?: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
   dispatch_orders: Prisma.dispatch_ordersCreateNestedOneWithoutDispatch_ratesInput
 }
 
@@ -510,6 +640,11 @@ export type dispatch_ratesUncheckedCreateWithoutTransfer_ratesInput = {
   dispatch_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type dispatch_ratesCreateOrConnectWithoutTransfer_ratesInput = {
@@ -543,12 +678,22 @@ export type dispatch_ratesCreateManyDispatch_ordersInput = {
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type dispatch_ratesUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transfer_rates?: Prisma.transfer_ratesUpdateOneRequiredWithoutDispatch_ratesNestedInput
 }
 
@@ -557,6 +702,11 @@ export type dispatch_ratesUncheckedUpdateWithoutDispatch_ordersInput = {
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type dispatch_ratesUncheckedUpdateManyWithoutDispatch_ordersInput = {
@@ -564,6 +714,11 @@ export type dispatch_ratesUncheckedUpdateManyWithoutDispatch_ordersInput = {
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type dispatch_ratesCreateManyTransfer_ratesInput = {
@@ -571,12 +726,22 @@ export type dispatch_ratesCreateManyTransfer_ratesInput = {
   dispatch_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
 }
 
 export type dispatch_ratesUpdateWithoutTransfer_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_orders?: Prisma.dispatch_ordersUpdateOneRequiredWithoutDispatch_ratesNestedInput
 }
 
@@ -585,6 +750,11 @@ export type dispatch_ratesUncheckedUpdateWithoutTransfer_ratesInput = {
   dispatch_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesInput = {
@@ -592,6 +762,11 @@ export type dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesInput = {
   dispatch_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -602,6 +777,11 @@ export type dispatch_ratesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   rate_id?: boolean
   value?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_orders?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
   transfer_rates?: boolean | Prisma.transfer_ratesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dispatch_rates"]>
@@ -612,6 +792,11 @@ export type dispatch_ratesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   rate_id?: boolean
   value?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_orders?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
   transfer_rates?: boolean | Prisma.transfer_ratesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dispatch_rates"]>
@@ -622,6 +807,11 @@ export type dispatch_ratesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   rate_id?: boolean
   value?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
   dispatch_orders?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
   transfer_rates?: boolean | Prisma.transfer_ratesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dispatch_rates"]>
@@ -632,9 +822,14 @@ export type dispatch_ratesSelectScalar = {
   rate_id?: boolean
   value?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  deleted_at?: boolean
+  created_by?: boolean
+  updated_by?: boolean
+  deleted_by?: boolean
 }
 
-export type dispatch_ratesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dispatch_id" | "rate_id" | "value" | "created_at", ExtArgs["result"]["dispatch_rates"]>
+export type dispatch_ratesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dispatch_id" | "rate_id" | "value" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["dispatch_rates"]>
 export type dispatch_ratesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dispatch_orders?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
   transfer_rates?: boolean | Prisma.transfer_ratesDefaultArgs<ExtArgs>
@@ -660,6 +855,11 @@ export type $dispatch_ratesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     rate_id: string
     value: runtime.Decimal
     created_at: Date
+    updated_at: Date
+    deleted_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    deleted_by: string | null
   }, ExtArgs["result"]["dispatch_rates"]>
   composites: {}
 }
@@ -1090,6 +1290,11 @@ export interface dispatch_ratesFieldRefs {
   readonly rate_id: Prisma.FieldRef<"dispatch_rates", 'String'>
   readonly value: Prisma.FieldRef<"dispatch_rates", 'Decimal'>
   readonly created_at: Prisma.FieldRef<"dispatch_rates", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"dispatch_rates", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"dispatch_rates", 'DateTime'>
+  readonly created_by: Prisma.FieldRef<"dispatch_rates", 'String'>
+  readonly updated_by: Prisma.FieldRef<"dispatch_rates", 'String'>
+  readonly deleted_by: Prisma.FieldRef<"dispatch_rates", 'String'>
 }
     
 

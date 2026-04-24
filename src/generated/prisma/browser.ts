@@ -252,3 +252,8 @@ export type product_taxes = Prisma.product_taxesModel
  * 
  */
 export type taxes = Prisma.taxesModel
+/**
+ * Model audit_logs
+ * 
+ */
+export type audit_logs = Prisma.audit_logsModel
