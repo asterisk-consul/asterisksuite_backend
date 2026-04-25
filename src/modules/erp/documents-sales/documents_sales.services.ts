@@ -12,8 +12,6 @@ const STATUS_PENDING = 1;
 const STATUS_CONFIRMED = 2;
 const STATUS_CANCELLED = 3;
 
-const DEFAULT_SALE_DOC_TYPE_ID = '84052621-1431-425b-a301-ce6429fafb6a';
-
 @Injectable()
 export class DocumentsSalesService {
   private readonly SALE_CODES = ['VEN', 'NC', 'ND'];

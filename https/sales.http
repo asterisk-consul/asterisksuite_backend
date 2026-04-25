@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:3000/api
+#@baseUrl = https://apidonandres.asterisksuite.cloud/api
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+###
+@accessToken = {{login.response.body.accessToken}}
+
+
+###
+
+
+GET {{baseUrl}}/documents/sales/bc28c5c1-7260-4cca-a485-6a2adffd49f1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
