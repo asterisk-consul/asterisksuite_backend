@@ -2,6 +2,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -32,5 +33,10 @@ export class TaxesController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateTaxDto) {
     return this.taxesService.update(id, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.taxesService.remove(id);
   }
 }

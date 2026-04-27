@@ -302,6 +302,10 @@ model products {
   name                      String                      @db.VarChar(255)
   sku                       String?                     @db.VarChar(100)
   requires_refrigeration    Boolean?                    @default(false)
+  price_enabled             Boolean                     @default(false)
+  is_rate_type              Boolean                     @default(false) // ← NUEVO
+  rate_id                   String?                     @db.Uuid // ← NUEVO
+  taxId                     String?                     @db.Uuid
   created_at                DateTime                    @default(now()) @db.Timestamp(6)
   updated_at                DateTime                    @updatedAt @db.Timestamp(6)
   deleted_at                DateTime?
@@ -315,6 +319,22 @@ model products {
   warehouse_stock           warehouse_stock[]
   warehouse_stock_movements warehouse_stock_movements[]
   document_items            document_items[]
+  product_price             product_price[]
+  transfer_rate             transfer_rates?             @relation(fields: [rate_id], references: [id])
+}
+
+model product_price {
+  id            String    @id @default(uuid()) @db.Uuid
+  product_id    String    @db.Uuid
+  price         Decimal   @db.Decimal(15, 2)
+  exemptionRate Decimal   @db.Decimal(5, 2) // Porcentaje de exención
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime  @updatedAt @db.Timestamp(6)
+  deleted_at    DateTime?
+  created_by    String?   @db.Uuid
+  updated_by    String?   @db.Uuid
+  deleted_by    String?   @db.Uuid
+  products      products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model trip_cargo {
@@ -747,6 +767,7 @@ model transfer_rates {
   updated_by     String?          @db.Uuid
   deleted_by     String?          @db.Uuid
   dispatch_rates dispatch_rates[]
+  products       products[]
 }
 
 model dispatch_rates {

@@ -4,10 +4,14 @@ import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { buildPrismaCreate } from '@/common/utils/buildPrisma';
 import { DispatchStatus, Prisma, TripStatus } from '@/generated/prisma/client';
+import { DocumentsSalesService } from '../../../erp/documents-sales/documents_sales.services';
 
 @Injectable()
 export class TripsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private documentsSalesService: DocumentsSalesService,
+  ) {}
 
   /* =========================
      MAP TRIP TO UNIQUE ORDERS
@@ -178,9 +182,19 @@ export class TripsService {
 
   async updateStatus(id: string, status: TripStatus) {
     await this.findOne(id);
-    return this.prisma.trips.update({ where: { id }, data: { status } });
-  }
 
+    const trip = await this.prisma.trips.update({
+      where: { id },
+      data: { status },
+    });
+
+    // 🔥 Hook: cuando el viaje pasa a COMPLETED generar borradores de factura
+    if (status === TripStatus.COMPLETED) {
+      await this.documentsSalesService.generateDraftsFromTrip(id);
+    }
+
+    return trip;
+  }
   async remove(id: string) {
     await this.findOne(id);
     return this.prisma.trips.delete({ where: { id } });

@@ -29,6 +29,10 @@ export type ProductsMinAggregateOutputType = {
   name: string | null
   sku: string | null
   requires_refrigeration: boolean | null
+  price_enabled: boolean | null
+  is_rate_type: boolean | null
+  rate_id: string | null
+  taxId: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -43,6 +47,10 @@ export type ProductsMaxAggregateOutputType = {
   name: string | null
   sku: string | null
   requires_refrigeration: boolean | null
+  price_enabled: boolean | null
+  is_rate_type: boolean | null
+  rate_id: string | null
+  taxId: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -57,6 +65,10 @@ export type ProductsCountAggregateOutputType = {
   name: number
   sku: number
   requires_refrigeration: number
+  price_enabled: number
+  is_rate_type: number
+  rate_id: number
+  taxId: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -73,6 +85,10 @@ export type ProductsMinAggregateInputType = {
   name?: true
   sku?: true
   requires_refrigeration?: true
+  price_enabled?: true
+  is_rate_type?: true
+  rate_id?: true
+  taxId?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -87,6 +103,10 @@ export type ProductsMaxAggregateInputType = {
   name?: true
   sku?: true
   requires_refrigeration?: true
+  price_enabled?: true
+  is_rate_type?: true
+  rate_id?: true
+  taxId?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -101,6 +121,10 @@ export type ProductsCountAggregateInputType = {
   name?: true
   sku?: true
   requires_refrigeration?: true
+  price_enabled?: true
+  is_rate_type?: true
+  rate_id?: true
+  taxId?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -188,6 +212,10 @@ export type ProductsGroupByOutputType = {
   name: string
   sku: string | null
   requires_refrigeration: boolean | null
+  price_enabled: boolean
+  is_rate_type: boolean
+  rate_id: string | null
+  taxId: string | null
   created_at: Date
   updated_at: Date
   deleted_at: Date | null
@@ -223,6 +251,10 @@ export type productsWhereInput = {
   name?: Prisma.StringFilter<"products"> | string
   sku?: Prisma.StringNullableFilter<"products"> | string | null
   requires_refrigeration?: Prisma.BoolNullableFilter<"products"> | boolean | null
+  price_enabled?: Prisma.BoolFilter<"products"> | boolean
+  is_rate_type?: Prisma.BoolFilter<"products"> | boolean
+  rate_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  taxId?: Prisma.UuidNullableFilter<"products"> | string | null
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
@@ -236,6 +268,8 @@ export type productsWhereInput = {
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
   document_items?: Prisma.Document_itemsListRelationFilter
+  product_price?: Prisma.Product_priceListRelationFilter
+  transfer_rate?: Prisma.XOR<Prisma.Transfer_ratesNullableScalarRelationFilter, Prisma.transfer_ratesWhereInput> | null
 }
 
 export type productsOrderByWithRelationInput = {
@@ -243,6 +277,10 @@ export type productsOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrderInput | Prisma.SortOrder
+  price_enabled?: Prisma.SortOrder
+  is_rate_type?: Prisma.SortOrder
+  rate_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -256,6 +294,8 @@ export type productsOrderByWithRelationInput = {
   warehouse_stock?: Prisma.warehouse_stockOrderByRelationAggregateInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
   document_items?: Prisma.document_itemsOrderByRelationAggregateInput
+  product_price?: Prisma.product_priceOrderByRelationAggregateInput
+  transfer_rate?: Prisma.transfer_ratesOrderByWithRelationInput
 }
 
 export type productsWhereUniqueInput = Prisma.AtLeast<{
@@ -266,6 +306,10 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"products"> | string
   sku?: Prisma.StringNullableFilter<"products"> | string | null
   requires_refrigeration?: Prisma.BoolNullableFilter<"products"> | boolean | null
+  price_enabled?: Prisma.BoolFilter<"products"> | boolean
+  is_rate_type?: Prisma.BoolFilter<"products"> | boolean
+  rate_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  taxId?: Prisma.UuidNullableFilter<"products"> | string | null
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
@@ -279,6 +323,8 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
   document_items?: Prisma.Document_itemsListRelationFilter
+  product_price?: Prisma.Product_priceListRelationFilter
+  transfer_rate?: Prisma.XOR<Prisma.Transfer_ratesNullableScalarRelationFilter, Prisma.transfer_ratesWhereInput> | null
 }, "id">
 
 export type productsOrderByWithAggregationInput = {
@@ -286,6 +332,10 @@ export type productsOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrderInput | Prisma.SortOrder
+  price_enabled?: Prisma.SortOrder
+  is_rate_type?: Prisma.SortOrder
+  rate_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -306,6 +356,10 @@ export type productsScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"products"> | string
   sku?: Prisma.StringNullableWithAggregatesFilter<"products"> | string | null
   requires_refrigeration?: Prisma.BoolNullableWithAggregatesFilter<"products"> | boolean | null
+  price_enabled?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
+  is_rate_type?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
+  rate_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  taxId?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"products"> | Date | string
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"products"> | Date | string | null
@@ -320,6 +374,9 @@ export type productsCreateInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -333,6 +390,8 @@ export type productsCreateInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
 }
 
 export type productsUncheckedCreateInput = {
@@ -340,6 +399,10 @@ export type productsUncheckedCreateInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -353,6 +416,7 @@ export type productsUncheckedCreateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsUpdateInput = {
@@ -360,6 +424,9 @@ export type productsUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -373,6 +440,8 @@ export type productsUpdateInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateInput = {
@@ -380,6 +449,10 @@ export type productsUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -393,6 +466,7 @@ export type productsUncheckedUpdateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateManyInput = {
@@ -400,6 +474,10 @@ export type productsCreateManyInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -414,6 +492,9 @@ export type productsUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428,6 +509,10 @@ export type productsUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -447,6 +532,10 @@ export type productsCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
+  price_enabled?: Prisma.SortOrder
+  is_rate_type?: Prisma.SortOrder
+  rate_id?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -461,6 +550,10 @@ export type productsMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
+  price_enabled?: Prisma.SortOrder
+  is_rate_type?: Prisma.SortOrder
+  rate_id?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -475,6 +568,10 @@ export type productsMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   requires_refrigeration?: Prisma.SortOrder
+  price_enabled?: Prisma.SortOrder
+  is_rate_type?: Prisma.SortOrder
+  rate_id?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -482,6 +579,16 @@ export type productsMinOrderByAggregateInput = {
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
   active?: Prisma.SortOrder
+}
+
+export type ProductsListRelationFilter = {
+  every?: Prisma.productsWhereInput
+  some?: Prisma.productsWhereInput
+  none?: Prisma.productsWhereInput
+}
+
+export type productsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ProductsNullableScalarRelationFilter = {
@@ -521,6 +628,20 @@ export type NullableBoolFieldUpdateOperationsInput = {
   set?: boolean | null
 }
 
+export type productsCreateNestedOneWithoutProduct_priceInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutProduct_priceNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput
+  upsert?: Prisma.productsUpsertWithoutProduct_priceInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_priceInput, Prisma.productsUpdateWithoutProduct_priceInput>, Prisma.productsUncheckedUpdateWithoutProduct_priceInput>
+}
+
 export type productsCreateNestedOneWithoutWarehouse_stockInput = {
   create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
   connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stockInput
@@ -547,6 +668,48 @@ export type productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
   upsert?: Prisma.productsUpsertWithoutWarehouse_stock_movementsInput
   connect?: Prisma.productsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.productsUpdateWithoutWarehouse_stock_movementsInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
+}
+
+export type productsCreateNestedManyWithoutTransfer_rateInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUncheckedCreateNestedManyWithoutTransfer_rateInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUpdateManyWithoutTransfer_rateNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput | Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
+export type productsUncheckedUpdateManyWithoutTransfer_rateNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput | Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
 }
 
 export type productsCreateNestedOneWithoutDocument_itemsInput = {
@@ -584,6 +747,9 @@ export type productsCreateWithoutPallet_itemsInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -596,6 +762,8 @@ export type productsCreateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutPallet_itemsInput = {
@@ -603,6 +771,10 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -615,6 +787,7 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutPallet_itemsInput = {
@@ -638,6 +811,9 @@ export type productsUpdateWithoutPallet_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -650,6 +826,8 @@ export type productsUpdateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutPallet_itemsInput = {
@@ -657,6 +835,10 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -669,6 +851,7 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutPicking_itemsInput = {
@@ -676,6 +859,9 @@ export type productsCreateWithoutPicking_itemsInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -688,6 +874,8 @@ export type productsCreateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutPicking_itemsInput = {
@@ -695,6 +883,10 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -707,6 +899,7 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutPicking_itemsInput = {
@@ -730,6 +923,9 @@ export type productsUpdateWithoutPicking_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -742,6 +938,8 @@ export type productsUpdateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutPicking_itemsInput = {
@@ -749,6 +947,10 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -761,6 +963,119 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsCreateWithoutProduct_priceInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutProduct_priceInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutProduct_priceInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
+}
+
+export type productsUpsertWithoutProduct_priceInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutProduct_priceInput, Prisma.productsUncheckedUpdateWithoutProduct_priceInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutProduct_priceInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutProduct_priceInput, Prisma.productsUncheckedUpdateWithoutProduct_priceInput>
+}
+
+export type productsUpdateWithoutProduct_priceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutProduct_priceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutWarehouse_stockInput = {
@@ -768,6 +1083,9 @@ export type productsCreateWithoutWarehouse_stockInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -780,6 +1098,8 @@ export type productsCreateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutWarehouse_stockInput = {
@@ -787,6 +1107,10 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -799,6 +1123,7 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutWarehouse_stockInput = {
@@ -822,6 +1147,9 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -834,6 +1162,8 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
@@ -841,6 +1171,10 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -853,6 +1187,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutWarehouse_stock_movementsInput = {
@@ -860,6 +1195,9 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -872,6 +1210,8 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
@@ -879,6 +1219,10 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -891,6 +1235,7 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutWarehouse_stock_movementsInput = {
@@ -914,6 +1259,9 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -926,6 +1274,8 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
@@ -933,6 +1283,10 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -945,13 +1299,17 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
 }
 
-export type productsCreateWithoutDocument_itemsInput = {
+export type productsCreateWithoutTransfer_rateInput = {
   id?: string
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -964,13 +1322,18 @@ export type productsCreateWithoutDocument_itemsInput = {
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
 }
 
-export type productsUncheckedCreateWithoutDocument_itemsInput = {
+export type productsUncheckedCreateWithoutTransfer_rateInput = {
   id?: string
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -983,6 +1346,103 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutTransfer_rateInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput>
+}
+
+export type productsCreateManyTransfer_rateInputEnvelope = {
+  data: Prisma.productsCreateManyTransfer_rateInput | Prisma.productsCreateManyTransfer_rateInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsUpsertWithWhereUniqueWithoutTransfer_rateInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutTransfer_rateInput, Prisma.productsUncheckedUpdateWithoutTransfer_rateInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutTransfer_rateInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutTransfer_rateInput, Prisma.productsUncheckedUpdateWithoutTransfer_rateInput>
+}
+
+export type productsUpdateManyWithWhereWithoutTransfer_rateInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutTransfer_rateInput>
+}
+
+export type productsScalarWhereInput = {
+  AND?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+  OR?: Prisma.productsScalarWhereInput[]
+  NOT?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"products"> | string
+  name?: Prisma.StringFilter<"products"> | string
+  sku?: Prisma.StringNullableFilter<"products"> | string | null
+  requires_refrigeration?: Prisma.BoolNullableFilter<"products"> | boolean | null
+  price_enabled?: Prisma.BoolFilter<"products"> | boolean
+  is_rate_type?: Prisma.BoolFilter<"products"> | boolean
+  rate_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  taxId?: Prisma.UuidNullableFilter<"products"> | string | null
+  created_at?: Prisma.DateTimeFilter<"products"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"products"> | string | null
+  active?: Prisma.BoolNullableFilter<"products"> | boolean | null
+}
+
+export type productsCreateWithoutDocument_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutDocument_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutDocument_itemsInput = {
@@ -1006,6 +1466,9 @@ export type productsUpdateWithoutDocument_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1018,6 +1481,8 @@ export type productsUpdateWithoutDocument_itemsInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutDocument_itemsInput = {
@@ -1025,6 +1490,10 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1037,6 +1506,7 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutProduct_taxesInput = {
@@ -1044,6 +1514,9 @@ export type productsCreateWithoutProduct_taxesInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1056,6 +1529,8 @@ export type productsCreateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
 }
 
 export type productsUncheckedCreateWithoutProduct_taxesInput = {
@@ -1063,6 +1538,10 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1075,6 +1554,7 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
 }
 
 export type productsCreateOrConnectWithoutProduct_taxesInput = {
@@ -1098,6 +1578,9 @@ export type productsUpdateWithoutProduct_taxesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1110,6 +1593,8 @@ export type productsUpdateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
 }
 
 export type productsUncheckedUpdateWithoutProduct_taxesInput = {
@@ -1117,6 +1602,10 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1129,6 +1618,89 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsCreateManyTransfer_rateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  active?: boolean | null
+}
+
+export type productsUpdateWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 
@@ -1143,6 +1715,7 @@ export type ProductsCountOutputType = {
   warehouse_stock: number
   warehouse_stock_movements: number
   document_items: number
+  product_price: number
 }
 
 export type ProductsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1152,6 +1725,7 @@ export type ProductsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   warehouse_stock?: boolean | ProductsCountOutputTypeCountWarehouse_stockArgs
   warehouse_stock_movements?: boolean | ProductsCountOutputTypeCountWarehouse_stock_movementsArgs
   document_items?: boolean | ProductsCountOutputTypeCountDocument_itemsArgs
+  product_price?: boolean | ProductsCountOutputTypeCountProduct_priceArgs
 }
 
 /**
@@ -1206,12 +1780,23 @@ export type ProductsCountOutputTypeCountDocument_itemsArgs<ExtArgs extends runti
   where?: Prisma.document_itemsWhereInput
 }
 
+/**
+ * ProductsCountOutputType without action
+ */
+export type ProductsCountOutputTypeCountProduct_priceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.product_priceWhereInput
+}
+
 
 export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   sku?: boolean
   requires_refrigeration?: boolean
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: boolean
+  taxId?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1225,6 +1810,8 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
   document_items?: boolean | Prisma.products$document_itemsArgs<ExtArgs>
+  product_price?: boolean | Prisma.products$product_priceArgs<ExtArgs>
+  transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
 
@@ -1233,6 +1820,10 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   sku?: boolean
   requires_refrigeration?: boolean
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: boolean
+  taxId?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1240,6 +1831,7 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   updated_by?: boolean
   deleted_by?: boolean
   active?: boolean
+  transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
 
 export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1247,6 +1839,10 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   sku?: boolean
   requires_refrigeration?: boolean
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: boolean
+  taxId?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1254,6 +1850,7 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   updated_by?: boolean
   deleted_by?: boolean
   active?: boolean
+  transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
 
 export type productsSelectScalar = {
@@ -1261,6 +1858,10 @@ export type productsSelectScalar = {
   name?: boolean
   sku?: boolean
   requires_refrigeration?: boolean
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: boolean
+  taxId?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1270,7 +1871,7 @@ export type productsSelectScalar = {
   active?: boolean
 }
 
-export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "active", ExtArgs["result"]["products"]>
+export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "active", ExtArgs["result"]["products"]>
 export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pallet_items?: boolean | Prisma.products$pallet_itemsArgs<ExtArgs>
   picking_items?: boolean | Prisma.products$picking_itemsArgs<ExtArgs>
@@ -1278,10 +1879,16 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
   document_items?: boolean | Prisma.products$document_itemsArgs<ExtArgs>
+  product_price?: boolean | Prisma.products$product_priceArgs<ExtArgs>
+  transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type productsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type productsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type productsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
+}
+export type productsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
+}
 
 export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "products"
@@ -1292,12 +1899,18 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     warehouse_stock: Prisma.$warehouse_stockPayload<ExtArgs>[]
     warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
     document_items: Prisma.$document_itemsPayload<ExtArgs>[]
+    product_price: Prisma.$product_pricePayload<ExtArgs>[]
+    transfer_rate: Prisma.$transfer_ratesPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     sku: string | null
     requires_refrigeration: boolean | null
+    price_enabled: boolean
+    is_rate_type: boolean
+    rate_id: string | null
+    taxId: string | null
     created_at: Date
     updated_at: Date
     deleted_at: Date | null
@@ -1705,6 +2318,8 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
   warehouse_stock<T extends Prisma.products$warehouse_stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock_movements<T extends Prisma.products$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   document_items<T extends Prisma.products$document_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$document_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  product_price<T extends Prisma.products$product_priceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_priceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_pricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transfer_rate<T extends Prisma.products$transfer_rateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$transfer_rateArgs<ExtArgs>>): Prisma.Prisma__transfer_ratesClient<runtime.Types.Result.GetResult<Prisma.$transfer_ratesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1738,6 +2353,10 @@ export interface productsFieldRefs {
   readonly name: Prisma.FieldRef<"products", 'String'>
   readonly sku: Prisma.FieldRef<"products", 'String'>
   readonly requires_refrigeration: Prisma.FieldRef<"products", 'Boolean'>
+  readonly price_enabled: Prisma.FieldRef<"products", 'Boolean'>
+  readonly is_rate_type: Prisma.FieldRef<"products", 'Boolean'>
+  readonly rate_id: Prisma.FieldRef<"products", 'String'>
+  readonly taxId: Prisma.FieldRef<"products", 'String'>
   readonly created_at: Prisma.FieldRef<"products", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"products", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"products", 'DateTime'>
@@ -1999,6 +2618,10 @@ export type productsCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.productsCreateManyInput | Prisma.productsCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.productsIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2069,6 +2692,10 @@ export type productsUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many products to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.productsIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2279,6 +2906,49 @@ export type products$document_itemsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.Document_itemsScalarFieldEnum | Prisma.Document_itemsScalarFieldEnum[]
+}
+
+/**
+ * products.product_price
+ */
+export type products$product_priceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the product_price
+   */
+  select?: Prisma.product_priceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the product_price
+   */
+  omit?: Prisma.product_priceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.product_priceInclude<ExtArgs> | null
+  where?: Prisma.product_priceWhereInput
+  orderBy?: Prisma.product_priceOrderByWithRelationInput | Prisma.product_priceOrderByWithRelationInput[]
+  cursor?: Prisma.product_priceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Product_priceScalarFieldEnum | Prisma.Product_priceScalarFieldEnum[]
+}
+
+/**
+ * products.transfer_rate
+ */
+export type products$transfer_rateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the transfer_rates
+   */
+  select?: Prisma.transfer_ratesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the transfer_rates
+   */
+  omit?: Prisma.transfer_ratesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.transfer_ratesInclude<ExtArgs> | null
+  where?: Prisma.transfer_ratesWhereInput
 }
 
 /**

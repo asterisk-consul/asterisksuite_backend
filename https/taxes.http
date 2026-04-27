@@ -20,7 +20,6 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "9af6e716-d26a-45f3-9afa-68c346e1628f",
   "code": "IMP_IVA1",
   "name": "IMP_IVA1",
   "tax_type": "IVA",
@@ -39,7 +38,7 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### ✏️ Actualizar Tax
-PATCH {{baseUrl}}/taxes/b30a27ed-2ab6-42ae-b178-54077b6854ca
+PATCH {{baseUrl}}/taxes/784fbace-ce2f-4fa8-bea3-c73522e5237d
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 

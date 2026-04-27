@@ -47,4 +47,8 @@ export class DispatchOrdersController {
   remove(@Param('id') id: string) {
     return this.service.remove(id);
   }
+  @Post('sync-prices')
+  syncPrices(@Body() body: { rateIds: string[] }) {
+    return this.service.syncPrices(body.rateIds);
+  }
 }

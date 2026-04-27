@@ -104,3 +104,16 @@ Content-Type: application/json
   "order_number": "ORD-003",
   "customer_id": "not-a-uuid"
 }
+
+### ─── SYNC PRICES (POR TARIFA) ─────────────────────────
+
+POST {{baseUrl}}/dispatch-orders/sync-prices
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "rateIds": [
+    "ID_TARIFA_BULTO",
+    "ID_TARIFA_FIJA"
+  ]
+}

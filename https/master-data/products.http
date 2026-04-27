@@ -13,22 +13,30 @@ Content-Type: application/json
 ###
 
 @accessToken = {{login.response.body.accessToken}}
+@productId = 872c4285-1c79-4881-a0f6-b10e6f149590
+@taxId = 784fbace-ce2f-4fa8-bea3-c73522e5237d
+@rateId = 7b300804-2feb-4ba5-94f9-4a4f8012a006
+@rateProductId = COMPLETAR-DESPUES-DE-CREAR
+
+### =====================================================
+### Crear Producto simple (sin precio)
+### =====================================================
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "PRUEBA",
+  "sku": "SKU-088",
+  "requires_refrigeration": false,
+  "price_enabled": false
+}
+
 ###
-# ==============================
-# 🔐 LOGIN
-# ==============================
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "admin@mail.com",
-  "password": "123456"
-}
-
 
 ### =====================================================
-### Crear Producto
-### POST /master-data/products
+### Crear Producto con precio sin impuesto
 ### =====================================================
 
 POST {{baseUrl}}/master-data/products
@@ -36,15 +44,18 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "21f611eb-1f24-4a85-9b82-efc5ba78ef71",
-  "name": "COMBUSTIBLE CISTERNA",
-  "sku": "SKU-001",
-  "requires_refrigeration": false
+  "name": "Producto con precio",
+  "sku": "SKU-002",
+  "requires_refrigeration": false,
+  "price_enabled": true,
+  "price": 1000,
+  "exemptionRate": 0
 }
 
+###
 
 ### =====================================================
-### Crear Producto (mínimo requerido)
+### Crear Producto con precio + impuesto
 ### =====================================================
 
 POST {{baseUrl}}/master-data/products
@@ -52,32 +63,121 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "{{companyId}}",
-  "name": "Producto Sin SKU"
+  "name": "Producto con IVA 21%",
+  "sku": "SKU-003",
+  "requires_refrigeration": false,
+  "price_enabled": true,
+  "price": 1000,
+  "taxId": "{{taxId}}",
+  "exemptionRate": 0
 }
 
+###
 
 ### =====================================================
-### Listar Productos por empresa
-### GET /master-data/products?company_id=
+### Crear Producto con precio + impuesto + exención 50%
+### precio_final = 1000 + (1000 * 0.50 * 0.21) = 1105
 ### =====================================================
 
-GET {{baseUrl}}/master-data/products?company_id={{companyId}}
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Producto con IVA 21% y exención 50%",
+  "sku": "SKU-004",
+  "price_enabled": true,
+  "price": 1000,
+  "taxId": "{{taxId}}",
+  "exemptionRate": 50
+}
+
+###
+
+### =====================================================
+### ⭐ TIPO TARIFA — Crear producto tipo tarifa
+### El precio queda en 0 hasta que haya un despacho
+### COMPLETED con viaje COMPLETED para esa tarifa
+### =====================================================
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Flete 2",
+  "sku": "SKU-TARIFA-001",
+  "requires_refrigeration": false,
+  "price_enabled": false,
+  "is_rate_type": true,
+  "rate_id": "{{rateId}}"
+}
+
+###
+
+### =====================================================
+### ⭐ TIPO TARIFA — Obtener producto tipo tarifa
+### Verificar que transfer_rate viene incluida
+### =====================================================
+
+GET {{baseUrl}}/master-data/products/{{rateProductId}}
 Authorization: Bearer {{accessToken}}
 
+###
+
+### =====================================================
+### ⭐ TIPO TARIFA — Cambiar la tarifa asociada
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/products/{{rateProductId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "is_rate_type": true,
+  "rate_id": "{{rateId}}"
+}
+
+###
+
+### =====================================================
+### ⭐ TIPO TARIFA — Volver a precio manual
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/products/{{rateProductId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "is_rate_type": false,
+  "price_enabled": true,
+  "price": 1500,
+  "exemptionRate": 0
+}
+
+###
+
+### =====================================================
+### Listar Productos
+### Verificar que los tipo tarifa traen transfer_rate
+### =====================================================
+
+GET {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+
+###
 
 ### =====================================================
 ### Obtener Producto por ID
-### GET /master-data/products/:id
 ### =====================================================
 
 GET {{baseUrl}}/master-data/products/{{productId}}
 Authorization: Bearer {{accessToken}}
 
+###
 
 ### =====================================================
-### Actualizar Producto
-### PATCH /master-data/products/:id
+### Actualizar Producto (sin tocar precio)
 ### =====================================================
 
 PATCH {{baseUrl}}/master-data/products/{{productId}}
@@ -90,10 +190,57 @@ Content-Type: application/json
   "requires_refrigeration": true
 }
 
+###
 
 ### =====================================================
-### Eliminar Producto (hard delete)
-### DELETE /master-data/products/:id
+### Actualizar precio e impuesto de un producto
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/products/{{productId}}/price
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "basePrice": 2000,
+  "taxId": "{{taxId}}",
+  "exemptionRate": 0
+}
+
+###
+
+### =====================================================
+### Actualizar precio con exención
+### precio_final = 2000 + (2000 * 0.30 * 0.21) = 2126
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/products/{{productId}}/price
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "basePrice": 2000,
+  "taxId": "{{taxId}}",
+  "exemptionRate": 30
+}
+
+###
+
+### =====================================================
+### Desactivar precio de un producto
+### =====================================================
+
+PATCH {{baseUrl}}/master-data/products/{{productId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "price_enabled": false
+}
+
+###
+
+### =====================================================
+### Eliminar Producto
 ### =====================================================
 
 DELETE {{baseUrl}}/master-data/products/{{productId}}

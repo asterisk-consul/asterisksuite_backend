@@ -32,4 +32,9 @@ export class TaxesService {
       data: dto,
     });
   }
+  async remove(id: string) {
+    return this.prisma.taxes.delete({
+      where: { id },
+    });
+  }
 }
