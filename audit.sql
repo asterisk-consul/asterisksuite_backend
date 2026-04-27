@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "AuditAction" AS ENUM ('CREATE', 'UPDATE', 'DELETE');
+CREATE TYPE "AuditAction" AS ENUM ('CREATE', 'UPDATE', 'DELETE', 'RESTORE');
 
 -- AlterTable
 ALTER TABLE "business_parties" ADD COLUMN     "created_by" UUID,
@@ -173,6 +173,10 @@ ALTER TABLE "products" ADD COLUMN     "active" BOOLEAN DEFAULT true,
 ADD COLUMN     "created_by" UUID,
 ADD COLUMN     "deleted_at" TIMESTAMP(3),
 ADD COLUMN     "deleted_by" UUID,
+ADD COLUMN     "is_rate_type" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "price_enabled" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "rate_id" UUID,
+ADD COLUMN     "taxId" UUID,
 ADD COLUMN     "updated_at" TIMESTAMP(6) NOT NULL,
 ADD COLUMN     "updated_by" UUID;
 
@@ -262,6 +266,22 @@ ADD COLUMN     "updated_at" TIMESTAMP(6) NOT NULL,
 ADD COLUMN     "updated_by" UUID;
 
 -- CreateTable
+CREATE TABLE "product_price" (
+    "id" UUID NOT NULL,
+    "product_id" UUID NOT NULL,
+    "price" DECIMAL(15,2) NOT NULL,
+    "exemptionRate" DECIMAL(5,2) NOT NULL,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
+    "created_by" UUID,
+    "updated_by" UUID,
+    "deleted_by" UUID,
+
+    CONSTRAINT "product_price_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "audit_logs" (
     "id" UUID NOT NULL,
     "table_name" VARCHAR(100) NOT NULL,
@@ -288,6 +308,12 @@ CREATE INDEX "audit_logs_changed_at_idx" ON "audit_logs"("changed_at");
 
 -- CreateIndex
 CREATE INDEX "audit_logs_table_name_changed_at_idx" ON "audit_logs"("table_name", "changed_at" DESC);
+
+-- AddForeignKey
+ALTER TABLE "products" ADD CONSTRAINT "products_rate_id_fkey" FOREIGN KEY ("rate_id") REFERENCES "transfer_rates"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "product_price" ADD CONSTRAINT "product_price_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_changed_by_fkey" FOREIGN KEY ("changed_by") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
