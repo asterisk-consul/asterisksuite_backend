@@ -12,15 +12,10 @@ export class PrismaService
     const connectionString = process.env.DATABASE_URL;
     const adapter = new PrismaPg({ connectionString });
 
-    const client = new PrismaClient({ adapter });
-
-    // 🔥 aplicamos extensión
-    const extended = withAudit(client);
-
     super({ adapter });
 
-    // ⚠️ reemplazamos internamente el client
-    Object.assign(this, extended);
+    // 🔥 IMPORTANTE: aplicar extensión correctamente
+    Object.assign(this, this.$extends(withAudit));
   }
 
   async onModuleInit() {
