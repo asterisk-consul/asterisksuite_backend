@@ -148,9 +148,15 @@ export class ReporteChoferesService {
         JOIN business_parties bp      ON bp.id = d.customer_id
         JOIN locations l              ON l.id = d.origin_location_id
         JOIN locations l2             ON l2.id = d.destination_location_id
-        JOIN trip_stops ts            ON ts.stop_order = 1
-        JOIN trip_stop_orders tso     ON tso.trip_stop_id = ts.id AND tso.dispatch_order_id = d.id
-        JOIN trips t                  ON t.id = ts.trip_id
+        JOIN LATERAL (
+          SELECT tso.*
+          FROM trip_stop_orders tso
+          WHERE tso.dispatch_order_id = d.id
+            AND tso.action = 'PICKUP'
+          LIMIT 1
+        ) tso ON true
+        JOIN trip_stops ts  ON ts.id = tso.trip_stop_id
+        LEFT JOIN trips t ON t.id = ts.trip_id
         LEFT JOIN vw_trips_drivers td ON td.trip_id = t.id
         LEFT JOIN corridors c         ON c.id = d.corridor_id
         LEFT JOIN (
