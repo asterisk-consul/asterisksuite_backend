@@ -19,24 +19,32 @@ import { TripStatus } from '@/generated/prisma/enums';
 export class TripsController {
   constructor(private readonly service: TripsService) {}
 
-  // ✅ Rutas específicas PRIMERO
+  // ✅ Específicas primero
   @Get('detail/:id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
 
-  @Patch(':id/status/:status') // ✅ antes de :id
+  @Patch(':id/status/:status')
   updateStatus(@Param('id') id: string, @Param('status') status: TripStatus) {
     return this.service.updateStatus(id, status);
   }
 
-  // ✅ Rutas genéricas DESPUÉS
+  @Delete(':id/orders/:dispatchOrderId')
+  removeOrderFromTrip(
+    @Param('id') tripId: string,
+    @Param('dispatchOrderId') dispatchOrderId: string,
+  ) {
+    return this.service.removeOrderFromTrip(tripId, dispatchOrderId);
+  }
+
+  // ⚠️ Genéricas después
   @Get()
   findAll() {
     return this.service.findAll();
   }
 
-  @Patch(':id') // ← esta debe ir después de todas las específicas
+  @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateTripDto) {
     return this.service.update(id, dto);
   }

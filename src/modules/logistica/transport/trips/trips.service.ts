@@ -1,4 +1,8 @@
-import { NotFoundException, Injectable } from '@nestjs/common';
+import {
+  NotFoundException,
+  Injectable,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
@@ -12,6 +16,42 @@ export class TripsService {
     private prisma: PrismaService,
     private documentsSalesService: DocumentsSalesService,
   ) {}
+
+  private async reorderTripStops(tx: Prisma.TransactionClient, tripId: string) {
+    const stops = await tx.trip_stops.findMany({
+      where: { trip_id: tripId },
+      orderBy: { stop_order: 'asc' },
+    });
+
+    // 🔁 normalizar 1..N
+    await Promise.all(
+      stops.map((stop, index) =>
+        tx.trip_stops.update({
+          where: { id: stop.id },
+          data: { stop_order: index + 1 },
+        }),
+      ),
+    );
+
+    // 🔁 recalcular extremos
+    if (stops.length > 0) {
+      await tx.trips.update({
+        where: { id: tripId },
+        data: {
+          origin_location_id: stops[0].location_id,
+          destination_location_id: stops[stops.length - 1].location_id,
+        },
+      });
+    } else {
+      await tx.trips.update({
+        where: { id: tripId },
+        data: {
+          origin_location_id: null,
+          destination_location_id: null,
+        },
+      });
+    }
+  }
 
   /* =========================
      MAP TRIP TO UNIQUE ORDERS
@@ -200,15 +240,12 @@ export class TripsService {
     return this.prisma.trips.delete({ where: { id } });
   }
 
-  /* =========================
-     ASSIGN ORDERS
-  ========================= */
   async assignOrders(
     tripId: string,
     dto: {
       stops: {
         location_id: string;
-        stop_order: number;
+        stop_order: number; // 👈 lo ignoramos
         stop_type?: string;
         orders: {
           dispatch_order_id: string;
@@ -217,89 +254,128 @@ export class TripsService {
       }[];
     },
   ) {
-    const trip = await this.prisma.trips.findUnique({ where: { id: tripId } });
+    const trip = await this.prisma.trips.findUnique({
+      where: { id: tripId },
+    });
+
     if (!trip) throw new NotFoundException('Trip not found');
 
-    const sortedStops = dto.stops.sort((a, b) => a.stop_order - b.stop_order);
+    if (trip.status !== 'PLANNED') {
+      throw new BadRequestException(
+        'Cannot modify a trip in progress or completed',
+      );
+    }
 
     return this.prisma.$transaction(async (tx) => {
+      // 1️⃣ limpiar todo
       await tx.trip_stop_orders.deleteMany({
         where: { trip_stop: { trip_id: tripId } },
       });
 
-      await tx.trip_stops.deleteMany({ where: { trip_id: tripId } });
+      await tx.trip_stops.deleteMany({
+        where: { trip_id: tripId },
+      });
 
-      const origin = sortedStops[0]?.location_id;
-      const destination = sortedStops[sortedStops.length - 1]?.location_id;
-
+      // 2️⃣ crear stops (🔥 orden controlado por backend)
       await tx.trip_stops.createMany({
-        data: sortedStops.map((s) => ({
+        data: dto.stops.map((s, index) => ({
           trip_id: tripId,
           location_id: s.location_id,
-          stop_order: s.stop_order,
+          stop_order: index + 1, // 🔥 SIEMPRE backend manda
           stop_type: s.stop_type,
         })),
       });
 
+      // 3️⃣ obtener stops reales
       const createdStops = await tx.trip_stops.findMany({
         where: { trip_id: tripId },
+        orderBy: { stop_order: 'asc' },
       });
+
       const stopMap = new Map(createdStops.map((s) => [s.stop_order, s.id]));
 
-      const tripOrdersData = sortedStops.flatMap((s) =>
+      // 4️⃣ crear relaciones
+      const tripOrdersData = dto.stops.flatMap((s, index) =>
         s.orders.map((o) => ({
-          trip_stop_id: stopMap.get(s.stop_order)!,
+          trip_stop_id: stopMap.get(index + 1)!,
           dispatch_order_id: o.dispatch_order_id,
           action: o.action,
         })),
       );
 
-      await tx.trip_stop_orders.createMany({ data: tripOrdersData });
+      if (tripOrdersData.length > 0) {
+        await tx.trip_stop_orders.createMany({
+          data: tripOrdersData,
+        });
+      }
 
-      const orderIds = tripOrdersData.map((o) => o.dispatch_order_id);
-      await tx.dispatch_orders.updateMany({
-        where: { id: { in: orderIds } },
-        data: { status: DispatchStatus.ASSIGNED },
-      });
+      // 5️⃣ actualizar estado órdenes
+      const orderIds = [
+        ...new Set(tripOrdersData.map((o) => o.dispatch_order_id)),
+      ];
 
-      await tx.trips.update({
-        where: { id: tripId },
-        data: {
-          origin_location_id: origin,
-          destination_location_id: destination,
-        },
-      });
+      if (orderIds.length > 0) {
+        await tx.dispatch_orders.updateMany({
+          where: { id: { in: orderIds } },
+          data: { status: DispatchStatus.ASSIGNED },
+        });
+      }
+
+      // 6️⃣ reorder + extremos (🔥 centralizado)
+      await this.reorderTripStops(tx, tripId);
 
       return { success: true };
     });
   }
+
   /* =========================
    REMOVE ORDER FROM TRIP
 ========================= */
   async removeOrderFromTrip(tripId: string, dispatchOrderId: string) {
-    const trip = await this.prisma.trips.findUnique({
-      where: { id: tripId },
-      include: { trip_stops: true },
+    return await this.prisma.$transaction(async (tx) => {
+      const trip = await tx.trips.findUnique({
+        where: { id: tripId },
+        include: { trip_stops: true },
+      });
+
+      if (!trip) throw new NotFoundException('Trip not found');
+
+      if (trip.status !== 'PLANNED') {
+        throw new BadRequestException(
+          'No se puede modificar un viaje en este estado',
+        );
+      }
+
+      const stopIds = trip.trip_stops.map((s) => s.id);
+
+      // 1️⃣ eliminar relaciones
+      await tx.trip_stop_orders.deleteMany({
+        where: {
+          trip_stop_id: { in: stopIds },
+          dispatch_order_id: dispatchOrderId,
+        },
+      });
+
+      // 2️⃣ eliminar stops vacíos
+      await tx.trip_stops.deleteMany({
+        where: {
+          trip_id: tripId,
+          trip_orders: {
+            none: {},
+          },
+        },
+      });
+
+      // 3️⃣ reorder 🔥
+      await this.reorderTripStops(tx, tripId);
+
+      // 4️⃣ estado orden
+      await tx.dispatch_orders.update({
+        where: { id: dispatchOrderId },
+        data: { status: DispatchStatus.PENDING },
+      });
+
+      return { success: true };
     });
-    if (!trip) throw new NotFoundException('Trip not found');
-
-    // Buscar todos los stops de ese trip
-    const stopIds = trip.trip_stops.map((s) => s.id);
-
-    // Borrar la relación de esa orden en todos los stops
-    await this.prisma.trip_stop_orders.deleteMany({
-      where: {
-        trip_stop_id: { in: stopIds },
-        dispatch_order_id: dispatchOrderId,
-      },
-    });
-
-    // Opcional: actualizar status de la orden a PENDING o PLANIFICADA
-    await this.prisma.dispatch_orders.update({
-      where: { id: dispatchOrderId },
-      data: { status: DispatchStatus.PENDING },
-    });
-
-    return { success: true };
   }
 }
