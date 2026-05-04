@@ -9,39 +9,15 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { DocumentsSalesService } from './documents_sales.services';
+import { DocumentsSalesService } from './documents_purchases.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 
-@Controller('documents/sales')
+@Controller('documents/purchases-documents')
 @UseGuards(JwtAuthGuard)
 export class DocumentsSalesController {
   constructor(private readonly service: DocumentsSalesService) {}
-
-  // ← PRIMERO las rutas estáticas
-  @Post('generate-from-all-completed-trips')
-  async generateFromAllCompletedTrips() {
-    const tripIds = await this.service.getAllCompletedTripIds();
-    const results: { tripId: string; created: number; skipped: number }[] = [];
-
-    for (const tripId of tripIds) {
-      const result = await this.service.generateDraftsFromTrip(tripId);
-      results.push({
-        tripId,
-        created: result.created,
-        skipped: result.skipped,
-      });
-    }
-
-    return { total_trips: tripIds.length, results };
-  }
-
-  // ← DESPUÉS las rutas dinámicas con :param
-  @Post('generate-from-trip/:tripId')
-  generateFromTrip(@Param('tripId') tripId: string) {
-    return this.service.generateDraftsFromTrip(tripId);
-  }
 
   @Post()
   create(@Body() dto: CreateDocumentDto) {

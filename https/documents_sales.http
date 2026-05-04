@@ -13,16 +13,15 @@ Content-Type: application/json
 ###
 
 @accessToken = {{login.response.body.accessToken}}
-@docId = REEMPLAZAR_CON_ID_REAL
+@docId =
 @tripId = REEMPLAZAR_CON_ID_REAL
-@partyId = REEMPLAZAR_CON_ID_REAL
-@taxId = REEMPLAZAR_CON_ID_REAL
-@productId = REEMPLAZAR_CON_ID_REAL
-@docTypeId = 84052621-1431-425b-a301-ce6429fafb6a
+@partyId = 6199dbb7-d74e-46af-95e5-3ee2e4e793ef
+@taxId = 7f2a703e-d2f4-4d21-b528-60a047c2450e
+@productId = 593f4d4d-1f0b-4c16-b9ce-15ce1b4e201d
+@docTypeId = afad8b42-baca-4c3e-afae-55038be50eec
 
 ### =====================================================
 ### 🚀 Generar borradores de TODOS los viajes completados
-### Corré esto UNA VEZ para los viajes preexistentes
 ### =====================================================
 
 POST {{baseUrl}}/documents/sales/generate-from-all-completed-trips
@@ -49,7 +48,7 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### =====================================================
-### Listar solo pendientes (status=1)
+### Listar solo pendientes
 ### =====================================================
 
 GET {{baseUrl}}/documents/sales?status=1
@@ -58,7 +57,7 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### =====================================================
-### Listar solo borradores (status=0)
+### Listar solo borradores
 ### =====================================================
 
 GET {{baseUrl}}/documents/sales?status=0
@@ -85,7 +84,7 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### =====================================================
-### Crear documento manual (factura)
+### Crear documento manual
 ### =====================================================
 
 POST {{baseUrl}}/documents/sales
@@ -96,33 +95,13 @@ Content-Type: application/json
   "document_type_id": "{{docTypeId}}",
   "party_id": "{{partyId}}",
   "date": "2026-04-23",
-  "descrip": "Factura manual",
+  "descrip": "Factura de Venta",
   "ref": "REF-001",
-  "subtotal": 1000,
-  "exempt_amount": 0,
-  "total_taxes": 210,
-  "total": 1210,
   "items": [
     {
       "product_id": "{{productId}}",
-      "quantity": 1,
-      "unit_price": 1000,
-      "price": 1000,
-      "taxes": [
-        {
-          "tax_id": "{{taxId}}",
-          "tax_rate": 21,
-          "tax_amount": 210
-        }
-      ]
-    }
-  ],
-  "taxes": [
-    {
-      "tax_id": "{{taxId}}",
-      "tax_rate": 21,
-      "taxable_base": 1000,
-      "tax_amount": 210
+      "quantity": 4,
+      "unit_price": 0
     }
   ]
 }
@@ -130,7 +109,7 @@ Content-Type: application/json
 ###
 
 ### =====================================================
-### Actualizar documento (agregar ítem, cambiar totales)
+### Actualizar documento
 ### =====================================================
 
 PATCH {{baseUrl}}/documents/sales/{{docId}}
@@ -138,39 +117,20 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "subtotal": 2000,
-  "exempt_amount": 0,
-  "total_taxes": 420,
-  "total": 2420,
   "items": [
     {
       "product_id": "{{productId}}",
       "quantity": 2,
-      "unit_price": 1000,
-      "price": 2000,
-      "taxes": [
-        {
-          "tax_id": "{{taxId}}",
-          "tax_rate": 21,
-          "tax_amount": 420
-        }
-      ]
+      "unit_price": 1000
     }
   ],
-  "taxes": [
-    {
-      "tax_id": "{{taxId}}",
-      "tax_rate": 21,
-      "taxable_base": 2000,
-      "tax_amount": 420
-    }
-  ]
+  "descrip": "Factura actualizada"
 }
 
 ###
 
 ### =====================================================
-### Confirmar documento (status 1 → 2)
+### Confirmar documento
 ### =====================================================
 
 PATCH {{baseUrl}}/documents/sales/{{docId}}/confirm
@@ -188,7 +148,7 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### =====================================================
-### Eliminar documento (solo borradores status=0)
+### Eliminar documento
 ### =====================================================
 
 DELETE {{baseUrl}}/documents/sales/{{docId}}

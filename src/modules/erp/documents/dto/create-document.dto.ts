@@ -1,46 +1,115 @@
-// dto/create-document.dto.ts
+import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsDateString,
-  IsDecimal,
-  IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
-  MaxLength,
+  Min,
+  ValidateNested,
 } from 'class-validator';
+
+export class CreateDocumentItemTaxDto {
+  @IsUUID()
+  tax_id!: string;
+
+  @IsNumber()
+  tax_rate!: number;
+
+  @IsNumber()
+  tax_amount!: number;
+}
+export class CreateDocumentItemDto {
+  @IsUUID()
+  @IsOptional()
+  product_id?: string;
+
+  @IsNumber()
+  @Min(0)
+  quantity!: number;
+
+  @IsNumber()
+  @Min(0)
+  unit_price!: number;
+
+  // ✅ ahora opcional (backend lo calcula)
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  price?: number;
+
+  // ✅ opcional y solo útil si NO hay producto
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateDocumentItemTaxDto)
+  @IsOptional()
+  taxes?: CreateDocumentItemTaxDto[];
+}
+
+export class CreateDocumentTaxDto {
+  @IsUUID()
+  tax_id!: string;
+
+  @IsNumber()
+  tax_rate!: number;
+
+  @IsNumber()
+  taxable_base!: number;
+
+  @IsNumber()
+  tax_amount!: number;
+}
 
 export class CreateDocumentDto {
   @IsUUID()
-  document_type_id: string;
+  document_type_id!: string;
 
-  @IsOptional()
   @IsUUID()
+  @IsOptional()
   party_id?: string;
 
-  @IsInt()
-  number: number;
-
   @IsDateString()
-  date: string;
+  date!: string;
 
+  @IsString()
   @IsOptional()
-  @IsInt()
-  status?: number;
+  descrip?: string;
 
+  @IsString()
   @IsOptional()
-  @IsDecimal()
+  ref?: string;
+
+  // ✅ ahora opcionales (backend los recalcula)
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
   subtotal?: number;
 
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
+  @Min(0)
+  exempt_amount?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
   total_taxes?: number;
 
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
+  @Min(0)
   total?: number;
 
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateDocumentItemDto)
+  items!: CreateDocumentItemDto[];
+
+  // ✅ opcional (backend los genera)
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateDocumentTaxDto)
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  descrip?: string;
+  taxes?: CreateDocumentTaxDto[];
 }

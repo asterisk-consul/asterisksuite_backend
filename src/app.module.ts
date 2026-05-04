@@ -8,7 +8,6 @@ import { modulesmodule } from './modules/modules.module';
 import { DocumentsTypesErpModule } from './modules/erp/document_types/documents-types.module';
 import { DocumentsTypesModule } from './modules/master-data/documents-types/documents-types.module';
 import { TaxesModule } from './modules/erp/taxes/taxes.module';
-import { DocumentsModule } from './modules/erp/documents/documents.module';
 import { PurchasesModule } from './modules/erp/purchase/purchases.module';
 import { ReporteChoferesModule } from './modules/logistica/reports/drivers/dispatch_rates.module';
 import { DocumentsSalesModule } from './modules/erp/documents-sales/documents_sales.module';
@@ -23,7 +22,6 @@ import { DocumentsSalesModule } from './modules/erp/documents-sales/documents_sa
     DocumentsTypesErpModule,
     DocumentsTypesModule,
     TaxesModule,
-    DocumentsModule,
     PurchasesModule,
     ReporteChoferesModule,
     DocumentsSalesModule,

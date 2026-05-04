@@ -78,6 +78,7 @@ Authorization: Bearer {{accessToken}}
 GET {{baseUrl}}/purchases/movements
 Authorization: Bearer {{accessToken}}
 
+
 ### Movimientos filtrados por fechas
 GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31
 Authorization: Bearer {{accessToken}}
@@ -97,8 +98,13 @@ Authorization: Bearer {{accessToken}}
 ### Movimientos con todos los filtros
 GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
 Authorization: Bearer {{accessToken}}
+### =====================================================
+### 🧾 DOCUMENTOS DE COMPRA
+### GET /purchases/purchases-documents
+### =====================================================
 
-
+GET {{baseUrl}}/purchases/purchases-documents
+Authorization: Bearer {{accessToken}}
 ### =====================================================
 ### 📦 PRODUCTOS DISPONIBLES
 ### GET /purchases/products

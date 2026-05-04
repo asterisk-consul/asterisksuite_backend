@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 
 ### 📋 Listar Taxes por empresa
-GET {{baseUrl}}/taxes?company_id=9af6e716-d26a-45f3-9afa-68c346e1628f
+GET {{baseUrl}}/taxes?company_id  
 Authorization: Bearer {{accessToken}}
 
 ###

@@ -103,11 +103,17 @@ export class DocumentsSalesService {
       const overridePrice =
         Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
 
-      const resolvedItem = await this.productPriceService.resolveItemWithTaxes(
+      const resolvedItem = (await this.productPriceService.resolveItemWithTaxes(
         item.product_id,
         Number(item.quantity),
         overridePrice,
-      );
+      )) as {
+        product_id: string;
+        quantity: number;
+        unit_price: number;
+        price: number;
+        taxes: TaxInput[];
+      } | null;
 
       if (resolvedItem) {
         // 🔥 BLINDADO: nunca undefined

@@ -12,6 +12,8 @@ import {
   AvailableProductResponseDto,
 } from './dto';
 import { QueryPurchasesDto } from './dto/query-purchases.dto';
+import { PurchasesDocumentsResponseDto } from './dto/documents_purchases/purchases-documents-response';
+import { GlobalPurchaseDocumentsResponseDto } from './dto/documents_purchases/global-purchases-documents';
 
 @Injectable()
 export class PurchasesService {
@@ -67,8 +69,6 @@ export class PurchasesService {
       if (!doc.document_types) continue;
 
       const sign = this.getDocumentSign(doc.document_types.code);
-
-      // esto me dice que es una compra
       const isInvoice = sign === 1;
 
       const documentSubtotal = Number(doc.subtotal) * sign;
@@ -80,6 +80,7 @@ export class PurchasesService {
         const product = item.products;
 
         const itemValue = Number(item.quantity) * Number(item.price);
+
         const proportion =
           documentSubtotal !== 0 ? itemValue / documentSubtotal : 0;
 
@@ -136,7 +137,7 @@ export class PurchasesService {
 
     const products: ProductSummaryDto[] = Array.from(productTotals.entries())
       .map(([productId, data]) => ({
-        productId: productId,
+        productId,
         productCode: data.productCode,
         productName: data.productName,
         productCategory: '',
@@ -161,7 +162,7 @@ export class PurchasesService {
 
     const globalExempt = products.reduce((sum, p) => sum + p.totalExempt, 0);
 
-    const globalPurchaseTotal = globalTotal + globalTaxes + globalExempt;
+    const grandTotal = globalTotal + globalTaxes + globalExempt;
 
     const globalTransactionCount = products.reduce(
       (sum, p) => sum + p.transactionCount,
@@ -170,10 +171,13 @@ export class PurchasesService {
 
     const negTotal = documents.reduce((sum, doc) => {
       if (!doc.document_types) return sum;
+
       const sign = this.getDocumentSign(doc.document_types.code);
+
       if (sign === -1) {
         return sum + Number(doc.subtotal);
       }
+
       return sum;
     }, 0);
 
@@ -181,7 +185,8 @@ export class PurchasesService {
       globalTotal,
       globalTaxes,
       globalExempt,
-      globalPurchaseTotal,
+      globalPurchaseTotal: grandTotal,
+      grandTotal,
       globalTransactionCount,
       negTotal,
       totalProducts: products.length,
@@ -480,6 +485,94 @@ export class PurchasesService {
 
     return movements;
   }
+
+  async getPurchaseDocuments(
+    query: QueryPurchasesDto,
+  ): Promise<GlobalPurchaseDocumentsResponseDto> {
+    const whereCondition = this.buildWhereCondition(query);
+
+    const documents = await this.prisma.documents.findMany({
+      where: {
+        ...whereCondition,
+        document_types: {
+          active: true,
+        },
+      },
+      include: {
+        business_parties: true,
+        document_taxes: {
+          include: {
+            taxes: true,
+          },
+        },
+        document_types: {
+          include: {
+            document_sequences: true,
+          },
+        },
+      },
+      orderBy: {
+        date: 'desc',
+      },
+    });
+
+    let grandTotal = 0;
+
+    const purchaseDocuments: PurchasesDocumentsResponseDto[] = [];
+
+    for (const doc of documents) {
+      if (!doc.document_types) continue;
+
+      const sign = this.getDocumentSign(doc.document_types.code);
+
+      const subtotal = Number(doc.subtotal) * sign;
+
+      const taxes =
+        doc.document_taxes.reduce((sum, t) => sum + Number(t.tax_amount), 0) *
+        sign;
+
+      const exempt = Number(doc.exempt_amount || 0) * sign;
+
+      const grossTotal = subtotal + taxes + exempt;
+
+      grandTotal += grossTotal;
+
+      purchaseDocuments.push({
+        ref: doc.ref || '',
+        number: doc.number?.toString() || '',
+        date: doc.date,
+
+        supplierName: doc.business_parties?.name || '',
+        supplierCode: doc.business_parties?.id || '',
+
+        documentTypeCode: doc.document_types.code,
+        documentTypeName: doc.document_types.description,
+
+        documentSubtotal: subtotal,
+        taxAmount: taxes,
+        totalExempt: exempt,
+
+        documentTotal: grossTotal,
+
+        taxCode: doc.document_taxes.map((t) => t.taxes.code).join(', '),
+        taxName: doc.document_taxes.map((t) => t.taxes.name).join(', '),
+
+        sequenceNumber:
+          doc.document_types.document_sequences?.current_number?.toString() ||
+          '',
+
+        transactionType: sign === 1 ? 'Compra' : 'Nota Crédito/Débito',
+
+        adjustedValue: grossTotal,
+      });
+    }
+
+    return {
+      grandTotal,
+      documents: purchaseDocuments,
+    };
+  }
+
   async getAvailableProducts(): Promise<AvailableProductResponseDto[]> {
     const products = await this.prisma.products.findMany({
       where: {

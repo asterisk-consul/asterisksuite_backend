@@ -25,7 +25,7 @@ Content-Type: application/json
 {
   "document_sequence_id": "3e2a2d2c-4dea-4b64-a50c-d4e5dee55ece",
   "code": "NC",
-  "description": "Nota de Crédito",
+  "description": "",
   "direction": -1,
   "affects_stock": true,
   "affects_accounting": true,

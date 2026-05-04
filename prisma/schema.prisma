@@ -683,7 +683,7 @@ model document_sequences {
   deleted_by     String?          @db.Uuid
   document_types document_types[]
 
-  @@unique([point_of_sale])
+  @@unique([point_of_sale, prefix])  
 }
 
 model refresh_tokens {
