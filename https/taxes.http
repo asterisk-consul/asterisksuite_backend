@@ -20,11 +20,11 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "IMP_IVA1",
-  "name": "IMP_IVA1",
+  "code": "Excento",
+  "name": "EX",
   "tax_type": "IVA",
-  "rate": 21.000,
-  "is_percentage": true,
+  "rate": -10.000,
+  "is_percentage": false,
   "active": true,
   "calculation_level": "LINE"
 }
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 
 ### 📋 Listar Taxes por empresa
-GET {{baseUrl}}/taxes?company_id  
+GET {{baseUrl}}/taxes?id 
 Authorization: Bearer {{accessToken}}
 
 ###

@@ -26,8 +26,8 @@ export class TaxesController {
   }
 
   @Get()
-  findAll(@Query('company_id') companyId: string) {
-    return this.taxesService.findAll(companyId);
+  findAll(@Query('id') id: string) {
+    return this.taxesService.findAll(id);
   }
 
   @Patch(':id')
