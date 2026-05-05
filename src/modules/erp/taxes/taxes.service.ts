@@ -14,7 +14,7 @@ export class TaxesService {
     });
   }
 
-  async findAll(id: string) {
+  async findAll() {
     return this.prisma.taxes.findMany();
   }
 

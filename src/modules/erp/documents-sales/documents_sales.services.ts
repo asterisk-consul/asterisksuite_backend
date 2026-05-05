@@ -100,6 +100,7 @@ export class DocumentsSalesService {
         continue;
       }
 
+      // Aca verifica si el precio lo coloca el cliente
       const overridePrice =
         Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
 

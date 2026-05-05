@@ -18,6 +18,8 @@ Content-Type: application/json
 @partyId = 6199dbb7-d74e-46af-95e5-3ee2e4e793ef
 @taxId = 7f2a703e-d2f4-4d21-b528-60a047c2450e
 @productId = 593f4d4d-1f0b-4c16-b9ce-15ce1b4e201d
+@productId2 = 658fdbd2-1d1e-488d-8cb5-31bcb30c43bf
+
 @docTypeId = afad8b42-baca-4c3e-afae-55038be50eec
 
 ### =====================================================
@@ -102,6 +104,11 @@ Content-Type: application/json
       "product_id": "{{productId}}",
       "quantity": 4,
       "unit_price": 0
+    },
+    {
+      "product_id": "{{productId2}}",
+      "quantity": 4,
+      "unit_price": 1000
     }
   ]
 }

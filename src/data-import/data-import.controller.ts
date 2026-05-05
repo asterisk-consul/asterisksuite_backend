@@ -1,5 +1,10 @@
 // data-import.controller.ts
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DataImportService } from './data-import.service';
 
@@ -19,6 +24,11 @@ export class DataImportController {
     return this.service.importCompras(file);
   }
 
+  @Post('ventas')
+  @UseInterceptors(FileInterceptor('file'))
+  importVentas(@UploadedFile() file: Express.Multer.File) {
+    return this.service.importventas(file);
+  }
   @Post('nota-credito')
   @UseInterceptors(FileInterceptor('file'))
   importNotaCredito(@UploadedFile() file: Express.Multer.File) {

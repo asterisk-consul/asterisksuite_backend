@@ -14,6 +14,9 @@ import { FacturaSink } from './compras/sinks/compras.sink';
 import { NotaParser } from './compras/paresers/notas.parser';
 import { NotaTransformer } from './compras/transformer/notas.transformer';
 
+import { VentasTransformer } from './sales/transformer/sales.transformer';
+import { FacturaVentaParser } from './sales/parsers/sales.parser';
+
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -39,7 +42,15 @@ export class DataImportService {
     );
     return pipeline.run();
   }
-
+  async importventas(file: Express.Multer.File) {
+    const pipeline = new ImportPipeline(
+      new ExcelSource(file),
+      new FacturaVentaParser(),
+      new VentasTransformer(this.prisma),
+      new FacturaSink(this.prisma),
+    );
+    return pipeline.run();
+  }
   async importNotaCredito(file: Express.Multer.File) {
     const pipeline = new ImportPipeline(
       new ExcelSource(file),

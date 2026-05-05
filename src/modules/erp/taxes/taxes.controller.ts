@@ -1,4 +1,3 @@
-// taxes.controller.ts
 import {
   Body,
   Controller,
@@ -7,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { TaxesService } from './taxes.service';
@@ -26,8 +24,8 @@ export class TaxesController {
   }
 
   @Get()
-  findAll(@Query('id') id: string) {
-    return this.taxesService.findAll(id);
+  findAll() {
+    return this.taxesService.findAll();
   }
 
   @Patch(':id')

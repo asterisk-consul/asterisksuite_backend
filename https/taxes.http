@@ -23,7 +23,7 @@ Content-Type: application/json
   "code": "Excento",
   "name": "EX",
   "tax_type": "IVA",
-  "rate": -10.000,
+  "rate": 10.000,
   "is_percentage": false,
   "active": true,
   "calculation_level": "LINE"
@@ -38,11 +38,12 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### ✏️ Actualizar Tax
-PATCH {{baseUrl}}/taxes/784fbace-ce2f-4fa8-bea3-c73522e5237d
+PATCH {{baseUrl}}/taxes/6f3a600a-61ec-4c3a-aa5a-780ac5d5c4e8
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "IVA2"
+  "code": "Excento",
+  "rate": -10
   
 }
