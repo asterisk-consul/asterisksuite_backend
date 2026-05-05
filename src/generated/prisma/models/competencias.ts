@@ -221,7 +221,7 @@ export type CompetenciasGroupByOutputType = {
   _max: CompetenciasMaxAggregateOutputType | null
 }
 
-type GetCompetenciasGroupByPayload<T extends competenciasGroupByArgs> = Prisma.PrismaPromise<
+export type GetCompetenciasGroupByPayload<T extends competenciasGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CompetenciasGroupByOutputType, T['by']> &
       {
@@ -1912,6 +1912,11 @@ export type competenciasFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` competencias.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of competencias.
+   */
   distinct?: Prisma.CompetenciasScalarFieldEnum | Prisma.CompetenciasScalarFieldEnum[]
 }
 

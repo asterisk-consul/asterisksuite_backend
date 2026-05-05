@@ -295,7 +295,7 @@ export type ComunicaGroupByOutputType = {
   _max: ComunicaMaxAggregateOutputType | null
 }
 
-type GetComunicaGroupByPayload<T extends comunicaGroupByArgs> = Prisma.PrismaPromise<
+export type GetComunicaGroupByPayload<T extends comunicaGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ComunicaGroupByOutputType, T['by']> &
       {
@@ -3294,6 +3294,11 @@ export type comunicaFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` comunicas.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of comunicas.
+   */
   distinct?: Prisma.ComunicaScalarFieldEnum | Prisma.ComunicaScalarFieldEnum[]
 }
 

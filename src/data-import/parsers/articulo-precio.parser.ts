@@ -16,10 +16,8 @@ function normalizeHeader(header: string): string {
 }
 
 export class ArticuloPrecioParser implements Parser<ArticuloPrecioRaw> {
-
   parse(raw: unknown[]): ArticuloPrecioRaw[] {
     return raw.map((row) => {
-
       const r = row as ArticuloPrecioRow;
 
       const normalized = Object.keys(r).reduce(
@@ -38,13 +36,11 @@ export class ArticuloPrecioParser implements Parser<ArticuloPrecioRaw> {
   }
 
   parseWithErrors(raw: unknown[]): ParseResult<ArticuloPrecioRaw> {
-
     const success: ArticuloPrecioRaw[] = [];
     const errors: ParseResult<ArticuloPrecioRaw>['errors'] = [];
 
     raw.forEach((row, index) => {
       try {
-
         const r = row as ArticuloPrecioRow;
 
         const normalized = Object.keys(r).reduce(
@@ -61,11 +57,8 @@ export class ArticuloPrecioParser implements Parser<ArticuloPrecioRaw> {
         });
 
         success.push(validated);
-
       } catch (error) {
-
         if (error instanceof ZodError) {
-
           errors.push({
             row: index + 2, // +2 porque excel tiene header
             data: row,
@@ -73,15 +66,12 @@ export class ArticuloPrecioParser implements Parser<ArticuloPrecioRaw> {
               (e) => `${e.path.join('.')}: ${e.message}`,
             ),
           });
-
         } else {
-
           errors.push({
             row: index + 2,
             data: row,
             errors: ['Error desconocido al parsear'],
           });
-
         }
       }
     });

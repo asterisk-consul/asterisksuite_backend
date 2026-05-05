@@ -218,7 +218,7 @@ export type ImpositivosGroupByOutputType = {
   _max: ImpositivosMaxAggregateOutputType | null
 }
 
-type GetImpositivosGroupByPayload<T extends impositivosGroupByArgs> = Prisma.PrismaPromise<
+export type GetImpositivosGroupByPayload<T extends impositivosGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ImpositivosGroupByOutputType, T['by']> &
       {
@@ -1485,6 +1485,11 @@ export type impositivosFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` impositivos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of impositivos.
+   */
   distinct?: Prisma.ImpositivosScalarFieldEnum | Prisma.ImpositivosScalarFieldEnum[]
 }
 

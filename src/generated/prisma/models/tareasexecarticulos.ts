@@ -197,7 +197,7 @@ export type TareasexecarticulosGroupByOutputType = {
   _max: TareasexecarticulosMaxAggregateOutputType | null
 }
 
-type GetTareasexecarticulosGroupByPayload<T extends tareasexecarticulosGroupByArgs> = Prisma.PrismaPromise<
+export type GetTareasexecarticulosGroupByPayload<T extends tareasexecarticulosGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TareasexecarticulosGroupByOutputType, T['by']> &
       {
@@ -1263,6 +1263,11 @@ export type tareasexecarticulosFindManyArgs<ExtArgs extends runtime.Types.Extens
    * Skip the first `n` tareasexecarticulos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of tareasexecarticulos.
+   */
   distinct?: Prisma.TareasexecarticulosScalarFieldEnum | Prisma.TareasexecarticulosScalarFieldEnum[]
 }
 

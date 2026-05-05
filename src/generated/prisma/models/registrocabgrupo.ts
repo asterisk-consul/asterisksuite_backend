@@ -197,7 +197,7 @@ export type RegistrocabgrupoGroupByOutputType = {
   _max: RegistrocabgrupoMaxAggregateOutputType | null
 }
 
-type GetRegistrocabgrupoGroupByPayload<T extends registrocabgrupoGroupByArgs> = Prisma.PrismaPromise<
+export type GetRegistrocabgrupoGroupByPayload<T extends registrocabgrupoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RegistrocabgrupoGroupByOutputType, T['by']> &
       {
@@ -1263,6 +1263,11 @@ export type registrocabgrupoFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` registrocabgrupos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of registrocabgrupos.
+   */
   distinct?: Prisma.RegistrocabgrupoScalarFieldEnum | Prisma.RegistrocabgrupoScalarFieldEnum[]
 }
 

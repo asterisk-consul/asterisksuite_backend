@@ -232,7 +232,7 @@ export type ArticuloespecGroupByOutputType = {
   _max: ArticuloespecMaxAggregateOutputType | null
 }
 
-type GetArticuloespecGroupByPayload<T extends articuloespecGroupByArgs> = Prisma.PrismaPromise<
+export type GetArticuloespecGroupByPayload<T extends articuloespecGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ArticuloespecGroupByOutputType, T['by']> &
       {
@@ -1336,6 +1336,11 @@ export type articuloespecFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` articuloespecs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of articuloespecs.
+   */
   distinct?: Prisma.ArticuloespecScalarFieldEnum | Prisma.ArticuloespecScalarFieldEnum[]
 }
 

@@ -261,7 +261,7 @@ export type SecuenciasGroupByOutputType = {
   _max: SecuenciasMaxAggregateOutputType | null
 }
 
-type GetSecuenciasGroupByPayload<T extends secuenciasGroupByArgs> = Prisma.PrismaPromise<
+export type GetSecuenciasGroupByPayload<T extends secuenciasGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<SecuenciasGroupByOutputType, T['by']> &
       {
@@ -2048,6 +2048,11 @@ export type secuenciasFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` secuencias.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of secuencias.
+   */
   distinct?: Prisma.SecuenciasScalarFieldEnum | Prisma.SecuenciasScalarFieldEnum[]
 }
 

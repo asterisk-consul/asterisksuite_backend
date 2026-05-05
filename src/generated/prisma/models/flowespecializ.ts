@@ -197,7 +197,7 @@ export type FlowespecializGroupByOutputType = {
   _max: FlowespecializMaxAggregateOutputType | null
 }
 
-type GetFlowespecializGroupByPayload<T extends flowespecializGroupByArgs> = Prisma.PrismaPromise<
+export type GetFlowespecializGroupByPayload<T extends flowespecializGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlowespecializGroupByOutputType, T['by']> &
       {
@@ -1263,6 +1263,11 @@ export type flowespecializFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` flowespecializs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of flowespecializs.
+   */
   distinct?: Prisma.FlowespecializScalarFieldEnum | Prisma.FlowespecializScalarFieldEnum[]
 }
 

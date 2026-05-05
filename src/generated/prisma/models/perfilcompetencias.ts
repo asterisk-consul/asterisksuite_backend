@@ -204,7 +204,7 @@ export type PerfilcompetenciasGroupByOutputType = {
   _max: PerfilcompetenciasMaxAggregateOutputType | null
 }
 
-type GetPerfilcompetenciasGroupByPayload<T extends perfilcompetenciasGroupByArgs> = Prisma.PrismaPromise<
+export type GetPerfilcompetenciasGroupByPayload<T extends perfilcompetenciasGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PerfilcompetenciasGroupByOutputType, T['by']> &
       {
@@ -1424,6 +1424,11 @@ export type perfilcompetenciasFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` perfilcompetencias.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of perfilcompetencias.
+   */
   distinct?: Prisma.PerfilcompetenciasScalarFieldEnum | Prisma.PerfilcompetenciasScalarFieldEnum[]
 }
 

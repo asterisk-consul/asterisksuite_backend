@@ -193,7 +193,7 @@ export type RegistrocabaudioGroupByOutputType = {
   _max: RegistrocabaudioMaxAggregateOutputType | null
 }
 
-type GetRegistrocabaudioGroupByPayload<T extends registrocabaudioGroupByArgs> = Prisma.PrismaPromise<
+export type GetRegistrocabaudioGroupByPayload<T extends registrocabaudioGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RegistrocabaudioGroupByOutputType, T['by']> &
       {
@@ -1143,6 +1143,11 @@ export type registrocabaudioFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` registrocabaudios.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of registrocabaudios.
+   */
   distinct?: Prisma.RegistrocabaudioScalarFieldEnum | Prisma.RegistrocabaudioScalarFieldEnum[]
 }
 

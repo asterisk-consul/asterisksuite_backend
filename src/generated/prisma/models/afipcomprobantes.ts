@@ -349,7 +349,7 @@ export type AfipcomprobantesGroupByOutputType = {
   _max: AfipcomprobantesMaxAggregateOutputType | null
 }
 
-type GetAfipcomprobantesGroupByPayload<T extends afipcomprobantesGroupByArgs> = Prisma.PrismaPromise<
+export type GetAfipcomprobantesGroupByPayload<T extends afipcomprobantesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AfipcomprobantesGroupByOutputType, T['by']> &
       {
@@ -2804,6 +2804,11 @@ export type afipcomprobantesFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` afipcomprobantes.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of afipcomprobantes.
+   */
   distinct?: Prisma.AfipcomprobantesScalarFieldEnum | Prisma.AfipcomprobantesScalarFieldEnum[]
 }
 

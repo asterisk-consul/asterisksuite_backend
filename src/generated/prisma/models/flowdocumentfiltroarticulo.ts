@@ -186,7 +186,7 @@ export type FlowdocumentfiltroarticuloGroupByOutputType = {
   _max: FlowdocumentfiltroarticuloMaxAggregateOutputType | null
 }
 
-type GetFlowdocumentfiltroarticuloGroupByPayload<T extends flowdocumentfiltroarticuloGroupByArgs> = Prisma.PrismaPromise<
+export type GetFlowdocumentfiltroarticuloGroupByPayload<T extends flowdocumentfiltroarticuloGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlowdocumentfiltroarticuloGroupByOutputType, T['by']> &
       {
@@ -1216,6 +1216,11 @@ export type flowdocumentfiltroarticuloFindManyArgs<ExtArgs extends runtime.Types
    * Skip the first `n` flowdocumentfiltroarticulos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of flowdocumentfiltroarticulos.
+   */
   distinct?: Prisma.FlowdocumentfiltroarticuloScalarFieldEnum | Prisma.FlowdocumentfiltroarticuloScalarFieldEnum[]
 }
 

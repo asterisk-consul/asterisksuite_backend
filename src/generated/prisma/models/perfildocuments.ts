@@ -186,7 +186,7 @@ export type PerfildocumentsGroupByOutputType = {
   _max: PerfildocumentsMaxAggregateOutputType | null
 }
 
-type GetPerfildocumentsGroupByPayload<T extends perfildocumentsGroupByArgs> = Prisma.PrismaPromise<
+export type GetPerfildocumentsGroupByPayload<T extends perfildocumentsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PerfildocumentsGroupByOutputType, T['by']> &
       {
@@ -1216,6 +1216,11 @@ export type perfildocumentsFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` perfildocuments.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of perfildocuments.
+   */
   distinct?: Prisma.PerfildocumentsScalarFieldEnum | Prisma.PerfildocumentsScalarFieldEnum[]
 }
 

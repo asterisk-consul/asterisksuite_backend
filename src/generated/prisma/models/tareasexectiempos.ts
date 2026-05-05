@@ -211,7 +211,7 @@ export type TareasexectiemposGroupByOutputType = {
   _max: TareasexectiemposMaxAggregateOutputType | null
 }
 
-type GetTareasexectiemposGroupByPayload<T extends tareasexectiemposGroupByArgs> = Prisma.PrismaPromise<
+export type GetTareasexectiemposGroupByPayload<T extends tareasexectiemposGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TareasexectiemposGroupByOutputType, T['by']> &
       {
@@ -1219,6 +1219,11 @@ export type tareasexectiemposFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` tareasexectiempos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of tareasexectiempos.
+   */
   distinct?: Prisma.TareasexectiemposScalarFieldEnum | Prisma.TareasexectiemposScalarFieldEnum[]
 }
 

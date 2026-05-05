@@ -186,7 +186,7 @@ export type ReceptoresGroupByOutputType = {
   _max: ReceptoresMaxAggregateOutputType | null
 }
 
-type GetReceptoresGroupByPayload<T extends receptoresGroupByArgs> = Prisma.PrismaPromise<
+export type GetReceptoresGroupByPayload<T extends receptoresGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ReceptoresGroupByOutputType, T['by']> &
       {
@@ -1216,6 +1216,11 @@ export type receptoresFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` receptores.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of receptores.
+   */
   distinct?: Prisma.ReceptoresScalarFieldEnum | Prisma.ReceptoresScalarFieldEnum[]
 }
 

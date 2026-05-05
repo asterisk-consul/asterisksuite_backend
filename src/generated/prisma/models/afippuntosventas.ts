@@ -239,7 +239,7 @@ export type AfippuntosventasGroupByOutputType = {
   _max: AfippuntosventasMaxAggregateOutputType | null
 }
 
-type GetAfippuntosventasGroupByPayload<T extends afippuntosventasGroupByArgs> = Prisma.PrismaPromise<
+export type GetAfippuntosventasGroupByPayload<T extends afippuntosventasGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AfippuntosventasGroupByOutputType, T['by']> &
       {
@@ -1494,6 +1494,11 @@ export type afippuntosventasFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` afippuntosventas.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of afippuntosventas.
+   */
   distinct?: Prisma.AfippuntosventasScalarFieldEnum | Prisma.AfippuntosventasScalarFieldEnum[]
 }
 

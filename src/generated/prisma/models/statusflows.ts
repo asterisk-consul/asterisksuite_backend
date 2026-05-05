@@ -248,7 +248,7 @@ export type StatusflowsGroupByOutputType = {
   _max: StatusflowsMaxAggregateOutputType | null
 }
 
-type GetStatusflowsGroupByPayload<T extends statusflowsGroupByArgs> = Prisma.PrismaPromise<
+export type GetStatusflowsGroupByPayload<T extends statusflowsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StatusflowsGroupByOutputType, T['by']> &
       {
@@ -3154,6 +3154,11 @@ export type statusflowsFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` statusflows.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of statusflows.
+   */
   distinct?: Prisma.StatusflowsScalarFieldEnum | Prisma.StatusflowsScalarFieldEnum[]
 }
 

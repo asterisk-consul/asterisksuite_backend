@@ -221,7 +221,7 @@ export type CompanyafipGroupByOutputType = {
   _max: CompanyafipMaxAggregateOutputType | null
 }
 
-type GetCompanyafipGroupByPayload<T extends companyafipGroupByArgs> = Prisma.PrismaPromise<
+export type GetCompanyafipGroupByPayload<T extends companyafipGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CompanyafipGroupByOutputType, T['by']> &
       {
@@ -1556,6 +1556,11 @@ export type companyafipFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` companyafips.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of companyafips.
+   */
   distinct?: Prisma.CompanyafipScalarFieldEnum | Prisma.CompanyafipScalarFieldEnum[]
 }
 

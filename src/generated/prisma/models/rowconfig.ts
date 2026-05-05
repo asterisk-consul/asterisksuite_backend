@@ -185,7 +185,7 @@ export type RowconfigGroupByOutputType = {
   _max: RowconfigMaxAggregateOutputType | null
 }
 
-type GetRowconfigGroupByPayload<T extends rowconfigGroupByArgs> = Prisma.PrismaPromise<
+export type GetRowconfigGroupByPayload<T extends rowconfigGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RowconfigGroupByOutputType, T['by']> &
       {
@@ -967,6 +967,11 @@ export type rowconfigFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` rowconfigs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of rowconfigs.
+   */
   distinct?: Prisma.RowconfigScalarFieldEnum | Prisma.RowconfigScalarFieldEnum[]
 }
 

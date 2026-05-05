@@ -254,7 +254,7 @@ export type ArticuloamedidacarteraGroupByOutputType = {
   _max: ArticuloamedidacarteraMaxAggregateOutputType | null
 }
 
-type GetArticuloamedidacarteraGroupByPayload<T extends articuloamedidacarteraGroupByArgs> = Prisma.PrismaPromise<
+export type GetArticuloamedidacarteraGroupByPayload<T extends articuloamedidacarteraGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ArticuloamedidacarteraGroupByOutputType, T['by']> &
       {
@@ -1882,6 +1882,11 @@ export type articuloamedidacarteraFindManyArgs<ExtArgs extends runtime.Types.Ext
    * Skip the first `n` articuloamedidacarteras.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of articuloamedidacarteras.
+   */
   distinct?: Prisma.ArticuloamedidacarteraScalarFieldEnum | Prisma.ArticuloamedidacarteraScalarFieldEnum[]
 }
 

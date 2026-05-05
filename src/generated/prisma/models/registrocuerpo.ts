@@ -651,7 +651,7 @@ export type RegistrocuerpoGroupByOutputType = {
   _max: RegistrocuerpoMaxAggregateOutputType | null
 }
 
-type GetRegistrocuerpoGroupByPayload<T extends registrocuerpoGroupByArgs> = Prisma.PrismaPromise<
+export type GetRegistrocuerpoGroupByPayload<T extends registrocuerpoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RegistrocuerpoGroupByOutputType, T['by']> &
       {
@@ -7449,6 +7449,11 @@ export type registrocuerpoFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` registrocuerpos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of registrocuerpos.
+   */
   distinct?: Prisma.RegistrocuerpoScalarFieldEnum | Prisma.RegistrocuerpoScalarFieldEnum[]
 }
 

@@ -351,7 +351,7 @@ export type TareasexecGroupByOutputType = {
   _max: TareasexecMaxAggregateOutputType | null
 }
 
-type GetTareasexecGroupByPayload<T extends tareasexecGroupByArgs> = Prisma.PrismaPromise<
+export type GetTareasexecGroupByPayload<T extends tareasexecGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TareasexecGroupByOutputType, T['by']> &
       {
@@ -2950,6 +2950,11 @@ export type tareasexecFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` tareasexecs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of tareasexecs.
+   */
   distinct?: Prisma.TareasexecScalarFieldEnum | Prisma.TareasexecScalarFieldEnum[]
 }
 

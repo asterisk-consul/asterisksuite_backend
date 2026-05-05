@@ -189,7 +189,7 @@ export type GruposGroupByOutputType = {
   _max: GruposMaxAggregateOutputType | null
 }
 
-type GetGruposGroupByPayload<T extends gruposGroupByArgs> = Prisma.PrismaPromise<
+export type GetGruposGroupByPayload<T extends gruposGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<GruposGroupByOutputType, T['by']> &
       {
@@ -1248,6 +1248,11 @@ export type gruposFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Skip the first `n` grupos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of grupos.
+   */
   distinct?: Prisma.GruposScalarFieldEnum | Prisma.GruposScalarFieldEnum[]
 }
 

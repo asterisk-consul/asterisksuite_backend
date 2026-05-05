@@ -211,7 +211,7 @@ export type DepositosGroupByOutputType = {
   _max: DepositosMaxAggregateOutputType | null
 }
 
-type GetDepositosGroupByPayload<T extends depositosGroupByArgs> = Prisma.PrismaPromise<
+export type GetDepositosGroupByPayload<T extends depositosGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DepositosGroupByOutputType, T['by']> &
       {
@@ -2221,6 +2221,11 @@ export type depositosFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` depositos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of depositos.
+   */
   distinct?: Prisma.DepositosScalarFieldEnum | Prisma.DepositosScalarFieldEnum[]
 }
 

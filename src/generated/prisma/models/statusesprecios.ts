@@ -186,7 +186,7 @@ export type StatusespreciosGroupByOutputType = {
   _max: StatusespreciosMaxAggregateOutputType | null
 }
 
-type GetStatusespreciosGroupByPayload<T extends statusespreciosGroupByArgs> = Prisma.PrismaPromise<
+export type GetStatusespreciosGroupByPayload<T extends statusespreciosGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StatusespreciosGroupByOutputType, T['by']> &
       {
@@ -1222,6 +1222,11 @@ export type statusespreciosFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` statusesprecios.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of statusesprecios.
+   */
   distinct?: Prisma.StatusespreciosScalarFieldEnum | Prisma.StatusespreciosScalarFieldEnum[]
 }
 

@@ -197,7 +197,7 @@ export type FlowdocumentprocesorelacionadoGroupByOutputType = {
   _max: FlowdocumentprocesorelacionadoMaxAggregateOutputType | null
 }
 
-type GetFlowdocumentprocesorelacionadoGroupByPayload<T extends flowdocumentprocesorelacionadoGroupByArgs> = Prisma.PrismaPromise<
+export type GetFlowdocumentprocesorelacionadoGroupByPayload<T extends flowdocumentprocesorelacionadoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlowdocumentprocesorelacionadoGroupByOutputType, T['by']> &
       {
@@ -1270,6 +1270,11 @@ export type flowdocumentprocesorelacionadoFindManyArgs<ExtArgs extends runtime.T
    * Skip the first `n` flowdocumentprocesorelacionados.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of flowdocumentprocesorelacionados.
+   */
   distinct?: Prisma.FlowdocumentprocesorelacionadoScalarFieldEnum | Prisma.FlowdocumentprocesorelacionadoScalarFieldEnum[]
 }
 

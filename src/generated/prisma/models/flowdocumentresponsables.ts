@@ -197,7 +197,7 @@ export type FlowdocumentresponsablesGroupByOutputType = {
   _max: FlowdocumentresponsablesMaxAggregateOutputType | null
 }
 
-type GetFlowdocumentresponsablesGroupByPayload<T extends flowdocumentresponsablesGroupByArgs> = Prisma.PrismaPromise<
+export type GetFlowdocumentresponsablesGroupByPayload<T extends flowdocumentresponsablesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlowdocumentresponsablesGroupByOutputType, T['by']> &
       {
@@ -1149,6 +1149,11 @@ export type flowdocumentresponsablesFindManyArgs<ExtArgs extends runtime.Types.E
    * Skip the first `n` flowdocumentresponsables.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of flowdocumentresponsables.
+   */
   distinct?: Prisma.FlowdocumentresponsablesScalarFieldEnum | Prisma.FlowdocumentresponsablesScalarFieldEnum[]
 }
 

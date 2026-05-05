@@ -186,7 +186,7 @@ export type ReportesaclGroupByOutputType = {
   _max: ReportesaclMaxAggregateOutputType | null
 }
 
-type GetReportesaclGroupByPayload<T extends reportesaclGroupByArgs> = Prisma.PrismaPromise<
+export type GetReportesaclGroupByPayload<T extends reportesaclGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ReportesaclGroupByOutputType, T['by']> &
       {
@@ -1216,6 +1216,11 @@ export type reportesaclFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` reportesacls.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of reportesacls.
+   */
   distinct?: Prisma.ReportesaclScalarFieldEnum | Prisma.ReportesaclScalarFieldEnum[]
 }
 

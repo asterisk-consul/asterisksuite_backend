@@ -200,7 +200,7 @@ export type OrdencabGroupByOutputType = {
   _max: OrdencabMaxAggregateOutputType | null
 }
 
-type GetOrdencabGroupByPayload<T extends ordencabGroupByArgs> = Prisma.PrismaPromise<
+export type GetOrdencabGroupByPayload<T extends ordencabGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<OrdencabGroupByOutputType, T['by']> &
       {
@@ -1385,6 +1385,11 @@ export type ordencabFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` ordencabs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ordencabs.
+   */
   distinct?: Prisma.OrdencabScalarFieldEnum | Prisma.OrdencabScalarFieldEnum[]
 }
 

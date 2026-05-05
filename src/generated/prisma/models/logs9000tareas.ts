@@ -226,7 +226,7 @@ export type Logs9000tareasGroupByOutputType = {
   _max: Logs9000tareasMaxAggregateOutputType | null
 }
 
-type GetLogs9000tareasGroupByPayload<T extends logs9000tareasGroupByArgs> = Prisma.PrismaPromise<
+export type GetLogs9000tareasGroupByPayload<T extends logs9000tareasGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Logs9000tareasGroupByOutputType, T['by']> &
       {
@@ -1266,6 +1266,11 @@ export type logs9000tareasFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` logs9000tareas.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of logs9000tareas.
+   */
   distinct?: Prisma.Logs9000tareasScalarFieldEnum | Prisma.Logs9000tareasScalarFieldEnum[]
 }
 

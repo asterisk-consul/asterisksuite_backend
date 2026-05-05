@@ -186,7 +186,7 @@ export type CategoriasperfilesGroupByOutputType = {
   _max: CategoriasperfilesMaxAggregateOutputType | null
 }
 
-type GetCategoriasperfilesGroupByPayload<T extends categoriasperfilesGroupByArgs> = Prisma.PrismaPromise<
+export type GetCategoriasperfilesGroupByPayload<T extends categoriasperfilesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CategoriasperfilesGroupByOutputType, T['by']> &
       {
@@ -1216,6 +1216,11 @@ export type categoriasperfilesFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` categoriasperfiles.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of categoriasperfiles.
+   */
   distinct?: Prisma.CategoriasperfilesScalarFieldEnum | Prisma.CategoriasperfilesScalarFieldEnum[]
 }
 

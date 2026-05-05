@@ -208,7 +208,7 @@ export type InstructivoarticulosGroupByOutputType = {
   _max: InstructivoarticulosMaxAggregateOutputType | null
 }
 
-type GetInstructivoarticulosGroupByPayload<T extends instructivoarticulosGroupByArgs> = Prisma.PrismaPromise<
+export type GetInstructivoarticulosGroupByPayload<T extends instructivoarticulosGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<InstructivoarticulosGroupByOutputType, T['by']> &
       {
@@ -1430,6 +1430,11 @@ export type instructivoarticulosFindManyArgs<ExtArgs extends runtime.Types.Exten
    * Skip the first `n` instructivoarticulos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of instructivoarticulos.
+   */
   distinct?: Prisma.InstructivoarticulosScalarFieldEnum | Prisma.InstructivoarticulosScalarFieldEnum[]
 }
 

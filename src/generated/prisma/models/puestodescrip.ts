@@ -229,7 +229,7 @@ export type PuestodescripGroupByOutputType = {
   _max: PuestodescripMaxAggregateOutputType | null
 }
 
-type GetPuestodescripGroupByPayload<T extends puestodescripGroupByArgs> = Prisma.PrismaPromise<
+export type GetPuestodescripGroupByPayload<T extends puestodescripGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PuestodescripGroupByOutputType, T['by']> &
       {
@@ -1706,6 +1706,11 @@ export type puestodescripFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` puestodescrips.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of puestodescrips.
+   */
   distinct?: Prisma.PuestodescripScalarFieldEnum | Prisma.PuestodescripScalarFieldEnum[]
 }
 

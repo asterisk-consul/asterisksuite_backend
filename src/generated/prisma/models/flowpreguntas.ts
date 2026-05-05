@@ -211,7 +211,7 @@ export type FlowpreguntasGroupByOutputType = {
   _max: FlowpreguntasMaxAggregateOutputType | null
 }
 
-type GetFlowpreguntasGroupByPayload<T extends flowpreguntasGroupByArgs> = Prisma.PrismaPromise<
+export type GetFlowpreguntasGroupByPayload<T extends flowpreguntasGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlowpreguntasGroupByOutputType, T['by']> &
       {
@@ -1338,6 +1338,11 @@ export type flowpreguntasFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` flowpreguntas.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of flowpreguntas.
+   */
   distinct?: Prisma.FlowpreguntasScalarFieldEnum | Prisma.FlowpreguntasScalarFieldEnum[]
 }
 

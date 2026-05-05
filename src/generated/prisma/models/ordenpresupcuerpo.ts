@@ -186,7 +186,7 @@ export type OrdenpresupcuerpoGroupByOutputType = {
   _max: OrdenpresupcuerpoMaxAggregateOutputType | null
 }
 
-type GetOrdenpresupcuerpoGroupByPayload<T extends ordenpresupcuerpoGroupByArgs> = Prisma.PrismaPromise<
+export type GetOrdenpresupcuerpoGroupByPayload<T extends ordenpresupcuerpoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<OrdenpresupcuerpoGroupByOutputType, T['by']> &
       {
@@ -1216,6 +1216,11 @@ export type ordenpresupcuerpoFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` ordenpresupcuerpos.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ordenpresupcuerpos.
+   */
   distinct?: Prisma.OrdenpresupcuerpoScalarFieldEnum | Prisma.OrdenpresupcuerpoScalarFieldEnum[]
 }
 

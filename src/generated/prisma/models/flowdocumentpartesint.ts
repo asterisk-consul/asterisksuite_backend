@@ -186,7 +186,7 @@ export type FlowdocumentpartesintGroupByOutputType = {
   _max: FlowdocumentpartesintMaxAggregateOutputType | null
 }
 
-type GetFlowdocumentpartesintGroupByPayload<T extends flowdocumentpartesintGroupByArgs> = Prisma.PrismaPromise<
+export type GetFlowdocumentpartesintGroupByPayload<T extends flowdocumentpartesintGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlowdocumentpartesintGroupByOutputType, T['by']> &
       {
@@ -1210,6 +1210,11 @@ export type flowdocumentpartesintFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` flowdocumentpartesints.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of flowdocumentpartesints.
+   */
   distinct?: Prisma.FlowdocumentpartesintScalarFieldEnum | Prisma.FlowdocumentpartesintScalarFieldEnum[]
 }
 

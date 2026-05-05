@@ -186,7 +186,7 @@ export type TareaexecperfilGroupByOutputType = {
   _max: TareaexecperfilMaxAggregateOutputType | null
 }
 
-type GetTareaexecperfilGroupByPayload<T extends tareaexecperfilGroupByArgs> = Prisma.PrismaPromise<
+export type GetTareaexecperfilGroupByPayload<T extends tareaexecperfilGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TareaexecperfilGroupByOutputType, T['by']> &
       {
@@ -1108,6 +1108,11 @@ export type tareaexecperfilFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` tareaexecperfils.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of tareaexecperfils.
+   */
   distinct?: Prisma.TareaexecperfilScalarFieldEnum | Prisma.TareaexecperfilScalarFieldEnum[]
 }
 
