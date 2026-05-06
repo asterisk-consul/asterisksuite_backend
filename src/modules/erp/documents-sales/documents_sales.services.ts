@@ -8,16 +8,6 @@ import { ProductPriceService } from '../../master-data/products-prices/products_
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 
-/* 
-Draft: Borrador editable
-
-Pending: Pendiente de revisión
-
-Confirmed: Confirmado, ya no editable
-
-Cancelled: Anulado
- */
-// ─── Estados ──────────────────────────────────────────────────────────────────
 const STATUS_DRAFT = 0;
 const STATUS_PENDING = 1;
 const STATUS_CONFIRMED = 2;
@@ -29,20 +19,22 @@ interface TaxInput {
   tax_id: string;
   tax_rate: number;
   tax_amount: number;
-  calculation_level?: string;
+  calculation_level: string; // siempre requerido internamente
+  is_included_in_price: boolean;
 }
 
 interface ItemInput {
-  product_id?: string | null;
+  product_id: string | null;
   quantity: number;
   unit_price: number;
   price: number;
-  taxes?: TaxInput[];
+  taxes: TaxInput[];
 }
 
 interface CalculatedTotals {
   subtotal: number;
   exempt_amount: number;
+  taxable_base: number;
   total_taxes: number;
   total: number;
   documentTaxes: {
@@ -51,6 +43,12 @@ interface CalculatedTotals {
     taxable_base: number;
     tax_amount: number;
   }[];
+}
+
+interface DocTypeTax {
+  tax_id: string;
+  tax_rate: number;
+  calculation_level: string;
 }
 
 @Injectable()
@@ -62,208 +60,279 @@ export class DocumentsSalesService {
     private productPriceService: ProductPriceService,
   ) {}
 
-  // ─── Resolver ítems: precio + taxes desde el producto ────────────────────
+  // ─── Taxes del tipo de documento ─────────────────────────────────────────
+  private async loadDocTypeTaxes(
+    documentTypeId: string,
+  ): Promise<DocTypeTax[]> {
+    const rows = await this.prisma.document_type_taxes.findMany({
+      where: { document_type_id: documentTypeId },
+      include: { taxes: true },
+    });
+
+    return rows.map((r) => ({
+      tax_id: r.tax_id,
+      tax_rate: Number(r.taxes.rate),
+      calculation_level: r.taxes.calculation_level,
+    }));
+  }
+
+  // ─── Resolver ítems ───────────────────────────────────────────────────────
   /**
-   * Para cada ítem del DTO:
+   * Para cada ítem:
    *
-   * 1. Si unit_price > 0 (override manual del frontend):
-   *    - Se usa ese precio
-   *    - Se buscan los taxes del producto desde product_taxes para calcularlos
-   *      sobre ese precio
+   * 1. unit_price:
+   *    - Si viene override del frontend (> 0) → ese valor
+   *    - Si el producto tiene price_enabled → último product_price activo
+   *      via ProductPriceService.resolvePrice()
+   *    - Si es rate_type o sin precio → 0
    *
-   * 2. Si unit_price === 0 y el producto tiene price_enabled:
-   *    - Se toma el precio desde product_price (último activo)
-   *    - Se toman los taxes desde product_taxes
-   *
-   * 3. Si el producto no tiene price configurado (tarifa logística, etc.):
-   *    - Se usa el ítem tal como viene del DTO (precio y taxes manuales)
-   *
-   * En todos los casos los totales del DTO se ignoran; se recalculan abajo.
+   * 2. taxes:
+   *    - Si el producto tiene product_taxes activos → esos
+   *    - Si no tiene → los del document_type (docTypeTaxes)
+   *    - Si tiene ambos → se suman (concat)
+   *    - is_included_in_price=true → tax_amount=0 (ya está en el precio)
+   *    - calculation_level='document' → tax_amount=0 aquí,
+   *      se calcula sobre el subtotal global en calculateTotals
    */
   private async resolveItems(
     dtoItems: CreateDocumentDto['items'],
+    documentTypeId: string,
   ): Promise<ItemInput[]> {
-    const resolved = [] as ItemInput[];
+    const docTypeTaxes = await this.loadDocTypeTaxes(documentTypeId);
+    const resolved: ItemInput[] = [];
 
     for (const item of dtoItems) {
+      // ── Ítem libre sin producto ────────────────────────────────────────
       if (!item.product_id) {
-        // Ítem libre sin producto → se usa tal cual
-        const price = round2(item.unit_price * item.quantity);
-
         resolved.push({
-          product_id: item.product_id ?? null,
+          product_id: null,
           quantity: item.quantity,
           unit_price: item.unit_price,
-          price,
-          taxes: item.taxes ?? [],
+          price: round2(item.unit_price * item.quantity),
+          taxes: docTypeTaxes.map((t) => ({
+            tax_id: t.tax_id,
+            tax_rate: t.tax_rate,
+            tax_amount: 0,
+            calculation_level: t.calculation_level,
+            is_included_in_price: false,
+          })),
         });
         continue;
       }
 
-      // Aca verifica si el precio lo coloca el cliente
-      const overridePrice =
-        Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
+      // ── Cargar producto con sus taxes ──────────────────────────────────
+      const product = await this.prisma.products.findUnique({
+        where: { id: item.product_id },
+        include: {
+          product_taxes: {
+            where: { active: true, deleted_at: null },
+            include: { taxes: true },
+          },
+        },
+      });
 
-      const resolvedItem = await this.productPriceService.resolveItemWithTaxes(
-        item.product_id,
-        Number(item.quantity),
-        overridePrice,
-      );
-
-      if (resolvedItem) {
-        // 🔥 BLINDADO: nunca undefined
-        const price =
-          resolvedItem.price ??
-          round2(resolvedItem.unit_price * resolvedItem.quantity);
-
-        resolved.push({
-          product_id: resolvedItem.product_id,
-          quantity: resolvedItem.quantity,
-          unit_price: resolvedItem.unit_price,
-          price,
-          taxes: resolvedItem.taxes ?? [],
-        });
-      } else {
-        // Producto sin precio configurado
-        const price = round2(item.unit_price * item.quantity);
-
-        resolved.push({
-          product_id: item.product_id ?? null,
-          quantity: item.quantity,
-          unit_price: item.unit_price,
-          price,
-          taxes: item.taxes ?? [],
-        });
+      if (!product) {
+        throw new NotFoundException(
+          `Producto ${item.product_id} no encontrado`,
+        );
       }
+
+      // ── Resolver unit_price via ProductPriceService ────────────────────
+      let unitPrice =
+        Number(item.unit_price) > 0
+          ? Number(item.unit_price) // override manual del frontend
+          : 0;
+
+      if (unitPrice === 0) {
+        const priceData = await this.productPriceService.resolvePrice(
+          product.id,
+        );
+        // resolvePrice maneja internamente: is_rate_type, price_enabled, sin precio activo
+        if (priceData) {
+          unitPrice = priceData.price; // exemptionRate lo ignoramos, viene del cliente
+        }
+      }
+
+      const price = round2(unitPrice * item.quantity);
+
+      // ── Taxes propios del producto ─────────────────────────────────────
+      const productTaxes: TaxInput[] = product.product_taxes.map((pt) => {
+        const taxRate = Number(pt.taxes.rate);
+        const level = pt.taxes.calculation_level;
+        const included = pt.is_included_in_price;
+
+        const taxAmount =
+          included || level === 'document'
+            ? 0
+            : round2(price * (taxRate / 100));
+
+        return {
+          tax_id: pt.tax_id,
+          tax_rate: taxRate,
+          tax_amount: taxAmount,
+          calculation_level: level,
+          is_included_in_price: included,
+        };
+      });
+
+      // ── Taxes del document_type que no están ya en el producto ─────────
+      const productTaxIds = new Set(productTaxes.map((t) => t.tax_id));
+      const fallbackTaxes: TaxInput[] = docTypeTaxes
+        .filter((t) => !productTaxIds.has(t.tax_id))
+        .map((t) => ({
+          tax_id: t.tax_id,
+          tax_rate: t.tax_rate,
+          tax_amount: 0,
+          calculation_level: t.calculation_level,
+          is_included_in_price: false,
+        }));
+
+      resolved.push({
+        product_id: product.id,
+        quantity: item.quantity,
+        unit_price: unitPrice,
+        price,
+        taxes: [...productTaxes, ...fallbackTaxes],
+      });
     }
 
-    return resolved as ItemInput[];
+    return resolved;
   }
 
   // ─── Calcular totales ─────────────────────────────────────────────────────
   /**
    * subtotal      = Σ item.price
-   * exempt_amount = Σ item.price de ítems sin taxes de línea
-   * total_taxes   = Σ tax_amount (line) + Σ tax_amount (document, sobre subtotal)
-   * total         = subtotal + total_taxes
+   * exempt_amount = subtotal * (party.exemption_rate / 100)
+   * taxable_base  = subtotal - exempt_amount
    *
-   * Los taxes con calculation_level='document' se consolidan y se calculan
-   * sobre el subtotal total; sus filas van a document_taxes.
+   * Taxes 'line':
+   *   tax_amount ya calculado en resolveItems → se agrupa y suma por tax_id
+   *
+   * Taxes 'document':
+   *   tax_amount = taxable_base * (rate / 100) → una sola vez al final
+   *
+   * total_taxes = Σ lineTaxes + Σ docTaxes
+   * total       = subtotal + total_taxes
    */
   private async calculateTotals(
     items: ItemInput[],
-    tx?: any,
+    partyId?: string | null,
   ): Promise<CalculatedTotals> {
-    const db = tx ?? this.prisma;
+    const subtotal = round2(items.reduce((acc, i) => acc + Number(i.price), 0));
 
-    const subtotal = round2(
-      items.reduce((acc, item) => acc + Number(item.price), 0),
-    );
-
-    // Consultar calculation_level solo para los taxes que no lo traen resuelto
-    const unknownTaxIds = [
-      ...new Set(
-        items
-          .flatMap((item) => item.taxes ?? [])
-          .filter((t) => !t.calculation_level)
-          .map((t) => t.tax_id),
-      ),
-    ];
-
-    const taxLevelMap = new Map<string, string>();
-
-    if (unknownTaxIds.length) {
-      const records = await db.taxes.findMany({
-        where: { id: { in: unknownTaxIds } },
-        select: { id: true, calculation_level: true },
+    // ── Exención desde el cliente ──────────────────────────────────────────
+    let exemptionRate = 0;
+    if (partyId) {
+      const party = await this.prisma.business_parties.findUnique({
+        where: { id: partyId },
+        select: { exemption_rate: true },
       });
-      for (const r of records) taxLevelMap.set(r.id, r.calculation_level);
+      exemptionRate = Number(party?.exemption_rate ?? 0);
     }
 
-    const getLevel = (t: TaxInput): string =>
-      t.calculation_level ?? taxLevelMap.get(t.tax_id) ?? 'line';
+    const exemptAmount = round2(subtotal * (exemptionRate / 100));
+    const taxableBase = round2(subtotal - exemptAmount);
 
-    let lineTaxesTotal = 0;
-    let exemptAmount = 0;
-    const docLevelTaxMap = new Map<
+    // ── Agrupar taxes por nivel ────────────────────────────────────────────
+    const lineTaxMap = new Map<
       string,
-      { tax_id: string; tax_rate: number }
+      {
+        tax_id: string;
+        tax_rate: number;
+        taxable_base: number;
+        tax_amount: number;
+      }
+    >();
+
+    const docTaxMap = new Map<
+      string,
+      {
+        tax_id: string;
+        tax_rate: number;
+      }
     >();
 
     for (const item of items) {
-      const itemTaxes = item.taxes ?? [];
-      const lineTaxes = itemTaxes.filter((t) => getLevel(t) === 'line');
-      const docTaxes = itemTaxes.filter((t) => getLevel(t) === 'document');
+      for (const t of item.taxes) {
+        if (t.is_included_in_price) continue;
 
-      lineTaxesTotal += lineTaxes.reduce(
-        (acc, t) => acc + Number(t.tax_amount),
-        0,
-      );
-
-      // Sin taxes de línea → el monto del ítem es exento
-      if (lineTaxes.length === 0) {
-        exemptAmount += Number(item.price);
-      }
-
-      for (const t of docTaxes) {
-        if (!docLevelTaxMap.has(t.tax_id)) {
-          docLevelTaxMap.set(t.tax_id, {
-            tax_id: t.tax_id,
-            tax_rate: Number(t.tax_rate),
-          });
+        if (t.calculation_level === 'line') {
+          const existing = lineTaxMap.get(t.tax_id);
+          if (existing) {
+            existing.tax_amount = round2(existing.tax_amount + t.tax_amount);
+            existing.taxable_base = round2(
+              existing.taxable_base + Number(item.price),
+            );
+          } else {
+            lineTaxMap.set(t.tax_id, {
+              tax_id: t.tax_id,
+              tax_rate: t.tax_rate,
+              taxable_base: Number(item.price),
+              tax_amount: t.tax_amount,
+            });
+          }
+        } else {
+          // 'document' → solo registrar rate, el monto se calcula después
+          if (!docTaxMap.has(t.tax_id)) {
+            docTaxMap.set(t.tax_id, {
+              tax_id: t.tax_id,
+              tax_rate: t.tax_rate,
+            });
+          }
         }
       }
     }
 
-    // Taxes de nivel documento: se calculan sobre el subtotal total
+    // ── Consolidar document_taxes ──────────────────────────────────────────
     const documentTaxes: CalculatedTotals['documentTaxes'] = [];
-    let docTaxesTotal = 0;
+    let totalTaxes = 0;
 
-    for (const [, tax] of docLevelTaxMap) {
-      const taxAmount = round2(subtotal * (tax.tax_rate / 100));
-      docTaxesTotal += taxAmount;
+    for (const [, t] of lineTaxMap) {
+      totalTaxes = round2(totalTaxes + t.tax_amount);
+      documentTaxes.push(t);
+    }
+
+    for (const [, t] of docTaxMap) {
+      const taxAmount = round2(taxableBase * (t.tax_rate / 100));
+      totalTaxes = round2(totalTaxes + taxAmount);
       documentTaxes.push({
-        tax_id: tax.tax_id,
-        tax_rate: tax.tax_rate,
-        taxable_base: subtotal,
+        tax_id: t.tax_id,
+        tax_rate: t.tax_rate,
+        taxable_base: taxableBase,
         tax_amount: taxAmount,
       });
     }
 
-    const totalTaxes = round2(lineTaxesTotal + docTaxesTotal);
-
     return {
       subtotal,
-      exempt_amount: round2(exemptAmount),
+      exempt_amount: exemptAmount,
+      taxable_base: taxableBase,
       total_taxes: totalTaxes,
       total: round2(subtotal + totalTaxes),
       documentTaxes,
     };
   }
 
-  // ─── Persistir ítems y sus taxes de línea ────────────────────────────────
+  // ─── Persistir ítems ──────────────────────────────────────────────────────
   private async persistItems(
     documentId: string,
     items: ItemInput[],
     tx: any,
   ): Promise<void> {
     for (const item of items) {
-      if (item.price === undefined) {
-        throw new Error('Price undefined - bug en resolveItems');
-      }
       const docItem = await tx.document_items.create({
         data: {
           document_id: documentId,
           product_id: item.product_id ?? null,
           quantity: item.quantity,
           unit_price: item.unit_price,
-          price: Number(item.price ?? 0),
+          price: item.price,
         },
       });
 
-      // Solo los taxes de línea van a document_item_taxes
-      const lineTaxes = (item.taxes ?? []).filter(
-        (t) => (t.calculation_level ?? 'line') === 'line',
+      // Solo taxes de línea no incluidos en precio → document_item_taxes
+      const lineTaxes = item.taxes.filter(
+        (t) => t.calculation_level === 'line' && !t.is_included_in_price,
       );
 
       if (lineTaxes.length) {
@@ -279,7 +348,7 @@ export class DocumentsSalesService {
     }
   }
 
-  // ─── Crear manual ─────────────────────────────────────────────────────────
+  // ─── Crear ────────────────────────────────────────────────────────────────
   async create(dto: CreateDocumentDto) {
     const docType = await this.prisma.document_types.findUnique({
       where: { id: dto.document_type_id },
@@ -288,9 +357,8 @@ export class DocumentsSalesService {
     if (!docType)
       throw new NotFoundException('Tipo de documento no encontrado');
 
-    // Resolver precios e impuestos ANTES de abrir la transacción
-    const items = await this.resolveItems(dto.items);
-    const totals = await this.calculateTotals(items);
+    const items = await this.resolveItems(dto.items, dto.document_type_id);
+    const totals = await this.calculateTotals(items, dto.party_id);
 
     let createdId = '';
 
@@ -337,7 +405,64 @@ export class DocumentsSalesService {
     return this.findOne(createdId);
   }
 
-  // ─── Generar borradores desde viaje completado ────────────────────────────
+  // ─── Actualizar ───────────────────────────────────────────────────────────
+  async update(id: string, dto: UpdateDocumentDto) {
+    const doc = await this.findOne(id);
+
+    if (doc.status === STATUS_CONFIRMED)
+      throw new BadRequestException(
+        'No se puede modificar un documento confirmado',
+      );
+    if (doc.status === STATUS_CANCELLED)
+      throw new BadRequestException(
+        'No se puede modificar un documento anulado',
+      );
+
+    let items: ItemInput[] | null = null;
+    let totals: CalculatedTotals | null = null;
+
+    if (dto.items?.length) {
+      items = await this.resolveItems(dto.items, doc.document_type_id);
+      totals = await this.calculateTotals(items, dto.party_id ?? doc.party_id);
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      if (items && totals) {
+        await tx.document_item_taxes.deleteMany({
+          where: { document_items: { document_id: id } },
+        });
+        await tx.document_items.deleteMany({ where: { document_id: id } });
+        await this.persistItems(id, items!, tx);
+        await tx.document_taxes.deleteMany({ where: { document_id: id } });
+
+        if (totals.documentTaxes.length) {
+          await tx.document_taxes.createMany({
+            data: totals.documentTaxes.map((t) => ({ document_id: id, ...t })),
+          });
+        }
+      }
+
+      await tx.documents.update({
+        where: { id },
+        data: {
+          party_id: dto.party_id ?? doc.party_id,
+          date: dto.date ? new Date(dto.date) : doc.date,
+          status: dto.status ?? doc.status,
+          subtotal: totals?.subtotal ?? Number(doc.subtotal),
+          exempt_amount: totals?.exempt_amount ?? Number(doc.exempt_amount),
+          total_taxes: totals?.total_taxes ?? Number(doc.total_taxes),
+          total: totals?.total ?? Number(doc.total),
+          descrip: dto.descrip ?? doc.descrip,
+          ref: dto.ref ?? doc.ref,
+          updated_at: new Date(),
+        },
+      });
+    });
+
+    return this.findOne(id);
+  }
+
+  // ─── Generar borradores desde viaje ───────────────────────────────────────
   async generateDraftsFromTrip(
     tripId: string,
   ): Promise<{ created: number; skipped: number }> {
@@ -430,7 +555,7 @@ export class DocumentsSalesService {
         continue;
       }
 
-      // Tarifas logísticas: sin taxes → todo exento
+      // Tarifas logísticas sin taxes → todo exento
       const items: ItemInput[] = group.dispatches.flatMap((d) =>
         d.rates.map((rate) => ({
           product_id: null,
@@ -441,7 +566,7 @@ export class DocumentsSalesService {
         })),
       );
 
-      const totals = await this.calculateTotals(items);
+      const totals = await this.calculateTotals(items, group.customerId);
 
       await this.prisma.$transaction(async (tx) => {
         const number = await this.getNextNumber(
@@ -520,9 +645,8 @@ export class DocumentsSalesService {
 
   // ─── Obtener uno ──────────────────────────────────────────────────────────
   async findOne(id: string) {
-    if (!id || id === 'undefined') {
-      throw new BadRequestException('ID inválido');
-    }
+    if (!id || id === 'undefined') throw new BadRequestException('ID inválido');
+
     const doc = await this.prisma.documents.findUnique({
       where: { id },
       include: {
@@ -537,68 +661,9 @@ export class DocumentsSalesService {
         document_taxes: { include: { taxes: true } },
       },
     });
+
     if (!doc) throw new NotFoundException('Documento no encontrado');
     return doc;
-  }
-
-  // ─── Actualizar ───────────────────────────────────────────────────────────
-  async update(id: string, dto: UpdateDocumentDto) {
-    const doc = await this.findOne(id);
-
-    if (doc.status === STATUS_CONFIRMED)
-      throw new BadRequestException(
-        'No se puede modificar un documento confirmado',
-      );
-    if (doc.status === STATUS_CANCELLED)
-      throw new BadRequestException(
-        'No se puede modificar un documento anulado',
-      );
-
-    // Resolver ítems ANTES de abrir la transacción
-    let items: ItemInput[] | null = null;
-    let totals: CalculatedTotals | null = null;
-
-    if (dto.items?.length) {
-      items = await this.resolveItems(dto.items);
-      totals = await this.calculateTotals(items);
-    }
-
-    await this.prisma.$transaction(async (tx) => {
-      if (items && totals) {
-        await tx.document_item_taxes.deleteMany({
-          where: { document_items: { document_id: id } },
-        });
-        await tx.document_items.deleteMany({ where: { document_id: id } });
-
-        await this.persistItems(id, items!, tx);
-
-        await tx.document_taxes.deleteMany({ where: { document_id: id } });
-
-        if (totals.documentTaxes.length) {
-          await tx.document_taxes.createMany({
-            data: totals.documentTaxes.map((t) => ({ document_id: id, ...t })),
-          });
-        }
-      }
-
-      await tx.documents.update({
-        where: { id },
-        data: {
-          party_id: dto.party_id ?? doc.party_id,
-          date: dto.date ? new Date(dto.date) : doc.date,
-          status: dto.status ?? doc.status,
-          subtotal: totals?.subtotal ?? Number(doc.subtotal),
-          exempt_amount: totals?.exempt_amount ?? Number(doc.exempt_amount),
-          total_taxes: totals?.total_taxes ?? Number(doc.total_taxes),
-          total: totals?.total ?? Number(doc.total),
-          descrip: dto.descrip ?? doc.descrip,
-          ref: dto.ref ?? doc.ref,
-          updated_at: new Date(),
-        },
-      });
-    });
-
-    return this.findOne(id);
   }
 
   // ─── Confirmar ────────────────────────────────────────────────────────────
@@ -669,7 +734,7 @@ export class DocumentsSalesService {
     return seq.current_number;
   }
 
-  // ─── Todos los viajes completados ─────────────────────────────────────────
+  // ─── Viajes completados ───────────────────────────────────────────────────
   async getAllCompletedTripIds(): Promise<string[]> {
     const trips = await this.prisma.trips.findMany({
       where: { status: 'COMPLETED' },

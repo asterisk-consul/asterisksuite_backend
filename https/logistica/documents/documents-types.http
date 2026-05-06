@@ -23,13 +23,12 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "document_sequence_id": "3e2a2d2c-4dea-4b64-a50c-d4e5dee55ece",
-  "code": "NC",
-  "description": "",
-  "direction": -1,
-  "affects_stock": true,
+  "code": "FAV",
+  "description": "Factura de Venta A",
+  "direction": 1,
+  "affects_stock": false,
   "affects_accounting": true,
   "affects_tax_book": true,
-  "active": true
+  "active": true,
+  "document_sequence_id": "4abaaa4d-38be-49b4-9dc0-58b8fcddc0be"
 }
-

@@ -95,6 +95,7 @@ export const ModelName = {
   document_items: 'document_items',
   document_taxes: 'document_taxes',
   document_types: 'document_types',
+  document_type_taxes: 'document_type_taxes',
   documents: 'documents',
   product_taxes: 'product_taxes',
   taxes: 'taxes',
@@ -122,6 +123,7 @@ export const Business_partiesScalarFieldEnum = {
   type: 'type',
   name: 'name',
   tax_id: 'tax_id',
+  exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -859,6 +861,17 @@ export const Document_typesScalarFieldEnum = {
 } as const
 
 export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
+
+
+export const Document_type_taxesScalarFieldEnum = {
+  id: 'id',
+  document_type_id: 'document_type_id',
+  tax_id: 'tax_id',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Document_type_taxesScalarFieldEnum = (typeof Document_type_taxesScalarFieldEnum)[keyof typeof Document_type_taxesScalarFieldEnum]
 
 
 export const DocumentsScalarFieldEnum = {

@@ -40,6 +40,9 @@ export class CreateProductDto {
   @Min(0)
   price?: number;
 
+  @IsBoolean()
+  active: boolean;
+
   // Impuesto asociado al producto
   @IsOptional()
   @IsUUID()

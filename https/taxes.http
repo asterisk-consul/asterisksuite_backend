@@ -20,13 +20,13 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "Excento",
-  "name": "EX",
+  "code": "IVA21",
+  "name": "IVA 21%",
   "tax_type": "IVA",
-  "rate": 10.000,
-  "is_percentage": false,
+  "rate": 21,
+  "is_percentage": true,
   "active": true,
-  "calculation_level": "LINE"
+  "calculation_level": "document"
 }
 
 ###
