@@ -5,6 +5,7 @@ import {
   Delete,
   Param,
   Query,
+  Body,
   UseGuards,
 } from '@nestjs/common';
 import { TrashService } from '@/common/services/trash.service';
@@ -40,5 +41,30 @@ export class TrashController {
   @Patch(':table/:id/restore')
   restore(@Param('table') table: string, @Param('id') id: string) {
     return this.trashService.restore(table, id);
+  }
+
+  // 🗑️ SOFT DELETE BULK
+  @Delete('bulk/:table')
+  softDeleteMany(
+    @Param('table') table: string,
+    @Body() body: { ids: string[] },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.trashService.softDeleteMany(table, body.ids, user.id);
+  }
+
+  // ♻️ RESTORE BULK
+  @Patch('bulk/:table/restore')
+  restoreMany(@Param('table') table: string, @Body() body: { ids: string[] }) {
+    return this.trashService.restoreMany(table, body.ids);
+  }
+
+  // 💀 HARD DELETE BULK
+  @Delete('hard/:table')
+  hardDeleteMany(
+    @Param('table') table: string,
+    @Body() body: { ids: string[] },
+  ) {
+    return this.trashService.hardDeleteMany(table, body.ids);
   }
 }

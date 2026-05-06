@@ -58,6 +58,35 @@ export class TrashService {
     });
   }
 
+  // 🗑️ soft delete BULK
+  softDeleteMany(model: string, ids: string[], userId: string) {
+    return this.prisma[model].updateMany({
+      where: { id: { in: ids } },
+      data: {
+        deleted_at: new Date(),
+        deleted_by: userId,
+      },
+    });
+  }
+
+  // ♻️ restore BULK
+  restoreMany(model: string, ids: string[]) {
+    return this.prisma[model].updateMany({
+      where: { id: { in: ids } },
+      data: {
+        deleted_at: null,
+        deleted_by: null,
+      },
+    });
+  }
+
+  // 💀 hard delete BULK (elimina físicamente)
+  hardDeleteMany(model: string, ids: string[]) {
+    return this.prisma[model].deleteMany({
+      where: { id: { in: ids } },
+    });
+  }
+
   // 🧠 lista de modelos permitidos (todos los que tienen deleted_at)
   private getModels(): string[] {
     return [
