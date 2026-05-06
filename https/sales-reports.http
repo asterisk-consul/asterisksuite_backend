@@ -18,32 +18,32 @@ Content-Type: application/json
 
 
 ### =====================================================
-### 📊 RESUMEN DE COMPRAS
+### 📊 RESUMEN DE VENTAS
 ### GET /purchases/summary
 ### =====================================================
 
 ### Resumen completo (todos los productos)
-GET {{baseUrl}}/purchases/summary
+GET {{baseUrl}}/sales-reports/summary
 Authorization: Bearer {{accessToken}}
 
 ### Resumen filtrado por fechas
-GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-02-25
+GET {{baseUrl}}/sales-reports/summary?startDate=2026-01-01&endDate=2026-12-31
 Authorization: Bearer {{accessToken}}
 
 ### Resumen filtrado por proveedor
-GET {{baseUrl}}/purchases/summary?supplierId=123
+GET {{baseUrl}}/sales-reports/summary?supplierId=123
 Authorization: Bearer {{accessToken}}
 
 ### Resumen filtrado por tipo de documento
-GET {{baseUrl}}/purchases/summary?documentTypeId=84052621-1431-425b-a301-ce6429fafb6a
+GET {{baseUrl}}/sales-reports/summary?documentTypeId=1
 Authorization: Bearer {{accessToken}}
 
 ### Resumen filtrado por producto
-GET {{baseUrl}}/purchases/summary?productId=b63868c0-4713-4481-ab2a-3f0754483e92
+GET {{baseUrl}}/sales-reports/summary?productId=ce03a1cc-7b18-4ca0-b7f4-5f7052b609eb
 Authorization: Bearer {{accessToken}}
 
 ### Resumen con todos los filtros combinados
-GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
+GET {{baseUrl}}/sales-reports/summary?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
 Authorization: Bearer {{accessToken}}
 
 
@@ -53,19 +53,19 @@ Authorization: Bearer {{accessToken}}
 ### =====================================================
 
 ### Detalle de un producto específico
-GET {{baseUrl}}/purchases/products/1
+GET {{baseUrl}}/sales-reports/products/1
 Authorization: Bearer {{accessToken}}
 
 ### Detalle filtrado por fechas
-GET {{baseUrl}}/purchases/products/1?startDate=2026-01-01&endDate=2026-12-31
+GET {{baseUrl}}/sales-reports/products/1?startDate=2026-01-01&endDate=2026-12-31
 Authorization: Bearer {{accessToken}}
 
 ### Detalle filtrado por proveedor
-GET {{baseUrl}}/purchases/products/1?supplierId=123
+GET {{baseUrl}}/sales-reports/products/1?supplierId=123
 Authorization: Bearer {{accessToken}}
 
 ### Detalle con todos los filtros
-GET {{baseUrl}}/purchases/products/1?startDate=2026-01-01&endDate=2026-12-31&supplierId=123
+GET {{baseUrl}}/sales-reports/products/1?startDate=2026-01-01&endDate=2026-12-31&supplierId=123
 Authorization: Bearer {{accessToken}}
 
 
@@ -75,35 +75,35 @@ Authorization: Bearer {{accessToken}}
 ### =====================================================
 
 ### Todos los movimientos
-GET {{baseUrl}}/purchases/movements
+GET {{baseUrl}}/sales-reports/movements
 Authorization: Bearer {{accessToken}}
 
 
 ### Movimientos filtrados por fechas
-GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31
+GET {{baseUrl}}/sales-reports/movements?startDate=2026-01-01&endDate=2026-12-31
 Authorization: Bearer {{accessToken}}
 
 ### Movimientos filtrados por proveedor
-GET {{baseUrl}}/purchases/movements?supplierId=123
+GET {{baseUrl}}sales-reports/movements?supplierId=123
 Authorization: Bearer {{accessToken}}
 
 ### Movimientos filtrados por tipo de documento
-GET {{baseUrl}}/purchases/movements?documentTypeId=1
+GET {{baseUrl}}/sales-reports/movements?documentTypeId=1
 Authorization: Bearer {{accessToken}}
 
 ### Movimientos filtrados por producto
-GET {{baseUrl}}/purchases/movements?productId=fe8abe1b-337a-482d-b037-82ab6365d3dc
+GET {{baseUrl}}/sales-reports/movements?productId=fe8abe1b-337a-482d-b037-82ab6365d3dc
 Authorization: Bearer {{accessToken}}
 
 ### Movimientos con todos los filtros
-GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
+GET {{baseUrl}}/sales-reports/movements?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
 Authorization: Bearer {{accessToken}}
 ### =====================================================
 ### 🧾 DOCUMENTOS DE COMPRA
 ### GET /purchases/purchases-documents
 ### =====================================================
 
-GET {{baseUrl}}/purchases/purchases-documents
+GET {{baseUrl}}/sales-reports/purchases-documents
 Authorization: Bearer {{accessToken}}
 ### =====================================================
 ### 📦 PRODUCTOS DISPONIBLES
@@ -111,5 +111,5 @@ Authorization: Bearer {{accessToken}}
 ### =====================================================
 
 ### Listar todos los productos con compras
-GET {{baseUrl}}/purchases/products
+GET {{baseUrl}}/sales-reports/products
 Authorization: Bearer {{accessToken}}

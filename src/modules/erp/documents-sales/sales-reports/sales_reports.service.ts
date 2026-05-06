@@ -1,25 +1,22 @@
-// src/modules/erp/purchases/purchases.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import {
-  GlobalPurchaseSummaryResponseDto,
+  GlobalSalesSummaryResponseDto,
   ProductSummaryDto,
-  ProductPurchaseDetailResponseDto,
-  PurchaseMovementResponseDto,
+  ProductSalesDetailResponseDto,
+  SalesMovementResponseDto,
   SupplierDetailDto,
   DocumentTypeDetailDto,
   TaxDetailDto,
-  AvailableProductResponseDto,
+  AvailableProductSalesResponseDto,
 } from './dto';
-import {
-  QueryPurchasesDto,
-  DocumentTypeFilter,
-} from './dto/query-purchases.dto';
-import { PurchasesDocumentsResponseDto } from './dto/documents_purchases/purchases-documents-response';
-import { GlobalPurchaseDocumentsResponseDto } from './dto/documents_purchases/global-purchases-documents';
+import { QuerySalesDto, DocumentTypeFilter } from './dto/query-sales.dto';
+import { SalesDocumentsResponseDto } from './dto/sales-documents-response.dto';
+import { GlobalSalesDocumentsResponseDto } from './dto/global-sales-documents';
 
 /**
  * Acumulador interno para calcular totales por producto
+ * en getSalesSummary antes de mapear al DTO final.
  */
 interface ProductTotalAccumulator {
   productId: number;
@@ -37,29 +34,38 @@ interface ProductTotalAccumulator {
 }
 
 @Injectable()
-export class PurchasesService {
+export class SalesService {
   constructor(private readonly prisma: PrismaService) {}
 
+  /**
+   * Mapeo de filtros públicos (enum) a códigos internos de documento.
+   * Nunca se exponen los códigos internos fuera de este servicio.
+   */
   private readonly documentTypeCodeMap: Record<DocumentTypeFilter, string> = {
-    [DocumentTypeFilter.INVOICE]: 'COM',
-    [DocumentTypeFilter.CREDIT_NOTE]: 'NC',
-    [DocumentTypeFilter.DEBIT_NOTE]: 'ND',
+    [DocumentTypeFilter.INVOICE]: 'FAV',
+    [DocumentTypeFilter.CREDIT_NOTE]: 'NCV',
+    [DocumentTypeFilter.DEBIT_NOTE]: 'NDV',
   };
 
   /**
-   * Códigos internos válidos para documentos de COMPRA.
+   * Códigos internos válidos para documentos de VENTA.
    * Se usa como whitelist para que nunca se filtren documentos de compra.
    */
-  private readonly purchaseCodes = Object.values(this.documentTypeCodeMap);
+  private readonly salesCodes = Object.values(this.documentTypeCodeMap);
 
-  async getPurchaseSummary(
-    query: QueryPurchasesDto,
-  ): Promise<GlobalPurchaseSummaryResponseDto> {
+  // ---------------------------------------------------------------------------
+  // RESUMEN GLOBAL DE VENTAS POR PRODUCTO
+  // ---------------------------------------------------------------------------
+
+  async getSalesSummary(
+    query: QuerySalesDto,
+  ): Promise<GlobalSalesSummaryResponseDto> {
     const whereCondition = this.buildWhereCondition(query);
 
     const documents = await this.prisma.documents.findMany({
       where: {
         ...whereCondition,
+        // Merge: preserva el filtro de código y agrega active: true
         document_types: {
           active: true,
           ...(whereCondition.document_types ?? {}),
@@ -67,44 +73,23 @@ export class PurchasesService {
       },
       include: {
         document_items: {
-          include: {
-            products: true,
-          },
+          include: { products: true },
         },
         document_taxes: {
-          include: {
-            taxes: true,
-          },
+          include: { taxes: true },
         },
         business_parties: true,
         document_types: true,
       },
     });
 
-    const productTotals = new Map<
-      string,
-      {
-        productId: number;
-        productCode: string;
-        productName: string;
-        totalPurchases: number;
-        totalTaxes: number;
-        totalExempt: number;
-        transactionCount: number;
-        invoiceCount: number;
-        creditNoteCount: number;
-        firstPurchaseDate: Date | null;
-        lastPurchaseDate: Date | null;
-        purchaseValues: number[];
-      }
-    >();
+    const productTotals = new Map<string, ProductTotalAccumulator>();
 
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
       const sign = this.getDocumentSign(doc.document_types.code);
       const isInvoice = sign === 1;
-
       const documentSubtotal = Number(doc.subtotal) * sign;
 
       for (const item of doc.document_items) {
@@ -112,27 +97,24 @@ export class PurchasesService {
 
         const productId = item.products.id;
         const product = item.products;
-
         const itemValue = Number(item.quantity) * Number(item.price);
-
         const proportion =
           documentSubtotal !== 0 ? itemValue / documentSubtotal : 0;
-
         const productValue = itemValue * sign;
 
-        const current = productTotals.get(productId) || {
+        const current = productTotals.get(productId) ?? {
           productId: parseInt(productId),
           productCode: product.sku || '',
           productName: product.name,
-          totalPurchases: 0,
+          totalSales: 0,
           totalTaxes: 0,
           totalExempt: 0,
           transactionCount: 0,
           invoiceCount: 0,
           creditNoteCount: 0,
-          firstPurchaseDate: null,
-          lastPurchaseDate: null,
-          purchaseValues: [],
+          firstSalesDate: null,
+          lastSalesDate: null,
+          salesValues: [],
         };
 
         const productTaxes = doc.document_taxes.reduce((sum, tax) => {
@@ -142,7 +124,7 @@ export class PurchasesService {
         const productExempt =
           Number(doc.exempt_amount || 0) * proportion * sign;
 
-        current.totalPurchases += productValue;
+        current.totalSales += productValue;
         current.totalTaxes += productTaxes;
         current.totalExempt += productExempt;
         current.transactionCount += 1;
@@ -153,16 +135,14 @@ export class PurchasesService {
           current.creditNoteCount += 1;
         }
 
-        current.purchaseValues.push(productValue);
+        current.salesValues.push(productValue);
 
         const docDate = new Date(doc.date);
-
-        if (!current.firstPurchaseDate || docDate < current.firstPurchaseDate) {
-          current.firstPurchaseDate = docDate;
+        if (!current.firstSalesDate || docDate < current.firstSalesDate) {
+          current.firstSalesDate = docDate;
         }
-
-        if (!current.lastPurchaseDate || docDate > current.lastPurchaseDate) {
-          current.lastPurchaseDate = docDate;
+        if (!current.lastSalesDate || docDate > current.lastSalesDate) {
+          current.lastSalesDate = docDate;
         }
 
         productTotals.set(productId, current);
@@ -175,29 +155,25 @@ export class PurchasesService {
         productCode: data.productCode,
         productName: data.productName,
         productCategory: '',
-        totalPurchases: data.totalPurchases,
+        totalSales: data.totalSales,
         totalTaxes: data.totalTaxes,
         totalExempt: data.totalExempt,
         transactionCount: data.transactionCount,
         invoiceCount: data.invoiceCount,
         creditNoteCount: data.creditNoteCount,
-        firstPurchaseDate: data.firstPurchaseDate,
-        lastPurchaseDate: data.lastPurchaseDate,
+        firstSalesDate: data.firstSalesDate,
+        lastSalesDate: data.lastSalesDate,
         avgPurchaseValue:
-          data.purchaseValues.length > 0
-            ? data.totalPurchases / data.purchaseValues.length
+          data.salesValues.length > 0
+            ? data.totalSales / data.salesValues.length
             : 0,
       }))
-      .sort((a, b) => b.totalPurchases - a.totalPurchases);
+      .sort((a, b) => b.totalSales - a.totalSales);
 
-    const globalTotal = products.reduce((sum, p) => sum + p.totalPurchases, 0);
-
+    const globalTotal = products.reduce((sum, p) => sum + p.totalSales, 0);
     const globalTaxes = products.reduce((sum, p) => sum + p.totalTaxes, 0);
-
     const globalExempt = products.reduce((sum, p) => sum + p.totalExempt, 0);
-
     const grandTotal = globalTotal + globalTaxes + globalExempt;
-
     const globalTransactionCount = products.reduce(
       (sum, p) => sum + p.transactionCount,
       0,
@@ -205,13 +181,8 @@ export class PurchasesService {
 
     const negTotal = documents.reduce((sum, doc) => {
       if (!doc.document_types) return sum;
-
       const sign = this.getDocumentSign(doc.document_types.code);
-
-      if (sign === -1) {
-        return sum + Number(doc.subtotal);
-      }
-
+      if (sign === -1) return sum + Number(doc.subtotal);
       return sum;
     }, 0);
 
@@ -219,7 +190,7 @@ export class PurchasesService {
       globalTotal,
       globalTaxes,
       globalExempt,
-      globalPurchaseTotal: grandTotal,
+      globalSalesTotal: grandTotal,
       grandTotal,
       globalTransactionCount,
       negTotal,
@@ -228,13 +199,15 @@ export class PurchasesService {
     };
   }
 
-  async getProductPurchaseDetail(
+  // ---------------------------------------------------------------------------
+  // DETALLE DE VENTAS POR PRODUCTO
+  // ---------------------------------------------------------------------------
+
+  async getProductSalesDetail(
     id: string,
-    query: QueryPurchasesDto,
-  ): Promise<ProductPurchaseDetailResponseDto> {
-    const product = await this.prisma.products.findUnique({
-      where: { id },
-    });
+    query: QuerySalesDto,
+  ): Promise<ProductSalesDetailResponseDto> {
+    const product = await this.prisma.products.findUnique({ where: { id } });
 
     if (!product) {
       throw new NotFoundException(`Producto con ID ${id} no encontrado`);
@@ -250,30 +223,20 @@ export class PurchasesService {
           ...(whereCondition.document_types ?? {}),
         },
         document_items: {
-          some: {
-            product_id: id,
-          },
+          some: { product_id: id },
         },
       },
       include: {
         document_items: {
-          where: {
-            product_id: id,
-          },
-          include: {
-            products: true,
-          },
+          where: { product_id: id },
+          include: { products: true },
         },
         document_taxes: {
-          include: {
-            taxes: true,
-          },
+          include: { taxes: true },
         },
         business_parties: true,
         document_types: {
-          include: {
-            document_sequences: true,
-          },
+          include: { document_sequences: true },
         },
       },
     });
@@ -284,9 +247,7 @@ export class PurchasesService {
 
     let totalGeneral = 0;
     let totalTaxes = 0;
-
-    // 🔥 CORRECTO: declarado fuera del loop
-    const movements: PurchaseMovementResponseDto[] = [];
+    const movements: SalesMovementResponseDto[] = [];
 
     for (const doc of documents) {
       if (!doc.document_types) continue;
@@ -295,51 +256,40 @@ export class PurchasesService {
 
       const productTotal =
         doc.document_items.reduce((sum, item) => {
-          const itemValue = Number(item.quantity) * Number(item.price);
-          return sum + itemValue;
+          return sum + Number(item.quantity) * Number(item.price);
         }, 0) * sign;
 
-      // 🔥 MOVIMIENTOS
       for (const item of doc.document_items) {
         if (!item.products) continue;
 
         const itemValue = Number(item.quantity) * Number(item.price);
+
         movements.push({
           ref: doc.ref || '',
           number: doc.number?.toString() || '',
           date: doc.date,
-
           supplierName: doc.business_parties?.name || '',
           supplierCode: doc.business_parties?.id || '',
-
           productId: item.products.id,
           productCode: item.products.sku || '',
           productName: item.products.name,
-
           documentTypeCode: doc.document_types.code,
           documentTypeName: doc.document_types.description,
-
           quantity: Number(item.quantity),
           unitPrice: Number(item.price),
           itemSubtotal: itemValue,
-
           documentSubtotal: Number(doc.subtotal),
           documentTotal: Number(doc.total),
-
           taxCode: doc.document_taxes.map((t) => t.taxes.code).join(', '),
           taxName: doc.document_taxes.map((t) => t.taxes.name).join(', '),
-
           taxAmount: doc.document_taxes.reduce(
             (sum, t) => sum + Number(t.tax_amount),
             0,
           ),
-
           sequenceNumber:
             doc.document_types?.document_sequences?.current_number?.toString() ||
             '',
-
-          transactionType: sign === 1 ? 'Compra' : 'Nota Crédito/Débito',
-
+          transactionType: sign === 1 ? 'Venta' : 'Nota Crédito/Débito',
           adjustedValue: itemValue * sign,
         });
       }
@@ -350,7 +300,7 @@ export class PurchasesService {
       const productProportion =
         documentTotal !== 0 ? productTotal / documentTotal : 0;
 
-      // 🔹 PROVEEDORES
+      // Agrupación por cliente/proveedor
       if (doc.business_parties) {
         const supplierId = doc.business_parties.id;
         const existingSupplier = suppliersMap.get(supplierId);
@@ -358,23 +308,22 @@ export class PurchasesService {
         if (existingSupplier) {
           existingSupplier.totalBySupplier += productTotal;
           existingSupplier.transactionCount += 1;
-
-          if (doc.date > existingSupplier.lastPurchaseDate) {
-            existingSupplier.lastPurchaseDate = doc.date;
+          if (doc.date > existingSupplier.lastSalesDate) {
+            existingSupplier.lastSalesDate = doc.date;
           }
         } else {
           suppliersMap.set(supplierId, {
-            supplierId: parseInt(supplierId), // ⚠️ si esto también es UUID, habría que cambiarlo
+            supplierId: parseInt(supplierId),
             supplierCode: doc.business_parties.id || '',
             supplierName: doc.business_parties.name,
             totalBySupplier: productTotal,
             transactionCount: 1,
-            lastPurchaseDate: doc.date,
+            lastSalesDate: doc.date,
           });
         }
       }
 
-      // 🔹 TIPOS DE DOCUMENTO
+      // Agrupación por tipo de documento
       const docTypeId = doc.document_type_id;
       const existingDocType = documentTypesMap.get(docTypeId);
 
@@ -391,10 +340,9 @@ export class PurchasesService {
         });
       }
 
-      // 🔹 IMPUESTOS
+      // Agrupación por impuesto
       for (const tax of doc.document_taxes) {
         const taxAmount = Number(tax.tax_amount) * productProportion * sign;
-
         totalTaxes += taxAmount;
 
         const taxId = tax.tax_id;
@@ -416,9 +364,8 @@ export class PurchasesService {
       }
     }
 
-    // 🔥 RETURN FINAL CORREGIDO
     return {
-      productId: product.id, // ✅ sin parseInt
+      productId: product.id,
       productCode: product.sku || '',
       productName: product.name,
       productCategory: '',
@@ -427,12 +374,17 @@ export class PurchasesService {
       suppliers: Array.from(suppliersMap.values()),
       documentTypes: Array.from(documentTypesMap.values()),
       taxes: Array.from(taxesMap.values()),
-      movements, // ✅ agregado
+      movements,
     };
   }
-  async getPurchaseMovements(
-    query: QueryPurchasesDto,
-  ): Promise<PurchaseMovementResponseDto[]> {
+
+  // ---------------------------------------------------------------------------
+  // MOVIMIENTOS DE VENTA
+  // ---------------------------------------------------------------------------
+
+  async getSalesMovements(
+    query: QuerySalesDto,
+  ): Promise<SalesMovementResponseDto[]> {
     const whereCondition = this.buildWhereCondition(query);
 
     const documents = await this.prisma.documents.findMany({
@@ -445,38 +397,27 @@ export class PurchasesService {
       },
       include: {
         document_items: {
-          where: {
-            product_id: query.productId, // 🔥 ESTE ES EL FIX
-          },
-          include: {
-            products: true,
-          },
+          where: { product_id: query.productId },
+          include: { products: true },
         },
         document_taxes: {
-          include: {
-            taxes: true,
-          },
+          include: { taxes: true },
         },
         business_parties: true,
         document_types: {
-          include: {
-            document_sequences: true,
-          },
+          include: { document_sequences: true },
         },
       },
-      orderBy: {
-        date: 'desc',
-      },
+      orderBy: { date: 'desc' },
     });
 
-    const movements: PurchaseMovementResponseDto[] = [];
+    const movements: SalesMovementResponseDto[] = [];
 
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
       const sign = this.getDocumentSign(doc.document_types.code);
-
-      const transactionType = sign === 1 ? 'Compra' : 'Nota Crédito/Débito';
+      const transactionType = sign === 1 ? 'Venta' : 'Nota Crédito/Débito';
 
       for (const item of doc.document_items) {
         if (!item.products) continue;
@@ -499,21 +440,16 @@ export class PurchasesService {
           itemSubtotal: itemValue,
           documentSubtotal: Number(doc.subtotal),
           documentTotal: Number(doc.total),
-
           taxCode: doc.document_taxes.map((t) => t.taxes.code).join(', '),
           taxName: doc.document_taxes.map((t) => t.taxes.name).join(', '),
-
           taxAmount: doc.document_taxes.reduce(
             (sum, t) => sum + Number(t.tax_amount),
             0,
           ),
-
           sequenceNumber:
             doc.document_types.document_sequences?.current_number?.toString() ||
             '',
-
           transactionType,
-
           adjustedValue: itemValue * sign,
         });
       }
@@ -522,9 +458,13 @@ export class PurchasesService {
     return movements;
   }
 
-  async getPurchaseDocuments(
-    query: QueryPurchasesDto,
-  ): Promise<GlobalPurchaseDocumentsResponseDto> {
+  // ---------------------------------------------------------------------------
+  // DOCUMENTOS DE VENTA
+  // ---------------------------------------------------------------------------
+
+  async getSalesDocuments(
+    query: QuerySalesDto,
+  ): Promise<GlobalSalesDocumentsResponseDto> {
     const whereCondition = this.buildWhereCondition(query);
 
     const documents = await this.prisma.documents.findMany({
@@ -538,100 +478,77 @@ export class PurchasesService {
       include: {
         business_parties: true,
         document_taxes: {
-          include: {
-            taxes: true,
-          },
+          include: { taxes: true },
         },
         document_types: {
-          include: {
-            document_sequences: true,
-          },
+          include: { document_sequences: true },
         },
       },
-      orderBy: {
-        date: 'desc',
-      },
+      orderBy: { date: 'desc' },
     });
 
     let grandTotal = 0;
-
-    const purchaseDocuments: PurchasesDocumentsResponseDto[] = [];
+    const SalesDocuments: SalesDocumentsResponseDto[] = [];
 
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
       const sign = this.getDocumentSign(doc.document_types.code);
-
       const subtotal = Number(doc.subtotal) * sign;
-
       const taxes =
         doc.document_taxes.reduce((sum, t) => sum + Number(t.tax_amount), 0) *
         sign;
-
       const exempt = Number(doc.exempt_amount || 0) * sign;
-
       const grossTotal = subtotal + taxes + exempt;
 
       grandTotal += grossTotal;
 
-      purchaseDocuments.push({
+      SalesDocuments.push({
         ref: doc.ref || '',
         number: doc.number?.toString() || '',
         date: doc.date,
-
         supplierName: doc.business_parties?.name || '',
         supplierCode: doc.business_parties?.id || '',
-
         documentTypeCode: doc.document_types.code,
         documentTypeName: doc.document_types.description,
-
         documentSubtotal: subtotal,
         taxAmount: taxes,
         totalExempt: exempt,
-
         documentTotal: grossTotal,
-
         taxCode: doc.document_taxes.map((t) => t.taxes.code).join(', '),
         taxName: doc.document_taxes.map((t) => t.taxes.name).join(', '),
-
         sequenceNumber:
           doc.document_types.document_sequences?.current_number?.toString() ||
           '',
-
-        transactionType: sign === 1 ? 'Compra' : 'Nota Crédito/Débito',
-
+        transactionType: sign === 1 ? 'Venta' : 'Nota Crédito/Débito',
         adjustedValue: grossTotal,
       });
     }
 
-    return {
-      grandTotal,
-      documents: purchaseDocuments,
-    };
+    return { grandTotal, documents: SalesDocuments };
   }
 
-  async getAvailableProducts(): Promise<AvailableProductResponseDto[]> {
+  // ---------------------------------------------------------------------------
+  // PRODUCTOS DISPONIBLES CON MOVIMIENTOS DE VENTA
+  // ---------------------------------------------------------------------------
+
+  async getAvailableProducts(): Promise<AvailableProductSalesResponseDto[]> {
     const products = await this.prisma.products.findMany({
       where: {
         document_items: {
           some: {
             documents: {
               document_types: {
+                // Solo productos que aparecen en documentos de venta activos
                 active: true,
-                code: { in: this.purchaseCodes },
+                code: { in: this.salesCodes },
               },
             },
           },
         },
       },
-      select: {
-        id: true,
-        sku: true,
-        name: true,
-      },
-      orderBy: {
-        name: 'asc',
-      },
+      select: { id: true, sku: true, name: true },
+      orderBy: { name: 'asc' },
     });
 
     return products.map((p) => ({
@@ -641,79 +558,59 @@ export class PurchasesService {
     }));
   }
 
-  private buildWhereCondition(query: QueryPurchasesDto): any {
+  // ---------------------------------------------------------------------------
+  // HELPERS PRIVADOS
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Construye el objeto `where` para Prisma según los filtros del query.
+   *
+   * Siempre aplica un whitelist de códigos de venta (salesCodes) para
+   * garantizar que nunca se devuelvan documentos de compra u otros módulos.
+   * Si se pasa un `documentTypeFilter` específico, filtra por ese código puntual.
+   */
+  private buildWhereCondition(query: QuerySalesDto): any {
     const where: any = {};
+
     if (query.documentTypeFilter) {
       // Filtro específico: un solo tipo de documento de venta
       const internalCode = this.documentTypeCodeMap[query.documentTypeFilter];
       where.document_types = { code: internalCode };
     } else {
       // Sin filtro: traer todos los tipos de venta (whitelist)
-      where.document_types = { code: { in: this.purchaseCodes } };
+      where.document_types = { code: { in: this.salesCodes } };
     }
 
-    if (query) {
-      if (query.startDate || query.endDate) {
-        where.date = {};
+    if (query.startDate || query.endDate) {
+      where.date = {};
+      if (query.startDate) where.date.gte = new Date(query.startDate);
+      if (query.endDate) where.date.lte = new Date(query.endDate);
+    }
 
-        if (query.startDate) {
-          where.date.gte = new Date(query.startDate);
-        }
+    if (query.supplierId) {
+      where.party_id = query.supplierId;
+    }
 
-        if (query.endDate) {
-          where.date.lte = new Date(query.endDate);
-        }
-      }
-
-      if (query.supplierId) {
-        where.party_id = query.supplierId;
-      }
-
-      if (query.documentTypeId) {
-        where.document_type_id = query.documentTypeId;
-      }
-
-      if (query.productId) {
-        where.document_items = {
-          some: {
-            product_id: query.productId.toString(),
-          },
-        };
-      }
+    if (query.productId) {
+      where.document_items = {
+        some: { product_id: query.productId.toString() },
+      };
     }
 
     return where;
   }
 
+  /**
+   * Retorna el signo contable del documento:
+   *  1 → suma (FAV, NDV)
+   * -1 → resta (NCV)
+   */
   private getDocumentSign(documentCode: string): number {
-    const positiveDocuments = [
-      'FC',
-      'FACT',
-      'COM',
-      'FCA',
-      'FCB',
-      'FCC',
-      'FCE',
-      'FCR',
-    ];
+    const positiveDocuments = ['FAV', 'NDV'];
+    const negativeDocuments = ['NCV'];
 
-    const negativeDocuments = [
-      'NC',
-      'ND',
-      'CREDIT',
-      'NOTA_CREDITO',
-      'NDC',
-      'NDD',
-    ];
-
-    if (positiveDocuments.includes(documentCode)) {
-      return 1;
-    }
-
-    if (negativeDocuments.includes(documentCode)) {
-      return -1;
-    }
-
+    if (positiveDocuments.includes(documentCode)) return 1;
+    if (negativeDocuments.includes(documentCode)) return -1;
     return 1;
   }
 }
