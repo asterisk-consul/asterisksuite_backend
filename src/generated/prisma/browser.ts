@@ -238,6 +238,11 @@ export type document_taxes = Prisma.document_taxesModel
  */
 export type document_types = Prisma.document_typesModel
 /**
+ * Model document_type_taxes
+ * 
+ */
+export type document_type_taxes = Prisma.document_type_taxesModel
+/**
  * Model documents
  * 
  */

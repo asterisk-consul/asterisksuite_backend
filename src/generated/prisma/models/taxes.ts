@@ -291,6 +291,7 @@ export type taxesWhereInput = {
   document_item_taxes?: Prisma.Document_item_taxesListRelationFilter
   document_taxes?: Prisma.Document_taxesListRelationFilter
   product_taxes?: Prisma.Product_taxesListRelationFilter
+  document_type_taxes?: Prisma.Document_type_taxesListRelationFilter
 }
 
 export type taxesOrderByWithRelationInput = {
@@ -311,6 +312,7 @@ export type taxesOrderByWithRelationInput = {
   document_item_taxes?: Prisma.document_item_taxesOrderByRelationAggregateInput
   document_taxes?: Prisma.document_taxesOrderByRelationAggregateInput
   product_taxes?: Prisma.product_taxesOrderByRelationAggregateInput
+  document_type_taxes?: Prisma.document_type_taxesOrderByRelationAggregateInput
 }
 
 export type taxesWhereUniqueInput = Prisma.AtLeast<{
@@ -334,6 +336,7 @@ export type taxesWhereUniqueInput = Prisma.AtLeast<{
   document_item_taxes?: Prisma.Document_item_taxesListRelationFilter
   document_taxes?: Prisma.Document_taxesListRelationFilter
   product_taxes?: Prisma.Product_taxesListRelationFilter
+  document_type_taxes?: Prisma.Document_type_taxesListRelationFilter
 }, "id">
 
 export type taxesOrderByWithAggregationInput = {
@@ -396,6 +399,7 @@ export type taxesCreateInput = {
   document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutTaxesInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutTaxesInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesUncheckedCreateInput = {
@@ -416,6 +420,7 @@ export type taxesUncheckedCreateInput = {
   document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutTaxesInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutTaxesInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesUpdateInput = {
@@ -436,6 +441,7 @@ export type taxesUpdateInput = {
   document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutTaxesNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutTaxesNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUpdateManyWithoutTaxesNestedInput
 }
 
 export type taxesUncheckedUpdateInput = {
@@ -456,6 +462,7 @@ export type taxesUncheckedUpdateInput = {
   document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutTaxesNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutTaxesNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedUpdateManyWithoutTaxesNestedInput
 }
 
 export type taxesCreateManyInput = {
@@ -601,6 +608,20 @@ export type taxesUpdateOneRequiredWithoutDocument_taxesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.taxesUpdateToOneWithWhereWithoutDocument_taxesInput, Prisma.taxesUpdateWithoutDocument_taxesInput>, Prisma.taxesUncheckedUpdateWithoutDocument_taxesInput>
 }
 
+export type taxesCreateNestedOneWithoutDocument_type_taxesInput = {
+  create?: Prisma.XOR<Prisma.taxesCreateWithoutDocument_type_taxesInput, Prisma.taxesUncheckedCreateWithoutDocument_type_taxesInput>
+  connectOrCreate?: Prisma.taxesCreateOrConnectWithoutDocument_type_taxesInput
+  connect?: Prisma.taxesWhereUniqueInput
+}
+
+export type taxesUpdateOneRequiredWithoutDocument_type_taxesNestedInput = {
+  create?: Prisma.XOR<Prisma.taxesCreateWithoutDocument_type_taxesInput, Prisma.taxesUncheckedCreateWithoutDocument_type_taxesInput>
+  connectOrCreate?: Prisma.taxesCreateOrConnectWithoutDocument_type_taxesInput
+  upsert?: Prisma.taxesUpsertWithoutDocument_type_taxesInput
+  connect?: Prisma.taxesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.taxesUpdateToOneWithWhereWithoutDocument_type_taxesInput, Prisma.taxesUpdateWithoutDocument_type_taxesInput>, Prisma.taxesUncheckedUpdateWithoutDocument_type_taxesInput>
+}
+
 export type taxesCreateNestedOneWithoutProduct_taxesInput = {
   create?: Prisma.XOR<Prisma.taxesCreateWithoutProduct_taxesInput, Prisma.taxesUncheckedCreateWithoutProduct_taxesInput>
   connectOrCreate?: Prisma.taxesCreateOrConnectWithoutProduct_taxesInput
@@ -632,6 +653,7 @@ export type taxesCreateWithoutDocument_item_taxesInput = {
   deleted_by?: string | null
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutTaxesInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesUncheckedCreateWithoutDocument_item_taxesInput = {
@@ -651,6 +673,7 @@ export type taxesUncheckedCreateWithoutDocument_item_taxesInput = {
   deleted_by?: string | null
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutTaxesInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesCreateOrConnectWithoutDocument_item_taxesInput = {
@@ -686,6 +709,7 @@ export type taxesUpdateWithoutDocument_item_taxesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_taxes?: Prisma.document_taxesUpdateManyWithoutTaxesNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUpdateManyWithoutTaxesNestedInput
 }
 
 export type taxesUncheckedUpdateWithoutDocument_item_taxesInput = {
@@ -705,6 +729,7 @@ export type taxesUncheckedUpdateWithoutDocument_item_taxesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutTaxesNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedUpdateManyWithoutTaxesNestedInput
 }
 
 export type taxesCreateWithoutDocument_taxesInput = {
@@ -724,6 +749,7 @@ export type taxesCreateWithoutDocument_taxesInput = {
   deleted_by?: string | null
   document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutTaxesInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesUncheckedCreateWithoutDocument_taxesInput = {
@@ -743,6 +769,7 @@ export type taxesUncheckedCreateWithoutDocument_taxesInput = {
   deleted_by?: string | null
   document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutTaxesInput
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesCreateOrConnectWithoutDocument_taxesInput = {
@@ -778,6 +805,7 @@ export type taxesUpdateWithoutDocument_taxesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutTaxesNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUpdateManyWithoutTaxesNestedInput
 }
 
 export type taxesUncheckedUpdateWithoutDocument_taxesInput = {
@@ -796,6 +824,103 @@ export type taxesUncheckedUpdateWithoutDocument_taxesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+}
+
+export type taxesCreateWithoutDocument_type_taxesInput = {
+  id?: string
+  code: string
+  name: string
+  tax_type: string
+  rate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_percentage?: boolean
+  active?: boolean
+  calculation_level: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutTaxesInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutTaxesInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutTaxesInput
+}
+
+export type taxesUncheckedCreateWithoutDocument_type_taxesInput = {
+  id?: string
+  code: string
+  name: string
+  tax_type: string
+  rate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_percentage?: boolean
+  active?: boolean
+  calculation_level: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutTaxesInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutTaxesInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutTaxesInput
+}
+
+export type taxesCreateOrConnectWithoutDocument_type_taxesInput = {
+  where: Prisma.taxesWhereUniqueInput
+  create: Prisma.XOR<Prisma.taxesCreateWithoutDocument_type_taxesInput, Prisma.taxesUncheckedCreateWithoutDocument_type_taxesInput>
+}
+
+export type taxesUpsertWithoutDocument_type_taxesInput = {
+  update: Prisma.XOR<Prisma.taxesUpdateWithoutDocument_type_taxesInput, Prisma.taxesUncheckedUpdateWithoutDocument_type_taxesInput>
+  create: Prisma.XOR<Prisma.taxesCreateWithoutDocument_type_taxesInput, Prisma.taxesUncheckedCreateWithoutDocument_type_taxesInput>
+  where?: Prisma.taxesWhereInput
+}
+
+export type taxesUpdateToOneWithWhereWithoutDocument_type_taxesInput = {
+  where?: Prisma.taxesWhereInput
+  data: Prisma.XOR<Prisma.taxesUpdateWithoutDocument_type_taxesInput, Prisma.taxesUncheckedUpdateWithoutDocument_type_taxesInput>
+}
+
+export type taxesUpdateWithoutDocument_type_taxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_type?: Prisma.StringFieldUpdateOperationsInput | string
+  rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_percentage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_level?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutTaxesNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutTaxesNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutTaxesNestedInput
+}
+
+export type taxesUncheckedUpdateWithoutDocument_type_taxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_type?: Prisma.StringFieldUpdateOperationsInput | string
+  rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_percentage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_level?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutTaxesNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutTaxesNestedInput
 }
 
@@ -816,6 +941,7 @@ export type taxesCreateWithoutProduct_taxesInput = {
   deleted_by?: string | null
   document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutTaxesInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesUncheckedCreateWithoutProduct_taxesInput = {
@@ -835,6 +961,7 @@ export type taxesUncheckedCreateWithoutProduct_taxesInput = {
   deleted_by?: string | null
   document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutTaxesInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutTaxesInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedCreateNestedManyWithoutTaxesInput
 }
 
 export type taxesCreateOrConnectWithoutProduct_taxesInput = {
@@ -870,6 +997,7 @@ export type taxesUpdateWithoutProduct_taxesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutTaxesNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUpdateManyWithoutTaxesNestedInput
 }
 
 export type taxesUncheckedUpdateWithoutProduct_taxesInput = {
@@ -889,6 +1017,7 @@ export type taxesUncheckedUpdateWithoutProduct_taxesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutTaxesNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutTaxesNestedInput
+  document_type_taxes?: Prisma.document_type_taxesUncheckedUpdateManyWithoutTaxesNestedInput
 }
 
 
@@ -900,12 +1029,14 @@ export type TaxesCountOutputType = {
   document_item_taxes: number
   document_taxes: number
   product_taxes: number
+  document_type_taxes: number
 }
 
 export type TaxesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_item_taxes?: boolean | TaxesCountOutputTypeCountDocument_item_taxesArgs
   document_taxes?: boolean | TaxesCountOutputTypeCountDocument_taxesArgs
   product_taxes?: boolean | TaxesCountOutputTypeCountProduct_taxesArgs
+  document_type_taxes?: boolean | TaxesCountOutputTypeCountDocument_type_taxesArgs
 }
 
 /**
@@ -939,6 +1070,13 @@ export type TaxesCountOutputTypeCountProduct_taxesArgs<ExtArgs extends runtime.T
   where?: Prisma.product_taxesWhereInput
 }
 
+/**
+ * TaxesCountOutputType without action
+ */
+export type TaxesCountOutputTypeCountDocument_type_taxesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_type_taxesWhereInput
+}
+
 
 export type taxesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -958,6 +1096,7 @@ export type taxesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   document_item_taxes?: boolean | Prisma.taxes$document_item_taxesArgs<ExtArgs>
   document_taxes?: boolean | Prisma.taxes$document_taxesArgs<ExtArgs>
   product_taxes?: boolean | Prisma.taxes$product_taxesArgs<ExtArgs>
+  document_type_taxes?: boolean | Prisma.taxes$document_type_taxesArgs<ExtArgs>
   _count?: boolean | Prisma.TaxesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["taxes"]>
 
@@ -1017,6 +1156,7 @@ export type taxesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   document_item_taxes?: boolean | Prisma.taxes$document_item_taxesArgs<ExtArgs>
   document_taxes?: boolean | Prisma.taxes$document_taxesArgs<ExtArgs>
   product_taxes?: boolean | Prisma.taxes$product_taxesArgs<ExtArgs>
+  document_type_taxes?: boolean | Prisma.taxes$document_type_taxesArgs<ExtArgs>
   _count?: boolean | Prisma.TaxesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type taxesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1028,6 +1168,7 @@ export type $taxesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     document_item_taxes: Prisma.$document_item_taxesPayload<ExtArgs>[]
     document_taxes: Prisma.$document_taxesPayload<ExtArgs>[]
     product_taxes: Prisma.$product_taxesPayload<ExtArgs>[]
+    document_type_taxes: Prisma.$document_type_taxesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1441,6 +1582,7 @@ export interface Prisma__taxesClient<T, Null = never, ExtArgs extends runtime.Ty
   document_item_taxes<T extends Prisma.taxes$document_item_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.taxes$document_item_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_item_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   document_taxes<T extends Prisma.taxes$document_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.taxes$document_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_taxes<T extends Prisma.taxes$product_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.taxes$product_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_type_taxes<T extends Prisma.taxes$document_type_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.taxes$document_type_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_type_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1946,6 +2088,30 @@ export type taxes$product_taxesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.Product_taxesScalarFieldEnum | Prisma.Product_taxesScalarFieldEnum[]
+}
+
+/**
+ * taxes.document_type_taxes
+ */
+export type taxes$document_type_taxesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the document_type_taxes
+   */
+  select?: Prisma.document_type_taxesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the document_type_taxes
+   */
+  omit?: Prisma.document_type_taxesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.document_type_taxesInclude<ExtArgs> | null
+  where?: Prisma.document_type_taxesWhereInput
+  orderBy?: Prisma.document_type_taxesOrderByWithRelationInput | Prisma.document_type_taxesOrderByWithRelationInput[]
+  cursor?: Prisma.document_type_taxesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_type_taxesScalarFieldEnum | Prisma.Document_type_taxesScalarFieldEnum[]
 }
 
 /**

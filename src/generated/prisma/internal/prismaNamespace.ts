@@ -428,6 +428,7 @@ export const ModelName = {
   document_items: 'document_items',
   document_taxes: 'document_taxes',
   document_types: 'document_types',
+  document_type_taxes: 'document_type_taxes',
   documents: 'documents',
   product_taxes: 'product_taxes',
   taxes: 'taxes',
@@ -447,7 +448,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "product_price" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "documents" | "product_taxes" | "taxes" | "audit_logs"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "products" | "product_price" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "product_taxes" | "taxes" | "audit_logs"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3707,6 +3708,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    document_type_taxes: {
+      payload: Prisma.$document_type_taxesPayload<ExtArgs>
+      fields: Prisma.document_type_taxesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_type_taxesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_type_taxesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>
+        }
+        findFirst: {
+          args: Prisma.document_type_taxesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_type_taxesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>
+        }
+        findMany: {
+          args: Prisma.document_type_taxesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>[]
+        }
+        create: {
+          args: Prisma.document_type_taxesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>
+        }
+        createMany: {
+          args: Prisma.document_type_taxesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_type_taxesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>[]
+        }
+        delete: {
+          args: Prisma.document_type_taxesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>
+        }
+        update: {
+          args: Prisma.document_type_taxesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_type_taxesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_type_taxesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_type_taxesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_type_taxesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_taxesPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_type_taxesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_type_taxes>
+        }
+        groupBy: {
+          args: Prisma.document_type_taxesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_type_taxesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_type_taxesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_type_taxesCountAggregateOutputType> | number
+        }
+      }
+    }
     documents: {
       payload: Prisma.$documentsPayload<ExtArgs>
       fields: Prisma.documentsFieldRefs
@@ -4047,6 +4122,7 @@ export const Business_partiesScalarFieldEnum = {
   type: 'type',
   name: 'name',
   tax_id: 'tax_id',
+  exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -4786,6 +4862,17 @@ export const Document_typesScalarFieldEnum = {
 export type Document_typesScalarFieldEnum = (typeof Document_typesScalarFieldEnum)[keyof typeof Document_typesScalarFieldEnum]
 
 
+export const Document_type_taxesScalarFieldEnum = {
+  id: 'id',
+  document_type_id: 'document_type_id',
+  tax_id: 'tax_id',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Document_type_taxesScalarFieldEnum = (typeof Document_type_taxesScalarFieldEnum)[keyof typeof Document_type_taxesScalarFieldEnum]
+
+
 export const DocumentsScalarFieldEnum = {
   id: 'id',
   document_type_id: 'document_type_id',
@@ -4925,6 +5012,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -4942,20 +5043,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -5181,6 +5268,7 @@ export type GlobalOmitConfig = {
   document_items?: Prisma.document_itemsOmit
   document_taxes?: Prisma.document_taxesOmit
   document_types?: Prisma.document_typesOmit
+  document_type_taxes?: Prisma.document_type_taxesOmit
   documents?: Prisma.documentsOmit
   product_taxes?: Prisma.product_taxesOmit
   taxes?: Prisma.taxesOmit

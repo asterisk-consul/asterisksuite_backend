@@ -20,29 +20,30 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "IMP_IVA1",
-  "name": "IMP_IVA1",
+  "code": "IVA21",
+  "name": "IVA 21%",
   "tax_type": "IVA",
-  "rate": 21.000,
+  "rate": 21,
   "is_percentage": true,
   "active": true,
-  "calculation_level": "LINE"
+  "calculation_level": "document"
 }
 
 ###
 
 ### 📋 Listar Taxes por empresa
-GET {{baseUrl}}/taxes?company_id=9af6e716-d26a-45f3-9afa-68c346e1628f
+GET {{baseUrl}}/taxes?id 
 Authorization: Bearer {{accessToken}}
 
 ###
 
 ### ✏️ Actualizar Tax
-PATCH {{baseUrl}}/taxes/784fbace-ce2f-4fa8-bea3-c73522e5237d
+PATCH {{baseUrl}}/taxes/6f3a600a-61ec-4c3a-aa5a-780ac5d5c4e8
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "IVA2"
+  "code": "Excento",
+  "rate": -10
   
 }
