@@ -32,14 +32,14 @@ export class ArticuloPrecioSink implements Sink<any> {
         changedate: now, // 👈 FIX
       }));
 
-      // 3. Histórico
-      const historicoData = batch.map((item) => ({
-        articuloid: item.articuloid,
-        categid: 10790, // 👈 opcional: consistencia
-        precio: item.precio,
-        changedate: now, // 👈 FIX consistente
-        factorconversion: 1,
-      }));
+      // // 3. Histórico
+      // const historicoData = batch.map((item) => ({
+      //   articuloid: item.articuloid,
+      //   categid: 10790, // 👈 opcional: consistencia
+      //   precio: item.precio,
+      //   changedate: now, // 👈 FIX consistente
+      //   factorconversion: 1,
+      // }));
 
       await this.prismaService.$transaction([
         ...updateQueries,
@@ -49,9 +49,9 @@ export class ArticuloPrecioSink implements Sink<any> {
           skipDuplicates: true,
         }),
 
-        this.prismaService.articulopreciohistorico.createMany({
-          data: historicoData,
-        }),
+        // this.prismaService.articulopreciohistorico.createMany({
+        //   data: historicoData,
+        // }),
       ]);
     }
   }
