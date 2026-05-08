@@ -14,7 +14,7 @@ Content-Type: application/json
 
 @accessToken = {{login.response.body.accessToken}}
 @docId =
-@tripId = REEMPLAZAR_CON_ID_REAL
+@tripId =7170d387-693b-426d-b1c2-cdb67f60d43c
 @partyId = 6199dbb7-d74e-46af-95e5-3ee2e4e793ef
 @taxId = 7f2a703e-d2f4-4d21-b528-60a047c2450e
 @productId = 593f4d4d-1f0b-4c16-b9ce-15ce1b4e201d
