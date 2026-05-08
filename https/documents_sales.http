@@ -15,19 +15,19 @@ Content-Type: application/json
 @accessToken = {{login.response.body.accessToken}}
 @docId =
 @tripId = REEMPLAZAR_CON_ID_REAL
-@partyId = 6199dbb7-d74e-46af-95e5-3ee2e4e793ef
+@partyId = 9e77a6ff-8bdf-4a4d-a4fe-5428e8fccae9
 @taxId = 7f2a703e-d2f4-4d21-b528-60a047c2450e
-@productId = 593f4d4d-1f0b-4c16-b9ce-15ce1b4e201d
+@productId = 29ee2654-c6a6-4a31-b7e6-08fbd21d8230
 @productId2 = a73dc2ca-9b57-43a0-83c7-0ecdc679cf78
 
-@docTypeId = afad8b42-baca-4c3e-afae-55038be50eec
+@docTypeId = e378e6bb-5096-4a4f-8551-74d73fd805e7
 
 ### =====================================================
 ### 🚀 Generar borradores de TODOS los viajes completados
 ### =====================================================
 
 POST {{baseUrl}}/documents/sales/generate-from-all-completed-trips
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{accessToken}}>
 
 ###
 
@@ -102,7 +102,7 @@ Content-Type: application/json
   "items": [
     {
       "product_id": "{{productId}}",
-      "quantity": 1,
+      "quantity": 2,
       "unit_price": 0
     }
  

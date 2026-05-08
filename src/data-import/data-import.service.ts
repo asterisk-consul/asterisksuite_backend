@@ -10,6 +10,7 @@ import { ArticuloPrecioSink } from './sinks/articulo-precio.sink';
 import { FacturaCompraParser } from './compras/paresers/compras.parser';
 import { ComprasTransformer } from './compras/transformer/compras.transformer';
 import { FacturaSink } from './compras/sinks/compras.sink';
+import { FacturaSink as VentasSink } from './sales/sinks/sales.sink';
 
 import { NotaParser } from './compras/paresers/notas.parser';
 import { NotaTransformer } from './compras/transformer/notas.transformer';
@@ -47,7 +48,7 @@ export class DataImportService {
       new ExcelSource(file),
       new FacturaVentaParser(),
       new VentasTransformer(this.prisma),
-      new FacturaSink(this.prisma),
+      new VentasSink(this.prisma),
     );
     return pipeline.run();
   }

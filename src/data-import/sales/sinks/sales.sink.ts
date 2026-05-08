@@ -23,15 +23,20 @@ export class FacturaSink implements Sink<VentasTransformado> {
 
       // 2. Insertar en transacción — si falla un hijo, se revierte todo
       await this.prisma.$transaction(async (tx) => {
+        console.log('source que se va a insertar:', 'import');
+
+        console.log('docData keys:', Object.keys(docData));
+        console.log('source a insertar:', 'import');
         const inserted = await tx.documents.create({
           data: {
             ...docData,
             number: documentNumber,
+            source: 'import',
             ref,
             // exempt_amount llega en docData automáticamente via spread
           },
         });
-
+        console.log('source insertado:', inserted.source);
         if (document_taxes.length > 0) {
           await tx.document_taxes.createMany({
             data: document_taxes.map((t) => ({

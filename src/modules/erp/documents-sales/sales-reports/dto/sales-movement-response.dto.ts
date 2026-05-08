@@ -14,6 +14,7 @@ export interface SalesMovementResponseDto {
   quantity: number;
   unitPrice: number;
   itemSubtotal: number;
+  exempt_amount: number;
   documentSubtotal: number;
   documentTotal: number;
   taxCode: string;

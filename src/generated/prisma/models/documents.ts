@@ -63,6 +63,7 @@ export type DocumentsMinAggregateOutputType = {
   created_by: string | null
   updated_by: string | null
   deleted_by: string | null
+  source: string | null
 }
 
 export type DocumentsMaxAggregateOutputType = {
@@ -84,6 +85,7 @@ export type DocumentsMaxAggregateOutputType = {
   created_by: string | null
   updated_by: string | null
   deleted_by: string | null
+  source: string | null
 }
 
 export type DocumentsCountAggregateOutputType = {
@@ -105,6 +107,7 @@ export type DocumentsCountAggregateOutputType = {
   created_by: number
   updated_by: number
   deleted_by: number
+  source: number
   _all: number
 }
 
@@ -146,6 +149,7 @@ export type DocumentsMinAggregateInputType = {
   created_by?: true
   updated_by?: true
   deleted_by?: true
+  source?: true
 }
 
 export type DocumentsMaxAggregateInputType = {
@@ -167,6 +171,7 @@ export type DocumentsMaxAggregateInputType = {
   created_by?: true
   updated_by?: true
   deleted_by?: true
+  source?: true
 }
 
 export type DocumentsCountAggregateInputType = {
@@ -188,6 +193,7 @@ export type DocumentsCountAggregateInputType = {
   created_by?: true
   updated_by?: true
   deleted_by?: true
+  source?: true
   _all?: true
 }
 
@@ -296,6 +302,7 @@ export type DocumentsGroupByOutputType = {
   created_by: string | null
   updated_by: string | null
   deleted_by: string | null
+  source: string
   _count: DocumentsCountAggregateOutputType | null
   _avg: DocumentsAvgAggregateOutputType | null
   _sum: DocumentsSumAggregateOutputType | null
@@ -340,6 +347,7 @@ export type documentsWhereInput = {
   created_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"documents"> | string | null
+  source?: Prisma.StringFilter<"documents"> | string
   document_items?: Prisma.Document_itemsListRelationFilter
   document_taxes?: Prisma.Document_taxesListRelationFilter
   document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
@@ -365,6 +373,7 @@ export type documentsOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   document_items?: Prisma.document_itemsOrderByRelationAggregateInput
   document_taxes?: Prisma.document_taxesOrderByRelationAggregateInput
   document_types?: Prisma.document_typesOrderByWithRelationInput
@@ -394,6 +403,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"documents"> | string | null
+  source?: Prisma.StringFilter<"documents"> | string
   document_items?: Prisma.Document_itemsListRelationFilter
   document_taxes?: Prisma.Document_taxesListRelationFilter
   document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
@@ -419,6 +429,7 @@ export type documentsOrderByWithAggregationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   _count?: Prisma.documentsCountOrderByAggregateInput
   _avg?: Prisma.documentsAvgOrderByAggregateInput
   _max?: Prisma.documentsMaxOrderByAggregateInput
@@ -448,6 +459,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
+  source?: Prisma.StringWithAggregatesFilter<"documents"> | string
 }
 
 export type documentsCreateInput = {
@@ -467,6 +479,7 @@ export type documentsCreateInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
@@ -492,6 +505,7 @@ export type documentsUncheckedCreateInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
@@ -513,6 +527,7 @@ export type documentsUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
@@ -538,6 +553,7 @@ export type documentsUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
 }
@@ -561,6 +577,7 @@ export type documentsCreateManyInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
 }
 
 export type documentsUpdateManyMutationInput = {
@@ -580,6 +597,7 @@ export type documentsUpdateManyMutationInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type documentsUncheckedUpdateManyInput = {
@@ -601,6 +619,7 @@ export type documentsUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type DocumentsListRelationFilter = {
@@ -642,6 +661,7 @@ export type documentsCountOrderByAggregateInput = {
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type documentsAvgOrderByAggregateInput = {
@@ -672,6 +692,7 @@ export type documentsMaxOrderByAggregateInput = {
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type documentsMinOrderByAggregateInput = {
@@ -693,6 +714,7 @@ export type documentsMinOrderByAggregateInput = {
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type documentsSumOrderByAggregateInput = {
@@ -833,6 +855,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
@@ -856,6 +879,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
@@ -908,6 +932,7 @@ export type documentsScalarWhereInput = {
   created_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"documents"> | string | null
+  source?: Prisma.StringFilter<"documents"> | string
 }
 
 export type documentsCreateWithoutDocument_itemsInput = {
@@ -927,6 +952,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
@@ -951,6 +977,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
@@ -987,6 +1014,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
@@ -1011,6 +1039,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
 }
 
@@ -1031,6 +1060,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
@@ -1055,6 +1085,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
 }
 
@@ -1091,6 +1122,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
@@ -1115,6 +1147,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
 }
 
@@ -1135,6 +1168,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
@@ -1158,6 +1192,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
 }
@@ -1206,6 +1241,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
 }
 
 export type documentsUpdateWithoutBusiness_partiesInput = {
@@ -1225,6 +1261,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
@@ -1248,6 +1285,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
 }
@@ -1270,6 +1308,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type documentsCreateManyDocument_typesInput = {
@@ -1290,6 +1329,7 @@ export type documentsCreateManyDocument_typesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  source?: string
 }
 
 export type documentsUpdateWithoutDocument_typesInput = {
@@ -1309,6 +1349,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
@@ -1332,6 +1373,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
 }
@@ -1354,6 +1396,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -1415,6 +1458,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   created_by?: boolean
   updated_by?: boolean
   deleted_by?: boolean
+  source?: boolean
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
@@ -1441,6 +1485,7 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   created_by?: boolean
   updated_by?: boolean
   deleted_by?: boolean
+  source?: boolean
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
@@ -1464,6 +1509,7 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   created_by?: boolean
   updated_by?: boolean
   deleted_by?: boolean
+  source?: boolean
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
@@ -1487,9 +1533,10 @@ export type documentsSelectScalar = {
   created_by?: boolean
   updated_by?: boolean
   deleted_by?: boolean
+  source?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "descrip" | "ref" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "descrip" | "ref" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -1533,6 +1580,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     created_by: string | null
     updated_by: string | null
     deleted_by: string | null
+    source: string
   }, ExtArgs["result"]["documents"]>
   composites: {}
 }
@@ -1978,6 +2026,7 @@ export interface documentsFieldRefs {
   readonly created_by: Prisma.FieldRef<"documents", 'String'>
   readonly updated_by: Prisma.FieldRef<"documents", 'String'>
   readonly deleted_by: Prisma.FieldRef<"documents", 'String'>
+  readonly source: Prisma.FieldRef<"documents", 'String'>
 }
     
 

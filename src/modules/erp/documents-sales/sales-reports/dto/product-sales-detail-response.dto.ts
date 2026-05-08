@@ -12,6 +12,7 @@ export interface ProductSalesDetailResponseDto {
   totalGeneral: number;
   totalTaxes: number;
   suppliers: SupplierDetailDto[];
+  exempt_amount: number;
   documentTypes: DocumentTypeDetailDto[];
   taxes: TaxDetailDto[];
   movements: SalesMovementResponseDto[];

@@ -425,6 +425,10 @@ export class DocumentsSalesService {
       items = await this.resolveItems(dto.items, doc.document_type_id);
       totals = await this.calculateTotals(items, dto.party_id ?? doc.party_id);
     }
+    if (doc.source === 'import')
+      throw new BadRequestException(
+        'No se pueden modificar documentos importados',
+      );
 
     await this.prisma.$transaction(async (tx) => {
       if (items && totals) {
