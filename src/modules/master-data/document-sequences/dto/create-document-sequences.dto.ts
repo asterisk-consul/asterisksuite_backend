@@ -10,9 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreateDocumentSequenceDto {
-  @IsUUID()
-  company_id!: string;
-
   @IsString()
   @MaxLength(50)
   name!: string;
@@ -34,6 +31,9 @@ export class CreateDocumentSequenceDto {
   @IsInt()
   @Min(1)
   range_end!: number;
+
+  @IsInt()
+  current_number!: number;
 
   @IsOptional()
   @IsString()

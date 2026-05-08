@@ -37,7 +37,6 @@ class CreatePartyContactDto {
 }
 
 export class CreateBusinessPartyDto {
-  
   @IsBoolean()
   active: boolean;
 
@@ -62,4 +61,7 @@ export class CreateBusinessPartyDto {
   @ValidateNested({ each: true })
   @Type(() => CreatePartyContactDto)
   contacts?: CreatePartyContactDto[];
+
+  @IsOptional()
+  exemption_rate?: number;
 }

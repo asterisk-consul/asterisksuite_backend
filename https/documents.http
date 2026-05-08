@@ -12,8 +12,15 @@ Content-Type: application/json
 }
 
 ###
-
 @accessToken = {{login.response.body.accessToken}}
+
+
+###
+GET {{baseUrl}}/documents-types
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+###
+
 POST {{baseUrl}}/documents
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json

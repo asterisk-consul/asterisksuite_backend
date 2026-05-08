@@ -64,7 +64,7 @@ export class DocumentSequencesService {
     });
   }
 
-  async findAll(company_id: string) {
+  async findAll() {
     return this.prisma.document_sequences.findMany({
       orderBy: { created_at: 'desc' },
     });
