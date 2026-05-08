@@ -263,6 +263,8 @@ export class SalesService {
         if (!item.products) continue;
 
         const itemValue = Number(item.quantity) * Number(item.price);
+        const itemProportion =
+          Number(doc.subtotal) !== 0 ? itemValue / Number(doc.subtotal) : 0;
 
         movements.push({
           ref: doc.ref || '',
@@ -277,6 +279,7 @@ export class SalesService {
           documentTypeName: doc.document_types.description,
           quantity: Number(item.quantity),
           unitPrice: Number(item.price),
+          exempt_amount: Number(doc.exempt_amount || 0),
           itemSubtotal: itemValue,
           documentSubtotal: Number(doc.subtotal),
           documentTotal: Number(doc.total),
@@ -286,11 +289,14 @@ export class SalesService {
             (sum, t) => sum + Number(t.tax_amount),
             0,
           ),
+
           sequenceNumber:
             doc.document_types?.document_sequences?.current_number?.toString() ||
             '',
+
           transactionType: sign === 1 ? 'Venta' : 'Nota Crédito/Débito',
-          adjustedValue: itemValue * sign,
+          adjustedValue:
+            itemValue * sign - Number(doc.exempt_amount || 0) * itemProportion,
         });
       }
 
@@ -371,6 +377,11 @@ export class SalesService {
       productCategory: '',
       totalGeneral,
       totalTaxes,
+      exempt_amount: documents.reduce(
+        // ✅ agregá esto
+        (sum, doc) => sum + Number(doc.exempt_amount || 0),
+        0,
+      ),
       suppliers: Array.from(suppliersMap.values()),
       documentTypes: Array.from(documentTypesMap.values()),
       taxes: Array.from(taxesMap.values()),
@@ -437,6 +448,7 @@ export class SalesService {
           documentTypeName: doc.document_types.description,
           quantity: Number(item.quantity),
           unitPrice: Number(item.price),
+          exempt_amount: Number(doc.exempt_amount || 0),
           itemSubtotal: itemValue,
           documentSubtotal: Number(doc.subtotal),
           documentTotal: Number(doc.total),

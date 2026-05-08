@@ -333,6 +333,7 @@ export type tripsWhereInput = {
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
   trip_cargo?: Prisma.Trip_cargoListRelationFilter
+  trip_stops?: Prisma.Trip_stopsListRelationFilter
   trip_temperature_logs?: Prisma.Trip_temperature_logsListRelationFilter
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   locations_trips_destination_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
@@ -340,7 +341,6 @@ export type tripsWhereInput = {
   locations_trips_origin_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.XOR<Prisma.WarehousesNullableScalarRelationFilter, Prisma.warehousesWhereInput> | null
   vehicle_combination?: Prisma.XOR<Prisma.Vehicle_combinationsNullableScalarRelationFilter, Prisma.vehicle_combinationsWhereInput> | null
-  trip_stops?: Prisma.Trip_stopsListRelationFilter
 }
 
 export type tripsOrderByWithRelationInput = {
@@ -368,6 +368,7 @@ export type tripsOrderByWithRelationInput = {
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
   picking_orders?: Prisma.picking_ordersOrderByRelationAggregateInput
   trip_cargo?: Prisma.trip_cargoOrderByRelationAggregateInput
+  trip_stops?: Prisma.trip_stopsOrderByRelationAggregateInput
   trip_temperature_logs?: Prisma.trip_temperature_logsOrderByRelationAggregateInput
   users?: Prisma.usersOrderByWithRelationInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsOrderByWithRelationInput
@@ -375,7 +376,6 @@ export type tripsOrderByWithRelationInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsOrderByWithRelationInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesOrderByWithRelationInput
   vehicle_combination?: Prisma.vehicle_combinationsOrderByWithRelationInput
-  trip_stops?: Prisma.trip_stopsOrderByRelationAggregateInput
 }
 
 export type tripsWhereUniqueInput = Prisma.AtLeast<{
@@ -406,6 +406,7 @@ export type tripsWhereUniqueInput = Prisma.AtLeast<{
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   picking_orders?: Prisma.Picking_ordersListRelationFilter
   trip_cargo?: Prisma.Trip_cargoListRelationFilter
+  trip_stops?: Prisma.Trip_stopsListRelationFilter
   trip_temperature_logs?: Prisma.Trip_temperature_logsListRelationFilter
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   locations_trips_destination_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
@@ -413,7 +414,6 @@ export type tripsWhereUniqueInput = Prisma.AtLeast<{
   locations_trips_origin_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.XOR<Prisma.WarehousesNullableScalarRelationFilter, Prisma.warehousesWhereInput> | null
   vehicle_combination?: Prisma.XOR<Prisma.Vehicle_combinationsNullableScalarRelationFilter, Prisma.vehicle_combinationsWhereInput> | null
-  trip_stops?: Prisma.Trip_stopsListRelationFilter
 }, "id">
 
 export type tripsOrderByWithAggregationInput = {
@@ -487,6 +487,7 @@ export type tripsCreateInput = {
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
@@ -494,7 +495,6 @@ export type tripsCreateInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateInput = {
@@ -522,8 +522,8 @@ export type tripsUncheckedCreateInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsUpdateInput = {
@@ -545,6 +545,7 @@ export type tripsUpdateInput = {
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
@@ -552,7 +553,6 @@ export type tripsUpdateInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateInput = {
@@ -580,8 +580,8 @@ export type tripsUncheckedUpdateInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsCreateManyInput = {
@@ -1118,6 +1118,7 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
@@ -1125,7 +1126,6 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput = {
@@ -1152,8 +1152,8 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_from_trip
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput = {
@@ -1179,6 +1179,7 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
@@ -1186,7 +1187,6 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsInput = {
@@ -1213,8 +1213,8 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_to_trip_i
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsInput = {
@@ -1251,6 +1251,7 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
@@ -1258,7 +1259,6 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput = {
@@ -1285,8 +1285,8 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_from_trip
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUpsertWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsInput = {
@@ -1318,6 +1318,7 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
@@ -1325,7 +1326,6 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsInput = {
@@ -1352,8 +1352,8 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_to_trip_i
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsCreateWithoutDelivery_notesInput = {
@@ -1374,6 +1374,7 @@ export type tripsCreateWithoutDelivery_notesInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
@@ -1381,7 +1382,6 @@ export type tripsCreateWithoutDelivery_notesInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutDelivery_notesInput = {
@@ -1408,8 +1408,8 @@ export type tripsUncheckedCreateWithoutDelivery_notesInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutDelivery_notesInput = {
@@ -1446,6 +1446,7 @@ export type tripsUpdateWithoutDelivery_notesInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
@@ -1453,7 +1454,6 @@ export type tripsUpdateWithoutDelivery_notesInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
@@ -1480,8 +1480,8 @@ export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -1503,13 +1503,13 @@ export type tripsCreateWithoutLocations_trips_destination_location_idTolocations
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -1536,8 +1536,8 @@ export type tripsUncheckedCreateWithoutLocations_trips_destination_location_idTo
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -1569,13 +1569,13 @@ export type tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput = {
@@ -1602,8 +1602,8 @@ export type tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocat
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutLocations_trips_origin_location_idTolocationsInput = {
@@ -1691,6 +1691,7 @@ export type tripsCreateWithoutPicking_ordersInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
@@ -1698,7 +1699,6 @@ export type tripsCreateWithoutPicking_ordersInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutPicking_ordersInput = {
@@ -1725,8 +1725,8 @@ export type tripsUncheckedCreateWithoutPicking_ordersInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutPicking_ordersInput = {
@@ -1763,6 +1763,7 @@ export type tripsUpdateWithoutPicking_ordersInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
@@ -1770,7 +1771,6 @@ export type tripsUpdateWithoutPicking_ordersInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutPicking_ordersInput = {
@@ -1797,8 +1797,8 @@ export type tripsUncheckedUpdateWithoutPicking_ordersInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsCreateWithoutTrip_cargoInput = {
@@ -1819,6 +1819,7 @@ export type tripsCreateWithoutTrip_cargoInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
@@ -1826,7 +1827,6 @@ export type tripsCreateWithoutTrip_cargoInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutTrip_cargoInput = {
@@ -1853,8 +1853,8 @@ export type tripsUncheckedCreateWithoutTrip_cargoInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutTrip_cargoInput = {
@@ -1891,6 +1891,7 @@ export type tripsUpdateWithoutTrip_cargoInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
@@ -1898,7 +1899,6 @@ export type tripsUpdateWithoutTrip_cargoInput = {
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutTrip_cargoInput = {
@@ -1925,8 +1925,8 @@ export type tripsUncheckedUpdateWithoutTrip_cargoInput = {
   cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsCreateWithoutTrip_temperature_logsInput = {
@@ -1948,13 +1948,13 @@ export type tripsCreateWithoutTrip_temperature_logsInput = {
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutTrip_temperature_logsInput = {
@@ -2020,13 +2020,13 @@ export type tripsUpdateWithoutTrip_temperature_logsInput = {
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutTrip_temperature_logsInput = {
@@ -2204,13 +2204,13 @@ export type tripsCreateWithoutUsersInput = {
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutUsersInput = {
@@ -2237,8 +2237,8 @@ export type tripsUncheckedCreateWithoutUsersInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutUsersInput = {
@@ -2286,13 +2286,13 @@ export type tripsCreateWithoutVehicle_combinationInput = {
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutVehicle_combinationInput = {
@@ -2319,8 +2319,8 @@ export type tripsUncheckedCreateWithoutVehicle_combinationInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutVehicle_combinationInput = {
@@ -2368,13 +2368,13 @@ export type tripsCreateWithoutWarehouses_trips_destination_warehouse_idTowarehou
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
@@ -2401,8 +2401,8 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_destination_warehouse_id
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
@@ -2434,13 +2434,13 @@ export type tripsCreateWithoutWarehouses_trips_origin_warehouse_idTowarehousesIn
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
 }
 
 export type tripsUncheckedCreateWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
@@ -2467,8 +2467,8 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_origin_warehouse_idTowar
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
   picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
 }
 
 export type tripsCreateOrConnectWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
@@ -2574,13 +2574,13 @@ export type tripsUpdateWithoutLocations_trips_destination_location_idTolocations
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -2607,8 +2607,8 @@ export type tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTo
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -2651,13 +2651,13 @@ export type tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
@@ -2684,8 +2684,8 @@ export type tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocat
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsInput = {
@@ -2749,13 +2749,13 @@ export type tripsUpdateWithoutUsersInput = {
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutUsersInput = {
@@ -2782,8 +2782,8 @@ export type tripsUncheckedUpdateWithoutUsersInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUncheckedUpdateManyWithoutUsersInput = {
@@ -2847,13 +2847,13 @@ export type tripsUpdateWithoutVehicle_combinationInput = {
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutVehicle_combinationInput = {
@@ -2880,8 +2880,8 @@ export type tripsUncheckedUpdateWithoutVehicle_combinationInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUncheckedUpdateManyWithoutVehicle_combinationInput = {
@@ -2966,13 +2966,13 @@ export type tripsUpdateWithoutWarehouses_trips_destination_warehouse_idTowarehou
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
@@ -2999,8 +2999,8 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_destination_warehouse_id
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
@@ -3043,13 +3043,13 @@ export type tripsUpdateWithoutWarehouses_trips_origin_warehouse_idTowarehousesIn
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
   users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
 }
 
 export type tripsUncheckedUpdateWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
@@ -3076,8 +3076,8 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_origin_warehouse_idTowar
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
 export type tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput = {
@@ -3112,8 +3112,8 @@ export type TripsCountOutputType = {
   delivery_notes: number
   picking_orders: number
   trip_cargo: number
-  trip_temperature_logs: number
   trip_stops: number
+  trip_temperature_logs: number
 }
 
 export type TripsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3122,8 +3122,8 @@ export type TripsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   delivery_notes?: boolean | TripsCountOutputTypeCountDelivery_notesArgs
   picking_orders?: boolean | TripsCountOutputTypeCountPicking_ordersArgs
   trip_cargo?: boolean | TripsCountOutputTypeCountTrip_cargoArgs
-  trip_temperature_logs?: boolean | TripsCountOutputTypeCountTrip_temperature_logsArgs
   trip_stops?: boolean | TripsCountOutputTypeCountTrip_stopsArgs
+  trip_temperature_logs?: boolean | TripsCountOutputTypeCountTrip_temperature_logsArgs
 }
 
 /**
@@ -3174,15 +3174,15 @@ export type TripsCountOutputTypeCountTrip_cargoArgs<ExtArgs extends runtime.Type
 /**
  * TripsCountOutputType without action
  */
-export type TripsCountOutputTypeCountTrip_temperature_logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.trip_temperature_logsWhereInput
+export type TripsCountOutputTypeCountTrip_stopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.trip_stopsWhereInput
 }
 
 /**
  * TripsCountOutputType without action
  */
-export type TripsCountOutputTypeCountTrip_stopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.trip_stopsWhereInput
+export type TripsCountOutputTypeCountTrip_temperature_logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.trip_temperature_logsWhereInput
 }
 
 
@@ -3211,6 +3211,7 @@ export type tripsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   delivery_notes?: boolean | Prisma.trips$delivery_notesArgs<ExtArgs>
   picking_orders?: boolean | Prisma.trips$picking_ordersArgs<ExtArgs>
   trip_cargo?: boolean | Prisma.trips$trip_cargoArgs<ExtArgs>
+  trip_stops?: boolean | Prisma.trips$trip_stopsArgs<ExtArgs>
   trip_temperature_logs?: boolean | Prisma.trips$trip_temperature_logsArgs<ExtArgs>
   users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
@@ -3218,7 +3219,6 @@ export type tripsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_origin_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_origin_warehouse_idTowarehousesArgs<ExtArgs>
   vehicle_combination?: boolean | Prisma.trips$vehicle_combinationArgs<ExtArgs>
-  trip_stops?: boolean | Prisma.trips$trip_stopsArgs<ExtArgs>
   _count?: boolean | Prisma.TripsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trips"]>
 
@@ -3307,6 +3307,7 @@ export type tripsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   delivery_notes?: boolean | Prisma.trips$delivery_notesArgs<ExtArgs>
   picking_orders?: boolean | Prisma.trips$picking_ordersArgs<ExtArgs>
   trip_cargo?: boolean | Prisma.trips$trip_cargoArgs<ExtArgs>
+  trip_stops?: boolean | Prisma.trips$trip_stopsArgs<ExtArgs>
   trip_temperature_logs?: boolean | Prisma.trips$trip_temperature_logsArgs<ExtArgs>
   users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
@@ -3314,7 +3315,6 @@ export type tripsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_origin_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_origin_warehouse_idTowarehousesArgs<ExtArgs>
   vehicle_combination?: boolean | Prisma.trips$vehicle_combinationArgs<ExtArgs>
-  trip_stops?: boolean | Prisma.trips$trip_stopsArgs<ExtArgs>
   _count?: boolean | Prisma.TripsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type tripsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3342,6 +3342,7 @@ export type $tripsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs>[]
     picking_orders: Prisma.$picking_ordersPayload<ExtArgs>[]
     trip_cargo: Prisma.$trip_cargoPayload<ExtArgs>[]
+    trip_stops: Prisma.$trip_stopsPayload<ExtArgs>[]
     trip_temperature_logs: Prisma.$trip_temperature_logsPayload<ExtArgs>[]
     users: Prisma.$usersPayload<ExtArgs> | null
     locations_trips_destination_location_idTolocations: Prisma.$locationsPayload<ExtArgs> | null
@@ -3349,7 +3350,6 @@ export type $tripsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     locations_trips_origin_location_idTolocations: Prisma.$locationsPayload<ExtArgs> | null
     warehouses_trips_origin_warehouse_idTowarehouses: Prisma.$warehousesPayload<ExtArgs> | null
     vehicle_combination: Prisma.$vehicle_combinationsPayload<ExtArgs> | null
-    trip_stops: Prisma.$trip_stopsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3770,6 +3770,7 @@ export interface Prisma__tripsClient<T, Null = never, ExtArgs extends runtime.Ty
   delivery_notes<T extends Prisma.trips$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$delivery_notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   picking_orders<T extends Prisma.trips$picking_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$picking_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trip_cargo<T extends Prisma.trips$trip_cargoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_cargoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  trip_stops<T extends Prisma.trips$trip_stopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_stopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_stopsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trip_temperature_logs<T extends Prisma.trips$trip_temperature_logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_temperature_logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_temperature_logsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.trips$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   locations_trips_destination_location_idTolocations<T extends Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -3777,7 +3778,6 @@ export interface Prisma__tripsClient<T, Null = never, ExtArgs extends runtime.Ty
   locations_trips_origin_location_idTolocations<T extends Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   warehouses_trips_origin_warehouse_idTowarehouses<T extends Prisma.trips$warehouses_trips_origin_warehouse_idTowarehousesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$warehouses_trips_origin_warehouse_idTowarehousesArgs<ExtArgs>>): Prisma.Prisma__warehousesClient<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   vehicle_combination<T extends Prisma.trips$vehicle_combinationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$vehicle_combinationArgs<ExtArgs>>): Prisma.Prisma__vehicle_combinationsClient<runtime.Types.Result.GetResult<Prisma.$vehicle_combinationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  trip_stops<T extends Prisma.trips$trip_stopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_stopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_stopsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4347,6 +4347,30 @@ export type trips$trip_cargoArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * trips.trip_stops
+ */
+export type trips$trip_stopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the trip_stops
+   */
+  select?: Prisma.trip_stopsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the trip_stops
+   */
+  omit?: Prisma.trip_stopsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.trip_stopsInclude<ExtArgs> | null
+  where?: Prisma.trip_stopsWhereInput
+  orderBy?: Prisma.trip_stopsOrderByWithRelationInput | Prisma.trip_stopsOrderByWithRelationInput[]
+  cursor?: Prisma.trip_stopsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Trip_stopsScalarFieldEnum | Prisma.Trip_stopsScalarFieldEnum[]
+}
+
+/**
  * trips.trip_temperature_logs
  */
 export type trips$trip_temperature_logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4482,30 +4506,6 @@ export type trips$vehicle_combinationArgs<ExtArgs extends runtime.Types.Extensio
    */
   include?: Prisma.vehicle_combinationsInclude<ExtArgs> | null
   where?: Prisma.vehicle_combinationsWhereInput
-}
-
-/**
- * trips.trip_stops
- */
-export type trips$trip_stopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the trip_stops
-   */
-  select?: Prisma.trip_stopsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the trip_stops
-   */
-  omit?: Prisma.trip_stopsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.trip_stopsInclude<ExtArgs> | null
-  where?: Prisma.trip_stopsWhereInput
-  orderBy?: Prisma.trip_stopsOrderByWithRelationInput | Prisma.trip_stopsOrderByWithRelationInput[]
-  cursor?: Prisma.trip_stopsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Trip_stopsScalarFieldEnum | Prisma.Trip_stopsScalarFieldEnum[]
 }
 
 /**

@@ -23,9 +23,9 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "FAV",
-  "description": "Factura de Venta A",
-  "direction": 1,
+  "code": "NC",
+  "description": "Nota de credito compras",
+  "direction": -1,
   "affects_stock": false,
   "affects_accounting": true,
   "affects_tax_book": true,

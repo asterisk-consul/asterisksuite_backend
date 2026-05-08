@@ -22,6 +22,21 @@ Content-Type: application/json
 
 @docTypeId = 0453babd-adda-499f-9c8b-25bc7a52a762
 
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
 ### =====================================================
 ### 🚀 Generar borradores de TODOS los viajes completados
 ### =====================================================
@@ -71,7 +86,7 @@ Authorization: Bearer {{accessToken}}
 ### Listar por tipo de documento
 ### =====================================================
 
-GET {{baseUrl}}/documents/sales?documentTypeId={{docTypeId}}
+GET {{baseUrl}}/documents/sales?documentTypeId=0453babd-adda-499f-9c8b-25bc7a52a762
 Authorization: Bearer {{accessToken}}
 
 ###

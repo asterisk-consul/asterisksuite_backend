@@ -27,8 +27,8 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "Computadora",
-  "sku": "COMP-001",
+  "name": "SERVICIOS",
+  "sku": "COMP-002",
   "requires_refrigeration": false,
    "price_enabled": true,
   "is_rate_type": false,
