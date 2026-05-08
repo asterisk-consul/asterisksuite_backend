@@ -53,7 +53,7 @@ interface DocTypeTax {
 
 @Injectable()
 export class DocumentsSalesService {
-  private readonly SALE_CODES = ['FAV', 'NCV', 'NDV'];
+  private readonly SALE_CODES = ['VEN', 'NCV', 'NDV'];
 
   constructor(
     private prisma: PrismaService,

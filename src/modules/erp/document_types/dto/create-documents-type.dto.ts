@@ -14,24 +14,24 @@ export class CreateDocumentsTypeDto {
 
   @IsString()
   @MaxLength(20)
-  code: string;
+  code!: string;
 
   @IsString()
   @MaxLength(150)
-  description: string;
+  description!: string;
 
   @IsInt()
-  direction: number;
+  direction!: number;
 
   @IsBoolean()
-  affects_stock: boolean;
+  affects_stock!: boolean;
 
   @IsBoolean()
-  affects_accounting: boolean;
+  affects_accounting!: boolean;
 
   @IsBoolean()
-  affects_tax_book: boolean;
+  affects_tax_book!: boolean;
 
   @IsBoolean()
-  active: boolean;
+  active!: boolean;
 }

@@ -25,8 +25,8 @@ export class DocumentsTypesController {
   }
 
   @Get()
-  findAll(@Query('company_id') companyId: string) {
-    return this.documentsTypesService.findAll(companyId);
+  findAll() {
+    return this.documentsTypesService.findAll();
   }
 
   @Get(':id')
