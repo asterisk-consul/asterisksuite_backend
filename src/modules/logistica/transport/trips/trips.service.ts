@@ -100,6 +100,8 @@ export class TripsService {
   ========================= */
   async findAll() {
     const trips = await this.prisma.trips.findMany({
+      where: { deleted_at: null },
+      orderBy: { created_at: 'desc' },
       include: {
         vehicle_combination: {
           include: { tractor: true, trailer: true, drivers: true },

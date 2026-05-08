@@ -42,7 +42,7 @@ export class SalesService {
    * Nunca se exponen los códigos internos fuera de este servicio.
    */
   private readonly documentTypeCodeMap: Record<DocumentTypeFilter, string> = {
-    [DocumentTypeFilter.INVOICE]: 'FAV',
+    [DocumentTypeFilter.INVOICE]: 'VEN',
     [DocumentTypeFilter.CREDIT_NOTE]: 'NCV',
     [DocumentTypeFilter.DEBIT_NOTE]: 'NDV',
   };
@@ -614,11 +614,11 @@ export class SalesService {
 
   /**
    * Retorna el signo contable del documento:
-   *  1 → suma (FAV, NDV)
+   *  1 → suma (VEN, NDV)
    * -1 → resta (NCV)
    */
   private getDocumentSign(documentCode: string): number {
-    const positiveDocuments = ['FAV', 'NDV'];
+    const positiveDocuments = ['VEN', 'NDV'];
     const negativeDocuments = ['NCV'];
 
     if (positiveDocuments.includes(documentCode)) return 1;
