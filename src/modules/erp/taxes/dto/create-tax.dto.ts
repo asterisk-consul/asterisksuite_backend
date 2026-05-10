@@ -1,16 +1,6 @@
-// dto/create-tax.dto.ts
-import {
-  IsBoolean,
-  IsNumber,
-  IsString,
-  IsUUID,
-  MaxLength,
-} from 'class-validator';
+import { IsBoolean, IsNumber, IsString, MaxLength } from 'class-validator';
 
 export class CreateTaxDto {
-  @IsUUID()
-  company_id: string;
-
   @IsString()
   @MaxLength(20)
   code: string;

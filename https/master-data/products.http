@@ -27,10 +27,12 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "PRUEBA",
-  "sku": "SKU-088",
+  "name": "SERVICIOS",
+  "sku": "COMP-002",
   "requires_refrigeration": false,
-  "price_enabled": false
+   "price_enabled": true,
+  "is_rate_type": false,
+  "active": true
 }
 
 ###

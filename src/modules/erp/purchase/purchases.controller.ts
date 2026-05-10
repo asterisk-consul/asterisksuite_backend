@@ -9,6 +9,7 @@ import {
 } from './dto';
 import { QueryPurchasesDto } from './dto/query-purchases.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { GlobalPurchaseDocumentsResponseDto } from './dto/documents_purchases/global-purchases-documents';
 
 @Controller('purchases')
 @UseGuards(JwtAuthGuard)
@@ -35,6 +36,12 @@ export class PurchasesController {
     @Query() query: QueryPurchasesDto,
   ): Promise<PurchaseMovementResponseDto[]> {
     return this.purchasesService.getPurchaseMovements(query);
+  }
+  @Get('purchases-documents')
+  getPurchaseDocuments(
+    @Query() query: QueryPurchasesDto,
+  ): Promise<GlobalPurchaseDocumentsResponseDto> {
+    return this.purchasesService.getPurchaseDocuments(query);
   }
 
   @Get('products')

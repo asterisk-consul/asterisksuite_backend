@@ -28,11 +28,12 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-"name":"Agustin Yedro",
-"tax_id":"303030030",
-"type":"supplier"
+  "type": "customer",
+  "name": "Cliente de Prueba SA",
+  "tax_id": "30-12345678-9",
+  "active": true,
+  "exemption_rate": 0
 }
-
 
 
 

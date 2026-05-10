@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 // Maneja números argentinos: "413.547,75" → 413547.75
 // compras/schemas/compras.schema.ts — volver a z.coerce.number()
-export const facturaCompraSchema = z.object({
+export const facturaVentaSchema = z.object({
   Comprobante: z.string(),
   Nombre: z.string(),
   Motivo_det: z.string().optional(),
@@ -20,4 +20,4 @@ export const facturaCompraSchema = z.object({
   Imp_Excento: z.coerce.number().default(0),
 });
 
-export type FacturaCompraRaw = z.infer<typeof facturaCompraSchema>;
+export type FacturaVentaRaw = z.infer<typeof facturaVentaSchema>;

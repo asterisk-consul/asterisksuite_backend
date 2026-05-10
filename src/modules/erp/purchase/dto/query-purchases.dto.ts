@@ -1,6 +1,18 @@
 // src/modules/erp/purchases/dto/query-purchases.dto.ts
-import { IsOptional, IsInt, IsDateString, Min, IsUUID } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsOptional,
+  IsInt,
+  IsDateString,
+  Min,
+  IsUUID,
+  IsEnum,
+} from 'class-validator';
+
+export enum DocumentTypeFilter {
+  INVOICE = 'INVOICE',
+  CREDIT_NOTE = 'CREDIT_NOTE',
+  DEBIT_NOTE = 'DEBIT_NOTE',
+}
 
 export class QueryPurchasesDto {
   @IsOptional()
@@ -22,4 +34,8 @@ export class QueryPurchasesDto {
   @IsOptional()
   @IsUUID()
   documentTypeId?: string;
+
+  @IsOptional()
+  @IsEnum(DocumentTypeFilter)
+  documentTypeFilter?: DocumentTypeFilter;
 }
