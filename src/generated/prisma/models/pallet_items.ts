@@ -347,14 +347,6 @@ export type pallet_itemsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type pallet_itemsCreateNestedManyWithoutPalletsInput = {
   create?: Prisma.XOR<Prisma.pallet_itemsCreateWithoutPalletsInput, Prisma.pallet_itemsUncheckedCreateWithoutPalletsInput> | Prisma.pallet_itemsCreateWithoutPalletsInput[] | Prisma.pallet_itemsUncheckedCreateWithoutPalletsInput[]
   connectOrCreate?: Prisma.pallet_itemsCreateOrConnectWithoutPalletsInput | Prisma.pallet_itemsCreateOrConnectWithoutPalletsInput[]

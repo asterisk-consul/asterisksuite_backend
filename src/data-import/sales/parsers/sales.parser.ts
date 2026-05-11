@@ -1,9 +1,9 @@
 // compras.parser.ts
 import { Parser, ParseResult } from '../../core/interfaces';
-import { FacturaCompraRaw, facturaCompraSchema } from '../schemas/sales.schema';
+import { FacturaVentaRaw, facturaVentaSchema } from '../schemas/sales.schema';
 import { ZodError } from 'zod';
 
-type FacturaCompraRow = Record<string, unknown>;
+type FacturaVentaRow = Record<string, unknown>;
 
 /* =========================
    💰 PARSER DE DINERO PRO
@@ -120,7 +120,7 @@ function parseExcelDate(value: unknown): Date | null {
 /* =========================
    🔄 NORMALIZADOR
 ========================= */
-function normalizeRow(row: FacturaCompraRow): Record<string, unknown> {
+function normalizeRow(row: FacturaVentaRow): Record<string, unknown> {
   const monetaryFields = new Set([
     'IMP_GRAVADO',
     'IMP_IVA1',
@@ -181,11 +181,11 @@ function validateInvoice(row: any) {
 function mapRow(normalized: Record<string, unknown>) {
   const fechaCarga = parseExcelDate(normalized.FECHA_CARGA);
 
-  return facturaCompraSchema.parse({
+  return facturaVentaSchema.parse({
     Comprobante: normalized.COMPROBANTE,
     Nombre: normalized.NOMBRE,
     Motivo_det: normalized.MOTIVO_DET,
-    Concepto: normalized.CONCEPTO,
+    Concepto: String(normalized.CONCEPTO),
     fecha_carga: fechaCarga,
     Imp_gravado: normalized.IMP_GRAVADO,
     Imp_total: normalized.IMP_TOTAL,
@@ -202,18 +202,18 @@ function mapRow(normalized: Record<string, unknown>) {
 /* =========================
    🚀 PARSER
 ========================= */
-export class FacturaCompraParser implements Parser<FacturaCompraRaw> {
-  parse(raw: unknown[]): FacturaCompraRaw[] {
-    return raw.map((row) => mapRow(normalizeRow(row as FacturaCompraRow)));
+export class FacturaVentaParser implements Parser<FacturaVentaRaw> {
+  parse(raw: unknown[]): FacturaVentaRaw[] {
+    return raw.map((row) => mapRow(normalizeRow(row as FacturaVentaRow)));
   }
 
-  parseWithErrors(raw: unknown[]): ParseResult<FacturaCompraRaw> {
-    const success: FacturaCompraRaw[] = [];
-    const errors: ParseResult<FacturaCompraRaw>['errors'] = [];
+  parseWithErrors(raw: unknown[]): ParseResult<FacturaVentaRaw> {
+    const success: FacturaVentaRaw[] = [];
+    const errors: ParseResult<FacturaVentaRaw>['errors'] = [];
 
     raw.forEach((row, index) => {
       try {
-        success.push(mapRow(normalizeRow(row as FacturaCompraRow)));
+        success.push(mapRow(normalizeRow(row as FacturaVentaRow)));
       } catch (error) {
         if (error instanceof ZodError) {
           errors.push({

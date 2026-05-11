@@ -20,12 +20,10 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "company_id": "9af6e716-d26a-45f3-9afa-68c346e1628f",
-  "name": "Secuencia compras",
+  "name": "Facturas A",
   "automatic": true,
-  "range_start": 1,
-  "range_end": 9999,
-  "point_of_sale": "0002",
-  "prefix": "COM",
+  "point_of_sale": "0001",
+  "current_number": 0,
+  "prefix": "A",
   "active": true
 }

@@ -23,10 +23,11 @@ export class DocumentsTypesService {
     });
   }
 
-  async findAll(companyId: string) {
+  async findAll() {
     return this.prisma.document_types.findMany({
       include: {
         document_sequences: true,
+        document_type_taxes: { include: { taxes: true } },
       },
     });
   }

@@ -15,7 +15,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3008',
       'http://localhost:3000',
-      'http://192.168.18.3:3008',
+      'http://192.168.18.13:3008',
       'https://dev.asterisksuite.cloud',
       'http://dev.asterisksuite.cloud',
       'https://donandres.asterisksuite.cloud',

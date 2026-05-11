@@ -10,8 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { DocumentsSalesService } from './documents_sales.services';
-import { CreateSaleDocumentDto } from './dto/create-sale-document.dto';
-import { UpdateSaleDocumentDto } from './dto/update-sale-document.dto';
+import { CreateDocumentDto } from '../documents/dto/create-document.dto';
+import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 
 @Controller('documents/sales')
@@ -44,7 +44,7 @@ export class DocumentsSalesController {
   }
 
   @Post()
-  create(@Body() dto: CreateSaleDocumentDto) {
+  create(@Body() dto: CreateDocumentDto) {
     return this.service.create(dto);
   }
 
@@ -65,7 +65,7 @@ export class DocumentsSalesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateSaleDocumentDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateDocumentDto) {
     return this.service.update(id, dto);
   }
 
