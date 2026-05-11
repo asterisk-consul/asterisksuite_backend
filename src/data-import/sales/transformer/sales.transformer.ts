@@ -52,7 +52,7 @@ export class VentasTransformer implements Transformer<
     const taxMap = new Map(taxes.map((t) => [t.code, t]));
     const documentTypeMap = new Map(documentTypes.map((dt) => [dt.code, dt]));
 
-    const documentType = documentTypeMap.get('FAV');
+    const documentType = documentTypeMap.get('VEN');
     if (!documentType) {
       throw new Error('Tipo de documento "FAV" no encontrado en la BD');
     }

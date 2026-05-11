@@ -15,7 +15,7 @@ Content-Type: application/json
 @accessToken = {{login.response.body.accessToken}}
 @productId = 872c4285-1c79-4881-a0f6-b10e6f149590
 @taxId = 784fbace-ce2f-4fa8-bea3-c73522e5237d
-@rateId = 7b300804-2feb-4ba5-94f9-4a4f8012a006
+@rateId = c2af6cb6-8520-45a7-95e6-b6e6cc583898
 @rateProductId = COMPLETAR-DESPUES-DE-CREAR
 
 ### =====================================================
@@ -27,11 +27,11 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "SERVICIOS",
+  "name": "BULTO",
   "sku": "COMP-002",
   "requires_refrigeration": false,
    "price_enabled": true,
-  "is_rate_type": false,
+  "is_rate_type": true,
   "active": true
 }
 
@@ -110,9 +110,10 @@ Content-Type: application/json
   "name": "Flete 2",
   "sku": "SKU-TARIFA-001",
   "requires_refrigeration": false,
-  "price_enabled": false,
+  "price_enabled": true,
   "is_rate_type": true,
-  "rate_id": "{{rateId}}"
+  "rate_id": "{{rateId}}",
+  "active": true
 }
 
 ###

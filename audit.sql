@@ -2,11 +2,7 @@
 CREATE TYPE "AuditAction" AS ENUM ('CREATE', 'UPDATE', 'DELETE', 'RESTORE');
 
 -- AlterTable
-ALTER TABLE "business_parties" ADD COLUMN     "created_by" UUID,
-ADD COLUMN     "deleted_at" TIMESTAMP(3),
-ADD COLUMN     "deleted_by" UUID,
-ADD COLUMN     "updated_at" TIMESTAMP(6) NOT NULL,
-ADD COLUMN     "updated_by" UUID;
+ALTER TABLE "audit_logs" ALTER COLUMN "id" DROP DEFAULT;
 
 -- AlterTable
 ALTER TABLE "companies" ADD COLUMN     "created_by" UUID,
@@ -282,26 +278,21 @@ CREATE TABLE "product_price" (
 );
 
 -- CreateTable
-CREATE TABLE "audit_logs" (
+CREATE TABLE "document_type_taxes" (
     "id" UUID NOT NULL,
-    "table_name" VARCHAR(100) NOT NULL,
-    "record_id" VARCHAR(100) NOT NULL,
-    "old_data" JSONB,
-    "new_data" JSONB,
-    "changed_by" UUID,
-    "changed_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "ip_address" VARCHAR(50),
-    "request_id" VARCHAR(100),
-    "action" "AuditAction" NOT NULL,
+    "document_type_id" UUID NOT NULL,
+    "tax_id" UUID NOT NULL,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" UUID,
 
-    CONSTRAINT "audit_logs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "document_type_taxes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE INDEX "audit_logs_table_name_record_id_idx" ON "audit_logs"("table_name", "record_id");
+CREATE UNIQUE INDEX "document_type_taxes_document_type_id_tax_id_key" ON "document_type_taxes"("document_type_id", "tax_id");
 
 -- CreateIndex
-CREATE INDEX "audit_logs_changed_by_idx" ON "audit_logs"("changed_by");
+CREATE UNIQUE INDEX "document_sequences_point_of_sale_prefix_key" ON "document_sequences"("point_of_sale", "prefix");
 
 -- CreateIndex
 CREATE INDEX "audit_logs_changed_at_idx" ON "audit_logs"("changed_at");
@@ -316,5 +307,4 @@ ALTER TABLE "products" ADD CONSTRAINT "products_rate_id_fkey" FOREIGN KEY ("rate
 ALTER TABLE "product_price" ADD CONSTRAINT "product_price_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_changed_by_fkey" FOREIGN KEY ("changed_by") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
+ALTER TABLE "document_type_taxes" ADD CONSTRAINT "document_type_taxes_tax_id_fkey" FOREIGN KEY ("tax_id") REFERENCES "taxes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
