@@ -1,10 +1,11 @@
-// create-product-price.dto.ts
-
-import { IsUUID, IsNumber, IsOptional, Min, Max } from 'class-validator';
+import { IsNumber, IsOptional, IsUUID, Min } from 'class-validator';
 
 export class CreateProductPriceDto {
   @IsUUID()
   product_id!: string;
+
+  @IsUUID()
+  currency_id!: string;
 
   @IsNumber()
   @Min(0)
@@ -13,6 +14,5 @@ export class CreateProductPriceDto {
   @IsOptional()
   @IsNumber()
   @Min(0)
-  @Max(100)
-  exemptionRate?: number;
+  exemption_rate?: number;
 }

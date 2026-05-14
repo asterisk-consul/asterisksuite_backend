@@ -17,7 +17,7 @@ export class ExchangeService {
   constructor(private readonly prisma: PrismaService) {}
 
   // =========================================================
-  // SINCRONIZAR TODAS LAS MONEDAS
+  // SINCRONIZAR TODAS LAS MONEDAS OFICIALES
   // =========================================================
 
   async syncOfficialRates() {
@@ -39,33 +39,54 @@ export class ExchangeService {
 
     const currencies = await this.prisma.currencies.findMany({
       where: {
-        code: { in: data.map((item) => item.moneda) },
+        code: {
+          in: data.map((item) => item.moneda),
+        },
       },
     });
 
     const currencyMap = new Map(currencies.map((c) => [c.code, c]));
 
-    const createPromises = data.flatMap((item) => {
+    const results: Awaited<
+      ReturnType<typeof this.prisma.currency_rates.create>
+    >[] = [];
+
+    for (const item of data) {
       const currency = currencyMap.get(item.moneda);
 
       if (!currency) {
         this.logger.warn(`Moneda ${item.moneda} no encontrada`);
-        return [];
+        continue;
       }
 
-      return this.prisma.currency_rates.create({
+      const existing = await this.findExistingRate({
+        from_currency_id: currency.id,
+        to_currency_id: ars.id,
+        rate_type: CurrencyRateType.OFFICIAL,
+      });
+
+      const newRate = Number(item.venta);
+
+      // Si no cambió la cotización → no guardar
+      if (existing && Number(existing.rate) === newRate) {
+        continue;
+      }
+
+      const created = await this.prisma.currency_rates.create({
         data: {
           from_currency_id: currency.id,
           to_currency_id: ars.id,
-          rate: Number(item.venta),
+          rate: newRate,
           source: 'dolarapi',
           rate_type: CurrencyRateType.OFFICIAL,
           effective_date: new Date(item.fechaActualizacion),
         },
       });
-    });
 
-    return Promise.all(createPromises);
+      results.push(created);
+    }
+
+    return results;
   }
 
   // =========================================================
@@ -82,28 +103,70 @@ export class ExchangeService {
     const data: DolarApiQuote[] = await response.json();
 
     const [ars, usd] = await Promise.all([
-      this.prisma.currencies.findFirst({ where: { code: 'ARS' } }),
-      this.prisma.currencies.findFirst({ where: { code: 'USD' } }),
+      this.prisma.currencies.findFirst({
+        where: { code: 'ARS' },
+      }),
+
+      this.prisma.currencies.findFirst({
+        where: { code: 'USD' },
+      }),
     ]);
 
     if (!ars || !usd) {
       throw new NotFoundException('USD o ARS no existen');
     }
 
-    return Promise.all(
-      data.map((item) =>
-        this.prisma.currency_rates.create({
-          data: {
-            from_currency_id: usd.id,
-            to_currency_id: ars.id,
-            rate: Number(item.venta),
-            source: 'dolarapi',
-            rate_type: this.mapRateType(item.casa),
-            effective_date: new Date(item.fechaActualizacion),
-          },
-        }),
-      ),
-    );
+    const results: Awaited<
+      ReturnType<typeof this.prisma.currency_rates.create>
+    >[] = [];
+
+    for (const item of data) {
+      const rateType = this.mapRateType(item.casa);
+
+      const existing = await this.findExistingRate({
+        from_currency_id: usd.id,
+        to_currency_id: ars.id,
+        rate_type: rateType,
+      });
+
+      const newRate = Number(item.venta);
+
+      if (existing && Number(existing.rate) === newRate) {
+        continue;
+      }
+
+      const created = await this.prisma.currency_rates.create({
+        data: {
+          from_currency_id: usd.id,
+          to_currency_id: ars.id,
+          rate: newRate,
+          source: 'dolarapi',
+          rate_type: rateType,
+          effective_date: new Date(item.fechaActualizacion),
+        },
+      });
+
+      results.push(created);
+    }
+
+    return results;
+  }
+
+  // =========================================================
+  // SINCRONIZAR TODO
+  // =========================================================
+
+  async syncAllRates() {
+    const official = await this.syncOfficialRates();
+
+    const dollars = await this.syncDollarRates();
+
+    return {
+      success: true,
+      official_created: official.length,
+      dollar_created: dollars.length,
+      total_created: official.length + dollars.length,
+    };
   }
 
   // =========================================================
@@ -140,6 +203,10 @@ export class ExchangeService {
       throw new NotFoundException('Moneda no encontrada');
     }
 
+    // =====================================================
+    // COTIZACIÓN DIRECTA
+    // =====================================================
+
     const directRate = await this.prisma.currency_rates.findFirst({
       where: {
         from_currency_id: fromCurrency.id,
@@ -155,9 +222,13 @@ export class ExchangeService {
       return {
         amount,
         rate: Number(directRate.rate),
-        converted_amount: amount * Number(directRate.rate),
+        converted_amount: round6(amount * Number(directRate.rate)),
       };
     }
+
+    // =====================================================
+    // COTIZACIÓN INVERSA
+    // =====================================================
 
     const inverseRate = await this.prisma.currency_rates.findFirst({
       where: {
@@ -171,7 +242,9 @@ export class ExchangeService {
     });
 
     if (!inverseRate) {
-      throw new NotFoundException('No existe cotización');
+      throw new NotFoundException(
+        `No existe cotización ${fromCode} → ${toCode}`,
+      );
     }
 
     const rate = 1 / Number(inverseRate.rate);
@@ -179,7 +252,7 @@ export class ExchangeService {
     return {
       amount,
       rate,
-      converted_amount: amount * rate,
+      converted_amount: round6(amount * rate),
     };
   }
 
@@ -225,6 +298,27 @@ export class ExchangeService {
   }
 
   // =========================================================
+  // BUSCAR ÚLTIMA COTIZACIÓN EXISTENTE
+  // =========================================================
+
+  private async findExistingRate(params: {
+    from_currency_id: string;
+    to_currency_id: string;
+    rate_type: CurrencyRateType;
+  }) {
+    return this.prisma.currency_rates.findFirst({
+      where: {
+        from_currency_id: params.from_currency_id,
+        to_currency_id: params.to_currency_id,
+        rate_type: params.rate_type,
+      },
+      orderBy: {
+        effective_date: 'desc',
+      },
+    });
+  }
+
+  // =========================================================
   // MAPEAR TIPOS
   // =========================================================
 
@@ -255,4 +349,12 @@ export class ExchangeService {
         return CurrencyRateType.OFFICIAL;
     }
   }
+}
+
+// =========================================================
+// HELPERS
+// =========================================================
+
+function round6(value: number): number {
+  return Math.round(value * 1_000_000) / 1_000_000;
 }
