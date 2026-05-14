@@ -41,7 +41,7 @@ export class CreateProductDto {
   price?: number;
 
   @IsBoolean()
-  active: boolean;
+  active!: boolean;
 
   // Impuesto asociado al producto
   @IsOptional()

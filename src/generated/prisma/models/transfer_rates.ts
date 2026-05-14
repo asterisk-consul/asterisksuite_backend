@@ -190,7 +190,7 @@ export type Transfer_ratesGroupByOutputType = {
   description: string | null
   active: boolean | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -225,7 +225,7 @@ export type transfer_ratesWhereInput = {
   description?: Prisma.StringNullableFilter<"transfer_rates"> | string | null
   active?: Prisma.BoolNullableFilter<"transfer_rates"> | boolean | null
   created_at?: Prisma.DateTimeFilter<"transfer_rates"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"transfer_rates"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"transfer_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"transfer_rates"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"transfer_rates"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"transfer_rates"> | string | null
@@ -241,7 +241,7 @@ export type transfer_ratesOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -260,7 +260,7 @@ export type transfer_ratesWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"transfer_rates"> | string | null
   active?: Prisma.BoolNullableFilter<"transfer_rates"> | boolean | null
   created_at?: Prisma.DateTimeFilter<"transfer_rates"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"transfer_rates"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"transfer_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"transfer_rates"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"transfer_rates"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"transfer_rates"> | string | null
@@ -276,7 +276,7 @@ export type transfer_ratesOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -296,7 +296,7 @@ export type transfer_ratesScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"transfer_rates"> | string | null
   active?: Prisma.BoolNullableWithAggregatesFilter<"transfer_rates"> | boolean | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"transfer_rates"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"transfer_rates"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"transfer_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"transfer_rates"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"transfer_rates"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"transfer_rates"> | string | null
@@ -310,7 +310,7 @@ export type transfer_ratesCreateInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -326,7 +326,7 @@ export type transfer_ratesUncheckedCreateInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -342,7 +342,7 @@ export type transfer_ratesUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -358,7 +358,7 @@ export type transfer_ratesUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -374,7 +374,7 @@ export type transfer_ratesCreateManyInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -388,7 +388,7 @@ export type transfer_ratesUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -402,16 +402,11 @@ export type transfer_ratesUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type Transfer_ratesNullableScalarRelationFilter = {
-  is?: Prisma.transfer_ratesWhereInput | null
-  isNot?: Prisma.transfer_ratesWhereInput | null
 }
 
 export type transfer_ratesCountOrderByAggregateInput = {
@@ -461,20 +456,9 @@ export type Transfer_ratesScalarRelationFilter = {
   isNot?: Prisma.transfer_ratesWhereInput
 }
 
-export type transfer_ratesCreateNestedOneWithoutProductsInput = {
-  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
-  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutProductsInput
-  connect?: Prisma.transfer_ratesWhereUniqueInput
-}
-
-export type transfer_ratesUpdateOneWithoutProductsNestedInput = {
-  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
-  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutProductsInput
-  upsert?: Prisma.transfer_ratesUpsertWithoutProductsInput
-  disconnect?: Prisma.transfer_ratesWhereInput | boolean
-  delete?: Prisma.transfer_ratesWhereInput | boolean
-  connect?: Prisma.transfer_ratesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.transfer_ratesUpdateToOneWithWhereWithoutProductsInput, Prisma.transfer_ratesUpdateWithoutProductsInput>, Prisma.transfer_ratesUncheckedUpdateWithoutProductsInput>
+export type Transfer_ratesNullableScalarRelationFilter = {
+  is?: Prisma.transfer_ratesWhereInput | null
+  isNot?: Prisma.transfer_ratesWhereInput | null
 }
 
 export type transfer_ratesCreateNestedOneWithoutDispatch_ratesInput = {
@@ -491,80 +475,20 @@ export type transfer_ratesUpdateOneRequiredWithoutDispatch_ratesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.transfer_ratesUpdateToOneWithWhereWithoutDispatch_ratesInput, Prisma.transfer_ratesUpdateWithoutDispatch_ratesInput>, Prisma.transfer_ratesUncheckedUpdateWithoutDispatch_ratesInput>
 }
 
-export type transfer_ratesCreateWithoutProductsInput = {
-  id?: string
-  name: string
-  rate_type: string
-  description?: string | null
-  active?: boolean | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutTransfer_ratesInput
+export type transfer_ratesCreateNestedOneWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutProductsInput
+  connect?: Prisma.transfer_ratesWhereUniqueInput
 }
 
-export type transfer_ratesUncheckedCreateWithoutProductsInput = {
-  id?: string
-  name: string
-  rate_type: string
-  description?: string | null
-  active?: boolean | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutTransfer_ratesInput
-}
-
-export type transfer_ratesCreateOrConnectWithoutProductsInput = {
-  where: Prisma.transfer_ratesWhereUniqueInput
-  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
-}
-
-export type transfer_ratesUpsertWithoutProductsInput = {
-  update: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutProductsInput, Prisma.transfer_ratesUncheckedUpdateWithoutProductsInput>
-  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
-  where?: Prisma.transfer_ratesWhereInput
-}
-
-export type transfer_ratesUpdateToOneWithWhereWithoutProductsInput = {
-  where?: Prisma.transfer_ratesWhereInput
-  data: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutProductsInput, Prisma.transfer_ratesUncheckedUpdateWithoutProductsInput>
-}
-
-export type transfer_ratesUpdateWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  rate_type?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dispatch_rates?: Prisma.dispatch_ratesUpdateManyWithoutTransfer_ratesNestedInput
-}
-
-export type transfer_ratesUncheckedUpdateWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  rate_type?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dispatch_rates?: Prisma.dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesNestedInput
+export type transfer_ratesUpdateOneWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.transfer_ratesCreateOrConnectWithoutProductsInput
+  upsert?: Prisma.transfer_ratesUpsertWithoutProductsInput
+  disconnect?: Prisma.transfer_ratesWhereInput | boolean
+  delete?: Prisma.transfer_ratesWhereInput | boolean
+  connect?: Prisma.transfer_ratesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.transfer_ratesUpdateToOneWithWhereWithoutProductsInput, Prisma.transfer_ratesUpdateWithoutProductsInput>, Prisma.transfer_ratesUncheckedUpdateWithoutProductsInput>
 }
 
 export type transfer_ratesCreateWithoutDispatch_ratesInput = {
@@ -574,7 +498,7 @@ export type transfer_ratesCreateWithoutDispatch_ratesInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -589,7 +513,7 @@ export type transfer_ratesUncheckedCreateWithoutDispatch_ratesInput = {
   description?: string | null
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -620,7 +544,7 @@ export type transfer_ratesUpdateWithoutDispatch_ratesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -635,12 +559,88 @@ export type transfer_ratesUncheckedUpdateWithoutDispatch_ratesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   products?: Prisma.productsUncheckedUpdateManyWithoutTransfer_rateNestedInput
+}
+
+export type transfer_ratesCreateWithoutProductsInput = {
+  id?: string
+  name: string
+  rate_type: string
+  description?: string | null
+  active?: boolean | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutTransfer_ratesInput
+}
+
+export type transfer_ratesUncheckedCreateWithoutProductsInput = {
+  id?: string
+  name: string
+  rate_type: string
+  description?: string | null
+  active?: boolean | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutTransfer_ratesInput
+}
+
+export type transfer_ratesCreateOrConnectWithoutProductsInput = {
+  where: Prisma.transfer_ratesWhereUniqueInput
+  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
+}
+
+export type transfer_ratesUpsertWithoutProductsInput = {
+  update: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutProductsInput, Prisma.transfer_ratesUncheckedUpdateWithoutProductsInput>
+  create: Prisma.XOR<Prisma.transfer_ratesCreateWithoutProductsInput, Prisma.transfer_ratesUncheckedCreateWithoutProductsInput>
+  where?: Prisma.transfer_ratesWhereInput
+}
+
+export type transfer_ratesUpdateToOneWithWhereWithoutProductsInput = {
+  where?: Prisma.transfer_ratesWhereInput
+  data: Prisma.XOR<Prisma.transfer_ratesUpdateWithoutProductsInput, Prisma.transfer_ratesUncheckedUpdateWithoutProductsInput>
+}
+
+export type transfer_ratesUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  rate_type?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dispatch_rates?: Prisma.dispatch_ratesUpdateManyWithoutTransfer_ratesNestedInput
+}
+
+export type transfer_ratesUncheckedUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  rate_type?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesNestedInput
 }
 
 
@@ -764,7 +764,7 @@ export type $transfer_ratesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     description: string | null
     active: boolean | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

@@ -243,7 +243,7 @@ export type FilesGroupByOutputType = {
   file_size: number | null
   uploaded_by: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -283,7 +283,7 @@ export type filesWhereInput = {
   file_size?: Prisma.IntNullableFilter<"files"> | number | null
   uploaded_by?: Prisma.UuidNullableFilter<"files"> | string | null
   created_at?: Prisma.DateTimeFilter<"files"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"files"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"files"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"files"> | string | null
@@ -302,7 +302,7 @@ export type filesOrderByWithRelationInput = {
   file_size?: Prisma.SortOrderInput | Prisma.SortOrder
   uploaded_by?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -324,7 +324,7 @@ export type filesWhereUniqueInput = Prisma.AtLeast<{
   file_size?: Prisma.IntNullableFilter<"files"> | number | null
   uploaded_by?: Prisma.UuidNullableFilter<"files"> | string | null
   created_at?: Prisma.DateTimeFilter<"files"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"files"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"files"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"files"> | string | null
@@ -343,7 +343,7 @@ export type filesOrderByWithAggregationInput = {
   file_size?: Prisma.SortOrderInput | Prisma.SortOrder
   uploaded_by?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -368,7 +368,7 @@ export type filesScalarWhereWithAggregatesInput = {
   file_size?: Prisma.IntNullableWithAggregatesFilter<"files"> | number | null
   uploaded_by?: Prisma.UuidNullableWithAggregatesFilter<"files"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"files"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"files"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"files"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"files"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"files"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"files"> | string | null
@@ -384,7 +384,7 @@ export type filesCreateInput = {
   mime_type?: string | null
   file_size?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -403,7 +403,7 @@ export type filesUncheckedCreateInput = {
   file_size?: number | null
   uploaded_by?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -420,7 +420,7 @@ export type filesUpdateInput = {
   mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -439,7 +439,7 @@ export type filesUncheckedUpdateInput = {
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   uploaded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -457,7 +457,7 @@ export type filesCreateManyInput = {
   file_size?: number | null
   uploaded_by?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -473,7 +473,7 @@ export type filesUpdateManyMutationInput = {
   mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -490,7 +490,7 @@ export type filesUncheckedUpdateManyInput = {
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   uploaded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -644,7 +644,7 @@ export type filesCreateWithoutEntity_photosInput = {
   mime_type?: string | null
   file_size?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -662,7 +662,7 @@ export type filesUncheckedCreateWithoutEntity_photosInput = {
   file_size?: number | null
   uploaded_by?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -694,7 +694,7 @@ export type filesUpdateWithoutEntity_photosInput = {
   mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -712,7 +712,7 @@ export type filesUncheckedUpdateWithoutEntity_photosInput = {
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   uploaded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -728,7 +728,7 @@ export type filesCreateWithoutUsersInput = {
   mime_type?: string | null
   file_size?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -745,7 +745,7 @@ export type filesUncheckedCreateWithoutUsersInput = {
   mime_type?: string | null
   file_size?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -792,7 +792,7 @@ export type filesScalarWhereInput = {
   file_size?: Prisma.IntNullableFilter<"files"> | number | null
   uploaded_by?: Prisma.UuidNullableFilter<"files"> | string | null
   created_at?: Prisma.DateTimeFilter<"files"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"files"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"files"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"files"> | string | null
@@ -808,7 +808,7 @@ export type filesCreateManyUsersInput = {
   mime_type?: string | null
   file_size?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -824,7 +824,7 @@ export type filesUpdateWithoutUsersInput = {
   mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -841,7 +841,7 @@ export type filesUncheckedUpdateWithoutUsersInput = {
   mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -858,7 +858,7 @@ export type filesUncheckedUpdateManyWithoutUsersInput = {
   mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   file_size?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -998,7 +998,7 @@ export type $filesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     file_size: number | null
     uploaded_by: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

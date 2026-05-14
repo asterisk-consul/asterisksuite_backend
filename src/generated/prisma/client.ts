@@ -125,16 +125,6 @@ export type picking_results = Prisma.picking_resultsModel
  */
 export type picking_sources = Prisma.picking_sourcesModel
 /**
- * Model products
- * 
- */
-export type products = Prisma.productsModel
-/**
- * Model product_price
- * 
- */
-export type product_price = Prisma.product_priceModel
-/**
  * Model trip_cargo
  * 
  */
@@ -284,3 +274,73 @@ export type taxes = Prisma.taxesModel
  * 
  */
 export type audit_logs = Prisma.audit_logsModel
+/**
+ * Model product_price
+ * 
+ */
+export type product_price = Prisma.product_priceModel
+/**
+ * Model currencies
+ * 
+ */
+export type currencies = Prisma.currenciesModel
+/**
+ * Model currency_rates
+ * 
+ */
+export type currency_rates = Prisma.currency_ratesModel
+/**
+ * Model products
+ * 
+ */
+export type products = Prisma.productsModel
+/**
+ * Model units
+ * 
+ */
+export type units = Prisma.unitsModel
+/**
+ * Model product_variants
+ * 
+ */
+export type product_variants = Prisma.product_variantsModel
+/**
+ * Model product_components
+ * 
+ */
+export type product_components = Prisma.product_componentsModel
+/**
+ * Model categories
+ * 
+ */
+export type categories = Prisma.categoriesModel
+/**
+ * Model product_categories
+ * 
+ */
+export type product_categories = Prisma.product_categoriesModel
+/**
+ * Model tags
+ * 
+ */
+export type tags = Prisma.tagsModel
+/**
+ * Model product_tags
+ * 
+ */
+export type product_tags = Prisma.product_tagsModel
+/**
+ * Model attributes
+ * 
+ */
+export type attributes = Prisma.attributesModel
+/**
+ * Model product_attribute_values
+ * 
+ */
+export type product_attribute_values = Prisma.product_attribute_valuesModel
+/**
+ * Model accounts
+ * 
+ */
+export type accounts = Prisma.accountsModel

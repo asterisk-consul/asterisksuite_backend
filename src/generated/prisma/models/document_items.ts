@@ -237,7 +237,7 @@ export type Document_itemsGroupByOutputType = {
   price: runtime.Decimal
   unit_price: runtime.Decimal
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -275,7 +275,7 @@ export type document_itemsWhereInput = {
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
@@ -293,7 +293,7 @@ export type document_itemsOrderByWithRelationInput = {
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -314,7 +314,7 @@ export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
@@ -332,7 +332,7 @@ export type document_itemsOrderByWithAggregationInput = {
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -355,7 +355,7 @@ export type document_itemsScalarWhereWithAggregatesInput = {
   price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_items"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"document_items"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_items"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
@@ -368,7 +368,7 @@ export type document_itemsCreateInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -386,7 +386,7 @@ export type document_itemsUncheckedCreateInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -400,7 +400,7 @@ export type document_itemsUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -418,7 +418,7 @@ export type document_itemsUncheckedUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -434,7 +434,7 @@ export type document_itemsCreateManyInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -447,7 +447,7 @@ export type document_itemsUpdateManyMutationInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -462,21 +462,11 @@ export type document_itemsUncheckedUpdateManyInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type Document_itemsListRelationFilter = {
-  every?: Prisma.document_itemsWhereInput
-  some?: Prisma.document_itemsWhereInput
-  none?: Prisma.document_itemsWhereInput
-}
-
-export type document_itemsOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type Document_itemsScalarRelationFilter = {
@@ -541,46 +531,14 @@ export type document_itemsSumOrderByAggregateInput = {
   unit_price?: Prisma.SortOrder
 }
 
-export type document_itemsCreateNestedManyWithoutProductsInput = {
-  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
-  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
-  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
-  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+export type Document_itemsListRelationFilter = {
+  every?: Prisma.document_itemsWhereInput
+  some?: Prisma.document_itemsWhereInput
+  none?: Prisma.document_itemsWhereInput
 }
 
-export type document_itemsUncheckedCreateNestedManyWithoutProductsInput = {
-  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
-  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
-  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
-  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-}
-
-export type document_itemsUpdateManyWithoutProductsNestedInput = {
-  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
-  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
-  upsert?: Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput[]
-  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
-  set?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  disconnect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  delete?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  update?: Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput[]
-  updateMany?: Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput | Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput[]
-  deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
-}
-
-export type document_itemsUncheckedUpdateManyWithoutProductsNestedInput = {
-  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
-  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
-  upsert?: Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput[]
-  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
-  set?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  disconnect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  delete?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
-  update?: Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput[]
-  updateMany?: Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput | Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput[]
-  deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
+export type document_itemsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type document_itemsCreateNestedOneWithoutDocument_item_taxesInput = {
@@ -639,78 +597,46 @@ export type document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput = {
   deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
 }
 
-export type document_itemsCreateWithoutProductsInput = {
-  id?: string
-  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutDocument_itemsInput
-  documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
+export type document_itemsCreateNestedManyWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
+  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
 }
 
-export type document_itemsUncheckedCreateWithoutProductsInput = {
-  id?: string
-  document_id: string
-  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutDocument_itemsInput
+export type document_itemsUncheckedCreateNestedManyWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
+  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
 }
 
-export type document_itemsCreateOrConnectWithoutProductsInput = {
-  where: Prisma.document_itemsWhereUniqueInput
-  create: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput>
+export type document_itemsUpdateManyWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
+  upsert?: Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput[]
+  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
+  set?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  disconnect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  delete?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  update?: Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput[]
+  updateMany?: Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput | Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput[]
+  deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
 }
 
-export type document_itemsCreateManyProductsInputEnvelope = {
-  data: Prisma.document_itemsCreateManyProductsInput | Prisma.document_itemsCreateManyProductsInput[]
-  skipDuplicates?: boolean
-}
-
-export type document_itemsUpsertWithWhereUniqueWithoutProductsInput = {
-  where: Prisma.document_itemsWhereUniqueInput
-  update: Prisma.XOR<Prisma.document_itemsUpdateWithoutProductsInput, Prisma.document_itemsUncheckedUpdateWithoutProductsInput>
-  create: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput>
-}
-
-export type document_itemsUpdateWithWhereUniqueWithoutProductsInput = {
-  where: Prisma.document_itemsWhereUniqueInput
-  data: Prisma.XOR<Prisma.document_itemsUpdateWithoutProductsInput, Prisma.document_itemsUncheckedUpdateWithoutProductsInput>
-}
-
-export type document_itemsUpdateManyWithWhereWithoutProductsInput = {
-  where: Prisma.document_itemsScalarWhereInput
-  data: Prisma.XOR<Prisma.document_itemsUpdateManyMutationInput, Prisma.document_itemsUncheckedUpdateManyWithoutProductsInput>
-}
-
-export type document_itemsScalarWhereInput = {
-  AND?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
-  OR?: Prisma.document_itemsScalarWhereInput[]
-  NOT?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"document_items"> | string
-  document_id?: Prisma.UuidFilter<"document_items"> | string
-  product_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
-  quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
+export type document_itemsUncheckedUpdateManyWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput> | Prisma.document_itemsCreateWithoutProductsInput[] | Prisma.document_itemsUncheckedCreateWithoutProductsInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutProductsInput | Prisma.document_itemsCreateOrConnectWithoutProductsInput[]
+  upsert?: Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpsertWithWhereUniqueWithoutProductsInput[]
+  createMany?: Prisma.document_itemsCreateManyProductsInputEnvelope
+  set?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  disconnect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  delete?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  update?: Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput | Prisma.document_itemsUpdateWithWhereUniqueWithoutProductsInput[]
+  updateMany?: Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput | Prisma.document_itemsUpdateManyWithWhereWithoutProductsInput[]
+  deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
 }
 
 export type document_itemsCreateWithoutDocument_item_taxesInput = {
@@ -719,7 +645,7 @@ export type document_itemsCreateWithoutDocument_item_taxesInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -736,7 +662,7 @@ export type document_itemsUncheckedCreateWithoutDocument_item_taxesInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -765,7 +691,7 @@ export type document_itemsUpdateWithoutDocument_item_taxesInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -782,7 +708,7 @@ export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -795,7 +721,7 @@ export type document_itemsCreateWithoutDocumentsInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -811,7 +737,7 @@ export type document_itemsUncheckedCreateWithoutDocumentsInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -845,62 +771,78 @@ export type document_itemsUpdateManyWithWhereWithoutDocumentsInput = {
   data: Prisma.XOR<Prisma.document_itemsUpdateManyMutationInput, Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsInput>
 }
 
-export type document_itemsCreateManyProductsInput = {
+export type document_itemsScalarWhereInput = {
+  AND?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
+  OR?: Prisma.document_itemsScalarWhereInput[]
+  NOT?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"document_items"> | string
+  document_id?: Prisma.UuidFilter<"document_items"> | string
+  product_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
+  deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"document_items"> | string | null
+}
+
+export type document_itemsCreateWithoutProductsInput = {
+  id?: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutDocument_itemsInput
+  documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
+}
+
+export type document_itemsUncheckedCreateWithoutProductsInput = {
   id?: string
   document_id: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutDocument_itemsInput
 }
 
-export type document_itemsUpdateWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutDocument_itemsNestedInput
-  documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
+export type document_itemsCreateOrConnectWithoutProductsInput = {
+  where: Prisma.document_itemsWhereUniqueInput
+  create: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput>
 }
 
-export type document_itemsUncheckedUpdateWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutDocument_itemsNestedInput
+export type document_itemsCreateManyProductsInputEnvelope = {
+  data: Prisma.document_itemsCreateManyProductsInput | Prisma.document_itemsCreateManyProductsInput[]
+  skipDuplicates?: boolean
 }
 
-export type document_itemsUncheckedUpdateManyWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  document_id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type document_itemsUpsertWithWhereUniqueWithoutProductsInput = {
+  where: Prisma.document_itemsWhereUniqueInput
+  update: Prisma.XOR<Prisma.document_itemsUpdateWithoutProductsInput, Prisma.document_itemsUncheckedUpdateWithoutProductsInput>
+  create: Prisma.XOR<Prisma.document_itemsCreateWithoutProductsInput, Prisma.document_itemsUncheckedCreateWithoutProductsInput>
+}
+
+export type document_itemsUpdateWithWhereUniqueWithoutProductsInput = {
+  where: Prisma.document_itemsWhereUniqueInput
+  data: Prisma.XOR<Prisma.document_itemsUpdateWithoutProductsInput, Prisma.document_itemsUncheckedUpdateWithoutProductsInput>
+}
+
+export type document_itemsUpdateManyWithWhereWithoutProductsInput = {
+  where: Prisma.document_itemsScalarWhereInput
+  data: Prisma.XOR<Prisma.document_itemsUpdateManyMutationInput, Prisma.document_itemsUncheckedUpdateManyWithoutProductsInput>
 }
 
 export type document_itemsCreateManyDocumentsInput = {
@@ -910,7 +852,7 @@ export type document_itemsCreateManyDocumentsInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -923,7 +865,7 @@ export type document_itemsUpdateWithoutDocumentsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -939,7 +881,7 @@ export type document_itemsUncheckedUpdateWithoutDocumentsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -954,7 +896,65 @@ export type document_itemsUncheckedUpdateManyWithoutDocumentsInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type document_itemsCreateManyProductsInput = {
+  id?: string
+  document_id: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type document_itemsUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutDocument_itemsNestedInput
+  documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
+}
+
+export type document_itemsUncheckedUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutDocument_itemsNestedInput
+}
+
+export type document_itemsUncheckedUpdateManyWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1091,7 +1091,7 @@ export type $document_itemsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     price: runtime.Decimal
     unit_price: runtime.Decimal
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

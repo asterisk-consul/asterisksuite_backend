@@ -38,3 +38,68 @@ export const AuditAction = {
 } as const
 
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
+
+
+export const ProductType = {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  SEMI_FINISHED: 'SEMI_FINISHED',
+  FINISHED_PRODUCT: 'FINISHED_PRODUCT',
+  SERVICE: 'SERVICE'
+} as const
+
+export type ProductType = (typeof ProductType)[keyof typeof ProductType]
+
+
+export const UnitType = {
+  UNIT: 'UNIT',
+  WEIGHT: 'WEIGHT',
+  LENGTH: 'LENGTH',
+  AREA: 'AREA',
+  VOLUME: 'VOLUME'
+} as const
+
+export type UnitType = (typeof UnitType)[keyof typeof UnitType]
+
+
+export const AccountType = {
+  ASSET: 'ASSET',
+  LIABILITY: 'LIABILITY',
+  EQUITY: 'EQUITY',
+  REVENUE: 'REVENUE',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type AccountType = (typeof AccountType)[keyof typeof AccountType]
+
+
+export const AttributeType = {
+  TEXT: 'TEXT',
+  NUMBER: 'NUMBER',
+  BOOLEAN: 'BOOLEAN',
+  SELECT: 'SELECT'
+} as const
+
+export type AttributeType = (typeof AttributeType)[keyof typeof AttributeType]
+
+
+export const CalculationType = {
+  UNIT: 'UNIT',
+  SURFACE: 'SURFACE',
+  VOLUME: 'VOLUME',
+  LINEAR: 'LINEAR'
+} as const
+
+export type CalculationType = (typeof CalculationType)[keyof typeof CalculationType]
+
+
+export const CurrencyRateType = {
+  OFFICIAL: 'OFFICIAL',
+  BLUE: 'BLUE',
+  MEP: 'MEP',
+  CCL: 'CCL',
+  WHOLESALE: 'WHOLESALE',
+  CRYPTO: 'CRYPTO',
+  CARD: 'CARD'
+} as const
+
+export type CurrencyRateType = (typeof CurrencyRateType)[keyof typeof CurrencyRateType]

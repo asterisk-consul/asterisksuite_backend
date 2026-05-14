@@ -183,7 +183,7 @@ export type Party_locationsGroupByOutputType = {
   location_id: string
   label: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -217,7 +217,7 @@ export type party_locationsWhereInput = {
   location_id?: Prisma.UuidFilter<"party_locations"> | string
   label?: Prisma.StringNullableFilter<"party_locations"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
@@ -232,7 +232,7 @@ export type party_locationsOrderByWithRelationInput = {
   location_id?: Prisma.SortOrder
   label?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,7 +250,7 @@ export type party_locationsWhereUniqueInput = Prisma.AtLeast<{
   location_id?: Prisma.UuidFilter<"party_locations"> | string
   label?: Prisma.StringNullableFilter<"party_locations"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
@@ -265,7 +265,7 @@ export type party_locationsOrderByWithAggregationInput = {
   location_id?: Prisma.SortOrder
   label?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -284,7 +284,7 @@ export type party_locationsScalarWhereWithAggregatesInput = {
   location_id?: Prisma.UuidWithAggregatesFilter<"party_locations"> | string
   label?: Prisma.StringNullableWithAggregatesFilter<"party_locations"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"party_locations"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"party_locations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"party_locations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"party_locations"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"party_locations"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"party_locations"> | string | null
@@ -295,7 +295,7 @@ export type party_locationsCreateInput = {
   id?: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -310,7 +310,7 @@ export type party_locationsUncheckedCreateInput = {
   location_id: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -321,7 +321,7 @@ export type party_locationsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -336,7 +336,7 @@ export type party_locationsUncheckedUpdateInput = {
   location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -349,7 +349,7 @@ export type party_locationsCreateManyInput = {
   location_id: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -360,7 +360,7 @@ export type party_locationsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -373,7 +373,7 @@ export type party_locationsUncheckedUpdateManyInput = {
   location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -517,7 +517,7 @@ export type party_locationsCreateWithoutBusiness_partiesInput = {
   id?: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -530,7 +530,7 @@ export type party_locationsUncheckedCreateWithoutBusiness_partiesInput = {
   location_id: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -572,7 +572,7 @@ export type party_locationsScalarWhereInput = {
   location_id?: Prisma.UuidFilter<"party_locations"> | string
   label?: Prisma.StringNullableFilter<"party_locations"> | string | null
   created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
@@ -583,7 +583,7 @@ export type party_locationsCreateWithoutLocationsInput = {
   id?: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -596,7 +596,7 @@ export type party_locationsUncheckedCreateWithoutLocationsInput = {
   party_id: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -634,7 +634,7 @@ export type party_locationsCreateManyBusiness_partiesInput = {
   location_id: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -645,7 +645,7 @@ export type party_locationsUpdateWithoutBusiness_partiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -658,7 +658,7 @@ export type party_locationsUncheckedUpdateWithoutBusiness_partiesInput = {
   location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -670,7 +670,7 @@ export type party_locationsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -682,7 +682,7 @@ export type party_locationsCreateManyLocationsInput = {
   party_id: string
   label?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -693,7 +693,7 @@ export type party_locationsUpdateWithoutLocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -706,7 +706,7 @@ export type party_locationsUncheckedUpdateWithoutLocationsInput = {
   party_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -718,7 +718,7 @@ export type party_locationsUncheckedUpdateManyWithoutLocationsInput = {
   party_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -811,7 +811,7 @@ export type $party_locationsPayload<ExtArgs extends runtime.Types.Extensions.Int
     location_id: string
     label: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

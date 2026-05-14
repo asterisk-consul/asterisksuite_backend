@@ -183,7 +183,7 @@ export type Transport_document_typesGroupByOutputType = {
   entity: string
   active: boolean | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -217,7 +217,7 @@ export type transport_document_typesWhereInput = {
   entity?: Prisma.StringFilter<"transport_document_types"> | string
   active?: Prisma.BoolNullableFilter<"transport_document_types"> | boolean | null
   created_at?: Prisma.DateTimeFilter<"transport_document_types"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"transport_document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"transport_document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"transport_document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"transport_document_types"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"transport_document_types"> | string | null
@@ -232,7 +232,7 @@ export type transport_document_typesOrderByWithRelationInput = {
   entity?: Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,7 +250,7 @@ export type transport_document_typesWhereUniqueInput = Prisma.AtLeast<{
   entity?: Prisma.StringFilter<"transport_document_types"> | string
   active?: Prisma.BoolNullableFilter<"transport_document_types"> | boolean | null
   created_at?: Prisma.DateTimeFilter<"transport_document_types"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"transport_document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"transport_document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"transport_document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"transport_document_types"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"transport_document_types"> | string | null
@@ -265,7 +265,7 @@ export type transport_document_typesOrderByWithAggregationInput = {
   entity?: Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -284,7 +284,7 @@ export type transport_document_typesScalarWhereWithAggregatesInput = {
   entity?: Prisma.StringWithAggregatesFilter<"transport_document_types"> | string
   active?: Prisma.BoolNullableWithAggregatesFilter<"transport_document_types"> | boolean | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"transport_document_types"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"transport_document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"transport_document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"transport_document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"transport_document_types"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"transport_document_types"> | string | null
@@ -297,7 +297,7 @@ export type transport_document_typesCreateInput = {
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -312,7 +312,7 @@ export type transport_document_typesUncheckedCreateInput = {
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -327,7 +327,7 @@ export type transport_document_typesUpdateInput = {
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -342,7 +342,7 @@ export type transport_document_typesUncheckedUpdateInput = {
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -357,7 +357,7 @@ export type transport_document_typesCreateManyInput = {
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -370,7 +370,7 @@ export type transport_document_typesUpdateManyMutationInput = {
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -383,7 +383,7 @@ export type transport_document_typesUncheckedUpdateManyInput = {
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -468,7 +468,7 @@ export type transport_document_typesCreateWithoutDocuments_vehicleInput = {
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -482,7 +482,7 @@ export type transport_document_typesUncheckedCreateWithoutDocuments_vehicleInput
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -512,7 +512,7 @@ export type transport_document_typesUpdateWithoutDocuments_vehicleInput = {
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -526,7 +526,7 @@ export type transport_document_typesUncheckedUpdateWithoutDocuments_vehicleInput
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -540,7 +540,7 @@ export type transport_document_typesCreateWithoutDocuments_driverInput = {
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -554,7 +554,7 @@ export type transport_document_typesUncheckedCreateWithoutDocuments_driverInput 
   entity: string
   active?: boolean | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -584,7 +584,7 @@ export type transport_document_typesUpdateWithoutDocuments_driverInput = {
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -598,7 +598,7 @@ export type transport_document_typesUncheckedUpdateWithoutDocuments_driverInput 
   entity?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -722,7 +722,7 @@ export type $transport_document_typesPayload<ExtArgs extends runtime.Types.Exten
     entity: string
     active: boolean | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

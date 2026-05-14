@@ -297,7 +297,7 @@ export type DocumentsGroupByOutputType = {
   descrip: string | null
   ref: string | null
   created_at: Date | null
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -342,7 +342,7 @@ export type documentsWhereInput = {
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
-  updated_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
@@ -368,7 +368,7 @@ export type documentsOrderByWithRelationInput = {
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -398,7 +398,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
-  updated_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
@@ -424,7 +424,7 @@ export type documentsOrderByWithAggregationInput = {
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -454,7 +454,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   descrip?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   ref?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
@@ -474,7 +474,7 @@ export type documentsCreateInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -500,7 +500,7 @@ export type documentsUncheckedCreateInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -522,7 +522,7 @@ export type documentsUpdateInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -548,7 +548,7 @@ export type documentsUncheckedUpdateInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -572,7 +572,7 @@ export type documentsCreateManyInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -592,7 +592,7 @@ export type documentsUpdateManyMutationInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -614,7 +614,7 @@ export type documentsUncheckedUpdateManyInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -850,7 +850,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -874,7 +874,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -927,7 +927,7 @@ export type documentsScalarWhereInput = {
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
-  updated_at?: Prisma.DateTimeFilter<"documents"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
@@ -947,7 +947,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -972,7 +972,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1009,7 +1009,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1034,7 +1034,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1055,7 +1055,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1080,7 +1080,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1117,7 +1117,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1142,7 +1142,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1163,7 +1163,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1187,7 +1187,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1236,7 +1236,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1256,7 +1256,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1280,7 +1280,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1303,7 +1303,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1324,7 +1324,7 @@ export type documentsCreateManyDocument_typesInput = {
   descrip?: string | null
   ref?: string | null
   created_at?: Date | string | null
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1344,7 +1344,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1368,7 +1368,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1391,7 +1391,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1575,7 +1575,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     descrip: string | null
     ref: string | null
     created_at: Date | null
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

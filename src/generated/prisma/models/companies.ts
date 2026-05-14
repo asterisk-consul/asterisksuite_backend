@@ -183,7 +183,7 @@ export type CompaniesGroupByOutputType = {
   tax_id: string | null
   phone: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -217,7 +217,7 @@ export type companiesWhereInput = {
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"companies"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"companies"> | string | null
@@ -230,7 +230,7 @@ export type companiesOrderByWithRelationInput = {
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -246,7 +246,7 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"companies"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"companies"> | string | null
@@ -259,7 +259,7 @@ export type companiesOrderByWithAggregationInput = {
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -278,7 +278,7 @@ export type companiesScalarWhereWithAggregatesInput = {
   tax_id?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"companies"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"companies"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"companies"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"companies"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"companies"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"companies"> | string | null
@@ -291,7 +291,7 @@ export type companiesCreateInput = {
   tax_id?: string | null
   phone?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -304,7 +304,7 @@ export type companiesUncheckedCreateInput = {
   tax_id?: string | null
   phone?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -317,7 +317,7 @@ export type companiesUpdateInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -330,7 +330,7 @@ export type companiesUncheckedUpdateInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -343,7 +343,7 @@ export type companiesCreateManyInput = {
   tax_id?: string | null
   phone?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -356,7 +356,7 @@ export type companiesUpdateManyMutationInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -369,7 +369,7 @@ export type companiesUncheckedUpdateManyInput = {
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -480,7 +480,7 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     tax_id: string | null
     phone: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

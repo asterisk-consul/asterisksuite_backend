@@ -16,7 +16,7 @@ model business_parties {
   exemption_rate  Decimal           @default(0) @db.Decimal(5, 2)
   active          Boolean           @default(true)
   created_at      DateTime          @default(now()) @db.Timestamp(6)
-  updated_at      DateTime          @updatedAt @db.Timestamp(6)
+  updated_at      DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at      DateTime?
   created_by      String?           @db.Uuid
   updated_by      String?           @db.Uuid
@@ -62,7 +62,7 @@ model companies {
   tax_id     String?   @db.VarChar(50)
   phone      String?   @db.VarChar(30)
   created_at DateTime  @default(now()) @db.Timestamp(6)
-  updated_at DateTime  @updatedAt @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
   deleted_at DateTime?
   created_by String?   @db.Uuid
   updated_by String?   @db.Uuid
@@ -77,7 +77,7 @@ model delivery_notes {
   party_id             String?                @db.Uuid
   trip_id              String?                @db.Uuid
   created_at           DateTime               @default(now()) @db.Timestamp(6)
-  updated_at           DateTime               @updatedAt @db.Timestamp(6)
+  updated_at           DateTime?              @updatedAt @db.Timestamp(6)
   deleted_at           DateTime?
   created_by           String?                @db.Uuid
   updated_by           String?                @db.Uuid
@@ -100,7 +100,7 @@ model drivers {
   phone               String?                @db.VarChar(50)
   active              Boolean                @default(true)
   created_at          DateTime               @default(now()) @db.Timestamp(6)
-  updated_at          DateTime               @updatedAt @db.Timestamp(6)
+  updated_at          DateTime?              @updatedAt @db.Timestamp(6)
   deleted_at          DateTime?
   created_by          String?                @db.Uuid
   updated_by          String?                @db.Uuid
@@ -116,7 +116,7 @@ model entity_photos {
   file_id     String    @db.Uuid
   photo_type  String?   @db.VarChar(30)
   created_at  DateTime  @default(now()) @db.Timestamp(6)
-  updated_at  DateTime  @updatedAt @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
   deleted_at  DateTime?
   created_by  String?   @db.Uuid
   updated_by  String?   @db.Uuid
@@ -136,7 +136,7 @@ model files {
   file_size        Int?
   uploaded_by      String?         @db.Uuid
   created_at       DateTime        @default(now()) @db.Timestamp(6)
-  updated_at       DateTime        @updatedAt @db.Timestamp(6)
+  updated_at       DateTime?       @updatedAt @db.Timestamp(6)
   deleted_at       DateTime?
   created_by       String?         @db.Uuid
   updated_by       String?         @db.Uuid
@@ -155,7 +155,7 @@ model locations {
   latitude                                       Decimal?          @db.Decimal(10, 6)
   longitude                                      Decimal?          @db.Decimal(10, 6)
   created_at                                     DateTime          @default(now()) @db.Timestamp(6)
-  updated_at                                     DateTime          @updatedAt @db.Timestamp(6)
+  updated_at                                     DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at                                     DateTime?
   created_by                                     String?           @db.Uuid
   updated_by                                     String?           @db.Uuid
@@ -190,7 +190,7 @@ model pallets {
   warehouse_id         String?                @db.Uuid
   status               String                 @db.VarChar(20)
   created_at           DateTime               @default(now()) @db.Timestamp(6)
-  updated_at           DateTime               @updatedAt @db.Timestamp(6)
+  updated_at           DateTime?              @updatedAt @db.Timestamp(6)
   deleted_at           DateTime?
   created_by           String?                @db.Uuid
   updated_by           String?                @db.Uuid
@@ -210,7 +210,7 @@ model party_locations {
   location_id      String           @db.Uuid
   label            String?          @db.VarChar(100)
   created_at       DateTime         @default(now()) @db.Timestamp(6)
-  updated_at       DateTime         @updatedAt @db.Timestamp(6)
+  updated_at       DateTime?        @updatedAt @db.Timestamp(6)
   deleted_at       DateTime?
   created_by       String?          @db.Uuid
   updated_by       String?          @db.Uuid
@@ -228,7 +228,7 @@ model party_contacts {
   phone            String?           @db.VarChar(50)
   email            String?           @db.VarChar(150)
   created_at       DateTime          @default(now()) @db.Timestamp(6)
-  updated_at       DateTime          @updatedAt @db.Timestamp(6)
+  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at       DateTime?
   created_by       String?           @db.Uuid
   updated_by       String?           @db.Uuid
@@ -257,7 +257,7 @@ model picking_orders {
   delivery_note_id  String?           @db.Uuid
   trip_id           String?           @db.Uuid
   created_at        DateTime          @default(now()) @db.Timestamp(6)
-  updated_at        DateTime          @updatedAt @db.Timestamp(6)
+  updated_at        DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at        DateTime?
   created_by        String?           @db.Uuid
   updated_by        String?           @db.Uuid
@@ -287,46 +287,6 @@ model picking_sources {
   quantity        Decimal       @db.Decimal(12, 3)
   pallets         pallets       @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_items   picking_items @relation(fields: [picking_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model products {
-  id                        String                      @id @default(uuid()) @db.Uuid
-  name                      String                      @db.VarChar(255)
-  sku                       String?                     @db.VarChar(100)
-  requires_refrigeration    Boolean?                    @default(false)
-  price_enabled             Boolean                     @default(false)
-  is_rate_type              Boolean                     @default(false)
-  rate_id                   String?                     @db.Uuid
-  taxId                     String?                     @db.Uuid
-  created_at                DateTime                    @default(now()) @db.Timestamp(6)
-  updated_at                DateTime                    @updatedAt @db.Timestamp(6)
-  deleted_at                DateTime?
-  created_by                String?                     @db.Uuid
-  updated_by                String?                     @db.Uuid
-  deleted_by                String?                     @db.Uuid
-  active                    Boolean?                    @default(true)
-  document_items            document_items[]
-  pallet_items              pallet_items[]
-  picking_items             picking_items[]
-  product_price             product_price[]
-  product_taxes             product_taxes[]
-  transfer_rate             transfer_rates?             @relation(fields: [rate_id], references: [id])
-  warehouse_stock           warehouse_stock[]
-  warehouse_stock_movements warehouse_stock_movements[]
-}
-
-model product_price {
-  id            String    @id @default(uuid()) @db.Uuid
-  product_id    String    @db.Uuid
-  price         Decimal   @db.Decimal(15, 2)
-  exemptionRate Decimal   @db.Decimal(5, 2)
-  created_at    DateTime  @default(now()) @db.Timestamp(6)
-  updated_at    DateTime  @updatedAt @db.Timestamp(6)
-  deleted_at    DateTime?
-  created_by    String?   @db.Uuid
-  updated_by    String?   @db.Uuid
-  deleted_by    String?   @db.Uuid
-  products      products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model trip_cargo {
@@ -366,7 +326,7 @@ model dispatch_orders {
   destination_location_id String?            @db.Uuid
   corridor_id             String?            @db.Uuid
   created_at              DateTime           @default(now()) @db.Timestamp(6)
-  updated_at              DateTime           @updatedAt @db.Timestamp(6)
+  updated_at              DateTime?          @updatedAt @db.Timestamp(6)
   deleted_at              DateTime?
   created_by              String?            @db.Uuid
   updated_by              String?            @db.Uuid
@@ -398,7 +358,7 @@ model trips {
   status                                                TripStatus
   notes                                                 String?
   created_at                                            DateTime                @default(now()) @db.Timestamp(6)
-  updated_at                                            DateTime                @updatedAt @db.Timestamp(6)
+  updated_at                                            DateTime?               @updatedAt @db.Timestamp(6)
   deleted_at                                            DateTime?
   created_by                                            String?                 @db.Uuid
   updated_by                                            String?                 @db.Uuid
@@ -429,7 +389,7 @@ model trip_stops {
   stop_order  Int
   stop_type   String?            @db.VarChar(20)
   created_at  DateTime           @default(now()) @db.Timestamp(6)
-  updated_at  DateTime           @updatedAt @db.Timestamp(6)
+  updated_at  DateTime?          @updatedAt @db.Timestamp(6)
   deleted_at  DateTime?
   created_by  String?            @db.Uuid
   updated_by  String?            @db.Uuid
@@ -447,7 +407,7 @@ model trip_stop_orders {
   dispatch_order_id String          @db.Uuid
   action            String          @db.VarChar(20)
   created_at        DateTime        @default(now()) @db.Timestamp(6)
-  updated_at        DateTime        @updatedAt @db.Timestamp(6)
+  updated_at        DateTime?       @updatedAt @db.Timestamp(6)
   deleted_at        DateTime?
   created_by        String?         @db.Uuid
   updated_by        String?         @db.Uuid
@@ -470,7 +430,7 @@ model corridors {
   estimated_minutes       Int?
   active                  Boolean           @default(true)
   created_at              DateTime          @default(now()) @db.Timestamp(6)
-  updated_at              DateTime          @updatedAt @db.Timestamp(6)
+  updated_at              DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at              DateTime?
   created_by              String?           @db.Uuid
   updated_by              String?           @db.Uuid
@@ -490,7 +450,7 @@ model corridor_stops {
   distance_km       Decimal?  @db.Decimal(10, 2)
   estimated_minutes Int?
   created_at        DateTime  @default(now()) @db.Timestamp(6)
-  updated_at        DateTime  @updatedAt @db.Timestamp(6)
+  updated_at        DateTime? @updatedAt @db.Timestamp(6)
   deleted_at        DateTime?
   created_by        String?   @db.Uuid
   updated_by        String?   @db.Uuid
@@ -509,7 +469,7 @@ model users {
   role                      String?                     @db.VarChar(30)
   active                    Boolean?                    @default(true)
   created_at                DateTime                    @default(now()) @db.Timestamp(6)
-  updated_at                DateTime                    @updatedAt @db.Timestamp(6)
+  updated_at                DateTime?                   @updatedAt @db.Timestamp(6)
   deleted_at                DateTime?
   created_by                String?                     @db.Uuid
   updated_by                String?                     @db.Uuid
@@ -540,7 +500,7 @@ model vehicles {
   refrigeration                Boolean?               @default(false)
   active                       Boolean                @default(true)
   created_at                   DateTime               @default(now()) @db.Timestamp(6)
-  updated_at                   DateTime               @updatedAt @db.Timestamp(6)
+  updated_at                   DateTime?              @updatedAt @db.Timestamp(6)
   deleted_at                   DateTime?
   created_by                   String?                @db.Uuid
   updated_by                   String?                @db.Uuid
@@ -559,7 +519,7 @@ model vehicle_combinations {
   unit_number String?   @db.VarChar(50)
   driver_id   String?   @db.Uuid
   created_at  DateTime  @default(now()) @db.Timestamp(6)
-  updated_at  DateTime  @updatedAt @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
   deleted_at  DateTime?
   created_by  String?   @db.Uuid
   updated_by  String?   @db.Uuid
@@ -581,7 +541,7 @@ model warehouse_stock {
   quantity          Decimal    @default(0) @db.Decimal(12, 3)
   reserved_quantity Decimal    @default(0) @db.Decimal(12, 3)
   created_at        DateTime   @default(now()) @db.Timestamp(6)
-  updated_at        DateTime   @updatedAt @db.Timestamp(6)
+  updated_at        DateTime?  @updatedAt @db.Timestamp(6)
   deleted_at        DateTime?
   created_by        String?    @db.Uuid
   updated_by        String?    @db.Uuid
@@ -604,7 +564,7 @@ model warehouse_stock_movements {
   reference_id   String?    @db.Uuid
   notes          String?
   created_at     DateTime   @default(now()) @db.Timestamp(6)
-  updated_at     DateTime   @updatedAt @db.Timestamp(6)
+  updated_at     DateTime?  @updatedAt @db.Timestamp(6)
   deleted_at     DateTime?
   created_by     String?    @db.Uuid
   updated_by     String?    @db.Uuid
@@ -625,7 +585,7 @@ model warehouses {
   code                                             String?                     @unique @db.VarChar(50)
   active                                           Boolean                     @default(true)
   created_at                                       DateTime                    @default(now()) @db.Timestamp(6)
-  updated_at                                       DateTime                    @updatedAt @db.Timestamp(6)
+  updated_at                                       DateTime?                   @updatedAt @db.Timestamp(6)
   deleted_at                                       DateTime?
   created_by                                       String?                     @db.Uuid
   updated_by                                       String?                     @db.Uuid
@@ -650,7 +610,7 @@ model document_sequences {
   prefix         String?          @db.VarChar(20)
   active         Boolean          @default(true)
   created_at     DateTime         @default(now()) @db.Timestamp(6)
-  updated_at     DateTime         @updatedAt @db.Timestamp(6)
+  updated_at     DateTime?        @updatedAt @db.Timestamp(6)
   deleted_at     DateTime?
   created_by     String?          @db.Uuid
   updated_by     String?          @db.Uuid
@@ -681,7 +641,7 @@ model transport_document_types {
   entity            String              @db.VarChar(20)
   active            Boolean?            @default(true)
   created_at        DateTime            @default(now()) @db.Timestamp(6)
-  updated_at        DateTime            @updatedAt @db.Timestamp(6)
+  updated_at        DateTime?           @updatedAt @db.Timestamp(6)
   deleted_at        DateTime?
   created_by        String?             @db.Uuid
   updated_by        String?             @db.Uuid
@@ -698,7 +658,7 @@ model documents_vehicle {
   document_type_id         String                   @db.Uuid
   expiration_date          DateTime?                @db.Date
   created_at               DateTime                 @default(now()) @db.Timestamp(6)
-  updated_at               DateTime                 @updatedAt @db.Timestamp(6)
+  updated_at               DateTime?                @updatedAt @db.Timestamp(6)
   deleted_at               DateTime?
   created_by               String?                  @db.Uuid
   updated_by               String?                  @db.Uuid
@@ -716,7 +676,7 @@ model documents_driver {
   document_type_id         String                   @db.Uuid
   expiration_date          DateTime?                @db.Date
   created_at               DateTime                 @default(now()) @db.Timestamp(6)
-  updated_at               DateTime                 @updatedAt @db.Timestamp(6)
+  updated_at               DateTime?                @updatedAt @db.Timestamp(6)
   deleted_at               DateTime?
   created_by               String?                  @db.Uuid
   updated_by               String?                  @db.Uuid
@@ -735,7 +695,7 @@ model transfer_rates {
   description    String?
   active         Boolean?         @default(true)
   created_at     DateTime         @default(now()) @db.Timestamp(6)
-  updated_at     DateTime         @updatedAt @db.Timestamp(6)
+  updated_at     DateTime?        @updatedAt @db.Timestamp(6)
   deleted_at     DateTime?
   created_by     String?          @db.Uuid
   updated_by     String?          @db.Uuid
@@ -750,7 +710,7 @@ model dispatch_rates {
   rate_id         String          @db.Uuid
   value           Decimal         @db.Decimal(12, 2)
   created_at      DateTime        @default(now()) @db.Timestamp(6)
-  updated_at      DateTime        @updatedAt @db.Timestamp(6)
+  updated_at      DateTime?       @updatedAt @db.Timestamp(6)
   deleted_at      DateTime?
   created_by      String?         @db.Uuid
   updated_by      String?         @db.Uuid
@@ -766,7 +726,7 @@ model document_item_taxes {
   tax_rate         Decimal        @db.Decimal(6, 3)
   tax_amount       Decimal        @db.Decimal(15, 2)
   created_at       DateTime       @default(now()) @db.Timestamp(6)
-  updated_at       DateTime       @updatedAt @db.Timestamp(6)
+  updated_at       DateTime?      @updatedAt @db.Timestamp(6)
   deleted_at       DateTime?
   created_by       String?        @db.Uuid
   updated_by       String?        @db.Uuid
@@ -786,7 +746,7 @@ model document_items {
   price               Decimal               @db.Decimal(15, 2)
   unit_price          Decimal               @default(0) @db.Decimal(15, 2)
   created_at          DateTime              @default(now()) @db.Timestamp(6)
-  updated_at          DateTime              @updatedAt @db.Timestamp(6)
+  updated_at          DateTime?             @updatedAt @db.Timestamp(6)
   deleted_at          DateTime?
   created_by          String?               @db.Uuid
   updated_by          String?               @db.Uuid
@@ -804,7 +764,7 @@ model document_taxes {
   taxable_base Decimal   @db.Decimal(15, 2)
   tax_amount   Decimal   @db.Decimal(15, 2)
   created_at   DateTime  @default(now()) @db.Timestamp(6)
-  updated_at   DateTime  @updatedAt @db.Timestamp(6)
+  updated_at   DateTime? @updatedAt @db.Timestamp(6)
   deleted_at   DateTime?
   created_by   String?   @db.Uuid
   updated_by   String?   @db.Uuid
@@ -824,7 +784,7 @@ model document_types {
   affects_tax_book     Boolean               @default(false)
   active               Boolean               @default(true)
   created_at           DateTime              @default(now()) @db.Timestamp(6)
-  updated_at           DateTime              @updatedAt @db.Timestamp(6)
+  updated_at           DateTime?             @updatedAt @db.Timestamp(6)
   deleted_at           DateTime?
   created_by           String?               @db.Uuid
   updated_by           String?               @db.Uuid
@@ -860,7 +820,7 @@ model documents {
   descrip          String?           @db.VarChar(50)
   ref              String?           @db.VarChar(50)
   created_at       DateTime?         @default(now()) @db.Timestamp(6)
-  updated_at       DateTime          @updatedAt @db.Timestamp(6)
+  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at       DateTime?
   created_by       String?           @db.Uuid
   updated_by       String?           @db.Uuid
@@ -881,7 +841,7 @@ model product_taxes {
   is_included_in_price Boolean   @default(false)
   active               Boolean   @default(true)
   created_at           DateTime  @default(now()) @db.Timestamp(6)
-  updated_at           DateTime  @updatedAt @db.Timestamp(6)
+  updated_at           DateTime? @updatedAt @db.Timestamp(6)
   deleted_at           DateTime?
   created_by           String?   @db.Uuid
   updated_by           String?   @db.Uuid
@@ -902,7 +862,7 @@ model taxes {
   active              Boolean               @default(true)
   calculation_level   String                @db.VarChar(20)
   created_at          DateTime              @default(now()) @db.Timestamp(6)
-  updated_at          DateTime              @updatedAt @db.Timestamp(6)
+  updated_at          DateTime?             @updatedAt @db.Timestamp(6)
   deleted_at          DateTime?
   created_by          String?               @db.Uuid
   updated_by          String?               @db.Uuid
@@ -954,4 +914,344 @@ enum AuditAction {
   UPDATE
   DELETE
   RESTORE
+}
+
+enum ProductType {
+  RAW_MATERIAL
+  SEMI_FINISHED
+  FINISHED_PRODUCT
+  SERVICE
+}
+
+enum UnitType {
+  UNIT //Unidad	un
+  WEIGHT //Kilogramo	kg
+  LENGTH //Metro	m
+  AREA //Metro cuadrado	m2
+  VOLUME //Metro cúbico	m3
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum AttributeType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
+}
+
+enum CalculationType {
+  UNIT
+  SURFACE
+  VOLUME
+  LINEAR
+}
+
+enum CurrencyRateType {
+  OFFICIAL
+  BLUE
+  MEP
+  CCL
+  WHOLESALE
+  CRYPTO
+  CARD
+}
+
+model product_price {
+  id             String     @id @default(uuid()) @db.Uuid
+  product_id     String     @db.Uuid
+  currency_id    String     @db.Uuid
+  price          Decimal    @db.Decimal(15, 2)
+  exemption_rate Decimal    @default(0) @db.Decimal(5, 2)
+  active         Boolean    @default(true)
+  created_at     DateTime   @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?  @updatedAt @db.Timestamp(6)
+  deleted_at     DateTime?
+  created_by     String?    @db.Uuid
+  updated_by     String?    @db.Uuid
+  deleted_by     String?    @db.Uuid
+  products       products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  currencies     currencies @relation(fields: [currency_id], references: [id])
+
+  @@unique([product_id, currency_id])
+  @@index([product_id])
+  @@index([currency_id])
+}
+
+model currencies {
+  id             String           @id @default(uuid()) @db.Uuid
+  code           String           @unique @db.VarChar(10)
+  name           String           @db.VarChar(100)
+  symbol         String           @db.VarChar(10)
+  is_base        Boolean          @default(false)
+  active         Boolean          @default(true)
+  created_at     DateTime         @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @updatedAt @db.Timestamp(6)
+  rates_from     currency_rates[] @relation("rate_from")
+  rates_to       currency_rates[] @relation("rate_to")
+  product_prices product_price[]
+}
+
+model currency_rates {
+  id               String           @id @default(uuid()) @db.Uuid
+  from_currency_id String           @db.Uuid
+  to_currency_id   String           @db.Uuid
+  rate             Decimal          @db.Decimal(18, 6)
+  source           String?
+  effective_date   DateTime
+  rate_type        CurrencyRateType @default(OFFICIAL)
+  created_at       DateTime         @default(now())
+  from_currency    currencies       @relation("rate_from", fields: [from_currency_id], references: [id])
+  to_currency      currencies       @relation("rate_to", fields: [to_currency_id], references: [id])
+
+  @@unique([from_currency_id, to_currency_id, effective_date])
+  @@index([effective_date])
+}
+
+model products {
+  id                        String                      @id @default(uuid()) @db.Uuid
+  name                      String                      @db.VarChar(255)
+  sku                       String?                     @db.VarChar(100)
+  requires_refrigeration    Boolean?                    @default(false)
+  price_enabled             Boolean                     @default(false)
+  is_rate_type              Boolean                     @default(false)
+  rate_id                   String?                     @db.Uuid
+  taxId                     String?                     @db.Uuid
+  active                    Boolean?                    @default(true)
+  product_type              ProductType                 @default(FINISHED_PRODUCT)
+  is_composed               Boolean                     @default(false)
+  auto_calculate_cost       Boolean                     @default(false)
+  has_engineering           Boolean                     @default(false)
+  manages_stock             Boolean                     @default(true)
+  //ver como impactan con lo que ya tenemos
+  income_account_id         String?                     @db.Uuid
+  expense_account_id        String?                     @db.Uuid
+  inventory_account_id      String?                     @db.Uuid
+  calculation_type          CalculationType?            @default(UNIT)
+  //DELETES
+  created_at                DateTime                    @default(now()) @db.Timestamp(6)
+  updated_at                DateTime?                   @updatedAt @db.Timestamp(6)
+  deleted_at                DateTime?
+  created_by                String?                     @db.Uuid
+  updated_by                String?                     @db.Uuid
+  deleted_by                String?                     @db.Uuid
+  // RELACIONES 
+  product_variants          product_variants[]
+  //articulo raiz no solo el padre
+  parent_components         product_components[]        @relation("parent_product")
+  child_components          product_components[]        @relation("child_product")
+  product_categories        product_categories[]
+  product_tags              product_tags[]
+  product_attribute_values  product_attribute_values[]
+  income_account            accounts?                   @relation("product_income_account", fields: [income_account_id], references: [id])
+  expense_account           accounts?                   @relation("product_expense_account", fields: [expense_account_id], references: [id])
+  inventory_account         accounts?                   @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
+  document_items            document_items[]
+  pallet_items              pallet_items[]
+  picking_items             picking_items[]
+  product_price             product_price[]
+  product_taxes             product_taxes[]
+  transfer_rate             transfer_rates?             @relation(fields: [rate_id], references: [id])
+  warehouse_stock           warehouse_stock[]
+  warehouse_stock_movements warehouse_stock_movements[]
+}
+
+model units {
+  id                 String               @id @default(uuid()) @db.Uuid
+  name               String               @db.VarChar(100)
+  symbol             String               @db.VarChar(20)
+  unit_type          UnitType
+  active             Boolean              @default(true)
+  created_at         DateTime             @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?            @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?              @db.Uuid
+  updated_by         String?              @db.Uuid
+  deleted_by         String?              @db.Uuid
+  product_components product_components[]
+}
+
+model product_variants {
+  id                       String                     @id @default(uuid()) @db.Uuid
+  product_id               String                     @db.Uuid
+  name                     String?                    @db.VarChar(255)
+  sku                      String?                    @db.VarChar(100)
+  thickness_mm             Decimal?                   @db.Decimal(10, 3)
+  density_kg_m3            Decimal?                   @db.Decimal(12, 3)
+  weight_kg                Decimal?                   @db.Decimal(12, 3)
+  cost_price               Decimal?                   @db.Decimal(15, 2)
+  sale_price               Decimal?                   @db.Decimal(15, 2)
+  active                   Boolean                    @default(true)
+  created_at               DateTime                   @default(now()) @db.Timestamp(6)
+  updated_at               DateTime?                  @updatedAt @db.Timestamp(6)
+  deleted_at               DateTime?
+  created_by               String?                    @db.Uuid
+  updated_by               String?                    @db.Uuid
+  deleted_by               String?                    @db.Uuid
+  products                 products                   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_components       product_components[]
+  product_attribute_values product_attribute_values[]
+
+  @@index([product_id])
+}
+
+model product_components {
+  //producto raiz 
+  id                   String            @id @default(uuid()) @db.Uuid
+  parent_product_id    String            @db.Uuid
+  child_product_id     String            @db.Uuid
+  child_variant_id     String?           @db.Uuid
+  quantity             Decimal           @db.Decimal(12, 3)
+  unit_id              String?           @db.Uuid
+  length_mm            Decimal?          @db.Decimal(12, 3)
+  width_mm             Decimal?          @db.Decimal(12, 3)
+  height_mm            Decimal?          @db.Decimal(12, 3)
+  calculated_weight_kg Decimal?          @db.Decimal(12, 3)
+  waste_percentage     Decimal?          @db.Decimal(5, 2)
+  active               Boolean           @default(true)
+  created_at           DateTime          @default(now()) @db.Timestamp(6)
+  updated_at           DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?           @db.Uuid
+  updated_by           String?           @db.Uuid
+  deleted_by           String?           @db.Uuid
+  parent_product       products          @relation("parent_product", fields: [parent_product_id], references: [id], onDelete: Cascade)
+  child_product        products          @relation("child_product", fields: [child_product_id], references: [id])
+  child_variant        product_variants? @relation(fields: [child_variant_id], references: [id])
+  units                units?            @relation(fields: [unit_id], references: [id])
+
+  @@index([parent_product_id])
+  @@index([child_product_id])
+  @@index([child_variant_id])
+}
+
+model categories {
+  id                 String               @id @default(uuid()) @db.Uuid
+  name               String               @db.VarChar(255)
+  slug               String?              @db.VarChar(255)
+  parent_id          String?              @db.Uuid
+  active             Boolean              @default(true)
+  //ver de agregar types como en flow
+  created_at         DateTime             @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?            @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?              @db.Uuid
+  updated_by         String?              @db.Uuid
+  deleted_by         String?              @db.Uuid
+  parent             categories?          @relation("category_tree", fields: [parent_id], references: [id])
+  children           categories[]         @relation("category_tree")
+  product_categories product_categories[]
+
+  @@index([parent_id])
+}
+
+model product_categories {
+  product_id  String     @db.Uuid
+  category_id String     @db.Uuid
+  created_at  DateTime   @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?  @updatedAt @db.Timestamp(6)
+  deleted_at  DateTime?
+  created_by  String?    @db.Uuid
+  updated_by  String?    @db.Uuid
+  deleted_by  String?    @db.Uuid
+  products    products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@id([product_id, category_id])
+  @@index([category_id])
+}
+
+model tags {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         String         @unique @db.VarChar(100)
+  active       Boolean        @default(true)
+  created_at   DateTime       @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?      @updatedAt @db.Timestamp(6)
+  deleted_at   DateTime?
+  created_by   String?        @db.Uuid
+  updated_by   String?        @db.Uuid
+  deleted_by   String?        @db.Uuid
+  product_tags product_tags[]
+}
+
+model product_tags {
+  product_id String    @db.Uuid
+  tag_id     String    @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+  products   products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  tags       tags      @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([product_id, tag_id])
+}
+
+model attributes {
+  id                       String                     @id @default(uuid()) @db.Uuid
+  name                     String                     @db.VarChar(100)
+  code                     String                     @unique @db.VarChar(100)
+  type                     AttributeType
+  active                   Boolean                    @default(true)
+  created_at               DateTime                   @default(now()) @db.Timestamp(6)
+  updated_at               DateTime?                  @updatedAt @db.Timestamp(6)
+  deleted_at               DateTime?
+  created_by               String?                    @db.Uuid
+  updated_by               String?                    @db.Uuid
+  deleted_by               String?                    @db.Uuid
+  product_attribute_values product_attribute_values[]
+}
+
+model product_attribute_values {
+  id               String            @id @default(uuid()) @db.Uuid
+  product_id       String?           @db.Uuid
+  variant_id       String?           @db.Uuid
+  attribute_id     String            @db.Uuid
+  text_value       String?
+  number_value     Decimal?          @db.Decimal(15, 3)
+  boolean_value    Boolean?
+  created_at       DateTime          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at       DateTime?
+  created_by       String?           @db.Uuid
+  updated_by       String?           @db.Uuid
+  deleted_by       String?           @db.Uuid
+  products         products?         @relation(fields: [product_id], references: [id])
+  product_variants product_variants? @relation(fields: [variant_id], references: [id])
+  attributes       attributes        @relation(fields: [attribute_id], references: [id])
+
+  @@index([product_id])
+  @@index([variant_id])
+  @@index([attribute_id])
+}
+
+model accounts {
+  id                 String      @id @default(uuid()) @db.Uuid
+  code               String      @db.VarChar(50)
+  name               String      @db.VarChar(255)
+  account_type       AccountType
+  parent_id          String?     @db.Uuid
+  active             Boolean     @default(true)
+  created_at         DateTime    @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?   @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?     @db.Uuid
+  updated_by         String?     @db.Uuid
+  deleted_by         String?     @db.Uuid
+  parent             accounts?   @relation("account_tree", fields: [parent_id], references: [id])
+  children           accounts[]  @relation("account_tree")
+  income_products    products[]  @relation("product_income_account")
+  expense_products   products[]  @relation("product_expense_account")
+  inventory_products products[]  @relation("product_inventory_account")
+
+  @@unique([code])
+  @@index([parent_id])
 }

@@ -250,7 +250,7 @@ export type Document_typesGroupByOutputType = {
   affects_tax_book: boolean
   active: boolean
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -291,7 +291,7 @@ export type document_typesWhereInput = {
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"document_types"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"document_types"> | string | null
@@ -312,7 +312,7 @@ export type document_typesOrderByWithRelationInput = {
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -336,7 +336,7 @@ export type document_typesWhereUniqueInput = Prisma.AtLeast<{
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"document_types"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"document_types"> | string | null
@@ -357,7 +357,7 @@ export type document_typesOrderByWithAggregationInput = {
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -383,7 +383,7 @@ export type document_typesScalarWhereWithAggregatesInput = {
   affects_tax_book?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_types"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"document_types"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"document_types"> | string | null
@@ -400,7 +400,7 @@ export type document_typesCreateInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -421,7 +421,7 @@ export type document_typesUncheckedCreateInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -440,7 +440,7 @@ export type document_typesUpdateInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -461,7 +461,7 @@ export type document_typesUncheckedUpdateInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -481,7 +481,7 @@ export type document_typesCreateManyInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -498,7 +498,7 @@ export type document_typesUpdateManyMutationInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -516,7 +516,7 @@ export type document_typesUncheckedUpdateManyInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -680,7 +680,7 @@ export type document_typesCreateWithoutDocument_sequencesInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -699,7 +699,7 @@ export type document_typesUncheckedCreateWithoutDocument_sequencesInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -748,7 +748,7 @@ export type document_typesScalarWhereInput = {
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"document_types"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"document_types"> | string | null
@@ -765,7 +765,7 @@ export type document_typesCreateWithoutDocument_type_taxesInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -785,7 +785,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_taxesInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -819,7 +819,7 @@ export type document_typesUpdateWithoutDocument_type_taxesInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -839,7 +839,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_taxesInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -857,7 +857,7 @@ export type document_typesCreateWithoutDocumentsInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -877,7 +877,7 @@ export type document_typesUncheckedCreateWithoutDocumentsInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -911,7 +911,7 @@ export type document_typesUpdateWithoutDocumentsInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -931,7 +931,7 @@ export type document_typesUncheckedUpdateWithoutDocumentsInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -949,7 +949,7 @@ export type document_typesCreateManyDocument_sequencesInput = {
   affects_tax_book?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -966,7 +966,7 @@ export type document_typesUpdateWithoutDocument_sequencesInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -985,7 +985,7 @@ export type document_typesUncheckedUpdateWithoutDocument_sequencesInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1004,7 +1004,7 @@ export type document_typesUncheckedUpdateManyWithoutDocument_sequencesInput = {
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1161,7 +1161,7 @@ export type $document_typesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     affects_tax_book: boolean
     active: boolean
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

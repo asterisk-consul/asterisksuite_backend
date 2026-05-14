@@ -203,7 +203,7 @@ export type Picking_ordersGroupByOutputType = {
   delivery_note_id: string | null
   trip_id: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -240,7 +240,7 @@ export type picking_ordersWhereInput = {
   delivery_note_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   trip_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   created_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"picking_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"picking_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
@@ -263,7 +263,7 @@ export type picking_ordersOrderByWithRelationInput = {
   delivery_note_id?: Prisma.SortOrderInput | Prisma.SortOrder
   trip_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -289,7 +289,7 @@ export type picking_ordersWhereUniqueInput = Prisma.AtLeast<{
   delivery_note_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   trip_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   created_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"picking_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"picking_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
@@ -312,7 +312,7 @@ export type picking_ordersOrderByWithAggregationInput = {
   delivery_note_id?: Prisma.SortOrderInput | Prisma.SortOrder
   trip_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -334,7 +334,7 @@ export type picking_ordersScalarWhereWithAggregatesInput = {
   delivery_note_id?: Prisma.UuidNullableWithAggregatesFilter<"picking_orders"> | string | null
   trip_id?: Prisma.UuidNullableWithAggregatesFilter<"picking_orders"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"picking_orders"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"picking_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"picking_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"picking_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"picking_orders"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"picking_orders"> | string | null
@@ -347,7 +347,7 @@ export type picking_ordersCreateInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -368,7 +368,7 @@ export type picking_ordersUncheckedCreateInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -383,7 +383,7 @@ export type picking_ordersUpdateInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -404,7 +404,7 @@ export type picking_ordersUncheckedUpdateInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -422,7 +422,7 @@ export type picking_ordersCreateManyInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -435,7 +435,7 @@ export type picking_ordersUpdateManyMutationInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -449,7 +449,7 @@ export type picking_ordersUncheckedUpdateManyInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -763,7 +763,7 @@ export type picking_ordersCreateWithoutDelivery_notesInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -782,7 +782,7 @@ export type picking_ordersUncheckedCreateWithoutDelivery_notesInput = {
   status: string
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -829,7 +829,7 @@ export type picking_ordersScalarWhereInput = {
   delivery_note_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   trip_id?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   created_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"picking_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"picking_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"picking_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"picking_orders"> | string | null
@@ -842,7 +842,7 @@ export type picking_ordersCreateWithoutPicking_itemsInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -862,7 +862,7 @@ export type picking_ordersUncheckedCreateWithoutPicking_itemsInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -892,7 +892,7 @@ export type picking_ordersUpdateWithoutPicking_itemsInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -912,7 +912,7 @@ export type picking_ordersUncheckedUpdateWithoutPicking_itemsInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -926,7 +926,7 @@ export type picking_ordersCreateWithoutPicking_resultsInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -946,7 +946,7 @@ export type picking_ordersUncheckedCreateWithoutPicking_resultsInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -976,7 +976,7 @@ export type picking_ordersUpdateWithoutPicking_resultsInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -996,7 +996,7 @@ export type picking_ordersUncheckedUpdateWithoutPicking_resultsInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1010,7 +1010,7 @@ export type picking_ordersCreateWithoutDispatch_ordersInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1030,7 +1030,7 @@ export type picking_ordersUncheckedCreateWithoutDispatch_ordersInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1070,7 +1070,7 @@ export type picking_ordersCreateWithoutTripsInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1089,7 +1089,7 @@ export type picking_ordersUncheckedCreateWithoutTripsInput = {
   status: string
   delivery_note_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1130,7 +1130,7 @@ export type picking_ordersCreateWithoutUsersInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1150,7 +1150,7 @@ export type picking_ordersUncheckedCreateWithoutUsersInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1190,7 +1190,7 @@ export type picking_ordersCreateWithoutWarehousesInput = {
   client_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1209,7 +1209,7 @@ export type picking_ordersUncheckedCreateWithoutWarehousesInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1252,7 +1252,7 @@ export type picking_ordersCreateManyDelivery_notesInput = {
   status: string
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1265,7 +1265,7 @@ export type picking_ordersUpdateWithoutDelivery_notesInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1284,7 +1284,7 @@ export type picking_ordersUncheckedUpdateWithoutDelivery_notesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1301,7 +1301,7 @@ export type picking_ordersUncheckedUpdateManyWithoutDelivery_notesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1317,7 +1317,7 @@ export type picking_ordersCreateManyDispatch_ordersInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1329,7 +1329,7 @@ export type picking_ordersUpdateWithoutDispatch_ordersInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1349,7 +1349,7 @@ export type picking_ordersUncheckedUpdateWithoutDispatch_ordersInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1366,7 +1366,7 @@ export type picking_ordersUncheckedUpdateManyWithoutDispatch_ordersInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1380,7 +1380,7 @@ export type picking_ordersCreateManyTripsInput = {
   status: string
   delivery_note_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1393,7 +1393,7 @@ export type picking_ordersUpdateWithoutTripsInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1412,7 +1412,7 @@ export type picking_ordersUncheckedUpdateWithoutTripsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1429,7 +1429,7 @@ export type picking_ordersUncheckedUpdateManyWithoutTripsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1445,7 +1445,7 @@ export type picking_ordersCreateManyUsersInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1457,7 +1457,7 @@ export type picking_ordersUpdateWithoutUsersInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1477,7 +1477,7 @@ export type picking_ordersUncheckedUpdateWithoutUsersInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1494,7 +1494,7 @@ export type picking_ordersUncheckedUpdateManyWithoutUsersInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1508,7 +1508,7 @@ export type picking_ordersCreateManyWarehousesInput = {
   delivery_note_id?: string | null
   trip_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1521,7 +1521,7 @@ export type picking_ordersUpdateWithoutWarehousesInput = {
   client_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1540,7 +1540,7 @@ export type picking_ordersUncheckedUpdateWithoutWarehousesInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1557,7 +1557,7 @@ export type picking_ordersUncheckedUpdateManyWithoutWarehousesInput = {
   delivery_note_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1732,7 +1732,7 @@ export type $picking_ordersPayload<ExtArgs extends runtime.Types.Extensions.Inte
     delivery_note_id: string | null
     trip_id: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null
