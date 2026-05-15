@@ -82,6 +82,7 @@ export class DocumentsSalesService {
    */
   private async resolveItems(
     dtoItems: CreateDocumentDto['items'],
+    currencyCode: string,
   ): Promise<ItemInput[]> {
     const resolved = [] as ItemInput[];
 
@@ -99,14 +100,14 @@ export class DocumentsSalesService {
         });
         continue;
       }
-
       const overridePrice =
         Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
 
       const resolvedItem = (await this.productPriceService.resolveItemWithTaxes(
         item.product_id,
         Number(item.quantity),
-        overridePrice,
+        currencyCode, // ← necesitás pasarlo (viene del DTO o del documento)
+        overridePrice, // ← number | undefined ✓
       )) as {
         product_id: string;
         quantity: number;

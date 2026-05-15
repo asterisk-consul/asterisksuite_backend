@@ -344,3 +344,13 @@ export type product_attribute_values = Prisma.product_attribute_valuesModel
  * 
  */
 export type accounts = Prisma.accountsModel
+/**
+ * Model product_costs
+ * 
+ */
+export type product_costs = Prisma.product_costsModel
+/**
+ * Model product_cost_breakdowns
+ * 
+ */
+export type product_cost_breakdowns = Prisma.product_cost_breakdownsModel

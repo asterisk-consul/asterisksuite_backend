@@ -111,7 +111,9 @@ export const ModelName = {
   product_tags: 'product_tags',
   attributes: 'attributes',
   product_attribute_values: 'product_attribute_values',
-  accounts: 'accounts'
+  accounts: 'accounts',
+  product_costs: 'product_costs',
+  product_cost_breakdowns: 'product_cost_breakdowns'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -953,7 +955,11 @@ export const CurrenciesScalarFieldEnum = {
   is_base: 'is_base',
   active: 'active',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type CurrenciesScalarFieldEnum = (typeof CurrenciesScalarFieldEnum)[keyof typeof CurrenciesScalarFieldEnum]
@@ -997,7 +1003,8 @@ export const ProductsScalarFieldEnum = {
   deleted_at: 'deleted_at',
   created_by: 'created_by',
   updated_by: 'updated_by',
-  deleted_by: 'deleted_by'
+  deleted_by: 'deleted_by',
+  current_cost: 'current_cost'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
@@ -1178,6 +1185,44 @@ export const AccountsScalarFieldEnum = {
 } as const
 
 export type AccountsScalarFieldEnum = (typeof AccountsScalarFieldEnum)[keyof typeof AccountsScalarFieldEnum]
+
+
+export const Product_costsScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  currency_id: 'currency_id',
+  cost_source: 'cost_source',
+  material_cost: 'material_cost',
+  labor_cost: 'labor_cost',
+  overhead_cost: 'overhead_cost',
+  total_cost: 'total_cost',
+  version: 'version',
+  notes: 'notes',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Product_costsScalarFieldEnum = (typeof Product_costsScalarFieldEnum)[keyof typeof Product_costsScalarFieldEnum]
+
+
+export const Product_cost_breakdownsScalarFieldEnum = {
+  id: 'id',
+  product_cost_id: 'product_cost_id',
+  component_product_id: 'component_product_id',
+  component_variant_id: 'component_variant_id',
+  quantity: 'quantity',
+  unit_cost: 'unit_cost',
+  total_cost: 'total_cost',
+  level: 'level',
+  created_at: 'created_at'
+} as const
+
+export type Product_cost_breakdownsScalarFieldEnum = (typeof Product_cost_breakdownsScalarFieldEnum)[keyof typeof Product_cost_breakdownsScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -444,7 +444,9 @@ export const ModelName = {
   product_tags: 'product_tags',
   attributes: 'attributes',
   product_attribute_values: 'product_attribute_values',
-  accounts: 'accounts'
+  accounts: 'accounts',
+  product_costs: 'product_costs',
+  product_cost_breakdowns: 'product_cost_breakdowns'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -460,7 +462,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "product_taxes" | "taxes" | "audit_logs" | "product_price" | "currencies" | "currency_rates" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "accounts"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "product_taxes" | "taxes" | "audit_logs" | "product_price" | "currencies" | "currency_rates" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "accounts" | "product_costs" | "product_cost_breakdowns"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4978,6 +4980,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    product_costs: {
+      payload: Prisma.$product_costsPayload<ExtArgs>
+      fields: Prisma.product_costsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.product_costsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.product_costsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>
+        }
+        findFirst: {
+          args: Prisma.product_costsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.product_costsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>
+        }
+        findMany: {
+          args: Prisma.product_costsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>[]
+        }
+        create: {
+          args: Prisma.product_costsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>
+        }
+        createMany: {
+          args: Prisma.product_costsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.product_costsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>[]
+        }
+        delete: {
+          args: Prisma.product_costsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>
+        }
+        update: {
+          args: Prisma.product_costsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>
+        }
+        deleteMany: {
+          args: Prisma.product_costsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.product_costsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.product_costsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>[]
+        }
+        upsert: {
+          args: Prisma.product_costsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_costsPayload>
+        }
+        aggregate: {
+          args: Prisma.Product_costsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProduct_costs>
+        }
+        groupBy: {
+          args: Prisma.product_costsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_costsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.product_costsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_costsCountAggregateOutputType> | number
+        }
+      }
+    }
+    product_cost_breakdowns: {
+      payload: Prisma.$product_cost_breakdownsPayload<ExtArgs>
+      fields: Prisma.product_cost_breakdownsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.product_cost_breakdownsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.product_cost_breakdownsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>
+        }
+        findFirst: {
+          args: Prisma.product_cost_breakdownsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.product_cost_breakdownsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>
+        }
+        findMany: {
+          args: Prisma.product_cost_breakdownsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>[]
+        }
+        create: {
+          args: Prisma.product_cost_breakdownsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>
+        }
+        createMany: {
+          args: Prisma.product_cost_breakdownsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.product_cost_breakdownsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>[]
+        }
+        delete: {
+          args: Prisma.product_cost_breakdownsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>
+        }
+        update: {
+          args: Prisma.product_cost_breakdownsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>
+        }
+        deleteMany: {
+          args: Prisma.product_cost_breakdownsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.product_cost_breakdownsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.product_cost_breakdownsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>[]
+        }
+        upsert: {
+          args: Prisma.product_cost_breakdownsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$product_cost_breakdownsPayload>
+        }
+        aggregate: {
+          args: Prisma.Product_cost_breakdownsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProduct_cost_breakdowns>
+        }
+        groupBy: {
+          args: Prisma.product_cost_breakdownsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_cost_breakdownsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.product_cost_breakdownsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Product_cost_breakdownsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5840,7 +5990,11 @@ export const CurrenciesScalarFieldEnum = {
   is_base: 'is_base',
   active: 'active',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
 } as const
 
 export type CurrenciesScalarFieldEnum = (typeof CurrenciesScalarFieldEnum)[keyof typeof CurrenciesScalarFieldEnum]
@@ -5884,7 +6038,8 @@ export const ProductsScalarFieldEnum = {
   deleted_at: 'deleted_at',
   created_by: 'created_by',
   updated_by: 'updated_by',
-  deleted_by: 'deleted_by'
+  deleted_by: 'deleted_by',
+  current_cost: 'current_cost'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
@@ -6065,6 +6220,44 @@ export const AccountsScalarFieldEnum = {
 } as const
 
 export type AccountsScalarFieldEnum = (typeof AccountsScalarFieldEnum)[keyof typeof AccountsScalarFieldEnum]
+
+
+export const Product_costsScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  currency_id: 'currency_id',
+  cost_source: 'cost_source',
+  material_cost: 'material_cost',
+  labor_cost: 'labor_cost',
+  overhead_cost: 'overhead_cost',
+  total_cost: 'total_cost',
+  version: 'version',
+  notes: 'notes',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Product_costsScalarFieldEnum = (typeof Product_costsScalarFieldEnum)[keyof typeof Product_costsScalarFieldEnum]
+
+
+export const Product_cost_breakdownsScalarFieldEnum = {
+  id: 'id',
+  product_cost_id: 'product_cost_id',
+  component_product_id: 'component_product_id',
+  component_variant_id: 'component_variant_id',
+  quantity: 'quantity',
+  unit_cost: 'unit_cost',
+  total_cost: 'total_cost',
+  level: 'level',
+  created_at: 'created_at'
+} as const
+
+export type Product_cost_breakdownsScalarFieldEnum = (typeof Product_cost_breakdownsScalarFieldEnum)[keyof typeof Product_cost_breakdownsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -6318,6 +6511,20 @@ export type ListEnumAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'ProductCostSource'
+ */
+export type EnumProductCostSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCostSource'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductCostSource[]'
+ */
+export type ListEnumProductCostSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCostSource[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -6486,6 +6693,8 @@ export type GlobalOmitConfig = {
   attributes?: Prisma.attributesOmit
   product_attribute_values?: Prisma.product_attribute_valuesOmit
   accounts?: Prisma.accountsOmit
+  product_costs?: Prisma.product_costsOmit
+  product_cost_breakdowns?: Prisma.product_cost_breakdownsOmit
 }
 
 /* Types for Logging */

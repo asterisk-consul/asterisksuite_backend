@@ -1,23 +1,24 @@
 import { Module } from '@nestjs/common';
 import { BusinessPartiesModule } from './business-parties/business-parties.module';
 import { LocationsModule } from './locations/locations.module';
-import { ProductPriceModule } from '../erp/pricing/product-pricing/product-pricing.module';
 import { ProductsModule } from './products/products.module';
 import { PartyContactsModule } from './contacts/contacts.module';
+import { DocumentSequencesModule } from './document-sequences/document-sequences.module';
+
 @Module({
   imports: [
     BusinessPartiesModule,
     LocationsModule,
     ProductsModule,
-    ProductPriceModule,
     PartyContactsModule,
+    DocumentSequencesModule,
   ],
   exports: [
     BusinessPartiesModule,
     LocationsModule,
     ProductsModule,
-    ProductPriceModule,
     PartyContactsModule,
+    DocumentSequencesModule,
   ],
 })
 export class MasterDataModule {}

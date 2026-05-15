@@ -103,3 +103,14 @@ export const CurrencyRateType = {
 } as const
 
 export type CurrencyRateType = (typeof CurrencyRateType)[keyof typeof CurrencyRateType]
+
+
+export const ProductCostSource = {
+  MANUAL: 'MANUAL',
+  BOM: 'BOM',
+  ENGINEERING: 'ENGINEERING',
+  PURCHASE: 'PURCHASE',
+  RATE: 'RATE'
+} as const
+
+export type ProductCostSource = (typeof ProductCostSource)[keyof typeof ProductCostSource]
