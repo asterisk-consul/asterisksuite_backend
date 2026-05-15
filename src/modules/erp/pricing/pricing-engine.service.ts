@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
-import { ExchangeService } from '@/modules/erp/exchange/exchange.service';
+import { ExchangeService } from '@/modules/erp/pricing/exchange/exchange.service';
 
 export interface ResolvedItemTax {
   tax_id: string;

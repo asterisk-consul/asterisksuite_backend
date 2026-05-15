@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 
 import { PrismaModule } from '@/prisma/prisma.module';
 
-import { ExchangeModule } from '@/modules/erp/exchange/exchange.module';
+import { ExchangeModule } from '@/modules/erp/pricing/exchange/exchange.module';
 
 import { PricingEngineService } from './pricing-engine.service';
 import { PricingEngineController } from './pricing-engine.controller';

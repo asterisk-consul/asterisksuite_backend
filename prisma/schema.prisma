@@ -996,6 +996,7 @@ model currencies {
   rates_from     currency_rates[] @relation("rate_from")
   rates_to       currency_rates[] @relation("rate_to")
   product_prices product_price[]
+  productCosts   product_costs[]
 }
 
 model currency_rates {
@@ -1049,6 +1050,8 @@ model products {
   product_categories        product_categories[]
   product_tags              product_tags[]
   product_attribute_values  product_attribute_values[]
+  //
+  current_cost              Decimal?                    @db.Decimal(15, 2)
   income_account            accounts?                   @relation("product_income_account", fields: [income_account_id], references: [id])
   expense_account           accounts?                   @relation("product_expense_account", fields: [expense_account_id], references: [id])
   inventory_account         accounts?                   @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
@@ -1060,6 +1063,8 @@ model products {
   transfer_rate             transfer_rates?             @relation(fields: [rate_id], references: [id])
   warehouse_stock           warehouse_stock[]
   warehouse_stock_movements warehouse_stock_movements[]
+  product_costs             product_costs[]
+  productCostBreakdowns     product_cost_breakdowns[]
 }
 
 model units {
@@ -1097,6 +1102,7 @@ model product_variants {
   products                 products                   @relation(fields: [product_id], references: [id], onDelete: Cascade)
   product_components       product_components[]
   product_attribute_values product_attribute_values[]
+  productCostBreakdowns    product_cost_breakdowns[]
 
   @@index([product_id])
 }
@@ -1254,4 +1260,86 @@ model accounts {
 
   @@unique([code])
   @@index([parent_id])
+}
+
+enum ProductCostSource {
+  MANUAL
+  BOM
+  ENGINEERING
+  PURCHASE
+  RATE
+}
+
+model product_costs {
+  id String @id @default(uuid()) @db.Uuid
+
+  product_id  String @db.Uuid
+  currency_id String @db.Uuid
+
+  cost_source ProductCostSource @default(BOM)
+
+  material_cost Decimal @default(0) @db.Decimal(15, 2)
+
+  labor_cost Decimal @default(0) @db.Decimal(15, 2)
+
+  overhead_cost Decimal @default(0) @db.Decimal(15, 2)
+
+  total_cost Decimal @default(0) @db.Decimal(15, 2)
+
+  version Int @default(1)
+
+  notes String?
+
+  active Boolean @default(true)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+
+  deleted_at DateTime?
+
+  created_by String? @db.Uuid
+
+  updated_by String? @db.Uuid
+
+  deleted_by String? @db.Uuid
+
+  products products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  currencies currencies @relation(fields: [currency_id], references: [id])
+
+  breakdowns product_cost_breakdowns[]
+
+  @@index([product_id])
+  @@index([currency_id])
+  @@index([active])
+}
+
+model product_cost_breakdowns {
+  id String @id @default(uuid()) @db.Uuid
+
+  product_cost_id String @db.Uuid
+
+  component_product_id String @db.Uuid
+
+  component_variant_id String? @db.Uuid
+
+  quantity Decimal @db.Decimal(15, 3)
+
+  unit_cost Decimal @db.Decimal(15, 2)
+
+  total_cost Decimal @db.Decimal(15, 2)
+
+  level Int @default(0)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  product_costs product_costs @relation(fields: [product_cost_id], references: [id], onDelete: Cascade)
+
+  component_product products @relation(fields: [component_product_id], references: [id])
+
+  component_variant product_variants? @relation(fields: [component_variant_id], references: [id])
+
+  @@index([product_cost_id])
+  @@index([component_product_id])
 }

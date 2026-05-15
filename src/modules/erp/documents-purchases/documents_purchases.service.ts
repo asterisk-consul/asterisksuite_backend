@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
-import { ProductPriceService } from '../../master-data/products-prices/products_prices.service';
+import { ProductPriceService } from '../pricing/product-pricing/product-pricing.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 

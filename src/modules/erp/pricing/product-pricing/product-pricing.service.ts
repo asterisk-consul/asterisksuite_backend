@@ -9,7 +9,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateProductPriceDto } from './dto/create-product-price.dto';
 import { UpdateProductPriceDto } from './dto/update-product-price.dto';
 
-import { ExchangeService } from '../../erp/exchange/exchange.service';
+import { ExchangeService } from '../exchange/exchange.service';
 
 @Injectable()
 export class ProductPriceService {
