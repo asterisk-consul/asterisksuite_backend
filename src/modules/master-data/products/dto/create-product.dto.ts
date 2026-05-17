@@ -7,6 +7,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
   @IsString()
@@ -40,9 +41,15 @@ export class CreateProductDto {
   @Min(0)
   price?: number;
 
+  @Type(() => Boolean)
+  @IsOptional()
   @IsBoolean()
-  active!: boolean;
+  is_base?: boolean;
 
+  @Type(() => Boolean)
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
   // Impuesto asociado al producto
   @IsOptional()
   @IsUUID()

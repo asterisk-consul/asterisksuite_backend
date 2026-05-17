@@ -4,19 +4,17 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
-import { ProductPriceService } from '../pricing/product-pricing/product-pricing.service';
+import { ProductPricingFacadeService } from '../pricing/product-pricing/product-pricing-facade.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 
 /* 
 Draft: Borrador editable
-
 Pending: Pendiente de revisión
-
 Confirmed: Confirmado, ya no editable
-
 Cancelled: Anulado
- */
+*/
+
 // ─── Estados ──────────────────────────────────────────────────────────────────
 const STATUS_DRAFT = 0;
 const STATUS_PENDING = 1;
@@ -59,7 +57,7 @@ export class DocumentsSalesService {
 
   constructor(
     private prisma: PrismaService,
-    private productPriceService: ProductPriceService,
+    private pricingFacade: ProductPricingFacadeService, // ← reemplaza ProductPriceService
   ) {}
 
   // ─── Resolver ítems: precio + taxes desde el producto ────────────────────
@@ -82,7 +80,7 @@ export class DocumentsSalesService {
    */
   private async resolveItems(
     dtoItems: CreateDocumentDto['items'],
-    currencyCode: string,
+    currencyCode: string, // ← viene de dto.currency_code
   ): Promise<ItemInput[]> {
     const resolved = [] as ItemInput[];
 
@@ -100,24 +98,17 @@ export class DocumentsSalesService {
         });
         continue;
       }
+
       const overridePrice =
         Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
 
-      const resolvedItem = (await this.productPriceService.resolveItemWithTaxes(
-        item.product_id,
-        Number(item.quantity),
-        currencyCode, // ← necesitás pasarlo (viene del DTO o del documento)
-        overridePrice, // ← number | undefined ✓
-      )) as {
-        product_id: string;
-        quantity: number;
-        unit_price: number;
-        price: number;
-        taxes: TaxInput[];
-      } | null;
+      try {
+        const resolvedItem = await this.pricingFacade.getSellPrice(
+          item.product_id,
+          Number(item.quantity),
+          currencyCode, // ✓ string
+        );
 
-      if (resolvedItem) {
-        // 🔥 BLINDADO: nunca undefined
         const price =
           resolvedItem.price ??
           round2(resolvedItem.unit_price * resolvedItem.quantity);
@@ -129,8 +120,8 @@ export class DocumentsSalesService {
           price,
           taxes: resolvedItem.taxes ?? [],
         });
-      } else {
-        // Producto sin precio configurado
+      } catch {
+        // Producto sin precio configurado → fallback al DTO
         const price = round2(item.unit_price * item.quantity);
 
         resolved.push({
@@ -147,15 +138,6 @@ export class DocumentsSalesService {
   }
 
   // ─── Calcular totales ─────────────────────────────────────────────────────
-  /**
-   * subtotal      = Σ item.price
-   * exempt_amount = Σ item.price de ítems sin taxes de línea
-   * total_taxes   = Σ tax_amount (line) + Σ tax_amount (document, sobre subtotal)
-   * total         = subtotal + total_taxes
-   *
-   * Los taxes con calculation_level='document' se consolidan y se calculan
-   * sobre el subtotal total; sus filas van a document_taxes.
-   */
   private async calculateTotals(
     items: ItemInput[],
     tx?: any,
@@ -166,7 +148,6 @@ export class DocumentsSalesService {
       items.reduce((acc, item) => acc + Number(item.price), 0),
     );
 
-    // Consultar calculation_level solo para los taxes que no lo traen resuelto
     const unknownTaxIds = [
       ...new Set(
         items
@@ -206,7 +187,6 @@ export class DocumentsSalesService {
         0,
       );
 
-      // Sin taxes de línea → el monto del ítem es exento
       if (lineTaxes.length === 0) {
         exemptAmount += Number(item.price);
       }
@@ -221,7 +201,6 @@ export class DocumentsSalesService {
       }
     }
 
-    // Taxes de nivel documento: se calculan sobre el subtotal total
     const documentTaxes: CalculatedTotals['documentTaxes'] = [];
     let docTaxesTotal = 0;
 
@@ -267,7 +246,6 @@ export class DocumentsSalesService {
         },
       });
 
-      // Solo los taxes de línea van a document_item_taxes
       const lineTaxes = (item.taxes ?? []).filter(
         (t) => (t.calculation_level ?? 'line') === 'line',
       );
@@ -295,7 +273,7 @@ export class DocumentsSalesService {
       throw new NotFoundException('Tipo de documento no encontrado');
 
     // Resolver precios e impuestos ANTES de abrir la transacción
-    const items = await this.resolveItems(dto.items);
+    const items = await this.resolveItems(dto.items, dto.currency_code); // ← currency_code del DTO
     const totals = await this.calculateTotals(items);
 
     let createdId = '';
@@ -560,12 +538,16 @@ export class DocumentsSalesService {
         'No se puede modificar un documento anulado',
       );
 
-    // Resolver ítems ANTES de abrir la transacción
     let items: ItemInput[] | null = null;
     let totals: CalculatedTotals | null = null;
 
     if (dto.items?.length) {
-      items = await this.resolveItems(dto.items);
+      if (!dto.currency_code) {
+        throw new BadRequestException(
+          'currency_code es requerido al actualizar ítems',
+        );
+      }
+      items = await this.resolveItems(dto.items, dto.currency_code);
       totals = await this.calculateTotals(items);
     }
 

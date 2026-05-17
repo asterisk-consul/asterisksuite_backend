@@ -16,15 +16,32 @@ export class ProductsService {
 
   async findAll() {
     return this.prisma.products.findMany({
+      where: {
+        deleted_at: null,
+      },
       orderBy: {
         created_at: 'desc',
+      },
+      include: {
+        product_price: {
+          where: { deleted_at: null },
+          include: { currencies: true },
+        },
+        product_variants: {
+          include: {
+            product_attribute_values: { include: { attributes: true } },
+          },
+        },
+        product_categories: {
+          include: { categories: true },
+        },
       },
     });
   }
 
   async findOne(id: string) {
     const product = await this.prisma.products.findUnique({
-      where: { id },
+      where: { id, deleted_at: null },
     });
 
     if (!product) {

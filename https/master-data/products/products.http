@@ -13,7 +13,7 @@ Content-Type: application/json
 ###
 
 @accessToken = {{login.response.body.accessToken}}
-@productId = 872c4285-1c79-4881-a0f6-b10e6f149590
+@productId = 194cee22-b263-48d9-bdd9-f5c42720a036
 @taxId = 784fbace-ce2f-4fa8-bea3-c73522e5237d
 @rateId = c2af6cb6-8520-45a7-95e6-b6e6cc583898
 @rateProductId = COMPLETAR-DESPUES-DE-CREAR
@@ -41,6 +41,7 @@ Content-Type: application/json
 ### Crear Producto con precio sin impuesto
 ### =====================================================
 
+
 POST {{baseUrl}}/master-data/products
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
@@ -51,7 +52,8 @@ Content-Type: application/json
   "requires_refrigeration": false,
   "price_enabled": true,
   "price": 1000,
-  "exemptionRate": 0
+  "exemptionRate": 0,
+  "active": true
 }
 
 ###
@@ -205,8 +207,6 @@ Content-Type: application/json
 
 {
   "basePrice": 2000,
-  "taxId": "{{taxId}}",
-  "exemptionRate": 0
 }
 
 ###

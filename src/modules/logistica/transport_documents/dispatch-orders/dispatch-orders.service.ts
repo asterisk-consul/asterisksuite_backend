@@ -159,14 +159,18 @@ export class DispatchOrdersService {
         orderBy: { created_at: 'desc' },
       });
 
-      // Sin historial válido, no tocar el precio
       if (!lastDispatchRate) continue;
 
       const newPrice = Number(lastDispatchRate.value);
 
       const products = await this.prisma.products.findMany({
-        where: { rate_id: rateId, is_rate_type: true },
-        include: { product_price: true },
+        where: {
+          rate_id: rateId,
+          is_rate_type: true,
+        },
+        include: {
+          product_price: true,
+        },
       });
 
       for (const product of products) {
@@ -181,11 +185,15 @@ export class DispatchOrdersService {
             },
           });
         } else {
+          // si no existe precio previo necesitás definir una moneda default
+          const defaultCurrencyId = 'ID_MONEDA_DEFAULT';
+
           await this.prisma.product_price.create({
             data: {
               product_id: product.id,
+              currency_id: defaultCurrencyId,
               price: newPrice,
-              exemptionRate: 0,
+              exemption_rate: 0,
             },
           });
         }

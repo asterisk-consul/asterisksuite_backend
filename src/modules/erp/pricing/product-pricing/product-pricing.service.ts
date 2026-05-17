@@ -147,165 +147,166 @@ export class ProductPriceService {
     });
   }
 
-  // =========================================================
-  // RESOLVE PRICE
-  // =========================================================
+  // // =========================================================
+  // // RESOLVE PRICE
+  // // =========================================================
 
-  async resolvePrice(productId: string, currencyCode: string) {
-    const currency = await this.prisma.currencies.findFirst({
-      where: {
-        code: currencyCode,
-      },
-    });
+  // async resolvePrice(productId: string, currencyCode: string) {
+  //   const currency = await this.prisma.currencies.findFirst({
+  //     where: {
+  //       code: currencyCode,
+  //     },
 
-    if (!currency) {
-      throw new NotFoundException('Moneda no encontrada');
-    }
+  //   });
 
-    const directPrice = await this.prisma.product_price.findFirst({
-      where: {
-        product_id: productId,
-        currency_id: currency.id,
-        deleted_at: null,
-      },
-      include: {
-        currencies: true,
-      },
-    });
+  //   if (!currency) {
+  //     throw new NotFoundException('Moneda no encontrada');
+  //   }
 
-    // Existe precio directo
-    if (directPrice) {
-      return {
-        currency_code: currency.code,
-        price: Number(directPrice.price),
-        exemption_rate: Number(directPrice.exemption_rate),
-      };
-    }
+  //   const directPrice = await this.prisma.product_price.findFirst({
+  //     where: {
+  //       product_id: productId,
+  //       currency_id: currency.id,
+  //       deleted_at: null,
+  //     },
+  //     include: {
+  //       currencies: true,
+  //     },
+  //   });
 
-    // Buscar cualquier precio base
-    const basePrice = await this.prisma.product_price.findFirst({
-      where: {
-        product_id: productId,
-        deleted_at: null,
-      },
-      include: {
-        currencies: true,
-      },
-    });
+  //   // Existe precio directo
+  //   if (directPrice) {
+  //     return {
+  //       currency_code: currency.code,
+  //       price: Number(directPrice.price),
+  //       exemption_rate: Number(directPrice.exemption_rate),
+  //     };
+  //   }
 
-    if (!basePrice) {
-      return null;
-    }
+  //   // Buscar cualquier precio base
+  //   const basePrice = await this.prisma.product_price.findFirst({
+  //     where: {
+  //       product_id: productId,
+  //       deleted_at: null,
+  //     },
+  //     include: {
+  //       currencies: true,
+  //     },
+  //   });
 
-    // Convertir
-    const converted = await this.exchangeService.convertAmount(
-      Number(basePrice.price),
-      basePrice.currencies.code,
-      currencyCode,
-    );
+  //   if (!basePrice) {
+  //     return null;
+  //   }
 
-    return {
-      currency_code: currencyCode,
-      price: converted.converted_amount,
-      exemption_rate: Number(basePrice.exemption_rate),
-    };
-  }
+  //   // Convertir
+  //   const converted = await this.exchangeService.convertAmount(
+  //     Number(basePrice.price),
+  //     basePrice.currencies.code,
+  //     currencyCode,
+  //   );
 
-  // =========================================================
-  // RESOLVE ITEM WITH TAXES
-  // =========================================================
+  //   return {
+  //     currency_code: currencyCode,
+  //     price: converted.converted_amount,
+  //     exemption_rate: Number(basePrice.exemption_rate),
+  //   };
+  // }
 
-  async resolveItemWithTaxes(
-    productId: string,
-    quantity: number,
-    currencyCode: string,
-    overrideUnitPrice?: number,
-  ) {
-    const product = await this.prisma.products.findUnique({
-      where: {
-        id: productId,
-      },
-      include: {
-        product_taxes: {
-          where: {
-            active: true,
-            deleted_at: null,
-          },
-          include: {
-            taxes: true,
-          },
-        },
-      },
-    });
+  // // =========================================================
+  // // RESOLVE ITEM WITH TAXES
+  // // =========================================================
 
-    if (!product) {
-      return null;
-    }
+  // async resolveItemWithTaxes(
+  //   productId: string,
+  //   quantity: number,
+  //   currencyCode: string,
+  //   overrideUnitPrice?: number,
+  // ) {
+  //   const product = await this.prisma.products.findUnique({
+  //     where: {
+  //       id: productId,
+  //     },
+  //     include: {
+  //       product_taxes: {
+  //         where: {
+  //           active: true,
+  //           deleted_at: null,
+  //         },
+  //         include: {
+  //           taxes: true,
+  //         },
+  //       },
+  //     },
+  //   });
 
-    let unitPrice = overrideUnitPrice ?? 0;
+  //   if (!product) {
+  //     return null;
+  //   }
 
-    let exemptionRate = 0;
+  //   let unitPrice = overrideUnitPrice ?? 0;
 
-    if (overrideUnitPrice === undefined) {
-      const resolvedPrice = await this.resolvePrice(productId, currencyCode);
+  //   let exemptionRate = 0;
 
-      if (!resolvedPrice) {
-        return null;
-      }
+  //   if (overrideUnitPrice === undefined) {
+  //     const resolvedPrice = await this.resolvePrice(productId, currencyCode);
 
-      unitPrice = resolvedPrice.price;
+  //     if (!resolvedPrice) {
+  //       return null;
+  //     }
 
-      exemptionRate = resolvedPrice.exemption_rate;
-    }
+  //     unitPrice = resolvedPrice.price;
 
-    const price = round2(unitPrice * quantity);
+  //     exemptionRate = resolvedPrice.exemption_rate;
+  //   }
 
-    const exemptAmount = round2(price * (exemptionRate / 100));
+  //   const price = round2(unitPrice * quantity);
 
-    const taxableBase = round2(price - exemptAmount);
+  //   const exemptAmount = round2(price * (exemptionRate / 100));
 
-    const taxes = product.product_taxes.map((pt) => {
-      const tax = pt.taxes;
+  //   const taxableBase = round2(price - exemptAmount);
 
-      const taxRate = Number(tax.rate);
+  //   const taxes = product.product_taxes.map((pt) => {
+  //     const tax = pt.taxes;
 
-      let taxAmount = 0;
+  //     const taxRate = Number(tax.rate);
 
-      if (
-        !pt.is_included_in_price &&
-        taxableBase > 0 &&
-        tax.calculation_level === 'line'
-      ) {
-        taxAmount = round2(taxableBase * (taxRate / 100));
-      }
+  //     let taxAmount = 0;
 
-      return {
-        tax_id: tax.id,
-        tax_rate: taxRate,
-        tax_amount: taxAmount,
-        calculation_level: tax.calculation_level,
-        is_included_in_price: pt.is_included_in_price,
-      };
-    });
+  //     if (
+  //       !pt.is_included_in_price &&
+  //       taxableBase > 0 &&
+  //       tax.calculation_level === 'line'
+  //     ) {
+  //       taxAmount = round2(taxableBase * (taxRate / 100));
+  //     }
 
-    return {
-      product_id: productId,
+  //     return {
+  //       tax_id: tax.id,
+  //       tax_rate: taxRate,
+  //       tax_amount: taxAmount,
+  //       calculation_level: tax.calculation_level,
+  //       is_included_in_price: pt.is_included_in_price,
+  //     };
+  //   });
 
-      currency_code: currencyCode,
+  //   return {
+  //     product_id: productId,
 
-      quantity,
+  //     currency_code: currencyCode,
 
-      unit_price: unitPrice,
+  //     quantity,
 
-      price,
+  //     unit_price: unitPrice,
 
-      exempt_amount: exemptAmount,
+  //     price,
 
-      taxable_base: taxableBase,
+  //     exempt_amount: exemptAmount,
 
-      taxes,
-    };
-  }
+  //     taxable_base: taxableBase,
+
+  //     taxes,
+  //   };
+  // }
 }
 
 function round2(value: number): number {

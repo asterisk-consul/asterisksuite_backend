@@ -1,17 +1,17 @@
-// src/modules/master-data/products/costing/interfaces/calculated-cost.interface.ts
+// src/modules/master-data/products/costing/dto/update-manual-cost.dto.ts
 
-import { CostBreakdownItem } from './cost-breakdown.interface';
+import { IsNumber, IsUUID } from 'class-validator';
 
-export interface CalculatedCost {
-  product_id: string;
+export class UpdateManualCostDto {
+  @IsUUID()
+  currency_id!: string;
 
-  material_cost: number;
+  @IsNumber()
+  material_cost!: number;
 
-  labor_cost: number;
+  @IsNumber()
+  labor_cost!: number;
 
-  overhead_cost: number;
-
-  total_cost: number;
-
-  breakdown: CostBreakdownItem[];
+  @IsNumber()
+  overhead_cost!: number;
 }

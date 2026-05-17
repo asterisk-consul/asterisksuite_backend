@@ -24,6 +24,10 @@ export interface ResolvedItem {
 
   currency: string;
 
+  original_currency: string;
+
+  original_unit_price: number;
+
   unit_price: number;
 
   converted_unit_price: number;
@@ -145,6 +149,10 @@ export class PricingEngineService {
 
     let unitPrice = overrideUnitPrice ?? 0;
 
+    let originalUnitPrice = overrideUnitPrice ?? 0;
+
+    let originalCurrency = targetCurrencyCode;
+
     let exemptionRate = 0;
 
     let currency = targetCurrencyCode;
@@ -173,6 +181,9 @@ export class PricingEngineService {
       currency = resolved.currency;
 
       exchangeRate = resolved.exchange_rate;
+      originalUnitPrice = resolved.original_price;
+
+      originalCurrency = resolved.original_currency;
     }
 
     // ─────────────────────────────────────────
@@ -235,6 +246,10 @@ export class PricingEngineService {
       exchange_rate: round6(exchangeRate),
 
       price,
+
+      original_unit_price: round2(unitPrice),
+
+      original_currency: currency,
 
       exempt_amount: exemptAmount,
 

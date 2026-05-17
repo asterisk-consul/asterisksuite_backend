@@ -4,12 +4,18 @@ import { DocumentsSalesController } from './documents_sales.controller';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { ProductPricingModule } from '../pricing/product-pricing/product-pricing.module';
 import { SalesReportModule } from './sales-reports/sales_reports.module';
-import { ProductPriceService } from '../pricing/product-pricing/product-pricing.service';
+import { DocumentsSalesItemsService } from './documents-sales-items.service';
+import { DocumentsSalesTotalsService } from './documents-sales-totals.service';
 
 @Module({
   imports: [PrismaModule, ProductPricingModule, SalesReportModule],
   controllers: [DocumentsSalesController],
-  providers: [DocumentsSalesService, ProductPriceService],
+  providers: [
+    DocumentsSalesService,
+    // ← ProductPriceService eliminado, viene via ProductPricingModule
+    DocumentsSalesItemsService,
+    DocumentsSalesTotalsService,
+  ],
   exports: [DocumentsSalesService],
 })
 export class DocumentsSalesModule {}

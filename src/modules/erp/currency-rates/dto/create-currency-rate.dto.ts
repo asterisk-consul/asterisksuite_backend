@@ -7,6 +7,7 @@ import {
   IsUUID,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { CurrencyRateType } from '@/generated/prisma/enums';
 export class CreateCurrencyRateDto {
@@ -16,6 +17,7 @@ export class CreateCurrencyRateDto {
   @IsUUID()
   to_currency_id!: string;
 
+  @Type(() => Number)
   @IsNumber()
   @Min(0.000001)
   rate!: number;

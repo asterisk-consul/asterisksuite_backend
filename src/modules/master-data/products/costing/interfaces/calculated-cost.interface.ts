@@ -1,17 +1,17 @@
-// src/modules/master-data/products/costing/interfaces/cost-breakdown.interface.ts
+// src/modules/master-data/products/costing/interfaces/calculated-cost.interface.ts
 
-export interface CostBreakdownItem {
+import { CostBreakdownItem } from './cost-breakdown.interface';
+
+export interface CalculatedCost {
   product_id: string;
 
-  product_name: string;
+  material_cost: number;
 
-  quantity: number;
+  labor_cost: number;
 
-  unit_cost: number;
+  overhead_cost: number;
 
   total_cost: number;
 
-  level: number;
-
-  children?: CostBreakdownItem[];
+  breakdown: CostBreakdownItem[];
 }

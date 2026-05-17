@@ -41,7 +41,6 @@ export class ProductCategoriesService {
         data: {
           deleted_at: null,
           deleted_by: null,
-          active: true,
         },
       });
     }
