@@ -22,7 +22,7 @@ export class ProductPriceService {
   // CREATE
   // =========================================================
 
-  async create(dto: CreateProductPriceDto) {
+  async create(dto: CreateProductPriceDto, createdBy?: string) {
     const product = await this.prisma.products.findUnique({
       where: {
         id: dto.product_id,
@@ -114,7 +114,7 @@ export class ProductPriceService {
   // UPDATE
   // =========================================================
 
-  async update(id: string, dto: UpdateProductPriceDto) {
+  async update(id: string, dto: UpdateProductPriceDto, updatedBy?: string) {
     await this.findOne(id);
 
     return this.prisma.product_price.update({
@@ -124,7 +124,7 @@ export class ProductPriceService {
       data: {
         price: dto.price,
         exemption_rate: dto.exemption_rate,
-        updated_by: dto.updated_by,
+        updated_by: updatedBy ?? null,
       },
     });
   }

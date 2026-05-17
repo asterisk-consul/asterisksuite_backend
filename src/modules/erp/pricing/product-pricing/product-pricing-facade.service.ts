@@ -39,11 +39,17 @@ export class ProductPricingFacadeService {
   // ─────────────────────────────────────────────
   // PRECIO COMPLETO CON IMPUESTOS
   // ─────────────────────────────────────────────
-  async getSellPrice(productId: string, quantity: number, currency: string) {
+  async getSellPrice(
+    productId: string,
+    quantity: number,
+    currency: string,
+    overrideUnitPrice?: number,
+  ) {
     return this.pricingEngine.resolveItemWithTaxes(
       productId,
       quantity,
       currency,
+      overrideUnitPrice,
     );
   }
 

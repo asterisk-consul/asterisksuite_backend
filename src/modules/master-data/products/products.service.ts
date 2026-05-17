@@ -42,6 +42,20 @@ export class ProductsService {
   async findOne(id: string) {
     const product = await this.prisma.products.findUnique({
       where: { id, deleted_at: null },
+      include: {
+        product_price: {
+          where: { deleted_at: null },
+          include: { currencies: true },
+        },
+        product_variants: {
+          include: {
+            product_attribute_values: { include: { attributes: true } },
+          },
+        },
+        product_categories: {
+          include: { categories: true },
+        },
+      },
     });
 
     if (!product) {

@@ -1,0 +1,155 @@
+@baseUrl = http://localhost:3000/api
+
+### =========================================================
+### VARIABLES
+### =========================================================
+
+@unitId = REEMPLAZAR_UNIT_ID
+
+### =========================================================
+### CREATE UNIT - UNIT
+### =========================================================
+
+POST {{baseUrl}}/erp/units
+Content-Type: application/json
+
+{
+  "name": "Unidad",
+  "symbol": "un",
+  "unit_type": "UNIT",
+  "active": true
+}
+
+###
+
+### =========================================================
+### CREATE UNIT - WEIGHT
+### =========================================================
+
+POST {{baseUrl}}/erp/units
+Content-Type: application/json
+
+{
+  "name": "Kilogramo",
+  "symbol": "kg",
+  "unit_type": "WEIGHT",
+  "active": true
+}
+
+###
+
+### =========================================================
+### CREATE UNIT - LENGTH
+### =========================================================
+
+POST {{baseUrl}}/erp/units
+Content-Type: application/json
+
+{
+  "name": "Metro",
+  "symbol": "m",
+  "unit_type": "LENGTH",
+  "active": true
+}
+
+###
+
+### =========================================================
+### CREATE UNIT - AREA
+### =========================================================
+
+POST {{baseUrl}}/erp/units
+Content-Type: application/json
+
+{
+  "name": "Metro cuadrado",
+  "symbol": "m2",
+  "unit_type": "AREA",
+  "active": true
+}
+
+###
+
+### =========================================================
+### CREATE UNIT - VOLUME
+### =========================================================
+
+POST {{baseUrl}}/erp/units
+Content-Type: application/json
+
+{
+  "name": "Metro cúbico",
+  "symbol": "m3",
+  "unit_type": "VOLUME",
+  "active": true
+}
+
+###
+
+### =========================================================
+### CREATE CUSTOM UNIT
+### =========================================================
+
+POST {{baseUrl}}/erp/units
+Content-Type: application/json
+
+{
+  "name": "Litro",
+  "symbol": "lt",
+  "unit_type": "VOLUME",
+  "active": true
+}
+
+###
+
+### =========================================================
+### GET ALL UNITS
+### =========================================================
+
+GET {{baseUrl}}/erp/units
+
+###
+
+### =========================================================
+### GET ONE UNIT
+### =========================================================
+
+GET {{baseUrl}}/erp/units/{{unitId}}
+
+###
+
+### =========================================================
+### UPDATE UNIT
+### =========================================================
+
+PATCH {{baseUrl}}/erp/units/{{unitId}}
+Content-Type: application/json
+
+{
+  "name": "Kilogramo actualizado",
+  "symbol": "kg",
+  "active": true
+}
+
+###
+
+### =========================================================
+### DISABLE UNIT
+### =========================================================
+
+PATCH {{baseUrl}}/erp/units/{{unitId}}
+Content-Type: application/json
+
+{
+  "active": false
+}
+
+###
+
+### =========================================================
+### DELETE UNIT (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/erp/units/{{unitId}}
+
+###

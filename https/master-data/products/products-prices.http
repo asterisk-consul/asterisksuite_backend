@@ -1,3 +1,7 @@
+### =========================================================
+### VARIABLES
+### =========================================================
+
 @baseUrl = http://localhost:3000/api
 
 ### 🔐 LOGIN
@@ -13,192 +17,103 @@ Content-Type: application/json
 ###
 
 @accessToken = {{login.response.body.accessToken}}
-@productId = 29ee2654-c6a6-4a31-b7e6-08fbd21d8230
-@priceId = 24f6d7ab-ec06-43e9-adeb-81fd8fed3523
 
-### Verificar producto — revisar price_enabled
-GET {{baseUrl}}/master-data/products/{{productId}}
-Authorization: Bearer {{accessToken}}
+@productId = 3c26c231-1f84-4de7-8e69-defac353ab83
+@currencyIdUsd = 839c208c-744d-4321-a375-2a747c911fa2
+@currencyIdArs = c02aaadd-43ed-4ee6-b6e6-69a791d55269
 
-### =====================================================
-### ✅ Crear precio simple (sin exención)
-### =====================================================
+@productPriceId = 389becae-6db2-4250-b9b3-2bc89ba5f1d2
 
-POST {{baseUrl}}/product-price
-Authorization: Bearer {{accessToken}}
+### =========================================================
+### CREATE PRODUCT PRICE (USD)
+### =========================================================
+
+POST {{baseUrl}}/product-prices
 Content-Type: application/json
 
 {
   "product_id": "{{productId}}",
+  "currency_id": "{{currencyIdUsd}}",
   "price": 1000,
-  "exemptionRate": 0
+  "exemption_rate": 0
 }
 
-###
+### =========================================================
+### CREATE PRODUCT PRICE (ARS)
+### =========================================================
 
-### =====================================================
-### ✅ Crear precio con exención parcial 50%
-### Solo el 50% de la base estará sujeta a impuesto
-### =====================================================
-
-POST {{baseUrl}}/product-price
-Authorization: Bearer {{accessToken}}
+POST {{baseUrl}}/product-prices
 Content-Type: application/json
 
 {
   "product_id": "{{productId}}",
-  "price": 1500,
-  "exemptionRate": 50
+  "currency_id": "{{currencyIdArs}}",
+  "price": 1500000,
+  "exemption_rate": 0
 }
 
-###
+### =========================================================
+### FIND ALL PRICES BY PRODUCT
+### =========================================================
 
-### =====================================================
-### ✅ Crear precio con exención total 100%
-### El producto no tributa impuesto
-### =====================================================
+GET {{baseUrl}}/product-prices/product/{{productId}}
 
-POST {{baseUrl}}/product-price
+### =========================================================
+### FIND ONE PRICE
+### =========================================================
+
+GET {{baseUrl}}/product-prices/{{productPriceId}}
+
+### =========================================================
+### UPDATE PRICE
+### =========================================================
+
+PATCH {{baseUrl}}/product-prices/{{productPriceId}}
+Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+{
+  "price": 1200,
+  "exemption_rate": 10
+}
+
+### =========================================================
+### DELETE PRICE (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/product-prices/{{productPriceId}}
+
+### =========================================================
+### GET UNIT PRICE (AUTO CONVERSION)
+### =========================================================
+
+GET {{baseUrl}}/pricing/unit/{{productId}}?currency=ARS
+
+### =========================================================
+### GET SELL PRICE WITH TAXES
+### =========================================================
+
+GET {{baseUrl}}/pricing/sell/{{productId}}?qty=2&currency=ARS&unitPrice=1500
+
+### =========================================================
+### CONVERT CURRENCY
+### =========================================================
+
+GET {{baseUrl}}/pricing/convert?amount=100&from=USD&to=ARS
+
+### =========================================================
+### CALCULATE CART
+### =========================================================
+
+POST {{baseUrl}}/pricing/cart
 Content-Type: application/json
 
 {
-  "product_id": "{{productId}}",
-  "price": 2000,
-  "exemptionRate": 100
+  "currency": "ARS",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "quantity": 2
+    }
+  ]
 }
-
-###
-
-### =====================================================
-### ❌ Crear precio en producto con price_enabled=false
-### Debe retornar 400 BadRequestException
-### =====================================================
-
-POST {{baseUrl}}/product-price
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "product_id": "COMPLETAR-CON-PRODUCTO-price_enabled-false",
-  "price": 999,
-  "exemptionRate": 0
-}
-
-###
-
-### =====================================================
-### ❌ Crear precio en producto inexistente
-### Debe retornar 404 NotFoundException
-### =====================================================
-
-POST {{baseUrl}}/product-price
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "product_id": "00000000-0000-0000-0000-000000000000",
-  "price": 500,
-  "exemptionRate": 0
-}
-
-###
-
-### =====================================================
-### Listar precios de un producto
-### =====================================================
-
-GET {{baseUrl}}/product-price/product/{{productId}}
-Authorization: Bearer {{accessToken}}
-
-###
-
-### =====================================================
-### ❌ Listar precios de producto inexistente
-### Debe retornar 404 NotFoundException
-### =====================================================
-
-GET {{baseUrl}}/product-price/product/00000000-0000-0000-0000-000000000000
-Authorization: Bearer {{accessToken}}
-
-###
-
-### =====================================================
-### Obtener precio por ID
-### =====================================================
-
-GET {{baseUrl}}/product-price/{{priceId}}
-Authorization: Bearer {{accessToken}}
-
-###
-
-### =====================================================
-### ❌ Obtener precio con ID inexistente
-### Debe retornar 404 NotFoundException
-### =====================================================
-
-GET {{baseUrl}}/product-price/00000000-0000-0000-0000-000000000000
-Authorization: Bearer {{accessToken}}
-
-###
-
-### =====================================================
-### Actualizar precio
-### =====================================================
-
-PATCH {{baseUrl}}/product-price/{{priceId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "price": 1800
-}
-
-###
-
-### =====================================================
-### Actualizar exención
-### =====================================================
-
-PATCH {{baseUrl}}/product-price/{{priceId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "exemptionRate": 25
-}
-
-###
-
-### =====================================================
-### Actualizar precio y exención juntos
-### =====================================================
-
-PATCH {{baseUrl}}/product-price/{{priceId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "price": 2500,
-  "exemptionRate": 30
-}
-
-###
-
-### =====================================================
-### Soft delete — Eliminar precio
-### Setea deleted_at, no borra el registro
-### =====================================================
-
-DELETE {{baseUrl}}/product-price/{{priceId}}
-Authorization: Bearer {{accessToken}}
-
-###
-
-### =====================================================
-### ❌ Eliminar precio ya eliminado (soft deleted)
-### Debe retornar 404 NotFoundException
-### =====================================================
-
-DELETE {{baseUrl}}/product-price/{{priceId}}
-Authorization: Bearer {{accessToken}}

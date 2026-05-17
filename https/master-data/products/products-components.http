@@ -1,0 +1,121 @@
+@baseUrl = http://localhost:3000/api
+
+### =========================================================
+### VARIABLES
+### =========================================================
+
+@componentId = REEMPLAZAR_COMPONENT_ID
+
+@parentProductId = 3c26c231-1f84-4de7-8e69-defac353ab83
+@childProductId = 46aa59be-26b1-45a8-81f2-bd64dc7cd11c
+
+@childVariantId = REEMPLAZAR_VARIANT_ID
+@unitId = 94fd5646-e316-4077-80a4-b59d1a51a7ff
+
+### =========================================================
+### CREATE COMPONENT
+### =========================================================
+
+POST {{baseUrl}}/product-components
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{parentProductId}}",
+  "child_product_id": "{{childProductId}}",
+  "quantity": 2,
+  "unit_id": "{{unitId}}",
+  "waste_percentage": 5,
+  "active": true
+}
+
+###
+
+### =========================================================
+### CREATE COMPONENT WITH VARIANT
+### =========================================================
+
+POST {{baseUrl}}/product-components
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{parentProductId}}",
+  "child_product_id": "{{childProductId}}",
+  "child_variant_id": "{{childVariantId}}",
+  "quantity": 1,
+  "unit_id": "{{unitId}}",
+  "length_mm": 1200,
+  "width_mm": 500,
+  "height_mm": 18,
+  "calculated_weight_kg": 12.5,
+  "waste_percentage": 10,
+  "active": true
+}
+
+###
+
+### =========================================================
+### GET ALL COMPONENTS
+### =========================================================
+
+GET {{baseUrl}}/product-components
+
+###
+
+### =========================================================
+### GET ONE COMPONENT
+### =========================================================
+
+GET {{baseUrl}}/product-components/{{componentId}}
+
+###
+
+### =========================================================
+### UPDATE COMPONENT
+### =========================================================
+
+PATCH {{baseUrl}}/product-components/{{componentId}}
+Content-Type: application/json
+
+{
+  "quantity": 3,
+  "waste_percentage": 8
+}
+
+###
+
+### =========================================================
+### UPDATE COMPONENT DIMENSIONS
+### =========================================================
+
+PATCH {{baseUrl}}/product-components/{{componentId}}
+Content-Type: application/json
+
+{
+  "length_mm": 2400,
+  "width_mm": 600,
+  "height_mm": 18,
+  "calculated_weight_kg": 20
+}
+
+###
+
+### =========================================================
+### DISABLE COMPONENT
+### =========================================================
+
+PATCH {{baseUrl}}/product-components/{{componentId}}
+Content-Type: application/json
+
+{
+  "active": false
+}
+
+###
+
+### =========================================================
+### DELETE COMPONENT (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/product-components/{{componentId}}
+
+###

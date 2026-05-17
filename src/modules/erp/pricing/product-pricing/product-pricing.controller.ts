@@ -24,13 +24,20 @@ export class ProductPricingController {
   @Get('sell/:productId')
   async getSellPrice(
     @Param('productId') productId: string,
+
     @Query('qty') qty: string,
+
     @Query('currency') currency: string,
+
+    @Query('unitPrice') unitPrice?: string,
   ) {
+    console.log('UNIT PRICE =>', unitPrice);
+
     return this.pricingFacade.getSellPrice(
       productId,
       Number(qty ?? 1),
       currency,
+      unitPrice ? Number(unitPrice) : undefined,
     );
   }
 
