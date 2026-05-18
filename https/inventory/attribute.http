@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:3000/api
+@attributeId = REEMPLAZAR_ID
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###  <-- este separador es clave
+
+@accessToken = {{login.response.body.accessToken}}
+
+### Crear atributo
+POST {{baseUrl}}/attributes
+Content-Type: application/json
+
+{
+  "name": "Color",
+  "code": "COLOR",
+  "type": "TEXT",
+  "active": true
+}
+
+###
+
+### Obtener todos los atributos
+GET {{baseUrl}}/attributes
+
+###
+
+### Obtener atributo por ID
+GET {{baseUrl}}/attributes/{{attributeId}}
+
+###
+
+### Actualizar atributo
+PATCH {{baseUrl}}/attributes/{{attributeId}}
+Content-Type: application/json
+
+{
+  "name": "Color actualizado",
+  "code": "COLOR_UPDATED",
+  "type": "TEXT",
+  "active": true
+}
+
+###
+
+### Eliminar atributo (soft delete)
+DELETE {{baseUrl}}/attributes/{{attributeId}}
+
+###
