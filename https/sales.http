@@ -17,9 +17,114 @@ Content-Type: application/json
 @accessToken = {{login.response.body.accessToken}}
 
 
+
+@documentId = REEMPLAZAR_DOCUMENT_ID
+@documentTypeId = ff5f0707-80e0-45f3-8a34-4dd5f68441ff
+@partyId = REEMPLAZAR_PARTY_ID
+@tripId = REEMPLAZAR_TRIP_ID
+@productId = REEMPLAZAR_PRODUCT_ID
+
+### Generar borradores desde TODOS los viajes completados
+POST {{baseUrl}}/documents/sales/generate-from-all-completed-trips
+Authorization: Bearer {{accessToken}}
+
 ###
 
+### Generar borradores desde un viaje
+POST {{baseUrl}}/documents/sales/generate-from-trip/{{tripId}}
+Authorization: Bearer {{accessToken}}
 
-GET {{baseUrl}}/documents/sales/bc28c5c1-7260-4cca-a485-6a2adffd49f1
+###
+
+### Crear documento de venta
+POST {{baseUrl}}/documents/sales
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+
+{
+  "document_type_id": "{{documentTypeId}}",
+  "party_id": "{{partyId}}",
+  "date": "2026-05-19",
+  "currency_code": "ARS",
+  "descrip": "Venta de productos",
+  "ref": "REF-001",
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 2,
+      "unit_price": 15000
+    }
+  ]
+}
+
+###
+
+### Obtener todos los documentos
+GET {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener documentos filtrados por tipo
+GET {{baseUrl}}/documents/sales?documentTypeId={{documentTypeId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener documentos filtrados por estado
+GET {{baseUrl}}/documents/sales?status=1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener documentos filtrados por tipo y estado
+GET {{baseUrl}}/documents/sales?documentTypeId={{documentTypeId}}&status=2
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener documento por ID
+GET {{baseUrl}}/documents/sales/{{documentId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Actualizar documento
+PATCH {{baseUrl}}/documents/sales/{{documentId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "party_id": "{{partyId}}",
+  "currency_code": "ARS",
+  "descrip": "Documento actualizado",
+  "ref": "REF-UPDATE",
+  "status": 1,
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 3,
+      "unit_price": 18000
+    }
+  ]
+}
+
+###
+
+### Confirmar documento
+PATCH {{baseUrl}}/documents/sales/{{documentId}}/confirm
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Cancelar documento
+PATCH {{baseUrl}}/documents/sales/{{documentId}}/cancel
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Eliminar documento (solo borradores)
+DELETE {{baseUrl}}/documents/sales/{{documentId}}
+Authorization: Bearer {{accessToken}}
+
+###

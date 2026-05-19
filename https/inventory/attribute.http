@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@attributeId = REEMPLAZAR_ID
+@attributeId = f8d4edcc-76c5-4974-93d1-289df366b39e
 
 
 ###
