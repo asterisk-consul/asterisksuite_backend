@@ -1,178 +1,94 @@
-// src/modules/master-data/products/costing/costing-tree.service.ts
-
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
 import { CostBreakdownItem } from './interfaces/cost-breakdown.interface';
 
-import { round2, safeNumber } from './utils/costing.utils';
+import { round2 } from './utils/costing.utils';
+
+import { VariantCostResolverService } from '../variant-costs/services/variant-cost-resolver.service';
 
 @Injectable()
 export class CostingTreeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+
+    private readonly variantCostResolver: VariantCostResolverService,
+  ) {}
 
   async buildTree(
     productId: string,
+    currencyId: string,
     level = 0,
-    visited = new Set<string>(),
   ): Promise<CostBreakdownItem[]> {
-    // ─────────────────────────────
-    // EVITAR CICLOS
-    // ─────────────────────────────
-
-    if (visited.has(productId)) {
-      throw new BadRequestException(
-        `Ciclo detectado en estructura BOM (${productId})`,
-      );
-    }
-
-    visited.add(productId);
-
-    // ─────────────────────────────
-    // COMPONENTES
-    // ─────────────────────────────
-
     const components = await this.prisma.product_components.findMany({
       where: {
         parent_product_id: productId,
+
         deleted_at: null,
+
         active: true,
       },
 
       include: {
-        child_product: {
-          include: {
-            // ─────────────────────
-            // COSTOS CALCULADOS
-            // ─────────────────────
+        child_product: true,
 
-            product_costs: {
-              where: {
-                active: true,
-              },
-
-              orderBy: {
-                created_at: 'desc',
-              },
-
-              take: 1,
-            },
-
-            // ─────────────────────
-            // PRECIO PRODUCTO
-            // FALLBACK
-            // ─────────────────────
-
-            product_price: {
-              where: {
-                deleted_at: null,
-                active: true,
-              },
-
-              include: {
-                currencies: true,
-              },
-
-              orderBy: {
-                created_at: 'desc',
-              },
-
-              take: 1,
-            },
-          },
-        },
+        child_variant: true,
       },
     });
 
     const result: CostBreakdownItem[] = [];
 
-    // ─────────────────────────────
-    // LOOP COMPONENTES
-    // ─────────────────────────────
-
     for (const component of components) {
-      const child = component.child_product;
-
-      if (!child) {
-        continue;
-      }
-
-      // ─────────────────────────
-      // COSTO UNITARIO
-      // ─────────────────────────
-
-      const latestCost = child.product_costs[0];
-
       let unitCost = 0;
 
-      // COSTO CALCULADO
-      if (latestCost) {
-        unitCost = safeNumber(latestCost.total_cost);
+      let source: string | undefined;
+
+      if (component.child_variant_id) {
+        const resolved = await this.variantCostResolver.resolve(
+          component.child_variant_id,
+          currencyId,
+        );
+
+        unitCost = resolved.converted_cost;
+
+        source = resolved.source;
+      } else {
+        unitCost = Number(component.child_product.current_cost || 0);
       }
 
-      // FALLBACK → PRECIO
-      else if (child.product_price?.length) {
-        unitCost = safeNumber(child.product_price[0].price);
-      }
+      const quantity = Number(component.quantity);
 
-      // ─────────────────────────
-      // CANTIDAD
-      // ─────────────────────────
+      const waste = Number(component.waste_percentage || 0);
 
-      const quantity = safeNumber(component.quantity);
+      const factor = 1 + waste / 100;
 
-      // ─────────────────────────
-      // HIJOS RECURSIVOS
-      // ─────────────────────────
+      const totalCost = round2(quantity * unitCost * factor);
 
       const children = await this.buildTree(
-        child.id,
+        component.child_product_id,
+        currencyId,
         level + 1,
-        new Set(visited),
       );
-
-      // ─────────────────────────
-      // COSTO HIJOS
-      // ─────────────────────────
-
-      const childrenCost = children.reduce(
-        (acc, childItem) => acc + childItem.total_cost,
-        0,
-      );
-
-      // ─────────────────────────
-      // COSTO PROPIO
-      // ─────────────────────────
-
-      const ownCost = round2(unitCost * quantity);
-
-      // ─────────────────────────
-      // COSTO TOTAL
-      // ─────────────────────────
-
-      const totalCost = round2(ownCost + childrenCost);
-
-      // ─────────────────────────
-      // RESULTADO
-      // ─────────────────────────
 
       result.push({
-        product_id: child.id,
+        product_id: component.child_product_id,
 
-        product_name: child.name,
+        variant_id: component.child_variant_id || undefined,
+
+        product_name: component.child_product.name,
 
         quantity,
 
-        unit_cost: round2(unitCost),
+        unit_cost: unitCost,
 
         total_cost: totalCost,
 
         level,
+
+        currency_id: currencyId,
+
+        cost_source: source,
 
         children,
       });
@@ -180,10 +96,6 @@ export class CostingTreeService {
 
     return result;
   }
-
-  // ─────────────────────────────
-  // FLATTEN TREE
-  // ─────────────────────────────
 
   flattenTree(items: CostBreakdownItem[]): CostBreakdownItem[] {
     const result: CostBreakdownItem[] = [];

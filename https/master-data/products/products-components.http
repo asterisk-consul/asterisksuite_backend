@@ -6,8 +6,8 @@
 
 @componentId = REEMPLAZAR_COMPONENT_ID
 
-@parentProductId = 3c26c231-1f84-4de7-8e69-defac353ab83
-@childProductId = 46aa59be-26b1-45a8-81f2-bd64dc7cd11c
+@parentProductId = 46aa59be-26b1-45a8-81f2-bd64dc7cd11c
+@childProductId = 553e3358-be8a-48e3-8bc4-1764d96f2936
 
 @childVariantId = REEMPLAZAR_VARIANT_ID
 @unitId = 94fd5646-e316-4077-80a4-b59d1a51a7ff
@@ -22,9 +22,9 @@ Content-Type: application/json
 {
   "parent_product_id": "{{parentProductId}}",
   "child_product_id": "{{childProductId}}",
-  "quantity": 2,
+  "quantity": 4,
   "unit_id": "{{unitId}}",
-  "waste_percentage": 5,
+  "waste_percentage": 0,
   "active": true
 }
 

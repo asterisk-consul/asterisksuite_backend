@@ -58,7 +58,7 @@ export class TagsService {
     return tag;
   }
 
-  async update(id: string, data: UpdateTagDto) {
+  async update(id: string, data: UpdateTagDto, userId: string) {
     await this.findOne(id);
 
     if (data.name) {
@@ -76,7 +76,11 @@ export class TagsService {
 
     return this.prisma.tags.update({
       where: { id },
-      data,
+      data: {
+        ...data,
+        updated_at: new Date(),
+        updated_by: userId,
+      },
     });
   }
 

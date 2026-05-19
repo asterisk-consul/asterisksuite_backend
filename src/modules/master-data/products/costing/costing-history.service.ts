@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
+import { ProductCostSource } from '@/generated/prisma/enums';
+
 @Injectable()
 export class CostingHistoryService {
   constructor(private readonly prisma: PrismaService) {}
@@ -12,6 +14,8 @@ export class CostingHistoryService {
     product_id: string;
 
     currency_id: string;
+
+    cost_source: ProductCostSource;
 
     material_cost: number;
 
@@ -23,6 +27,8 @@ export class CostingHistoryService {
 
     breakdown: {
       component_product_id: string;
+
+      component_variant_id?: string;
 
       quantity: number;
 

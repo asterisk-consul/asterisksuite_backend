@@ -1,5 +1,3 @@
-// src/modules/master-data/products/costing/dto/calculate-product-cost.dto.ts
-
 import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
 
 export class CalculateProductCostDto {

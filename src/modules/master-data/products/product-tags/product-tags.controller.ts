@@ -1,7 +1,16 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 
 import { ProductTagsService } from './product-tags.service';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('erp/product-tags')
 export class ProductTagsController {
   constructor(private readonly productTagsService: ProductTagsService) {}

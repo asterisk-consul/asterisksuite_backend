@@ -6,13 +6,16 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 import { ProductComponentsService } from './product-components.service';
 
 import { CreateProductComponentDto } from './dto/create-product-component.dto';
 import { UpdateProductComponentDto } from './dto/update-product-component.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('product-components')
 export class ProductComponentsController {
   constructor(private readonly service: ProductComponentsService) {}

@@ -456,6 +456,13 @@ export type EnumCalculationTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumCalculationTypeNullableFilter<$PrismaModel> | $Enums.CalculationType | null
 }
 
+export type EnumProductCostSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel> | $Enums.ProductCostSource
+}
+
 export type EnumProductTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.ProductType | Prisma.EnumProductTypeFieldRefInput<$PrismaModel>
   in?: $Enums.ProductType[] | Prisma.ListEnumProductTypeFieldRefInput<$PrismaModel>
@@ -474,6 +481,16 @@ export type EnumCalculationTypeNullableWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCalculationTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCalculationTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumProductCostSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductCostSourceWithAggregatesFilter<$PrismaModel> | $Enums.ProductCostSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
 }
 
 export type EnumUnitTypeFilter<$PrismaModel = never> = {
@@ -527,21 +544,21 @@ export type EnumAccountTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAccountTypeFilter<$PrismaModel>
 }
 
-export type EnumProductCostSourceFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel> | $Enums.ProductCostSource
+export type EnumVariantCostSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantCostSource | Prisma.EnumVariantCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantCostSourceFilter<$PrismaModel> | $Enums.VariantCostSource
 }
 
-export type EnumProductCostSourceWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumProductCostSourceWithAggregatesFilter<$PrismaModel> | $Enums.ProductCostSource
+export type EnumVariantCostSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantCostSource | Prisma.EnumVariantCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantCostSourceWithAggregatesFilter<$PrismaModel> | $Enums.VariantCostSource
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVariantCostSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVariantCostSourceFilter<$PrismaModel>
 }
 
 export type NestedUuidFilter<$PrismaModel = never> = {
@@ -968,6 +985,13 @@ export type NestedEnumCalculationTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumCalculationTypeNullableFilter<$PrismaModel> | $Enums.CalculationType | null
 }
 
+export type NestedEnumProductCostSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel> | $Enums.ProductCostSource
+}
+
 export type NestedEnumProductTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.ProductType | Prisma.EnumProductTypeFieldRefInput<$PrismaModel>
   in?: $Enums.ProductType[] | Prisma.ListEnumProductTypeFieldRefInput<$PrismaModel>
@@ -986,6 +1010,16 @@ export type NestedEnumCalculationTypeNullableWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCalculationTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCalculationTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumProductCostSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductCostSourceWithAggregatesFilter<$PrismaModel> | $Enums.ProductCostSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
 }
 
 export type NestedEnumUnitTypeFilter<$PrismaModel = never> = {
@@ -1039,21 +1073,21 @@ export type NestedEnumAccountTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAccountTypeFilter<$PrismaModel>
 }
 
-export type NestedEnumProductCostSourceFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel> | $Enums.ProductCostSource
+export type NestedEnumVariantCostSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantCostSource | Prisma.EnumVariantCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantCostSourceFilter<$PrismaModel> | $Enums.VariantCostSource
 }
 
-export type NestedEnumProductCostSourceWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductCostSource | Prisma.EnumProductCostSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ProductCostSource[] | Prisma.ListEnumProductCostSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumProductCostSourceWithAggregatesFilter<$PrismaModel> | $Enums.ProductCostSource
+export type NestedEnumVariantCostSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantCostSource | Prisma.EnumVariantCostSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantCostSource[] | Prisma.ListEnumVariantCostSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantCostSourceWithAggregatesFilter<$PrismaModel> | $Enums.VariantCostSource
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumProductCostSourceFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVariantCostSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVariantCostSourceFilter<$PrismaModel>
 }
 
 

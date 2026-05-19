@@ -1,7 +1,7 @@
-// src/modules/master-data/products/costing/interfaces/cost-breakdown.interface.ts
-
 export interface CostBreakdownItem {
   product_id: string;
+
+  variant_id?: string;
 
   product_name: string;
 
@@ -12,6 +12,10 @@ export interface CostBreakdownItem {
   total_cost: number;
 
   level: number;
+
+  currency_id?: string;
+
+  cost_source?: string;
 
   children?: CostBreakdownItem[];
 }

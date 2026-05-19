@@ -1,5 +1,3 @@
-// src/modules/master-data/products/costing/interfaces/calculated-cost.interface.ts
-
 import { CostBreakdownItem } from './cost-breakdown.interface';
 
 export interface CalculatedCost {

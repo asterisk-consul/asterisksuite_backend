@@ -6,13 +6,16 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 import { ProductAttributeValuesService } from './product-attribute-values.service';
 
 import { CreateProductAttributeValueDto } from './dto/create-product-attribute-value.dto';
 import { UpdateProductAttributeValueDto } from './dto/update-product-attribute-value.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('product-attribute-values')
 export class ProductAttributeValuesController {
   constructor(private readonly service: ProductAttributeValuesService) {}

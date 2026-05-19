@@ -114,3 +114,14 @@ export const ProductCostSource = {
 } as const
 
 export type ProductCostSource = (typeof ProductCostSource)[keyof typeof ProductCostSource]
+
+
+export const VariantCostSource = {
+  MANUAL: 'MANUAL',
+  PURCHASE: 'PURCHASE',
+  IMPORT: 'IMPORT',
+  ENGINEERING: 'ENGINEERING',
+  SUPPLIER: 'SUPPLIER'
+} as const
+
+export type VariantCostSource = (typeof VariantCostSource)[keyof typeof VariantCostSource]

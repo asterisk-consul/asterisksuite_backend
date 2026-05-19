@@ -1,0 +1,384 @@
+```http
+@baseUrl = http://localhost:3000/api
+
+###########################################################
+# LOGIN
+###########################################################
+
+### LOGIN
+# @name login
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+###########################################################
+# IDS FIJOS
+###########################################################
+
+@kgUnitId = f39db553-925c-43bd-a088-dd86928a2e32
+@meterUnitId = bbd1eb49-66e5-4126-813e-26f478ede723
+@unitUnitId = 94fd5646-e316-4077-80a4-b59d1a51a7ff
+
+@usdCurrencyId = 839c208c-744d-4321-a375-2a747c911fa2
+
+###########################################################
+# PRODUCTO 1 - CHAPA
+###########################################################
+
+### CREATE CHAPA
+# @name createChapa
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Chapa SAE 1010",
+  "sku": "CH-SAE1010",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@chapaProductId = 45059783-6a8b-4938-bb6a-020ecbbd867b
+
+###########################################################
+# VARIANTE CHAPA
+###########################################################
+
+### CREATE CHAPA VARIANT
+# @name createChapaVariant
+
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{chapaProductId}}",
+  "name": "Chapa 0.9mm",
+  "sku": "CH-09",
+  "thickness_mm": 0.9,
+  "weight_kg": 7.065,
+  "active": true
+}
+
+###
+
+@chapaVariantId = 79796e1f-f7af-42ae-aebb-3f39abd0dc34
+
+###########################################################
+# COSTO CHAPA
+###########################################################
+
+### CREATE CHAPA COST
+
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{chapaVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 3200,
+  "supplier": "Acindar"
+}
+
+###########################################################
+# PRODUCTO 2 - ESPUMA
+###########################################################
+
+### CREATE ESPUMA
+# @name createEspuma
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Espuma Alta Densidad",
+  "sku": "ESP-AD",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@espumaProductId = 4032380c-bbc4-419e-b4ea-378560aaf66c
+
+###########################################################
+# VARIANTE ESPUMA
+###########################################################
+
+### CREATE ESPUMA VARIANT
+# @name createEspumaVariant
+
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{espumaProductId}}",
+  "name": "Espuma 30kg",
+  "sku": "ESP-30KG",
+  "density_kg_m3": 30,
+  "thickness_mm": 50,
+  "weight_kg": 1.2,
+  "active": true
+}
+
+###
+
+@espumaVariantId = 45c1569e-186e-4550-9bc5-256c68611fca
+
+###########################################################
+# COSTO ESPUMA
+###########################################################
+
+### CREATE ESPUMA COST
+
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{espumaVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 5800,
+  "supplier": "Piero"
+}
+
+###########################################################
+# PRODUCTO 3 - TELA
+###########################################################
+
+### CREATE TELA
+# @name createTela
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Tela Chenille",
+  "sku": "TEL-CH",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@telaProductId = b8719f3d-3f01-4c8e-8916-7581617e1de4
+
+###########################################################
+# VARIANTE TELA
+###########################################################
+
+### CREATE TELA VARIANT
+# @name createTelaVariant
+
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{telaProductId}}",
+  "name": "Tela Gris",
+  "sku": "TEL-GRIS",
+  "active": true
+}
+
+###
+
+@telaVariantId = e4dc12c8-27b7-468e-b23a-4b273a35a27d
+
+###########################################################
+# COSTO TELA
+###########################################################
+
+### CREATE TELA COST
+
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{telaVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 2400,
+  "supplier": "Textil SA"
+}
+
+###########################################################
+# PRODUCTO 4 - ESTRUCTURA
+###########################################################
+
+### CREATE ESTRUCTURA
+# @name createEstructura
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Estructura Sillon",
+  "sku": "EST-SILLON",
+  "product_type": "SEMI_FINISHED",
+  "cost_source": "BOM",
+  "is_composed": true,
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@estructuraProductId = f32351da-3806-4963-89ff-1d9b8a382b5e
+
+###########################################################
+# COMPONENTE CHAPA
+###########################################################
+
+### CREATE COMPONENT CHAPA
+
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{estructuraProductId}}",
+  "child_product_id": "{{chapaProductId}}",
+  "child_variant_id": "{{chapaVariantId}}",
+  "quantity": 12,
+  "length_mm": 1200,
+  "width_mm": 600,
+  "height_mm": 1,
+  "waste_percentage": 5
+}
+
+###########################################################
+# PRODUCTO 5 - SILLON
+###########################################################
+
+### CREATE SILLON
+# @name createSillon
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Sillon Premium 3 Cuerpos",
+  "sku": "SILLON-PREM",
+  "product_type": "FINISHED_PRODUCT",
+  "cost_source": "ENGINEERING",
+  "has_engineering": true,
+  "is_composed": true,
+  "auto_calculate_cost": true,
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@sillonProductId = eaeee3d2-017a-44ad-aeee-f57d5294e541
+
+###########################################################
+# COMPONENTE ESTRUCTURA
+###########################################################
+
+### CREATE COMPONENT ESTRUCTURA
+
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{sillonProductId}}",
+  "child_product_id": "{{estructuraProductId}}",
+  "quantity": 1
+}
+
+###########################################################
+# COMPONENTE ESPUMA
+###########################################################
+
+### CREATE COMPONENT ESPUMA
+
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{sillonProductId}}",
+  "child_product_id": "{{espumaProductId}}",
+  "child_variant_id": "{{espumaVariantId}}",
+  "quantity": 4,
+  "length_mm": 700,
+  "width_mm": 500,
+  "height_mm": 50,
+  "waste_percentage": 10
+}
+
+###########################################################
+# COMPONENTE TELA
+###########################################################
+
+### CREATE COMPONENT TELA
+
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{sillonProductId}}",
+  "child_product_id": "{{telaProductId}}",
+  "child_variant_id": "{{telaVariantId}}",
+  "quantity": 8,
+  "length_mm": 2500,
+  "width_mm": 1400,
+  "waste_percentage": 15
+}
+
+###########################################################
+# CALCULAR COSTO
+###########################################################
+
+### CALCULATE COST
+
+POST {{baseUrl}}/products/costing/calculate
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{sillonProductId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "save_snapshot": true
+}
+
+###########################################################
+# HISTORIAL
+###########################################################
+
+### GET HISTORY
+
+GET {{baseUrl}}/products/costing/history/{{sillonProductId}}
+Authorization: Bearer {{accessToken}}
+```

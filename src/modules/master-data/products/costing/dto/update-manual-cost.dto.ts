@@ -1,17 +1,12 @@
-// src/modules/master-data/products/costing/dto/update-manual-cost.dto.ts
+import { IsEnum, IsNumber, IsOptional } from 'class-validator';
 
-import { IsNumber, IsUUID } from 'class-validator';
+import { ProductCostSource } from '@/generated/prisma/enums';
 
 export class UpdateManualCostDto {
-  @IsUUID()
-  currency_id!: string;
-
   @IsNumber()
-  material_cost!: number;
+  current_cost!: number;
 
-  @IsNumber()
-  labor_cost!: number;
-
-  @IsNumber()
-  overhead_cost!: number;
+  @IsOptional()
+  @IsEnum(ProductCostSource)
+  cost_source?: ProductCostSource = 'MANUAL';
 }

@@ -1,10 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 
 import { ProductCategoriesService } from './product-categories.service';
 
 import { AssignProductCategoryDto } from './dto/assign-product-category.dto';
 import { BulkAssignProductCategoriesDto } from './dto/bulk-assign-product-categories.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('product-categories')
 export class ProductCategoriesController {
   constructor(

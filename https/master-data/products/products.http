@@ -27,8 +27,8 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "BULTO",
-  "sku": "COMP-002",
+  "name": "hijo",
+  "sku": "Prueba-003",
   "requires_refrigeration": false,
    "price_enabled": true,
   "is_rate_type": true,
@@ -176,7 +176,7 @@ Authorization: Bearer {{accessToken}}
 ### Obtener Producto por ID
 ### =====================================================
 
-GET {{baseUrl}}/master-data/products/{{productId}}
+GET {{baseUrl}}/master-data/products/3c26c231-1f84-4de7-8e69-defac353ab83
 Authorization: Bearer {{accessToken}}
 
 ###
@@ -206,7 +206,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "basePrice": 2000,
+  "basePrice": 2000
 }
 
 ###

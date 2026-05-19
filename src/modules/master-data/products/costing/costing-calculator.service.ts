@@ -1,5 +1,3 @@
-// src/modules/master-data/products/costing/costing-calculator.service.ts
-
 import { Injectable } from '@nestjs/common';
 
 import { CostBreakdownItem } from './interfaces/cost-breakdown.interface';
@@ -14,12 +12,20 @@ export class CostingCalculatorService {
     return round2(flat.reduce((acc, item) => acc + item.total_cost, 0));
   }
 
+  calculateEngineeringCost(breakdown: CostBreakdownItem[]): number {
+    return this.calculateMaterialCost(breakdown);
+  }
+
+  calculatePurchaseCost(breakdown: CostBreakdownItem[]): number {
+    return this.calculateMaterialCost(breakdown);
+  }
+
   calculateLaborCost(materialCost: number): number {
-    return round2(materialCost * 0.1);
+    return round2(materialCost * 0.15);
   }
 
   calculateOverheadCost(materialCost: number): number {
-    return round2(materialCost * 0.05);
+    return round2(materialCost * 0.1);
   }
 
   private flatten(items: CostBreakdownItem[]): CostBreakdownItem[] {

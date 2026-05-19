@@ -8,6 +8,7 @@ import { ProductCategoriesModule } from './product-categories/product-categories
 import { ProductComponentsModule } from './product-components/product-components.module';
 import { ProductTagsModule } from './product-tags/product-tags.module';
 import { ProductVariantsModule } from './product-variants/product-variants.module';
+import { EngineeringModule } from './engineering/engineering.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProductVariantsModule } from './product-variants/product-variants.modul
     ProductComponentsModule,
     ProductTagsModule,
     ProductVariantsModule,
+    EngineeringModule,
   ],
   controllers: [ProductsController],
   providers: [ProductsService],

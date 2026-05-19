@@ -354,3 +354,13 @@ export type product_costs = Prisma.product_costsModel
  * 
  */
 export type product_cost_breakdowns = Prisma.product_cost_breakdownsModel
+/**
+ * Model product_variant_prices
+ * 
+ */
+export type product_variant_prices = Prisma.product_variant_pricesModel
+/**
+ * Model product_variant_costs
+ * 
+ */
+export type product_variant_costs = Prisma.product_variant_costsModel

@@ -1,5 +1,3 @@
-// src/modules/master-data/products/costing/costing.service.ts
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
@@ -41,10 +39,28 @@ export class CostingService {
       throw new NotFoundException('Producto no encontrado');
     }
 
-    const breakdown = await this.treeService.buildTree(productId);
+    const breakdown = await this.treeService.buildTree(productId, currencyId);
 
-    const materialCost =
-      this.calculatorService.calculateMaterialCost(breakdown);
+    let materialCost = 0;
+
+    switch (product.cost_source) {
+      case 'MANUAL':
+        materialCost = Number(product.current_cost || 0);
+        break;
+
+      case 'PURCHASE':
+        materialCost = this.calculatorService.calculatePurchaseCost(breakdown);
+        break;
+
+      case 'ENGINEERING':
+        materialCost =
+          this.calculatorService.calculateEngineeringCost(breakdown);
+        break;
+
+      case 'BOM':
+      default:
+        materialCost = this.calculatorService.calculateMaterialCost(breakdown);
+    }
 
     const laborCost = this.calculatorService.calculateLaborCost(materialCost);
 
@@ -61,6 +77,8 @@ export class CostingService {
 
         currency_id: currencyId,
 
+        cost_source: product.cost_source,
+
         material_cost: materialCost,
 
         labor_cost: laborCost,
@@ -71,6 +89,8 @@ export class CostingService {
 
         breakdown: flat.map((item) => ({
           component_product_id: item.product_id,
+
+          component_variant_id: item.variant_id,
 
           quantity: item.quantity,
 
@@ -88,6 +108,10 @@ export class CostingService {
         },
         data: {
           current_cost: totalCost,
+
+          last_cost_calculated_at: new Date(),
+
+          needs_cost_recalculation: false,
         },
       });
     }
@@ -112,11 +136,14 @@ export class CostingService {
       where: {
         product_id: productId,
       },
+
       orderBy: {
         created_at: 'desc',
       },
+
       include: {
         breakdowns: true,
+
         currencies: true,
       },
     });
