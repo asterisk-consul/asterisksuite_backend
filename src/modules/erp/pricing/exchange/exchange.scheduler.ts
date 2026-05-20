@@ -10,8 +10,8 @@ export class ExchangeScheduler {
 
   constructor(private readonly exchangeService: ExchangeService) {}
 
-  //cada 30 min de 10 a 15 hs arg
-  @Cron('*/30 10-15 * * *', {
+  //cada 1 de 10 a 15 hs arg lunes a viernes
+  @Cron('0 10-15 * * 1-5', {
     timeZone: 'America/Argentina/Buenos_Aires',
   })
   async handleSyncRates() {
