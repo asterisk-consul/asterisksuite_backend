@@ -379,6 +379,6 @@ Content-Type: application/json
 
 ### GET HISTORY
 
-GET {{baseUrl}}/products/costing/history/{{sillonProductId}}
+GET {{baseUrl}}/products/costing/{{sillonProductId}}/history
 Authorization: Bearer {{accessToken}}
 ```
