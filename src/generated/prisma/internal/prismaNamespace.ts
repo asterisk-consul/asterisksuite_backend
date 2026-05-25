@@ -6269,6 +6269,7 @@ export const CategoriesScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   parent_id: 'parent_id',
+  sort_order: 'sort_order',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',

@@ -1156,6 +1156,7 @@ model categories {
   name               String               @db.VarChar(255)
   slug               String?              @db.VarChar(255)
   parent_id          String?              @db.Uuid
+  sort_order         Int                  @default(0)
   active             Boolean              @default(true)
   //ver de agregar types como en flow
   created_at         DateTime             @default(now()) @db.Timestamp(6)
@@ -1169,6 +1170,8 @@ model categories {
   product_categories product_categories[]
 
   @@index([parent_id])
+  @@index([sort_order])
+  @@index([parent_id, sort_order])
 }
 
 model product_categories {

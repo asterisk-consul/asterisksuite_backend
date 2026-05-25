@@ -1,9 +1,11 @@
 import {
   IsBoolean,
+  IsInt,
   IsOptional,
   IsString,
   IsUUID,
   MaxLength,
+  Min,
 } from 'class-validator';
 
 export class CreateCategoryDto {
@@ -19,6 +21,11 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsUUID()
   parent_id?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  sort_order?: number;
 
   @IsOptional()
   @IsBoolean()
