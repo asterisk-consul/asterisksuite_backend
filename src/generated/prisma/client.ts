@@ -364,3 +364,18 @@ export type product_variant_prices = Prisma.product_variant_pricesModel
  * 
  */
 export type product_variant_costs = Prisma.product_variant_costsModel
+/**
+ * Model cost_components
+ * 
+ */
+export type cost_components = Prisma.cost_componentsModel
+/**
+ * Model cost_templates
+ * 
+ */
+export type cost_templates = Prisma.cost_templatesModel
+/**
+ * Model cost_template_components
+ * 
+ */
+export type cost_template_components = Prisma.cost_template_componentsModel

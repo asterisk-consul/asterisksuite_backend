@@ -50,4 +50,14 @@ export class CreateProductVariantDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean = true;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  weight_per_m2_kg?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  weight_per_meter_kg?: number;
 }

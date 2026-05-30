@@ -43,19 +43,25 @@ export class ProductsService {
   // ─────────────────────────────
 
   async findAll() {
-    const products = await this.prisma.products.findMany({
+    return this.prisma.products.findMany({
       where: {
         deleted_at: null,
       },
+
       orderBy: {
         created_at: 'desc',
       },
+
       include: {
         transfer_rate: true,
 
         income_account: true,
         expense_account: true,
         inventory_account: true,
+
+        // ─────────────
+        // PRECIOS
+        // ─────────────
 
         product_price: {
           where: {
@@ -66,18 +72,9 @@ export class ProductsService {
           },
         },
 
-        product_variants: {
-          where: {
-            deleted_at: null,
-          },
-          include: {
-            product_attribute_values: {
-              include: {
-                attributes: true,
-              },
-            },
-          },
-        },
+        // ─────────────
+        // CATEGORÍAS
+        // ─────────────
 
         product_categories: {
           where: {
@@ -88,52 +85,27 @@ export class ProductsService {
           },
         },
 
+        // ─────────────
+        // TAGS
+        // ─────────────
+
         product_tags: {
           include: {
             tags: true,
           },
         },
 
-        product_attribute_values: {
-          include: {
-            attributes: true,
-          },
-        },
+        // ─────────────
+        // TAXES
+        // ─────────────
 
         product_taxes: {
           include: {
             taxes: true,
           },
         },
-
-        parent_components: {
-          where: {
-            deleted_at: null,
-          },
-          include: {
-            child_product: true,
-            child_variant: true,
-            units: true,
-          },
-        },
-
-        child_components: {
-          where: {
-            deleted_at: null,
-          },
-          include: {
-            parent_product: true,
-          },
-        },
       },
     });
-
-    return Promise.all(
-      products.map(async (product) => ({
-        ...product,
-        root_products: await this.getRootProducts(product.id),
-      })),
-    );
   }
 
   // ─────────────────────────────
@@ -154,6 +126,10 @@ export class ProductsService {
         expense_account: true,
         inventory_account: true,
 
+        // ─────────────
+        // PRECIOS
+        // ─────────────
+
         product_price: {
           where: {
             deleted_at: null,
@@ -162,6 +138,10 @@ export class ProductsService {
             currencies: true,
           },
         },
+
+        // ─────────────
+        // VARIANTES
+        // ─────────────
 
         product_variants: {
           where: {
@@ -173,8 +153,37 @@ export class ProductsService {
                 attributes: true,
               },
             },
+
+            // PRECIOS DE LA VARIANTE
+            productVariantPrices: {
+              where: {
+                deleted_at: null,
+                active: true,
+              },
+              include: {
+                currency: true,
+              },
+            },
+
+            // COSTOS DE LA VARIANTE
+            productVariantCosts: {
+              where: {
+                deleted_at: null,
+                active: true,
+              },
+              include: {
+                currency: true,
+              },
+              orderBy: {
+                effective_date: 'desc',
+              },
+            },
           },
         },
+
+        // ─────────────
+        // CATEGORÍAS
+        // ─────────────
 
         product_categories: {
           where: {
@@ -185,11 +194,19 @@ export class ProductsService {
           },
         },
 
+        // ─────────────
+        // TAGS
+        // ─────────────
+
         product_tags: {
           include: {
             tags: true,
           },
         },
+
+        // ─────────────
+        // ATRIBUTOS
+        // ─────────────
 
         product_attribute_values: {
           include: {
@@ -197,29 +214,58 @@ export class ProductsService {
           },
         },
 
+        // ─────────────
+        // IMPUESTOS
+        // ─────────────
+
         product_taxes: {
           include: {
             taxes: true,
           },
         },
 
+        // ─────────────
+        // HIJOS — registros donde este producto es el PADRE
+        // parent_components = "yo soy el padre, el hijo es child_product"
+        // ─────────────
         parent_components: {
           where: {
             deleted_at: null,
           },
           include: {
-            child_product: true,
+            child_product: {
+              // ← el producto hijo
+              select: {
+                id: true,
+                name: true,
+                sku: true,
+              },
+            },
             child_variant: true,
             units: true,
           },
         },
 
+        // ─────────────
+        // PADRES — registros donde este producto es el HIJO
+        // child_components = "yo soy el hijo, el padre es parent_product"
+        // ─────────────
         child_components: {
           where: {
             deleted_at: null,
+            parent_product: {
+              deleted_at: null,
+            },
           },
           include: {
-            parent_product: true,
+            parent_product: {
+              // ← el producto padre
+              select: {
+                id: true,
+                name: true,
+                sku: true,
+              },
+            },
           },
         },
       },
@@ -231,6 +277,7 @@ export class ProductsService {
 
     return {
       ...product,
+
       root_products: await this.getRootProducts(id),
     };
   }
@@ -246,9 +293,11 @@ export class ProductsService {
       const existing = await this.prisma.products.findFirst({
         where: {
           sku: data.sku,
+
           id: {
             not: id,
           },
+
           deleted_at: null,
         },
       });
@@ -264,6 +313,7 @@ export class ProductsService {
       where: {
         id,
       },
+
       data,
     });
   }
@@ -279,6 +329,7 @@ export class ProductsService {
       where: {
         id,
       },
+
       data: {
         deleted_at: new Date(),
         active: false,
@@ -293,15 +344,14 @@ export class ProductsService {
   async getRootProducts(productId: string) {
     const visited = new Set<string>();
 
-    const roots = await this.findRootsRecursive(productId, visited);
-
-    return roots;
+    return this.findRootsRecursive(productId, visited);
   }
 
   private async findRootsRecursive(
     productId: string,
     visited: Set<string>,
   ): Promise<any[]> {
+    // evita loops
     if (visited.has(productId)) {
       return [];
     }
@@ -311,18 +361,25 @@ export class ProductsService {
     const parents = await this.prisma.product_components.findMany({
       where: {
         child_product_id: productId,
+
         deleted_at: null,
+
+        parent_product: {
+          deleted_at: null,
+        },
       },
+
       include: {
         parent_product: true,
       },
     });
 
-    // no tiene padre → es root
+    // no tiene padres → es root
     if (!parents.length) {
-      const self = await this.prisma.products.findUnique({
+      const self = await this.prisma.products.findFirst({
         where: {
           id: productId,
+          deleted_at: null,
         },
       });
 
@@ -340,7 +397,7 @@ export class ProductsService {
       roots.push(...parentRoots);
     }
 
-    // unique
+    // unique roots
     return roots.filter(
       (root, index, arr) => arr.findIndex((x) => x.id === root.id) === index,
     );

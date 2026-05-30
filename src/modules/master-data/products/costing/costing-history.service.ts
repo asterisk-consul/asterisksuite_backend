@@ -1,10 +1,12 @@
-// src/modules/master-data/products/costing/costing-history.service.ts
-
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
 import { ProductCostSource } from '@/generated/prisma/enums';
+
+import { Prisma } from '@/generated/prisma/client';
+
+import { CostRateSnapshot } from './interfaces/calculated-cost.interface';
 
 @Injectable()
 export class CostingHistoryService {
@@ -18,12 +20,14 @@ export class CostingHistoryService {
     cost_source: ProductCostSource;
 
     material_cost: number;
-
     labor_cost: number;
-
     overhead_cost: number;
 
     total_cost: number;
+
+    cost_template_id?: string | null;
+
+    cost_rates_snapshot?: Record<string, CostRateSnapshot>;
 
     breakdown: {
       component_product_id: string;
@@ -51,20 +55,27 @@ export class CostingHistoryService {
 
         currency_id: data.currency_id,
 
+        cost_source: data.cost_source,
+
         material_cost: data.material_cost,
-
         labor_cost: data.labor_cost,
-
         overhead_cost: data.overhead_cost,
 
         total_cost: data.total_cost,
 
         version: version + 1,
 
+        cost_template_id: data.cost_template_id ?? null,
+
+        cost_rates_snapshot: data.cost_rates_snapshot
+          ? (data.cost_rates_snapshot as unknown as Prisma.InputJsonValue)
+          : Prisma.JsonNull,
+
         breakdowns: {
           create: data.breakdown,
         },
       },
+
       include: {
         breakdowns: true,
       },

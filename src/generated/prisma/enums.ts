@@ -125,3 +125,23 @@ export const VariantCostSource = {
 } as const
 
 export type VariantCostSource = (typeof VariantCostSource)[keyof typeof VariantCostSource]
+
+
+export const CostComponentType = {
+  MATERIAL: 'MATERIAL',
+  LABOR: 'LABOR',
+  OVERHEAD: 'OVERHEAD',
+  OTHER: 'OTHER'
+} as const
+
+export type CostComponentType = (typeof CostComponentType)[keyof typeof CostComponentType]
+
+
+export const CostValueType = {
+  FROM_BOM: 'FROM_BOM',
+  PERCENTAGE_OF_MATERIAL: 'PERCENTAGE_OF_MATERIAL',
+  PERCENTAGE_OF_TOTAL: 'PERCENTAGE_OF_TOTAL',
+  FIXED_PER_UNIT: 'FIXED_PER_UNIT'
+} as const
+
+export type CostValueType = (typeof CostValueType)[keyof typeof CostValueType]

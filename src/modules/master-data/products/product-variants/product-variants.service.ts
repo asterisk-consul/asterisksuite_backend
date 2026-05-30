@@ -13,6 +13,48 @@ import { UpdateProductVariantDto } from './dto/update-product-variant.dto';
 export class ProductVariantsService {
   constructor(private prisma: PrismaService) {}
 
+  // ─────────────────────────────────────────────
+  // NORMALIZE TECHNICAL FIELDS
+  // ─────────────────────────────────────────────
+
+  private normalizeTechnicalFields<
+    T extends CreateProductVariantDto | UpdateProductVariantDto,
+  >(data: T): T {
+    const thicknessM = Number(data.thickness_mm || 0) / 1000;
+
+    let density = Number(data.density_kg_m3 || 0);
+
+    let kgPerM2 = Number(data.weight_per_m2_kg || 0);
+
+    /**
+     * kg/m² → density
+     *
+     * density = kg_m2 / thickness(m)
+     */
+    if (!density && kgPerM2 > 0 && thicknessM > 0) {
+      density = kgPerM2 / thicknessM;
+    }
+
+    /**
+     * density → kg/m²
+     *
+     * kg_m2 = density * thickness(m)
+     */
+    if (!kgPerM2 && density > 0 && thicknessM > 0) {
+      kgPerM2 = density * thicknessM;
+    }
+
+    return {
+      ...data,
+      density_kg_m3: density || undefined,
+      weight_per_m2_kg: kgPerM2 || undefined,
+    };
+  }
+
+  // ─────────────────────────────────────────────
+  // CREATE
+  // ─────────────────────────────────────────────
+
   async create(data: CreateProductVariantDto) {
     const product = await this.prisma.products.findUnique({
       where: {
@@ -36,12 +78,16 @@ export class ProductVariantsService {
       }
     }
 
+    const normalized = this.normalizeTechnicalFields(data);
+
     return this.prisma.product_variants.create({
-      data: {
-        ...data,
-      },
+      data: normalized,
     });
   }
+
+  // ─────────────────────────────────────────────
+  // FIND ALL
+  // ─────────────────────────────────────────────
 
   async findAll() {
     return this.prisma.product_variants.findMany({
@@ -56,6 +102,10 @@ export class ProductVariantsService {
       },
     });
   }
+
+  // ─────────────────────────────────────────────
+  // FIND ONE
+  // ─────────────────────────────────────────────
 
   async findOne(id: string) {
     const variant = await this.prisma.product_variants.findFirst({
@@ -80,6 +130,10 @@ export class ProductVariantsService {
     return variant;
   }
 
+  // ─────────────────────────────────────────────
+  // FIND BY PRODUCT
+  // ─────────────────────────────────────────────
+
   async findByProduct(productId: string) {
     return this.prisma.product_variants.findMany({
       where: {
@@ -91,6 +145,10 @@ export class ProductVariantsService {
       },
     });
   }
+
+  // ─────────────────────────────────────────────
+  // UPDATE
+  // ─────────────────────────────────────────────
 
   async update(id: string, data: UpdateProductVariantDto) {
     await this.findOne(id);
@@ -110,11 +168,17 @@ export class ProductVariantsService {
       }
     }
 
+    const normalized = this.normalizeTechnicalFields(data);
+
     return this.prisma.product_variants.update({
       where: { id },
-      data,
+      data: normalized,
     });
   }
+
+  // ─────────────────────────────────────────────
+  // REMOVE
+  // ─────────────────────────────────────────────
 
   async remove(id: string) {
     await this.findOne(id);

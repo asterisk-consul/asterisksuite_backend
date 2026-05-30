@@ -1,0 +1,636 @@
+@baseUrl = http://localhost:3000/api
+
+###########################################################
+# LOGIN
+###########################################################
+
+### LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+###########################################################
+# IDS FIJOS
+###########################################################
+
+@usdCurrencyId = 839c208c-744d-4321-a375-2a747c911fa2
+@unitUnitId    = 94fd5646-e316-4077-80a4-b59d1a51a7ff
+
+###########################################################
+# MATERIA PRIMA 1 — CHAPA DE ACERO
+###########################################################
+
+### Crear chapa de acero
+# @name createChapa
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Chapa de Acero Inoxidable",
+  "sku": "MP-CHAPA-INOX",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@chapaId = {{createChapa.response.body.id}}
+
+### Variante chapa 0.8mm
+# @name createChapaVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{chapaId}}",
+  "name": "Chapa 0.8mm",
+  "sku": "MP-CHAPA-08",
+  "thickness_mm": 0.8,
+  "weight_kg": 6.28,
+  "active": true
+}
+
+###
+
+@chapaVariantId = {{createChapaVariant.response.body.id}}
+
+### Costo chapa
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{chapaVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 4200,
+  "supplier": "Acindar"
+}
+
+###########################################################
+# MATERIA PRIMA 2 — MOTOR ELÉCTRICO
+###########################################################
+
+### Crear motor
+# @name createMotor
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Motor Eléctrico Universal",
+  "sku": "MP-MOTOR-UNI",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@motorId = {{createMotor.response.body.id}}
+
+### Variante motor 350W
+# @name createMotorVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{motorId}}",
+  "name": "Motor 350W",
+  "sku": "MP-MOTOR-350W",
+  "active": true
+}
+
+###
+
+@motorVariantId = {{createMotorVariant.response.body.id}}
+
+### Costo motor
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{motorVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 28000,
+  "supplier": "Electro Motors SA"
+}
+
+###########################################################
+# MATERIA PRIMA 3 — PANEL DE CONTROL
+###########################################################
+
+### Crear panel
+# @name createPanel
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Panel de Control Digital",
+  "sku": "MP-PANEL-DIG",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@panelId = {{createPanel.response.body.id}}
+
+### Variante panel
+# @name createPanelVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{panelId}}",
+  "name": "Panel 7 programas",
+  "sku": "MP-PANEL-7P",
+  "active": true
+}
+
+###
+
+@panelVariantId = {{createPanelVariant.response.body.id}}
+
+### Costo panel
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{panelVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 12500,
+  "supplier": "TechParts Argentina"
+}
+
+###########################################################
+# MATERIA PRIMA 4 — BOMBA DE AGUA
+###########################################################
+
+### Crear bomba
+# @name createBomba
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Bomba de Agua",
+  "sku": "MP-BOMBA-AGU",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@bombaId = {{createBomba.response.body.id}}
+
+### Variante bomba
+# @name createBombaVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{bombaId}}",
+  "name": "Bomba 30L/min",
+  "sku": "MP-BOMBA-30L",
+  "active": true
+}
+
+###
+
+@bombaVariantId = {{createBombaVariant.response.body.id}}
+
+### Costo bomba
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{bombaVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 8700,
+  "supplier": "Hidráulica del Norte"
+}
+
+###########################################################
+# MATERIA PRIMA 5 — CARCASA PLÁSTICA
+###########################################################
+
+### Crear carcasa
+# @name createCarcasa
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Carcasa Plástica ABS",
+  "sku": "MP-CARCASA-ABS",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@carcasaId = {{createCarcasa.response.body.id}}
+
+### Variante carcasa
+# @name createCarcasaVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{carcasaId}}",
+  "name": "Carcasa Blanca 60cm",
+  "sku": "MP-CARC-BL60",
+  "active": true
+}
+
+###
+
+@carcasaVariantId = {{createCarcasaVariant.response.body.id}}
+
+### Costo carcasa
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{carcasaVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 9800,
+  "supplier": "Plásticos del Sur"
+}
+
+###########################################################
+# MATERIA PRIMA 6 — MANGUERAS
+###########################################################
+
+### Crear manguera
+# @name createManguera
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Manguera de Desagüe",
+  "sku": "MP-MANG-DES",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@mangueraId = {{createManguera.response.body.id}}
+
+### Variante manguera
+# @name createMangueraVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{mangueraId}}",
+  "name": "Manguera 1.5m",
+  "sku": "MP-MANG-15M",
+  "active": true
+}
+
+###
+
+@mangueraVariantId = {{createMangueraVariant.response.body.id}}
+
+### Costo manguera
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{mangueraVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 1200,
+  "supplier": "Cauchos SA"
+}
+
+###########################################################
+# SEMITERMINADO 1 — TAMBOR ENSAMBLADO
+# (chapa x3 + motor)
+###########################################################
+
+### Crear tambor
+# @name createTambor
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Tambor Ensamblado",
+  "sku": "ST-TAMBOR",
+  "product_type": "SEMI_FINISHED",
+  "cost_source": "BOM",
+  "is_composed": true,
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@tamborId = {{createTambor.response.body.id}}
+
+### Componente: chapa → tambor (3 chapas con 8% desperdicio)
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{tamborId}}",
+  "child_product_id": "{{chapaId}}",
+  "child_variant_id": "{{chapaVariantId}}",
+  "quantity": 3,
+  "waste_percentage": 8
+}
+
+###
+
+### Componente: motor → tambor (1 motor)
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{tamborId}}",
+  "child_product_id": "{{motorId}}",
+  "child_variant_id": "{{motorVariantId}}",
+  "quantity": 1
+}
+
+###########################################################
+# SEMITERMINADO 2 — SISTEMA HIDRÁULICO
+# (bomba x1 + manguera x2)
+###########################################################
+
+### Crear sistema hidráulico
+# @name createHidraulico
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Sistema Hidráulico",
+  "sku": "ST-HIDRAUL",
+  "product_type": "SEMI_FINISHED",
+  "cost_source": "BOM",
+  "is_composed": true,
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@hidraulicoId = {{createHidraulico.response.body.id}}
+
+### Componente: bomba → hidráulico
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{hidraulicoId}}",
+  "child_product_id": "{{bombaId}}",
+  "child_variant_id": "{{bombaVariantId}}",
+  "quantity": 1
+}
+
+###
+
+### Componente: manguera x2 → hidráulico
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{hidraulicoId}}",
+  "child_product_id": "{{mangueraId}}",
+  "child_variant_id": "{{mangueraVariantId}}",
+  "quantity": 2
+}
+
+###########################################################
+# PRODUCTO FINAL — LAVARROPAS 7KG
+###########################################################
+
+### Crear lavarropas
+# @name createLavarropas
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Lavarropas 7kg Carga Superior",
+  "sku": "LV-7KG-CS",
+  "product_type": "FINISHED_PRODUCT",
+  "cost_source": "ENGINEERING",
+  "has_engineering": true,
+  "is_composed": true,
+  "auto_calculate_cost": true,
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@lavarropasId = {{createLavarropas.response.body.id}}
+
+###########################################################
+# ÁRBOL DE INGENIERÍA — LAVARROPAS
+###########################################################
+
+### Componente: tambor ensamblado x1
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{lavarropasId}}",
+  "child_product_id": "{{tamborId}}",
+  "quantity": 1
+}
+
+###
+
+### Componente: sistema hidráulico x1
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{lavarropasId}}",
+  "child_product_id": "{{hidraulicoId}}",
+  "quantity": 1
+}
+
+###
+
+### Componente: panel de control x1
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{lavarropasId}}",
+  "child_product_id": "{{panelId}}",
+  "child_variant_id": "{{panelVariantId}}",
+  "quantity": 1
+}
+
+###
+
+### Componente: carcasa x1
+POST {{baseUrl}}/product-components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{lavarropasId}}",
+  "child_product_id": "{{carcasaId}}",
+  "child_variant_id": "{{carcasaVariantId}}",
+  "quantity": 1,
+  "waste_percentage": 3
+}
+
+###########################################################
+# TEMPLATES — MATERIAL + LABOR FIJO
+###########################################################
+
+### Crear componente Material (FROM_BOM)
+# @name createCompMaterial
+POST {{baseUrl}}/cost-templates/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Material",
+  "type": "MATERIAL",
+  "value_type": "FROM_BOM",
+  "order": 1
+}
+
+###
+
+@materialComponentId = {{createCompMaterial.response.body.id}}
+
+### Crear componente Labor fijo ensamblado lavarropas
+# @name createCompLabor
+POST {{baseUrl}}/cost-templates/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Mano de obra ensamblado",
+  "type": "LABOR",
+  "value_type": "FIXED_PER_UNIT",
+  "value": 22000,
+  "order": 2
+}
+
+###
+
+@laborComponentId = {{createCompLabor.response.body.id}}
+
+### Crear template Electrónica + Labor fijo
+# @name createTemplate
+POST {{baseUrl}}/cost-templates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Electrónica + Labor fijo",
+  "description": "Materiales desde ingeniería + mano de obra fija de ensamblado",
+  "is_default": false,
+  "components": [
+    {
+      "cost_component_id": "{{materialComponentId}}",
+      "order": 1
+    },
+    {
+      "cost_component_id": "{{laborComponentId}}",
+      "order": 2
+    }
+  ]
+}
+
+###
+
+@templateId = {{createTemplate.response.body.id}}
+
+### Asignar template al lavarropas
+POST {{baseUrl}}/cost-templates/{{templateId}}/products/{{lavarropasId}}
+Authorization: Bearer {{accessToken}}
+
+###########################################################
+# CALCULAR COSTO FINAL
+###########################################################
+
+### Calcular — Engineering + Labor fijo
+POST {{baseUrl}}/products/costing/calculate
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{lavarropasId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "save_snapshot": true
+}
+
+###########################################################
+# VERIFICAR RESULTADOS
+###########################################################
+
+### Historial de costos
+GET {{baseUrl}}/products/costing/{{lavarropasId}}/history
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Pareto consolidado (ver qué componente pesa más)
+GET {{baseUrl}}/products/costing/{{lavarropasId}}/pareto?currencyId={{usdCurrencyId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Árbol de ingeniería (sin costos, solo estructura)
+GET {{baseUrl}}/erp/engineering/tree/{{lavarropasId}}
+Authorization: Bearer {{accessToken}}

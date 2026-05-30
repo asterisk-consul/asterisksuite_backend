@@ -4,6 +4,9 @@ export interface CostBreakdownItem {
   variant_id?: string;
 
   product_name: string;
+  product_sku?: string | null;
+  variant_name?: string | null;
+  variant_sku?: string | null;
 
   quantity: number;
 

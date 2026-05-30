@@ -1,9 +1,8 @@
+// engineering.controller.ts
+
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-
 import { EngineeringService } from './engineering.service';
-
 import { CreateEngineeringComponentDto } from './dto/create-engineering-component.dto';
 
 @UseGuards(JwtAuthGuard)
@@ -21,6 +20,7 @@ export class EngineeringController {
     return this.engineeringService.getEngineeringTree(productId);
   }
 
+  // ← este ya existía, calcula solo materiales sin costo
   @Post('calculate/:productId')
   calculate(@Param('productId') productId: string) {
     return this.engineeringService.calculate(productId);

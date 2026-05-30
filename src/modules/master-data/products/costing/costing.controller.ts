@@ -1,6 +1,6 @@
 // src/modules/master-data/products/costing/costing.controller.ts
 
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 
 import { CostingService } from './costing.service';
 
@@ -9,6 +9,15 @@ import { CalculateProductCostDto } from './dto/calculate-product-cost.dto';
 @Controller('products/costing')
 export class CostingController {
   constructor(private readonly costingService: CostingService) {}
+  @Get(':productId/pareto')
+  getCostPareto(
+    @Param('productId') productId: string,
+    @Query('currencyId') currencyId: string,
+    @Query('mode')
+    mode: 'materials' | 'full' = 'materials',
+  ) {
+    return this.costingService.getCostPareto(productId, currencyId, mode);
+  }
 
   @Post('calculate')
   calculate(

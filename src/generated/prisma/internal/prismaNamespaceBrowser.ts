@@ -115,7 +115,10 @@ export const ModelName = {
   product_costs: 'product_costs',
   product_cost_breakdowns: 'product_cost_breakdowns',
   product_variant_prices: 'product_variant_prices',
-  product_variant_costs: 'product_variant_costs'
+  product_variant_costs: 'product_variant_costs',
+  cost_components: 'cost_components',
+  cost_templates: 'cost_templates',
+  cost_template_components: 'cost_template_components'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1014,6 +1017,7 @@ export const ProductsScalarFieldEnum = {
   cost_source: 'cost_source',
   needs_cost_recalculation: 'needs_cost_recalculation',
   last_cost_calculated_at: 'last_cost_calculated_at',
+  cost_template_id: 'cost_template_id',
   current_cost: 'current_cost'
 } as const
 
@@ -1213,7 +1217,9 @@ export const Product_costsScalarFieldEnum = {
   deleted_at: 'deleted_at',
   created_by: 'created_by',
   updated_by: 'updated_by',
-  deleted_by: 'deleted_by'
+  deleted_by: 'deleted_by',
+  cost_template_id: 'cost_template_id',
+  cost_rates_snapshot: 'cost_rates_snapshot'
 } as const
 
 export type Product_costsScalarFieldEnum = (typeof Product_costsScalarFieldEnum)[keyof typeof Product_costsScalarFieldEnum]
@@ -1266,6 +1272,51 @@ export const Product_variant_costsScalarFieldEnum = {
 } as const
 
 export type Product_variant_costsScalarFieldEnum = (typeof Product_variant_costsScalarFieldEnum)[keyof typeof Product_variant_costsScalarFieldEnum]
+
+
+export const Cost_componentsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  value_type: 'value_type',
+  value: 'value',
+  order: 'order',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Cost_componentsScalarFieldEnum = (typeof Cost_componentsScalarFieldEnum)[keyof typeof Cost_componentsScalarFieldEnum]
+
+
+export const Cost_templatesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_default: 'is_default',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Cost_templatesScalarFieldEnum = (typeof Cost_templatesScalarFieldEnum)[keyof typeof Cost_templatesScalarFieldEnum]
+
+
+export const Cost_template_componentsScalarFieldEnum = {
+  id: 'id',
+  template_id: 'template_id',
+  cost_component_id: 'cost_component_id',
+  value_override: 'value_override',
+  order: 'order'
+} as const
+
+export type Cost_template_componentsScalarFieldEnum = (typeof Cost_template_componentsScalarFieldEnum)[keyof typeof Cost_template_componentsScalarFieldEnum]
 
 
 export const SortOrder = {
