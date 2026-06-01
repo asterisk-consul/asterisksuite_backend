@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -11,12 +10,14 @@ export class EngineeringTreeService {
       where: {
         parent_product_id: productId,
         deleted_at: null,
+        active: true,
       },
       include: {
         child_product: true,
         child_variant: true,
         units: true,
       },
+      orderBy: { order: 'asc' }, // ← respeta el orden guardado
     });
 
     return Promise.all(

@@ -18,6 +18,31 @@ Content-Type: application/json
 @rateId = c2af6cb6-8520-45a7-95e6-b6e6cc583898
 @rateProductId = COMPLETAR-DESPUES-DE-CREAR
 
+PATCH {{baseUrl}}/erp/engineering/components/reorder
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "id": "691502ae-6bcf-494c-9fec-1ac965c1a215",
+      "order": 0
+    },
+    {
+      "id": "8cad792e-5897-47bc-90cc-630a92490f33",
+      "order": 1
+    },
+    {
+      "id": "b0aa7eb6-17df-4662-91fa-12f742e8ac55",
+      "order": 2
+    },
+    {
+      "id": "afaf9245-3161-4310-bc58-a4ad624761de",
+      "order": 3
+    }
+  ]
+}
+
 ### =====================================================
 ### Crear Producto simple (sin precio)
 ### =====================================================

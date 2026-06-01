@@ -40,6 +40,10 @@ export class CreateProductComponentDto {
   waste_percentage?: number;
 
   @IsOptional()
+  @IsNumber()
+  order?: number;
+
+  @IsOptional()
   @IsBoolean()
   active?: boolean = true;
 }

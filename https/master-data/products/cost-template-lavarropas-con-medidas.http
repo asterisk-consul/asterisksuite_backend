@@ -219,6 +219,10 @@ Content-Type: application/json
 # VER ÁRBOL DE INGENIERÍA
 ###########################################################
 
+### Tree sillon
+GET {{baseUrl}}/erp/engineering/tree/eaeee3d2-017a-44ad-aeee-f57d5294e541
+Authorization: Bearer {{accessToken}}
+
 ### Tree
 GET {{baseUrl}}/erp/engineering/tree/{{cabinetId}}
 Authorization: Bearer {{accessToken}}
@@ -333,6 +337,7 @@ Content-Type: application/json
 ###########################################################
 # ASIGNAR TEMPLATE
 ###########################################################
+
 
 ### Assign template
 POST {{baseUrl}}/cost-templates/{{templateId}}/products/{{cabinetId}}

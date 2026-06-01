@@ -33,6 +33,9 @@ export class CreateEngineeringComponentDto {
   @IsOptional()
   @IsNumber()
   waste_percentage?: number;
+  @IsOptional()
+  @IsNumber()
+  order?: number;
 
   @IsOptional()
   @IsBoolean()
