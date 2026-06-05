@@ -44,7 +44,8 @@ export const ProductType = {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SEMI_FINISHED: 'SEMI_FINISHED',
   FINISHED_PRODUCT: 'FINISHED_PRODUCT',
-  SERVICE: 'SERVICE'
+  SERVICE: 'SERVICE',
+  RATES: 'RATES'
 } as const
 
 export type ProductType = (typeof ProductType)[keyof typeof ProductType]

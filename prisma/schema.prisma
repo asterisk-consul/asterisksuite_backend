@@ -926,6 +926,7 @@ enum ProductType {
   SEMI_FINISHED
   FINISHED_PRODUCT
   SERVICE
+  RATES
 }
 
 enum UnitType {
