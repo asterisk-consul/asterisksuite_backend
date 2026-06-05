@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -27,9 +23,7 @@ export class ProductsService {
       });
 
       if (existing) {
-        throw new ConflictException(
-          `Ya existe un producto con SKU ${data.sku}`,
-        );
+        throw new ConflictException(`Ya existe un producto con SKU ${data.sku}`);
       }
     }
 
@@ -125,6 +119,22 @@ export class ProductsService {
         income_account: true,
         expense_account: true,
         inventory_account: true,
+
+        // ─────────────
+        // Costos
+        // ─────────────
+        product_costs: {
+          select: {
+            currencies: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+                symbol: true,
+              },
+            },
+          },
+        },
 
         // ─────────────
         // PRECIOS
@@ -303,9 +313,7 @@ export class ProductsService {
       });
 
       if (existing) {
-        throw new ConflictException(
-          `Ya existe otro producto con SKU ${data.sku}`,
-        );
+        throw new ConflictException(`Ya existe otro producto con SKU ${data.sku}`);
       }
     }
 
@@ -347,10 +355,7 @@ export class ProductsService {
     return this.findRootsRecursive(productId, visited);
   }
 
-  private async findRootsRecursive(
-    productId: string,
-    visited: Set<string>,
-  ): Promise<any[]> {
+  private async findRootsRecursive(productId: string, visited: Set<string>): Promise<any[]> {
     // evita loops
     if (visited.has(productId)) {
       return [];
@@ -389,17 +394,12 @@ export class ProductsService {
     let roots: any[] = [];
 
     for (const parent of parents) {
-      const parentRoots = await this.findRootsRecursive(
-        parent.parent_product_id,
-        visited,
-      );
+      const parentRoots = await this.findRootsRecursive(parent.parent_product_id, visited);
 
       roots.push(...parentRoots);
     }
 
     // unique roots
-    return roots.filter(
-      (root, index, arr) => arr.findIndex((x) => x.id === root.id) === index,
-    );
+    return roots.filter((root, index, arr) => arr.findIndex((x) => x.id === root.id) === index);
   }
 }
