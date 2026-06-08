@@ -67,6 +67,22 @@ export class ProductsService {
         },
 
         // ─────────────
+        // Costos
+        // ─────────────
+        product_costs: {
+          select: {
+            currencies: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+                symbol: true,
+              },
+            },
+          },
+        },
+
+        // ─────────────
         // CATEGORÍAS
         // ─────────────
 
