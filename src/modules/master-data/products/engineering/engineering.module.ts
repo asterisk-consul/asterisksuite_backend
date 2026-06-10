@@ -7,6 +7,7 @@ import { EngineeringService } from './engineering.service';
 import { EngineeringTreeService } from './engineering-tree.service';
 import { EngineeringCalculationService } from './engineering-calculation.service';
 import { EngineeringValidationService } from './engineering-validation.service';
+import { ProductStructureVersionService } from './product-structure-version.service';
 
 @Module({
   imports: [
@@ -14,7 +15,13 @@ import { EngineeringValidationService } from './engineering-validation.service';
     ProductComponentsModule, // ← importar para poder inyectar ProductComponentsService
   ],
   controllers: [EngineeringController],
-  providers: [EngineeringService, EngineeringTreeService, EngineeringCalculationService, EngineeringValidationService],
-  exports: [EngineeringService],
+  providers: [
+    EngineeringService,
+    EngineeringTreeService,
+    EngineeringCalculationService,
+    ProductStructureVersionService,
+    EngineeringValidationService,
+  ],
+  exports: [EngineeringService, ProductStructureVersionService],
 })
 export class EngineeringModule {}

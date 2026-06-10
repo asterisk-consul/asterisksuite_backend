@@ -3,10 +3,14 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateProductComponentDto } from './dto/create-product-component.dto';
 import { UpdateProductComponentDto } from './dto/update-product-component.dto';
+import { ProductStructureVersionService } from '../engineering/product-structure-version.service';
 
 @Injectable()
 export class ProductComponentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly productStructureVersionService: ProductStructureVersionService,
+  ) {}
 
   async create(data: CreateProductComponentDto) {
     if (data.parent_product_id === data.child_product_id) {
@@ -17,7 +21,7 @@ export class ProductComponentsService {
     await this.validateNoCircularReference(data.parent_product_id, data.child_product_id);
     await this.validateRelations(data);
 
-    return this.prisma.product_components.create({
+    const component = await this.prisma.product_components.create({
       data,
       include: {
         parent_product: true,
@@ -26,6 +30,10 @@ export class ProductComponentsService {
         units: true,
       },
     });
+
+    await this.productStructureVersionService.createVersion(component.parent_product_id);
+
+    return component;
   }
 
   async update(id: string, data: UpdateProductComponentDto) {
@@ -45,7 +53,7 @@ export class ProductComponentsService {
 
     await this.validateRelations({ ...existing, ...data });
 
-    return this.prisma.product_components.update({
+    const component = await this.prisma.product_components.update({
       where: { id },
       data,
       include: {
@@ -55,6 +63,10 @@ export class ProductComponentsService {
         units: true,
       },
     });
+
+    await this.productStructureVersionService.createVersion(component.parent_product_id);
+
+    return component;
   }
 
   // ─── resto de métodos sin cambios ────────────────────────────
@@ -77,11 +89,19 @@ export class ProductComponentsService {
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    return this.prisma.product_components.update({
+    const component = await this.findOne(id);
+
+    const deleted = await this.prisma.product_components.update({
       where: { id },
-      data: { deleted_at: new Date(), active: false },
+      data: {
+        deleted_at: new Date(),
+        active: false,
+      },
     });
+
+    await this.productStructureVersionService.createVersion(component.parent_product_id);
+
+    return deleted;
   }
 
   // ─── validación circular (extraída del EngineeringValidationService) ──────

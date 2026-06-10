@@ -6,6 +6,7 @@ import { EngineeringTreeService } from './engineering-tree.service';
 import { EngineeringCalculationService } from './engineering-calculation.service';
 
 import { CreateEngineeringComponentDto } from './dto/create-engineering-component.dto';
+import { ProductStructureVersionService } from './product-structure-version.service';
 
 @Injectable()
 export class EngineeringService {
@@ -14,6 +15,7 @@ export class EngineeringService {
     private readonly productComponentsService: ProductComponentsService, // ← inyectar
     private readonly engineeringTreeService: EngineeringTreeService,
     private readonly engineeringCalculationService: EngineeringCalculationService,
+    private readonly productStructureVersionService: ProductStructureVersionService,
   ) {}
 
   // =========================
@@ -66,7 +68,20 @@ export class EngineeringService {
         }),
       ),
     );
-    return { reordered: items.length };
+
+    const first = await this.prisma.product_components.findUnique({
+      where: {
+        id: items[0].id,
+      },
+    });
+
+    if (first) {
+      await this.productStructureVersionService.createVersion(first.parent_product_id);
+    }
+
+    return {
+      reordered: items.length,
+    };
   }
   // =========================
   // MOVE — cambia el padre del componente

@@ -1062,27 +1062,28 @@ model products {
   // RELACIONES 
   product_variants          product_variants[]
   //articulo raiz no solo el padre
-  parent_components         product_components[]        @relation("parent_product")
-  child_components          product_components[]        @relation("child_product")
+  parent_components         product_components[]         @relation("parent_product")
+  child_components          product_components[]         @relation("child_product")
   product_categories        product_categories[]
   product_tags              product_tags[]
   product_attribute_values  product_attribute_values[]
   //
-  current_cost              Decimal?                    @db.Decimal(15, 2)
-  income_account            accounts?                   @relation("product_income_account", fields: [income_account_id], references: [id])
-  expense_account           accounts?                   @relation("product_expense_account", fields: [expense_account_id], references: [id])
-  inventory_account         accounts?                   @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
+  current_cost              Decimal?                     @db.Decimal(15, 2)
+  income_account            accounts?                    @relation("product_income_account", fields: [income_account_id], references: [id])
+  expense_account           accounts?                    @relation("product_expense_account", fields: [expense_account_id], references: [id])
+  inventory_account         accounts?                    @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
   document_items            document_items[]
   pallet_items              pallet_items[]
   picking_items             picking_items[]
   product_price             product_price[]
   product_taxes             product_taxes[]
-  transfer_rate             transfer_rates?             @relation(fields: [rate_id], references: [id])
+  transfer_rate             transfer_rates?              @relation(fields: [rate_id], references: [id])
   warehouse_stock           warehouse_stock[]
   warehouse_stock_movements warehouse_stock_movements[]
   product_costs             product_costs[]
   productCostBreakdowns     product_cost_breakdowns[]
-  cost_template             cost_templates?             @relation(fields: [cost_template_id], references: [id])
+  cost_template             cost_templates?              @relation(fields: [cost_template_id], references: [id])
+  productStructureVersions  product_structure_versions[]
 }
 
 model units {
@@ -1447,4 +1448,21 @@ model cost_template_components {
 
   @@unique([template_id, cost_component_id])
   @@index([template_id])
+}
+
+model product_structure_versions {
+  id String @id @default(uuid()) @db.Uuid
+
+  product_id String @db.Uuid
+
+  version Int
+
+  snapshot Json
+
+  created_at DateTime @default(now())
+
+  product products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([product_id, version])
+  @@index([product_id])
 }

@@ -118,7 +118,8 @@ export const ModelName = {
   product_variant_costs: 'product_variant_costs',
   cost_components: 'cost_components',
   cost_templates: 'cost_templates',
-  cost_template_components: 'cost_template_components'
+  cost_template_components: 'cost_template_components',
+  product_structure_versions: 'product_structure_versions'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1322,6 +1323,17 @@ export const Cost_template_componentsScalarFieldEnum = {
 export type Cost_template_componentsScalarFieldEnum = (typeof Cost_template_componentsScalarFieldEnum)[keyof typeof Cost_template_componentsScalarFieldEnum]
 
 
+export const Product_structure_versionsScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  version: 'version',
+  snapshot: 'snapshot',
+  created_at: 'created_at'
+} as const
+
+export type Product_structure_versionsScalarFieldEnum = (typeof Product_structure_versionsScalarFieldEnum)[keyof typeof Product_structure_versionsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1336,6 +1348,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
