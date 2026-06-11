@@ -8,6 +8,9 @@ RUN npm install
 
 COPY prisma ./prisma
 COPY . .
+
+# DATABASE_URL dummy solo para que prisma generate pueda leer el config
+ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
 RUN npx prisma generate
 RUN npm run build
 
@@ -24,6 +27,7 @@ RUN npm install --only=production
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/src/generated ./src/generated
 
+ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
 RUN npx prisma generate
 
 COPY --from=builder /app/dist ./dist
