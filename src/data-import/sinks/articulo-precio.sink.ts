@@ -5,7 +5,7 @@ export class ArticuloPrecioSink implements Sink<any> {
   constructor(private prismaService: PrismaService) {}
 
   async send(data: any[]) {
-    const batchSize = 500;
+    const batchSize = 20;
 
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
