@@ -201,7 +201,7 @@ Authorization: Bearer {{accessToken}}
 ### Obtener Producto por ID
 ### =====================================================
 
-GET {{baseUrl}}/master-data/products/eaeee3d2-017a-44ad-aeee-f57d5294e541
+GET {{baseUrl}}/master-data/products/452714fe-1338-4598-bb6d-33656b2bf017
 Authorization: Bearer {{accessToken}}
 
 ###

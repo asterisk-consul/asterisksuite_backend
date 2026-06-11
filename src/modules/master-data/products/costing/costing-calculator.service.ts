@@ -30,9 +30,7 @@ export class CostingCalculatorService {
   // ─── Cálculo base de material (sin cambios) ───────────────────────────────
 
   calculateMaterialCost(breakdown: CostBreakdownItem[]): number {
-    return round2(
-      this.flatten(breakdown).reduce((acc, i) => acc + i.total_cost, 0),
-    );
+    return round2(this.flatten(breakdown).reduce((acc, i) => acc + i.total_cost, 0));
   }
 
   calculateEngineeringCost(breakdown: CostBreakdownItem[]): number {
@@ -45,10 +43,7 @@ export class CostingCalculatorService {
 
   // ─── Nuevo: cálculo por componentes de template ───────────────────────────
 
-  calculateFromComponents(
-    materialCost: number,
-    components: TemplateComponent[],
-  ): ComponentCostResult {
+  calculateFromComponents(materialCost: number, components: TemplateComponent[]): ComponentCostResult {
     let runningTotal = materialCost;
     let laborCost = 0;
     let overheadCost = 0;
@@ -67,10 +62,10 @@ export class CostingCalculatorService {
 
       switch (component.value_type) {
         case 'PERCENTAGE_OF_MATERIAL':
-          cost = round2(materialCost * rate);
+          cost = round2(materialCost * (rate / 100));
           break;
         case 'PERCENTAGE_OF_TOTAL':
-          cost = round2(runningTotal * rate);
+          cost = round2(runningTotal * (rate / 100));
           break;
         case 'FIXED_PER_UNIT':
           cost = round2(rate);
@@ -78,8 +73,7 @@ export class CostingCalculatorService {
       }
 
       if (component.type === 'LABOR') laborCost = round2(laborCost + cost);
-      if (component.type === 'OVERHEAD')
-        overheadCost = round2(overheadCost + cost);
+      if (component.type === 'OVERHEAD') overheadCost = round2(overheadCost + cost);
       if (component.type === 'OTHER') otherCost = round2(otherCost + cost);
 
       runningTotal = round2(runningTotal + cost);
