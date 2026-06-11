@@ -1237,6 +1237,7 @@ export const Product_cost_breakdownsScalarFieldEnum = {
   unit_cost: 'unit_cost',
   total_cost: 'total_cost',
   level: 'level',
+  parent_breakdown_id: 'parent_breakdown_id',
   created_at: 'created_at'
 } as const
 

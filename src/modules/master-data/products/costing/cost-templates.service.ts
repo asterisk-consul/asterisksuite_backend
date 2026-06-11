@@ -1,19 +1,11 @@
 // cost-templates.service.ts
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 export interface CreateCostComponentDto {
   name: string;
   type: 'MATERIAL' | 'LABOR' | 'OVERHEAD' | 'OTHER';
-  value_type:
-    | 'FROM_BOM'
-    | 'PERCENTAGE_OF_MATERIAL'
-    | 'PERCENTAGE_OF_TOTAL'
-    | 'FIXED_PER_UNIT';
+  value_type: 'FROM_BOM' | 'PERCENTAGE_OF_MATERIAL' | 'PERCENTAGE_OF_TOTAL' | 'FIXED_PER_UNIT';
   value?: number;
   order?: number;
 }
@@ -74,7 +66,6 @@ export class CostTemplatesService {
   async deleteComponent(id: string) {
     await this.findComponentOrFail(id);
 
-    // Soft delete
     return this.prisma.cost_components.update({
       where: { id },
       data: { deleted_at: new Date(), active: false },
@@ -112,7 +103,6 @@ export class CostTemplatesService {
   }
 
   async create(dto: CreateCostTemplateDto) {
-    // Si es default, quitar el default anterior
     if (dto.is_default) {
       await this.clearDefault();
     }
@@ -138,10 +128,7 @@ export class CostTemplatesService {
     });
   }
 
-  async update(
-    id: string,
-    dto: Partial<Omit<CreateCostTemplateDto, 'components'>>,
-  ) {
+  async update(id: string, dto: Partial<Omit<CreateCostTemplateDto, 'components'>>) {
     await this.findOne(id);
 
     if (dto.is_default) {
@@ -163,12 +150,9 @@ export class CostTemplatesService {
     const template = await this.findOne(id);
 
     if (template.is_default) {
-      throw new ConflictException(
-        'No se puede eliminar el template predeterminado',
-      );
+      throw new ConflictException('No se puede eliminar el template predeterminado');
     }
 
-    // Verificar si hay productos usando este template
     const productsCount = await this.prisma.products.count({
       where: { cost_template_id: id },
     });
@@ -187,10 +171,7 @@ export class CostTemplatesService {
 
   // ─── Componentes dentro de un template ───────────────────────────────────
 
-  async addComponent(
-    templateId: string,
-    dto: { cost_component_id: string; value_override?: number; order: number },
-  ) {
+  async addComponent(templateId: string, dto: { cost_component_id: string; value_override?: number; order: number }) {
     await this.findOne(templateId);
     await this.findComponentOrFail(dto.cost_component_id);
 
@@ -205,17 +186,13 @@ export class CostTemplatesService {
     });
   }
 
-  async updateTemplateComponent(
-    templateId: string,
-    componentId: string,
-    dto: UpdateTemplateComponentDto,
-  ) {
+  async updateTemplateComponent(templateId: string, componentId: string, dto: UpdateTemplateComponentDto) {
+    // componentId es el id de la fila en cost_template_components
     const tc = await this.prisma.cost_template_components.findFirst({
-      where: { template_id: templateId, cost_component_id: componentId },
+      where: { id: componentId, template_id: templateId },
     });
 
-    if (!tc)
-      throw new NotFoundException('Componente no encontrado en este template');
+    if (!tc) throw new NotFoundException('Componente no encontrado en este template');
 
     return this.prisma.cost_template_components.update({
       where: { id: tc.id },
@@ -225,12 +202,12 @@ export class CostTemplatesService {
   }
 
   async removeComponent(templateId: string, componentId: string) {
+    // componentId es el id de la fila en cost_template_components
     const tc = await this.prisma.cost_template_components.findFirst({
-      where: { template_id: templateId, cost_component_id: componentId },
+      where: { id: componentId, template_id: templateId },
     });
 
-    if (!tc)
-      throw new NotFoundException('Componente no encontrado en este template');
+    if (!tc) throw new NotFoundException('Componente no encontrado en este template');
 
     return this.prisma.cost_template_components.delete({
       where: { id: tc.id },
@@ -263,8 +240,7 @@ export class CostTemplatesService {
     const component = await this.prisma.cost_components.findFirst({
       where: { id, deleted_at: null },
     });
-    if (!component)
-      throw new NotFoundException('Componente de costo no encontrado');
+    if (!component) throw new NotFoundException('Componente de costo no encontrado');
     return component;
   }
 

@@ -2,11 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 import { CostingTreeService } from './costing-tree.service';
-import {
-  CostingCalculatorService,
-  TemplateComponent,
-} from './costing-calculator.service';
-import { CostingHistoryService } from './costing-history.service';
+import { CostingCalculatorService, TemplateComponent } from './costing-calculator.service';
+import { CostingHistoryService, BreakdownInput } from './costing-history.service';
 
 import { BomCostStrategy } from './strategies/bom-cost.strategy';
 import { EngineeringCostStrategy } from './strategies/engineering-cost.strategy';
@@ -16,16 +13,11 @@ import { RateCostStrategy } from './strategies/rate-cost.strategy';
 
 import { CalculatedCost } from './interfaces/calculated-cost.interface';
 import { CostStrategyOptions } from './interfaces/cost-strategy.interface';
-import {
-  CostParetoResult,
-  ParetoItem,
-} from './interfaces/cost-pareto.interface';
+import { CostBreakdownItem } from './interfaces/cost-breakdown.interface';
+import { CostParetoResult, ParetoItem } from './interfaces/cost-pareto.interface';
 import { round2 } from './utils/costing.utils';
 
-import {
-  cost_components,
-  cost_template_components,
-} from '@/generated/prisma/client';
+import { cost_components, cost_template_components } from '@/generated/prisma/client';
 
 type PrismaTemplateComponent = cost_template_components & {
   component: cost_components;
@@ -49,31 +41,34 @@ export class CostingService {
   // MAPPERS
   // ─────────────────────────────────────────────────────────────
 
-  private mapTemplateComponent(
-    item: PrismaTemplateComponent,
-  ): TemplateComponent {
+  private mapTemplateComponent(item: PrismaTemplateComponent): TemplateComponent {
     return {
       ...item,
-      value_override:
-        item.value_override !== null ? Number(item.value_override) : null,
+      value_override: item.value_override !== null ? Number(item.value_override) : null,
       component: {
         ...item.component,
-        value:
-          item.component.value !== null ? Number(item.component.value) : null,
+        value: item.component.value !== null ? Number(item.component.value) : null,
       },
     };
+  }
+
+  private mapBreakdownToInput(items: CostBreakdownItem[]): BreakdownInput[] {
+    return items.map((item) => ({
+      component_product_id: item.product_id,
+      component_variant_id: item.variant_id,
+      quantity: item.quantity,
+      unit_cost: item.unit_cost,
+      total_cost: item.total_cost,
+      level: item.level,
+      children: item.children?.length ? this.mapBreakdownToInput(item.children) : undefined,
+    }));
   }
 
   // ─────────────────────────────────────────────────────────────
   // CALCULATE
   // ─────────────────────────────────────────────────────────────
 
-  async calculateProductCost(
-    productId: string,
-    currencyId: string,
-    saveSnapshot = true,
-  ): Promise<CalculatedCost> {
-    // 1. Cargar producto + template
+  async calculateProductCost(productId: string, currencyId: string, saveSnapshot = true): Promise<CalculatedCost> {
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
       include: {
@@ -90,19 +85,12 @@ export class CostingService {
 
     if (!product) throw new NotFoundException('Producto no encontrado');
 
-    // 2. Resolver template
-    const rawComponents =
-      product.cost_template?.components ??
-      (await this.getRawDefaultTemplateComponents());
+    const rawComponents = product.cost_template?.components ?? (await this.getRawDefaultTemplateComponents());
 
-    const templateComponents: TemplateComponent[] = rawComponents.map((item) =>
-      this.mapTemplateComponent(item),
-    );
+    const templateComponents: TemplateComponent[] = rawComponents.map((item) => this.mapTemplateComponent(item));
 
-    const costTemplateId =
-      product.cost_template_id ?? (await this.getDefaultTemplateId());
+    const costTemplateId = product.cost_template_id ?? (await this.getDefaultTemplateId());
 
-    // 3. Armar opciones para la estrategia
     const options: CostStrategyOptions = {
       productId,
       currencyId,
@@ -110,7 +98,6 @@ export class CostingService {
       costTemplateId,
     };
 
-    // 4. Delegar en la estrategia correcta
     let result: CalculatedCost;
 
     switch (product.cost_source) {
@@ -132,10 +119,9 @@ export class CostingService {
         break;
     }
 
-    // 5. Guardar snapshot
     if (saveSnapshot) {
-      const flat = this.treeService.flattenTree(result.breakdown);
-
+      // Pasar el árbol jerárquico directamente — el history service
+      // se encarga de insertar con parent_breakdown_id
       await this.historyService.saveSnapshot({
         product_id: productId,
         currency_id: currencyId,
@@ -146,14 +132,7 @@ export class CostingService {
         total_cost: result.total_cost,
         cost_template_id: costTemplateId,
         cost_rates_snapshot: result.rates_snapshot,
-        breakdown: flat.map((item) => ({
-          component_product_id: item.product_id,
-          component_variant_id: item.variant_id,
-          quantity: item.quantity,
-          unit_cost: item.unit_cost,
-          total_cost: item.total_cost,
-          level: item.level,
-        })),
+        breakdown: this.mapBreakdownToInput(result.breakdown),
       });
 
       await this.prisma.products.update({
@@ -176,22 +155,16 @@ export class CostingService {
   async getCostPareto(
     productId: string,
     currencyId: string,
-    mode: 'materials' | 'full' = 'materials',
+    mode: 'materials' | 'assemblies' | 'full' = 'materials',
   ): Promise<CostParetoResult> {
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
-
       include: {
         cost_template: {
           include: {
             components: {
-              include: {
-                component: true,
-              },
-
-              orderBy: {
-                order: 'asc',
-              },
+              include: { component: true },
+              orderBy: { order: 'asc' },
             },
           },
         },
@@ -202,166 +175,141 @@ export class CostingService {
       throw new NotFoundException('Producto no encontrado');
     }
 
-    // ─────────────────────────────────────────────
-    // MATERIALES
-    // ─────────────────────────────────────────────
-
     const breakdown = await this.treeService.buildTree(productId, currencyId);
 
-    const consolidated = this.treeService.consolidateTree(breakdown);
-
-    const items: ParetoItem[] = Array.from(
-      consolidated.values(),
-    ) as ParetoItem[];
-
     // ─────────────────────────────────────────────
-    // FULL MODE
+    // ASSEMBLIES — solo semi-terminados (level 0 con hijos)
     // ─────────────────────────────────────────────
 
-    if (mode === 'full') {
-      const materialCost = round2(
-        items.reduce((acc, item) => acc + item.total_cost, 0),
-      );
-
-      // MAPEAR DECIMAL → NUMBER
-      const templateComponents: TemplateComponent[] = (
-        product.cost_template?.components ?? []
-      ).map((item) => ({
-        ...item,
-
-        value_override:
-          item.value_override !== null ? Number(item.value_override) : null,
-
-        component: {
-          ...item.component,
-
-          value:
-            item.component.value !== null ? Number(item.component.value) : null,
-        },
-      }));
-
-      const calculated = this.calculatorService.calculateFromComponents(
-        materialCost,
-        templateComponents,
-      );
-
-      // ─────────────────────────────────────────
-      // LABOR
-      // ─────────────────────────────────────────
-
-      if (calculated.labor_cost > 0) {
-        items.push({
-          product_id: 'LABOR',
-          variant_id: null,
-
-          product_name: 'Mano de Obra',
-          product_sku: null,
-
-          variant_name: null,
-          variant_sku: null,
-
-          total_quantity: 1,
-
-          total_cost: calculated.labor_cost,
-
+    if (mode === 'assemblies') {
+      const assemblyItems: ParetoItem[] = breakdown
+        .filter((node) => node.children?.length)
+        .map((node) => ({
+          product_id: node.product_id,
+          variant_id: node.variant_id ?? null,
+          product_name: node.product_name,
+          product_sku: node.product_sku ?? null,
+          variant_name: node.variant_name ?? null,
+          variant_sku: node.variant_sku ?? null,
+          total_quantity: node.quantity,
+          total_cost: node.total_cost,
           occurrences: 1,
-
-          cost_source: 'LABOR',
-
+          cost_source: 'SEMI_FINISHED',
           percentage: 0,
           cumulative: 0,
           is_vital: false,
-        });
-      }
+        }));
 
-      // ─────────────────────────────────────────
-      // OVERHEAD
-      // ─────────────────────────────────────────
-
-      if (calculated.overhead_cost > 0) {
-        items.push({
-          product_id: 'OVERHEAD',
-          variant_id: null,
-
-          product_name: 'Costos Indirectos',
-          product_sku: null,
-
-          variant_name: null,
-          variant_sku: null,
-
-          total_quantity: 1,
-
-          total_cost: calculated.overhead_cost,
-
-          occurrences: 1,
-
-          cost_source: 'OVERHEAD',
-
-          percentage: 0,
-          cumulative: 0,
-          is_vital: false,
-        });
-      }
-
-      // ─────────────────────────────────────────
-      // OTHER
-      // ─────────────────────────────────────────
-
-      if (calculated.other_cost > 0) {
-        items.push({
-          product_id: 'OTHER',
-          variant_id: null,
-
-          product_name: 'Otros Costos',
-          product_sku: null,
-
-          variant_name: null,
-          variant_sku: null,
-
-          total_quantity: 1,
-
-          total_cost: calculated.other_cost,
-
-          occurrences: 1,
-
-          cost_source: 'OTHER',
-
-          percentage: 0,
-          cumulative: 0,
-          is_vital: false,
-        });
-      }
+      return this.buildParetoResult(productId, currencyId, assemblyItems);
     }
 
     // ─────────────────────────────────────────────
-    // SORT
+    // MATERIALS — solo hojas consolidadas
     // ─────────────────────────────────────────────
 
-    const sorted = items.sort((a, b) => b.total_cost - a.total_cost);
+    const consolidatedLeaves = this.treeService.consolidateTree(breakdown);
+    const leafItems: ParetoItem[] = Array.from(consolidatedLeaves.values()) as ParetoItem[];
 
-    const totalCost = round2(
-      sorted.reduce((acc, item) => acc + item.total_cost, 0),
-    );
+    if (mode === 'materials') {
+      return this.buildParetoResult(productId, currencyId, leafItems);
+    }
 
     // ─────────────────────────────────────────────
-    // PERCENTAGES
+    // FULL — materiales + labor/overhead/otros
     // ─────────────────────────────────────────────
+
+    const materialCost = round2(leafItems.reduce((acc, item) => acc + item.total_cost, 0));
+
+    const templateComponents: TemplateComponent[] = (product.cost_template?.components ?? []).map((item) => ({
+      ...item,
+      value_override: item.value_override !== null ? Number(item.value_override) : null,
+      component: {
+        ...item.component,
+        value: item.component.value !== null ? Number(item.component.value) : null,
+      },
+    }));
+
+    const calculated = this.calculatorService.calculateFromComponents(materialCost, templateComponents);
+
+    const fullItems: ParetoItem[] = [...leafItems];
+
+    if (calculated.labor_cost > 0) {
+      fullItems.push({
+        product_id: 'LABOR',
+        variant_id: null,
+        product_name: 'Mano de Obra',
+        product_sku: null,
+        variant_name: null,
+        variant_sku: null,
+        total_quantity: 1,
+        total_cost: calculated.labor_cost,
+        occurrences: 1,
+        cost_source: 'LABOR',
+        percentage: 0,
+        cumulative: 0,
+        is_vital: false,
+      });
+    }
+
+    if (calculated.overhead_cost > 0) {
+      fullItems.push({
+        product_id: 'OVERHEAD',
+        variant_id: null,
+        product_name: 'Costos Indirectos',
+        product_sku: null,
+        variant_name: null,
+        variant_sku: null,
+        total_quantity: 1,
+        total_cost: calculated.overhead_cost,
+        occurrences: 1,
+        cost_source: 'OVERHEAD',
+        percentage: 0,
+        cumulative: 0,
+        is_vital: false,
+      });
+    }
+
+    if (calculated.other_cost > 0) {
+      fullItems.push({
+        product_id: 'OTHER',
+        variant_id: null,
+        product_name: 'Otros Costos',
+        product_sku: null,
+        variant_name: null,
+        variant_sku: null,
+        total_quantity: 1,
+        total_cost: calculated.other_cost,
+        occurrences: 1,
+        cost_source: 'OTHER',
+        percentage: 0,
+        cumulative: 0,
+        is_vital: false,
+      });
+    }
+
+    return this.buildParetoResult(productId, currencyId, fullItems);
+  }
+
+  // ─────────────────────────────────────────────
+  // HELPER — calcular porcentajes y acumulado
+  // ─────────────────────────────────────────────
+
+  private buildParetoResult(productId: string, currencyId: string, items: ParetoItem[]): CostParetoResult {
+    const sorted = [...items].sort((a, b) => b.total_cost - a.total_cost);
+
+    const totalCost = round2(sorted.reduce((acc, item) => acc + item.total_cost, 0));
 
     let cumulative = 0;
 
     const finalItems: ParetoItem[] = sorted.map((item) => {
-      const percentage =
-        totalCost > 0 ? round2((item.total_cost / totalCost) * 100) : 0;
+      const percentage = totalCost > 0 ? round2((item.total_cost / totalCost) * 100) : 0;
 
       cumulative = round2(cumulative + percentage);
 
       return {
         ...item,
-
         percentage,
-
         cumulative,
-
         is_vital: cumulative <= 80,
       };
     });
@@ -370,19 +318,11 @@ export class CostingService {
 
     return {
       product_id: productId,
-
       currency_id: currencyId,
-
       total_cost: totalCost,
-
       items: finalItems,
-
       vital_items_count: vitalItems.length,
-
-      vital_items_percentage:
-        finalItems.length > 0
-          ? round2((vitalItems.length / finalItems.length) * 100)
-          : 0,
+      vital_items_percentage: finalItems.length > 0 ? round2((vitalItems.length / finalItems.length) * 100) : 0,
     };
   }
 
@@ -391,29 +331,42 @@ export class CostingService {
   // ─────────────────────────────────────────────────────────────
 
   async getCostHistory(productId: string) {
-    return this.prisma.product_costs.findMany({
+    const snapshots = await this.prisma.product_costs.findMany({
       where: { product_id: productId },
       orderBy: { created_at: 'desc' },
       include: {
         breakdowns: {
+          where: { parent_breakdown_id: null }, // solo raíces
           include: {
             component_product: { select: { name: true, sku: true } },
             component_variant: { select: { name: true, sku: true } },
+            children: {
+              include: {
+                component_product: { select: { name: true, sku: true } },
+                component_variant: { select: { name: true, sku: true } },
+                children: {
+                  include: {
+                    component_product: { select: { name: true, sku: true } },
+                    component_variant: { select: { name: true, sku: true } },
+                  },
+                },
+              },
+            },
           },
         },
         currencies: true,
         products: { select: { name: true, sku: true } },
       },
     });
+
+    return snapshots;
   }
 
   // ─────────────────────────────────────────────────────────────
   // DEFAULT TEMPLATE
   // ─────────────────────────────────────────────────────────────
 
-  private async getRawDefaultTemplateComponents(): Promise<
-    PrismaTemplateComponent[]
-  > {
+  private async getRawDefaultTemplateComponents(): Promise<PrismaTemplateComponent[]> {
     const template = await this.prisma.cost_templates.findFirst({
       where: { is_default: true, active: true },
       include: {
