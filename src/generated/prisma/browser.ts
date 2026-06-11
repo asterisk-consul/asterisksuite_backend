@@ -357,3 +357,8 @@ export type cost_templates = Prisma.cost_templatesModel
  * 
  */
 export type cost_template_components = Prisma.cost_template_componentsModel
+/**
+ * Model product_structure_versions
+ * 
+ */
+export type product_structure_versions = Prisma.product_structure_versionsModel

@@ -71,6 +71,7 @@ export class ProductsService {
         // ─────────────
         product_costs: {
           select: {
+            total_cost: true,
             currencies: {
               select: {
                 id: true,
@@ -141,6 +142,7 @@ export class ProductsService {
         // ─────────────
         product_costs: {
           select: {
+            total_cost: true,
             currencies: {
               select: {
                 id: true,
