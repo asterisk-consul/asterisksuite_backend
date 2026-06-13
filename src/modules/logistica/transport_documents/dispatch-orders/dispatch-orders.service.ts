@@ -9,7 +9,12 @@ import { DispatchStatus, TripStatus } from '@/generated/prisma/enums'; // ← ag
 
 @Injectable()
 export class DispatchOrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(dto: CreateDispatchOrderDto, userId: string) {
     const order = await this.prisma.dispatch_orders.create({

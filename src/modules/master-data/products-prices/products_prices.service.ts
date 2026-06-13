@@ -34,7 +34,12 @@ export interface ResolvedItem {
 
 @Injectable()
 export class ProductPriceService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // ─────────────────────────────────────────────
   // CREATE

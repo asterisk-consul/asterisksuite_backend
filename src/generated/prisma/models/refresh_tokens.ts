@@ -403,6 +403,10 @@ export type refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput = {
   deleteMany?: Prisma.refresh_tokensScalarWhereInput | Prisma.refresh_tokensScalarWhereInput[]
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type refresh_tokensCreateWithoutUsersInput = {
   id?: string
   token_hash: string

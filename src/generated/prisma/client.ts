@@ -29,8 +29,8 @@ export * from "./enums.js"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Business_parties
- * const business_parties = await prisma.business_parties.findMany()
+ * // Fetch zero or more Companies
+ * const companies = await prisma.companies.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,26 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model companies
+ * 
+ */
+export type companies = Prisma.companiesModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel
+/**
+ * Model company_users
+ * 
+ */
+export type company_users = Prisma.company_usersModel
+/**
+ * Model refresh_tokens
+ * 
+ */
+export type refresh_tokens = Prisma.refresh_tokensModel
 /**
  * Model business_parties
  * 
@@ -54,11 +74,6 @@ export type cargo_transfer_items = Prisma.cargo_transfer_itemsModel
  * 
  */
 export type cargo_transfers = Prisma.cargo_transfersModel
-/**
- * Model companies
- * 
- */
-export type companies = Prisma.companiesModel
 /**
  * Model delivery_notes
  * 
@@ -175,11 +190,6 @@ export type corridors = Prisma.corridorsModel
  */
 export type corridor_stops = Prisma.corridor_stopsModel
 /**
- * Model users
- * 
- */
-export type users = Prisma.usersModel
-/**
  * Model vehicles
  * 
  */
@@ -209,11 +219,6 @@ export type warehouses = Prisma.warehousesModel
  * 
  */
 export type document_sequences = Prisma.document_sequencesModel
-/**
- * Model refresh_tokens
- * 
- */
-export type refresh_tokens = Prisma.refresh_tokensModel
 /**
  * Model transport_document_types
  * 

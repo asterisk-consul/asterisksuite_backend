@@ -56,9 +56,14 @@ export class DocumentsSalesService {
   private readonly SALE_CODES = ['VEN', 'NCV', 'NDV'];
 
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private productPriceService: ProductPriceService,
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // ─── Taxes del tipo de documento ─────────────────────────────────────────
   private async loadDocTypeTaxes(

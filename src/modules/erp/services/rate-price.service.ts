@@ -4,8 +4,12 @@ import { DispatchStatus, TripStatus } from '@/generated/prisma/enums';
 
 @Injectable()
 export class RatePriceService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
 
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
   /**
    * Último precio cobrado para una tarifa a un cliente específico
    * en despachos y viajes COMPLETED

@@ -35,7 +35,12 @@ export class VentasTransformer implements Transformer<
   FacturaVentaRaw,
   VentasTransformado
 > {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async transform(documents: FacturaVentaRaw[]): Promise<VentasTransformado[]> {
     const resultado: VentasTransformado[] = [];

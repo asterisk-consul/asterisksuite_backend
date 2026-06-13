@@ -4,7 +4,12 @@ import { CreateFileDto } from './dto/create-file.dto';
 
 @Injectable()
 export class FilesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   create(dto: CreateFileDto) {
     return this.prisma.files.create({

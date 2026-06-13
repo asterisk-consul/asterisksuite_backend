@@ -6,7 +6,12 @@ import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class LocationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(dto: CreateLocationDto) {
     return this.prisma.locations.create({

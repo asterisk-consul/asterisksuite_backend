@@ -5,7 +5,12 @@ import { UpdateTransferRateDto } from './dto/update-transfer-rate.dto';
 
 @Injectable()
 export class TransferRatesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   create(data: CreateTransferRateDto) {
     return this.prisma.transfer_rates.create({

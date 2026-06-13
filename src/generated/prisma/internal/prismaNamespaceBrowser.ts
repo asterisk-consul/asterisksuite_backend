@@ -51,10 +51,13 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  companies: 'companies',
+  users: 'users',
+  company_users: 'company_users',
+  refresh_tokens: 'refresh_tokens',
   business_parties: 'business_parties',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
-  companies: 'companies',
   delivery_notes: 'delivery_notes',
   drivers: 'drivers',
   entity_photos: 'entity_photos',
@@ -78,14 +81,12 @@ export const ModelName = {
   trip_stop_orders: 'trip_stop_orders',
   corridors: 'corridors',
   corridor_stops: 'corridor_stops',
-  users: 'users',
   vehicles: 'vehicles',
   vehicle_combinations: 'vehicle_combinations',
   warehouse_stock: 'warehouse_stock',
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
   document_sequences: 'document_sequences',
-  refresh_tokens: 'refresh_tokens',
   transport_document_types: 'transport_document_types',
   documents_vehicle: 'documents_vehicle',
   documents_driver: 'documents_driver',
@@ -116,6 +117,64 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const CompaniesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  tax_id: 'tax_id',
+  phone: 'phone',
+  subdomain: 'subdomain',
+  schema_name: 'schema_name',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password_hash: 'password_hash',
+  role: 'role',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const Company_usersScalarFieldEnum = {
+  company_id: 'company_id',
+  user_id: 'user_id',
+  role: 'role'
+} as const
+
+export type Company_usersScalarFieldEnum = (typeof Company_usersScalarFieldEnum)[keyof typeof Company_usersScalarFieldEnum]
+
+
+export const Refresh_tokensScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  token_hash: 'token_hash',
+  expires_at: 'expires_at',
+  revoked: 'revoked',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at'
+} as const
+
+export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
 
 
 export const Business_partiesScalarFieldEnum = {
@@ -158,22 +217,6 @@ export const Cargo_transfersScalarFieldEnum = {
 } as const
 
 export type Cargo_transfersScalarFieldEnum = (typeof Cargo_transfersScalarFieldEnum)[keyof typeof Cargo_transfersScalarFieldEnum]
-
-
-export const CompaniesScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  tax_id: 'tax_id',
-  phone: 'phone',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  deleted_at: 'deleted_at',
-  created_by: 'created_by',
-  updated_by: 'updated_by',
-  deleted_by: 'deleted_by'
-} as const
-
-export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
 
 
 export const Delivery_notesScalarFieldEnum = {
@@ -560,24 +603,6 @@ export const Corridor_stopsScalarFieldEnum = {
 export type Corridor_stopsScalarFieldEnum = (typeof Corridor_stopsScalarFieldEnum)[keyof typeof Corridor_stopsScalarFieldEnum]
 
 
-export const UsersScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  password_hash: 'password_hash',
-  role: 'role',
-  active: 'active',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  deleted_at: 'deleted_at',
-  created_by: 'created_by',
-  updated_by: 'updated_by',
-  deleted_by: 'deleted_by'
-} as const
-
-export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
-
-
 export const VehiclesScalarFieldEnum = {
   id: 'id',
   type: 'type',
@@ -693,19 +718,6 @@ export const Document_sequencesScalarFieldEnum = {
 } as const
 
 export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
-
-
-export const Refresh_tokensScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  token_hash: 'token_hash',
-  expires_at: 'expires_at',
-  revoked: 'revoked',
-  revoked_at: 'revoked_at',
-  created_at: 'created_at'
-} as const
-
-export type Refresh_tokensScalarFieldEnum = (typeof Refresh_tokensScalarFieldEnum)[keyof typeof Refresh_tokensScalarFieldEnum]
 
 
 export const Transport_document_typesScalarFieldEnum = {

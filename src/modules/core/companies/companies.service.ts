@@ -5,14 +5,30 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Injectable()
 export class CompaniesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
 
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getDefaultClient();
+  }
   async create(createCompanyDto: CreateCompanyDto) {
+    const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
+    const schemaName =
+      createCompanyDto.schemaName?.toLowerCase().trim() || subdomain;
+
+    if (schemaName) {
+      await this.prisma.$executeRawUnsafe(
+        `CREATE SCHEMA IF NOT EXISTS "${schemaName}"`,
+      );
+    }
+
     return this.prisma.companies.create({
       data: {
         name: createCompanyDto.name,
         tax_id: createCompanyDto.taxId,
         phone: createCompanyDto.phone,
+        subdomain,
+        schema_name: schemaName,
       },
     });
   }
@@ -43,12 +59,24 @@ export class CompaniesService {
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
     await this.findOne(id);
 
+    const subdomain = updateCompanyDto.subdomain?.toLowerCase().trim();
+    const schemaName =
+      updateCompanyDto.schemaName?.toLowerCase().trim() || subdomain;
+
+    if (schemaName) {
+      await this.prisma.$executeRawUnsafe(
+        `CREATE SCHEMA IF NOT EXISTS "${schemaName}"`,
+      );
+    }
+
     return this.prisma.companies.update({
       where: { id },
       data: {
         name: updateCompanyDto.name,
         tax_id: updateCompanyDto.taxId,
         phone: updateCompanyDto.phone,
+        ...(subdomain !== undefined ? { subdomain } : {}),
+        ...(schemaName !== undefined ? { schema_name: schemaName } : {}),
       },
     });
   }

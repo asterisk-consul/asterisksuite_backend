@@ -415,6 +415,16 @@ export type palletsUncheckedUpdateManyInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type PalletsListRelationFilter = {
+  every?: Prisma.palletsWhereInput
+  some?: Prisma.palletsWhereInput
+  none?: Prisma.palletsWhereInput
+}
+
+export type palletsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type PalletsNullableScalarRelationFilter = {
   is?: Prisma.palletsWhereInput | null
   isNot?: Prisma.palletsWhereInput | null
@@ -464,14 +474,46 @@ export type palletsMinOrderByAggregateInput = {
   deleted_by?: Prisma.SortOrder
 }
 
-export type PalletsListRelationFilter = {
-  every?: Prisma.palletsWhereInput
-  some?: Prisma.palletsWhereInput
-  none?: Prisma.palletsWhereInput
+export type palletsCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
 }
 
-export type palletsOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type palletsUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+}
+
+export type palletsUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+}
+
+export type palletsUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
 }
 
 export type palletsCreateNestedOneWithoutCargo_transfer_itemsInput = {
@@ -548,48 +590,6 @@ export type palletsUpdateOneWithoutTrip_cargoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.palletsUpdateToOneWithWhereWithoutTrip_cargoInput, Prisma.palletsUpdateWithoutTrip_cargoInput>, Prisma.palletsUncheckedUpdateWithoutTrip_cargoInput>
 }
 
-export type palletsCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-}
-
-export type palletsUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-}
-
-export type palletsUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
-}
-
-export type palletsUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
-}
-
 export type palletsCreateNestedManyWithoutWarehousesInput = {
   create?: Prisma.XOR<Prisma.palletsCreateWithoutWarehousesInput, Prisma.palletsUncheckedCreateWithoutWarehousesInput> | Prisma.palletsCreateWithoutWarehousesInput[] | Prisma.palletsUncheckedCreateWithoutWarehousesInput[]
   connectOrCreate?: Prisma.palletsCreateOrConnectWithoutWarehousesInput | Prisma.palletsCreateOrConnectWithoutWarehousesInput[]
@@ -630,6 +630,82 @@ export type palletsUncheckedUpdateManyWithoutWarehousesNestedInput = {
   update?: Prisma.palletsUpdateWithWhereUniqueWithoutWarehousesInput | Prisma.palletsUpdateWithWhereUniqueWithoutWarehousesInput[]
   updateMany?: Prisma.palletsUpdateManyWithWhereWithoutWarehousesInput | Prisma.palletsUpdateManyWithWhereWithoutWarehousesInput[]
   deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+}
+
+export type palletsCreateWithoutUsersInput = {
+  id?: string
+  code: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
+  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsUncheckedCreateWithoutUsersInput = {
+  id?: string
+  code: string
+  warehouse_id?: string | null
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsCreateOrConnectWithoutUsersInput = {
+  where: Prisma.palletsWhereUniqueInput
+  create: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput>
+}
+
+export type palletsCreateManyUsersInputEnvelope = {
+  data: Prisma.palletsCreateManyUsersInput | Prisma.palletsCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type palletsUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.palletsWhereUniqueInput
+  update: Prisma.XOR<Prisma.palletsUpdateWithoutUsersInput, Prisma.palletsUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput>
+}
+
+export type palletsUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.palletsWhereUniqueInput
+  data: Prisma.XOR<Prisma.palletsUpdateWithoutUsersInput, Prisma.palletsUncheckedUpdateWithoutUsersInput>
+}
+
+export type palletsUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.palletsScalarWhereInput
+  data: Prisma.XOR<Prisma.palletsUpdateManyMutationInput, Prisma.palletsUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type palletsScalarWhereInput = {
+  AND?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+  OR?: Prisma.palletsScalarWhereInput[]
+  NOT?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"pallets"> | string
+  code?: Prisma.StringFilter<"pallets"> | string
+  warehouse_id?: Prisma.UuidNullableFilter<"pallets"> | string | null
+  status?: Prisma.StringFilter<"pallets"> | string
+  created_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
 }
 
 export type palletsCreateWithoutCargo_transfer_itemsInput = {
@@ -1050,82 +1126,6 @@ export type palletsUncheckedUpdateWithoutTrip_cargoInput = {
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
   picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
   picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsCreateWithoutUsersInput = {
-  id?: string
-  code: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
-  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsUncheckedCreateWithoutUsersInput = {
-  id?: string
-  code: string
-  warehouse_id?: string | null
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsCreateOrConnectWithoutUsersInput = {
-  where: Prisma.palletsWhereUniqueInput
-  create: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput>
-}
-
-export type palletsCreateManyUsersInputEnvelope = {
-  data: Prisma.palletsCreateManyUsersInput | Prisma.palletsCreateManyUsersInput[]
-  skipDuplicates?: boolean
-}
-
-export type palletsUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.palletsWhereUniqueInput
-  update: Prisma.XOR<Prisma.palletsUpdateWithoutUsersInput, Prisma.palletsUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput>
-}
-
-export type palletsUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.palletsWhereUniqueInput
-  data: Prisma.XOR<Prisma.palletsUpdateWithoutUsersInput, Prisma.palletsUncheckedUpdateWithoutUsersInput>
-}
-
-export type palletsUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.palletsScalarWhereInput
-  data: Prisma.XOR<Prisma.palletsUpdateManyMutationInput, Prisma.palletsUncheckedUpdateManyWithoutUsersInput>
-}
-
-export type palletsScalarWhereInput = {
-  AND?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
-  OR?: Prisma.palletsScalarWhereInput[]
-  NOT?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"pallets"> | string
-  code?: Prisma.StringFilter<"pallets"> | string
-  warehouse_id?: Prisma.UuidNullableFilter<"pallets"> | string | null
-  status?: Prisma.StringFilter<"pallets"> | string
-  created_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
 }
 
 export type palletsCreateWithoutWarehousesInput = {

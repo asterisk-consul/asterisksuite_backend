@@ -29,6 +29,8 @@ export type CompaniesMinAggregateOutputType = {
   name: string | null
   tax_id: string | null
   phone: string | null
+  subdomain: string | null
+  schema_name: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -42,6 +44,8 @@ export type CompaniesMaxAggregateOutputType = {
   name: string | null
   tax_id: string | null
   phone: string | null
+  subdomain: string | null
+  schema_name: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -55,6 +59,8 @@ export type CompaniesCountAggregateOutputType = {
   name: number
   tax_id: number
   phone: number
+  subdomain: number
+  schema_name: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -70,6 +76,8 @@ export type CompaniesMinAggregateInputType = {
   name?: true
   tax_id?: true
   phone?: true
+  subdomain?: true
+  schema_name?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -83,6 +91,8 @@ export type CompaniesMaxAggregateInputType = {
   name?: true
   tax_id?: true
   phone?: true
+  subdomain?: true
+  schema_name?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -96,6 +106,8 @@ export type CompaniesCountAggregateInputType = {
   name?: true
   tax_id?: true
   phone?: true
+  subdomain?: true
+  schema_name?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -182,6 +194,8 @@ export type CompaniesGroupByOutputType = {
   name: string
   tax_id: string | null
   phone: string | null
+  subdomain: string | null
+  schema_name: string | null
   created_at: Date
   updated_at: Date
   deleted_at: Date | null
@@ -216,12 +230,15 @@ export type companiesWhereInput = {
   name?: Prisma.StringFilter<"companies"> | string
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
+  subdomain?: Prisma.StringNullableFilter<"companies"> | string | null
+  schema_name?: Prisma.StringNullableFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"companies"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"companies"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"companies"> | string | null
+  companyUsers?: Prisma.Company_usersListRelationFilter
 }
 
 export type companiesOrderByWithRelationInput = {
@@ -229,16 +246,21 @@ export type companiesOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  subdomain?: Prisma.SortOrderInput | Prisma.SortOrder
+  schema_name?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyUsers?: Prisma.company_usersOrderByRelationAggregateInput
 }
 
 export type companiesWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  subdomain?: string
+  schema_name?: string
   AND?: Prisma.companiesWhereInput | Prisma.companiesWhereInput[]
   OR?: Prisma.companiesWhereInput[]
   NOT?: Prisma.companiesWhereInput | Prisma.companiesWhereInput[]
@@ -251,13 +273,16 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"companies"> | string | null
-}, "id">
+  companyUsers?: Prisma.Company_usersListRelationFilter
+}, "id" | "subdomain" | "schema_name">
 
 export type companiesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  subdomain?: Prisma.SortOrderInput | Prisma.SortOrder
+  schema_name?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -277,6 +302,8 @@ export type companiesScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"companies"> | string
   tax_id?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
+  subdomain?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
+  schema_name?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"companies"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"companies"> | Date | string
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"companies"> | Date | string | null
@@ -290,12 +317,15 @@ export type companiesCreateInput = {
   name: string
   tax_id?: string | null
   phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesUncheckedCreateInput = {
@@ -303,12 +333,15 @@ export type companiesUncheckedCreateInput = {
   name: string
   tax_id?: string | null
   phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesUpdateInput = {
@@ -316,12 +349,15 @@ export type companiesUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesUncheckedUpdateInput = {
@@ -329,12 +365,15 @@ export type companiesUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesCreateManyInput = {
@@ -342,6 +381,8 @@ export type companiesCreateManyInput = {
   name: string
   tax_id?: string | null
   phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -355,6 +396,8 @@ export type companiesUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -368,6 +411,8 @@ export type companiesUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -381,6 +426,8 @@ export type companiesCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  subdomain?: Prisma.SortOrder
+  schema_name?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -394,6 +441,8 @@ export type companiesMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  subdomain?: Prisma.SortOrder
+  schema_name?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -407,6 +456,8 @@ export type companiesMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  subdomain?: Prisma.SortOrder
+  schema_name?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -415,6 +466,146 @@ export type companiesMinOrderByAggregateInput = {
   deleted_by?: Prisma.SortOrder
 }
 
+export type CompaniesScalarRelationFilter = {
+  is?: Prisma.companiesWhereInput
+  isNot?: Prisma.companiesWhereInput
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type companiesCreateNestedOneWithoutCompanyUsersInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutCompanyUsersInput, Prisma.companiesUncheckedCreateWithoutCompanyUsersInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutCompanyUsersInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesUpdateOneRequiredWithoutCompanyUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutCompanyUsersInput, Prisma.companiesUncheckedCreateWithoutCompanyUsersInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutCompanyUsersInput
+  upsert?: Prisma.companiesUpsertWithoutCompanyUsersInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutCompanyUsersInput, Prisma.companiesUpdateWithoutCompanyUsersInput>, Prisma.companiesUncheckedUpdateWithoutCompanyUsersInput>
+}
+
+export type companiesCreateWithoutCompanyUsersInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type companiesUncheckedCreateWithoutCompanyUsersInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type companiesCreateOrConnectWithoutCompanyUsersInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutCompanyUsersInput, Prisma.companiesUncheckedCreateWithoutCompanyUsersInput>
+}
+
+export type companiesUpsertWithoutCompanyUsersInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutCompanyUsersInput, Prisma.companiesUncheckedUpdateWithoutCompanyUsersInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutCompanyUsersInput, Prisma.companiesUncheckedCreateWithoutCompanyUsersInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutCompanyUsersInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutCompanyUsersInput, Prisma.companiesUncheckedUpdateWithoutCompanyUsersInput>
+}
+
+export type companiesUpdateWithoutCompanyUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type companiesUncheckedUpdateWithoutCompanyUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+
+/**
+ * Count Type CompaniesCountOutputType
+ */
+
+export type CompaniesCountOutputType = {
+  companyUsers: number
+}
+
+export type CompaniesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  companyUsers?: boolean | CompaniesCountOutputTypeCountCompanyUsersArgs
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CompaniesCountOutputType
+   */
+  select?: Prisma.CompaniesCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountCompanyUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.company_usersWhereInput
+}
 
 
 export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -422,12 +613,16 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   name?: boolean
   tax_id?: boolean
   phone?: boolean
+  subdomain?: boolean
+  schema_name?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
   created_by?: boolean
   updated_by?: boolean
   deleted_by?: boolean
+  companyUsers?: boolean | Prisma.companies$companyUsersArgs<ExtArgs>
+  _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companies"]>
 
 export type companiesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -435,6 +630,8 @@ export type companiesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   tax_id?: boolean
   phone?: boolean
+  subdomain?: boolean
+  schema_name?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -448,6 +645,8 @@ export type companiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   tax_id?: boolean
   phone?: boolean
+  subdomain?: boolean
+  schema_name?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -461,6 +660,8 @@ export type companiesSelectScalar = {
   name?: boolean
   tax_id?: boolean
   phone?: boolean
+  subdomain?: boolean
+  schema_name?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -469,16 +670,26 @@ export type companiesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tax_id" | "phone" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["companies"]>
+export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tax_id" | "phone" | "subdomain" | "schema_name" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["companies"]>
+export type companiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  companyUsers?: boolean | Prisma.companies$companyUsersArgs<ExtArgs>
+  _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type companiesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type companiesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "companies"
-  objects: {}
+  objects: {
+    companyUsers: Prisma.$company_usersPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     tax_id: string | null
     phone: string | null
+    subdomain: string | null
+    schema_name: string | null
     created_at: Date
     updated_at: Date
     deleted_at: Date | null
@@ -879,6 +1090,7 @@ readonly fields: companiesFieldRefs;
  */
 export interface Prisma__companiesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  companyUsers<T extends Prisma.companies$companyUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$companyUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -912,6 +1124,8 @@ export interface companiesFieldRefs {
   readonly name: Prisma.FieldRef<"companies", 'String'>
   readonly tax_id: Prisma.FieldRef<"companies", 'String'>
   readonly phone: Prisma.FieldRef<"companies", 'String'>
+  readonly subdomain: Prisma.FieldRef<"companies", 'String'>
+  readonly schema_name: Prisma.FieldRef<"companies", 'String'>
   readonly created_at: Prisma.FieldRef<"companies", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"companies", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"companies", 'DateTime'>
@@ -935,6 +1149,10 @@ export type companiesFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
+  /**
    * Filter, which companies to fetch.
    */
   where: Prisma.companiesWhereUniqueInput
@@ -953,6 +1171,10 @@ export type companiesFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
+  /**
    * Filter, which companies to fetch.
    */
   where: Prisma.companiesWhereUniqueInput
@@ -970,6 +1192,10 @@ export type companiesFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the companies
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
   /**
    * Filter, which companies to fetch.
    */
@@ -1019,6 +1245,10 @@ export type companiesFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
+  /**
    * Filter, which companies to fetch.
    */
   where?: Prisma.companiesWhereInput
@@ -1066,6 +1296,10 @@ export type companiesFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the companies
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
   /**
    * Filter, which companies to fetch.
    */
@@ -1115,6 +1349,10 @@ export type companiesCreateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
+  /**
    * The data needed to create a companies.
    */
   data: Prisma.XOR<Prisma.companiesCreateInput, Prisma.companiesUncheckedCreateInput>
@@ -1162,6 +1400,10 @@ export type companiesUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the companies
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
   /**
    * The data needed to update a companies.
    */
@@ -1229,6 +1471,10 @@ export type companiesUpsertArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
+  /**
    * The filter to search for the companies to update in case it exists.
    */
   where: Prisma.companiesWhereUniqueInput
@@ -1255,6 +1501,10 @@ export type companiesDeleteArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
+  /**
    * Filter which companies to delete.
    */
   where: Prisma.companiesWhereUniqueInput
@@ -1275,6 +1525,30 @@ export type companiesDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * companies.companyUsers
+ */
+export type companies$companyUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the company_users
+   */
+  select?: Prisma.company_usersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the company_users
+   */
+  omit?: Prisma.company_usersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.company_usersInclude<ExtArgs> | null
+  where?: Prisma.company_usersWhereInput
+  orderBy?: Prisma.company_usersOrderByWithRelationInput | Prisma.company_usersOrderByWithRelationInput[]
+  cursor?: Prisma.company_usersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Company_usersScalarFieldEnum | Prisma.Company_usersScalarFieldEnum[]
+}
+
+/**
  * companies without action
  */
 export type companiesDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1286,4 +1560,8 @@ export type companiesDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the companies
    */
   omit?: Prisma.companiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.companiesInclude<ExtArgs> | null
 }

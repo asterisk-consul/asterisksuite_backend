@@ -23,4 +23,14 @@ export class CreateCompanyDto {
   @IsOptional()
   @IsEmail()
   email?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  subdomain?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  schemaName?: string;
 }

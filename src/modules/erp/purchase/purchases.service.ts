@@ -38,7 +38,12 @@ interface ProductTotalAccumulator {
 
 @Injectable()
 export class PurchasesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   private readonly documentTypeCodeMap: Record<DocumentTypeFilter, string> = {
     [DocumentTypeFilter.INVOICE]: 'COM',

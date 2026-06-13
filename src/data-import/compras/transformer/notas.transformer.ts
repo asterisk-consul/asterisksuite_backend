@@ -13,9 +13,14 @@ export class NotaTransformer implements Transformer<
   ComprasTransformado
 > {
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private documentTypeCode: string, // 'NC' o 'ND'
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async transform(documents: NotaRaw[]): Promise<ComprasTransformado[]> {
     const resultado: ComprasTransformado[] = [];

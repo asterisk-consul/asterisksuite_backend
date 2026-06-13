@@ -1,5 +1,5 @@
 // src/app.module.ts
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
@@ -12,6 +12,7 @@ import { PurchasesModule } from './modules/erp/purchase/purchases.module';
 import { ReporteChoferesModule } from './modules/logistica/reports/drivers/dispatch_rates.module';
 import { DocumentsSalesModule } from './modules/erp/documents-sales/documents_sales.module';
 import { SalesReportModule } from './modules/erp/documents-sales/sales-reports/sales_reports.module';
+import { TenantMiddleware } from './common/middleware/tenant.middleware';
 
 @Module({
   imports: [
@@ -29,4 +30,10 @@ import { SalesReportModule } from './modules/erp/documents-sales/sales-reports/s
     SalesReportModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(TenantMiddleware)
+      .forRoutes('*');
+  }
+}

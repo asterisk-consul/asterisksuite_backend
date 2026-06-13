@@ -12,9 +12,14 @@ import { DocumentSequencesService } from '../../../master-data/document-sequence
 @Injectable()
 export class DeliveryNotesService {
   constructor(
-    private readonly prisma: PrismaService,
+    private db: PrismaService,
     private readonly sequences: DocumentSequencesService,
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(dto: CreateDeliveryNoteDto, userId: string) {
     return this.prisma.$transaction(async (tx) => {

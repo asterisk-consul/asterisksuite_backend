@@ -497,6 +497,16 @@ export type filesUncheckedUpdateManyInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type FilesListRelationFilter = {
+  every?: Prisma.filesWhereInput
+  some?: Prisma.filesWhereInput
+  none?: Prisma.filesWhereInput
+}
+
+export type filesOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type FilesScalarRelationFilter = {
   is?: Prisma.filesWhereInput
   isNot?: Prisma.filesWhereInput
@@ -561,38 +571,6 @@ export type filesSumOrderByAggregateInput = {
   file_size?: Prisma.SortOrder
 }
 
-export type FilesListRelationFilter = {
-  every?: Prisma.filesWhereInput
-  some?: Prisma.filesWhereInput
-  none?: Prisma.filesWhereInput
-}
-
-export type filesOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type filesCreateNestedOneWithoutEntity_photosInput = {
-  create?: Prisma.XOR<Prisma.filesCreateWithoutEntity_photosInput, Prisma.filesUncheckedCreateWithoutEntity_photosInput>
-  connectOrCreate?: Prisma.filesCreateOrConnectWithoutEntity_photosInput
-  connect?: Prisma.filesWhereUniqueInput
-}
-
-export type filesUpdateOneRequiredWithoutEntity_photosNestedInput = {
-  create?: Prisma.XOR<Prisma.filesCreateWithoutEntity_photosInput, Prisma.filesUncheckedCreateWithoutEntity_photosInput>
-  connectOrCreate?: Prisma.filesCreateOrConnectWithoutEntity_photosInput
-  upsert?: Prisma.filesUpsertWithoutEntity_photosInput
-  connect?: Prisma.filesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.filesUpdateToOneWithWhereWithoutEntity_photosInput, Prisma.filesUpdateWithoutEntity_photosInput>, Prisma.filesUncheckedUpdateWithoutEntity_photosInput>
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type filesCreateNestedManyWithoutUsersInput = {
   create?: Prisma.XOR<Prisma.filesCreateWithoutUsersInput, Prisma.filesUncheckedCreateWithoutUsersInput> | Prisma.filesCreateWithoutUsersInput[] | Prisma.filesUncheckedCreateWithoutUsersInput[]
   connectOrCreate?: Prisma.filesCreateOrConnectWithoutUsersInput | Prisma.filesCreateOrConnectWithoutUsersInput[]
@@ -633,6 +611,108 @@ export type filesUncheckedUpdateManyWithoutUsersNestedInput = {
   update?: Prisma.filesUpdateWithWhereUniqueWithoutUsersInput | Prisma.filesUpdateWithWhereUniqueWithoutUsersInput[]
   updateMany?: Prisma.filesUpdateManyWithWhereWithoutUsersInput | Prisma.filesUpdateManyWithWhereWithoutUsersInput[]
   deleteMany?: Prisma.filesScalarWhereInput | Prisma.filesScalarWhereInput[]
+}
+
+export type filesCreateNestedOneWithoutEntity_photosInput = {
+  create?: Prisma.XOR<Prisma.filesCreateWithoutEntity_photosInput, Prisma.filesUncheckedCreateWithoutEntity_photosInput>
+  connectOrCreate?: Prisma.filesCreateOrConnectWithoutEntity_photosInput
+  connect?: Prisma.filesWhereUniqueInput
+}
+
+export type filesUpdateOneRequiredWithoutEntity_photosNestedInput = {
+  create?: Prisma.XOR<Prisma.filesCreateWithoutEntity_photosInput, Prisma.filesUncheckedCreateWithoutEntity_photosInput>
+  connectOrCreate?: Prisma.filesCreateOrConnectWithoutEntity_photosInput
+  upsert?: Prisma.filesUpsertWithoutEntity_photosInput
+  connect?: Prisma.filesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.filesUpdateToOneWithWhereWithoutEntity_photosInput, Prisma.filesUpdateWithoutEntity_photosInput>, Prisma.filesUncheckedUpdateWithoutEntity_photosInput>
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type filesCreateWithoutUsersInput = {
+  id?: string
+  storage_provider?: string | null
+  file_path: string
+  public_url?: string | null
+  file_name?: string | null
+  mime_type?: string | null
+  file_size?: number | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  entity_photos?: Prisma.entity_photosCreateNestedManyWithoutFilesInput
+}
+
+export type filesUncheckedCreateWithoutUsersInput = {
+  id?: string
+  storage_provider?: string | null
+  file_path: string
+  public_url?: string | null
+  file_name?: string | null
+  mime_type?: string | null
+  file_size?: number | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  entity_photos?: Prisma.entity_photosUncheckedCreateNestedManyWithoutFilesInput
+}
+
+export type filesCreateOrConnectWithoutUsersInput = {
+  where: Prisma.filesWhereUniqueInput
+  create: Prisma.XOR<Prisma.filesCreateWithoutUsersInput, Prisma.filesUncheckedCreateWithoutUsersInput>
+}
+
+export type filesCreateManyUsersInputEnvelope = {
+  data: Prisma.filesCreateManyUsersInput | Prisma.filesCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type filesUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.filesWhereUniqueInput
+  update: Prisma.XOR<Prisma.filesUpdateWithoutUsersInput, Prisma.filesUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.filesCreateWithoutUsersInput, Prisma.filesUncheckedCreateWithoutUsersInput>
+}
+
+export type filesUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.filesWhereUniqueInput
+  data: Prisma.XOR<Prisma.filesUpdateWithoutUsersInput, Prisma.filesUncheckedUpdateWithoutUsersInput>
+}
+
+export type filesUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.filesScalarWhereInput
+  data: Prisma.XOR<Prisma.filesUpdateManyMutationInput, Prisma.filesUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type filesScalarWhereInput = {
+  AND?: Prisma.filesScalarWhereInput | Prisma.filesScalarWhereInput[]
+  OR?: Prisma.filesScalarWhereInput[]
+  NOT?: Prisma.filesScalarWhereInput | Prisma.filesScalarWhereInput[]
+  id?: Prisma.UuidFilter<"files"> | string
+  storage_provider?: Prisma.StringNullableFilter<"files"> | string | null
+  file_path?: Prisma.StringFilter<"files"> | string
+  public_url?: Prisma.StringNullableFilter<"files"> | string | null
+  file_name?: Prisma.StringNullableFilter<"files"> | string | null
+  mime_type?: Prisma.StringNullableFilter<"files"> | string | null
+  file_size?: Prisma.IntNullableFilter<"files"> | number | null
+  uploaded_by?: Prisma.UuidNullableFilter<"files"> | string | null
+  created_at?: Prisma.DateTimeFilter<"files"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"files"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"files"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"files"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"files"> | string | null
 }
 
 export type filesCreateWithoutEntity_photosInput = {
@@ -717,86 +797,6 @@ export type filesUncheckedUpdateWithoutEntity_photosInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type filesCreateWithoutUsersInput = {
-  id?: string
-  storage_provider?: string | null
-  file_path: string
-  public_url?: string | null
-  file_name?: string | null
-  mime_type?: string | null
-  file_size?: number | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  entity_photos?: Prisma.entity_photosCreateNestedManyWithoutFilesInput
-}
-
-export type filesUncheckedCreateWithoutUsersInput = {
-  id?: string
-  storage_provider?: string | null
-  file_path: string
-  public_url?: string | null
-  file_name?: string | null
-  mime_type?: string | null
-  file_size?: number | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  entity_photos?: Prisma.entity_photosUncheckedCreateNestedManyWithoutFilesInput
-}
-
-export type filesCreateOrConnectWithoutUsersInput = {
-  where: Prisma.filesWhereUniqueInput
-  create: Prisma.XOR<Prisma.filesCreateWithoutUsersInput, Prisma.filesUncheckedCreateWithoutUsersInput>
-}
-
-export type filesCreateManyUsersInputEnvelope = {
-  data: Prisma.filesCreateManyUsersInput | Prisma.filesCreateManyUsersInput[]
-  skipDuplicates?: boolean
-}
-
-export type filesUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.filesWhereUniqueInput
-  update: Prisma.XOR<Prisma.filesUpdateWithoutUsersInput, Prisma.filesUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.filesCreateWithoutUsersInput, Prisma.filesUncheckedCreateWithoutUsersInput>
-}
-
-export type filesUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.filesWhereUniqueInput
-  data: Prisma.XOR<Prisma.filesUpdateWithoutUsersInput, Prisma.filesUncheckedUpdateWithoutUsersInput>
-}
-
-export type filesUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.filesScalarWhereInput
-  data: Prisma.XOR<Prisma.filesUpdateManyMutationInput, Prisma.filesUncheckedUpdateManyWithoutUsersInput>
-}
-
-export type filesScalarWhereInput = {
-  AND?: Prisma.filesScalarWhereInput | Prisma.filesScalarWhereInput[]
-  OR?: Prisma.filesScalarWhereInput[]
-  NOT?: Prisma.filesScalarWhereInput | Prisma.filesScalarWhereInput[]
-  id?: Prisma.UuidFilter<"files"> | string
-  storage_provider?: Prisma.StringNullableFilter<"files"> | string | null
-  file_path?: Prisma.StringFilter<"files"> | string
-  public_url?: Prisma.StringNullableFilter<"files"> | string | null
-  file_name?: Prisma.StringNullableFilter<"files"> | string | null
-  mime_type?: Prisma.StringNullableFilter<"files"> | string | null
-  file_size?: Prisma.IntNullableFilter<"files"> | number | null
-  uploaded_by?: Prisma.UuidNullableFilter<"files"> | string | null
-  created_at?: Prisma.DateTimeFilter<"files"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"files"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"files"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"files"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"files"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"files"> | string | null
 }
 
 export type filesCreateManyUsersInput = {

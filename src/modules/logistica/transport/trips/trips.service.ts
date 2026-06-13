@@ -13,11 +13,19 @@ import { DocumentsSalesService } from '../../../erp/documents-sales/documents_sa
 @Injectable()
 export class TripsService {
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private documentsSalesService: DocumentsSalesService,
   ) {}
 
-  private async reorderTripStops(tx: Prisma.TransactionClient, tripId: string) {
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
+
+  private async reorderTripStops(
+    tx: Parameters<Parameters<typeof this.prisma.$transaction>[0]>[0],
+    tripId: string,
+  ) {
     const stops = await tx.trip_stops.findMany({
       where: { trip_id: tripId },
       orderBy: { stop_order: 'asc' },

@@ -58,9 +58,14 @@ export class DocumentsSalesService {
   private readonly SALE_CODES = ['FAV', 'NCV', 'NDV'];
 
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private productPriceService: ProductPriceService,
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // ─── Resolver ítems: precio + taxes desde el producto ────────────────────
   /**

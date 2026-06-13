@@ -5,7 +5,12 @@ import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
 
 @Injectable()
 export class BusinessPartiesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // ✅ CREATE con relaciones
   async create(data: CreateBusinessPartyDto) {

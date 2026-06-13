@@ -6,7 +6,12 @@ import { UpdateDocumentsTypeDto } from './dto/update-documents-type.dto';
 
 @Injectable()
 export class DocumentsTypesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(dto: CreateDocumentsTypeDto) {
     const { document_sequence_id, ...rest } = dto;

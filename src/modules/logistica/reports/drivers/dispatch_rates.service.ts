@@ -9,7 +9,12 @@ import {
 
 @Injectable()
 export class ReporteChoferesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async findAll(
     query: ReporteChoferesQueryDto,

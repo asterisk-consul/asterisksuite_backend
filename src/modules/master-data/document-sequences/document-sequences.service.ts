@@ -9,7 +9,12 @@ import { CreateDocumentSequenceDto } from './dto/create-document-sequences.dto';
 import { UpdateDocumentSequenceDto } from './dto/update-document-sequences.dto';
 @Injectable()
 export class DocumentSequencesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // ── Validaciones internas ──────────────────────────────────────────────────
 

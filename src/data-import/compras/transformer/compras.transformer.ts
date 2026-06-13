@@ -35,7 +35,12 @@ export class ComprasTransformer implements Transformer<
   FacturaCompraRaw,
   ComprasTransformado
 > {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async transform(
     documents: FacturaCompraRaw[],

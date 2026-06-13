@@ -525,6 +525,48 @@ export type delivery_notesMinOrderByAggregateInput = {
   dispatch_order_id?: Prisma.SortOrder
 }
 
+export type delivery_notesCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
+  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+}
+
+export type delivery_notesUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
+  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+}
+
+export type delivery_notesUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
+  set?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  disconnect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  delete?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  update?: Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput | Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
+}
+
+export type delivery_notesUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
+  set?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  disconnect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  delete?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+  update?: Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput | Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
+}
+
 export type delivery_notesCreateNestedManyWithoutBusiness_partiesInput = {
   create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutBusiness_partiesInput, Prisma.delivery_notesUncheckedCreateWithoutBusiness_partiesInput> | Prisma.delivery_notesCreateWithoutBusiness_partiesInput[] | Prisma.delivery_notesUncheckedCreateWithoutBusiness_partiesInput[]
   connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutBusiness_partiesInput | Prisma.delivery_notesCreateOrConnectWithoutBusiness_partiesInput[]
@@ -699,46 +741,85 @@ export type delivery_notesUncheckedUpdateManyWithoutTripsNestedInput = {
   deleteMany?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
 }
 
-export type delivery_notesCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
-  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+export type delivery_notesCreateWithoutUsersInput = {
+  id?: string
+  type: string
+  number: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
+  trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutDelivery_notesInput
 }
 
-export type delivery_notesUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
-  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
+export type delivery_notesUncheckedCreateWithoutUsersInput = {
+  id?: string
+  type: string
+  number: string
+  status: string
+  party_id?: string | null
+  trip_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  dispatch_order_id?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutDelivery_notesInput
 }
 
-export type delivery_notesUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
-  set?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  disconnect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  delete?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  update?: Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput | Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
+export type delivery_notesCreateOrConnectWithoutUsersInput = {
+  where: Prisma.delivery_notesWhereUniqueInput
+  create: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput>
 }
 
-export type delivery_notesUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput> | Prisma.delivery_notesCreateWithoutUsersInput[] | Prisma.delivery_notesUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.delivery_notesCreateOrConnectWithoutUsersInput | Prisma.delivery_notesCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.delivery_notesCreateManyUsersInputEnvelope
-  set?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  disconnect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  delete?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  connect?: Prisma.delivery_notesWhereUniqueInput | Prisma.delivery_notesWhereUniqueInput[]
-  update?: Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput | Prisma.delivery_notesUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput | Prisma.delivery_notesUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
+export type delivery_notesCreateManyUsersInputEnvelope = {
+  data: Prisma.delivery_notesCreateManyUsersInput | Prisma.delivery_notesCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type delivery_notesUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.delivery_notesWhereUniqueInput
+  update: Prisma.XOR<Prisma.delivery_notesUpdateWithoutUsersInput, Prisma.delivery_notesUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput>
+}
+
+export type delivery_notesUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.delivery_notesWhereUniqueInput
+  data: Prisma.XOR<Prisma.delivery_notesUpdateWithoutUsersInput, Prisma.delivery_notesUncheckedUpdateWithoutUsersInput>
+}
+
+export type delivery_notesUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.delivery_notesScalarWhereInput
+  data: Prisma.XOR<Prisma.delivery_notesUpdateManyMutationInput, Prisma.delivery_notesUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type delivery_notesScalarWhereInput = {
+  AND?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
+  OR?: Prisma.delivery_notesScalarWhereInput[]
+  NOT?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
+  id?: Prisma.UuidFilter<"delivery_notes"> | string
+  type?: Prisma.StringFilter<"delivery_notes"> | string
+  number?: Prisma.StringFilter<"delivery_notes"> | string
+  status?: Prisma.StringFilter<"delivery_notes"> | string
+  party_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  trip_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
+  dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
 }
 
 export type delivery_notesCreateWithoutBusiness_partiesInput = {
@@ -801,25 +882,6 @@ export type delivery_notesUpdateWithWhereUniqueWithoutBusiness_partiesInput = {
 export type delivery_notesUpdateManyWithWhereWithoutBusiness_partiesInput = {
   where: Prisma.delivery_notesScalarWhereInput
   data: Prisma.XOR<Prisma.delivery_notesUpdateManyMutationInput, Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesInput>
-}
-
-export type delivery_notesScalarWhereInput = {
-  AND?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
-  OR?: Prisma.delivery_notesScalarWhereInput[]
-  NOT?: Prisma.delivery_notesScalarWhereInput | Prisma.delivery_notesScalarWhereInput[]
-  id?: Prisma.UuidFilter<"delivery_notes"> | string
-  type?: Prisma.StringFilter<"delivery_notes"> | string
-  number?: Prisma.StringFilter<"delivery_notes"> | string
-  status?: Prisma.StringFilter<"delivery_notes"> | string
-  party_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  trip_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  created_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"delivery_notes"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"delivery_notes"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
-  dispatch_order_id?: Prisma.UuidNullableFilter<"delivery_notes"> | string | null
 }
 
 export type delivery_notesCreateWithoutCargo_transfer_itemsInput = {
@@ -1210,25 +1272,7 @@ export type delivery_notesUpdateManyWithWhereWithoutTripsInput = {
   data: Prisma.XOR<Prisma.delivery_notesUpdateManyMutationInput, Prisma.delivery_notesUncheckedUpdateManyWithoutTripsInput>
 }
 
-export type delivery_notesCreateWithoutUsersInput = {
-  id?: string
-  type: string
-  number: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutDelivery_notesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedOneWithoutDelivery_notesInput
-  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDelivery_notesInput
-  trips?: Prisma.tripsCreateNestedOneWithoutDelivery_notesInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDelivery_notesInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutDelivery_notesInput
-}
-
-export type delivery_notesUncheckedCreateWithoutUsersInput = {
+export type delivery_notesCreateManyUsersInput = {
   id?: string
   type: string
   number: string
@@ -1241,35 +1285,57 @@ export type delivery_notesUncheckedCreateWithoutUsersInput = {
   updated_by?: string | null
   deleted_by?: string | null
   dispatch_order_id?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutDelivery_notesInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDelivery_notesInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutDelivery_notesInput
 }
 
-export type delivery_notesCreateOrConnectWithoutUsersInput = {
-  where: Prisma.delivery_notesWhereUniqueInput
-  create: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput>
+export type delivery_notesUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
+  trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutDelivery_notesNestedInput
 }
 
-export type delivery_notesCreateManyUsersInputEnvelope = {
-  data: Prisma.delivery_notesCreateManyUsersInput | Prisma.delivery_notesCreateManyUsersInput[]
-  skipDuplicates?: boolean
+export type delivery_notesUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutDelivery_notesNestedInput
 }
 
-export type delivery_notesUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.delivery_notesWhereUniqueInput
-  update: Prisma.XOR<Prisma.delivery_notesUpdateWithoutUsersInput, Prisma.delivery_notesUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.delivery_notesCreateWithoutUsersInput, Prisma.delivery_notesUncheckedCreateWithoutUsersInput>
-}
-
-export type delivery_notesUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.delivery_notesWhereUniqueInput
-  data: Prisma.XOR<Prisma.delivery_notesUpdateWithoutUsersInput, Prisma.delivery_notesUncheckedUpdateWithoutUsersInput>
-}
-
-export type delivery_notesUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.delivery_notesScalarWhereInput
-  data: Prisma.XOR<Prisma.delivery_notesUpdateManyMutationInput, Prisma.delivery_notesUncheckedUpdateManyWithoutUsersInput>
+export type delivery_notesUncheckedUpdateManyWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type delivery_notesCreateManyBusiness_partiesInput = {
@@ -1465,72 +1531,6 @@ export type delivery_notesUncheckedUpdateManyWithoutTripsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type delivery_notesCreateManyUsersInput = {
-  id?: string
-  type: string
-  number: string
-  status: string
-  party_id?: string | null
-  trip_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  dispatch_order_id?: string | null
-}
-
-export type delivery_notesUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  number?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutDelivery_notesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput
-  business_parties?: Prisma.business_partiesUpdateOneWithoutDelivery_notesNestedInput
-  trips?: Prisma.tripsUpdateOneWithoutDelivery_notesNestedInput
-  picking_orders?: Prisma.picking_ordersUpdateManyWithoutDelivery_notesNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutDelivery_notesNestedInput
-}
-
-export type delivery_notesUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  number?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutDelivery_notesNestedInput
-  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDelivery_notesNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutDelivery_notesNestedInput
-}
-
-export type delivery_notesUncheckedUpdateManyWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  number?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trip_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null

@@ -35,7 +35,12 @@ interface ProductTotalAccumulator {
 
 @Injectable()
 export class SalesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   /**
    * Mapeo de filtros públicos (enum) a códigos internos de documento.

@@ -18,6 +18,26 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
+ * Model companies
+ * 
+ */
+export type companies = Prisma.companiesModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel
+/**
+ * Model company_users
+ * 
+ */
+export type company_users = Prisma.company_usersModel
+/**
+ * Model refresh_tokens
+ * 
+ */
+export type refresh_tokens = Prisma.refresh_tokensModel
+/**
  * Model business_parties
  * 
  */
@@ -32,11 +52,6 @@ export type cargo_transfer_items = Prisma.cargo_transfer_itemsModel
  * 
  */
 export type cargo_transfers = Prisma.cargo_transfersModel
-/**
- * Model companies
- * 
- */
-export type companies = Prisma.companiesModel
 /**
  * Model delivery_notes
  * 
@@ -153,11 +168,6 @@ export type corridors = Prisma.corridorsModel
  */
 export type corridor_stops = Prisma.corridor_stopsModel
 /**
- * Model users
- * 
- */
-export type users = Prisma.usersModel
-/**
  * Model vehicles
  * 
  */
@@ -187,11 +197,6 @@ export type warehouses = Prisma.warehousesModel
  * 
  */
 export type document_sequences = Prisma.document_sequencesModel
-/**
- * Model refresh_tokens
- * 
- */
-export type refresh_tokens = Prisma.refresh_tokensModel
 /**
  * Model transport_document_types
  * 

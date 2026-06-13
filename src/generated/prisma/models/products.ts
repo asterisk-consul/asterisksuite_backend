@@ -624,10 +624,6 @@ export type productsUpdateOneRequiredWithoutPicking_itemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutPicking_itemsInput, Prisma.productsUpdateWithoutPicking_itemsInput>, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
 }
 
-export type NullableBoolFieldUpdateOperationsInput = {
-  set?: boolean | null
-}
-
 export type productsCreateNestedOneWithoutProduct_priceInput = {
   create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
   connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput

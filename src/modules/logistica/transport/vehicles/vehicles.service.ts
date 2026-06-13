@@ -10,7 +10,12 @@ import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class VehiclesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(dto: CreateVehicleDto) {
     return this.prisma.$transaction(async (tx) => {

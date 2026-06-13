@@ -19,9 +19,14 @@ type RefreshTokenWithUser = Prisma.refresh_tokensGetPayload<{
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private jwtService: JwtService,
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   private hashToken(token: string) {
     return crypto.createHash('sha256').update(token).digest('hex');
@@ -231,5 +236,37 @@ export class AuthService {
     });
 
     return { message: 'Password actualizado. Todas las sesiones cerradas' };
+  }
+  async getCurrentUser(userId: string) {
+    const user = await this.prisma.users.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        companyUsers: {
+          include: {
+            company: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+
+      companies: user.companyUsers.map((cu) => ({
+        id: cu.company.id,
+        name: cu.company.name,
+        subdomain: cu.company.subdomain,
+        schemaName: cu.company.schema_name,
+        role: cu.role,
+      })),
+    };
   }
 }
