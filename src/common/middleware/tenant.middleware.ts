@@ -36,6 +36,8 @@ export class TenantMiddleware implements NestMiddleware {
           message: `Tenant not found for subdomain: ${subdomain}`,
         });
       }
+      console.log('TENANT:', subdomain);
+      console.log('SCHEMA RESUELTO:', schemaName);
 
       // Run subsequent request code with the resolved tenant schema
       return requestContext.run({ schema: schemaName }, () => next());

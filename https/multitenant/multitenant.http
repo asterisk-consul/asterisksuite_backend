@@ -1,0 +1,187 @@
+@baseUrl = http://localhost:3000/api
+
+########################################################
+
+# USUARIO A
+
+########################################################
+
+# @name registerA
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+"name": "Usuario A",
+"email": "usuarioa@test.com",
+"password": "123456"
+}
+
+###
+
+# @name loginA
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+"email": "usuarioa@test.com",
+"password": "123456"
+}
+
+###
+
+@tokenA = {{loginA.response.body.accessToken}}
+
+########################################################
+
+# EMPRESA A
+
+########################################################
+
+# @name companyA
+
+POST {{baseUrl}}/companies
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+
+{
+"name": "Empresa A",
+"subdomain": "empresaa",
+"schemaName": "tenant_empresaa"
+}
+
+###
+
+########################################################
+
+# USUARIO B
+
+########################################################
+
+# @name registerB
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+"name": "Usuario B",
+"email": "[usuariob@test.com](mailto:usuariob@test.com)",
+"password": "123456"
+}
+
+###
+
+# @name loginB
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+"email": "[usuariob@test.com](mailto:usuariob@test.com)",
+"password": "123456"
+}
+
+###
+
+@tokenB = {{loginB.response.body.accessToken}}
+
+########################################################
+
+# EMPRESA B
+
+########################################################
+
+# @name companyB
+
+POST {{baseUrl}}/companies
+Authorization: Bearer {{tokenB}}
+Content-Type: application/json
+
+{
+"name": "Empresa B",
+"subdomain": "empresab",
+"schemaName": "tenant_empresab"
+}
+
+###
+
+########################################################
+
+# PRODUCTO EMPRESA A
+
+########################################################
+
+# @name createProductA
+
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{tokenA}}
+x-tenant: empresaa
+Content-Type: application/json
+
+{
+"name": "Producto Empresa A",
+"active": true
+}
+
+###
+
+########################################################
+
+# PRODUCTO EMPRESA B
+
+########################################################
+
+# @name createProductB
+
+POST {{baseUrl}}/products
+Authorization: Bearer {{tokenB}}
+x-tenant: empresab
+Content-Type: application/json
+
+{
+"name": "Producto Empresa B"
+"active": true
+}
+
+###
+
+########################################################
+
+# CONSULTAR PRODUCTOS EMPRESA A
+
+########################################################
+
+GET {{baseUrl}}/master-data/products
+Authorization: Bearer {{tokenA}}
+x-tenant: empresaa
+
+###
+
+########################################################
+
+# CONSULTAR PRODUCTOS EMPRESA B
+
+########################################################
+
+GET {{baseUrl}}/products
+Authorization: Bearer {{tokenB}}
+x-tenant: empresab
+
+###
+
+########################################################
+
+# VERIFICAR CONTEXTO ACTUAL
+
+########################################################
+
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{tokenA}}
+x-tenant: empresaa
+
+###
+
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{tokenB}}
+x-tenant: empresab

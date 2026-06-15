@@ -237,6 +237,20 @@ export class AuthService {
 
     return { message: 'Password actualizado. Todas las sesiones cerradas' };
   }
+
+  async getMyCompanies(userId: string) {
+    const prisma = this.db.getDefaultClient();
+
+    return prisma.company_users.findMany({
+      where: {
+        user_id: userId,
+      },
+      include: {
+        company: true,
+      },
+    });
+  }
+
   async getCurrentUser(userId: string) {
     const user = await this.prisma.users.findUnique({
       where: {

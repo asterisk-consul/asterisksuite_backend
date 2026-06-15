@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './../../../../prisma/prisma.service';
+import { PrismaClient } from '@/generated/prisma/client';
 
 import {
   ReporteChoferesQueryDto,
@@ -182,10 +183,9 @@ export class ReporteChoferesService {
 
     params.push(limit, offset);
 
-    const rows = await this.prisma.$queryRawUnsafe<ReporteChoferItemDto[]>(
-      mainQuery,
-      ...params,
-    );
+    const rows = await (this.prisma as unknown as PrismaClient).$queryRawUnsafe<
+      ReporteChoferItemDto[]
+    >(mainQuery, ...params);
 
     // ── Count ───────────────────────────────────────────────────────────
     const countQuery = `
@@ -205,10 +205,9 @@ export class ReporteChoferesService {
 
     const countParams = params.slice(0, -2);
 
-    const countResult = await this.prisma.$queryRawUnsafe<[{ count: bigint }]>(
-      countQuery,
-      ...countParams,
-    );
+    const countResult = await (
+      this.prisma as unknown as PrismaClient
+    ).$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...countParams);
 
     const total = Number(countResult[0]?.count ?? 0);
 

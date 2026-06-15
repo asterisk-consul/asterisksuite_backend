@@ -9,6 +9,7 @@ import { UpdateTripDto } from './dto/update-trip.dto';
 import { buildPrismaCreate } from '@/common/utils/buildPrisma';
 import { DispatchStatus, Prisma, TripStatus } from '@/generated/prisma/client';
 import { DocumentsSalesService } from '../../../erp/documents-sales/documents_sales.services';
+import { PrismaTransactionClient } from '@/prisma/prisma.service';
 
 @Injectable()
 export class TripsService {
@@ -22,10 +23,7 @@ export class TripsService {
     return this.db.getClientForCurrentContext();
   }
 
-  private async reorderTripStops(
-    tx: Parameters<Parameters<typeof this.prisma.$transaction>[0]>[0],
-    tripId: string,
-  ) {
+  private async reorderTripStops(tx: PrismaTransactionClient, tripId: string) {
     const stops = await tx.trip_stops.findMany({
       where: { trip_id: tripId },
       orderBy: { stop_order: 'asc' },

@@ -1,8 +1,12 @@
 // common/context/request-context.ts
 import { AsyncLocalStorage } from 'node:async_hooks';
 
-export const requestContext = new AsyncLocalStorage<{
+export interface RequestContextData {
+  schema?: string;
+  companyId?: string;
+  role?: string;
   userId?: string;
   ip?: string;
-  schema?: string;
-}>();
+}
+
+export const requestContext = new AsyncLocalStorage<RequestContextData>();

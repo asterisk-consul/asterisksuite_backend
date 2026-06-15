@@ -44,6 +44,11 @@ export class AuthController {
       body.newPassword,
     );
   }
+  @Get('my-companies')
+  @UseGuards(JwtAuthGuard)
+  myCompanies(@Req() req: RequestWithUser) {
+    return this.authService.getMyCompanies(req.user.id);
+  }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)

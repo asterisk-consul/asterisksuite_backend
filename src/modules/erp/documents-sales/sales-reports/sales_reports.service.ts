@@ -119,7 +119,7 @@ export class SalesService {
           creditNoteCount: 0,
           firstSalesDate: null,
           lastSalesDate: null,
-          salesValues: [],
+          salesValues: [] as number[],
         };
 
         const productTaxes = doc.document_taxes.reduce((sum, tax) => {

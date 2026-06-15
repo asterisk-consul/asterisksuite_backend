@@ -75,3 +75,19 @@ model refresh_tokens {
   @@index([revoked_at], map: "idx_refresh_tokens_revoked_at")
   @@schema("public")
 }
+
+model audit_logs_public {
+  id         String      @id @default(uuid()) @db.Uuid
+  table_name String      @db.VarChar(100)
+  record_id  String      @db.VarChar(100)
+  old_data   Json?
+  new_data   Json?
+  changed_by String?     @db.Uuid
+  changed_at DateTime    @default(now()) @db.Timestamp(6)
+  ip_address String?     @db.VarChar(50)
+  request_id String?     @db.VarChar(100)
+  action     AuditAction
+
+  @@map("audit_logs")
+  @@schema("public")
+}

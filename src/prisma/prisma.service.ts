@@ -4,37 +4,66 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client';
 import { withAudit } from './audit.extension';
 import { requestContext } from '../common/context/request-context';
+import 'dotenv/config';
 
+// prisma.service.ts — already exported, make sure it's there
+
+const BASE_URL = process.env.DATABASE_URL;
+
+if (!BASE_URL) {
+  throw new Error('DATABASE_URL environment variable is not defined');
+}
+
+// ✅ Single shared raw public client — used for audit log writes
+const publicRawClient = new PrismaClient({
+  adapter: new PrismaPg(
+    new Pool({
+      connectionString: BASE_URL,
+      options: `-c search_path="public"`,
+    }),
+    { schema: 'public' },
+  ),
+});
+
+// ✅ No explicit return type — let TypeScript infer it
 function createClient(schemaName: string) {
-  const baseUrl = process.env.DATABASE_URL;
-
-  if (!baseUrl) {
-    throw new Error('DATABASE_URL environment variable is not defined');
-  }
-
   const pool = new Pool({
-    connectionString: baseUrl,
+    connectionString: BASE_URL,
     options: `-c search_path="${schemaName}",public`,
   });
 
-  const adapter = new PrismaPg(pool, {
-    schema: schemaName,
+  const adapter = new PrismaPg(pool, { schema: schemaName });
+  const raw = new PrismaClient({
+    adapter,
+    log: ['query'],
   });
 
-  const raw = new PrismaClient({ adapter });
-
-  return raw.$extends(withAudit);
+  return { client: withAudit(publicRawClient)(raw), pool };
 }
 
-type ExtendedClient = ReturnType<typeof createClient>;
+// ✅ Now this works — no circular reference
+type ExtendedClient = ReturnType<typeof createClient>['client'];
+
+// ✅ Export for use in services, sinks, transformers, etc.
+export type ExtendedPrismaClient = ExtendedClient;
+
+// ✅ Use this instead of Prisma.TransactionClient across your codebase
+export type PrismaTransactionClient = Omit<
+  ExtendedPrismaClient,
+  '$extends' | '$transaction' | '$disconnect' | '$connect' | '$on' | '$use'
+>;
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
   private readonly clientCache = new Map<string, ExtendedClient>();
+  private readonly poolCache = new Map<string, Pool>();
   private readonly defaultClient: ExtendedClient;
+  private readonly defaultPool: Pool;
 
   constructor() {
-    this.defaultClient = createClient('public');
+    const { client, pool } = createClient('public');
+    this.defaultClient = client;
+    this.defaultPool = pool;
   }
 
   /**
@@ -54,12 +83,16 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     const store = requestContext.getStore();
     const schemaName = store?.schema;
 
+    console.log('SCHEMA RESUELTO EN PRISMA SERVICE:', schemaName); // ✅ debug
+
     if (!schemaName || schemaName === 'public') {
       return this.defaultClient;
     }
 
     if (!this.clientCache.has(schemaName)) {
-      this.clientCache.set(schemaName, createClient(schemaName));
+      const { client, pool } = createClient(schemaName);
+      this.clientCache.set(schemaName, client);
+      this.poolCache.set(schemaName, pool);
     }
 
     return this.clientCache.get(schemaName)!;
@@ -67,14 +100,25 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     // $connect is optional with driver adapters, but safe to call
-    await (this.defaultClient as any).$connect();
+    await (this.defaultClient as unknown as PrismaClient).$connect();
   }
 
   async onModuleDestroy() {
-    await (this.defaultClient as any).$disconnect();
+    // ✅ Disconnect all Prisma clients
+    await (this.defaultClient as unknown as PrismaClient).$disconnect();
     for (const client of this.clientCache.values()) {
-      await (client as any).$disconnect();
+      await (client as unknown as PrismaClient).$disconnect();
     }
     this.clientCache.clear();
+
+    // ✅ End all pg pools to avoid connection leaks
+    await this.defaultPool.end();
+    for (const pool of this.poolCache.values()) {
+      await pool.end();
+    }
+    this.poolCache.clear();
+
+    // ✅ Disconnect the shared public audit client
+    await publicRawClient.$disconnect();
   }
 }

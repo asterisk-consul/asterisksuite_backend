@@ -11,18 +11,32 @@ export class CompaniesService {
   private get prisma() {
     return this.db.getDefaultClient();
   }
-  async create(createCompanyDto: CreateCompanyDto) {
+  async create(createCompanyDto: CreateCompanyDto, userId: string) {
+    const prisma = this.db.getDefaultClient();
+
     const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
+
     const schemaName =
       createCompanyDto.schemaName?.toLowerCase().trim() || subdomain;
 
     if (schemaName) {
-      await this.prisma.$executeRawUnsafe(
-        `CREATE SCHEMA IF NOT EXISTS "${schemaName}"`,
-      );
+      await this.prisma.$executeRawUnsafe(`CREATE SCHEMA "${schemaName}"`);
+
+      const tables = await this.prisma.$queryRawUnsafe(`
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = 'tenant'
+  `);
+
+      for (const table of tables) {
+        await this.prisma.$executeRawUnsafe(`
+      CREATE TABLE "${schemaName}"."${table.table_name}"
+      (LIKE tenant."${table.table_name}" INCLUDING ALL)
+    `);
+      }
     }
 
-    return this.prisma.companies.create({
+    const company = await prisma.companies.create({
       data: {
         name: createCompanyDto.name,
         tax_id: createCompanyDto.taxId,
@@ -31,6 +45,16 @@ export class CompaniesService {
         schema_name: schemaName,
       },
     });
+
+    await prisma.company_users.create({
+      data: {
+        company_id: company.id,
+        user_id: userId,
+        role: 'OWNER',
+      },
+    });
+
+    return company;
   }
 
   async findAll() {
@@ -77,6 +101,25 @@ export class CompaniesService {
         phone: updateCompanyDto.phone,
         ...(subdomain !== undefined ? { subdomain } : {}),
         ...(schemaName !== undefined ? { schema_name: schemaName } : {}),
+      },
+    });
+  }
+  async addUser(companyId: string, email: string, role: string) {
+    const prisma = this.db.getDefaultClient();
+
+    const user = await prisma.users.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    return prisma.company_users.create({
+      data: {
+        company_id: companyId,
+        user_id: user.id,
+        role,
       },
     });
   }

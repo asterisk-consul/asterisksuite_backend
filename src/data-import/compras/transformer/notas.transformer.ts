@@ -2,6 +2,12 @@ import { Transformer } from '../../core/interfaces';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotaRaw } from '../schemas/notas.schema';
 import { ComprasTransformado } from './compras.transformer';
+import type {
+  business_parties,
+  products,
+  taxes,
+  document_types,
+} from '../../../generated/prisma/client';
 
 function extractNumber(comprobante: string): number {
   const match = comprobante.match(/\d+$/);
@@ -32,10 +38,19 @@ export class NotaTransformer implements Transformer<
       this.prisma.document_types.findMany(),
     ]);
 
-    const partyMap = new Map(parties.map((p) => [p.name, p]));
-    const productMap = new Map(products.map((p) => [p.name, p]));
-    const taxMap = new Map(taxes.map((t) => [t.code, t]));
-    const documentTypeMap = new Map(documentTypes.map((dt) => [dt.code, dt]));
+    const partyMap = new Map<string, business_parties>(
+      parties.map((p) => [p.name, p]),
+    );
+
+    const productMap = new Map<string, products>(
+      products.map((p) => [p.name, p]),
+    );
+
+    const taxMap = new Map<string, taxes>(taxes.map((t) => [t.code, t]));
+
+    const documentTypeMap = new Map<string, document_types>(
+      documentTypes.map((dt) => [dt.code, dt]),
+    );
 
     const documentType = documentTypeMap.get(this.documentTypeCode);
     if (!documentType) {

@@ -137,7 +137,7 @@ export class PurchasesService {
           creditNoteCount: 0,
           firstPurchaseDate: null,
           lastPurchaseDate: null,
-          purchaseValues: [],
+          purchaseValues: [] as number[],
         };
 
         const productTaxes = doc.document_taxes.reduce((sum, tax) => {
