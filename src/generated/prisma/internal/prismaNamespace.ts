@@ -452,7 +452,8 @@ export const ModelName = {
   cost_components: 'cost_components',
   cost_templates: 'cost_templates',
   cost_template_components: 'cost_template_components',
-  product_structure_versions: 'product_structure_versions'
+  product_structure_versions: 'product_structure_versions',
+  system_modules: 'system_modules'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -468,7 +469,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "product_taxes" | "taxes" | "audit_logs" | "product_price" | "currencies" | "currency_rates" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "accounts" | "product_costs" | "product_cost_breakdowns" | "product_variant_prices" | "product_variant_costs" | "cost_components" | "cost_templates" | "cost_template_components" | "product_structure_versions"
+    modelProps: "business_parties" | "cargo_transfer_items" | "cargo_transfers" | "companies" | "delivery_notes" | "drivers" | "entity_photos" | "files" | "locations" | "pallet_items" | "pallets" | "party_locations" | "party_contacts" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "users" | "vehicles" | "vehicle_combinations" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses" | "document_sequences" | "refresh_tokens" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "product_taxes" | "taxes" | "audit_logs" | "product_price" | "currencies" | "currency_rates" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "accounts" | "product_costs" | "product_cost_breakdowns" | "product_variant_prices" | "product_variant_costs" | "cost_components" | "cost_templates" | "cost_template_components" | "product_structure_versions" | "system_modules"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5578,6 +5579,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    system_modules: {
+      payload: Prisma.$system_modulesPayload<ExtArgs>
+      fields: Prisma.system_modulesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.system_modulesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.system_modulesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>
+        }
+        findFirst: {
+          args: Prisma.system_modulesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.system_modulesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>
+        }
+        findMany: {
+          args: Prisma.system_modulesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>[]
+        }
+        create: {
+          args: Prisma.system_modulesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>
+        }
+        createMany: {
+          args: Prisma.system_modulesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.system_modulesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>[]
+        }
+        delete: {
+          args: Prisma.system_modulesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>
+        }
+        update: {
+          args: Prisma.system_modulesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>
+        }
+        deleteMany: {
+          args: Prisma.system_modulesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.system_modulesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.system_modulesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>[]
+        }
+        upsert: {
+          args: Prisma.system_modulesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$system_modulesPayload>
+        }
+        aggregate: {
+          args: Prisma.System_modulesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSystem_modules>
+        }
+        groupBy: {
+          args: Prisma.system_modulesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.System_modulesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.system_modulesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.System_modulesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -6310,6 +6385,7 @@ export type Document_taxesScalarFieldEnum = (typeof Document_taxesScalarFieldEnu
 export const Document_typesScalarFieldEnum = {
   id: 'id',
   document_sequence_id: 'document_sequence_id',
+  module_id: 'module_id',
   code: 'code',
   description: 'description',
   direction: 'direction',
@@ -6814,6 +6890,23 @@ export const Product_structure_versionsScalarFieldEnum = {
 export type Product_structure_versionsScalarFieldEnum = (typeof Product_structure_versionsScalarFieldEnum)[keyof typeof Product_structure_versionsScalarFieldEnum]
 
 
+export const System_modulesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  code: 'code',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type System_modulesScalarFieldEnum = (typeof System_modulesScalarFieldEnum)[keyof typeof System_modulesScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -7304,6 +7397,7 @@ export type GlobalOmitConfig = {
   cost_templates?: Prisma.cost_templatesOmit
   cost_template_components?: Prisma.cost_template_componentsOmit
   product_structure_versions?: Prisma.product_structure_versionsOmit
+  system_modules?: Prisma.system_modulesOmit
 }
 
 /* Types for Logging */

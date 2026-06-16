@@ -119,7 +119,8 @@ export const ModelName = {
   cost_components: 'cost_components',
   cost_templates: 'cost_templates',
   cost_template_components: 'cost_template_components',
-  product_structure_versions: 'product_structure_versions'
+  product_structure_versions: 'product_structure_versions',
+  system_modules: 'system_modules'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -831,6 +832,7 @@ export type Document_taxesScalarFieldEnum = (typeof Document_taxesScalarFieldEnu
 export const Document_typesScalarFieldEnum = {
   id: 'id',
   document_sequence_id: 'document_sequence_id',
+  module_id: 'module_id',
   code: 'code',
   description: 'description',
   direction: 'direction',
@@ -1333,6 +1335,23 @@ export const Product_structure_versionsScalarFieldEnum = {
 } as const
 
 export type Product_structure_versionsScalarFieldEnum = (typeof Product_structure_versionsScalarFieldEnum)[keyof typeof Product_structure_versionsScalarFieldEnum]
+
+
+export const System_modulesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  code: 'code',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type System_modulesScalarFieldEnum = (typeof System_modulesScalarFieldEnum)[keyof typeof System_modulesScalarFieldEnum]
 
 
 export const SortOrder = {
