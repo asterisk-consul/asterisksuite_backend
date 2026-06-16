@@ -30,8 +30,7 @@ model cargo_transfer_items {
     delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
     pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
     cargo_transfers  cargo_transfers @relation(fields: [transfer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-    @@schema("tenant")
+@@schema("tenant")
 }
 
 model cargo_transfers {
@@ -47,8 +46,8 @@ model cargo_transfers {
     locations                                 locations?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
     users                                     users?                 @relation(fields: [performed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
     trips_cargo_transfers_to_trip_idTotrips   trips?                 @relation("cargo_transfers_to_trip_idTotrips", fields: [to_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
     @@schema("tenant")
+
 }
 
 model delivery_notes {
@@ -72,8 +71,7 @@ model delivery_notes {
     trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
     picking_orders       picking_orders[]
     trip_cargo           trip_cargo[]
-
-    @@schema("tenant")
+@@schema("tenant")
 }
 
 model drivers {
@@ -91,8 +89,7 @@ model drivers {
     deleted_by          String?                @db.Uuid
     driverDocuments     documents_driver[]
     vehicleCombinations vehicle_combinations[]
-
-    @@schema("tenant")
+@@schema("tenant")
 }
 
 model entity_photos {
@@ -130,8 +127,7 @@ model files {
     deleted_by       String?         @db.Uuid
     entity_photos    entity_photos[]
     users            users?          @relation(fields: [uploaded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-    @@schema("tenant")
+@@schema("tenant")
 }
 
 model locations {
@@ -160,8 +156,7 @@ model locations {
     trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
     trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
     warehouses                                     warehouses[]
-
-    @@schema("tenant")
+@@schema("tenant")
 }
 
 model pallet_items {

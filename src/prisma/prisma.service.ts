@@ -6,48 +6,68 @@ import { withAudit } from './audit.extension';
 import { requestContext } from '../common/context/request-context';
 import 'dotenv/config';
 
-// prisma.service.ts — already exported, make sure it's there
+// ✅ DB fija para public
+const DATABASE_URL_PUBLIC = process.env.DATABASE_URL_PUBLIC;
+// ✅ Base para construir URLs de tenant dinámicamente
+const DATABASE_URL_BASE = process.env.DATABASE_URL_BASE;
 
-const BASE_URL = process.env.DATABASE_URL;
-
-if (!BASE_URL) {
-  throw new Error('DATABASE_URL environment variable is not defined');
+if (!DATABASE_URL_PUBLIC) {
+  throw new Error('DATABASE_URL_PUBLIC environment variable is not defined');
 }
 
-// ✅ Single shared raw public client — used for audit log writes
+if (!DATABASE_URL_BASE) {
+  throw new Error('DATABASE_URL_BASE environment variable is not defined');
+}
+
+// ✅ Cliente compartido para audit log — apunta a DB pública
 const publicRawClient = new PrismaClient({
   adapter: new PrismaPg(
     new Pool({
-      connectionString: BASE_URL,
+      connectionString: DATABASE_URL_PUBLIC,
       options: `-c search_path="public"`,
     }),
     { schema: 'public' },
   ),
 });
 
-// ✅ No explicit return type — let TypeScript infer it
-function createClient(schemaName: string) {
+// ✅ Cliente para tablas PUBLIC (users, companies, refresh_tokens...)
+function createPublicClient() {
   const pool = new Pool({
-    connectionString: BASE_URL,
-    options: `-c search_path="${schemaName}",public`,
+    connectionString: DATABASE_URL_PUBLIC,
+    options: `-c search_path="public"`,
   });
 
-  const adapter = new PrismaPg(pool, { schema: schemaName });
-  const raw = new PrismaClient({
-    adapter,
-    log: ['query'],
-  });
+  const adapter = new PrismaPg(pool, { schema: 'public' });
+  const raw = new PrismaClient({ adapter, log: ['query'] });
 
   return { client: withAudit(publicRawClient)(raw), pool };
 }
 
-// ✅ Now this works — no circular reference
-type ExtendedClient = ReturnType<typeof createClient>['client'];
+// ✅ Cliente para tablas TENANT (products, taxes, transfer_rates...)
+// Cada tenant tiene su propia DB con schema "tenant" fijo
+function createTenantClient(tenantDb: string) {
+  // ✅ URL dinámica — cambia la base de datos por tenant
+  const connectionString = `${DATABASE_URL_BASE}${tenantDb}`;
+  // resultado: "postgresql://user:pass@host:5432/empresaa_db"
 
-// ✅ Export for use in services, sinks, transformers, etc.
+  const pool = new Pool({
+    connectionString,
+    options: `-c search_path="tenant",public`,
+    max: 5, // límite de conexiones por tenant
+  });
+
+  // ✅ "tenant" coincide con @@schema("tenant") en tenant.prisma
+  const adapter = new PrismaPg(pool, { schema: 'tenant' });
+  const raw = new PrismaClient({ adapter, log: ['query'] });
+
+  return { client: withAudit(publicRawClient)(raw), pool };
+}
+
+// ✅ Tipos inferidos
+type ExtendedClient = ReturnType<typeof createPublicClient>['client'];
+
 export type ExtendedPrismaClient = ExtendedClient;
 
-// ✅ Use this instead of Prisma.TransactionClient across your codebase
 export type PrismaTransactionClient = Omit<
   ExtendedPrismaClient,
   '$extends' | '$transaction' | '$disconnect' | '$connect' | '$on' | '$use'
@@ -55,70 +75,75 @@ export type PrismaTransactionClient = Omit<
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
-  private readonly clientCache = new Map<string, ExtendedClient>();
-  private readonly poolCache = new Map<string, Pool>();
+  // Cache de clientes tenant — key es el nombre de la DB (ej: "empresaa_db")
+  private readonly tenantClientCache = new Map<string, ExtendedClient>();
+  private readonly tenantPoolCache = new Map<string, Pool>();
+
+  // Cliente fijo para public
   private readonly defaultClient: ExtendedClient;
   private readonly defaultPool: Pool;
 
   constructor() {
-    const { client, pool } = createClient('public');
+    const { client, pool } = createPublicClient();
     this.defaultClient = client;
     this.defaultPool = pool;
   }
 
   /**
-   * Always returns the default public-schema client.
-   * Use this when you need to query public tables (e.g. companies)
-   * regardless of the current request context.
+   * Siempre retorna el cliente de la DB pública.
+   * Usar para: users, companies, refresh_tokens, company_users
    */
   public getDefaultClient(): ExtendedClient {
     return this.defaultClient;
   }
 
   /**
-   * Returns a tenant-specific client based on the current request context.
-   * Falls back to the public client if no schema is set.
+   * Retorna el cliente del tenant basado en el contexto actual.
+   * Usar para: products, taxes, product_taxes, transfer_rates
+   * Clave del cache: nombre de la DB del tenant (ej: "empresaa_db")
    */
   public getClientForCurrentContext(): ExtendedClient {
     const store = requestContext.getStore();
-    const schemaName = store?.schema;
+    const tenantDb = store?.schema; // ej: "empresaa_db"
 
-    console.log('SCHEMA RESUELTO EN PRISMA SERVICE:', schemaName); // ✅ debug
+    console.log('TENANT DB RESUELTO EN PRISMA SERVICE:', tenantDb);
 
-    if (!schemaName || schemaName === 'public') {
+    if (!tenantDb || tenantDb === 'public') {
       return this.defaultClient;
     }
 
-    if (!this.clientCache.has(schemaName)) {
-      const { client, pool } = createClient(schemaName);
-      this.clientCache.set(schemaName, client);
-      this.poolCache.set(schemaName, pool);
+    if (!this.tenantClientCache.has(tenantDb)) {
+      // ✅ Crea cliente con URL dinámica apuntando a la DB del tenant
+      const { client, pool } = createTenantClient(tenantDb);
+      this.tenantClientCache.set(tenantDb, client);
+      this.tenantPoolCache.set(tenantDb, pool);
     }
 
-    return this.clientCache.get(schemaName)!;
+    return this.tenantClientCache.get(tenantDb)!;
   }
 
   async onModuleInit() {
-    // $connect is optional with driver adapters, but safe to call
     await (this.defaultClient as unknown as PrismaClient).$connect();
   }
 
   async onModuleDestroy() {
-    // ✅ Disconnect all Prisma clients
+    // ✅ Desconectar cliente public
     await (this.defaultClient as unknown as PrismaClient).$disconnect();
-    for (const client of this.clientCache.values()) {
+    await this.defaultPool.end();
+
+    // ✅ Desconectar todos los clientes tenant
+    for (const client of this.tenantClientCache.values()) {
       await (client as unknown as PrismaClient).$disconnect();
     }
-    this.clientCache.clear();
+    this.tenantClientCache.clear();
 
-    // ✅ End all pg pools to avoid connection leaks
-    await this.defaultPool.end();
-    for (const pool of this.poolCache.values()) {
+    // ✅ Cerrar todos los pools tenant
+    for (const pool of this.tenantPoolCache.values()) {
       await pool.end();
     }
-    this.poolCache.clear();
+    this.tenantPoolCache.clear();
 
-    // ✅ Disconnect the shared public audit client
+    // ✅ Desconectar cliente de audit
     await publicRawClient.$disconnect();
   }
 }

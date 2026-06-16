@@ -1,52 +1,95 @@
+import { execSync } from 'child_process';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Pool, Client } from 'pg';
 
 @Injectable()
 export class CompaniesService {
   constructor(private db: PrismaService) {}
 
-  // Getter privado para reutilizar en todos los métodos
   private get prisma() {
     return this.db.getDefaultClient();
   }
+
   async create(createCompanyDto: CreateCompanyDto, userId: string) {
-    const prisma = this.db.getDefaultClient();
-
     const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
+    const tenantDb = `${subdomain}_db`;
+    const tenantDbUrl = `${process.env.DATABASE_URL_BASE}${tenantDb}`;
 
-    const schemaName =
-      createCompanyDto.schemaName?.toLowerCase().trim() || subdomain;
+    // 1. Crear la DB
+    const adminPool = new Pool({
+      connectionString: process.env.DATABASE_URL_PUBLIC,
+    });
 
-    if (schemaName) {
-      await this.prisma.$executeRawUnsafe(`CREATE SCHEMA "${schemaName}"`);
-
-      const tables = await this.prisma.$queryRawUnsafe(`
-    SELECT table_name
-    FROM information_schema.tables
-    WHERE table_schema = 'tenant'
-  `);
-
-      for (const table of tables) {
-        await this.prisma.$executeRawUnsafe(`
-      CREATE TABLE "${schemaName}"."${table.table_name}"
-      (LIKE tenant."${table.table_name}" INCLUDING ALL)
-    `);
+    try {
+      const { rows } = await adminPool.query(
+        `SELECT 1 FROM pg_database WHERE datname = $1`,
+        [tenantDb],
+      );
+      if (rows.length > 0) {
+        throw new Error(`La empresa con subdomain "${subdomain}" ya existe`);
       }
+      await adminPool.query(`CREATE DATABASE "${tenantDb}"`);
+    } finally {
+      await adminPool.end();
     }
 
-    const company = await prisma.companies.create({
+    // 2. Crear schemas public y tenant en la nueva DB
+    const tenantPool = new Pool({ connectionString: tenantDbUrl });
+    try {
+      await tenantPool.query(`CREATE SCHEMA IF NOT EXISTS tenant`);
+      await tenantPool.query(`CREATE SCHEMA IF NOT EXISTS public`);
+    } finally {
+      await tenantPool.end();
+    }
+
+    // 3. Generar SQL con migrate diff y ejecutarlo directamente
+    try {
+      const sql = execSync(
+        `npx prisma migrate diff --from-empty --to-schema ./prisma/schema --script`,
+        {
+          env: {
+            ...process.env,
+            DATABASE_URL: tenantDbUrl,
+          },
+        },
+      ).toString();
+
+      const client = new Client({ connectionString: tenantDbUrl });
+      await client.connect();
+      try {
+        await client.query(sql);
+      } finally {
+        await client.end();
+      }
+    } catch (error) {
+      const cleanupPool = new Pool({
+        connectionString: process.env.DATABASE_URL_PUBLIC,
+      });
+      try {
+        await cleanupPool.query(`DROP DATABASE IF EXISTS "${tenantDb}"`);
+      } finally {
+        await cleanupPool.end();
+      }
+      throw new Error(
+        `Error al aplicar schema en ${tenantDb}: ${error.message}`,
+      );
+    }
+
+    // 4. Registrar empresa en public
+    const company = await this.prisma.companies.create({
       data: {
         name: createCompanyDto.name,
         tax_id: createCompanyDto.taxId,
         phone: createCompanyDto.phone,
         subdomain,
-        schema_name: schemaName,
+        schema_name: tenantDb,
       },
     });
 
-    await prisma.company_users.create({
+    await this.prisma.company_users.create({
       data: {
         company_id: company.id,
         user_id: userId,
@@ -104,6 +147,7 @@ export class CompaniesService {
       },
     });
   }
+
   async addUser(companyId: string, email: string, role: string) {
     const prisma = this.db.getDefaultClient();
 

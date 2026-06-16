@@ -3,78 +3,75 @@ import { Request, Response, NextFunction } from 'express';
 import { requestContext } from '../context/request-context';
 import { PrismaService } from '@/prisma/prisma.service';
 
-// Non-tenant subdomains that should always use the public schema
 const PUBLIC_SUBDOMAINS = new Set(['public', 'dev', 'api', 'www', 'admin']);
 
 @Injectable()
 export class TenantMiddleware implements NestMiddleware {
   private readonly logger = new Logger(TenantMiddleware.name);
 
-  // Simple in-memory cache mapping subdomain -> schema_name
-  // TTL-based invalidation: cache entry expires after 5 minutes
+  // Cache: subdomain → { tenantDb, expiresAt }
   private tenantCache = new Map<
     string,
-    { schemaName: string; expiresAt: number }
+    { tenantDb: string; expiresAt: number }
   >();
-  private readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+  private readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
 
   constructor(private readonly prisma: PrismaService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     const subdomain = this.extractSubdomain(req);
 
-    // No subdomain or known public subdomain → use public schema
+    // Sin subdomain o subdomain público → usa cliente public
     if (!subdomain || PUBLIC_SUBDOMAINS.has(subdomain)) {
       return requestContext.run({ schema: 'public' }, () => next());
     }
 
     try {
-      const schemaName = await this.resolveSchema(subdomain);
+      const tenantDb = await this.resolveTenantDb(subdomain);
 
-      if (!schemaName) {
+      if (!tenantDb) {
         return res.status(404).json({
           message: `Tenant not found for subdomain: ${subdomain}`,
         });
       }
-      console.log('TENANT:', subdomain);
-      console.log('SCHEMA RESUELTO:', schemaName);
 
-      // Run subsequent request code with the resolved tenant schema
-      return requestContext.run({ schema: schemaName }, () => next());
+      this.logger.log(`TENANT: ${subdomain} → DB: ${tenantDb}`);
+
+      // ✅ schema ahora guarda el nombre de la DB del tenant
+      // ej: "empresaa_db" — usado en PrismaService.getClientForCurrentContext()
+      return requestContext.run({ schema: tenantDb }, () => next());
     } catch (error: any) {
       this.logger.error(
-        `Error resolving tenant schema for subdomain "${subdomain}": ${error.message}`,
+        `Error resolving tenant DB for subdomain "${subdomain}": ${error.message}`,
       );
       return res.status(500).json({
-        message: 'Error resolving tenant schema',
+        message: 'Error resolving tenant DB',
         error: error.message,
       });
     }
   }
 
   /**
-   * Resolves the schema name for a given subdomain.
-   * Uses an in-memory cache with TTL to avoid hitting the DB on every request.
+   * Resuelve el nombre de la DB del tenant para un subdomain dado.
+   * Usa cache en memoria con TTL para evitar queries en cada request.
    */
-  private async resolveSchema(subdomain: string): Promise<string | null> {
+  private async resolveTenantDb(subdomain: string): Promise<string | null> {
     const now = Date.now();
     const cached = this.tenantCache.get(subdomain);
 
-    // Return cached value if still valid
+    // ✅ Retorna del cache si aún es válido
     if (cached && cached.expiresAt > now) {
-      return cached.schemaName;
+      return cached.tenantDb;
     }
 
-    // Always query the public schema client for company lookup
-    const company = await (
-      this.prisma.getDefaultClient() as any
-    ).companies.findFirst({
+    // ✅ Siempre usa el cliente public para buscar la empresa
+    const company = await this.prisma.getDefaultClient().companies.findFirst({
       where: {
         subdomain,
-        deleted_at: null, // exclude soft-deleted companies
+        deleted_at: null,
       },
       select: {
-        schema_name: true,
+        schema_name: true, // ← contiene "empresaa_db"
       },
     });
 
@@ -82,9 +79,9 @@ export class TenantMiddleware implements NestMiddleware {
       return null;
     }
 
-    // Store in cache with expiry
+    // ✅ Guarda en cache con expiración
     this.tenantCache.set(subdomain, {
-      schemaName: company.schema_name,
+      tenantDb: company.schema_name, // ej: "empresaa_db"
       expiresAt: now + this.CACHE_TTL_MS,
     });
 
@@ -92,11 +89,11 @@ export class TenantMiddleware implements NestMiddleware {
   }
 
   /**
-   * Extracts the tenant subdomain from the request.
-   * Priority: custom header > query param > hostname
+   * Extrae el subdomain del request.
+   * Prioridad: header > query param > hostname
    */
   private extractSubdomain(req: Request): string | null {
-    // 1. Custom headers (useful for local dev / API clients)
+    // 1. Headers personalizados
     const tenantHeader = req.headers['x-tenant'] ?? req.headers['x-subdomain'];
     if (tenantHeader && typeof tenantHeader === 'string') {
       return tenantHeader.toLowerCase().trim();
@@ -108,29 +105,24 @@ export class TenantMiddleware implements NestMiddleware {
       return tenantQuery.toLowerCase().trim();
     }
 
-    // 3. Parse from hostname
-    // Strip port if present (e.g. localhost:3000 -> localhost)
+    // 3. Hostname
     const rawHost = (req.hostname || req.headers.host || '').split(':')[0];
     const parts = rawHost.split('.');
 
-    // Need at least: subdomain.domain.tld (3 parts)
     if (parts.length < 3) {
       return null;
     }
 
     const first = parts[0].toLowerCase();
 
-    // api.donandres.asterisksuite.cloud -> donandres
     if ((first === 'api' || first === 'www') && parts.length > 3) {
       return parts[1].toLowerCase();
     }
 
-    // dev.donandres.asterisksuite.cloud -> donandres
     if (first === 'dev' && parts.length > 3) {
       return parts[1].toLowerCase();
     }
 
-    // donandres.asterisksuite.cloud -> donandres
     return first;
   }
 }
