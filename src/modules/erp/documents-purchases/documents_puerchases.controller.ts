@@ -1,23 +1,13 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import { DocumentsSalesService } from './documents_purchases.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { DocumentsPurchasesService } from './documents_purchases.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 
 @Controller('documents/purchases-documents')
 @UseGuards(JwtAuthGuard)
-export class DocumentsSalesController {
-  constructor(private readonly service: DocumentsSalesService) {}
+export class DocumentsPurchasesController {
+  constructor(private readonly service: DocumentsPurchasesService) {}
 
   @Post()
   create(@Body() dto: CreateDocumentDto) {
@@ -25,14 +15,8 @@ export class DocumentsSalesController {
   }
 
   @Get()
-  findAll(
-    @Query('documentTypeId') documentTypeId?: string,
-    @Query('status') status?: string,
-  ) {
-    return this.service.findAll(
-      documentTypeId,
-      status !== undefined ? Number(status) : undefined,
-    );
+  findAll(@Query('documentTypeId') documentTypeId?: string, @Query('status') status?: string) {
+    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined);
   }
 
   @Get(':id')

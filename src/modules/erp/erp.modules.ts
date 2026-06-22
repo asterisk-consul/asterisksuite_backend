@@ -16,6 +16,7 @@ import { ProductPricingModule } from './pricing/product-pricing/product-pricing.
 import { PurchasesModule } from './purchase/purchases.module';
 import { RatePriceModule } from './services/rate-price.module';
 import { TaxesModule } from './taxes/taxes.module';
+import { DocumentsPurchasesModule } from './documents-purchases/documents_purchases.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TaxesModule } from './taxes/taxes.module';
     // DocumentsSalesModule,
     DocumentsSalesModule,
     SalesReportModule,
+    DocumentsPurchasesModule,
     DocumentsTypesErpModule,
     PricingEngineModule,
     ExchangeModule,
