@@ -1,0 +1,99 @@
+enum DispatchStatus {
+    PENDING
+    ASSIGNED
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}
+
+enum TripStatus {
+    PLANNED
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}
+
+enum AuditAction {
+    CREATE
+    UPDATE
+    DELETE
+    RESTORE
+}
+
+enum ProductType {
+    RAW_MATERIAL
+    SEMI_FINISHED
+    FINISHED_PRODUCT
+    SERVICE
+    RATES
+}
+
+enum UnitType {
+    UNIT //Unidad	un
+    WEIGHT //Kilogramo	kg
+    LENGTH //Metro	m
+    AREA //Metro cuadrado	m2
+    VOLUME //Metro cúbico	m3
+}
+
+enum AccountType {
+    ASSET
+    LIABILITY
+    EQUITY
+    REVENUE
+    EXPENSE
+}
+
+enum AttributeType {
+    TEXT
+    NUMBER
+    BOOLEAN
+    SELECT
+}
+
+enum CalculationType {
+    UNIT
+    SURFACE
+    VOLUME
+    LINEAR
+}
+
+enum CurrencyRateType {
+    OFFICIAL
+    BLUE
+    MEP
+    CCL
+    WHOLESALE
+    CRYPTO
+    CARD
+}
+
+enum ProductCostSource {
+    MANUAL
+    BOM
+    ENGINEERING
+    PURCHASE
+    RATE
+}
+
+enum VariantCostSource {
+    MANUAL
+    PURCHASE
+    IMPORT
+    ENGINEERING
+    SUPPLIER
+}
+
+enum CostComponentType {
+    MATERIAL
+    LABOR
+    OVERHEAD
+    OTHER
+}
+
+enum CostValueType {
+    FROM_BOM
+    PERCENTAGE_OF_MATERIAL
+    PERCENTAGE_OF_TOTAL
+    FIXED_PER_UNIT
+}

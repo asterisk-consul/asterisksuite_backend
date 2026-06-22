@@ -1,0 +1,297 @@
+model product_price {
+    id             String     @id @default(uuid()) @db.Uuid
+    product_id     String     @db.Uuid
+    currency_id    String     @db.Uuid
+    price          Decimal    @db.Decimal(15, 2)
+    exemption_rate Decimal    @default(0) @db.Decimal(5, 2)
+    active         Boolean    @default(true)
+    created_at     DateTime   @default(now()) @db.Timestamp(6)
+    updated_at     DateTime?  @updatedAt @db.Timestamp(6)
+    deleted_at     DateTime?
+    created_by     String?    @db.Uuid
+    updated_by     String?    @db.Uuid
+    deleted_by     String?    @db.Uuid
+    products       products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+    currencies     currencies @relation(fields: [currency_id], references: [id])
+
+    @@unique([product_id, currency_id])
+    @@index([product_id])
+    @@index([currency_id])
+}
+
+model products {
+    id                       String            @id @default(uuid()) @db.Uuid
+    name                     String            @db.VarChar(255)
+    sku                      String?           @db.VarChar(100)
+    requires_refrigeration   Boolean?          @default(false)
+    price_enabled            Boolean           @default(false)
+    is_rate_type             Boolean           @default(false)
+    rate_id                  String?           @db.Uuid
+    taxId                    String?           @db.Uuid
+    active                   Boolean?          @default(true)
+    product_type             ProductType       @default(FINISHED_PRODUCT)
+    is_composed              Boolean           @default(false)
+    auto_calculate_cost      Boolean           @default(false)
+    has_engineering          Boolean           @default(false)
+    manages_stock            Boolean           @default(true)
+    //ver como impactan con lo que ya tenemos
+    income_account_id        String?           @db.Uuid
+    expense_account_id       String?           @db.Uuid
+    inventory_account_id     String?           @db.Uuid
+    calculation_type         CalculationType?  @default(UNIT)
+    //DELETES
+    created_at               DateTime          @default(now()) @db.Timestamp(6)
+    updated_at               DateTime?         @updatedAt @db.Timestamp(6)
+    deleted_at               DateTime?
+    created_by               String?           @db.Uuid
+    updated_by               String?           @db.Uuid
+    deleted_by               String?           @db.Uuid
+    cost_source              ProductCostSource @default(BOM)
+    needs_cost_recalculation Boolean           @default(false)
+    last_cost_calculated_at  DateTime?
+    cost_template_id         String?           @db.Uuid
+
+    // RELACIONES 
+    product_variants          product_variants[]
+    //articulo raiz no solo el padre
+    parent_components         product_components[]         @relation("parent_product")
+    child_components          product_components[]         @relation("child_product")
+    product_categories        product_categories[]
+    product_tags              product_tags[]
+    product_attribute_values  product_attribute_values[]
+    //
+    current_cost              Decimal?                     @db.Decimal(15, 2)
+    income_account            accounts?                    @relation("product_income_account", fields: [income_account_id], references: [id])
+    expense_account           accounts?                    @relation("product_expense_account", fields: [expense_account_id], references: [id])
+    inventory_account         accounts?                    @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
+    document_items            document_items[]
+    pallet_items              pallet_items[]
+    picking_items             picking_items[]
+    product_price             product_price[]
+    product_taxes             product_taxes[]
+    transfer_rate             transfer_rates?              @relation(fields: [rate_id], references: [id])
+    warehouse_stock           warehouse_stock[]
+    warehouse_stock_movements warehouse_stock_movements[]
+    product_costs             product_costs[]
+    productCostBreakdowns     product_cost_breakdowns[]
+    cost_template             cost_templates?              @relation(fields: [cost_template_id], references: [id])
+    productStructureVersions  product_structure_versions[]
+}
+
+model units {
+    id                 String               @id @default(uuid()) @db.Uuid
+    name               String               @db.VarChar(100)
+    symbol             String               @db.VarChar(20)
+    unit_type          UnitType
+    active             Boolean              @default(true)
+    created_at         DateTime             @default(now()) @db.Timestamp(6)
+    updated_at         DateTime?            @updatedAt @db.Timestamp(6)
+    deleted_at         DateTime?
+    created_by         String?              @db.Uuid
+    updated_by         String?              @db.Uuid
+    deleted_by         String?              @db.Uuid
+    product_components product_components[]
+}
+
+model product_variants {
+    id                       String                     @id @default(uuid()) @db.Uuid
+    product_id               String                     @db.Uuid
+    name                     String?                    @db.VarChar(255)
+    sku                      String?                    @db.VarChar(100)
+    thickness_mm             Decimal?                   @db.Decimal(10, 3)
+    density_kg_m3            Decimal?                   @db.Decimal(12, 3)
+    weight_kg                Decimal?                   @db.Decimal(12, 3)
+    weight_per_m2_kg         Decimal?                   @db.Decimal(10, 4)
+    weight_per_meter_kg      Decimal?                   @db.Decimal(10, 4)
+    active                   Boolean                    @default(true)
+    created_at               DateTime                   @default(now()) @db.Timestamp(6)
+    updated_at               DateTime?                  @updatedAt @db.Timestamp(6)
+    deleted_at               DateTime?
+    created_by               String?                    @db.Uuid
+    updated_by               String?                    @db.Uuid
+    deleted_by               String?                    @db.Uuid
+    products                 products                   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+    product_components       product_components[]
+    product_attribute_values product_attribute_values[]
+    productCostBreakdowns    product_cost_breakdowns[]
+    productVariantPrices     product_variant_prices[]
+    productVariantCosts      product_variant_costs[]
+
+    @@index([product_id])
+}
+
+model product_components {
+    //producto raiz 
+    id                   String            @id @default(uuid()) @db.Uuid
+    parent_product_id    String            @db.Uuid
+    child_product_id     String            @db.Uuid
+    child_variant_id     String?           @db.Uuid
+    quantity             Decimal           @db.Decimal(12, 3)
+    unit_id              String?           @db.Uuid
+    length_mm            Decimal?          @db.Decimal(12, 3)
+    width_mm             Decimal?          @db.Decimal(12, 3)
+    height_mm            Decimal?          @db.Decimal(12, 3)
+    calculated_weight_kg Decimal?          @db.Decimal(12, 3)
+    waste_percentage     Decimal?          @db.Decimal(5, 2)
+    active               Boolean           @default(true)
+    order                Int               @default(0)
+    created_at           DateTime          @default(now()) @db.Timestamp(6)
+    updated_at           DateTime?         @updatedAt @db.Timestamp(6)
+    deleted_at           DateTime?
+    created_by           String?           @db.Uuid
+    updated_by           String?           @db.Uuid
+    deleted_by           String?           @db.Uuid
+    parent_product       products          @relation("parent_product", fields: [parent_product_id], references: [id], onDelete: Cascade)
+    child_product        products          @relation("child_product", fields: [child_product_id], references: [id])
+    child_variant        product_variants? @relation(fields: [child_variant_id], references: [id])
+    units                units?            @relation(fields: [unit_id], references: [id])
+
+    @@index([parent_product_id, order])
+    @@index([child_product_id])
+    @@index([child_variant_id])
+}
+
+model categories {
+    id                 String               @id @default(uuid()) @db.Uuid
+    name               String               @db.VarChar(255)
+    slug               String?              @db.VarChar(255)
+    parent_id          String?              @db.Uuid
+    sort_order         Int                  @default(0)
+    active             Boolean              @default(true)
+    //ver de agregar types como en flow
+    created_at         DateTime             @default(now()) @db.Timestamp(6)
+    updated_at         DateTime?            @updatedAt @db.Timestamp(6)
+    deleted_at         DateTime?
+    created_by         String?              @db.Uuid
+    updated_by         String?              @db.Uuid
+    deleted_by         String?              @db.Uuid
+    parent             categories?          @relation("category_tree", fields: [parent_id], references: [id])
+    children           categories[]         @relation("category_tree")
+    product_categories product_categories[]
+
+    @@index([parent_id])
+    @@index([sort_order])
+    @@index([parent_id, sort_order])
+}
+
+model product_categories {
+    product_id  String     @db.Uuid
+    category_id String     @db.Uuid
+    created_at  DateTime   @default(now()) @db.Timestamp(6)
+    updated_at  DateTime?  @updatedAt @db.Timestamp(6)
+    deleted_at  DateTime?
+    created_by  String?    @db.Uuid
+    updated_by  String?    @db.Uuid
+    deleted_by  String?    @db.Uuid
+    products    products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+    categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+    @@id([product_id, category_id])
+    @@index([category_id])
+}
+
+model tags {
+    id           String         @id @default(uuid()) @db.Uuid
+    name         String         @unique @db.VarChar(100)
+    active       Boolean        @default(true)
+    created_at   DateTime       @default(now()) @db.Timestamp(6)
+    updated_at   DateTime?      @updatedAt @db.Timestamp(6)
+    deleted_at   DateTime?
+    created_by   String?        @db.Uuid
+    updated_by   String?        @db.Uuid
+    deleted_by   String?        @db.Uuid
+    product_tags product_tags[]
+}
+
+model product_tags {
+    product_id String    @db.Uuid
+    tag_id     String    @db.Uuid
+    created_at DateTime  @default(now()) @db.Timestamp(6)
+    updated_at DateTime? @updatedAt @db.Timestamp(6)
+    deleted_at DateTime?
+    created_by String?   @db.Uuid
+    updated_by String?   @db.Uuid
+    deleted_by String?   @db.Uuid
+    products   products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+    tags       tags      @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+    @@id([product_id, tag_id])
+}
+
+model attributes {
+    id                       String                     @id @default(uuid()) @db.Uuid
+    name                     String                     @db.VarChar(100)
+    code                     String                     @unique @db.VarChar(100)
+    type                     AttributeType
+    active                   Boolean                    @default(true)
+    created_at               DateTime                   @default(now()) @db.Timestamp(6)
+    updated_at               DateTime?                  @updatedAt @db.Timestamp(6)
+    deleted_at               DateTime?
+    created_by               String?                    @db.Uuid
+    updated_by               String?                    @db.Uuid
+    deleted_by               String?                    @db.Uuid
+    product_attribute_values product_attribute_values[]
+}
+
+model product_attribute_values {
+    id               String            @id @default(uuid()) @db.Uuid
+    product_id       String?           @db.Uuid
+    variant_id       String?           @db.Uuid
+    attribute_id     String            @db.Uuid
+    text_value       String?
+    number_value     Decimal?          @db.Decimal(15, 3)
+    boolean_value    Boolean?
+    created_at       DateTime          @default(now()) @db.Timestamp(6)
+    updated_at       DateTime?         @updatedAt @db.Timestamp(6)
+    deleted_at       DateTime?
+    created_by       String?           @db.Uuid
+    updated_by       String?           @db.Uuid
+    deleted_by       String?           @db.Uuid
+    products         products?         @relation(fields: [product_id], references: [id])
+    product_variants product_variants? @relation(fields: [variant_id], references: [id])
+    attributes       attributes        @relation(fields: [attribute_id], references: [id])
+
+    @@index([product_id])
+    @@index([variant_id])
+    @@index([attribute_id])
+}
+
+model product_variant_prices {
+    id              String           @id @default(uuid()) @db.Uuid
+    variant_id      String           @db.Uuid
+    currency_id     String           @db.Uuid
+    price           Decimal          @db.Decimal(15, 2)
+    price_list      String?
+    margin          Decimal?         @db.Decimal(5, 2)
+    active          Boolean          @default(true)
+    created_at      DateTime         @default(now())
+    updated_at      DateTime?        @updatedAt
+    deleted_at      DateTime?
+    product_variant product_variants @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+    currency        currencies       @relation(fields: [currency_id], references: [id])
+
+    @@index([variant_id])
+    @@index([currency_id])
+}
+
+model product_variant_costs {
+    id              String            @id @default(uuid()) @db.Uuid
+    variant_id      String            @db.Uuid
+    currency_id     String            @db.Uuid
+    source          VariantCostSource @default(MANUAL)
+    cost            Decimal           @db.Decimal(15, 2)
+    effective_date  DateTime          @default(now())
+    supplier        String?
+    notes           String?
+    active          Boolean           @default(true)
+    created_at      DateTime          @default(now())
+    updated_at      DateTime?         @updatedAt
+    deleted_at      DateTime?
+    product_variant product_variants  @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+    currency        currencies        @relation(fields: [currency_id], references: [id])
+
+    @@index([variant_id])
+    @@index([currency_id])
+    @@index([source])
+    @@index([effective_date])
+}

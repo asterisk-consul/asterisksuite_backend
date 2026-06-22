@@ -1,0 +1,14 @@
+model system_modules {
+    id             String           @id @default(uuid()) @db.Uuid
+    name           String           @db.VarChar(100)
+    description    String?          @db.VarChar(255)
+    code           String           @unique @db.VarChar(50)
+    active         Boolean          @default(true)
+    created_at     DateTime         @default(now()) @db.Timestamp(6)
+    updated_at     DateTime?        @updatedAt @db.Timestamp(6)
+    deleted_at     DateTime?
+    created_by     String?          @db.Uuid
+    updated_by     String?          @db.Uuid
+    deleted_by     String?          @db.Uuid
+    document_types document_types[]
+}

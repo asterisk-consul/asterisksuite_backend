@@ -1,0 +1,96 @@
+model product_costs {
+    id                  String                    @id @default(uuid()) @db.Uuid
+    product_id          String                    @db.Uuid
+    currency_id         String                    @db.Uuid
+    cost_source         ProductCostSource         @default(BOM)
+    material_cost       Decimal                   @default(0) @db.Decimal(15, 2)
+    labor_cost          Decimal                   @default(0) @db.Decimal(15, 2)
+    overhead_cost       Decimal                   @default(0) @db.Decimal(15, 2)
+    total_cost          Decimal                   @default(0) @db.Decimal(15, 2)
+    version             Int                       @default(1)
+    notes               String?
+    active              Boolean                   @default(true)
+    created_at          DateTime                  @default(now()) @db.Timestamp(6)
+    updated_at          DateTime?                 @updatedAt @db.Timestamp(6)
+    deleted_at          DateTime?
+    created_by          String?                   @db.Uuid
+    updated_by          String?                   @db.Uuid
+    deleted_by          String?                   @db.Uuid
+    cost_template_id    String?                   @db.Uuid
+    cost_rates_snapshot Json?
+    products            products                  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+    currencies          currencies                @relation(fields: [currency_id], references: [id])
+    breakdowns          product_cost_breakdowns[]
+
+    @@index([product_id])
+    @@index([currency_id])
+    @@index([active])
+}
+
+model product_cost_breakdowns {
+    id                   String                    @id @default(uuid()) @db.Uuid
+    product_cost_id      String                    @db.Uuid
+    component_product_id String                    @db.Uuid
+    component_variant_id String?                   @db.Uuid
+    quantity             Decimal                   @db.Decimal(15, 3)
+    unit_cost            Decimal                   @db.Decimal(15, 2)
+    total_cost           Decimal                   @db.Decimal(15, 2)
+    level                Int                       @default(0)
+    parent_breakdown_id  String?                   @db.Uuid
+    created_at           DateTime                  @default(now()) @db.Timestamp(6)
+    product_costs        product_costs             @relation(fields: [product_cost_id], references: [id], onDelete: Cascade)
+    component_product    products                  @relation(fields: [component_product_id], references: [id])
+    component_variant    product_variants?         @relation(fields: [component_variant_id], references: [id])
+    parent_breakdown     product_cost_breakdowns?  @relation("BreakdownTree", fields: [parent_breakdown_id], references: [id])
+    children             product_cost_breakdowns[] @relation("BreakdownTree")
+
+    @@index([product_cost_id])
+    @@index([component_product_id])
+    @@index([parent_breakdown_id])
+}
+
+model cost_components {
+    id         String            @id @default(uuid()) @db.Uuid
+    name       String            @db.VarChar(255)
+    type       CostComponentType
+    value_type CostValueType
+    value      Decimal?          @db.Decimal(10, 4)
+    order      Int               @default(0)
+    active     Boolean           @default(true)
+    created_at DateTime          @default(now()) @db.Timestamp(6)
+    updated_at DateTime?         @updatedAt @db.Timestamp(6)
+    deleted_at DateTime?
+    created_by String?           @db.Uuid
+    updated_by String?           @db.Uuid
+
+    template_components cost_template_components[]
+}
+
+model cost_templates {
+    id          String    @id @default(uuid()) @db.Uuid
+    name        String    @db.VarChar(255)
+    description String?
+    is_default  Boolean   @default(false)
+    active      Boolean   @default(true)
+    created_at  DateTime  @default(now()) @db.Timestamp(6)
+    updated_at  DateTime? @updatedAt @db.Timestamp(6)
+    deleted_at  DateTime?
+    created_by  String?   @db.Uuid
+    updated_by  String?   @db.Uuid
+
+    components cost_template_components[]
+    products   products[]
+}
+
+model cost_template_components {
+    id                String          @id @default(uuid()) @db.Uuid
+    template_id       String          @db.Uuid
+    cost_component_id String          @db.Uuid
+    value_override    Decimal?        @db.Decimal(10, 4)
+    order             Int             @default(0)
+    template          cost_templates  @relation(fields: [template_id], references: [id], onDelete: Cascade)
+    component         cost_components @relation(fields: [cost_component_id], references: [id])
+
+    @@unique([template_id, cost_component_id])
+    @@index([template_id])
+}
