@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { DataImportModule } from './data-import/data-import.module';
 import { ModulesModule } from './modules/modules.module';
+import { AccessControlModule } from './access-control/access-control.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ModulesModule } from './modules/modules.module';
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     AuthModule,
+    AccessControlModule,
     DataImportModule,
     ModulesModule,
   ],

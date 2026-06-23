@@ -1,0 +1,111 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==========================================
+# LOGIN
+# ==========================================
+
+# @name login
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+###############################################################
+### ACCESS CONTROL
+###############################################################
+
+###
+# Obtener catálogo de permisos
+
+GET {{baseUrl}}/access-control/permissions
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Obtener roles
+
+GET {{baseUrl}}/access-control/roles
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Crear rol
+
+POST {{baseUrl}}/access-control/roles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "test-role",
+  "name": "Rol de Prueba",
+  "description": "Creado desde REST Client"
+}
+
+###
+
+# Actualizar rol
+
+PATCH {{baseUrl}}/access-control/roles/ROLE_ID
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Rol Actualizado"
+}
+
+###
+
+# Eliminar rol
+
+DELETE {{baseUrl}}/access-control/roles/ROLE_ID
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Obtener roles de un usuario
+
+GET {{baseUrl}}/access-control/users/9c331e1a-b343-43eb-bfe7-15c9f00631d2/roles
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Asignar rol al usuario
+
+PUT {{baseUrl}}/access-control/users/9c331e1a-b343-43eb-bfe7-15c9f00631d2/roles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "roleIds": [
+    "PONER_ROLE_ID"
+  ]
+}
+
+###
+
+# Permisos efectivos
+
+GET {{baseUrl}}/access-control/users/9c331e1a-b343-43eb-bfe7-15c9f00631d2/permissions
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Test de autorización
+
+POST {{baseUrl}}/access-control/test/can
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "userId": "9c331e1a-b343-43eb-bfe7-15c9f00631d2",
+  "permission": "products.create"
+}

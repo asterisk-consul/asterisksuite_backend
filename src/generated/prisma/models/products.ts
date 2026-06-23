@@ -895,11 +895,6 @@ export type productsUncheckedUpdateManyInput = {
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
-export type ProductsScalarRelationFilter = {
-  is?: Prisma.productsWhereInput
-  isNot?: Prisma.productsWhereInput
-}
-
 export type ProductsListRelationFilter = {
   every?: Prisma.productsWhereInput
   some?: Prisma.productsWhereInput
@@ -908,6 +903,11 @@ export type ProductsListRelationFilter = {
 
 export type productsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ProductsScalarRelationFilter = {
+  is?: Prisma.productsWhereInput
+  isNot?: Prisma.productsWhereInput
 }
 
 export type ProductsNullableScalarRelationFilter = {
@@ -1017,246 +1017,6 @@ export type productsMinOrderByAggregateInput = {
 
 export type productsSumOrderByAggregateInput = {
   current_cost?: Prisma.SortOrder
-}
-
-export type productsCreateNestedOneWithoutPallet_itemsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPallet_itemsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutPallet_itemsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPallet_itemsInput
-  upsert?: Prisma.productsUpsertWithoutPallet_itemsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutPallet_itemsInput, Prisma.productsUpdateWithoutPallet_itemsInput>, Prisma.productsUncheckedUpdateWithoutPallet_itemsInput>
-}
-
-export type productsCreateNestedOneWithoutPicking_itemsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPicking_itemsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutPicking_itemsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPicking_itemsInput
-  upsert?: Prisma.productsUpsertWithoutPicking_itemsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutPicking_itemsInput, Prisma.productsUpdateWithoutPicking_itemsInput>, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
-}
-
-export type productsCreateNestedOneWithoutWarehouse_stockInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stockInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutWarehouse_stockNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stockInput
-  upsert?: Prisma.productsUpsertWithoutWarehouse_stockInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stockInput, Prisma.productsUpdateWithoutWarehouse_stockInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stockInput>
-}
-
-export type productsCreateNestedOneWithoutWarehouse_stock_movementsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stock_movementsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stock_movementsInput
-  upsert?: Prisma.productsUpsertWithoutWarehouse_stock_movementsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.productsUpdateWithoutWarehouse_stock_movementsInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
-}
-
-export type productsCreateNestedManyWithoutTransfer_rateInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
-  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
-  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-}
-
-export type productsUncheckedCreateNestedManyWithoutTransfer_rateInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
-  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
-  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-}
-
-export type productsUpdateManyWithoutTransfer_rateNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
-  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput[]
-  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
-  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  update?: Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput[]
-  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput | Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput[]
-  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
-}
-
-export type productsUncheckedUpdateManyWithoutTransfer_rateNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
-  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput[]
-  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
-  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
-  update?: Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput[]
-  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput | Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput[]
-  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
-}
-
-export type productsCreateNestedOneWithoutDocument_itemsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutDocument_itemsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneWithoutDocument_itemsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutDocument_itemsInput
-  upsert?: Prisma.productsUpsertWithoutDocument_itemsInput
-  disconnect?: Prisma.productsWhereInput | boolean
-  delete?: Prisma.productsWhereInput | boolean
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutDocument_itemsInput, Prisma.productsUpdateWithoutDocument_itemsInput>, Prisma.productsUncheckedUpdateWithoutDocument_itemsInput>
-}
-
-export type productsCreateNestedOneWithoutProduct_taxesInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_taxesInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutProduct_taxesNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_taxesInput
-  upsert?: Prisma.productsUpsertWithoutProduct_taxesInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_taxesInput, Prisma.productsUpdateWithoutProduct_taxesInput>, Prisma.productsUncheckedUpdateWithoutProduct_taxesInput>
-}
-
-export type productsCreateNestedOneWithoutProduct_priceInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutProduct_priceNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput
-  upsert?: Prisma.productsUpsertWithoutProduct_priceInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_priceInput, Prisma.productsUpdateWithoutProduct_priceInput>, Prisma.productsUncheckedUpdateWithoutProduct_priceInput>
-}
-
-export type EnumProductTypeFieldUpdateOperationsInput = {
-  set?: $Enums.ProductType
-}
-
-export type NullableEnumCalculationTypeFieldUpdateOperationsInput = {
-  set?: $Enums.CalculationType | null
-}
-
-export type EnumProductCostSourceFieldUpdateOperationsInput = {
-  set?: $Enums.ProductCostSource
-}
-
-export type productsCreateNestedOneWithoutProduct_variantsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_variantsInput, Prisma.productsUncheckedCreateWithoutProduct_variantsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_variantsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutProduct_variantsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_variantsInput, Prisma.productsUncheckedCreateWithoutProduct_variantsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_variantsInput
-  upsert?: Prisma.productsUpsertWithoutProduct_variantsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_variantsInput, Prisma.productsUpdateWithoutProduct_variantsInput>, Prisma.productsUncheckedUpdateWithoutProduct_variantsInput>
-}
-
-export type productsCreateNestedOneWithoutParent_componentsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutParent_componentsInput, Prisma.productsUncheckedCreateWithoutParent_componentsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutParent_componentsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsCreateNestedOneWithoutChild_componentsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutChild_componentsInput, Prisma.productsUncheckedCreateWithoutChild_componentsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutChild_componentsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutParent_componentsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutParent_componentsInput, Prisma.productsUncheckedCreateWithoutParent_componentsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutParent_componentsInput
-  upsert?: Prisma.productsUpsertWithoutParent_componentsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutParent_componentsInput, Prisma.productsUpdateWithoutParent_componentsInput>, Prisma.productsUncheckedUpdateWithoutParent_componentsInput>
-}
-
-export type productsUpdateOneRequiredWithoutChild_componentsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutChild_componentsInput, Prisma.productsUncheckedCreateWithoutChild_componentsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutChild_componentsInput
-  upsert?: Prisma.productsUpsertWithoutChild_componentsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutChild_componentsInput, Prisma.productsUpdateWithoutChild_componentsInput>, Prisma.productsUncheckedUpdateWithoutChild_componentsInput>
-}
-
-export type productsCreateNestedOneWithoutProduct_categoriesInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_categoriesInput, Prisma.productsUncheckedCreateWithoutProduct_categoriesInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_categoriesInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutProduct_categoriesNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_categoriesInput, Prisma.productsUncheckedCreateWithoutProduct_categoriesInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_categoriesInput
-  upsert?: Prisma.productsUpsertWithoutProduct_categoriesInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_categoriesInput, Prisma.productsUpdateWithoutProduct_categoriesInput>, Prisma.productsUncheckedUpdateWithoutProduct_categoriesInput>
-}
-
-export type productsCreateNestedOneWithoutProduct_tagsInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_tagsInput, Prisma.productsUncheckedCreateWithoutProduct_tagsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_tagsInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneRequiredWithoutProduct_tagsNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_tagsInput, Prisma.productsUncheckedCreateWithoutProduct_tagsInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_tagsInput
-  upsert?: Prisma.productsUpsertWithoutProduct_tagsInput
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_tagsInput, Prisma.productsUpdateWithoutProduct_tagsInput>, Prisma.productsUncheckedUpdateWithoutProduct_tagsInput>
-}
-
-export type productsCreateNestedOneWithoutProduct_attribute_valuesInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_attribute_valuesInput, Prisma.productsUncheckedCreateWithoutProduct_attribute_valuesInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_attribute_valuesInput
-  connect?: Prisma.productsWhereUniqueInput
-}
-
-export type productsUpdateOneWithoutProduct_attribute_valuesNestedInput = {
-  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_attribute_valuesInput, Prisma.productsUncheckedCreateWithoutProduct_attribute_valuesInput>
-  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_attribute_valuesInput
-  upsert?: Prisma.productsUpsertWithoutProduct_attribute_valuesInput
-  disconnect?: Prisma.productsWhereInput | boolean
-  delete?: Prisma.productsWhereInput | boolean
-  connect?: Prisma.productsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_attribute_valuesInput, Prisma.productsUpdateWithoutProduct_attribute_valuesInput>, Prisma.productsUncheckedUpdateWithoutProduct_attribute_valuesInput>
 }
 
 export type productsCreateNestedManyWithoutIncome_accountInput = {
@@ -1455,6 +1215,22 @@ export type productsUncheckedUpdateManyWithoutCost_templateNestedInput = {
   deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
 }
 
+export type productsCreateNestedOneWithoutDocument_itemsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutDocument_itemsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneWithoutDocument_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutDocument_itemsInput, Prisma.productsUncheckedCreateWithoutDocument_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutDocument_itemsInput
+  upsert?: Prisma.productsUpsertWithoutDocument_itemsInput
+  disconnect?: Prisma.productsWhereInput | boolean
+  delete?: Prisma.productsWhereInput | boolean
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutDocument_itemsInput, Prisma.productsUpdateWithoutDocument_itemsInput>, Prisma.productsUncheckedUpdateWithoutDocument_itemsInput>
+}
+
 export type productsCreateNestedOneWithoutProductStructureVersionsInput = {
   create?: Prisma.XOR<Prisma.productsCreateWithoutProductStructureVersionsInput, Prisma.productsUncheckedCreateWithoutProductStructureVersionsInput>
   connectOrCreate?: Prisma.productsCreateOrConnectWithoutProductStructureVersionsInput
@@ -1469,7 +1245,227 @@ export type productsUpdateOneRequiredWithoutProductStructureVersionsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProductStructureVersionsInput, Prisma.productsUpdateWithoutProductStructureVersionsInput>, Prisma.productsUncheckedUpdateWithoutProductStructureVersionsInput>
 }
 
-export type productsCreateWithoutPallet_itemsInput = {
+export type productsCreateNestedOneWithoutPicking_itemsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPicking_itemsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutPicking_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPicking_itemsInput
+  upsert?: Prisma.productsUpsertWithoutPicking_itemsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutPicking_itemsInput, Prisma.productsUpdateWithoutPicking_itemsInput>, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
+}
+
+export type productsCreateNestedManyWithoutTransfer_rateInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUncheckedCreateNestedManyWithoutTransfer_rateInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUpdateManyWithoutTransfer_rateNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput | Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
+export type productsUncheckedUpdateManyWithoutTransfer_rateNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput> | Prisma.productsCreateWithoutTransfer_rateInput[] | Prisma.productsUncheckedCreateWithoutTransfer_rateInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTransfer_rateInput | Prisma.productsCreateOrConnectWithoutTransfer_rateInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpsertWithWhereUniqueWithoutTransfer_rateInput[]
+  createMany?: Prisma.productsCreateManyTransfer_rateInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput | Prisma.productsUpdateWithWhereUniqueWithoutTransfer_rateInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput | Prisma.productsUpdateManyWithWhereWithoutTransfer_rateInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
+export type productsCreateNestedOneWithoutPallet_itemsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPallet_itemsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutPallet_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutPallet_itemsInput
+  upsert?: Prisma.productsUpsertWithoutPallet_itemsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutPallet_itemsInput, Prisma.productsUpdateWithoutPallet_itemsInput>, Prisma.productsUncheckedUpdateWithoutPallet_itemsInput>
+}
+
+export type productsCreateNestedOneWithoutProduct_priceInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutProduct_priceNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_priceInput, Prisma.productsUncheckedCreateWithoutProduct_priceInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_priceInput
+  upsert?: Prisma.productsUpsertWithoutProduct_priceInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_priceInput, Prisma.productsUpdateWithoutProduct_priceInput>, Prisma.productsUncheckedUpdateWithoutProduct_priceInput>
+}
+
+export type EnumProductTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ProductType
+}
+
+export type NullableEnumCalculationTypeFieldUpdateOperationsInput = {
+  set?: $Enums.CalculationType | null
+}
+
+export type productsCreateNestedOneWithoutProduct_variantsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_variantsInput, Prisma.productsUncheckedCreateWithoutProduct_variantsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_variantsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutProduct_variantsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_variantsInput, Prisma.productsUncheckedCreateWithoutProduct_variantsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_variantsInput
+  upsert?: Prisma.productsUpsertWithoutProduct_variantsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_variantsInput, Prisma.productsUpdateWithoutProduct_variantsInput>, Prisma.productsUncheckedUpdateWithoutProduct_variantsInput>
+}
+
+export type productsCreateNestedOneWithoutParent_componentsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutParent_componentsInput, Prisma.productsUncheckedCreateWithoutParent_componentsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutParent_componentsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsCreateNestedOneWithoutChild_componentsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutChild_componentsInput, Prisma.productsUncheckedCreateWithoutChild_componentsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutChild_componentsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutParent_componentsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutParent_componentsInput, Prisma.productsUncheckedCreateWithoutParent_componentsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutParent_componentsInput
+  upsert?: Prisma.productsUpsertWithoutParent_componentsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutParent_componentsInput, Prisma.productsUpdateWithoutParent_componentsInput>, Prisma.productsUncheckedUpdateWithoutParent_componentsInput>
+}
+
+export type productsUpdateOneRequiredWithoutChild_componentsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutChild_componentsInput, Prisma.productsUncheckedCreateWithoutChild_componentsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutChild_componentsInput
+  upsert?: Prisma.productsUpsertWithoutChild_componentsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutChild_componentsInput, Prisma.productsUpdateWithoutChild_componentsInput>, Prisma.productsUncheckedUpdateWithoutChild_componentsInput>
+}
+
+export type productsCreateNestedOneWithoutProduct_categoriesInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_categoriesInput, Prisma.productsUncheckedCreateWithoutProduct_categoriesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_categoriesInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutProduct_categoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_categoriesInput, Prisma.productsUncheckedCreateWithoutProduct_categoriesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_categoriesInput
+  upsert?: Prisma.productsUpsertWithoutProduct_categoriesInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_categoriesInput, Prisma.productsUpdateWithoutProduct_categoriesInput>, Prisma.productsUncheckedUpdateWithoutProduct_categoriesInput>
+}
+
+export type productsCreateNestedOneWithoutProduct_tagsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_tagsInput, Prisma.productsUncheckedCreateWithoutProduct_tagsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_tagsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutProduct_tagsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_tagsInput, Prisma.productsUncheckedCreateWithoutProduct_tagsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_tagsInput
+  upsert?: Prisma.productsUpsertWithoutProduct_tagsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_tagsInput, Prisma.productsUpdateWithoutProduct_tagsInput>, Prisma.productsUncheckedUpdateWithoutProduct_tagsInput>
+}
+
+export type productsCreateNestedOneWithoutProduct_attribute_valuesInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_attribute_valuesInput, Prisma.productsUncheckedCreateWithoutProduct_attribute_valuesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_attribute_valuesInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneWithoutProduct_attribute_valuesNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_attribute_valuesInput, Prisma.productsUncheckedCreateWithoutProduct_attribute_valuesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_attribute_valuesInput
+  upsert?: Prisma.productsUpsertWithoutProduct_attribute_valuesInput
+  disconnect?: Prisma.productsWhereInput | boolean
+  delete?: Prisma.productsWhereInput | boolean
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_attribute_valuesInput, Prisma.productsUpdateWithoutProduct_attribute_valuesInput>, Prisma.productsUncheckedUpdateWithoutProduct_attribute_valuesInput>
+}
+
+export type productsCreateNestedOneWithoutProduct_taxesInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_taxesInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutProduct_taxesNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_taxesInput
+  upsert?: Prisma.productsUpsertWithoutProduct_taxesInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_taxesInput, Prisma.productsUpdateWithoutProduct_taxesInput>, Prisma.productsUncheckedUpdateWithoutProduct_taxesInput>
+}
+
+export type productsCreateNestedOneWithoutWarehouse_stockInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stockInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutWarehouse_stockNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stockInput
+  upsert?: Prisma.productsUpsertWithoutWarehouse_stockInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stockInput, Prisma.productsUpdateWithoutWarehouse_stockInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stockInput>
+}
+
+export type productsCreateNestedOneWithoutWarehouse_stock_movementsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stock_movementsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutWarehouse_stock_movementsInput
+  upsert?: Prisma.productsUpsertWithoutWarehouse_stock_movementsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.productsUpdateWithoutWarehouse_stock_movementsInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
+}
+
+export type productsCreateWithoutIncome_accountInput = {
   id?: string
   name: string
   sku?: string | null
@@ -1500,10 +1496,10 @@ export type productsCreateWithoutPallet_itemsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
@@ -1516,7 +1512,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
 }
 
-export type productsUncheckedCreateWithoutPallet_itemsInput = {
+export type productsUncheckedCreateWithoutIncome_accountInput = {
   id?: string
   name: string
   sku?: string | null
@@ -1531,822 +1527,6 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   auto_calculate_cost?: boolean
   has_engineering?: boolean
   manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutPallet_itemsInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
-}
-
-export type productsUpsertWithoutPallet_itemsInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutPallet_itemsInput, Prisma.productsUncheckedUpdateWithoutPallet_itemsInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
-  where?: Prisma.productsWhereInput
-}
-
-export type productsUpdateToOneWithWhereWithoutPallet_itemsInput = {
-  where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutPallet_itemsInput, Prisma.productsUncheckedUpdateWithoutPallet_itemsInput>
-}
-
-export type productsUpdateWithoutPallet_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateWithoutPallet_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsCreateWithoutPicking_itemsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutPicking_itemsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutPicking_itemsInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
-}
-
-export type productsUpsertWithoutPicking_itemsInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutPicking_itemsInput, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
-  where?: Prisma.productsWhereInput
-}
-
-export type productsUpdateToOneWithWhereWithoutPicking_itemsInput = {
-  where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutPicking_itemsInput, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
-}
-
-export type productsUpdateWithoutPicking_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateWithoutPicking_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsCreateWithoutWarehouse_stockInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutWarehouse_stockInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutWarehouse_stockInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
-}
-
-export type productsUpsertWithoutWarehouse_stockInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stockInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stockInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
-  where?: Prisma.productsWhereInput
-}
-
-export type productsUpdateToOneWithWhereWithoutWarehouse_stockInput = {
-  where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stockInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stockInput>
-}
-
-export type productsUpdateWithoutWarehouse_stockInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsCreateWithoutWarehouse_stock_movementsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutWarehouse_stock_movementsInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
-}
-
-export type productsUpsertWithoutWarehouse_stock_movementsInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
-  where?: Prisma.productsWhereInput
-}
-
-export type productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput = {
-  where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
-}
-
-export type productsUpdateWithoutWarehouse_stock_movementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsCreateWithoutTransfer_rateInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutTransfer_rateInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
   expense_account_id?: string | null
   inventory_account_id?: string | null
   calculation_type?: $Enums.CalculationType | null
@@ -2379,30 +1559,238 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
 }
 
-export type productsCreateOrConnectWithoutTransfer_rateInput = {
+export type productsCreateOrConnectWithoutIncome_accountInput = {
   where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutIncome_accountInput, Prisma.productsUncheckedCreateWithoutIncome_accountInput>
 }
 
-export type productsCreateManyTransfer_rateInputEnvelope = {
-  data: Prisma.productsCreateManyTransfer_rateInput | Prisma.productsCreateManyTransfer_rateInput[]
+export type productsCreateManyIncome_accountInputEnvelope = {
+  data: Prisma.productsCreateManyIncome_accountInput | Prisma.productsCreateManyIncome_accountInput[]
   skipDuplicates?: boolean
 }
 
-export type productsUpsertWithWhereUniqueWithoutTransfer_rateInput = {
-  where: Prisma.productsWhereUniqueInput
-  update: Prisma.XOR<Prisma.productsUpdateWithoutTransfer_rateInput, Prisma.productsUncheckedUpdateWithoutTransfer_rateInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput>
+export type productsCreateWithoutExpense_accountInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
 }
 
-export type productsUpdateWithWhereUniqueWithoutTransfer_rateInput = {
-  where: Prisma.productsWhereUniqueInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutTransfer_rateInput, Prisma.productsUncheckedUpdateWithoutTransfer_rateInput>
+export type productsUncheckedCreateWithoutExpense_accountInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
 }
 
-export type productsUpdateManyWithWhereWithoutTransfer_rateInput = {
+export type productsCreateOrConnectWithoutExpense_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutExpense_accountInput, Prisma.productsUncheckedCreateWithoutExpense_accountInput>
+}
+
+export type productsCreateManyExpense_accountInputEnvelope = {
+  data: Prisma.productsCreateManyExpense_accountInput | Prisma.productsCreateManyExpense_accountInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsCreateWithoutInventory_accountInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutInventory_accountInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutInventory_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutInventory_accountInput, Prisma.productsUncheckedCreateWithoutInventory_accountInput>
+}
+
+export type productsCreateManyInventory_accountInputEnvelope = {
+  data: Prisma.productsCreateManyInventory_accountInput | Prisma.productsCreateManyInventory_accountInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsUpsertWithWhereUniqueWithoutIncome_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutIncome_accountInput, Prisma.productsUncheckedUpdateWithoutIncome_accountInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutIncome_accountInput, Prisma.productsUncheckedCreateWithoutIncome_accountInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutIncome_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutIncome_accountInput, Prisma.productsUncheckedUpdateWithoutIncome_accountInput>
+}
+
+export type productsUpdateManyWithWhereWithoutIncome_accountInput = {
   where: Prisma.productsScalarWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutTransfer_rateInput>
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutIncome_accountInput>
 }
 
 export type productsScalarWhereInput = {
@@ -2438,6 +1826,566 @@ export type productsScalarWhereInput = {
   last_cost_calculated_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
   cost_template_id?: Prisma.UuidNullableFilter<"products"> | string | null
   current_cost?: Prisma.DecimalNullableFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type productsUpsertWithWhereUniqueWithoutExpense_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutExpense_accountInput, Prisma.productsUncheckedUpdateWithoutExpense_accountInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutExpense_accountInput, Prisma.productsUncheckedCreateWithoutExpense_accountInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutExpense_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutExpense_accountInput, Prisma.productsUncheckedUpdateWithoutExpense_accountInput>
+}
+
+export type productsUpdateManyWithWhereWithoutExpense_accountInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutExpense_accountInput>
+}
+
+export type productsUpsertWithWhereUniqueWithoutInventory_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutInventory_accountInput, Prisma.productsUncheckedUpdateWithoutInventory_accountInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutInventory_accountInput, Prisma.productsUncheckedCreateWithoutInventory_accountInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutInventory_accountInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutInventory_accountInput, Prisma.productsUncheckedUpdateWithoutInventory_accountInput>
+}
+
+export type productsUpdateManyWithWhereWithoutInventory_accountInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutInventory_accountInput>
+}
+
+export type productsCreateWithoutProduct_costsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutProduct_costsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutProduct_costsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_costsInput, Prisma.productsUncheckedCreateWithoutProduct_costsInput>
+}
+
+export type productsUpsertWithoutProduct_costsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutProduct_costsInput, Prisma.productsUncheckedUpdateWithoutProduct_costsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_costsInput, Prisma.productsUncheckedCreateWithoutProduct_costsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutProduct_costsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutProduct_costsInput, Prisma.productsUncheckedUpdateWithoutProduct_costsInput>
+}
+
+export type productsUpdateWithoutProduct_costsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutProduct_costsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsCreateWithoutProductCostBreakdownsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutProductCostBreakdownsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedCreateWithoutProductCostBreakdownsInput>
+}
+
+export type productsUpsertWithoutProductCostBreakdownsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedUpdateWithoutProductCostBreakdownsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedCreateWithoutProductCostBreakdownsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutProductCostBreakdownsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedUpdateWithoutProductCostBreakdownsInput>
+}
+
+export type productsUpdateWithoutProductCostBreakdownsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsCreateWithoutCost_templateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutCost_templateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutCost_templateInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutCost_templateInput, Prisma.productsUncheckedCreateWithoutCost_templateInput>
+}
+
+export type productsCreateManyCost_templateInputEnvelope = {
+  data: Prisma.productsCreateManyCost_templateInput | Prisma.productsCreateManyCost_templateInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsUpsertWithWhereUniqueWithoutCost_templateInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutCost_templateInput, Prisma.productsUncheckedUpdateWithoutCost_templateInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutCost_templateInput, Prisma.productsUncheckedCreateWithoutCost_templateInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutCost_templateInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutCost_templateInput, Prisma.productsUncheckedUpdateWithoutCost_templateInput>
+}
+
+export type productsUpdateManyWithWhereWithoutCost_templateInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutCost_templateInput>
 }
 
 export type productsCreateWithoutDocument_itemsInput = {
@@ -2644,7 +2592,7 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
 }
 
-export type productsCreateWithoutProduct_taxesInput = {
+export type productsCreateWithoutProductStructureVersionsInput = {
   id?: string
   name: string
   sku?: string | null
@@ -2682,16 +2630,16 @@ export type productsCreateWithoutProduct_taxesInput = {
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
 }
 
-export type productsUncheckedCreateWithoutProduct_taxesInput = {
+export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   id?: string
   name: string
   sku?: string | null
@@ -2731,30 +2679,30 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
 }
 
-export type productsCreateOrConnectWithoutProduct_taxesInput = {
+export type productsCreateOrConnectWithoutProductStructureVersionsInput = {
   where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProductStructureVersionsInput, Prisma.productsUncheckedCreateWithoutProductStructureVersionsInput>
 }
 
-export type productsUpsertWithoutProduct_taxesInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutProduct_taxesInput, Prisma.productsUncheckedUpdateWithoutProduct_taxesInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
+export type productsUpsertWithoutProductStructureVersionsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutProductStructureVersionsInput, Prisma.productsUncheckedUpdateWithoutProductStructureVersionsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProductStructureVersionsInput, Prisma.productsUncheckedCreateWithoutProductStructureVersionsInput>
   where?: Prisma.productsWhereInput
 }
 
-export type productsUpdateToOneWithWhereWithoutProduct_taxesInput = {
+export type productsUpdateToOneWithWhereWithoutProductStructureVersionsInput = {
   where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutProduct_taxesInput, Prisma.productsUncheckedUpdateWithoutProduct_taxesInput>
+  data: Prisma.XOR<Prisma.productsUpdateWithoutProductStructureVersionsInput, Prisma.productsUncheckedUpdateWithoutProductStructureVersionsInput>
 }
 
-export type productsUpdateWithoutProduct_taxesInput = {
+export type productsUpdateWithoutProductStructureVersionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2792,16 +2740,16 @@ export type productsUpdateWithoutProduct_taxesInput = {
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
 }
 
-export type productsUncheckedUpdateWithoutProduct_taxesInput = {
+export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2841,6 +2789,534 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+}
+
+export type productsCreateWithoutPicking_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutPicking_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutPicking_itemsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
+}
+
+export type productsUpsertWithoutPicking_itemsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutPicking_itemsInput, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutPicking_itemsInput, Prisma.productsUncheckedCreateWithoutPicking_itemsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutPicking_itemsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutPicking_itemsInput, Prisma.productsUncheckedUpdateWithoutPicking_itemsInput>
+}
+
+export type productsUpdateWithoutPicking_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutPicking_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsCreateWithoutTransfer_rateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutTransfer_rateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutTransfer_rateInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput>
+}
+
+export type productsCreateManyTransfer_rateInputEnvelope = {
+  data: Prisma.productsCreateManyTransfer_rateInput | Prisma.productsCreateManyTransfer_rateInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsUpsertWithWhereUniqueWithoutTransfer_rateInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutTransfer_rateInput, Prisma.productsUncheckedUpdateWithoutTransfer_rateInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutTransfer_rateInput, Prisma.productsUncheckedCreateWithoutTransfer_rateInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutTransfer_rateInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutTransfer_rateInput, Prisma.productsUncheckedUpdateWithoutTransfer_rateInput>
+}
+
+export type productsUpdateManyWithWhereWithoutTransfer_rateInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutTransfer_rateInput>
+}
+
+export type productsCreateWithoutPallet_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutPallet_itemsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutPallet_itemsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
+}
+
+export type productsUpsertWithoutPallet_itemsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutPallet_itemsInput, Prisma.productsUncheckedUpdateWithoutPallet_itemsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutPallet_itemsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutPallet_itemsInput, Prisma.productsUncheckedUpdateWithoutPallet_itemsInput>
+}
+
+export type productsUpdateWithoutPallet_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutPallet_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
@@ -4276,367 +4752,7 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
 }
 
-export type productsCreateWithoutIncome_accountInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutIncome_accountInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutIncome_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutIncome_accountInput, Prisma.productsUncheckedCreateWithoutIncome_accountInput>
-}
-
-export type productsCreateManyIncome_accountInputEnvelope = {
-  data: Prisma.productsCreateManyIncome_accountInput | Prisma.productsCreateManyIncome_accountInput[]
-  skipDuplicates?: boolean
-}
-
-export type productsCreateWithoutExpense_accountInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutExpense_accountInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutExpense_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutExpense_accountInput, Prisma.productsUncheckedCreateWithoutExpense_accountInput>
-}
-
-export type productsCreateManyExpense_accountInputEnvelope = {
-  data: Prisma.productsCreateManyExpense_accountInput | Prisma.productsCreateManyExpense_accountInput[]
-  skipDuplicates?: boolean
-}
-
-export type productsCreateWithoutInventory_accountInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutInventory_accountInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutInventory_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutInventory_accountInput, Prisma.productsUncheckedCreateWithoutInventory_accountInput>
-}
-
-export type productsCreateManyInventory_accountInputEnvelope = {
-  data: Prisma.productsCreateManyInventory_accountInput | Prisma.productsCreateManyInventory_accountInput[]
-  skipDuplicates?: boolean
-}
-
-export type productsUpsertWithWhereUniqueWithoutIncome_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  update: Prisma.XOR<Prisma.productsUpdateWithoutIncome_accountInput, Prisma.productsUncheckedUpdateWithoutIncome_accountInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutIncome_accountInput, Prisma.productsUncheckedCreateWithoutIncome_accountInput>
-}
-
-export type productsUpdateWithWhereUniqueWithoutIncome_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutIncome_accountInput, Prisma.productsUncheckedUpdateWithoutIncome_accountInput>
-}
-
-export type productsUpdateManyWithWhereWithoutIncome_accountInput = {
-  where: Prisma.productsScalarWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutIncome_accountInput>
-}
-
-export type productsUpsertWithWhereUniqueWithoutExpense_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  update: Prisma.XOR<Prisma.productsUpdateWithoutExpense_accountInput, Prisma.productsUncheckedUpdateWithoutExpense_accountInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutExpense_accountInput, Prisma.productsUncheckedCreateWithoutExpense_accountInput>
-}
-
-export type productsUpdateWithWhereUniqueWithoutExpense_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutExpense_accountInput, Prisma.productsUncheckedUpdateWithoutExpense_accountInput>
-}
-
-export type productsUpdateManyWithWhereWithoutExpense_accountInput = {
-  where: Prisma.productsScalarWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutExpense_accountInput>
-}
-
-export type productsUpsertWithWhereUniqueWithoutInventory_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  update: Prisma.XOR<Prisma.productsUpdateWithoutInventory_accountInput, Prisma.productsUncheckedUpdateWithoutInventory_accountInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutInventory_accountInput, Prisma.productsUncheckedCreateWithoutInventory_accountInput>
-}
-
-export type productsUpdateWithWhereUniqueWithoutInventory_accountInput = {
-  where: Prisma.productsWhereUniqueInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutInventory_accountInput, Prisma.productsUncheckedUpdateWithoutInventory_accountInput>
-}
-
-export type productsUpdateManyWithWhereWithoutInventory_accountInput = {
-  where: Prisma.productsScalarWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutInventory_accountInput>
-}
-
-export type productsCreateWithoutProduct_costsInput = {
+export type productsCreateWithoutProduct_taxesInput = {
   id?: string
   name: string
   sku?: string | null
@@ -4674,16 +4790,16 @@ export type productsCreateWithoutProduct_costsInput = {
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
 }
 
-export type productsUncheckedCreateWithoutProduct_costsInput = {
+export type productsUncheckedCreateWithoutProduct_taxesInput = {
   id?: string
   name: string
   sku?: string | null
@@ -4723,30 +4839,438 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
 }
 
-export type productsCreateOrConnectWithoutProduct_costsInput = {
+export type productsCreateOrConnectWithoutProduct_taxesInput = {
   where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_costsInput, Prisma.productsUncheckedCreateWithoutProduct_costsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
 }
 
-export type productsUpsertWithoutProduct_costsInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutProduct_costsInput, Prisma.productsUncheckedUpdateWithoutProduct_costsInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_costsInput, Prisma.productsUncheckedCreateWithoutProduct_costsInput>
+export type productsUpsertWithoutProduct_taxesInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutProduct_taxesInput, Prisma.productsUncheckedUpdateWithoutProduct_taxesInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
   where?: Prisma.productsWhereInput
 }
 
-export type productsUpdateToOneWithWhereWithoutProduct_costsInput = {
+export type productsUpdateToOneWithWhereWithoutProduct_taxesInput = {
   where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutProduct_costsInput, Prisma.productsUncheckedUpdateWithoutProduct_costsInput>
+  data: Prisma.XOR<Prisma.productsUpdateWithoutProduct_taxesInput, Prisma.productsUncheckedUpdateWithoutProduct_taxesInput>
 }
 
-export type productsUpdateWithoutProduct_costsInput = {
+export type productsUpdateWithoutProduct_taxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutProduct_taxesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsCreateWithoutWarehouse_stockInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutWarehouse_stockInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutWarehouse_stockInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
+}
+
+export type productsUpsertWithoutWarehouse_stockInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stockInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stockInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stockInput, Prisma.productsUncheckedCreateWithoutWarehouse_stockInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutWarehouse_stockInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stockInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stockInput>
+}
+
+export type productsUpdateWithoutWarehouse_stockInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsCreateWithoutWarehouse_stock_movementsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutWarehouse_stock_movementsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
+}
+
+export type productsUpsertWithoutWarehouse_stock_movementsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedCreateWithoutWarehouse_stock_movementsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutWarehouse_stock_movementsInput, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
+}
+
+export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4787,13 +5311,13 @@ export type productsUpdateWithoutProduct_costsInput = {
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
 }
 
-export type productsUncheckedUpdateWithoutProduct_costsInput = {
+export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4835,693 +5359,9 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsCreateWithoutProductCostBreakdownsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutProductCostBreakdownsInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedCreateWithoutProductCostBreakdownsInput>
-}
-
-export type productsUpsertWithoutProductCostBreakdownsInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedUpdateWithoutProductCostBreakdownsInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedCreateWithoutProductCostBreakdownsInput>
-  where?: Prisma.productsWhereInput
-}
-
-export type productsUpdateToOneWithWhereWithoutProductCostBreakdownsInput = {
-  where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutProductCostBreakdownsInput, Prisma.productsUncheckedUpdateWithoutProductCostBreakdownsInput>
-}
-
-export type productsUpdateWithoutProductCostBreakdownsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsCreateWithoutCost_templateInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
-}
-
-export type productsUncheckedCreateWithoutCost_templateInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
-}
-
-export type productsCreateOrConnectWithoutCost_templateInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutCost_templateInput, Prisma.productsUncheckedCreateWithoutCost_templateInput>
-}
-
-export type productsCreateManyCost_templateInputEnvelope = {
-  data: Prisma.productsCreateManyCost_templateInput | Prisma.productsCreateManyCost_templateInput[]
-  skipDuplicates?: boolean
-}
-
-export type productsUpsertWithWhereUniqueWithoutCost_templateInput = {
-  where: Prisma.productsWhereUniqueInput
-  update: Prisma.XOR<Prisma.productsUpdateWithoutCost_templateInput, Prisma.productsUncheckedUpdateWithoutCost_templateInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutCost_templateInput, Prisma.productsUncheckedCreateWithoutCost_templateInput>
-}
-
-export type productsUpdateWithWhereUniqueWithoutCost_templateInput = {
-  where: Prisma.productsWhereUniqueInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutCost_templateInput, Prisma.productsUncheckedUpdateWithoutCost_templateInput>
-}
-
-export type productsUpdateManyWithWhereWithoutCost_templateInput = {
-  where: Prisma.productsScalarWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutCost_templateInput>
-}
-
-export type productsCreateWithoutProductStructureVersionsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
-  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
-  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
-  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
-  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
-  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
-  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
-}
-
-export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  rate_id?: string | null
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
-  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
-  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
-  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
-  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
-  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
-  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
-  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
-  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
-  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
-}
-
-export type productsCreateOrConnectWithoutProductStructureVersionsInput = {
-  where: Prisma.productsWhereUniqueInput
-  create: Prisma.XOR<Prisma.productsCreateWithoutProductStructureVersionsInput, Prisma.productsUncheckedCreateWithoutProductStructureVersionsInput>
-}
-
-export type productsUpsertWithoutProductStructureVersionsInput = {
-  update: Prisma.XOR<Prisma.productsUpdateWithoutProductStructureVersionsInput, Prisma.productsUncheckedUpdateWithoutProductStructureVersionsInput>
-  create: Prisma.XOR<Prisma.productsCreateWithoutProductStructureVersionsInput, Prisma.productsUncheckedCreateWithoutProductStructureVersionsInput>
-  where?: Prisma.productsWhereInput
-}
-
-export type productsUpdateToOneWithWhereWithoutProductStructureVersionsInput = {
-  where?: Prisma.productsWhereInput
-  data: Prisma.XOR<Prisma.productsUpdateWithoutProductStructureVersionsInput, Prisma.productsUncheckedUpdateWithoutProductStructureVersionsInput>
-}
-
-export type productsUpdateWithoutProductStructureVersionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-}
-
-export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
-}
-
-export type productsCreateManyTransfer_rateInput = {
-  id?: string
-  name: string
-  sku?: string | null
-  requires_refrigeration?: boolean | null
-  price_enabled?: boolean
-  is_rate_type?: boolean
-  taxId?: string | null
-  active?: boolean | null
-  product_type?: $Enums.ProductType
-  is_composed?: boolean
-  auto_calculate_cost?: boolean
-  has_engineering?: boolean
-  manages_stock?: boolean
-  income_account_id?: string | null
-  expense_account_id?: string | null
-  inventory_account_id?: string | null
-  calculation_type?: $Enums.CalculationType | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cost_source?: $Enums.ProductCostSource
-  needs_cost_recalculation?: boolean
-  last_cost_calculated_at?: Date | string | null
-  cost_template_id?: string | null
-  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type productsUpdateWithoutTransfer_rateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
-  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
-  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
-  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
-  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
-  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
-  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
-  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
-  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateWithoutTransfer_rateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
-  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
-  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
-  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
-  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
-  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
-  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
-  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
-  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
-}
-
-export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
-  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
-  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type productsCreateManyIncome_accountInput = {
@@ -6145,6 +5985,162 @@ export type productsUncheckedUpdateManyWithoutCost_templateInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type productsCreateManyTransfer_rateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type productsUpdateWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 

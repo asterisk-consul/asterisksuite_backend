@@ -634,6 +634,10 @@ export type VehiclesNullableScalarRelationFilter = {
   isNot?: Prisma.vehiclesWhereInput | null
 }
 
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
 export type vehiclesCreateNestedOneWithoutVehicle_combinations_tractorInput = {
   create?: Prisma.XOR<Prisma.vehiclesCreateWithoutVehicle_combinations_tractorInput, Prisma.vehiclesUncheckedCreateWithoutVehicle_combinations_tractorInput>
   connectOrCreate?: Prisma.vehiclesCreateOrConnectWithoutVehicle_combinations_tractorInput

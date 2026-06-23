@@ -146,3 +146,11 @@ export const CostValueType = {
 } as const
 
 export type CostValueType = (typeof CostValueType)[keyof typeof CostValueType]
+
+
+export const PermissionEffect = {
+  ALLOW: 'ALLOW',
+  DENY: 'DENY'
+} as const
+
+export type PermissionEffect = (typeof PermissionEffect)[keyof typeof PermissionEffect]

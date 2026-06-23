@@ -485,6 +485,11 @@ export type business_partiesUncheckedUpdateManyInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type Business_partiesNullableScalarRelationFilter = {
+  is?: Prisma.business_partiesWhereInput | null
+  isNot?: Prisma.business_partiesWhereInput | null
+}
+
 export type business_partiesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -538,42 +543,25 @@ export type business_partiesSumOrderByAggregateInput = {
   exemption_rate?: Prisma.SortOrder
 }
 
-export type Business_partiesNullableScalarRelationFilter = {
-  is?: Prisma.business_partiesWhereInput | null
-  isNot?: Prisma.business_partiesWhereInput | null
-}
-
 export type Business_partiesScalarRelationFilter = {
   is?: Prisma.business_partiesWhereInput
   isNot?: Prisma.business_partiesWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type business_partiesCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDocumentsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
+export type business_partiesUpdateOneWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.business_partiesUpsertWithoutDocumentsInput
+  disconnect?: Prisma.business_partiesWhereInput | boolean
+  delete?: Prisma.business_partiesWhereInput | boolean
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutDocumentsInput, Prisma.business_partiesUpdateWithoutDocumentsInput>, Prisma.business_partiesUncheckedUpdateWithoutDocumentsInput>
 }
 
 export type business_partiesCreateNestedOneWithoutDelivery_notesInput = {
@@ -590,6 +578,22 @@ export type business_partiesUpdateOneWithoutDelivery_notesNestedInput = {
   delete?: Prisma.business_partiesWhereInput | boolean
   connect?: Prisma.business_partiesWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutDelivery_notesInput, Prisma.business_partiesUpdateWithoutDelivery_notesInput>, Prisma.business_partiesUncheckedUpdateWithoutDelivery_notesInput>
+}
+
+export type business_partiesCreateNestedOneWithoutDispatch_ordersInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDispatch_ordersInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+}
+
+export type business_partiesUpdateOneWithoutDispatch_ordersNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDispatch_ordersInput
+  upsert?: Prisma.business_partiesUpsertWithoutDispatch_ordersInput
+  disconnect?: Prisma.business_partiesWhereInput | boolean
+  delete?: Prisma.business_partiesWhereInput | boolean
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutDispatch_ordersInput, Prisma.business_partiesUpdateWithoutDispatch_ordersInput>, Prisma.business_partiesUncheckedUpdateWithoutDispatch_ordersInput>
 }
 
 export type business_partiesCreateNestedOneWithoutParty_locationsInput = {
@@ -622,36 +626,96 @@ export type business_partiesUpdateOneWithoutParty_contactsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutParty_contactsInput, Prisma.business_partiesUpdateWithoutParty_contactsInput>, Prisma.business_partiesUncheckedUpdateWithoutParty_contactsInput>
 }
 
-export type business_partiesCreateNestedOneWithoutDispatch_ordersInput = {
-  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
-  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDispatch_ordersInput
-  connect?: Prisma.business_partiesWhereUniqueInput
+export type business_partiesCreateWithoutDocumentsInput = {
+  id?: string
+  type: string
+  name: string
+  tax_id?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
 }
 
-export type business_partiesUpdateOneWithoutDispatch_ordersNestedInput = {
-  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
-  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDispatch_ordersInput
-  upsert?: Prisma.business_partiesUpsertWithoutDispatch_ordersInput
-  disconnect?: Prisma.business_partiesWhereInput | boolean
-  delete?: Prisma.business_partiesWhereInput | boolean
-  connect?: Prisma.business_partiesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutDispatch_ordersInput, Prisma.business_partiesUpdateWithoutDispatch_ordersInput>, Prisma.business_partiesUncheckedUpdateWithoutDispatch_ordersInput>
+export type business_partiesUncheckedCreateWithoutDocumentsInput = {
+  id?: string
+  type: string
+  name: string
+  tax_id?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
 }
 
-export type business_partiesCreateNestedOneWithoutDocumentsInput = {
-  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
-  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDocumentsInput
-  connect?: Prisma.business_partiesWhereUniqueInput
+export type business_partiesCreateOrConnectWithoutDocumentsInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
 }
 
-export type business_partiesUpdateOneWithoutDocumentsNestedInput = {
-  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
-  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutDocumentsInput
-  upsert?: Prisma.business_partiesUpsertWithoutDocumentsInput
-  disconnect?: Prisma.business_partiesWhereInput | boolean
-  delete?: Prisma.business_partiesWhereInput | boolean
-  connect?: Prisma.business_partiesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutDocumentsInput, Prisma.business_partiesUpdateWithoutDocumentsInput>, Prisma.business_partiesUncheckedUpdateWithoutDocumentsInput>
+export type business_partiesUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutDocumentsInput, Prisma.business_partiesUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutDocumentsInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutDocumentsInput, Prisma.business_partiesUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type business_partiesUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
 }
 
 export type business_partiesCreateWithoutDelivery_notesInput = {
@@ -741,6 +805,98 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+}
+
+export type business_partiesCreateWithoutDispatch_ordersInput = {
+  id?: string
+  type: string
+  name: string
+  tax_id?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+}
+
+export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
+  id?: string
+  type: string
+  name: string
+  tax_id?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+}
+
+export type business_partiesCreateOrConnectWithoutDispatch_ordersInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
+}
+
+export type business_partiesUpsertWithoutDispatch_ordersInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedUpdateWithoutDispatch_ordersInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutDispatch_ordersInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedUpdateWithoutDispatch_ordersInput>
+}
+
+export type business_partiesUpdateWithoutDispatch_ordersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -927,190 +1083,6 @@ export type business_partiesUncheckedUpdateWithoutParty_contactsInput = {
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-}
-
-export type business_partiesCreateWithoutDispatch_ordersInput = {
-  id?: string
-  type: string
-  name: string
-  tax_id?: string | null
-  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: boolean
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
-  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
-  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
-}
-
-export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
-  id?: string
-  type: string
-  name: string
-  tax_id?: string | null
-  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: boolean
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-}
-
-export type business_partiesCreateOrConnectWithoutDispatch_ordersInput = {
-  where: Prisma.business_partiesWhereUniqueInput
-  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
-}
-
-export type business_partiesUpsertWithoutDispatch_ordersInput = {
-  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedUpdateWithoutDispatch_ordersInput>
-  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedCreateWithoutDispatch_ordersInput>
-  where?: Prisma.business_partiesWhereInput
-}
-
-export type business_partiesUpdateToOneWithWhereWithoutDispatch_ordersInput = {
-  where?: Prisma.business_partiesWhereInput
-  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutDispatch_ordersInput, Prisma.business_partiesUncheckedUpdateWithoutDispatch_ordersInput>
-}
-
-export type business_partiesUpdateWithoutDispatch_ordersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
-  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
-  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
-}
-
-export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-}
-
-export type business_partiesCreateWithoutDocumentsInput = {
-  id?: string
-  type: string
-  name: string
-  tax_id?: string | null
-  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: boolean
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
-  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
-}
-
-export type business_partiesUncheckedCreateWithoutDocumentsInput = {
-  id?: string
-  type: string
-  name: string
-  tax_id?: string | null
-  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: boolean
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
-  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
-}
-
-export type business_partiesCreateOrConnectWithoutDocumentsInput = {
-  where: Prisma.business_partiesWhereUniqueInput
-  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
-}
-
-export type business_partiesUpsertWithoutDocumentsInput = {
-  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutDocumentsInput, Prisma.business_partiesUncheckedUpdateWithoutDocumentsInput>
-  create: Prisma.XOR<Prisma.business_partiesCreateWithoutDocumentsInput, Prisma.business_partiesUncheckedCreateWithoutDocumentsInput>
-  where?: Prisma.business_partiesWhereInput
-}
-
-export type business_partiesUpdateToOneWithWhereWithoutDocumentsInput = {
-  where?: Prisma.business_partiesWhereInput
-  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutDocumentsInput, Prisma.business_partiesUncheckedUpdateWithoutDocumentsInput>
-}
-
-export type business_partiesUpdateWithoutDocumentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
-  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
-  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
-}
-
-export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
-  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
 }
 

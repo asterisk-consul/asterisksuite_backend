@@ -528,16 +528,6 @@ export type dispatch_ordersUncheckedUpdateManyInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type Dispatch_ordersListRelationFilter = {
-  every?: Prisma.dispatch_ordersWhereInput
-  some?: Prisma.dispatch_ordersWhereInput
-  none?: Prisma.dispatch_ordersWhereInput
-}
-
-export type dispatch_ordersOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type Dispatch_ordersNullableScalarRelationFilter = {
   is?: Prisma.dispatch_ordersWhereInput | null
   isNot?: Prisma.dispatch_ordersWhereInput | null
@@ -605,46 +595,14 @@ export type Dispatch_ordersScalarRelationFilter = {
   isNot?: Prisma.dispatch_ordersWhereInput
 }
 
-export type dispatch_ordersCreateNestedManyWithoutCustomersInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
-  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+export type Dispatch_ordersListRelationFilter = {
+  every?: Prisma.dispatch_ordersWhereInput
+  some?: Prisma.dispatch_ordersWhereInput
+  none?: Prisma.dispatch_ordersWhereInput
 }
 
-export type dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
-  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-}
-
-export type dispatch_ordersUpdateManyWithoutCustomersNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
-  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
-  set?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  disconnect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  delete?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput[]
-  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput[]
-  deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
-}
-
-export type dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
-  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
-  set?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  disconnect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  delete?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput[]
-  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput[]
-  deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
+export type dispatch_ordersOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type dispatch_ordersCreateNestedOneWithoutDelivery_notesInput = {
@@ -661,6 +619,96 @@ export type dispatch_ordersUpdateOneWithoutDelivery_notesNestedInput = {
   delete?: Prisma.dispatch_ordersWhereInput | boolean
   connect?: Prisma.dispatch_ordersWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutDelivery_notesInput, Prisma.dispatch_ordersUpdateWithoutDelivery_notesInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutDelivery_notesInput>
+}
+
+export type dispatch_ordersCreateNestedOneWithoutPicking_ordersInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutPicking_ordersInput, Prisma.dispatch_ordersUncheckedCreateWithoutPicking_ordersInput>
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutPicking_ordersInput
+  connect?: Prisma.dispatch_ordersWhereUniqueInput
+}
+
+export type dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutPicking_ordersInput, Prisma.dispatch_ordersUncheckedCreateWithoutPicking_ordersInput>
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutPicking_ordersInput
+  upsert?: Prisma.dispatch_ordersUpsertWithoutPicking_ordersInput
+  disconnect?: Prisma.dispatch_ordersWhereInput | boolean
+  delete?: Prisma.dispatch_ordersWhereInput | boolean
+  connect?: Prisma.dispatch_ordersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutPicking_ordersInput, Prisma.dispatch_ordersUpdateWithoutPicking_ordersInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutPicking_ordersInput>
+}
+
+export type EnumDispatchStatusFieldUpdateOperationsInput = {
+  set?: $Enums.DispatchStatus
+}
+
+export type dispatch_ordersCreateNestedOneWithoutTripStopOrdersInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutTripStopOrdersInput, Prisma.dispatch_ordersUncheckedCreateWithoutTripStopOrdersInput>
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutTripStopOrdersInput
+  connect?: Prisma.dispatch_ordersWhereUniqueInput
+}
+
+export type dispatch_ordersUpdateOneRequiredWithoutTripStopOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutTripStopOrdersInput, Prisma.dispatch_ordersUncheckedCreateWithoutTripStopOrdersInput>
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutTripStopOrdersInput
+  upsert?: Prisma.dispatch_ordersUpsertWithoutTripStopOrdersInput
+  connect?: Prisma.dispatch_ordersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutTripStopOrdersInput, Prisma.dispatch_ordersUpdateWithoutTripStopOrdersInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutTripStopOrdersInput>
+}
+
+export type dispatch_ordersCreateNestedManyWithoutCorridorsInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+}
+
+export type dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+}
+
+export type dispatch_ordersUpdateManyWithoutCorridorsNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
+  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+  set?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  disconnect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  delete?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput[]
+  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput[]
+  deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
+}
+
+export type dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
+  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+  set?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  disconnect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  delete?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
+  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput[]
+  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput[]
+  deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
+}
+
+export type dispatch_ordersCreateNestedOneWithoutDispatch_ratesInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDispatch_ratesInput, Prisma.dispatch_ordersUncheckedCreateWithoutDispatch_ratesInput>
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutDispatch_ratesInput
+  connect?: Prisma.dispatch_ordersWhereUniqueInput
+}
+
+export type dispatch_ordersUpdateOneRequiredWithoutDispatch_ratesNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDispatch_ratesInput, Prisma.dispatch_ordersUncheckedCreateWithoutDispatch_ratesInput>
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutDispatch_ratesInput
+  upsert?: Prisma.dispatch_ordersUpsertWithoutDispatch_ratesInput
+  connect?: Prisma.dispatch_ordersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutDispatch_ratesInput, Prisma.dispatch_ordersUpdateWithoutDispatch_ratesInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutDispatch_ratesInput>
 }
 
 export type dispatch_ordersCreateNestedManyWithoutDestination_locationInput = {
@@ -747,79 +795,45 @@ export type dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationNestedInput 
   deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
 }
 
-export type dispatch_ordersCreateNestedOneWithoutPicking_ordersInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutPicking_ordersInput, Prisma.dispatch_ordersUncheckedCreateWithoutPicking_ordersInput>
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutPicking_ordersInput
-  connect?: Prisma.dispatch_ordersWhereUniqueInput
-}
-
-export type dispatch_ordersUpdateOneWithoutPicking_ordersNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutPicking_ordersInput, Prisma.dispatch_ordersUncheckedCreateWithoutPicking_ordersInput>
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutPicking_ordersInput
-  upsert?: Prisma.dispatch_ordersUpsertWithoutPicking_ordersInput
-  disconnect?: Prisma.dispatch_ordersWhereInput | boolean
-  delete?: Prisma.dispatch_ordersWhereInput | boolean
-  connect?: Prisma.dispatch_ordersWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutPicking_ordersInput, Prisma.dispatch_ordersUpdateWithoutPicking_ordersInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutPicking_ordersInput>
-}
-
-export type EnumDispatchStatusFieldUpdateOperationsInput = {
-  set?: $Enums.DispatchStatus
-}
-
-export type dispatch_ordersCreateNestedOneWithoutTripStopOrdersInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutTripStopOrdersInput, Prisma.dispatch_ordersUncheckedCreateWithoutTripStopOrdersInput>
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutTripStopOrdersInput
-  connect?: Prisma.dispatch_ordersWhereUniqueInput
-}
-
-export type dispatch_ordersUpdateOneRequiredWithoutTripStopOrdersNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutTripStopOrdersInput, Prisma.dispatch_ordersUncheckedCreateWithoutTripStopOrdersInput>
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutTripStopOrdersInput
-  upsert?: Prisma.dispatch_ordersUpsertWithoutTripStopOrdersInput
-  connect?: Prisma.dispatch_ordersWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutTripStopOrdersInput, Prisma.dispatch_ordersUpdateWithoutTripStopOrdersInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutTripStopOrdersInput>
-}
-
-export type dispatch_ordersCreateNestedManyWithoutCorridorsInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+export type dispatch_ordersCreateNestedManyWithoutCustomersInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
   connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
 }
 
-export type dispatch_ordersUncheckedCreateNestedManyWithoutCorridorsInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+export type dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
   connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
 }
 
-export type dispatch_ordersUpdateManyWithoutCorridorsNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
-  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+export type dispatch_ordersUpdateManyWithoutCustomersNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
+  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
   set?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
   disconnect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
   delete?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
   connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput[]
-  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput[]
+  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput[]
+  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput[]
   deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
 }
 
-export type dispatch_ordersUncheckedUpdateManyWithoutCorridorsNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCorridorsInput, Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput> | Prisma.dispatch_ordersCreateWithoutCorridorsInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCorridorsInput[]
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput | Prisma.dispatch_ordersCreateOrConnectWithoutCorridorsInput[]
-  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCorridorsInput[]
-  createMany?: Prisma.dispatch_ordersCreateManyCorridorsInputEnvelope
+export type dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput = {
+  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput> | Prisma.dispatch_ordersCreateWithoutCustomersInput[] | Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput[]
+  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput | Prisma.dispatch_ordersCreateOrConnectWithoutCustomersInput[]
+  upsert?: Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput[]
+  createMany?: Prisma.dispatch_ordersCreateManyCustomersInputEnvelope
   set?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
   disconnect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
   delete?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
   connect?: Prisma.dispatch_ordersWhereUniqueInput | Prisma.dispatch_ordersWhereUniqueInput[]
-  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCorridorsInput[]
-  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput[]
+  update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput[]
+  updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutCustomersInput[]
   deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
 }
 
@@ -863,112 +877,6 @@ export type dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput = {
   update?: Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutUsersInput | Prisma.dispatch_ordersUpdateWithWhereUniqueWithoutUsersInput[]
   updateMany?: Prisma.dispatch_ordersUpdateManyWithWhereWithoutUsersInput | Prisma.dispatch_ordersUpdateManyWithWhereWithoutUsersInput[]
   deleteMany?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
-}
-
-export type dispatch_ordersCreateNestedOneWithoutDispatch_ratesInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDispatch_ratesInput, Prisma.dispatch_ordersUncheckedCreateWithoutDispatch_ratesInput>
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutDispatch_ratesInput
-  connect?: Prisma.dispatch_ordersWhereUniqueInput
-}
-
-export type dispatch_ordersUpdateOneRequiredWithoutDispatch_ratesNestedInput = {
-  create?: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDispatch_ratesInput, Prisma.dispatch_ordersUncheckedCreateWithoutDispatch_ratesInput>
-  connectOrCreate?: Prisma.dispatch_ordersCreateOrConnectWithoutDispatch_ratesInput
-  upsert?: Prisma.dispatch_ordersUpsertWithoutDispatch_ratesInput
-  connect?: Prisma.dispatch_ordersWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.dispatch_ordersUpdateToOneWithWhereWithoutDispatch_ratesInput, Prisma.dispatch_ordersUpdateWithoutDispatch_ratesInput>, Prisma.dispatch_ordersUncheckedUpdateWithoutDispatch_ratesInput>
-}
-
-export type dispatch_ordersCreateWithoutCustomersInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
-  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
-  users?: Prisma.usersCreateNestedOneWithoutDispatch_ordersInput
-  destination_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_destinationInput
-  origin_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_originInput
-  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersUncheckedCreateWithoutCustomersInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  origin_location_id?: string | null
-  destination_location_id?: string | null
-  corridor_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersCreateOrConnectWithoutCustomersInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput>
-}
-
-export type dispatch_ordersCreateManyCustomersInputEnvelope = {
-  data: Prisma.dispatch_ordersCreateManyCustomersInput | Prisma.dispatch_ordersCreateManyCustomersInput[]
-  skipDuplicates?: boolean
-}
-
-export type dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutCustomersInput>
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput>
-}
-
-export type dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutCustomersInput>
-}
-
-export type dispatch_ordersUpdateManyWithWhereWithoutCustomersInput = {
-  where: Prisma.dispatch_ordersScalarWhereInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersInput>
-}
-
-export type dispatch_ordersScalarWhereInput = {
-  AND?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
-  OR?: Prisma.dispatch_ordersScalarWhereInput[]
-  NOT?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
-  id?: Prisma.UuidFilter<"dispatch_orders"> | string
-  order_number?: Prisma.StringFilter<"dispatch_orders"> | string
-  status?: Prisma.EnumDispatchStatusFilter<"dispatch_orders"> | $Enums.DispatchStatus
-  requires_stock?: Prisma.BoolFilter<"dispatch_orders"> | boolean
-  planned_date?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
-  confirmed_at?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
-  customer_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
-  origin_location_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
-  destination_location_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
-  corridor_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
-  created_at?: Prisma.DateTimeFilter<"dispatch_orders"> | Date | string
-  updated_at?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
 }
 
 export type dispatch_ordersCreateWithoutDelivery_notesInput = {
@@ -1073,146 +981,6 @@ export type dispatch_ordersUncheckedUpdateWithoutDelivery_notesInput = {
   dispatch_rates?: Prisma.dispatch_ratesUncheckedUpdateManyWithoutDispatch_ordersNestedInput
   picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutDispatch_ordersNestedInput
   tripStopOrders?: Prisma.trip_stop_ordersUncheckedUpdateManyWithoutDispatch_orderNestedInput
-}
-
-export type dispatch_ordersCreateWithoutDestination_locationInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
-  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
-  users?: Prisma.usersCreateNestedOneWithoutDispatch_ordersInput
-  customers?: Prisma.business_partiesCreateNestedOneWithoutDispatch_ordersInput
-  origin_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_originInput
-  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersUncheckedCreateWithoutDestination_locationInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  customer_id?: string | null
-  origin_location_id?: string | null
-  corridor_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersCreateOrConnectWithoutDestination_locationInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutDestination_locationInput>
-}
-
-export type dispatch_ordersCreateManyDestination_locationInputEnvelope = {
-  data: Prisma.dispatch_ordersCreateManyDestination_locationInput | Prisma.dispatch_ordersCreateManyDestination_locationInput[]
-  skipDuplicates?: boolean
-}
-
-export type dispatch_ordersCreateWithoutOrigin_locationInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
-  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
-  users?: Prisma.usersCreateNestedOneWithoutDispatch_ordersInput
-  customers?: Prisma.business_partiesCreateNestedOneWithoutDispatch_ordersInput
-  destination_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_destinationInput
-  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersUncheckedCreateWithoutOrigin_locationInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  customer_id?: string | null
-  destination_location_id?: string | null
-  corridor_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersCreateOrConnectWithoutOrigin_locationInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutOrigin_locationInput>
-}
-
-export type dispatch_ordersCreateManyOrigin_locationInputEnvelope = {
-  data: Prisma.dispatch_ordersCreateManyOrigin_locationInput | Prisma.dispatch_ordersCreateManyOrigin_locationInput[]
-  skipDuplicates?: boolean
-}
-
-export type dispatch_ordersUpsertWithWhereUniqueWithoutDestination_locationInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutDestination_locationInput>
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutDestination_locationInput>
-}
-
-export type dispatch_ordersUpdateWithWhereUniqueWithoutDestination_locationInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutDestination_locationInput>
-}
-
-export type dispatch_ordersUpdateManyWithWhereWithoutDestination_locationInput = {
-  where: Prisma.dispatch_ordersScalarWhereInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationInput>
-}
-
-export type dispatch_ordersUpsertWithWhereUniqueWithoutOrigin_locationInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutOrigin_locationInput>
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutOrigin_locationInput>
-}
-
-export type dispatch_ordersUpdateWithWhereUniqueWithoutOrigin_locationInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutOrigin_locationInput>
-}
-
-export type dispatch_ordersUpdateManyWithWhereWithoutOrigin_locationInput = {
-  where: Prisma.dispatch_ordersScalarWhereInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationInput>
 }
 
 export type dispatch_ordersCreateWithoutPicking_ordersInput = {
@@ -1493,74 +1261,26 @@ export type dispatch_ordersUpdateManyWithWhereWithoutCorridorsInput = {
   data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutCorridorsInput>
 }
 
-export type dispatch_ordersCreateWithoutUsersInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
-  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
-  customers?: Prisma.business_partiesCreateNestedOneWithoutDispatch_ordersInput
-  destination_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_destinationInput
-  origin_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_originInput
-  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersUncheckedCreateWithoutUsersInput = {
-  id?: string
-  order_number: string
-  status: $Enums.DispatchStatus
-  requires_stock?: boolean
-  planned_date?: Date | string | null
-  confirmed_at?: Date | string | null
-  customer_id?: string | null
-  origin_location_id?: string | null
-  destination_location_id?: string | null
-  corridor_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
-  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
-}
-
-export type dispatch_ordersCreateOrConnectWithoutUsersInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutUsersInput, Prisma.dispatch_ordersUncheckedCreateWithoutUsersInput>
-}
-
-export type dispatch_ordersCreateManyUsersInputEnvelope = {
-  data: Prisma.dispatch_ordersCreateManyUsersInput | Prisma.dispatch_ordersCreateManyUsersInput[]
-  skipDuplicates?: boolean
-}
-
-export type dispatch_ordersUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutUsersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutUsersInput, Prisma.dispatch_ordersUncheckedCreateWithoutUsersInput>
-}
-
-export type dispatch_ordersUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.dispatch_ordersWhereUniqueInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutUsersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutUsersInput>
-}
-
-export type dispatch_ordersUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.dispatch_ordersScalarWhereInput
-  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersInput>
+export type dispatch_ordersScalarWhereInput = {
+  AND?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
+  OR?: Prisma.dispatch_ordersScalarWhereInput[]
+  NOT?: Prisma.dispatch_ordersScalarWhereInput | Prisma.dispatch_ordersScalarWhereInput[]
+  id?: Prisma.UuidFilter<"dispatch_orders"> | string
+  order_number?: Prisma.StringFilter<"dispatch_orders"> | string
+  status?: Prisma.EnumDispatchStatusFilter<"dispatch_orders"> | $Enums.DispatchStatus
+  requires_stock?: Prisma.BoolFilter<"dispatch_orders"> | boolean
+  planned_date?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
+  confirmed_at?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
+  customer_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
+  origin_location_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
+  destination_location_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
+  corridor_id?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
+  created_at?: Prisma.DateTimeFilter<"dispatch_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
+  deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_orders"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"dispatch_orders"> | string | null
 }
 
 export type dispatch_ordersCreateWithoutDispatch_ratesInput = {
@@ -1667,7 +1387,169 @@ export type dispatch_ordersUncheckedUpdateWithoutDispatch_ratesInput = {
   tripStopOrders?: Prisma.trip_stop_ordersUncheckedUpdateManyWithoutDispatch_orderNestedInput
 }
 
-export type dispatch_ordersCreateManyCustomersInput = {
+export type dispatch_ordersCreateWithoutDestination_locationInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
+  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
+  users?: Prisma.usersCreateNestedOneWithoutDispatch_ordersInput
+  customers?: Prisma.business_partiesCreateNestedOneWithoutDispatch_ordersInput
+  origin_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_originInput
+  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersUncheckedCreateWithoutDestination_locationInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  customer_id?: string | null
+  origin_location_id?: string | null
+  corridor_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersCreateOrConnectWithoutDestination_locationInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutDestination_locationInput>
+}
+
+export type dispatch_ordersCreateManyDestination_locationInputEnvelope = {
+  data: Prisma.dispatch_ordersCreateManyDestination_locationInput | Prisma.dispatch_ordersCreateManyDestination_locationInput[]
+  skipDuplicates?: boolean
+}
+
+export type dispatch_ordersCreateWithoutOrigin_locationInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
+  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
+  users?: Prisma.usersCreateNestedOneWithoutDispatch_ordersInput
+  customers?: Prisma.business_partiesCreateNestedOneWithoutDispatch_ordersInput
+  destination_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_destinationInput
+  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersUncheckedCreateWithoutOrigin_locationInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  customer_id?: string | null
+  destination_location_id?: string | null
+  corridor_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersCreateOrConnectWithoutOrigin_locationInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutOrigin_locationInput>
+}
+
+export type dispatch_ordersCreateManyOrigin_locationInputEnvelope = {
+  data: Prisma.dispatch_ordersCreateManyOrigin_locationInput | Prisma.dispatch_ordersCreateManyOrigin_locationInput[]
+  skipDuplicates?: boolean
+}
+
+export type dispatch_ordersUpsertWithWhereUniqueWithoutDestination_locationInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutDestination_locationInput>
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutDestination_locationInput>
+}
+
+export type dispatch_ordersUpdateWithWhereUniqueWithoutDestination_locationInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutDestination_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutDestination_locationInput>
+}
+
+export type dispatch_ordersUpdateManyWithWhereWithoutDestination_locationInput = {
+  where: Prisma.dispatch_ordersScalarWhereInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutDestination_locationInput>
+}
+
+export type dispatch_ordersUpsertWithWhereUniqueWithoutOrigin_locationInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutOrigin_locationInput>
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedCreateWithoutOrigin_locationInput>
+}
+
+export type dispatch_ordersUpdateWithWhereUniqueWithoutOrigin_locationInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutOrigin_locationInput, Prisma.dispatch_ordersUncheckedUpdateWithoutOrigin_locationInput>
+}
+
+export type dispatch_ordersUpdateManyWithWhereWithoutOrigin_locationInput = {
+  where: Prisma.dispatch_ordersScalarWhereInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationInput>
+}
+
+export type dispatch_ordersCreateWithoutCustomersInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
+  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
+  users?: Prisma.usersCreateNestedOneWithoutDispatch_ordersInput
+  destination_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_destinationInput
+  origin_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_originInput
+  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersUncheckedCreateWithoutCustomersInput = {
   id?: string
   order_number: string
   status: $Enums.DispatchStatus
@@ -1683,9 +1565,127 @@ export type dispatch_ordersCreateManyCustomersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
 }
 
-export type dispatch_ordersUpdateWithoutCustomersInput = {
+export type dispatch_ordersCreateOrConnectWithoutCustomersInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput>
+}
+
+export type dispatch_ordersCreateManyCustomersInputEnvelope = {
+  data: Prisma.dispatch_ordersCreateManyCustomersInput | Prisma.dispatch_ordersCreateManyCustomersInput[]
+  skipDuplicates?: boolean
+}
+
+export type dispatch_ordersUpsertWithWhereUniqueWithoutCustomersInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutCustomersInput>
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedCreateWithoutCustomersInput>
+}
+
+export type dispatch_ordersUpdateWithWhereUniqueWithoutCustomersInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutCustomersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutCustomersInput>
+}
+
+export type dispatch_ordersUpdateManyWithWhereWithoutCustomersInput = {
+  where: Prisma.dispatch_ordersScalarWhereInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersInput>
+}
+
+export type dispatch_ordersCreateWithoutUsersInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutDispatch_ordersInput
+  corridors?: Prisma.corridorsCreateNestedOneWithoutDispatchOrdersInput
+  customers?: Prisma.business_partiesCreateNestedOneWithoutDispatch_ordersInput
+  destination_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_destinationInput
+  origin_location?: Prisma.locationsCreateNestedOneWithoutDispatch_orders_originInput
+  dispatch_rates?: Prisma.dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersUncheckedCreateWithoutUsersInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  customer_id?: string | null
+  origin_location_id?: string | null
+  destination_location_id?: string | null
+  corridor_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  dispatch_rates?: Prisma.dispatch_ratesUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutDispatch_ordersInput
+  tripStopOrders?: Prisma.trip_stop_ordersUncheckedCreateNestedManyWithoutDispatch_orderInput
+}
+
+export type dispatch_ordersCreateOrConnectWithoutUsersInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutUsersInput, Prisma.dispatch_ordersUncheckedCreateWithoutUsersInput>
+}
+
+export type dispatch_ordersCreateManyUsersInputEnvelope = {
+  data: Prisma.dispatch_ordersCreateManyUsersInput | Prisma.dispatch_ordersCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type dispatch_ordersUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  update: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutUsersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.dispatch_ordersCreateWithoutUsersInput, Prisma.dispatch_ordersUncheckedCreateWithoutUsersInput>
+}
+
+export type dispatch_ordersUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.dispatch_ordersWhereUniqueInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateWithoutUsersInput, Prisma.dispatch_ordersUncheckedUpdateWithoutUsersInput>
+}
+
+export type dispatch_ordersUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.dispatch_ordersScalarWhereInput
+  data: Prisma.XOR<Prisma.dispatch_ordersUpdateManyMutationInput, Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type dispatch_ordersCreateManyCorridorsInput = {
+  id?: string
+  order_number: string
+  status: $Enums.DispatchStatus
+  requires_stock?: boolean
+  planned_date?: Date | string | null
+  confirmed_at?: Date | string | null
+  customer_id?: string | null
+  origin_location_id?: string | null
+  destination_location_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type dispatch_ordersUpdateWithoutCorridorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDispatchStatusFieldUpdateOperationsInput | $Enums.DispatchStatus
@@ -1698,8 +1698,8 @@ export type dispatch_ordersUpdateWithoutCustomersInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutDispatch_ordersNestedInput
-  corridors?: Prisma.corridorsUpdateOneWithoutDispatchOrdersNestedInput
   users?: Prisma.usersUpdateOneWithoutDispatch_ordersNestedInput
+  customers?: Prisma.business_partiesUpdateOneWithoutDispatch_ordersNestedInput
   destination_location?: Prisma.locationsUpdateOneWithoutDispatch_orders_destinationNestedInput
   origin_location?: Prisma.locationsUpdateOneWithoutDispatch_orders_originNestedInput
   dispatch_rates?: Prisma.dispatch_ratesUpdateManyWithoutDispatch_ordersNestedInput
@@ -1707,16 +1707,16 @@ export type dispatch_ordersUpdateWithoutCustomersInput = {
   tripStopOrders?: Prisma.trip_stop_ordersUpdateManyWithoutDispatch_orderNestedInput
 }
 
-export type dispatch_ordersUncheckedUpdateWithoutCustomersInput = {
+export type dispatch_ordersUncheckedUpdateWithoutCorridorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDispatchStatusFieldUpdateOperationsInput | $Enums.DispatchStatus
   requires_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planned_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   confirmed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1729,16 +1729,16 @@ export type dispatch_ordersUncheckedUpdateWithoutCustomersInput = {
   tripStopOrders?: Prisma.trip_stop_ordersUncheckedUpdateManyWithoutDispatch_orderNestedInput
 }
 
-export type dispatch_ordersUncheckedUpdateManyWithoutCustomersInput = {
+export type dispatch_ordersUncheckedUpdateManyWithoutCorridorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDispatchStatusFieldUpdateOperationsInput | $Enums.DispatchStatus
   requires_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planned_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   confirmed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1907,16 +1907,16 @@ export type dispatch_ordersUncheckedUpdateManyWithoutOrigin_locationInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type dispatch_ordersCreateManyCorridorsInput = {
+export type dispatch_ordersCreateManyCustomersInput = {
   id?: string
   order_number: string
   status: $Enums.DispatchStatus
   requires_stock?: boolean
   planned_date?: Date | string | null
   confirmed_at?: Date | string | null
-  customer_id?: string | null
   origin_location_id?: string | null
   destination_location_id?: string | null
+  corridor_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1925,7 +1925,7 @@ export type dispatch_ordersCreateManyCorridorsInput = {
   deleted_by?: string | null
 }
 
-export type dispatch_ordersUpdateWithoutCorridorsInput = {
+export type dispatch_ordersUpdateWithoutCustomersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDispatchStatusFieldUpdateOperationsInput | $Enums.DispatchStatus
@@ -1938,8 +1938,8 @@ export type dispatch_ordersUpdateWithoutCorridorsInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutDispatch_ordersNestedInput
+  corridors?: Prisma.corridorsUpdateOneWithoutDispatchOrdersNestedInput
   users?: Prisma.usersUpdateOneWithoutDispatch_ordersNestedInput
-  customers?: Prisma.business_partiesUpdateOneWithoutDispatch_ordersNestedInput
   destination_location?: Prisma.locationsUpdateOneWithoutDispatch_orders_destinationNestedInput
   origin_location?: Prisma.locationsUpdateOneWithoutDispatch_orders_originNestedInput
   dispatch_rates?: Prisma.dispatch_ratesUpdateManyWithoutDispatch_ordersNestedInput
@@ -1947,16 +1947,16 @@ export type dispatch_ordersUpdateWithoutCorridorsInput = {
   tripStopOrders?: Prisma.trip_stop_ordersUpdateManyWithoutDispatch_orderNestedInput
 }
 
-export type dispatch_ordersUncheckedUpdateWithoutCorridorsInput = {
+export type dispatch_ordersUncheckedUpdateWithoutCustomersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDispatchStatusFieldUpdateOperationsInput | $Enums.DispatchStatus
   requires_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planned_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   confirmed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1969,16 +1969,16 @@ export type dispatch_ordersUncheckedUpdateWithoutCorridorsInput = {
   tripStopOrders?: Prisma.trip_stop_ordersUncheckedUpdateManyWithoutDispatch_orderNestedInput
 }
 
-export type dispatch_ordersUncheckedUpdateManyWithoutCorridorsInput = {
+export type dispatch_ordersUncheckedUpdateManyWithoutCustomersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order_number?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDispatchStatusFieldUpdateOperationsInput | $Enums.DispatchStatus
   requires_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planned_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   confirmed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null

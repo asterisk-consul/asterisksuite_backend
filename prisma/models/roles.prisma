@@ -16,6 +16,10 @@ model permissions {
     overrides        user_permission_overrides[]
     created_at       DateTime                    @default(now())
     updated_at       DateTime                    @updatedAt
+    deleted_at       DateTime?
+    created_by       String?                     @db.Uuid
+    updated_by       String?                     @db.Uuid
+    deleted_by       String?                     @db.Uuid
 }
 
 model business_roles {
@@ -25,6 +29,10 @@ model business_roles {
     description String?
     is_system   Boolean                     @default(false)
     active      Boolean                     @default(true)
+    deleted_at  DateTime?
+    created_by  String?                     @db.Uuid
+    updated_by  String?                     @db.Uuid
+    deleted_by  String?                     @db.Uuid
     created_at  DateTime                    @default(now())
     updated_at  DateTime                    @updatedAt
     permissions business_role_permissions[]

@@ -429,48 +429,6 @@ export type party_locationsMinOrderByAggregateInput = {
   deleted_by?: Prisma.SortOrder
 }
 
-export type party_locationsCreateNestedManyWithoutBusiness_partiesInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
-  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
-  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-}
-
-export type party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
-  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
-  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-}
-
-export type party_locationsUpdateManyWithoutBusiness_partiesNestedInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
-  upsert?: Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput[]
-  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
-  set?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  disconnect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  delete?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  update?: Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput[]
-  updateMany?: Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput | Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput[]
-  deleteMany?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
-}
-
-export type party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput = {
-  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
-  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
-  upsert?: Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput[]
-  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
-  set?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  disconnect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  delete?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
-  update?: Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput[]
-  updateMany?: Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput | Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput[]
-  deleteMany?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
-}
-
 export type party_locationsCreateNestedManyWithoutLocationsInput = {
   create?: Prisma.XOR<Prisma.party_locationsCreateWithoutLocationsInput, Prisma.party_locationsUncheckedCreateWithoutLocationsInput> | Prisma.party_locationsCreateWithoutLocationsInput[] | Prisma.party_locationsUncheckedCreateWithoutLocationsInput[]
   connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutLocationsInput | Prisma.party_locationsCreateOrConnectWithoutLocationsInput[]
@@ -513,70 +471,46 @@ export type party_locationsUncheckedUpdateManyWithoutLocationsNestedInput = {
   deleteMany?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
 }
 
-export type party_locationsCreateWithoutBusiness_partiesInput = {
-  id?: string
-  label?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  locations: Prisma.locationsCreateNestedOneWithoutParty_locationsInput
+export type party_locationsCreateNestedManyWithoutBusiness_partiesInput = {
+  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
+  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
+  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
 }
 
-export type party_locationsUncheckedCreateWithoutBusiness_partiesInput = {
-  id?: string
-  location_id: string
-  label?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string | null
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
+export type party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput = {
+  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
+  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
+  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
 }
 
-export type party_locationsCreateOrConnectWithoutBusiness_partiesInput = {
-  where: Prisma.party_locationsWhereUniqueInput
-  create: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput>
+export type party_locationsUpdateManyWithoutBusiness_partiesNestedInput = {
+  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
+  upsert?: Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput[]
+  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
+  set?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  disconnect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  delete?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  update?: Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput[]
+  updateMany?: Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput | Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput[]
+  deleteMany?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
 }
 
-export type party_locationsCreateManyBusiness_partiesInputEnvelope = {
-  data: Prisma.party_locationsCreateManyBusiness_partiesInput | Prisma.party_locationsCreateManyBusiness_partiesInput[]
-  skipDuplicates?: boolean
-}
-
-export type party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput = {
-  where: Prisma.party_locationsWhereUniqueInput
-  update: Prisma.XOR<Prisma.party_locationsUpdateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedUpdateWithoutBusiness_partiesInput>
-  create: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput>
-}
-
-export type party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput = {
-  where: Prisma.party_locationsWhereUniqueInput
-  data: Prisma.XOR<Prisma.party_locationsUpdateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedUpdateWithoutBusiness_partiesInput>
-}
-
-export type party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput = {
-  where: Prisma.party_locationsScalarWhereInput
-  data: Prisma.XOR<Prisma.party_locationsUpdateManyMutationInput, Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesInput>
-}
-
-export type party_locationsScalarWhereInput = {
-  AND?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
-  OR?: Prisma.party_locationsScalarWhereInput[]
-  NOT?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"party_locations"> | string
-  party_id?: Prisma.UuidFilter<"party_locations"> | string
-  location_id?: Prisma.UuidFilter<"party_locations"> | string
-  label?: Prisma.StringNullableFilter<"party_locations"> | string | null
-  created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
-  updated_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
-  deleted_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
+export type party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput = {
+  create?: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput> | Prisma.party_locationsCreateWithoutBusiness_partiesInput[] | Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput[]
+  connectOrCreate?: Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput | Prisma.party_locationsCreateOrConnectWithoutBusiness_partiesInput[]
+  upsert?: Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput[]
+  createMany?: Prisma.party_locationsCreateManyBusiness_partiesInputEnvelope
+  set?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  disconnect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  delete?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  connect?: Prisma.party_locationsWhereUniqueInput | Prisma.party_locationsWhereUniqueInput[]
+  update?: Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput | Prisma.party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput[]
+  updateMany?: Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput | Prisma.party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput[]
+  deleteMany?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
 }
 
 export type party_locationsCreateWithoutLocationsInput = {
@@ -629,7 +563,35 @@ export type party_locationsUpdateManyWithWhereWithoutLocationsInput = {
   data: Prisma.XOR<Prisma.party_locationsUpdateManyMutationInput, Prisma.party_locationsUncheckedUpdateManyWithoutLocationsInput>
 }
 
-export type party_locationsCreateManyBusiness_partiesInput = {
+export type party_locationsScalarWhereInput = {
+  AND?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
+  OR?: Prisma.party_locationsScalarWhereInput[]
+  NOT?: Prisma.party_locationsScalarWhereInput | Prisma.party_locationsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"party_locations"> | string
+  party_id?: Prisma.UuidFilter<"party_locations"> | string
+  location_id?: Prisma.UuidFilter<"party_locations"> | string
+  label?: Prisma.StringNullableFilter<"party_locations"> | string | null
+  created_at?: Prisma.DateTimeFilter<"party_locations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
+  deleted_at?: Prisma.DateTimeNullableFilter<"party_locations"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"party_locations"> | string | null
+}
+
+export type party_locationsCreateWithoutBusiness_partiesInput = {
+  id?: string
+  label?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  locations: Prisma.locationsCreateNestedOneWithoutParty_locationsInput
+}
+
+export type party_locationsUncheckedCreateWithoutBusiness_partiesInput = {
   id?: string
   location_id: string
   label?: string | null
@@ -641,40 +603,30 @@ export type party_locationsCreateManyBusiness_partiesInput = {
   deleted_by?: string | null
 }
 
-export type party_locationsUpdateWithoutBusiness_partiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  locations?: Prisma.locationsUpdateOneRequiredWithoutParty_locationsNestedInput
+export type party_locationsCreateOrConnectWithoutBusiness_partiesInput = {
+  where: Prisma.party_locationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput>
 }
 
-export type party_locationsUncheckedUpdateWithoutBusiness_partiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type party_locationsCreateManyBusiness_partiesInputEnvelope = {
+  data: Prisma.party_locationsCreateManyBusiness_partiesInput | Prisma.party_locationsCreateManyBusiness_partiesInput[]
+  skipDuplicates?: boolean
 }
 
-export type party_locationsUncheckedUpdateManyWithoutBusiness_partiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  location_id?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type party_locationsUpsertWithWhereUniqueWithoutBusiness_partiesInput = {
+  where: Prisma.party_locationsWhereUniqueInput
+  update: Prisma.XOR<Prisma.party_locationsUpdateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedUpdateWithoutBusiness_partiesInput>
+  create: Prisma.XOR<Prisma.party_locationsCreateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedCreateWithoutBusiness_partiesInput>
+}
+
+export type party_locationsUpdateWithWhereUniqueWithoutBusiness_partiesInput = {
+  where: Prisma.party_locationsWhereUniqueInput
+  data: Prisma.XOR<Prisma.party_locationsUpdateWithoutBusiness_partiesInput, Prisma.party_locationsUncheckedUpdateWithoutBusiness_partiesInput>
+}
+
+export type party_locationsUpdateManyWithWhereWithoutBusiness_partiesInput = {
+  where: Prisma.party_locationsScalarWhereInput
+  data: Prisma.XOR<Prisma.party_locationsUpdateManyMutationInput, Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesInput>
 }
 
 export type party_locationsCreateManyLocationsInput = {
@@ -716,6 +668,54 @@ export type party_locationsUncheckedUpdateWithoutLocationsInput = {
 export type party_locationsUncheckedUpdateManyWithoutLocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   party_id?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type party_locationsCreateManyBusiness_partiesInput = {
+  id?: string
+  location_id: string
+  label?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type party_locationsUpdateWithoutBusiness_partiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locations?: Prisma.locationsUpdateOneRequiredWithoutParty_locationsNestedInput
+}
+
+export type party_locationsUncheckedUpdateWithoutBusiness_partiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  location_id?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type party_locationsUncheckedUpdateManyWithoutBusiness_partiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  location_id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null

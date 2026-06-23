@@ -599,6 +599,14 @@ export type Document_sequencesNullableScalarRelationFilter = {
   isNot?: Prisma.document_sequencesWhereInput | null
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type document_sequencesCreateNestedOneWithoutDocument_typesInput = {
   create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_typesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_typesInput>
   connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocument_typesInput

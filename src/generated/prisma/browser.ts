@@ -18,35 +18,90 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
- * Model business_parties
+ * Model accounts
  * 
  */
-export type business_parties = Prisma.business_partiesModel
+export type accounts = Prisma.accountsModel
 /**
- * Model cargo_transfer_items
+ * Model audit_logs
  * 
  */
-export type cargo_transfer_items = Prisma.cargo_transfer_itemsModel
+export type audit_logs = Prisma.audit_logsModel
 /**
- * Model cargo_transfers
+ * Model product_costs
  * 
  */
-export type cargo_transfers = Prisma.cargo_transfersModel
+export type product_costs = Prisma.product_costsModel
 /**
- * Model companies
+ * Model product_cost_breakdowns
  * 
  */
-export type companies = Prisma.companiesModel
+export type product_cost_breakdowns = Prisma.product_cost_breakdownsModel
 /**
- * Model delivery_notes
+ * Model cost_components
  * 
  */
-export type delivery_notes = Prisma.delivery_notesModel
+export type cost_components = Prisma.cost_componentsModel
 /**
- * Model drivers
+ * Model cost_templates
  * 
  */
-export type drivers = Prisma.driversModel
+export type cost_templates = Prisma.cost_templatesModel
+/**
+ * Model cost_template_components
+ * 
+ */
+export type cost_template_components = Prisma.cost_template_componentsModel
+/**
+ * Model currencies
+ * 
+ */
+export type currencies = Prisma.currenciesModel
+/**
+ * Model currency_rates
+ * 
+ */
+export type currency_rates = Prisma.currency_ratesModel
+/**
+ * Model document_sequences
+ * 
+ */
+export type document_sequences = Prisma.document_sequencesModel
+/**
+ * Model document_item_taxes
+ * 
+ */
+export type document_item_taxes = Prisma.document_item_taxesModel
+/**
+ * Model document_items
+ * 
+ */
+export type document_items = Prisma.document_itemsModel
+/**
+ * Model document_taxes
+ * 
+ */
+export type document_taxes = Prisma.document_taxesModel
+/**
+ * Model document_types
+ * 
+ */
+export type document_types = Prisma.document_typesModel
+/**
+ * Model document_type_taxes
+ * 
+ */
+export type document_type_taxes = Prisma.document_type_taxesModel
+/**
+ * Model documents
+ * 
+ */
+export type documents = Prisma.documentsModel
+/**
+ * Model product_structure_versions
+ * 
+ */
+export type product_structure_versions = Prisma.product_structure_versionsModel
 /**
  * Model entity_photos
  * 
@@ -58,30 +113,25 @@ export type entity_photos = Prisma.entity_photosModel
  */
 export type files = Prisma.filesModel
 /**
- * Model locations
+ * Model cargo_transfer_items
  * 
  */
-export type locations = Prisma.locationsModel
+export type cargo_transfer_items = Prisma.cargo_transfer_itemsModel
 /**
- * Model pallet_items
+ * Model cargo_transfers
  * 
  */
-export type pallet_items = Prisma.pallet_itemsModel
+export type cargo_transfers = Prisma.cargo_transfersModel
 /**
- * Model pallets
+ * Model delivery_notes
  * 
  */
-export type pallets = Prisma.palletsModel
+export type delivery_notes = Prisma.delivery_notesModel
 /**
- * Model party_locations
+ * Model drivers
  * 
  */
-export type party_locations = Prisma.party_locationsModel
-/**
- * Model party_contacts
- * 
- */
-export type party_contacts = Prisma.party_contactsModel
+export type drivers = Prisma.driversModel
 /**
  * Model picking_items
  * 
@@ -143,11 +193,6 @@ export type corridors = Prisma.corridorsModel
  */
 export type corridor_stops = Prisma.corridor_stopsModel
 /**
- * Model users
- * 
- */
-export type users = Prisma.usersModel
-/**
  * Model vehicles
  * 
  */
@@ -157,31 +202,6 @@ export type vehicles = Prisma.vehiclesModel
  * 
  */
 export type vehicle_combinations = Prisma.vehicle_combinationsModel
-/**
- * Model warehouse_stock
- * 
- */
-export type warehouse_stock = Prisma.warehouse_stockModel
-/**
- * Model warehouse_stock_movements
- * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
- */
-export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
-/**
- * Model warehouses
- * 
- */
-export type warehouses = Prisma.warehousesModel
-/**
- * Model document_sequences
- * 
- */
-export type document_sequences = Prisma.document_sequencesModel
-/**
- * Model refresh_tokens
- * 
- */
-export type refresh_tokens = Prisma.refresh_tokensModel
 /**
  * Model transport_document_types
  * 
@@ -208,65 +228,45 @@ export type transfer_rates = Prisma.transfer_ratesModel
  */
 export type dispatch_rates = Prisma.dispatch_ratesModel
 /**
- * Model document_item_taxes
+ * Model system_modules
  * 
  */
-export type document_item_taxes = Prisma.document_item_taxesModel
+export type system_modules = Prisma.system_modulesModel
 /**
- * Model document_items
+ * Model locations
  * 
  */
-export type document_items = Prisma.document_itemsModel
+export type locations = Prisma.locationsModel
 /**
- * Model document_taxes
+ * Model pallet_items
  * 
  */
-export type document_taxes = Prisma.document_taxesModel
+export type pallet_items = Prisma.pallet_itemsModel
 /**
- * Model document_types
+ * Model pallets
  * 
  */
-export type document_types = Prisma.document_typesModel
+export type pallets = Prisma.palletsModel
 /**
- * Model document_type_taxes
+ * Model business_parties
  * 
  */
-export type document_type_taxes = Prisma.document_type_taxesModel
+export type business_parties = Prisma.business_partiesModel
 /**
- * Model documents
+ * Model party_locations
  * 
  */
-export type documents = Prisma.documentsModel
+export type party_locations = Prisma.party_locationsModel
 /**
- * Model product_taxes
+ * Model party_contacts
  * 
  */
-export type product_taxes = Prisma.product_taxesModel
-/**
- * Model taxes
- * 
- */
-export type taxes = Prisma.taxesModel
-/**
- * Model audit_logs
- * 
- */
-export type audit_logs = Prisma.audit_logsModel
+export type party_contacts = Prisma.party_contactsModel
 /**
  * Model product_price
  * 
  */
 export type product_price = Prisma.product_priceModel
-/**
- * Model currencies
- * 
- */
-export type currencies = Prisma.currenciesModel
-/**
- * Model currency_rates
- * 
- */
-export type currency_rates = Prisma.currency_ratesModel
 /**
  * Model products
  * 
@@ -318,21 +318,6 @@ export type attributes = Prisma.attributesModel
  */
 export type product_attribute_values = Prisma.product_attribute_valuesModel
 /**
- * Model accounts
- * 
- */
-export type accounts = Prisma.accountsModel
-/**
- * Model product_costs
- * 
- */
-export type product_costs = Prisma.product_costsModel
-/**
- * Model product_cost_breakdowns
- * 
- */
-export type product_cost_breakdowns = Prisma.product_cost_breakdownsModel
-/**
  * Model product_variant_prices
  * 
  */
@@ -343,27 +328,67 @@ export type product_variant_prices = Prisma.product_variant_pricesModel
  */
 export type product_variant_costs = Prisma.product_variant_costsModel
 /**
- * Model cost_components
+ * Model users
  * 
  */
-export type cost_components = Prisma.cost_componentsModel
+export type users = Prisma.usersModel
 /**
- * Model cost_templates
+ * Model companies
  * 
  */
-export type cost_templates = Prisma.cost_templatesModel
+export type companies = Prisma.companiesModel
 /**
- * Model cost_template_components
+ * Model refresh_tokens
  * 
  */
-export type cost_template_components = Prisma.cost_template_componentsModel
+export type refresh_tokens = Prisma.refresh_tokensModel
 /**
- * Model product_structure_versions
+ * Model permissions
  * 
  */
-export type product_structure_versions = Prisma.product_structure_versionsModel
+export type permissions = Prisma.permissionsModel
 /**
- * Model system_modules
+ * Model business_roles
  * 
  */
-export type system_modules = Prisma.system_modulesModel
+export type business_roles = Prisma.business_rolesModel
+/**
+ * Model business_role_permissions
+ * 
+ */
+export type business_role_permissions = Prisma.business_role_permissionsModel
+/**
+ * Model business_user_roles
+ * 
+ */
+export type business_user_roles = Prisma.business_user_rolesModel
+/**
+ * Model user_permission_overrides
+ * 
+ */
+export type user_permission_overrides = Prisma.user_permission_overridesModel
+/**
+ * Model product_taxes
+ * 
+ */
+export type product_taxes = Prisma.product_taxesModel
+/**
+ * Model taxes
+ * 
+ */
+export type taxes = Prisma.taxesModel
+/**
+ * Model warehouse_stock
+ * 
+ */
+export type warehouse_stock = Prisma.warehouse_stockModel
+/**
+ * Model warehouse_stock_movements
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ */
+export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
+/**
+ * Model warehouses
+ * 
+ */
+export type warehouses = Prisma.warehousesModel

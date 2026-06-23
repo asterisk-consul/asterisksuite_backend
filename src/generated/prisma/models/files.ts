@@ -585,14 +585,6 @@ export type filesUpdateOneRequiredWithoutEntity_photosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.filesUpdateToOneWithWhereWithoutEntity_photosInput, Prisma.filesUpdateWithoutEntity_photosInput>, Prisma.filesUncheckedUpdateWithoutEntity_photosInput>
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type filesCreateNestedManyWithoutUsersInput = {
   create?: Prisma.XOR<Prisma.filesCreateWithoutUsersInput, Prisma.filesUncheckedCreateWithoutUsersInput> | Prisma.filesCreateWithoutUsersInput[] | Prisma.filesUncheckedCreateWithoutUsersInput[]
   connectOrCreate?: Prisma.filesCreateOrConnectWithoutUsersInput | Prisma.filesCreateOrConnectWithoutUsersInput[]
