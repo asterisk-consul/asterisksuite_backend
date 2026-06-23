@@ -1,424 +1,424 @@
 model cargo_transfer_items {
-    id               String          @id @default(uuid()) @db.Uuid
-    transfer_id      String          @db.Uuid
-    pallet_id        String?         @db.Uuid
-    delivery_note_id String?         @db.Uuid
-    quantity         Decimal?        @db.Decimal(12, 3)
-    delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    cargo_transfers  cargo_transfers @relation(fields: [transfer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id               String          @id @default(uuid()) @db.Uuid
+  transfer_id      String          @db.Uuid
+  pallet_id        String?         @db.Uuid
+  delivery_note_id String?         @db.Uuid
+  quantity         Decimal?        @db.Decimal(12, 3)
+  delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cargo_transfers  cargo_transfers @relation(fields: [transfer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model cargo_transfers {
-    id                                        String                 @id @default(uuid()) @db.Uuid
-    from_trip_id                              String?                @db.Uuid
-    to_trip_id                                String?                @db.Uuid
-    location_id                               String?                @db.Uuid
-    transfer_time                             DateTime               @default(now()) @db.Timestamp(6)
-    performed_by                              String?                @db.Uuid
-    notes                                     String?
-    cargo_transfer_items                      cargo_transfer_items[]
-    trips_cargo_transfers_from_trip_idTotrips trips?                 @relation("cargo_transfers_from_trip_idTotrips", fields: [from_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    locations                                 locations?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    users                                     users?                 @relation(fields: [performed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    trips_cargo_transfers_to_trip_idTotrips   trips?                 @relation("cargo_transfers_to_trip_idTotrips", fields: [to_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                                        String                 @id @default(uuid()) @db.Uuid
+  from_trip_id                              String?                @db.Uuid
+  to_trip_id                                String?                @db.Uuid
+  location_id                               String?                @db.Uuid
+  transfer_time                             DateTime               @default(now()) @db.Timestamp(6)
+  performed_by                              String?                @db.Uuid
+  notes                                     String?
+  cargo_transfer_items                      cargo_transfer_items[]
+  trips_cargo_transfers_from_trip_idTotrips trips?                 @relation("cargo_transfers_from_trip_idTotrips", fields: [from_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  locations                                 locations?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                                     users?                 @relation(fields: [performed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trips_cargo_transfers_to_trip_idTotrips   trips?                 @relation("cargo_transfers_to_trip_idTotrips", fields: [to_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model delivery_notes {
-    id                   String                 @id @default(uuid()) @db.Uuid
-    type                 String                 @db.VarChar(20)
-    number               String                 @db.VarChar(50)
-    status               String                 @db.VarChar(20)
-    party_id             String?                @db.Uuid
-    trip_id              String?                @db.Uuid
-    created_at           DateTime               @default(now()) @db.Timestamp(6)
-    updated_at           DateTime?              @updatedAt @db.Timestamp(6)
-    deleted_at           DateTime?
-    created_by           String?                @db.Uuid
-    updated_by           String?                @db.Uuid
-    deleted_by           String?                @db.Uuid
-    dispatch_order_id    String?                @db.Uuid
-    cargo_transfer_items cargo_transfer_items[]
-    users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    dispatch_orders      dispatch_orders?       @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    business_parties     business_parties?      @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
-    picking_orders       picking_orders[]
-    trip_cargo           trip_cargo[]
+  id                   String                 @id @default(uuid()) @db.Uuid
+  type                 String                 @db.VarChar(20)
+  number               String                 @db.VarChar(50)
+  status               String                 @db.VarChar(20)
+  party_id             String?                @db.Uuid
+  trip_id              String?                @db.Uuid
+  created_at           DateTime               @default(now()) @db.Timestamp(6)
+  updated_at           DateTime?              @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?                @db.Uuid
+  updated_by           String?                @db.Uuid
+  deleted_by           String?                @db.Uuid
+  dispatch_order_id    String?                @db.Uuid
+  cargo_transfer_items cargo_transfer_items[]
+  users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  dispatch_orders      dispatch_orders?       @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties     business_parties?      @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
+  picking_orders       picking_orders[]
+  trip_cargo           trip_cargo[]
 }
 
 model drivers {
-    id                  String                 @id @default(uuid()) @db.Uuid
-    first_name          String                 @db.VarChar(100)
-    last_name           String                 @db.VarChar(100)
-    document            String?                @db.VarChar(50)
-    phone               String?                @db.VarChar(50)
-    active              Boolean                @default(true)
-    created_at          DateTime               @default(now()) @db.Timestamp(6)
-    updated_at          DateTime?              @updatedAt @db.Timestamp(6)
-    deleted_at          DateTime?
-    created_by          String?                @db.Uuid
-    updated_by          String?                @db.Uuid
-    deleted_by          String?                @db.Uuid
-    driverDocuments     documents_driver[]
-    vehicleCombinations vehicle_combinations[]
+  id                  String                 @id @default(uuid()) @db.Uuid
+  first_name          String                 @db.VarChar(100)
+  last_name           String                 @db.VarChar(100)
+  document            String?                @db.VarChar(50)
+  phone               String?                @db.VarChar(50)
+  active              Boolean                @default(true)
+  created_at          DateTime               @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?              @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?                @db.Uuid
+  updated_by          String?                @db.Uuid
+  deleted_by          String?                @db.Uuid
+  driverDocuments     documents_driver[]
+  vehicleCombinations vehicle_combinations[]
 }
 
 model picking_items {
-    id                String            @id @default(uuid()) @db.Uuid
-    picking_order_id  String            @db.Uuid
-    product_id        String            @db.Uuid
-    quantity_required Decimal           @db.Decimal(12, 3)
-    quantity_picked   Decimal?          @default(0) @db.Decimal(12, 3)
-    picking_orders    picking_orders    @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    products          products          @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    picking_sources   picking_sources[]
+  id                String            @id @default(uuid()) @db.Uuid
+  picking_order_id  String            @db.Uuid
+  product_id        String            @db.Uuid
+  quantity_required Decimal           @db.Decimal(12, 3)
+  quantity_picked   Decimal?          @default(0) @db.Decimal(12, 3)
+  picking_orders    picking_orders    @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  products          products          @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  picking_sources   picking_sources[]
 }
 
 model picking_orders {
-    id                String            @id @default(uuid()) @db.Uuid
-    warehouse_id      String            @db.Uuid
-    client_id         String?           @db.Uuid
-    status            String            @db.VarChar(20)
-    delivery_note_id  String?           @db.Uuid
-    trip_id           String?           @db.Uuid
-    created_at        DateTime          @default(now()) @db.Timestamp(6)
-    updated_at        DateTime?         @updatedAt @db.Timestamp(6)
-    deleted_at        DateTime?
-    created_by        String?           @db.Uuid
-    updated_by        String?           @db.Uuid
-    deleted_by        String?           @db.Uuid
-    dispatch_order_id String?           @db.Uuid
-    picking_items     picking_items[]
-    users             users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    delivery_notes    delivery_notes?   @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    dispatch_orders   dispatch_orders?  @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    trips             trips?            @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    warehouses        warehouses        @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    picking_results   picking_results[]
+  id                String            @id @default(uuid()) @db.Uuid
+  warehouse_id      String            @db.Uuid
+  client_id         String?           @db.Uuid
+  status            String            @db.VarChar(20)
+  delivery_note_id  String?           @db.Uuid
+  trip_id           String?           @db.Uuid
+  created_at        DateTime          @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at        DateTime?
+  created_by        String?           @db.Uuid
+  updated_by        String?           @db.Uuid
+  deleted_by        String?           @db.Uuid
+  dispatch_order_id String?           @db.Uuid
+  picking_items     picking_items[]
+  users             users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  delivery_notes    delivery_notes?   @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  dispatch_orders   dispatch_orders?  @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trips             trips?            @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouses        warehouses        @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  picking_results   picking_results[]
 }
 
 model picking_results {
-    id               String         @id @default(uuid()) @db.Uuid
-    picking_order_id String         @db.Uuid
-    pallet_id        String         @db.Uuid
-    pallets          pallets        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    picking_orders   picking_orders @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id               String         @id @default(uuid()) @db.Uuid
+  picking_order_id String         @db.Uuid
+  pallet_id        String         @db.Uuid
+  pallets          pallets        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  picking_orders   picking_orders @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model picking_sources {
-    id              String        @id @default(uuid()) @db.Uuid
-    picking_item_id String        @db.Uuid
-    pallet_id       String        @db.Uuid
-    quantity        Decimal       @db.Decimal(12, 3)
-    pallets         pallets       @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    picking_items   picking_items @relation(fields: [picking_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id              String        @id @default(uuid()) @db.Uuid
+  picking_item_id String        @db.Uuid
+  pallet_id       String        @db.Uuid
+  quantity        Decimal       @db.Decimal(12, 3)
+  pallets         pallets       @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  picking_items   picking_items @relation(fields: [picking_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model trip_cargo {
-    id               String          @id @default(uuid()) @db.Uuid
-    trip_id          String          @db.Uuid
-    pallet_id        String?         @db.Uuid
-    delivery_note_id String?         @db.Uuid
-    loaded_at        DateTime?       @db.Timestamp(6)
-    unloaded_at      DateTime?       @db.Timestamp(6)
-    delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    trips            trips           @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id               String          @id @default(uuid()) @db.Uuid
+  trip_id          String          @db.Uuid
+  pallet_id        String?         @db.Uuid
+  delivery_note_id String?         @db.Uuid
+  loaded_at        DateTime?       @db.Timestamp(6)
+  unloaded_at      DateTime?       @db.Timestamp(6)
+  delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trips            trips           @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-    @@index([pallet_id], map: "idx_trip_cargo_pallet")
-    @@index([trip_id], map: "idx_trip_cargo_trip")
+  @@index([pallet_id], map: "idx_trip_cargo_pallet")
+  @@index([trip_id], map: "idx_trip_cargo_trip")
 }
 
 model trip_temperature_logs {
-    id          String   @id @default(uuid()) @db.Uuid
-    trip_id     String   @db.Uuid
-    temperature Decimal  @db.Decimal(5, 2)
-    recorded_at DateTime @default(now()) @db.Timestamp(6)
-    recorded_by String?  @db.Uuid
-    users       users?   @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    trips       trips    @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          String   @id @default(uuid()) @db.Uuid
+  trip_id     String   @db.Uuid
+  temperature Decimal  @db.Decimal(5, 2)
+  recorded_at DateTime @default(now()) @db.Timestamp(6)
+  recorded_by String?  @db.Uuid
+  users       users?   @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trips       trips    @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model dispatch_orders {
-    id                      String             @id @default(uuid()) @db.Uuid
-    order_number            String             @unique @db.VarChar(50)
-    status                  DispatchStatus
-    requires_stock          Boolean            @default(false)
-    planned_date            DateTime?          @db.Timestamp(6)
-    confirmed_at            DateTime?          @db.Timestamp(6)
-    customer_id             String?            @db.Uuid
-    origin_location_id      String?            @db.Uuid
-    destination_location_id String?            @db.Uuid
-    corridor_id             String?            @db.Uuid
-    created_at              DateTime           @default(now()) @db.Timestamp(6)
-    updated_at              DateTime?          @updatedAt @db.Timestamp(6)
-    deleted_at              DateTime?
-    created_by              String?            @db.Uuid
-    updated_by              String?            @db.Uuid
-    deleted_by              String?            @db.Uuid
-    delivery_notes          delivery_notes[]
-    corridors               corridors?         @relation(fields: [corridor_id], references: [id])
-    users                   users?             @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    customers               business_parties?  @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    destination_location    locations?         @relation("dispatch_destination_location", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    origin_location         locations?         @relation("dispatch_origin_location", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    dispatch_rates          dispatch_rates[]
-    picking_orders          picking_orders[]
-    tripStopOrders          trip_stop_orders[]
+  id                      String             @id @default(uuid()) @db.Uuid
+  order_number            String             @unique @db.VarChar(50)
+  status                  DispatchStatus
+  requires_stock          Boolean            @default(false)
+  planned_date            DateTime?          @db.Timestamp(6)
+  confirmed_at            DateTime?          @db.Timestamp(6)
+  customer_id             String?            @db.Uuid
+  origin_location_id      String?            @db.Uuid
+  destination_location_id String?            @db.Uuid
+  corridor_id             String?            @db.Uuid
+  created_at              DateTime           @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?          @updatedAt @db.Timestamp(6)
+  deleted_at              DateTime?
+  created_by              String?            @db.Uuid
+  updated_by              String?            @db.Uuid
+  deleted_by              String?            @db.Uuid
+  delivery_notes          delivery_notes[]
+  corridors               corridors?         @relation(fields: [corridor_id], references: [id])
+  users                   users?             @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  customers               business_parties?  @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  destination_location    locations?         @relation("dispatch_destination_location", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  origin_location         locations?         @relation("dispatch_origin_location", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  dispatch_rates          dispatch_rates[]
+  picking_orders          picking_orders[]
+  tripStopOrders          trip_stop_orders[]
 
-    @@index([status], map: "idx_dispatch_orders_status")
+  @@index([status], map: "idx_dispatch_orders_status")
 }
 
 model trips {
-    id                                                    String                  @id @default(uuid()) @db.Uuid
-    reference_number                                      String?                 @db.VarChar(100)
-    week                                                  String?                 @db.VarChar(10)
-    vehicle_combination_id                                String?                 @db.Uuid
-    origin_warehouse_id                                   String?                 @db.Uuid
-    destination_warehouse_id                              String?                 @db.Uuid
-    origin_location_id                                    String?                 @db.Uuid
-    destination_location_id                               String?                 @db.Uuid
-    departure_time                                        DateTime?               @db.Timestamp(6)
-    arrival_time                                          DateTime?               @db.Timestamp(6)
-    status                                                TripStatus
-    notes                                                 String?
-    created_at                                            DateTime                @default(now()) @db.Timestamp(6)
-    updated_at                                            DateTime?               @updatedAt @db.Timestamp(6)
-    deleted_at                                            DateTime?
-    created_by                                            String?                 @db.Uuid
-    updated_by                                            String?                 @db.Uuid
-    deleted_by                                            String?                 @db.Uuid
-    kilometers                                            Decimal?                @db.Decimal(10, 2)
-    cargo_transfers_cargo_transfers_from_trip_idTotrips   cargo_transfers[]       @relation("cargo_transfers_from_trip_idTotrips")
-    cargo_transfers_cargo_transfers_to_trip_idTotrips     cargo_transfers[]       @relation("cargo_transfers_to_trip_idTotrips")
-    delivery_notes                                        delivery_notes[]
-    picking_orders                                        picking_orders[]
-    trip_cargo                                            trip_cargo[]
-    trip_stops                                            trip_stops[]
-    trip_temperature_logs                                 trip_temperature_logs[]
-    users                                                 users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    locations_trips_destination_location_idTolocations    locations?              @relation("trips_destination_location_idTolocations", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    warehouses_trips_destination_warehouse_idTowarehouses warehouses?             @relation("trips_destination_warehouse_idTowarehouses", fields: [destination_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    locations_trips_origin_location_idTolocations         locations?              @relation("trips_origin_location_idTolocations", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    warehouses_trips_origin_warehouse_idTowarehouses      warehouses?             @relation("trips_origin_warehouse_idTowarehouses", fields: [origin_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    vehicle_combination                                   vehicle_combinations?   @relation(fields: [vehicle_combination_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                                                    String                  @id @default(uuid()) @db.Uuid
+  reference_number                                      String?                 @db.VarChar(100)
+  week                                                  String?                 @db.VarChar(10)
+  vehicle_combination_id                                String?                 @db.Uuid
+  origin_warehouse_id                                   String?                 @db.Uuid
+  destination_warehouse_id                              String?                 @db.Uuid
+  origin_location_id                                    String?                 @db.Uuid
+  destination_location_id                               String?                 @db.Uuid
+  departure_time                                        DateTime?               @db.Timestamp(6)
+  arrival_time                                          DateTime?               @db.Timestamp(6)
+  status                                                TripStatus
+  notes                                                 String?
+  created_at                                            DateTime                @default(now()) @db.Timestamp(6)
+  updated_at                                            DateTime?               @updatedAt @db.Timestamp(6)
+  deleted_at                                            DateTime?
+  created_by                                            String?                 @db.Uuid
+  updated_by                                            String?                 @db.Uuid
+  deleted_by                                            String?                 @db.Uuid
+  kilometers                                            Decimal?                @db.Decimal(10, 2)
+  cargo_transfers_cargo_transfers_from_trip_idTotrips   cargo_transfers[]       @relation("cargo_transfers_from_trip_idTotrips")
+  cargo_transfers_cargo_transfers_to_trip_idTotrips     cargo_transfers[]       @relation("cargo_transfers_to_trip_idTotrips")
+  delivery_notes                                        delivery_notes[]
+  picking_orders                                        picking_orders[]
+  trip_cargo                                            trip_cargo[]
+  trip_stops                                            trip_stops[]
+  trip_temperature_logs                                 trip_temperature_logs[]
+  users                                                 users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  locations_trips_destination_location_idTolocations    locations?              @relation("trips_destination_location_idTolocations", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouses_trips_destination_warehouse_idTowarehouses warehouses?             @relation("trips_destination_warehouse_idTowarehouses", fields: [destination_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  locations_trips_origin_location_idTolocations         locations?              @relation("trips_origin_location_idTolocations", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouses_trips_origin_warehouse_idTowarehouses      warehouses?             @relation("trips_origin_warehouse_idTowarehouses", fields: [origin_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vehicle_combination                                   vehicle_combinations?   @relation(fields: [vehicle_combination_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-    @@index([status], map: "idx_trips_status")
-    @@index([vehicle_combination_id], map: "idx_trips_vehicle_combination_id")
+  @@index([status], map: "idx_trips_status")
+  @@index([vehicle_combination_id], map: "idx_trips_vehicle_combination_id")
 }
 
 model trip_stops {
-    id          String             @id @default(uuid()) @db.Uuid
-    trip_id     String             @db.Uuid
-    location_id String             @db.Uuid
-    stop_order  Int
-    stop_type   String?            @db.VarChar(20)
-    created_at  DateTime           @default(now()) @db.Timestamp(6)
-    updated_at  DateTime?          @updatedAt @db.Timestamp(6)
-    deleted_at  DateTime?
-    created_by  String?            @db.Uuid
-    updated_by  String?            @db.Uuid
-    deleted_by  String?            @db.Uuid
-    trip_orders trip_stop_orders[]
-    location    locations          @relation(fields: [location_id], references: [id])
-    trip        trips              @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+  id          String             @id @default(uuid()) @db.Uuid
+  trip_id     String             @db.Uuid
+  location_id String             @db.Uuid
+  stop_order  Int
+  stop_type   String?            @db.VarChar(20)
+  created_at  DateTime           @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?          @updatedAt @db.Timestamp(6)
+  deleted_at  DateTime?
+  created_by  String?            @db.Uuid
+  updated_by  String?            @db.Uuid
+  deleted_by  String?            @db.Uuid
+  trip_orders trip_stop_orders[]
+  location    locations          @relation(fields: [location_id], references: [id])
+  trip        trips              @relation(fields: [trip_id], references: [id], onDelete: Cascade)
 
-    @@index([trip_id])
+  @@index([trip_id])
 }
 
 model trip_stop_orders {
-    id                String          @id @default(uuid()) @db.Uuid
-    trip_stop_id      String          @db.Uuid
-    dispatch_order_id String          @db.Uuid
-    action            String          @db.VarChar(20)
-    created_at        DateTime        @default(now()) @db.Timestamp(6)
-    updated_at        DateTime?       @updatedAt @db.Timestamp(6)
-    deleted_at        DateTime?
-    created_by        String?         @db.Uuid
-    updated_by        String?         @db.Uuid
-    deleted_by        String?         @db.Uuid
-    dispatch_order    dispatch_orders @relation(fields: [dispatch_order_id], references: [id], onDelete: Cascade)
-    trip_stop         trip_stops      @relation(fields: [trip_stop_id], references: [id], onDelete: Cascade)
+  id                String          @id @default(uuid()) @db.Uuid
+  trip_stop_id      String          @db.Uuid
+  dispatch_order_id String          @db.Uuid
+  action            String          @db.VarChar(20)
+  created_at        DateTime        @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?       @updatedAt @db.Timestamp(6)
+  deleted_at        DateTime?
+  created_by        String?         @db.Uuid
+  updated_by        String?         @db.Uuid
+  deleted_by        String?         @db.Uuid
+  dispatch_order    dispatch_orders @relation(fields: [dispatch_order_id], references: [id], onDelete: Cascade)
+  trip_stop         trip_stops      @relation(fields: [trip_stop_id], references: [id], onDelete: Cascade)
 
-    @@index([trip_stop_id])
-    @@index([dispatch_order_id])
+  @@index([trip_stop_id])
+  @@index([dispatch_order_id])
 }
 
 model corridors {
-    id                      String            @id @default(uuid()) @db.Uuid
-    name                    String?           @db.VarChar(150)
-    description             String?           @db.VarChar(255)
-    origin_location_id      String            @db.Uuid
-    destination_location_id String            @db.Uuid
-    is_template             Boolean           @default(true)
-    total_distance_km       Decimal?          @db.Decimal(10, 2)
-    estimated_minutes       Int?
-    active                  Boolean           @default(true)
-    created_at              DateTime          @default(now()) @db.Timestamp(6)
-    updated_at              DateTime?         @updatedAt @db.Timestamp(6)
-    deleted_at              DateTime?
-    created_by              String?           @db.Uuid
-    updated_by              String?           @db.Uuid
-    deleted_by              String?           @db.Uuid
-    corridorStops           corridor_stops[]
-    destination_location    locations         @relation("corridor_destination", fields: [destination_location_id], references: [id])
-    origin_location         locations         @relation("corridor_origin", fields: [origin_location_id], references: [id])
-    dispatchOrders          dispatch_orders[]
+  id                      String            @id @default(uuid()) @db.Uuid
+  name                    String?           @db.VarChar(150)
+  description             String?           @db.VarChar(255)
+  origin_location_id      String            @db.Uuid
+  destination_location_id String            @db.Uuid
+  is_template             Boolean           @default(true)
+  total_distance_km       Decimal?          @db.Decimal(10, 2)
+  estimated_minutes       Int?
+  active                  Boolean           @default(true)
+  created_at              DateTime          @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at              DateTime?
+  created_by              String?           @db.Uuid
+  updated_by              String?           @db.Uuid
+  deleted_by              String?           @db.Uuid
+  corridorStops           corridor_stops[]
+  destination_location    locations         @relation("corridor_destination", fields: [destination_location_id], references: [id])
+  origin_location         locations         @relation("corridor_origin", fields: [origin_location_id], references: [id])
+  dispatchOrders          dispatch_orders[]
 }
 
 model corridor_stops {
-    id                String    @id @default(uuid()) @db.Uuid
-    corridor_id       String    @db.Uuid
-    location_id       String    @db.Uuid
-    stop_order        Int
-    stop_type         String?   @db.VarChar(30)
-    distance_km       Decimal?  @db.Decimal(10, 2)
-    estimated_minutes Int?
-    created_at        DateTime  @default(now()) @db.Timestamp(6)
-    updated_at        DateTime? @updatedAt @db.Timestamp(6)
-    deleted_at        DateTime?
-    created_by        String?   @db.Uuid
-    updated_by        String?   @db.Uuid
-    deleted_by        String?   @db.Uuid
-    corridor          corridors @relation(fields: [corridor_id], references: [id], onDelete: Cascade)
-    location          locations @relation(fields: [location_id], references: [id])
+  id                String    @id @default(uuid()) @db.Uuid
+  corridor_id       String    @db.Uuid
+  location_id       String    @db.Uuid
+  stop_order        Int
+  stop_type         String?   @db.VarChar(30)
+  distance_km       Decimal?  @db.Decimal(10, 2)
+  estimated_minutes Int?
+  created_at        DateTime  @default(now()) @db.Timestamp(6)
+  updated_at        DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at        DateTime?
+  created_by        String?   @db.Uuid
+  updated_by        String?   @db.Uuid
+  deleted_by        String?   @db.Uuid
+  corridor          corridors @relation(fields: [corridor_id], references: [id], onDelete: Cascade)
+  location          locations @relation(fields: [location_id], references: [id])
 
-    @@unique([corridor_id, stop_order])
+  @@unique([corridor_id, stop_order])
 }
 
 model vehicles {
-    id                           String                 @id @default(uuid()) @db.Uuid
-    type                         String                 @db.VarChar(30)
-    plate                        String                 @unique @db.VarChar(20)
-    brand                        String?                @db.VarChar(100)
-    model                        String?                @db.VarChar(100)
-    year                         Int?
-    max_weight                   Decimal?               @db.Decimal(12, 3)
-    max_volume                   Decimal?               @db.Decimal(12, 3)
-    refrigeration                Boolean?               @default(false)
-    active                       Boolean                @default(true)
-    created_at                   DateTime               @default(now()) @db.Timestamp(6)
-    updated_at                   DateTime?              @updatedAt @db.Timestamp(6)
-    deleted_at                   DateTime?
-    created_by                   String?                @db.Uuid
-    updated_by                   String?                @db.Uuid
-    deleted_by                   String?                @db.Uuid
-    vehicleDocuments             documents_vehicle[]
-    vehicle_combinations_tractor vehicle_combinations[] @relation("tractor_vehicle")
-    vehicle_combinations_trailer vehicle_combinations[] @relation("trailer_vehicle")
+  id                           String                 @id @default(uuid()) @db.Uuid
+  type                         String                 @db.VarChar(30)
+  plate                        String                 @unique @db.VarChar(20)
+  brand                        String?                @db.VarChar(100)
+  model                        String?                @db.VarChar(100)
+  year                         Int?
+  max_weight                   Decimal?               @db.Decimal(12, 3)
+  max_volume                   Decimal?               @db.Decimal(12, 3)
+  refrigeration                Boolean?               @default(false)
+  active                       Boolean                @default(true)
+  created_at                   DateTime               @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime?              @updatedAt @db.Timestamp(6)
+  deleted_at                   DateTime?
+  created_by                   String?                @db.Uuid
+  updated_by                   String?                @db.Uuid
+  deleted_by                   String?                @db.Uuid
+  vehicleDocuments             documents_vehicle[]
+  vehicle_combinations_tractor vehicle_combinations[] @relation("tractor_vehicle")
+  vehicle_combinations_trailer vehicle_combinations[] @relation("trailer_vehicle")
 }
 
 model vehicle_combinations {
-    id          String    @id @default(uuid()) @db.Uuid
-    tractor_id  String    @db.Uuid
-    trailer_id  String?   @db.Uuid
-    valid_from  DateTime  @db.Timestamp(6)
-    valid_until DateTime? @db.Timestamp(6)
-    unit_number String?   @db.VarChar(50)
-    driver_id   String?   @db.Uuid
-    created_at  DateTime  @default(now()) @db.Timestamp(6)
-    updated_at  DateTime? @updatedAt @db.Timestamp(6)
-    deleted_at  DateTime?
-    created_by  String?   @db.Uuid
-    updated_by  String?   @db.Uuid
-    deleted_by  String?   @db.Uuid
-    trips       trips[]
-    drivers     drivers?  @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_comb_driver")
-    users       users?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    tractor     vehicles  @relation("tractor_vehicle", fields: [tractor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    trailer     vehicles? @relation("trailer_vehicle", fields: [trailer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          String    @id @default(uuid()) @db.Uuid
+  tractor_id  String    @db.Uuid
+  trailer_id  String?   @db.Uuid
+  valid_from  DateTime  @db.Timestamp(6)
+  valid_until DateTime? @db.Timestamp(6)
+  unit_number String?   @db.VarChar(50)
+  driver_id   String?   @db.Uuid
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at  DateTime?
+  created_by  String?   @db.Uuid
+  updated_by  String?   @db.Uuid
+  deleted_by  String?   @db.Uuid
+  trips       trips[]
+  drivers     drivers?  @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_comb_driver")
+  users       users?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tractor     vehicles  @relation("tractor_vehicle", fields: [tractor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trailer     vehicles? @relation("trailer_vehicle", fields: [trailer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-    @@index([tractor_id], map: "idx_vehicle_combinations_tractor")
-    @@index([trailer_id], map: "idx_vehicle_combinations_trailer")
+  @@index([tractor_id], map: "idx_vehicle_combinations_tractor")
+  @@index([trailer_id], map: "idx_vehicle_combinations_trailer")
 }
 
 ///****-----
 ///DOCS
 
 model transport_document_types {
-    id                String              @id @default(uuid()) @db.Uuid
-    name              String              @db.VarChar(100)
-    entity            String              @db.VarChar(20)
-    active            Boolean?            @default(true)
-    created_at        DateTime            @default(now()) @db.Timestamp(6)
-    updated_at        DateTime?           @updatedAt @db.Timestamp(6)
-    deleted_at        DateTime?
-    created_by        String?             @db.Uuid
-    updated_by        String?             @db.Uuid
-    deleted_by        String?             @db.Uuid
-    documents_driver  documents_driver[]
-    documents_vehicle documents_vehicle[]
+  id                String              @id @default(uuid()) @db.Uuid
+  name              String              @db.VarChar(100)
+  entity            String              @db.VarChar(20)
+  active            Boolean?            @default(true)
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at        DateTime?
+  created_by        String?             @db.Uuid
+  updated_by        String?             @db.Uuid
+  deleted_by        String?             @db.Uuid
+  documents_driver  documents_driver[]
+  documents_vehicle documents_vehicle[]
 
-    @@index([entity], map: "idx_transport_document_types_entity")
+  @@index([entity], map: "idx_transport_document_types_entity")
 }
 
 model documents_vehicle {
-    id                       String                   @id @default(uuid()) @db.Uuid
-    vehicle_id               String                   @db.Uuid
-    document_type_id         String                   @db.Uuid
-    expiration_date          DateTime?                @db.Date
-    created_at               DateTime                 @default(now()) @db.Timestamp(6)
-    updated_at               DateTime?                @updatedAt @db.Timestamp(6)
-    deleted_at               DateTime?
-    created_by               String?                  @db.Uuid
-    updated_by               String?                  @db.Uuid
-    deleted_by               String?                  @db.Uuid
-    vehicles                 vehicles                 @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vehicle")
-    transport_document_types transport_document_types @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_doc_type")
+  id                       String                   @id @default(uuid()) @db.Uuid
+  vehicle_id               String                   @db.Uuid
+  document_type_id         String                   @db.Uuid
+  expiration_date          DateTime?                @db.Date
+  created_at               DateTime                 @default(now()) @db.Timestamp(6)
+  updated_at               DateTime?                @updatedAt @db.Timestamp(6)
+  deleted_at               DateTime?
+  created_by               String?                  @db.Uuid
+  updated_by               String?                  @db.Uuid
+  deleted_by               String?                  @db.Uuid
+  vehicles                 vehicles                 @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vehicle")
+  transport_document_types transport_document_types @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_doc_type")
 
-    @@unique([vehicle_id, document_type_id], map: "unique_vehicle_doc")
-    @@index([vehicle_id], map: "idx_documents_vehicle_vehicle")
+  @@unique([vehicle_id, document_type_id], map: "unique_vehicle_doc")
+  @@index([vehicle_id], map: "idx_documents_vehicle_vehicle")
 }
 
 model documents_driver {
-    id                       String                   @id @default(uuid()) @db.Uuid
-    driver_id                String                   @db.Uuid
-    document_type_id         String                   @db.Uuid
-    expiration_date          DateTime?                @db.Date
-    created_at               DateTime                 @default(now()) @db.Timestamp(6)
-    updated_at               DateTime?                @updatedAt @db.Timestamp(6)
-    deleted_at               DateTime?
-    created_by               String?                  @db.Uuid
-    updated_by               String?                  @db.Uuid
-    deleted_by               String?                  @db.Uuid
-    drivers                  drivers                  @relation(fields: [driver_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_driver")
-    transport_document_types transport_document_types @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_driver_doc_type")
+  id                       String                   @id @default(uuid()) @db.Uuid
+  driver_id                String                   @db.Uuid
+  document_type_id         String                   @db.Uuid
+  expiration_date          DateTime?                @db.Date
+  created_at               DateTime                 @default(now()) @db.Timestamp(6)
+  updated_at               DateTime?                @updatedAt @db.Timestamp(6)
+  deleted_at               DateTime?
+  created_by               String?                  @db.Uuid
+  updated_by               String?                  @db.Uuid
+  deleted_by               String?                  @db.Uuid
+  drivers                  drivers                  @relation(fields: [driver_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_driver")
+  transport_document_types transport_document_types @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_driver_doc_type")
 
-    @@unique([driver_id, document_type_id], map: "unique_driver_doc")
-    @@index([driver_id], map: "idx_documents_driver_driver")
+  @@unique([driver_id, document_type_id], map: "unique_driver_doc")
+  @@index([driver_id], map: "idx_documents_driver_driver")
 }
 
 //------
 // ORDENES DE DESPACHO
 
 model transfer_rates {
-    id             String           @id @default(uuid()) @db.Uuid
-    name           String           @db.VarChar(100)
-    rate_type      String           @db.VarChar(20)
-    description    String?
-    active         Boolean?         @default(true)
-    created_at     DateTime         @default(now()) @db.Timestamp(6)
-    updated_at     DateTime?        @updatedAt @db.Timestamp(6)
-    deleted_at     DateTime?
-    created_by     String?          @db.Uuid
-    updated_by     String?          @db.Uuid
-    deleted_by     String?          @db.Uuid
-    dispatch_rates dispatch_rates[]
-    products       products[]
+  id             String           @id @default(uuid()) @db.Uuid
+  name           String           @db.VarChar(100)
+  rate_type      String           @db.VarChar(20)
+  description    String?
+  active         Boolean?         @default(true)
+  created_at     DateTime         @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at     DateTime?
+  created_by     String?          @db.Uuid
+  updated_by     String?          @db.Uuid
+  deleted_by     String?          @db.Uuid
+  dispatch_rates dispatch_rates[]
+  products       products[]
 }
 
 model dispatch_rates {
-    id              String          @id @default(uuid()) @db.Uuid
-    dispatch_id     String          @db.Uuid
-    rate_id         String          @db.Uuid
-    value           Decimal         @db.Decimal(12, 2)
-    created_at      DateTime        @default(now()) @db.Timestamp(6)
-    updated_at      DateTime?       @updatedAt @db.Timestamp(6)
-    deleted_at      DateTime?
-    created_by      String?         @db.Uuid
-    updated_by      String?         @db.Uuid
-    deleted_by      String?         @db.Uuid
-    dispatch_orders dispatch_orders @relation(fields: [dispatch_id], references: [id], onDelete: Cascade)
-    transfer_rates  transfer_rates  @relation(fields: [rate_id], references: [id])
+  id              String          @id @default(uuid()) @db.Uuid
+  dispatch_id     String          @db.Uuid
+  rate_id         String          @db.Uuid
+  value           Decimal         @db.Decimal(12, 2)
+  created_at      DateTime        @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?       @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?         @db.Uuid
+  updated_by      String?         @db.Uuid
+  deleted_by      String?         @db.Uuid
+  dispatch_orders dispatch_orders @relation(fields: [dispatch_id], references: [id], onDelete: Cascade)
+  transfer_rates  transfer_rates  @relation(fields: [rate_id], references: [id])
 }

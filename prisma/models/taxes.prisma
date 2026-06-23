@@ -1,40 +1,40 @@
 model product_taxes {
-    id                   String    @id @default(uuid()) @db.Uuid
-    product_id           String    @db.Uuid
-    tax_id               String    @db.Uuid
-    is_included_in_price Boolean   @default(false)
-    active               Boolean   @default(true)
-    created_at           DateTime  @default(now()) @db.Timestamp(6)
-    updated_at           DateTime? @updatedAt @db.Timestamp(6)
-    deleted_at           DateTime?
-    created_by           String?   @db.Uuid
-    updated_by           String?   @db.Uuid
-    deleted_by           String?   @db.Uuid
-    products             products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    taxes                taxes     @relation(fields: [tax_id], references: [id], onUpdate: NoAction)
+  id                   String    @id @default(uuid()) @db.Uuid
+  product_id           String    @db.Uuid
+  tax_id               String    @db.Uuid
+  is_included_in_price Boolean   @default(false)
+  active               Boolean   @default(true)
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+  updated_at           DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?   @db.Uuid
+  updated_by           String?   @db.Uuid
+  deleted_by           String?   @db.Uuid
+  products             products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  taxes                taxes     @relation(fields: [tax_id], references: [id], onUpdate: NoAction)
 
-    @@unique([product_id, tax_id], map: "uq_product_tax")
+  @@unique([product_id, tax_id], map: "uq_product_tax")
 }
 
 model taxes {
-    id                  String                @id @default(uuid()) @db.Uuid
-    code                String                @db.VarChar(20)
-    name                String                @db.VarChar(100)
-    tax_type            String                @db.VarChar(30)
-    rate                Decimal               @db.Decimal(6, 3)
-    is_percentage       Boolean               @default(true)
-    active              Boolean               @default(true)
-    calculation_level   String                @db.VarChar(20)
-    created_at          DateTime              @default(now()) @db.Timestamp(6)
-    updated_at          DateTime?             @updatedAt @db.Timestamp(6)
-    deleted_at          DateTime?
-    created_by          String?               @db.Uuid
-    updated_by          String?               @db.Uuid
-    deleted_by          String?               @db.Uuid
-    document_item_taxes document_item_taxes[]
-    document_taxes      document_taxes[]
-    document_type_taxes document_type_taxes[]
-    product_taxes       product_taxes[]
+  id                  String                @id @default(uuid()) @db.Uuid
+  code                String                @db.VarChar(20)
+  name                String                @db.VarChar(100)
+  tax_type            String                @db.VarChar(30)
+  rate                Decimal               @db.Decimal(6, 3)
+  is_percentage       Boolean               @default(true)
+  active              Boolean               @default(true)
+  calculation_level   String                @db.VarChar(20)
+  created_at          DateTime              @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?             @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?               @db.Uuid
+  updated_by          String?               @db.Uuid
+  deleted_by          String?               @db.Uuid
+  document_item_taxes document_item_taxes[]
+  document_taxes      document_taxes[]
+  document_type_taxes document_type_taxes[]
+  product_taxes       product_taxes[]
 
-    @@index([tax_type, active], map: "idx_taxes_type_active")
+  @@index([tax_type, active], map: "idx_taxes_type_active")
 }

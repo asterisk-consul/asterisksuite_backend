@@ -1,16 +1,16 @@
 model product_structure_versions {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    product_id String @db.Uuid
+  product_id String @db.Uuid
 
-    version Int
+  version Int
 
-    snapshot Json
+  snapshot Json
 
-    created_at DateTime @default(now())
+  created_at DateTime @default(now())
 
-    product products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product products @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
-    @@unique([product_id, version])
-    @@index([product_id])
+  @@unique([product_id, version])
+  @@index([product_id])
 }

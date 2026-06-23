@@ -1,99 +1,99 @@
 enum DispatchStatus {
-    PENDING
-    ASSIGNED
-    IN_PROGRESS
-    COMPLETED
-    CANCELLED
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
 
 enum TripStatus {
-    PLANNED
-    IN_PROGRESS
-    COMPLETED
-    CANCELLED
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
 
 enum AuditAction {
-    CREATE
-    UPDATE
-    DELETE
-    RESTORE
+  CREATE
+  UPDATE
+  DELETE
+  RESTORE
 }
 
 enum ProductType {
-    RAW_MATERIAL
-    SEMI_FINISHED
-    FINISHED_PRODUCT
-    SERVICE
-    RATES
+  RAW_MATERIAL
+  SEMI_FINISHED
+  FINISHED_PRODUCT
+  SERVICE
+  RATES
 }
 
 enum UnitType {
-    UNIT //Unidad	un
-    WEIGHT //Kilogramo	kg
-    LENGTH //Metro	m
-    AREA //Metro cuadrado	m2
-    VOLUME //Metro cúbico	m3
+  UNIT //Unidad	un
+  WEIGHT //Kilogramo	kg
+  LENGTH //Metro	m
+  AREA //Metro cuadrado	m2
+  VOLUME //Metro cúbico	m3
 }
 
 enum AccountType {
-    ASSET
-    LIABILITY
-    EQUITY
-    REVENUE
-    EXPENSE
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
 }
 
 enum AttributeType {
-    TEXT
-    NUMBER
-    BOOLEAN
-    SELECT
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
 }
 
 enum CalculationType {
-    UNIT
-    SURFACE
-    VOLUME
-    LINEAR
+  UNIT
+  SURFACE
+  VOLUME
+  LINEAR
 }
 
 enum CurrencyRateType {
-    OFFICIAL
-    BLUE
-    MEP
-    CCL
-    WHOLESALE
-    CRYPTO
-    CARD
+  OFFICIAL
+  BLUE
+  MEP
+  CCL
+  WHOLESALE
+  CRYPTO
+  CARD
 }
 
 enum ProductCostSource {
-    MANUAL
-    BOM
-    ENGINEERING
-    PURCHASE
-    RATE
+  MANUAL
+  BOM
+  ENGINEERING
+  PURCHASE
+  RATE
 }
 
 enum VariantCostSource {
-    MANUAL
-    PURCHASE
-    IMPORT
-    ENGINEERING
-    SUPPLIER
+  MANUAL
+  PURCHASE
+  IMPORT
+  ENGINEERING
+  SUPPLIER
 }
 
 enum CostComponentType {
-    MATERIAL
-    LABOR
-    OVERHEAD
-    OTHER
+  MATERIAL
+  LABOR
+  OVERHEAD
+  OTHER
 }
 
 enum CostValueType {
-    FROM_BOM
-    PERCENTAGE_OF_MATERIAL
-    PERCENTAGE_OF_TOTAL
-    FIXED_PER_UNIT
+  FROM_BOM
+  PERCENTAGE_OF_MATERIAL
+  PERCENTAGE_OF_TOTAL
+  FIXED_PER_UNIT
 }

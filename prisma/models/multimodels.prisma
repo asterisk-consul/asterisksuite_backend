@@ -1,27 +1,28 @@
 model locations {
-    id                                             String            @id @default(uuid()) @db.Uuid
-    address                                        String?           @db.VarChar(255)
-    city                                           String?           @db.VarChar(100)
-    province                                       String?           @db.VarChar(100)
-    country                                        String?           @db.VarChar(100)
-    postal_code                                    String?           @db.VarChar(20)
-    latitude                                       Decimal?          @db.Decimal(10, 6)
-    longitude                                      Decimal?          @db.Decimal(10, 6)
-    created_at                                     DateTime          @default(now()) @db.Timestamp(6)
-    updated_at                                     DateTime?         @updatedAt @db.Timestamp(6)
-    deleted_at                                     DateTime?
-    created_by                                     String?           @db.Uuid
-    updated_by                                     String?           @db.Uuid
-    deleted_by                                     String?           @db.Uuid
-    cargo_transfers                                cargo_transfers[]
-    corridorStops                                  corridor_stops[]
-    corridor_destination                           corridors[]       @relation("corridor_destination")
-    corridor_origin                                corridors[]       @relation("corridor_origin")
-    dispatch_orders_destination                    dispatch_orders[] @relation("dispatch_destination_location")
-    dispatch_orders_origin                         dispatch_orders[] @relation("dispatch_origin_location")
-    party_locations                                party_locations[]
-    tripStops                                      trip_stops[]
-    trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
-    trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
-    warehouses                                     warehouses[]
+  id                                             String            @id @default(uuid()) @db.Uuid
+  address                                        String?           @db.VarChar(255)
+  city                                           String?           @db.VarChar(100)
+  province                                       String?           @db.VarChar(100)
+  country                                        String?           @db.VarChar(100)
+  postal_code                                    String?           @db.VarChar(20)
+  latitude                                       Decimal?          @db.Decimal(10, 6)
+  longitude                                      Decimal?          @db.Decimal(10, 6)
+  created_at                                     DateTime          @default(now()) @db.Timestamp(6)
+  updated_at                                     DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at                                     DateTime?
+  created_by                                     String?           @db.Uuid
+  updated_by                                     String?           @db.Uuid
+  deleted_by                                     String?           @db.Uuid
+  cargo_transfers                                cargo_transfers[]
+  corridorStops                                  corridor_stops[]
+  corridor_destination                           corridors[]       @relation("corridor_destination")
+  corridor_origin                                corridors[]       @relation("corridor_origin")
+  dispatch_orders_destination                    dispatch_orders[] @relation("dispatch_destination_location")
+  dispatch_orders_origin                         dispatch_orders[] @relation("dispatch_origin_location")
+  party_locations                                party_locations[]
+  tripStops                                      trip_stops[]
+  trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
+  trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
+  warehouses                                     warehouses[]
+  
 }
