@@ -204,7 +204,7 @@ export type Vehicle_combinationsGroupByOutputType = {
   unit_number: string | null
   driver_id: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -241,7 +241,7 @@ export type vehicle_combinationsWhereInput = {
   unit_number?: Prisma.StringNullableFilter<"vehicle_combinations"> | string | null
   driver_id?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
   created_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
@@ -262,7 +262,7 @@ export type vehicle_combinationsOrderByWithRelationInput = {
   unit_number?: Prisma.SortOrderInput | Prisma.SortOrder
   driver_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -286,7 +286,7 @@ export type vehicle_combinationsWhereUniqueInput = Prisma.AtLeast<{
   unit_number?: Prisma.StringNullableFilter<"vehicle_combinations"> | string | null
   driver_id?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
   created_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
@@ -307,7 +307,7 @@ export type vehicle_combinationsOrderByWithAggregationInput = {
   unit_number?: Prisma.SortOrderInput | Prisma.SortOrder
   driver_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -329,7 +329,7 @@ export type vehicle_combinationsScalarWhereWithAggregatesInput = {
   unit_number?: Prisma.StringNullableWithAggregatesFilter<"vehicle_combinations"> | string | null
   driver_id?: Prisma.UuidNullableWithAggregatesFilter<"vehicle_combinations"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"vehicle_combinations"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"vehicle_combinations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"vehicle_combinations"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"vehicle_combinations"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"vehicle_combinations"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"vehicle_combinations"> | string | null
@@ -342,7 +342,7 @@ export type vehicle_combinationsCreateInput = {
   valid_until?: Date | string | null
   unit_number?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -362,7 +362,7 @@ export type vehicle_combinationsUncheckedCreateInput = {
   unit_number?: string | null
   driver_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -376,7 +376,7 @@ export type vehicle_combinationsUpdateInput = {
   valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -396,7 +396,7 @@ export type vehicle_combinationsUncheckedUpdateInput = {
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -413,7 +413,7 @@ export type vehicle_combinationsCreateManyInput = {
   unit_number?: string | null
   driver_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -426,7 +426,7 @@ export type vehicle_combinationsUpdateManyMutationInput = {
   valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -441,7 +441,7 @@ export type vehicle_combinationsUncheckedUpdateManyInput = {
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -509,48 +509,6 @@ export type vehicle_combinationsMinOrderByAggregateInput = {
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
-}
-
-export type vehicle_combinationsCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
-  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-}
-
-export type vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
-  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-}
-
-export type vehicle_combinationsUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
-  set?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  disconnect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  delete?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  update?: Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput | Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
-}
-
-export type vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
-  set?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  disconnect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  delete?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
-  update?: Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput | Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
 }
 
 export type vehicle_combinationsCreateNestedManyWithoutDriversInput = {
@@ -695,81 +653,46 @@ export type vehicle_combinationsUncheckedUpdateManyWithoutTrailerNestedInput = {
   deleteMany?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
 }
 
-export type vehicle_combinationsCreateWithoutUsersInput = {
-  id?: string
-  valid_from: Date | string
-  valid_until?: Date | string | null
-  unit_number?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  trips?: Prisma.tripsCreateNestedManyWithoutVehicle_combinationInput
-  drivers?: Prisma.driversCreateNestedOneWithoutVehicleCombinationsInput
-  tractor: Prisma.vehiclesCreateNestedOneWithoutVehicle_combinations_tractorInput
-  trailer?: Prisma.vehiclesCreateNestedOneWithoutVehicle_combinations_trailerInput
+export type vehicle_combinationsCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
+  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
 }
 
-export type vehicle_combinationsUncheckedCreateWithoutUsersInput = {
-  id?: string
-  tractor_id: string
-  trailer_id?: string | null
-  valid_from: Date | string
-  valid_until?: Date | string | null
-  unit_number?: string | null
-  driver_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutVehicle_combinationInput
+export type vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
+  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
 }
 
-export type vehicle_combinationsCreateOrConnectWithoutUsersInput = {
-  where: Prisma.vehicle_combinationsWhereUniqueInput
-  create: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput>
+export type vehicle_combinationsUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
+  set?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  disconnect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  delete?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  update?: Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput | Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
 }
 
-export type vehicle_combinationsCreateManyUsersInputEnvelope = {
-  data: Prisma.vehicle_combinationsCreateManyUsersInput | Prisma.vehicle_combinationsCreateManyUsersInput[]
-  skipDuplicates?: boolean
-}
-
-export type vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.vehicle_combinationsWhereUniqueInput
-  update: Prisma.XOR<Prisma.vehicle_combinationsUpdateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput>
-}
-
-export type vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.vehicle_combinationsWhereUniqueInput
-  data: Prisma.XOR<Prisma.vehicle_combinationsUpdateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedUpdateWithoutUsersInput>
-}
-
-export type vehicle_combinationsUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.vehicle_combinationsScalarWhereInput
-  data: Prisma.XOR<Prisma.vehicle_combinationsUpdateManyMutationInput, Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersInput>
-}
-
-export type vehicle_combinationsScalarWhereInput = {
-  AND?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
-  OR?: Prisma.vehicle_combinationsScalarWhereInput[]
-  NOT?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"vehicle_combinations"> | string
-  tractor_id?: Prisma.UuidFilter<"vehicle_combinations"> | string
-  trailer_id?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
-  valid_from?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
-  valid_until?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
-  unit_number?: Prisma.StringNullableFilter<"vehicle_combinations"> | string | null
-  driver_id?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
-  created_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
+export type vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput> | Prisma.vehicle_combinationsCreateWithoutUsersInput[] | Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput | Prisma.vehicle_combinationsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.vehicle_combinationsCreateManyUsersInputEnvelope
+  set?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  disconnect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  delete?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  connect?: Prisma.vehicle_combinationsWhereUniqueInput | Prisma.vehicle_combinationsWhereUniqueInput[]
+  update?: Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput | Prisma.vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput | Prisma.vehicle_combinationsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
 }
 
 export type vehicle_combinationsCreateWithoutDriversInput = {
@@ -778,7 +701,7 @@ export type vehicle_combinationsCreateWithoutDriversInput = {
   valid_until?: Date | string | null
   unit_number?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -796,7 +719,7 @@ export type vehicle_combinationsUncheckedCreateWithoutDriversInput = {
   valid_until?: Date | string | null
   unit_number?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -830,13 +753,32 @@ export type vehicle_combinationsUpdateManyWithWhereWithoutDriversInput = {
   data: Prisma.XOR<Prisma.vehicle_combinationsUpdateManyMutationInput, Prisma.vehicle_combinationsUncheckedUpdateManyWithoutDriversInput>
 }
 
+export type vehicle_combinationsScalarWhereInput = {
+  AND?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
+  OR?: Prisma.vehicle_combinationsScalarWhereInput[]
+  NOT?: Prisma.vehicle_combinationsScalarWhereInput | Prisma.vehicle_combinationsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"vehicle_combinations"> | string
+  tractor_id?: Prisma.UuidFilter<"vehicle_combinations"> | string
+  trailer_id?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
+  valid_from?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
+  valid_until?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
+  unit_number?: Prisma.StringNullableFilter<"vehicle_combinations"> | string | null
+  driver_id?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
+  created_at?: Prisma.DateTimeFilter<"vehicle_combinations"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
+  deleted_at?: Prisma.DateTimeNullableFilter<"vehicle_combinations"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"vehicle_combinations"> | string | null
+}
+
 export type vehicle_combinationsCreateWithoutTripsInput = {
   id?: string
   valid_from: Date | string
   valid_until?: Date | string | null
   unit_number?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -855,7 +797,7 @@ export type vehicle_combinationsUncheckedCreateWithoutTripsInput = {
   unit_number?: string | null
   driver_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -884,7 +826,7 @@ export type vehicle_combinationsUpdateWithoutTripsInput = {
   valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -903,7 +845,7 @@ export type vehicle_combinationsUncheckedUpdateWithoutTripsInput = {
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -916,7 +858,7 @@ export type vehicle_combinationsCreateWithoutTractorInput = {
   valid_until?: Date | string | null
   unit_number?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -934,7 +876,7 @@ export type vehicle_combinationsUncheckedCreateWithoutTractorInput = {
   unit_number?: string | null
   driver_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -958,7 +900,7 @@ export type vehicle_combinationsCreateWithoutTrailerInput = {
   valid_until?: Date | string | null
   unit_number?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -976,7 +918,7 @@ export type vehicle_combinationsUncheckedCreateWithoutTrailerInput = {
   unit_number?: string | null
   driver_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1026,6 +968,250 @@ export type vehicle_combinationsUpdateManyWithWhereWithoutTrailerInput = {
   data: Prisma.XOR<Prisma.vehicle_combinationsUpdateManyMutationInput, Prisma.vehicle_combinationsUncheckedUpdateManyWithoutTrailerInput>
 }
 
+export type vehicle_combinationsCreateWithoutUsersInput = {
+  id?: string
+  valid_from: Date | string
+  valid_until?: Date | string | null
+  unit_number?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  trips?: Prisma.tripsCreateNestedManyWithoutVehicle_combinationInput
+  drivers?: Prisma.driversCreateNestedOneWithoutVehicleCombinationsInput
+  tractor: Prisma.vehiclesCreateNestedOneWithoutVehicle_combinations_tractorInput
+  trailer?: Prisma.vehiclesCreateNestedOneWithoutVehicle_combinations_trailerInput
+}
+
+export type vehicle_combinationsUncheckedCreateWithoutUsersInput = {
+  id?: string
+  tractor_id: string
+  trailer_id?: string | null
+  valid_from: Date | string
+  valid_until?: Date | string | null
+  unit_number?: string | null
+  driver_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutVehicle_combinationInput
+}
+
+export type vehicle_combinationsCreateOrConnectWithoutUsersInput = {
+  where: Prisma.vehicle_combinationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput>
+}
+
+export type vehicle_combinationsCreateManyUsersInputEnvelope = {
+  data: Prisma.vehicle_combinationsCreateManyUsersInput | Prisma.vehicle_combinationsCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type vehicle_combinationsUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.vehicle_combinationsWhereUniqueInput
+  update: Prisma.XOR<Prisma.vehicle_combinationsUpdateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.vehicle_combinationsCreateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedCreateWithoutUsersInput>
+}
+
+export type vehicle_combinationsUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.vehicle_combinationsWhereUniqueInput
+  data: Prisma.XOR<Prisma.vehicle_combinationsUpdateWithoutUsersInput, Prisma.vehicle_combinationsUncheckedUpdateWithoutUsersInput>
+}
+
+export type vehicle_combinationsUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.vehicle_combinationsScalarWhereInput
+  data: Prisma.XOR<Prisma.vehicle_combinationsUpdateManyMutationInput, Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type vehicle_combinationsCreateManyDriversInput = {
+  id?: string
+  tractor_id: string
+  trailer_id?: string | null
+  valid_from: Date | string
+  valid_until?: Date | string | null
+  unit_number?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type vehicle_combinationsUpdateWithoutDriversInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trips?: Prisma.tripsUpdateManyWithoutVehicle_combinationNestedInput
+  users?: Prisma.usersUpdateOneWithoutVehicle_combinationsNestedInput
+  tractor?: Prisma.vehiclesUpdateOneRequiredWithoutVehicle_combinations_tractorNestedInput
+  trailer?: Prisma.vehiclesUpdateOneWithoutVehicle_combinations_trailerNestedInput
+}
+
+export type vehicle_combinationsUncheckedUpdateWithoutDriversInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
+  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trips?: Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput
+}
+
+export type vehicle_combinationsUncheckedUpdateManyWithoutDriversInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
+  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type vehicle_combinationsCreateManyTractorInput = {
+  id?: string
+  trailer_id?: string | null
+  valid_from: Date | string
+  valid_until?: Date | string | null
+  unit_number?: string | null
+  driver_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type vehicle_combinationsCreateManyTrailerInput = {
+  id?: string
+  tractor_id: string
+  valid_from: Date | string
+  valid_until?: Date | string | null
+  unit_number?: string | null
+  driver_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type vehicle_combinationsUpdateWithoutTractorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trips?: Prisma.tripsUpdateManyWithoutVehicle_combinationNestedInput
+  drivers?: Prisma.driversUpdateOneWithoutVehicleCombinationsNestedInput
+  users?: Prisma.usersUpdateOneWithoutVehicle_combinationsNestedInput
+  trailer?: Prisma.vehiclesUpdateOneWithoutVehicle_combinations_trailerNestedInput
+}
+
+export type vehicle_combinationsUncheckedUpdateWithoutTractorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trips?: Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput
+}
+
+export type vehicle_combinationsUncheckedUpdateManyWithoutTractorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type vehicle_combinationsUpdateWithoutTrailerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trips?: Prisma.tripsUpdateManyWithoutVehicle_combinationNestedInput
+  drivers?: Prisma.driversUpdateOneWithoutVehicleCombinationsNestedInput
+  users?: Prisma.usersUpdateOneWithoutVehicle_combinationsNestedInput
+  tractor?: Prisma.vehiclesUpdateOneRequiredWithoutVehicle_combinations_tractorNestedInput
+}
+
+export type vehicle_combinationsUncheckedUpdateWithoutTrailerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trips?: Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput
+}
+
+export type vehicle_combinationsUncheckedUpdateManyWithoutTrailerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
+  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type vehicle_combinationsCreateManyUsersInput = {
   id?: string
   tractor_id: string
@@ -1035,7 +1221,7 @@ export type vehicle_combinationsCreateManyUsersInput = {
   unit_number?: string | null
   driver_id?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1047,7 +1233,7 @@ export type vehicle_combinationsUpdateWithoutUsersInput = {
   valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1066,7 +1252,7 @@ export type vehicle_combinationsUncheckedUpdateWithoutUsersInput = {
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1082,194 +1268,8 @@ export type vehicle_combinationsUncheckedUpdateManyWithoutUsersInput = {
   unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type vehicle_combinationsCreateManyDriversInput = {
-  id?: string
-  tractor_id: string
-  trailer_id?: string | null
-  valid_from: Date | string
-  valid_until?: Date | string | null
-  unit_number?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-}
-
-export type vehicle_combinationsUpdateWithoutDriversInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trips?: Prisma.tripsUpdateManyWithoutVehicle_combinationNestedInput
-  users?: Prisma.usersUpdateOneWithoutVehicle_combinationsNestedInput
-  tractor?: Prisma.vehiclesUpdateOneRequiredWithoutVehicle_combinations_tractorNestedInput
-  trailer?: Prisma.vehiclesUpdateOneWithoutVehicle_combinations_trailerNestedInput
-}
-
-export type vehicle_combinationsUncheckedUpdateWithoutDriversInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
-  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trips?: Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput
-}
-
-export type vehicle_combinationsUncheckedUpdateManyWithoutDriversInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
-  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type vehicle_combinationsCreateManyTractorInput = {
-  id?: string
-  trailer_id?: string | null
-  valid_from: Date | string
-  valid_until?: Date | string | null
-  unit_number?: string | null
-  driver_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-}
-
-export type vehicle_combinationsCreateManyTrailerInput = {
-  id?: string
-  tractor_id: string
-  valid_from: Date | string
-  valid_until?: Date | string | null
-  unit_number?: string | null
-  driver_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-}
-
-export type vehicle_combinationsUpdateWithoutTractorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trips?: Prisma.tripsUpdateManyWithoutVehicle_combinationNestedInput
-  drivers?: Prisma.driversUpdateOneWithoutVehicleCombinationsNestedInput
-  users?: Prisma.usersUpdateOneWithoutVehicle_combinationsNestedInput
-  trailer?: Prisma.vehiclesUpdateOneWithoutVehicle_combinations_trailerNestedInput
-}
-
-export type vehicle_combinationsUncheckedUpdateWithoutTractorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trips?: Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput
-}
-
-export type vehicle_combinationsUncheckedUpdateManyWithoutTractorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  trailer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type vehicle_combinationsUpdateWithoutTrailerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trips?: Prisma.tripsUpdateManyWithoutVehicle_combinationNestedInput
-  drivers?: Prisma.driversUpdateOneWithoutVehicleCombinationsNestedInput
-  users?: Prisma.usersUpdateOneWithoutVehicle_combinationsNestedInput
-  tractor?: Prisma.vehiclesUpdateOneRequiredWithoutVehicle_combinations_tractorNestedInput
-}
-
-export type vehicle_combinationsUncheckedUpdateWithoutTrailerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trips?: Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput
-}
-
-export type vehicle_combinationsUncheckedUpdateManyWithoutTrailerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tractor_id?: Prisma.StringFieldUpdateOperationsInput | string
-  valid_from?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  valid_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  unit_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  driver_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -1423,7 +1423,7 @@ export type $vehicle_combinationsPayload<ExtArgs extends runtime.Types.Extension
     unit_number: string | null
     driver_id: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

@@ -1,9 +1,11 @@
 import { execSync } from 'child_process';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { CreateCompanyUserDto } from './dto/create-company-user.dto';
 import { Pool, Client } from 'pg';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CompaniesService {
@@ -13,30 +15,61 @@ export class CompaniesService {
     return this.db.getDefaultClient();
   }
 
+  private async assertUserIsCompanyMember(userId: string, companyId: string) {
+    const membership = await this.prisma.company_users.findUnique({
+      where: {
+        company_id_user_id: {
+          company_id: companyId,
+          user_id: userId,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ForbiddenException('No perteneces a esta empresa');
+    }
+
+    return membership;
+  }
+
+  private async assertUserIsOwnerOrAdmin(userId: string, companyId: string) {
+    const membership = await this.assertUserIsCompanyMember(userId, companyId);
+
+    if (membership.role !== 'OWNER' && membership.role !== 'ADMIN') {
+      throw new ForbiddenException('Solo OWNER o ADMIN pueden realizar esta acción');
+    }
+
+    return membership;
+  }
+
   async create(createCompanyDto: CreateCompanyDto, userId: string) {
+    console.log(userId);
     const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
     const tenantDb = `${subdomain}_db`;
     const tenantDbUrl = `${process.env.DATABASE_URL_BASE}${tenantDb}`;
 
-    // 1. Crear la DB
+    const existingCompany = await this.prisma.companies.findFirst({
+      where: { subdomain, deleted_at: null },
+    });
+
+    if (existingCompany) {
+      throw new ConflictException(`La empresa con subdomain "${subdomain}" ya existe`);
+    }
+
     const adminPool = new Pool({
       connectionString: process.env.DATABASE_URL_PUBLIC,
     });
 
     try {
-      const { rows } = await adminPool.query(
-        `SELECT 1 FROM pg_database WHERE datname = $1`,
-        [tenantDb],
-      );
+      const { rows } = await adminPool.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [tenantDb]);
       if (rows.length > 0) {
-        throw new Error(`La empresa con subdomain "${subdomain}" ya existe`);
+        throw new ConflictException(`La base de datos "${tenantDb}" ya existe`);
       }
       await adminPool.query(`CREATE DATABASE "${tenantDb}"`);
     } finally {
       await adminPool.end();
     }
 
-    // 2. Crear schemas public y tenant en la nueva DB
     const tenantPool = new Pool({ connectionString: tenantDbUrl });
     try {
       await tenantPool.query(`CREATE SCHEMA IF NOT EXISTS tenant`);
@@ -45,17 +78,13 @@ export class CompaniesService {
       await tenantPool.end();
     }
 
-    // 3. Generar SQL con migrate diff y ejecutarlo directamente
     try {
-      const sql = execSync(
-        `npx prisma migrate diff --from-empty --to-schema ./prisma/schema --script`,
-        {
-          env: {
-            ...process.env,
-            DATABASE_URL: tenantDbUrl,
-          },
+      const sql = execSync(`npx prisma migrate diff --from-empty --to-schema ./prisma/schema --script`, {
+        env: {
+          ...process.env,
+          DATABASE_URL: tenantDbUrl,
         },
-      ).toString();
+      }).toString();
 
       const client = new Client({ connectionString: tenantDbUrl });
       await client.connect();
@@ -73,12 +102,27 @@ export class CompaniesService {
       } finally {
         await cleanupPool.end();
       }
-      throw new Error(
-        `Error al aplicar schema en ${tenantDb}: ${error.message}`,
-      );
+
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new ConflictException(`Error al crear la empresa: ${error.message}`);
     }
 
-    // 4. Registrar empresa en public
+    console.log('SERVICE userId:', userId, typeof userId);
+
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    console.log('USER found:', user);
+
+    if (!user) {
+      throw new ConflictException('El usuario autenticado no existe en la base de datos');
+    }
+
     const company = await this.prisma.companies.create({
       data: {
         name: createCompanyDto.name,
@@ -89,26 +133,25 @@ export class CompaniesService {
       },
     });
 
-    await this.prisma.company_users.create({
+    console.log('COMPANY created:', company.id);
+
+    const cu = await this.prisma.company_users.create({
       data: {
         company_id: company.id,
-        user_id: userId,
+        user_id: user.id,
         role: 'OWNER',
       },
     });
+
+    console.log('COMPANY_USER created:', cu);
 
     return company;
   }
 
   async findAll() {
-    const data = await this.prisma.companies.findMany({
+    return this.prisma.companies.findMany({
       orderBy: { created_at: 'desc' },
     });
-
-    console.log(data[0].created_at);
-    console.log(data[0].created_at instanceof Date);
-
-    return data;
   }
 
   async findOne(id: string) {
@@ -127,13 +170,10 @@ export class CompaniesService {
     await this.findOne(id);
 
     const subdomain = updateCompanyDto.subdomain?.toLowerCase().trim();
-    const schemaName =
-      updateCompanyDto.schemaName?.toLowerCase().trim() || subdomain;
+    const schemaName = updateCompanyDto.schemaName?.toLowerCase().trim() || subdomain;
 
     if (schemaName) {
-      await this.prisma.$executeRawUnsafe(
-        `CREATE SCHEMA IF NOT EXISTS "${schemaName}"`,
-      );
+      await this.prisma.$executeRawUnsafe(`CREATE SCHEMA IF NOT EXISTS "${schemaName}"`);
     }
 
     return this.prisma.companies.update({
@@ -148,10 +188,65 @@ export class CompaniesService {
     });
   }
 
-  async addUser(companyId: string, email: string, role: string) {
-    const prisma = this.db.getDefaultClient();
+  async listUsers(companyId: string, userId: string) {
+    await this.assertUserIsCompanyMember(userId, companyId);
 
-    const user = await prisma.users.findUnique({
+    return this.prisma.company_users.findMany({
+      where: { company_id: companyId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            active: true,
+          },
+        },
+      },
+    });
+  }
+
+  async createUserInCompany(companyId: string, dto: CreateCompanyUserDto, requestUserId: string) {
+    await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
+    await this.findOne(companyId);
+
+    const existing = await this.prisma.users.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (existing) {
+      throw new ConflictException('El email ya está registrado');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    const user = await this.prisma.users.create({
+      data: {
+        name: dto.name,
+        email: dto.email,
+        password_hash: passwordHash,
+      },
+    });
+
+    await this.prisma.company_users.create({
+      data: {
+        company_id: companyId,
+        user_id: user.id,
+        role: dto.role || 'USER',
+      },
+    });
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+  }
+
+  async addUser(companyId: string, email: string, role: string, requestUserId: string) {
+    await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
+
+    const user = await this.prisma.users.findUnique({
       where: { email },
     });
 
@@ -159,11 +254,58 @@ export class CompaniesService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    return prisma.company_users.create({
+    const existing = await this.prisma.company_users.findUnique({
+      where: {
+        company_id_user_id: {
+          company_id: companyId,
+          user_id: user.id,
+        },
+      },
+    });
+
+    if (existing) {
+      throw new ConflictException('El usuario ya pertenece a esta empresa');
+    }
+
+    return this.prisma.company_users.create({
       data: {
         company_id: companyId,
         user_id: user.id,
         role,
+      },
+    });
+  }
+
+  async removeUser(companyId: string, userIdToRemove: string, requestUserId: string) {
+    await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
+
+    if (userIdToRemove === requestUserId) {
+      throw new ForbiddenException('No puedes eliminarte a ti mismo');
+    }
+
+    const membership = await this.prisma.company_users.findUnique({
+      where: {
+        company_id_user_id: {
+          company_id: companyId,
+          user_id: userIdToRemove,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new NotFoundException('Usuario no encontrado en esta empresa');
+    }
+
+    if (membership.role === 'OWNER') {
+      throw new ForbiddenException('No puedes eliminar a otro OWNER');
+    }
+
+    return this.prisma.company_users.delete({
+      where: {
+        company_id_user_id: {
+          company_id: companyId,
+          user_id: userIdToRemove,
+        },
       },
     });
   }

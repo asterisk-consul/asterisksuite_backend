@@ -125,6 +125,19 @@ export class TrashService {
       'documents',
       'product_taxes',
       'taxes',
+      'product_price',
+      'accounts',
+      'product_attribute_values',
+      'attributes',
+      'product_tags',
+      'tags',
+      'product_categories',
+      'categories',
+      'product_components',
+      'product_variants',
+      'units',
+      'currency_rates',
+      'currencies',
     ];
   }
 }

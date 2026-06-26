@@ -1,0 +1,382 @@
+```http
+@baseUrl = http://localhost:3000/api
+
+###########################################################
+# LOGIN
+###########################################################
+
+### LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+###########################################################
+# IDS
+###########################################################
+
+@usdCurrencyId = 839c208c-744d-4321-a375-2a747c911fa2
+
+###########################################################
+# MATERIA PRIMA — CHAPA GALVANIZADA
+###########################################################
+
+### Crear producto chapa
+# @name createSheet
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Chapa Galvanizada",
+  "sku": "RAW-SHEET-GALV",
+  "product_type": "RAW_MATERIAL",
+  "cost_source": "PURCHASE",
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@sheetId = 7b6f6542-ae34-4b41-93e9-0fd83cefd3a2
+
+###########################################################
+# VARIANTE CHAPA 1MM
+###########################################################
+
+### Crear variante
+# @name createSheetVariant
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{sheetId}}",
+  "name": "Chapa 1mm",
+  "sku": "SHEET-1MM",
+
+  // espesor
+  "thickness_mm": 1,
+
+  // acero galvanizado aprox
+  "density_kg_m3": 7850,
+
+  "active": true
+}
+
+###
+
+@sheetVariantId = 4f7d76e6-012f-4626-ab8a-6310836adea2
+
+###########################################################
+# COSTO DE LA CHAPA
+###########################################################
+
+### Costo variante
+POST {{baseUrl}}/erp/variant-costs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{sheetVariantId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "source": "PURCHASE",
+  "cost": 2500,
+  "supplier": "Aceros SRL"
+}
+
+###########################################################
+# PRODUCTO FINAL — GABINETE METÁLICO
+###########################################################
+
+### Crear gabinete
+# @name createCabinet
+POST {{baseUrl}}/master-data/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Gabinete Metálico Industrial",
+  "sku": "GAB-IND-01",
+  "product_type": "FINISHED_PRODUCT",
+
+  "cost_source": "ENGINEERING",
+
+  "has_engineering": true,
+  "is_composed": true,
+  "auto_calculate_cost": true,
+  "manages_stock": true,
+  "active": true
+}
+
+###
+
+@cabinetId = 452714fe-1338-4598-bb6d-33656b2bf017
+###########################################################
+# COMPONENTE 1 — TAPA SUPERIOR
+###########################################################
+
+### Tapa superior
+POST {{baseUrl}}/erp/engineering/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{cabinetId}}",
+
+  "child_product_id": "{{sheetId}}",
+  "child_variant_id": "{{sheetVariantId}}",
+
+  "quantity": 1,
+
+  // 800mm x 600mm
+  "length_mm": 800,
+  "width_mm": 600,
+
+  // desperdicio corte
+  "waste_percentage": 5
+}
+
+###########################################################
+# COMPONENTE 2 — LATERAL IZQUIERDO
+###########################################################
+
+### Lateral izquierdo
+POST {{baseUrl}}/erp/engineering/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{cabinetId}}",
+
+  "child_product_id": "{{sheetId}}",
+  "child_variant_id": "{{sheetVariantId}}",
+
+  "quantity": 1,
+
+  // 1800mm x 600mm
+  "length_mm": 1800,
+  "width_mm": 600,
+
+  "waste_percentage": 8
+}
+
+###########################################################
+# COMPONENTE 3 — LATERAL DERECHO
+###########################################################
+
+### Lateral derecho
+POST {{baseUrl}}/erp/engineering/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{cabinetId}}",
+
+  "child_product_id": "{{sheetId}}",
+  "child_variant_id": "{{sheetVariantId}}",
+
+  "quantity": 1,
+
+  "length_mm": 1800,
+  "width_mm": 600,
+
+  "waste_percentage": 8
+}
+
+###########################################################
+# COMPONENTE 4 — FONDO
+###########################################################
+
+### Fondo
+POST {{baseUrl}}/erp/engineering/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "parent_product_id": "{{cabinetId}}",
+
+  "child_product_id": "{{sheetId}}",
+  "child_variant_id": "{{sheetVariantId}}",
+
+  "quantity": 1,
+
+  "length_mm": 1800,
+  "width_mm": 800,
+
+  "waste_percentage": 5
+}
+
+###########################################################
+# VER ÁRBOL DE INGENIERÍA
+###########################################################
+
+### Tree sillon
+GET {{baseUrl}}/erp/engineering/tree/eaeee3d2-017a-44ad-aeee-f57d5294e541
+Authorization: Bearer {{accessToken}}
+
+### Tree
+GET {{baseUrl}}/erp/engineering/tree/{{cabinetId}}
+Authorization: Bearer {{accessToken}}
+
+###########################################################
+# CALCULAR INGENIERÍA
+###########################################################
+
+### Engineering calculate
+POST {{baseUrl}}/erp/engineering/calculate/{{cabinetId}}
+Authorization: Bearer {{accessToken}}
+
+###########################################################
+# TEMPLATE COSTOS
+###########################################################
+
+### MATERIAL
+# @name createMaterialComponent
+POST {{baseUrl}}/cost-templates/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Material Ingeniería",
+  "type": "MATERIAL",
+  "value_type": "FROM_BOM",
+  "order": 1
+}
+
+###
+
+@materialComponentId = c99e802c-6cc1-4d47-843e-9a3edc012937
+
+###########################################################
+# LABOR
+###########################################################
+
+### Labor fija
+# @name createLaborComponent
+POST {{baseUrl}}/cost-templates/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Plegado y Soldadura",
+  "type": "LABOR",
+  "value_type": "FIXED_PER_UNIT",
+  "value": 18000,
+  "order": 2
+}
+
+###
+
+@laborComponentId = 20500100-a876-4229-a797-bfdae3772ed2
+
+###########################################################
+# OVERHEAD
+###########################################################
+
+### Overhead
+# @name createOverheadComponent
+POST {{baseUrl}}/cost-templates/components
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Overhead Industrial",
+  "type": "OVERHEAD",
+  "value_type": "PERCENTAGE_OF_MATERIAL",
+  "value": 12,
+  "order": 3
+}
+
+###
+
+@overheadComponentId = dc4bd7f1-1a2e-432b-8c22-46af6974f5d1
+
+###########################################################
+# TEMPLATE
+###########################################################
+
+### Template ingeniería metálica
+# @name createTemplate
+POST {{baseUrl}}/cost-templates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Plantilla Ingeniería Metálica",
+  "description": "Material + Mano de obra + Overhead",
+
+  "components": [
+    {
+      "cost_component_id": "{{materialComponentId}}",
+      "order": 1
+    },
+    {
+      "cost_component_id": "{{laborComponentId}}",
+      "order": 2
+    },
+    {
+      "cost_component_id": "{{overheadComponentId}}",
+      "order": 3
+    }
+  ]
+}
+
+###
+
+@templateId = 3fe70b46-3115-49d2-8348-dc030d6d2eb3
+
+###########################################################
+# ASIGNAR TEMPLATE
+###########################################################
+
+
+### Assign template
+POST {{baseUrl}}/cost-templates/{{templateId}}/products/{{cabinetId}}
+Authorization: Bearer {{accessToken}}
+
+###########################################################
+# CALCULAR COSTO FINAL
+###########################################################
+
+### Costing calculate
+POST {{baseUrl}}/products/costing/calculate
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{cabinetId}}",
+  "currency_id": "{{usdCurrencyId}}",
+  "save_snapshot": true
+}
+
+###########################################################
+# HISTORIAL
+###########################################################
+
+### History
+GET {{baseUrl}}/products/costing/{{cabinetId}}/history
+Authorization: Bearer {{accessToken}}
+
+###########################################################
+# PARETO
+###########################################################
+
+### Pareto — Solo materiales
+GET {{baseUrl}}/products/costing/{{cabinetId}}/pareto?currencyId={{usdCurrencyId}}
+Authorization: Bearer {{accessToken}}
+### Pareto — Completo (materiales + labor + overhead + otros)
+GET {{baseUrl}}/products/costing/{{cabinetId}}/pareto?currencyId={{usdCurrencyId}}&mode=full
+Authorization: Bearer {{accessToken}}
+
+### Pareto — Materiales explícito
+GET {{baseUrl}}/products/costing/{{cabinetId}}/pareto?currencyId={{usdCurrencyId}}&mode=materials
+Authorization: Bearer {{accessToken}}

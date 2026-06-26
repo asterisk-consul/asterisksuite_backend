@@ -1,5 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+
 import { PrismaService } from '@/prisma/prisma.service';
+
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
@@ -12,219 +14,418 @@ export class ProductsService {
     return this.db.getClientForCurrentContext();
   }
 
-  async create(data: CreateProductDto) {
-    const { price, exemptionRate, ...productData } = data;
+  // ─────────────────────────────
+  // CREATE
+  // ─────────────────────────────
 
-    const product = await this.prisma.products.create({
-      data: productData,
-    });
-    // tarifa
-    if (data.is_rate_type && data.rate_id) {
-      // Tipo tarifa: precio referencial desde el último dispatch_rate válido
-      await this.upsertPriceFromRate(product.id, data.rate_id);
-    } else if (data.price_enabled && price !== undefined) {
-      // Precio manual
-      await this.upsertProductPrice(
-        product.id,
-        price,
-        data.taxId ?? null,
-        exemptionRate ?? 0,
-      );
+  async create(data: CreateProductDto) {
+    if (data.sku) {
+      const existing = await this.prisma.products.findFirst({
+        where: {
+          sku: data.sku,
+          deleted_at: null,
+        },
+      });
+
+      if (existing) {
+        throw new ConflictException(`Ya existe un producto con SKU ${data.sku}`);
+      }
     }
 
-    return product;
+    return this.prisma.products.create({
+      data,
+    });
   }
+
+  // ─────────────────────────────
+  // FIND ALL
+  // ─────────────────────────────
 
   async findAll() {
     const searchPath = await this.prisma.$queryRawUnsafe('SHOW search_path');
 
     console.log('SEARCH PATH:', searchPath);
     return this.prisma.products.findMany({
-      orderBy: { created_at: 'desc' },
+      where: {
+        deleted_at: null,
+      },
+
+      orderBy: {
+        created_at: 'desc',
+      },
+
       include: {
-        product_taxes: { include: { taxes: true } },
-        product_price: true,
-        transfer_rate: true, // ← tarifa asociada
+        transfer_rate: true,
+
+        income_account: true,
+        expense_account: true,
+        inventory_account: true,
+
+        // ─────────────
+        // PRECIOS
+        // ─────────────
+
+        product_price: {
+          where: {
+            deleted_at: null,
+          },
+          include: {
+            currencies: true,
+          },
+        },
+
+        // ─────────────
+        // Costos
+        // ─────────────
+        product_costs: {
+          select: {
+            total_cost: true,
+            currencies: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+                symbol: true,
+              },
+            },
+          },
+        },
+
+        // ─────────────
+        // CATEGORÍAS
+        // ─────────────
+
+        product_categories: {
+          where: {
+            deleted_at: null,
+          },
+          include: {
+            categories: true,
+          },
+        },
+
+        // ─────────────
+        // TAGS
+        // ─────────────
+
+        product_tags: {
+          include: {
+            tags: true,
+          },
+        },
+
+        // ─────────────
+        // TAXES
+        // ─────────────
+
+        product_taxes: {
+          include: {
+            taxes: true,
+          },
+        },
       },
     });
   }
+
+  // ─────────────────────────────
+  // FIND ONE
+  // ─────────────────────────────
 
   async findOne(id: string) {
-    const product = await this.prisma.products.findUnique({
-      where: { id },
-      include: {
-        product_taxes: { include: { taxes: true } },
-        product_price: true,
-        transfer_rate: true, // ← tarifa asociada
-      },
-    });
-
-    if (!product) throw new NotFoundException('Product not found');
-    return product;
-  }
-
-  async update(id: string, data: UpdateProductDto) {
-    await this.findOne(id);
-
-    const { price, exemptionRate, ...productData } = data;
-
-    const product = await this.prisma.products.update({
-      where: { id },
-      data: productData,
-    });
-
-    if (data.is_rate_type && data.rate_id) {
-      // Cambió a tipo tarifa o cambió la tarifa asociada
-      await this.upsertPriceFromRate(id, data.rate_id);
-    } else if (!data.is_rate_type) {
-      // Volvió a precio manual
-      if (data.price_enabled && price !== undefined) {
-        await this.upsertProductPrice(
-          id,
-          price,
-          data.taxId ?? null,
-          exemptionRate ?? 0,
-        );
-      }
-      if (data.price_enabled === false) {
-        await this.prisma.product_price.deleteMany({
-          where: { product_id: id },
-        });
-      }
-    }
-
-    return product;
-  }
-
-  async remove(id: string) {
-    await this.findOne(id);
-    return this.prisma.products.delete({ where: { id } });
-  }
-
-  async updatePrice(
-    productId: string,
-    basePrice: number,
-    exemptionRate: number,
-    taxId: string | null,
-  ) {
-    await this.findOne(productId);
-    await this.upsertProductPrice(productId, basePrice, taxId, exemptionRate);
-    return this.findOne(productId);
-  }
-
-  // ─── Privado ──────────────────────────────────────────────────────────────
-
-  /**
-   * Toma el último valor de dispatch_rates para esta tarifa
-   * donde la orden está COMPLETED y el viaje asociado también COMPLETED.
-   * Si no hay historial válido, guarda 0 como precio referencial.
-   */
-  private async upsertPriceFromRate(productId: string, rateId: string) {
-    const rate = await this.prisma.transfer_rates.findUnique({
-      where: { id: rateId },
-    });
-    if (!rate) throw new NotFoundException(`Tarifa ${rateId} no encontrada`);
-
-    const lastDispatchRate = await this.prisma.dispatch_rates.findFirst({
+    const product = await this.prisma.products.findFirst({
       where: {
-        rate_id: rateId,
-        dispatch_orders: {
-          status: 'COMPLETED',
-          tripStopOrders: {
-            some: {
-              trip_stop: {
-                trip: { status: 'COMPLETED' },
+        id,
+        deleted_at: null,
+      },
+
+      include: {
+        transfer_rate: true,
+
+        income_account: true,
+        expense_account: true,
+        inventory_account: true,
+
+        // ─────────────
+        // Costos
+        // ─────────────
+        product_costs: {
+          select: {
+            total_cost: true,
+            currencies: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+                symbol: true,
+              },
+            },
+          },
+        },
+
+        // ─────────────
+        // PRECIOS
+        // ─────────────
+
+        product_price: {
+          where: {
+            deleted_at: null,
+          },
+          include: {
+            currencies: true,
+          },
+        },
+
+        // ─────────────
+        // VARIANTES
+        // ─────────────
+
+        product_variants: {
+          where: {
+            deleted_at: null,
+          },
+          include: {
+            product_attribute_values: {
+              include: {
+                attributes: true,
+              },
+            },
+
+            // PRECIOS DE LA VARIANTE
+            productVariantPrices: {
+              where: {
+                deleted_at: null,
+                active: true,
+              },
+              include: {
+                currency: true,
+              },
+            },
+
+            // COSTOS DE LA VARIANTE
+            productVariantCosts: {
+              where: {
+                deleted_at: null,
+                active: true,
+              },
+              include: {
+                currency: true,
+              },
+              orderBy: {
+                effective_date: 'desc',
+              },
+            },
+          },
+        },
+
+        // ─────────────
+        // CATEGORÍAS
+        // ─────────────
+
+        product_categories: {
+          where: {
+            deleted_at: null,
+          },
+          include: {
+            categories: true,
+          },
+        },
+
+        // ─────────────
+        // TAGS
+        // ─────────────
+
+        product_tags: {
+          include: {
+            tags: true,
+          },
+        },
+
+        // ─────────────
+        // ATRIBUTOS
+        // ─────────────
+
+        product_attribute_values: {
+          include: {
+            attributes: true,
+          },
+        },
+
+        // ─────────────
+        // IMPUESTOS
+        // ─────────────
+
+        product_taxes: {
+          include: {
+            taxes: true,
+          },
+        },
+
+        // ─────────────
+        // HIJOS — registros donde este producto es el PADRE
+        // parent_components = "yo soy el padre, el hijo es child_product"
+        // ─────────────
+        parent_components: {
+          where: {
+            deleted_at: null,
+          },
+          include: {
+            child_product: {
+              // ← el producto hijo
+              select: {
+                id: true,
+                name: true,
+                sku: true,
+              },
+            },
+            child_variant: true,
+            units: true,
+          },
+        },
+
+        // ─────────────
+        // PADRES — registros donde este producto es el HIJO
+        // child_components = "yo soy el hijo, el padre es parent_product"
+        // ─────────────
+        child_components: {
+          where: {
+            deleted_at: null,
+            parent_product: {
+              deleted_at: null,
+            },
+          },
+          include: {
+            parent_product: {
+              // ← el producto padre
+              select: {
+                id: true,
+                name: true,
+                sku: true,
               },
             },
           },
         },
       },
-      orderBy: { created_at: 'desc' },
     });
 
-    const referentialPrice = lastDispatchRate
-      ? Number(lastDispatchRate.value)
-      : 0;
-
-    const existing = await this.prisma.product_price.findFirst({
-      where: { product_id: productId },
-    });
-
-    if (existing) {
-      await this.prisma.product_price.update({
-        where: { id: existing.id },
-        data: {
-          price: referentialPrice,
-          exemptionRate: 0,
-          updated_at: new Date(),
-        },
-      });
-    } else {
-      await this.prisma.product_price.create({
-        data: {
-          product_id: productId,
-          price: referentialPrice,
-          exemptionRate: 0,
-        },
-      });
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
     }
+
+    return {
+      ...product,
+
+      root_products: await this.getRootProducts(id),
+    };
   }
 
-  private async upsertProductPrice(
-    productId: string,
-    basePrice: number,
-    taxId: string | null,
-    exemptionRate: number = 0,
-  ) {
-    let finalPrice = basePrice;
+  // ─────────────────────────────
+  // UPDATE
+  // ─────────────────────────────
 
-    if (taxId) {
-      const tax = await this.prisma.taxes.findUnique({ where: { id: taxId } });
+  async update(id: string, data: UpdateProductDto) {
+    await this.findOne(id);
 
-      if (tax) {
-        const existingTax = await this.prisma.product_taxes.findFirst({
-          where: { product_id: productId, tax_id: taxId },
-        });
+    if (data.sku) {
+      const existing = await this.prisma.products.findFirst({
+        where: {
+          sku: data.sku,
 
-        if (!existingTax) {
-          await this.prisma.product_taxes.create({
-            data: {
-              product_id: productId,
-              tax_id: taxId,
-              is_included_in_price: true,
-              active: true,
-            },
-          });
-        } else {
-          await this.prisma.product_taxes.update({
-            where: { id: existingTax.id },
-            data: { active: true },
-          });
-        }
+          id: {
+            not: id,
+          },
 
-        const rate = Number(tax.rate);
-        if (tax.is_percentage) {
-          const taxableBase = basePrice * (1 - exemptionRate / 100);
-          finalPrice = basePrice + taxableBase * (rate / 100);
-        } else {
-          finalPrice = basePrice + rate;
-        }
+          deleted_at: null,
+        },
+      });
+
+      if (existing) {
+        throw new ConflictException(`Ya existe otro producto con SKU ${data.sku}`);
       }
     }
 
-    const existing = await this.prisma.product_price.findFirst({
-      where: { product_id: productId },
+    return this.prisma.products.update({
+      where: {
+        id,
+      },
+
+      data,
+    });
+  }
+
+  // ─────────────────────────────
+  // REMOVE
+  // ─────────────────────────────
+
+  async remove(id: string) {
+    await this.findOne(id);
+
+    return this.prisma.products.update({
+      where: {
+        id,
+      },
+
+      data: {
+        deleted_at: new Date(),
+        active: false,
+      },
+    });
+  }
+
+  // ─────────────────────────────
+  // ROOT PRODUCTS
+  // ─────────────────────────────
+
+  async getRootProducts(productId: string) {
+    const visited = new Set<string>();
+
+    return this.findRootsRecursive(productId, visited);
+  }
+
+  private async findRootsRecursive(productId: string, visited: Set<string>): Promise<any[]> {
+    // evita loops
+    if (visited.has(productId)) {
+      return [];
+    }
+
+    visited.add(productId);
+
+    const parents = await this.prisma.product_components.findMany({
+      where: {
+        child_product_id: productId,
+
+        deleted_at: null,
+
+        parent_product: {
+          deleted_at: null,
+        },
+      },
+
+      include: {
+        parent_product: true,
+      },
     });
 
-    if (existing) {
-      await this.prisma.product_price.update({
-        where: { id: existing.id },
-        data: { price: finalPrice, exemptionRate, updated_at: new Date() },
+    // no tiene padres → es root
+    if (!parents.length) {
+      const self = await this.prisma.products.findFirst({
+        where: {
+          id: productId,
+          deleted_at: null,
+        },
       });
-    } else {
-      await this.prisma.product_price.create({
-        data: { product_id: productId, price: finalPrice, exemptionRate },
-      });
+
+      return self ? [self] : [];
     }
+
+    let roots: any[] = [];
+
+    for (const parent of parents) {
+      const parentRoots = await this.findRootsRecursive(parent.parent_product_id, visited);
+
+      roots.push(...parentRoots);
+    }
+
+    // unique roots
+    return roots.filter((root, index, arr) => arr.findIndex((x) => x.id === root.id) === index);
   }
 }

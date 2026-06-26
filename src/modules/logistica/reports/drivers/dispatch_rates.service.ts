@@ -17,20 +17,8 @@ export class ReporteChoferesService {
     return this.db.getClientForCurrentContext();
   }
 
-  async findAll(
-    query: ReporteChoferesQueryDto,
-  ): Promise<ReporteChoferesResponseDto> {
-    const {
-      fechaDesde,
-      fechaHasta,
-      choferId,
-      mes,
-      cliente,
-      corredor,
-      numeroViaje,
-      page = 1,
-      limit = 50,
-    } = query;
+  async findAll(query: ReporteChoferesQueryDto): Promise<ReporteChoferesResponseDto> {
+    const { fechaDesde, fechaHasta, choferId, mes, cliente, corredor, numeroViaje, page = 1, limit = 50 } = query;
 
     const offset = (page - 1) * limit;
 
@@ -90,8 +78,7 @@ export class ReporteChoferesService {
       params.push(`%${numeroViaje}%`);
     }
 
-    const whereClause =
-      conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     // ── Query principal ────────────────────────────────────────────────
     const mainQuery = `
@@ -183,9 +170,10 @@ export class ReporteChoferesService {
 
     params.push(limit, offset);
 
-    const rows = await (this.prisma as unknown as PrismaClient).$queryRawUnsafe<
-      ReporteChoferItemDto[]
-    >(mainQuery, ...params);
+    const rows = await (this.prisma as unknown as PrismaClient).$queryRawUnsafe<ReporteChoferItemDto[]>(
+      mainQuery,
+      ...params,
+    );
 
     // ── Count ───────────────────────────────────────────────────────────
     const countQuery = `
@@ -205,9 +193,10 @@ export class ReporteChoferesService {
 
     const countParams = params.slice(0, -2);
 
-    const countResult = await (
-      this.prisma as unknown as PrismaClient
-    ).$queryRawUnsafe<[{ count: bigint }]>(countQuery, ...countParams);
+    const countResult = await (this.prisma as unknown as PrismaClient).$queryRawUnsafe<[{ count: bigint }]>(
+      countQuery,
+      ...countParams,
+    );
 
     const total = Number(countResult[0]?.count ?? 0);
 

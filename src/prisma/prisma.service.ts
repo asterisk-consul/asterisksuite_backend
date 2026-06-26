@@ -38,7 +38,7 @@ function createPublicClient() {
   });
 
   const adapter = new PrismaPg(pool, { schema: 'public' });
-  const raw = new PrismaClient({ adapter, log: ['query'] });
+  const raw = new PrismaClient({ adapter });
 
   return { client: withAudit(publicRawClient)(raw), pool };
 }
@@ -58,7 +58,7 @@ function createTenantClient(tenantDb: string) {
 
   // ✅ "tenant" coincide con @@schema("tenant") en tenant.prisma
   const adapter = new PrismaPg(pool, { schema: 'tenant' });
-  const raw = new PrismaClient({ adapter, log: ['query'] });
+  const raw = new PrismaClient({ adapter });
 
   return { client: withAudit(publicRawClient)(raw), pool };
 }
@@ -106,7 +106,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     const store = requestContext.getStore();
     const tenantDb = store?.schema; // ej: "empresaa_db"
 
-    console.log('TENANT DB RESUELTO EN PRISMA SERVICE:', tenantDb);
+    // console.log('TENANT DB RESUELTO EN PRISMA SERVICE:', tenantDb);
 
     if (!tenantDb || tenantDb === 'public') {
       return this.defaultClient;

@@ -106,6 +106,9 @@ export class CreateDocumentDto {
   @Type(() => CreateDocumentItemDto)
   items!: CreateDocumentItemDto[];
 
+  @IsString()
+  currency_code!: string;
+
   // ✅ opcional (backend los genera)
   @IsArray()
   @ValidateNested({ each: true })

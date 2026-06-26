@@ -185,7 +185,7 @@ function mapRow(normalized: Record<string, unknown>) {
     Comprobante: normalized.COMPROBANTE,
     Nombre: normalized.NOMBRE,
     Motivo_det: normalized.MOTIVO_DET,
-    Concepto: normalized.CONCEPTO,
+    Concepto: String(normalized.CONCEPTO),
     fecha_carga: fechaCarga,
     Imp_gravado: normalized.IMP_GRAVADO,
     Imp_total: normalized.IMP_TOTAL,

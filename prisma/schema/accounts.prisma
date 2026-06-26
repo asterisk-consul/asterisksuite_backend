@@ -1,0 +1,23 @@
+model accounts {
+  id                 String      @id @default(uuid()) @db.Uuid
+  code               String      @db.VarChar(50)
+  name               String      @db.VarChar(255)
+  account_type       AccountType
+  parent_id          String?     @db.Uuid
+  active             Boolean     @default(true)
+  created_at         DateTime    @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?   @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?     @db.Uuid
+  updated_by         String?     @db.Uuid
+  deleted_by         String?     @db.Uuid
+  parent             accounts?   @relation("account_tree", fields: [parent_id], references: [id])
+  children           accounts[]  @relation("account_tree")
+  income_products    products[]  @relation("product_income_account")
+  expense_products   products[]  @relation("product_expense_account")
+  inventory_products products[]  @relation("product_inventory_account")
+
+  @@unique([code])
+  @@index([parent_id])
+   @@schema("tenant")
+}

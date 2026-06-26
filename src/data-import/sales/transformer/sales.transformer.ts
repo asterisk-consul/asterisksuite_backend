@@ -1,12 +1,7 @@
 import { Transformer } from '../../core/interfaces';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { FacturaVentaRaw } from '../schemas/sales.schema';
-import type {
-  business_parties,
-  products,
-  taxes,
-  document_types,
-} from '../../../generated/prisma/client';
+import type { business_parties, products, taxes, document_types } from '../../../generated/prisma/client';
 
 function extractNumber(comprobante: string): number {
   const parts = comprobante.split('-');
@@ -37,10 +32,7 @@ export type VentasTransformado = {
   }[];
 };
 
-export class VentasTransformer implements Transformer<
-  FacturaVentaRaw,
-  VentasTransformado
-> {
+export class VentasTransformer implements Transformer<FacturaVentaRaw, VentasTransformado> {
   constructor(private db: PrismaService) {}
 
   // Getter privado para reutilizar en todos los métodos
@@ -58,19 +50,13 @@ export class VentasTransformer implements Transformer<
       this.prisma.document_types.findMany(),
     ]);
 
-    const partyMap = new Map<string, business_parties>(
-      parties.map((p) => [p.name, p]),
-    );
+    const partyMap = new Map<string, business_parties>(parties.map((p) => [p.name, p]));
 
-    const productMap = new Map<string, products>(
-      products.map((p) => [p.name, p]),
-    );
+    const productMap = new Map<string, products>(products.map((p) => [p.name, p]));
 
     const taxMap = new Map<string, taxes>(taxes.map((t) => [t.code, t]));
 
-    const documentTypeMap = new Map<string, document_types>(
-      documentTypes.map((dt) => [dt.code, dt]),
-    );
+    const documentTypeMap = new Map<string, document_types>(documentTypes.map((dt) => [dt.code, dt]));
     const documentType = documentTypeMap.get('FAV');
     if (!documentType) {
       throw new Error('Tipo de documento "FAV" no encontrado en la BD');
@@ -90,9 +76,7 @@ export class VentasTransformer implements Transformer<
 
       const product = productMap.get(factura.Concepto);
       if (!product) {
-        console.warn(
-          `⚠️  Producto no encontrado: "${factura.Concepto}" — se omite`,
-        );
+        console.warn(`⚠️  Producto no encontrado: "${factura.Concepto}" — se omite`);
         continue;
       }
 

@@ -2,14 +2,20 @@ import { Module } from '@nestjs/common';
 import { DocumentsSalesService } from './documents_sales.services';
 import { DocumentsSalesController } from './documents_sales.controller';
 import { PrismaModule } from '@/prisma/prisma.module';
-import { ProductPriceModule } from '../../master-data/products-prices/products_prices.module';
+import { ProductPricingModule } from '../pricing/product-pricing/product-pricing.module';
 import { SalesReportModule } from './sales-reports/sales_reports.module';
-import { ProductPriceService } from '../../master-data/products-prices/products_prices.service';
+import { DocumentsSalesItemsService } from './documents-sales-items.service';
+import { DocumentsSalesTotalsService } from './documents-sales-totals.service';
 
 @Module({
-  imports: [PrismaModule, ProductPriceModule, SalesReportModule],
+  imports: [PrismaModule, ProductPricingModule, SalesReportModule],
   controllers: [DocumentsSalesController],
-  providers: [DocumentsSalesService, ProductPriceService],
+  providers: [
+    DocumentsSalesService,
+    // ← ProductPriceService eliminado, viene via ProductPricingModule
+    DocumentsSalesItemsService,
+    DocumentsSalesTotalsService,
+  ],
   exports: [DocumentsSalesService],
 })
 export class DocumentsSalesModule {}

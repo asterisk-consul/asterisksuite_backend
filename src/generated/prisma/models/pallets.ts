@@ -183,7 +183,7 @@ export type PalletsGroupByOutputType = {
   warehouse_id: string | null
   status: string
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -217,7 +217,7 @@ export type palletsWhereInput = {
   warehouse_id?: Prisma.UuidNullableFilter<"pallets"> | string | null
   status?: Prisma.StringFilter<"pallets"> | string
   created_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
@@ -237,7 +237,7 @@ export type palletsOrderByWithRelationInput = {
   warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -260,7 +260,7 @@ export type palletsWhereUniqueInput = Prisma.AtLeast<{
   warehouse_id?: Prisma.UuidNullableFilter<"pallets"> | string | null
   status?: Prisma.StringFilter<"pallets"> | string
   created_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
@@ -280,7 +280,7 @@ export type palletsOrderByWithAggregationInput = {
   warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -299,7 +299,7 @@ export type palletsScalarWhereWithAggregatesInput = {
   warehouse_id?: Prisma.UuidNullableWithAggregatesFilter<"pallets"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"pallets"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"pallets"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"pallets"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"pallets"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"pallets"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"pallets"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"pallets"> | string | null
@@ -311,7 +311,7 @@ export type palletsCreateInput = {
   code: string
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -330,7 +330,7 @@ export type palletsUncheckedCreateInput = {
   warehouse_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -347,7 +347,7 @@ export type palletsUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -366,7 +366,7 @@ export type palletsUncheckedUpdateInput = {
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -384,7 +384,7 @@ export type palletsCreateManyInput = {
   warehouse_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -396,7 +396,7 @@ export type palletsUpdateManyMutationInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -408,21 +408,11 @@ export type palletsUncheckedUpdateManyInput = {
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type PalletsListRelationFilter = {
-  every?: Prisma.palletsWhereInput
-  some?: Prisma.palletsWhereInput
-  none?: Prisma.palletsWhereInput
-}
-
-export type palletsOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type PalletsNullableScalarRelationFilter = {
@@ -474,46 +464,14 @@ export type palletsMinOrderByAggregateInput = {
   deleted_by?: Prisma.SortOrder
 }
 
-export type palletsCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+export type PalletsListRelationFilter = {
+  every?: Prisma.palletsWhereInput
+  some?: Prisma.palletsWhereInput
+  none?: Prisma.palletsWhereInput
 }
 
-export type palletsUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-}
-
-export type palletsUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
-}
-
-export type palletsUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
-  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
-  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+export type palletsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type palletsCreateNestedOneWithoutCargo_transfer_itemsInput = {
@@ -530,20 +488,6 @@ export type palletsUpdateOneWithoutCargo_transfer_itemsNestedInput = {
   delete?: Prisma.palletsWhereInput | boolean
   connect?: Prisma.palletsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.palletsUpdateToOneWithWhereWithoutCargo_transfer_itemsInput, Prisma.palletsUpdateWithoutCargo_transfer_itemsInput>, Prisma.palletsUncheckedUpdateWithoutCargo_transfer_itemsInput>
-}
-
-export type palletsCreateNestedOneWithoutPallet_itemsInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutPallet_itemsInput
-  connect?: Prisma.palletsWhereUniqueInput
-}
-
-export type palletsUpdateOneRequiredWithoutPallet_itemsNestedInput = {
-  create?: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
-  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutPallet_itemsInput
-  upsert?: Prisma.palletsUpsertWithoutPallet_itemsInput
-  connect?: Prisma.palletsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.palletsUpdateToOneWithWhereWithoutPallet_itemsInput, Prisma.palletsUpdateWithoutPallet_itemsInput>, Prisma.palletsUncheckedUpdateWithoutPallet_itemsInput>
 }
 
 export type palletsCreateNestedOneWithoutPicking_resultsInput = {
@@ -590,6 +534,62 @@ export type palletsUpdateOneWithoutTrip_cargoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.palletsUpdateToOneWithWhereWithoutTrip_cargoInput, Prisma.palletsUpdateWithoutTrip_cargoInput>, Prisma.palletsUncheckedUpdateWithoutTrip_cargoInput>
 }
 
+export type palletsCreateNestedOneWithoutPallet_itemsInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutPallet_itemsInput
+  connect?: Prisma.palletsWhereUniqueInput
+}
+
+export type palletsUpdateOneRequiredWithoutPallet_itemsNestedInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutPallet_itemsInput
+  upsert?: Prisma.palletsUpsertWithoutPallet_itemsInput
+  connect?: Prisma.palletsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.palletsUpdateToOneWithWhereWithoutPallet_itemsInput, Prisma.palletsUpdateWithoutPallet_itemsInput>, Prisma.palletsUncheckedUpdateWithoutPallet_itemsInput>
+}
+
+export type palletsCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+}
+
+export type palletsUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+}
+
+export type palletsUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+}
+
+export type palletsUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.palletsCreateWithoutUsersInput, Prisma.palletsUncheckedCreateWithoutUsersInput> | Prisma.palletsCreateWithoutUsersInput[] | Prisma.palletsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.palletsCreateOrConnectWithoutUsersInput | Prisma.palletsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput | Prisma.palletsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.palletsCreateManyUsersInputEnvelope
+  set?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  disconnect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  delete?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  connect?: Prisma.palletsWhereUniqueInput | Prisma.palletsWhereUniqueInput[]
+  update?: Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput | Prisma.palletsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.palletsUpdateManyWithWhereWithoutUsersInput | Prisma.palletsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
+}
+
 export type palletsCreateNestedManyWithoutWarehousesInput = {
   create?: Prisma.XOR<Prisma.palletsCreateWithoutWarehousesInput, Prisma.palletsUncheckedCreateWithoutWarehousesInput> | Prisma.palletsCreateWithoutWarehousesInput[] | Prisma.palletsUncheckedCreateWithoutWarehousesInput[]
   connectOrCreate?: Prisma.palletsCreateOrConnectWithoutWarehousesInput | Prisma.palletsCreateOrConnectWithoutWarehousesInput[]
@@ -632,12 +632,432 @@ export type palletsUncheckedUpdateManyWithoutWarehousesNestedInput = {
   deleteMany?: Prisma.palletsScalarWhereInput | Prisma.palletsScalarWhereInput[]
 }
 
+export type palletsCreateWithoutCargo_transfer_itemsInput = {
+  id?: string
+  code: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
+  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
+  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsUncheckedCreateWithoutCargo_transfer_itemsInput = {
+  id?: string
+  code: string
+  warehouse_id?: string | null
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsCreateOrConnectWithoutCargo_transfer_itemsInput = {
+  where: Prisma.palletsWhereUniqueInput
+  create: Prisma.XOR<Prisma.palletsCreateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedCreateWithoutCargo_transfer_itemsInput>
+}
+
+export type palletsUpsertWithoutCargo_transfer_itemsInput = {
+  update: Prisma.XOR<Prisma.palletsUpdateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedUpdateWithoutCargo_transfer_itemsInput>
+  create: Prisma.XOR<Prisma.palletsCreateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedCreateWithoutCargo_transfer_itemsInput>
+  where?: Prisma.palletsWhereInput
+}
+
+export type palletsUpdateToOneWithWhereWithoutCargo_transfer_itemsInput = {
+  where?: Prisma.palletsWhereInput
+  data: Prisma.XOR<Prisma.palletsUpdateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedUpdateWithoutCargo_transfer_itemsInput>
+}
+
+export type palletsUpdateWithoutCargo_transfer_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
+  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
+  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsUncheckedUpdateWithoutCargo_transfer_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsCreateWithoutPicking_resultsInput = {
+  id?: string
+  code: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
+  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
+  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsUncheckedCreateWithoutPicking_resultsInput = {
+  id?: string
+  code: string
+  warehouse_id?: string | null
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsCreateOrConnectWithoutPicking_resultsInput = {
+  where: Prisma.palletsWhereUniqueInput
+  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_resultsInput, Prisma.palletsUncheckedCreateWithoutPicking_resultsInput>
+}
+
+export type palletsUpsertWithoutPicking_resultsInput = {
+  update: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_resultsInput, Prisma.palletsUncheckedUpdateWithoutPicking_resultsInput>
+  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_resultsInput, Prisma.palletsUncheckedCreateWithoutPicking_resultsInput>
+  where?: Prisma.palletsWhereInput
+}
+
+export type palletsUpdateToOneWithWhereWithoutPicking_resultsInput = {
+  where?: Prisma.palletsWhereInput
+  data: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_resultsInput, Prisma.palletsUncheckedUpdateWithoutPicking_resultsInput>
+}
+
+export type palletsUpdateWithoutPicking_resultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
+  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
+  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsUncheckedUpdateWithoutPicking_resultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsCreateWithoutPicking_sourcesInput = {
+  id?: string
+  code: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
+  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
+  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsUncheckedCreateWithoutPicking_sourcesInput = {
+  id?: string
+  code: string
+  warehouse_id?: string | null
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsCreateOrConnectWithoutPicking_sourcesInput = {
+  where: Prisma.palletsWhereUniqueInput
+  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_sourcesInput, Prisma.palletsUncheckedCreateWithoutPicking_sourcesInput>
+}
+
+export type palletsUpsertWithoutPicking_sourcesInput = {
+  update: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_sourcesInput, Prisma.palletsUncheckedUpdateWithoutPicking_sourcesInput>
+  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_sourcesInput, Prisma.palletsUncheckedCreateWithoutPicking_sourcesInput>
+  where?: Prisma.palletsWhereInput
+}
+
+export type palletsUpdateToOneWithWhereWithoutPicking_sourcesInput = {
+  where?: Prisma.palletsWhereInput
+  data: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_sourcesInput, Prisma.palletsUncheckedUpdateWithoutPicking_sourcesInput>
+}
+
+export type palletsUpdateWithoutPicking_sourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
+  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
+  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsUncheckedUpdateWithoutPicking_sourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsCreateWithoutTrip_cargoInput = {
+  id?: string
+  code: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
+  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
+  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsUncheckedCreateWithoutTrip_cargoInput = {
+  id?: string
+  code: string
+  warehouse_id?: string | null
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsCreateOrConnectWithoutTrip_cargoInput = {
+  where: Prisma.palletsWhereUniqueInput
+  create: Prisma.XOR<Prisma.palletsCreateWithoutTrip_cargoInput, Prisma.palletsUncheckedCreateWithoutTrip_cargoInput>
+}
+
+export type palletsUpsertWithoutTrip_cargoInput = {
+  update: Prisma.XOR<Prisma.palletsUpdateWithoutTrip_cargoInput, Prisma.palletsUncheckedUpdateWithoutTrip_cargoInput>
+  create: Prisma.XOR<Prisma.palletsCreateWithoutTrip_cargoInput, Prisma.palletsUncheckedCreateWithoutTrip_cargoInput>
+  where?: Prisma.palletsWhereInput
+}
+
+export type palletsUpdateToOneWithWhereWithoutTrip_cargoInput = {
+  where?: Prisma.palletsWhereInput
+  data: Prisma.XOR<Prisma.palletsUpdateWithoutTrip_cargoInput, Prisma.palletsUncheckedUpdateWithoutTrip_cargoInput>
+}
+
+export type palletsUpdateWithoutTrip_cargoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
+  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
+  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsUncheckedUpdateWithoutTrip_cargoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsCreateWithoutPallet_itemsInput = {
+  id?: string
+  code: string
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
+  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
+  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsUncheckedCreateWithoutPallet_itemsInput = {
+  id?: string
+  code: string
+  warehouse_id?: string | null
+  status: string
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
+  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
+}
+
+export type palletsCreateOrConnectWithoutPallet_itemsInput = {
+  where: Prisma.palletsWhereUniqueInput
+  create: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
+}
+
+export type palletsUpsertWithoutPallet_itemsInput = {
+  update: Prisma.XOR<Prisma.palletsUpdateWithoutPallet_itemsInput, Prisma.palletsUncheckedUpdateWithoutPallet_itemsInput>
+  create: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
+  where?: Prisma.palletsWhereInput
+}
+
+export type palletsUpdateToOneWithWhereWithoutPallet_itemsInput = {
+  where?: Prisma.palletsWhereInput
+  data: Prisma.XOR<Prisma.palletsUpdateWithoutPallet_itemsInput, Prisma.palletsUncheckedUpdateWithoutPallet_itemsInput>
+}
+
+export type palletsUpdateWithoutPallet_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
+  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
+  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
+}
+
+export type palletsUncheckedUpdateWithoutPallet_itemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
+  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
+}
+
 export type palletsCreateWithoutUsersInput = {
   id?: string
   code: string
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -655,7 +1075,7 @@ export type palletsUncheckedCreateWithoutUsersInput = {
   warehouse_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -701,431 +1121,11 @@ export type palletsScalarWhereInput = {
   warehouse_id?: Prisma.UuidNullableFilter<"pallets"> | string | null
   status?: Prisma.StringFilter<"pallets"> | string
   created_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"pallets"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"pallets"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"pallets"> | string | null
-}
-
-export type palletsCreateWithoutCargo_transfer_itemsInput = {
-  id?: string
-  code: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
-  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
-  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsUncheckedCreateWithoutCargo_transfer_itemsInput = {
-  id?: string
-  code: string
-  warehouse_id?: string | null
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsCreateOrConnectWithoutCargo_transfer_itemsInput = {
-  where: Prisma.palletsWhereUniqueInput
-  create: Prisma.XOR<Prisma.palletsCreateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedCreateWithoutCargo_transfer_itemsInput>
-}
-
-export type palletsUpsertWithoutCargo_transfer_itemsInput = {
-  update: Prisma.XOR<Prisma.palletsUpdateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedUpdateWithoutCargo_transfer_itemsInput>
-  create: Prisma.XOR<Prisma.palletsCreateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedCreateWithoutCargo_transfer_itemsInput>
-  where?: Prisma.palletsWhereInput
-}
-
-export type palletsUpdateToOneWithWhereWithoutCargo_transfer_itemsInput = {
-  where?: Prisma.palletsWhereInput
-  data: Prisma.XOR<Prisma.palletsUpdateWithoutCargo_transfer_itemsInput, Prisma.palletsUncheckedUpdateWithoutCargo_transfer_itemsInput>
-}
-
-export type palletsUpdateWithoutCargo_transfer_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
-  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
-  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsUncheckedUpdateWithoutCargo_transfer_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsCreateWithoutPallet_itemsInput = {
-  id?: string
-  code: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
-  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
-  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsUncheckedCreateWithoutPallet_itemsInput = {
-  id?: string
-  code: string
-  warehouse_id?: string | null
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsCreateOrConnectWithoutPallet_itemsInput = {
-  where: Prisma.palletsWhereUniqueInput
-  create: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
-}
-
-export type palletsUpsertWithoutPallet_itemsInput = {
-  update: Prisma.XOR<Prisma.palletsUpdateWithoutPallet_itemsInput, Prisma.palletsUncheckedUpdateWithoutPallet_itemsInput>
-  create: Prisma.XOR<Prisma.palletsCreateWithoutPallet_itemsInput, Prisma.palletsUncheckedCreateWithoutPallet_itemsInput>
-  where?: Prisma.palletsWhereInput
-}
-
-export type palletsUpdateToOneWithWhereWithoutPallet_itemsInput = {
-  where?: Prisma.palletsWhereInput
-  data: Prisma.XOR<Prisma.palletsUpdateWithoutPallet_itemsInput, Prisma.palletsUncheckedUpdateWithoutPallet_itemsInput>
-}
-
-export type palletsUpdateWithoutPallet_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
-  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
-  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsUncheckedUpdateWithoutPallet_itemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsCreateWithoutPicking_resultsInput = {
-  id?: string
-  code: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
-  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
-  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsUncheckedCreateWithoutPicking_resultsInput = {
-  id?: string
-  code: string
-  warehouse_id?: string | null
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsCreateOrConnectWithoutPicking_resultsInput = {
-  where: Prisma.palletsWhereUniqueInput
-  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_resultsInput, Prisma.palletsUncheckedCreateWithoutPicking_resultsInput>
-}
-
-export type palletsUpsertWithoutPicking_resultsInput = {
-  update: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_resultsInput, Prisma.palletsUncheckedUpdateWithoutPicking_resultsInput>
-  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_resultsInput, Prisma.palletsUncheckedCreateWithoutPicking_resultsInput>
-  where?: Prisma.palletsWhereInput
-}
-
-export type palletsUpdateToOneWithWhereWithoutPicking_resultsInput = {
-  where?: Prisma.palletsWhereInput
-  data: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_resultsInput, Prisma.palletsUncheckedUpdateWithoutPicking_resultsInput>
-}
-
-export type palletsUpdateWithoutPicking_resultsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
-  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
-  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsUncheckedUpdateWithoutPicking_resultsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsCreateWithoutPicking_sourcesInput = {
-  id?: string
-  code: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
-  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
-  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsUncheckedCreateWithoutPicking_sourcesInput = {
-  id?: string
-  code: string
-  warehouse_id?: string | null
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsCreateOrConnectWithoutPicking_sourcesInput = {
-  where: Prisma.palletsWhereUniqueInput
-  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_sourcesInput, Prisma.palletsUncheckedCreateWithoutPicking_sourcesInput>
-}
-
-export type palletsUpsertWithoutPicking_sourcesInput = {
-  update: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_sourcesInput, Prisma.palletsUncheckedUpdateWithoutPicking_sourcesInput>
-  create: Prisma.XOR<Prisma.palletsCreateWithoutPicking_sourcesInput, Prisma.palletsUncheckedCreateWithoutPicking_sourcesInput>
-  where?: Prisma.palletsWhereInput
-}
-
-export type palletsUpdateToOneWithWhereWithoutPicking_sourcesInput = {
-  where?: Prisma.palletsWhereInput
-  data: Prisma.XOR<Prisma.palletsUpdateWithoutPicking_sourcesInput, Prisma.palletsUncheckedUpdateWithoutPicking_sourcesInput>
-}
-
-export type palletsUpdateWithoutPicking_sourcesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
-  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
-  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsUncheckedUpdateWithoutPicking_sourcesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsCreateWithoutTrip_cargoInput = {
-  id?: string
-  code: string
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutPalletsInput
-  users?: Prisma.usersCreateNestedOneWithoutPalletsInput
-  warehouses?: Prisma.warehousesCreateNestedOneWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsUncheckedCreateWithoutTrip_cargoInput = {
-  id?: string
-  code: string
-  warehouse_id?: string | null
-  status: string
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_results?: Prisma.picking_resultsUncheckedCreateNestedManyWithoutPalletsInput
-  picking_sources?: Prisma.picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput
-}
-
-export type palletsCreateOrConnectWithoutTrip_cargoInput = {
-  where: Prisma.palletsWhereUniqueInput
-  create: Prisma.XOR<Prisma.palletsCreateWithoutTrip_cargoInput, Prisma.palletsUncheckedCreateWithoutTrip_cargoInput>
-}
-
-export type palletsUpsertWithoutTrip_cargoInput = {
-  update: Prisma.XOR<Prisma.palletsUpdateWithoutTrip_cargoInput, Prisma.palletsUncheckedUpdateWithoutTrip_cargoInput>
-  create: Prisma.XOR<Prisma.palletsCreateWithoutTrip_cargoInput, Prisma.palletsUncheckedCreateWithoutTrip_cargoInput>
-  where?: Prisma.palletsWhereInput
-}
-
-export type palletsUpdateToOneWithWhereWithoutTrip_cargoInput = {
-  where?: Prisma.palletsWhereInput
-  data: Prisma.XOR<Prisma.palletsUpdateWithoutTrip_cargoInput, Prisma.palletsUncheckedUpdateWithoutTrip_cargoInput>
-}
-
-export type palletsUpdateWithoutTrip_cargoInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUpdateManyWithoutPalletsNestedInput
-  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutPalletsNestedInput
-  users?: Prisma.usersUpdateOneWithoutPalletsNestedInput
-  warehouses?: Prisma.warehousesUpdateOneWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUpdateManyWithoutPalletsNestedInput
-}
-
-export type palletsUncheckedUpdateWithoutTrip_cargoInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfer_items?: Prisma.cargo_transfer_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_results?: Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput
-  picking_sources?: Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput
 }
 
 export type palletsCreateWithoutWarehousesInput = {
@@ -1133,7 +1133,7 @@ export type palletsCreateWithoutWarehousesInput = {
   code: string
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1150,7 +1150,7 @@ export type palletsUncheckedCreateWithoutWarehousesInput = {
   code: string
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1194,7 +1194,7 @@ export type palletsCreateManyUsersInput = {
   warehouse_id?: string | null
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   updated_by?: string | null
   deleted_by?: string | null
@@ -1205,7 +1205,7 @@ export type palletsUpdateWithoutUsersInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1223,7 +1223,7 @@ export type palletsUncheckedUpdateWithoutUsersInput = {
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1240,7 +1240,7 @@ export type palletsUncheckedUpdateManyWithoutUsersInput = {
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1251,7 +1251,7 @@ export type palletsCreateManyWarehousesInput = {
   code: string
   status: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1263,7 +1263,7 @@ export type palletsUpdateWithoutWarehousesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1280,7 +1280,7 @@ export type palletsUncheckedUpdateWithoutWarehousesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1297,7 +1297,7 @@ export type palletsUncheckedUpdateManyWithoutWarehousesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1472,7 +1472,7 @@ export type $palletsPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     warehouse_id: string | null
     status: string
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

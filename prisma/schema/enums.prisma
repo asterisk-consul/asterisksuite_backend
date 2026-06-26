@@ -1,0 +1,112 @@
+enum DispatchStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  @@schema("tenant")
+}
+
+enum TripStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  @@schema("tenant")
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  RESTORE
+  @@schema("tenant")
+}
+
+enum ProductType {
+  RAW_MATERIAL
+  SEMI_FINISHED
+  FINISHED_PRODUCT
+  SERVICE
+  RATES
+  @@schema("tenant")
+}
+
+enum UnitType {
+  UNIT //Unidad	un
+  WEIGHT //Kilogramo	kg
+  LENGTH //Metro	m
+  AREA //Metro cuadrado	m2
+  VOLUME //Metro cúbico	m3
+  @@schema("tenant")
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+  @@schema("tenant")
+}
+
+enum AttributeType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
+  @@schema("tenant")
+}
+
+enum CalculationType {
+  UNIT
+  SURFACE
+  VOLUME
+  LINEAR
+  @@schema("tenant")
+}
+
+enum CurrencyRateType {
+  OFFICIAL
+  BLUE
+  MEP
+  CCL
+  WHOLESALE
+  CRYPTO
+  CARD
+  @@schema("tenant")
+}
+
+enum ProductCostSource {
+  MANUAL
+  BOM
+  ENGINEERING
+  PURCHASE
+  RATE
+  @@schema("tenant")
+}
+
+enum VariantCostSource {
+  MANUAL
+  PURCHASE
+  IMPORT
+  ENGINEERING
+  SUPPLIER
+  @@schema("tenant")
+}
+
+enum CostComponentType {
+  MATERIAL
+  LABOR
+  OVERHEAD
+  OTHER
+  @@schema("tenant")
+}
+
+enum CostValueType {
+  FROM_BOM
+  PERCENTAGE_OF_MATERIAL
+  PERCENTAGE_OF_TOTAL
+  FIXED_PER_UNIT
+  @@schema("tenant")
+}

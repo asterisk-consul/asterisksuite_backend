@@ -1,0 +1,64 @@
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
+
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { EngineeringService } from './engineering.service';
+import { CreateEngineeringComponentDto } from './dto/create-engineering-component.dto';
+import { ReorderComponentsDto } from './dto/reorder-components.dto';
+
+@UseGuards(JwtAuthGuard)
+@Controller('erp/engineering')
+export class EngineeringController {
+  constructor(private readonly engineeringService: EngineeringService) {}
+
+  // =========================
+  // TREE
+  // =========================
+
+  @Get('tree/:productId')
+  getEngineeringTree(@Param('productId', ParseUUIDPipe) productId: string) {
+    return this.engineeringService.getEngineeringTree(productId);
+  }
+
+  // =========================
+  // CALCULATE
+  // =========================
+
+  @Post('calculate/:productId')
+  calculate(@Param('productId', ParseUUIDPipe) productId: string) {
+    return this.engineeringService.calculate(productId);
+  }
+
+  // =========================
+  // COMPONENTS CRUD
+  // =========================
+
+  @Post('components')
+  createComponent(@Body() dto: CreateEngineeringComponentDto) {
+    return this.engineeringService.createComponent(dto);
+  }
+
+  // IMPORTANTE: rutas estáticas antes de las dinámicas (:id)
+
+  @Patch('components/reorder')
+  reorderComponents(@Body() dto: ReorderComponentsDto) {
+    return this.engineeringService.reorderComponents(dto.items);
+  }
+
+  @Patch('components/:id/move')
+  moveComponent(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: { new_parent_product_id: string | null; product_root_id: string },
+  ) {
+    return this.engineeringService.moveComponent(id, dto.new_parent_product_id, dto.product_root_id);
+  }
+
+  @Patch('components/:id')
+  updateComponent(@Param('id', ParseUUIDPipe) id: string, @Body() dto: Partial<CreateEngineeringComponentDto>) {
+    return this.engineeringService.updateComponent(id, dto);
+  }
+
+  @Delete('components/:id')
+  deleteComponent(@Param('id', ParseUUIDPipe) id: string) {
+    return this.engineeringService.deleteComponent(id);
+  }
+}

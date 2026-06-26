@@ -244,7 +244,7 @@ export type Corridor_stopsGroupByOutputType = {
   distance_km: runtime.Decimal | null
   estimated_minutes: number | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -283,7 +283,7 @@ export type corridor_stopsWhereInput = {
   distance_km?: Prisma.DecimalNullableFilter<"corridor_stops"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.IntNullableFilter<"corridor_stops"> | number | null
   created_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
@@ -301,7 +301,7 @@ export type corridor_stopsOrderByWithRelationInput = {
   distance_km?: Prisma.SortOrderInput | Prisma.SortOrder
   estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -323,7 +323,7 @@ export type corridor_stopsWhereUniqueInput = Prisma.AtLeast<{
   distance_km?: Prisma.DecimalNullableFilter<"corridor_stops"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.IntNullableFilter<"corridor_stops"> | number | null
   created_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
@@ -341,7 +341,7 @@ export type corridor_stopsOrderByWithAggregationInput = {
   distance_km?: Prisma.SortOrderInput | Prisma.SortOrder
   estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -365,7 +365,7 @@ export type corridor_stopsScalarWhereWithAggregatesInput = {
   distance_km?: Prisma.DecimalNullableWithAggregatesFilter<"corridor_stops"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.IntNullableWithAggregatesFilter<"corridor_stops"> | number | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"corridor_stops"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"corridor_stops"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"corridor_stops"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"corridor_stops"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"corridor_stops"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"corridor_stops"> | string | null
@@ -379,7 +379,7 @@ export type corridor_stopsCreateInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -397,7 +397,7 @@ export type corridor_stopsUncheckedCreateInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -411,7 +411,7 @@ export type corridor_stopsUpdateInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -429,7 +429,7 @@ export type corridor_stopsUncheckedUpdateInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -445,7 +445,7 @@ export type corridor_stopsCreateManyInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -459,7 +459,7 @@ export type corridor_stopsUpdateManyMutationInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -475,7 +475,7 @@ export type corridor_stopsUncheckedUpdateManyInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -557,48 +557,6 @@ export type corridor_stopsSumOrderByAggregateInput = {
   estimated_minutes?: Prisma.SortOrder
 }
 
-export type corridor_stopsCreateNestedManyWithoutLocationInput = {
-  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
-  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
-  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-}
-
-export type corridor_stopsUncheckedCreateNestedManyWithoutLocationInput = {
-  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
-  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
-  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-}
-
-export type corridor_stopsUpdateManyWithoutLocationNestedInput = {
-  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
-  upsert?: Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput[]
-  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
-  set?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  disconnect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  delete?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  update?: Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput[]
-  updateMany?: Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput | Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput[]
-  deleteMany?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
-}
-
-export type corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput = {
-  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
-  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
-  upsert?: Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput[]
-  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
-  set?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  disconnect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  delete?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
-  update?: Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput[]
-  updateMany?: Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput | Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput[]
-  deleteMany?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
-}
-
 export type corridor_stopsCreateNestedManyWithoutCorridorInput = {
   create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutCorridorInput, Prisma.corridor_stopsUncheckedCreateWithoutCorridorInput> | Prisma.corridor_stopsCreateWithoutCorridorInput[] | Prisma.corridor_stopsUncheckedCreateWithoutCorridorInput[]
   connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutCorridorInput | Prisma.corridor_stopsCreateOrConnectWithoutCorridorInput[]
@@ -641,79 +599,46 @@ export type corridor_stopsUncheckedUpdateManyWithoutCorridorNestedInput = {
   deleteMany?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
 }
 
-export type corridor_stopsCreateWithoutLocationInput = {
-  id?: string
-  stop_order: number
-  stop_type?: string | null
-  distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: number | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  corridor: Prisma.corridorsCreateNestedOneWithoutCorridorStopsInput
+export type corridor_stopsCreateNestedManyWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
+  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
+  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
 }
 
-export type corridor_stopsUncheckedCreateWithoutLocationInput = {
-  id?: string
-  corridor_id: string
-  stop_order: number
-  stop_type?: string | null
-  distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: number | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
+export type corridor_stopsUncheckedCreateNestedManyWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
+  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
+  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
 }
 
-export type corridor_stopsCreateOrConnectWithoutLocationInput = {
-  where: Prisma.corridor_stopsWhereUniqueInput
-  create: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput>
+export type corridor_stopsUpdateManyWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
+  upsert?: Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput[]
+  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
+  set?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  disconnect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  delete?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  update?: Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput[]
+  updateMany?: Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput | Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput[]
+  deleteMany?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
 }
 
-export type corridor_stopsCreateManyLocationInputEnvelope = {
-  data: Prisma.corridor_stopsCreateManyLocationInput | Prisma.corridor_stopsCreateManyLocationInput[]
-  skipDuplicates?: boolean
-}
-
-export type corridor_stopsUpsertWithWhereUniqueWithoutLocationInput = {
-  where: Prisma.corridor_stopsWhereUniqueInput
-  update: Prisma.XOR<Prisma.corridor_stopsUpdateWithoutLocationInput, Prisma.corridor_stopsUncheckedUpdateWithoutLocationInput>
-  create: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput>
-}
-
-export type corridor_stopsUpdateWithWhereUniqueWithoutLocationInput = {
-  where: Prisma.corridor_stopsWhereUniqueInput
-  data: Prisma.XOR<Prisma.corridor_stopsUpdateWithoutLocationInput, Prisma.corridor_stopsUncheckedUpdateWithoutLocationInput>
-}
-
-export type corridor_stopsUpdateManyWithWhereWithoutLocationInput = {
-  where: Prisma.corridor_stopsScalarWhereInput
-  data: Prisma.XOR<Prisma.corridor_stopsUpdateManyMutationInput, Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationInput>
-}
-
-export type corridor_stopsScalarWhereInput = {
-  AND?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
-  OR?: Prisma.corridor_stopsScalarWhereInput[]
-  NOT?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"corridor_stops"> | string
-  corridor_id?: Prisma.UuidFilter<"corridor_stops"> | string
-  location_id?: Prisma.UuidFilter<"corridor_stops"> | string
-  stop_order?: Prisma.IntFilter<"corridor_stops"> | number
-  stop_type?: Prisma.StringNullableFilter<"corridor_stops"> | string | null
-  distance_km?: Prisma.DecimalNullableFilter<"corridor_stops"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.IntNullableFilter<"corridor_stops"> | number | null
-  created_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
+export type corridor_stopsUncheckedUpdateManyWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput> | Prisma.corridor_stopsCreateWithoutLocationInput[] | Prisma.corridor_stopsUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.corridor_stopsCreateOrConnectWithoutLocationInput | Prisma.corridor_stopsCreateOrConnectWithoutLocationInput[]
+  upsert?: Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpsertWithWhereUniqueWithoutLocationInput[]
+  createMany?: Prisma.corridor_stopsCreateManyLocationInputEnvelope
+  set?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  disconnect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  delete?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  connect?: Prisma.corridor_stopsWhereUniqueInput | Prisma.corridor_stopsWhereUniqueInput[]
+  update?: Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput | Prisma.corridor_stopsUpdateWithWhereUniqueWithoutLocationInput[]
+  updateMany?: Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput | Prisma.corridor_stopsUpdateManyWithWhereWithoutLocationInput[]
+  deleteMany?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
 }
 
 export type corridor_stopsCreateWithoutCorridorInput = {
@@ -723,7 +648,7 @@ export type corridor_stopsCreateWithoutCorridorInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -739,7 +664,7 @@ export type corridor_stopsUncheckedCreateWithoutCorridorInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -772,7 +697,41 @@ export type corridor_stopsUpdateManyWithWhereWithoutCorridorInput = {
   data: Prisma.XOR<Prisma.corridor_stopsUpdateManyMutationInput, Prisma.corridor_stopsUncheckedUpdateManyWithoutCorridorInput>
 }
 
-export type corridor_stopsCreateManyLocationInput = {
+export type corridor_stopsScalarWhereInput = {
+  AND?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
+  OR?: Prisma.corridor_stopsScalarWhereInput[]
+  NOT?: Prisma.corridor_stopsScalarWhereInput | Prisma.corridor_stopsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"corridor_stops"> | string
+  corridor_id?: Prisma.UuidFilter<"corridor_stops"> | string
+  location_id?: Prisma.UuidFilter<"corridor_stops"> | string
+  stop_order?: Prisma.IntFilter<"corridor_stops"> | number
+  stop_type?: Prisma.StringNullableFilter<"corridor_stops"> | string | null
+  distance_km?: Prisma.DecimalNullableFilter<"corridor_stops"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.IntNullableFilter<"corridor_stops"> | number | null
+  created_at?: Prisma.DateTimeFilter<"corridor_stops"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
+  deleted_at?: Prisma.DateTimeNullableFilter<"corridor_stops"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"corridor_stops"> | string | null
+}
+
+export type corridor_stopsCreateWithoutLocationInput = {
+  id?: string
+  stop_order: number
+  stop_type?: string | null
+  distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: number | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  corridor: Prisma.corridorsCreateNestedOneWithoutCorridorStopsInput
+}
+
+export type corridor_stopsUncheckedCreateWithoutLocationInput = {
   id?: string
   corridor_id: string
   stop_order: number
@@ -780,56 +739,37 @@ export type corridor_stopsCreateManyLocationInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
 }
 
-export type corridor_stopsUpdateWithoutLocationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  stop_order?: Prisma.IntFieldUpdateOperationsInput | number
-  stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  corridor?: Prisma.corridorsUpdateOneRequiredWithoutCorridorStopsNestedInput
+export type corridor_stopsCreateOrConnectWithoutLocationInput = {
+  where: Prisma.corridor_stopsWhereUniqueInput
+  create: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput>
 }
 
-export type corridor_stopsUncheckedUpdateWithoutLocationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  corridor_id?: Prisma.StringFieldUpdateOperationsInput | string
-  stop_order?: Prisma.IntFieldUpdateOperationsInput | number
-  stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type corridor_stopsCreateManyLocationInputEnvelope = {
+  data: Prisma.corridor_stopsCreateManyLocationInput | Prisma.corridor_stopsCreateManyLocationInput[]
+  skipDuplicates?: boolean
 }
 
-export type corridor_stopsUncheckedUpdateManyWithoutLocationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  corridor_id?: Prisma.StringFieldUpdateOperationsInput | string
-  stop_order?: Prisma.IntFieldUpdateOperationsInput | number
-  stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type corridor_stopsUpsertWithWhereUniqueWithoutLocationInput = {
+  where: Prisma.corridor_stopsWhereUniqueInput
+  update: Prisma.XOR<Prisma.corridor_stopsUpdateWithoutLocationInput, Prisma.corridor_stopsUncheckedUpdateWithoutLocationInput>
+  create: Prisma.XOR<Prisma.corridor_stopsCreateWithoutLocationInput, Prisma.corridor_stopsUncheckedCreateWithoutLocationInput>
+}
+
+export type corridor_stopsUpdateWithWhereUniqueWithoutLocationInput = {
+  where: Prisma.corridor_stopsWhereUniqueInput
+  data: Prisma.XOR<Prisma.corridor_stopsUpdateWithoutLocationInput, Prisma.corridor_stopsUncheckedUpdateWithoutLocationInput>
+}
+
+export type corridor_stopsUpdateManyWithWhereWithoutLocationInput = {
+  where: Prisma.corridor_stopsScalarWhereInput
+  data: Prisma.XOR<Prisma.corridor_stopsUpdateManyMutationInput, Prisma.corridor_stopsUncheckedUpdateManyWithoutLocationInput>
 }
 
 export type corridor_stopsCreateManyCorridorInput = {
@@ -840,7 +780,7 @@ export type corridor_stopsCreateManyCorridorInput = {
   distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: number | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -854,7 +794,7 @@ export type corridor_stopsUpdateWithoutCorridorInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -870,7 +810,7 @@ export type corridor_stopsUncheckedUpdateWithoutCorridorInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -885,7 +825,67 @@ export type corridor_stopsUncheckedUpdateManyWithoutCorridorInput = {
   distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type corridor_stopsCreateManyLocationInput = {
+  id?: string
+  corridor_id: string
+  stop_order: number
+  stop_type?: string | null
+  distance_km?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: number | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type corridor_stopsUpdateWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stop_order?: Prisma.IntFieldUpdateOperationsInput | number
+  stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corridor?: Prisma.corridorsUpdateOneRequiredWithoutCorridorStopsNestedInput
+}
+
+export type corridor_stopsUncheckedUpdateWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  corridor_id?: Prisma.StringFieldUpdateOperationsInput | string
+  stop_order?: Prisma.IntFieldUpdateOperationsInput | number
+  stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type corridor_stopsUncheckedUpdateManyWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  corridor_id?: Prisma.StringFieldUpdateOperationsInput | string
+  stop_order?: Prisma.IntFieldUpdateOperationsInput | number
+  stop_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distance_km?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -993,7 +993,7 @@ export type $corridor_stopsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     distance_km: runtime.Decimal | null
     estimated_minutes: number | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

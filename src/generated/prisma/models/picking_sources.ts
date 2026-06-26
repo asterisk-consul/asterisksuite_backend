@@ -341,48 +341,6 @@ export type picking_sourcesSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
 }
 
-export type picking_sourcesCreateNestedManyWithoutPalletsInput = {
-  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
-  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
-  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-}
-
-export type picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput = {
-  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
-  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
-  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-}
-
-export type picking_sourcesUpdateManyWithoutPalletsNestedInput = {
-  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
-  upsert?: Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput[]
-  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
-  set?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  disconnect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  delete?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  update?: Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput[]
-  updateMany?: Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput[]
-  deleteMany?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
-}
-
-export type picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput = {
-  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
-  upsert?: Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput[]
-  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
-  set?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  disconnect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  delete?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
-  update?: Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput[]
-  updateMany?: Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput[]
-  deleteMany?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
-}
-
 export type picking_sourcesCreateNestedManyWithoutPicking_itemsInput = {
   create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPicking_itemsInput, Prisma.picking_sourcesUncheckedCreateWithoutPicking_itemsInput> | Prisma.picking_sourcesCreateWithoutPicking_itemsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPicking_itemsInput[]
   connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPicking_itemsInput | Prisma.picking_sourcesCreateOrConnectWithoutPicking_itemsInput[]
@@ -425,52 +383,46 @@ export type picking_sourcesUncheckedUpdateManyWithoutPicking_itemsNestedInput = 
   deleteMany?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
 }
 
-export type picking_sourcesCreateWithoutPalletsInput = {
-  id?: string
-  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
-  picking_items: Prisma.picking_itemsCreateNestedOneWithoutPicking_sourcesInput
+export type picking_sourcesCreateNestedManyWithoutPalletsInput = {
+  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
+  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
+  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
 }
 
-export type picking_sourcesUncheckedCreateWithoutPalletsInput = {
-  id?: string
-  picking_item_id: string
-  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type picking_sourcesUncheckedCreateNestedManyWithoutPalletsInput = {
+  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
+  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
+  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
 }
 
-export type picking_sourcesCreateOrConnectWithoutPalletsInput = {
-  where: Prisma.picking_sourcesWhereUniqueInput
-  create: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput>
+export type picking_sourcesUpdateManyWithoutPalletsNestedInput = {
+  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
+  upsert?: Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput[]
+  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
+  set?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  disconnect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  delete?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  update?: Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput[]
+  updateMany?: Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput[]
+  deleteMany?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
 }
 
-export type picking_sourcesCreateManyPalletsInputEnvelope = {
-  data: Prisma.picking_sourcesCreateManyPalletsInput | Prisma.picking_sourcesCreateManyPalletsInput[]
-  skipDuplicates?: boolean
-}
-
-export type picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput = {
-  where: Prisma.picking_sourcesWhereUniqueInput
-  update: Prisma.XOR<Prisma.picking_sourcesUpdateWithoutPalletsInput, Prisma.picking_sourcesUncheckedUpdateWithoutPalletsInput>
-  create: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput>
-}
-
-export type picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput = {
-  where: Prisma.picking_sourcesWhereUniqueInput
-  data: Prisma.XOR<Prisma.picking_sourcesUpdateWithoutPalletsInput, Prisma.picking_sourcesUncheckedUpdateWithoutPalletsInput>
-}
-
-export type picking_sourcesUpdateManyWithWhereWithoutPalletsInput = {
-  where: Prisma.picking_sourcesScalarWhereInput
-  data: Prisma.XOR<Prisma.picking_sourcesUpdateManyMutationInput, Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsInput>
-}
-
-export type picking_sourcesScalarWhereInput = {
-  AND?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
-  OR?: Prisma.picking_sourcesScalarWhereInput[]
-  NOT?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
-  id?: Prisma.UuidFilter<"picking_sources"> | string
-  picking_item_id?: Prisma.UuidFilter<"picking_sources"> | string
-  pallet_id?: Prisma.UuidFilter<"picking_sources"> | string
-  quantity?: Prisma.DecimalFilter<"picking_sources"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+export type picking_sourcesUncheckedUpdateManyWithoutPalletsNestedInput = {
+  create?: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput> | Prisma.picking_sourcesCreateWithoutPalletsInput[] | Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput | Prisma.picking_sourcesCreateOrConnectWithoutPalletsInput[]
+  upsert?: Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput[]
+  createMany?: Prisma.picking_sourcesCreateManyPalletsInputEnvelope
+  set?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  disconnect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  delete?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  connect?: Prisma.picking_sourcesWhereUniqueInput | Prisma.picking_sourcesWhereUniqueInput[]
+  update?: Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput[]
+  updateMany?: Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_sourcesUpdateManyWithWhereWithoutPalletsInput[]
+  deleteMany?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
 }
 
 export type picking_sourcesCreateWithoutPicking_itemsInput = {
@@ -511,28 +463,52 @@ export type picking_sourcesUpdateManyWithWhereWithoutPicking_itemsInput = {
   data: Prisma.XOR<Prisma.picking_sourcesUpdateManyMutationInput, Prisma.picking_sourcesUncheckedUpdateManyWithoutPicking_itemsInput>
 }
 
-export type picking_sourcesCreateManyPalletsInput = {
+export type picking_sourcesScalarWhereInput = {
+  AND?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
+  OR?: Prisma.picking_sourcesScalarWhereInput[]
+  NOT?: Prisma.picking_sourcesScalarWhereInput | Prisma.picking_sourcesScalarWhereInput[]
+  id?: Prisma.UuidFilter<"picking_sources"> | string
+  picking_item_id?: Prisma.UuidFilter<"picking_sources"> | string
+  pallet_id?: Prisma.UuidFilter<"picking_sources"> | string
+  quantity?: Prisma.DecimalFilter<"picking_sources"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type picking_sourcesCreateWithoutPalletsInput = {
+  id?: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  picking_items: Prisma.picking_itemsCreateNestedOneWithoutPicking_sourcesInput
+}
+
+export type picking_sourcesUncheckedCreateWithoutPalletsInput = {
   id?: string
   picking_item_id: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type picking_sourcesUpdateWithoutPalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  picking_items?: Prisma.picking_itemsUpdateOneRequiredWithoutPicking_sourcesNestedInput
+export type picking_sourcesCreateOrConnectWithoutPalletsInput = {
+  where: Prisma.picking_sourcesWhereUniqueInput
+  create: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput>
 }
 
-export type picking_sourcesUncheckedUpdateWithoutPalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  picking_item_id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+export type picking_sourcesCreateManyPalletsInputEnvelope = {
+  data: Prisma.picking_sourcesCreateManyPalletsInput | Prisma.picking_sourcesCreateManyPalletsInput[]
+  skipDuplicates?: boolean
 }
 
-export type picking_sourcesUncheckedUpdateManyWithoutPalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  picking_item_id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+export type picking_sourcesUpsertWithWhereUniqueWithoutPalletsInput = {
+  where: Prisma.picking_sourcesWhereUniqueInput
+  update: Prisma.XOR<Prisma.picking_sourcesUpdateWithoutPalletsInput, Prisma.picking_sourcesUncheckedUpdateWithoutPalletsInput>
+  create: Prisma.XOR<Prisma.picking_sourcesCreateWithoutPalletsInput, Prisma.picking_sourcesUncheckedCreateWithoutPalletsInput>
+}
+
+export type picking_sourcesUpdateWithWhereUniqueWithoutPalletsInput = {
+  where: Prisma.picking_sourcesWhereUniqueInput
+  data: Prisma.XOR<Prisma.picking_sourcesUpdateWithoutPalletsInput, Prisma.picking_sourcesUncheckedUpdateWithoutPalletsInput>
+}
+
+export type picking_sourcesUpdateManyWithWhereWithoutPalletsInput = {
+  where: Prisma.picking_sourcesScalarWhereInput
+  data: Prisma.XOR<Prisma.picking_sourcesUpdateManyMutationInput, Prisma.picking_sourcesUncheckedUpdateManyWithoutPalletsInput>
 }
 
 export type picking_sourcesCreateManyPicking_itemsInput = {
@@ -556,6 +532,30 @@ export type picking_sourcesUncheckedUpdateWithoutPicking_itemsInput = {
 export type picking_sourcesUncheckedUpdateManyWithoutPicking_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pallet_id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type picking_sourcesCreateManyPalletsInput = {
+  id?: string
+  picking_item_id: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type picking_sourcesUpdateWithoutPalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  picking_items?: Prisma.picking_itemsUpdateOneRequiredWithoutPicking_sourcesNestedInput
+}
+
+export type picking_sourcesUncheckedUpdateWithoutPalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  picking_item_id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type picking_sourcesUncheckedUpdateManyWithoutPalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  picking_item_id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 

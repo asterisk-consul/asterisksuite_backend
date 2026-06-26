@@ -3,25 +3,20 @@ import { Request, Response, NextFunction } from 'express';
 import { requestContext } from '../context/request-context';
 import { PrismaService } from '@/prisma/prisma.service';
 
-const PUBLIC_SUBDOMAINS = new Set(['public', 'dev', 'api', 'www', 'admin']);
+const PUBLIC_SUBDOMAINS = new Set(['public', 'api', 'www', 'admin']);
 
 @Injectable()
 export class TenantMiddleware implements NestMiddleware {
   private readonly logger = new Logger(TenantMiddleware.name);
 
-  // Cache: subdomain → { tenantDb, expiresAt }
-  private tenantCache = new Map<
-    string,
-    { tenantDb: string; expiresAt: number }
-  >();
-  private readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
+  private tenantCache = new Map<string, { tenantDb: string; expiresAt: number }>();
+  private readonly CACHE_TTL_MS = 5 * 60 * 1000;
 
   constructor(private readonly prisma: PrismaService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     const subdomain = this.extractSubdomain(req);
 
-    // Sin subdomain o subdomain público → usa cliente public
     if (!subdomain || PUBLIC_SUBDOMAINS.has(subdomain)) {
       return requestContext.run({ schema: 'public' }, () => next());
     }
@@ -41,9 +36,7 @@ export class TenantMiddleware implements NestMiddleware {
       // ej: "empresaa_db" — usado en PrismaService.getClientForCurrentContext()
       return requestContext.run({ schema: tenantDb }, () => next());
     } catch (error: any) {
-      this.logger.error(
-        `Error resolving tenant DB for subdomain "${subdomain}": ${error.message}`,
-      );
+      this.logger.error(`Error resolving tenant DB for subdomain "${subdomain}": ${error.message}`);
       return res.status(500).json({
         message: 'Error resolving tenant DB',
         error: error.message,
@@ -59,33 +52,32 @@ export class TenantMiddleware implements NestMiddleware {
     const now = Date.now();
     const cached = this.tenantCache.get(subdomain);
 
-    // ✅ Retorna del cache si aún es válido
     if (cached && cached.expiresAt > now) {
       return cached.tenantDb;
     }
 
-    // ✅ Siempre usa el cliente public para buscar la empresa
     const company = await this.prisma.getDefaultClient().companies.findFirst({
       where: {
         subdomain,
         deleted_at: null,
       },
       select: {
-        schema_name: true, // ← contiene "empresaa_db"
+        subdomain: true,
       },
     });
 
-    if (!company?.schema_name) {
+    if (!company) {
       return null;
     }
 
-    // ✅ Guarda en cache con expiración
+    const tenantDb = `${subdomain}_db`;
+
     this.tenantCache.set(subdomain, {
-      tenantDb: company.schema_name, // ej: "empresaa_db"
+      tenantDb,
       expiresAt: now + this.CACHE_TTL_MS,
     });
 
-    return company.schema_name;
+    return tenantDb;
   }
 
   /**

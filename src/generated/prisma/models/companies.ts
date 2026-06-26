@@ -471,22 +471,6 @@ export type CompaniesScalarRelationFilter = {
   isNot?: Prisma.companiesWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type companiesCreateNestedOneWithoutCompanyUsersInput = {
   create?: Prisma.XOR<Prisma.companiesCreateWithoutCompanyUsersInput, Prisma.companiesUncheckedCreateWithoutCompanyUsersInput>
   connectOrCreate?: Prisma.companiesCreateOrConnectWithoutCompanyUsersInput

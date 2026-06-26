@@ -1,22 +1,16 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
-import { ProductPriceService } from '../../master-data/products-prices/products_prices.service';
+import { ProductPricingFacadeService } from '../pricing/product-pricing/product-pricing-facade.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 
 /* 
 Draft: Borrador editable
-
 Pending: Pendiente de revisión
-
 Confirmed: Confirmado, ya no editable
-
 Cancelled: Anulado
- */
+*/
+
 // ─── Estados ──────────────────────────────────────────────────────────────────
 const STATUS_DRAFT = 0;
 const STATUS_PENDING = 1;
@@ -59,7 +53,7 @@ export class DocumentsSalesService {
 
   constructor(
     private db: PrismaService,
-    private productPriceService: ProductPriceService,
+    private pricingFacade: ProductPricingFacadeService, // ← reemplaza ProductPriceService
   ) {}
 
   // Getter privado para reutilizar en todos los métodos
@@ -87,6 +81,7 @@ export class DocumentsSalesService {
    */
   private async resolveItems(
     dtoItems: CreateDocumentDto['items'],
+    currencyCode: string, // ← viene de dto.currency_code
   ): Promise<ItemInput[]> {
     const resolved = [] as ItemInput[];
 
@@ -105,26 +100,16 @@ export class DocumentsSalesService {
         continue;
       }
 
-      const overridePrice =
-        Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
+      const overridePrice = Number(item.unit_price) > 0 ? Number(item.unit_price) : undefined;
 
-      const resolvedItem = (await this.productPriceService.resolveItemWithTaxes(
-        item.product_id,
-        Number(item.quantity),
-        overridePrice,
-      )) as {
-        product_id: string;
-        quantity: number;
-        unit_price: number;
-        price: number;
-        taxes: TaxInput[];
-      } | null;
+      try {
+        const resolvedItem = await this.pricingFacade.getSellPrice(
+          item.product_id,
+          Number(item.quantity),
+          currencyCode, // ✓ string
+        );
 
-      if (resolvedItem) {
-        // 🔥 BLINDADO: nunca undefined
-        const price =
-          resolvedItem.price ??
-          round2(resolvedItem.unit_price * resolvedItem.quantity);
+        const price = resolvedItem.price ?? round2(resolvedItem.unit_price * resolvedItem.quantity);
 
         resolved.push({
           product_id: resolvedItem.product_id,
@@ -133,8 +118,8 @@ export class DocumentsSalesService {
           price,
           taxes: resolvedItem.taxes ?? [],
         });
-      } else {
-        // Producto sin precio configurado
+      } catch {
+        // Producto sin precio configurado → fallback al DTO
         const price = round2(item.unit_price * item.quantity);
 
         resolved.push({
@@ -151,26 +136,11 @@ export class DocumentsSalesService {
   }
 
   // ─── Calcular totales ─────────────────────────────────────────────────────
-  /**
-   * subtotal      = Σ item.price
-   * exempt_amount = Σ item.price de ítems sin taxes de línea
-   * total_taxes   = Σ tax_amount (line) + Σ tax_amount (document, sobre subtotal)
-   * total         = subtotal + total_taxes
-   *
-   * Los taxes con calculation_level='document' se consolidan y se calculan
-   * sobre el subtotal total; sus filas van a document_taxes.
-   */
-  private async calculateTotals(
-    items: ItemInput[],
-    tx?: any,
-  ): Promise<CalculatedTotals> {
+  private async calculateTotals(items: ItemInput[], tx?: any): Promise<CalculatedTotals> {
     const db = tx ?? this.prisma;
 
-    const subtotal = round2(
-      items.reduce((acc, item) => acc + Number(item.price), 0),
-    );
+    const subtotal = round2(items.reduce((acc, item) => acc + Number(item.price), 0));
 
-    // Consultar calculation_level solo para los taxes que no lo traen resuelto
     const unknownTaxIds = [
       ...new Set(
         items
@@ -190,27 +160,19 @@ export class DocumentsSalesService {
       for (const r of records) taxLevelMap.set(r.id, r.calculation_level);
     }
 
-    const getLevel = (t: TaxInput): string =>
-      t.calculation_level ?? taxLevelMap.get(t.tax_id) ?? 'line';
+    const getLevel = (t: TaxInput): string => t.calculation_level ?? taxLevelMap.get(t.tax_id) ?? 'line';
 
     let lineTaxesTotal = 0;
     let exemptAmount = 0;
-    const docLevelTaxMap = new Map<
-      string,
-      { tax_id: string; tax_rate: number }
-    >();
+    const docLevelTaxMap = new Map<string, { tax_id: string; tax_rate: number }>();
 
     for (const item of items) {
       const itemTaxes = item.taxes ?? [];
       const lineTaxes = itemTaxes.filter((t) => getLevel(t) === 'line');
       const docTaxes = itemTaxes.filter((t) => getLevel(t) === 'document');
 
-      lineTaxesTotal += lineTaxes.reduce(
-        (acc, t) => acc + Number(t.tax_amount),
-        0,
-      );
+      lineTaxesTotal += lineTaxes.reduce((acc, t) => acc + Number(t.tax_amount), 0);
 
-      // Sin taxes de línea → el monto del ítem es exento
       if (lineTaxes.length === 0) {
         exemptAmount += Number(item.price);
       }
@@ -225,7 +187,6 @@ export class DocumentsSalesService {
       }
     }
 
-    // Taxes de nivel documento: se calculan sobre el subtotal total
     const documentTaxes: CalculatedTotals['documentTaxes'] = [];
     let docTaxesTotal = 0;
 
@@ -252,11 +213,7 @@ export class DocumentsSalesService {
   }
 
   // ─── Persistir ítems y sus taxes de línea ────────────────────────────────
-  private async persistItems(
-    documentId: string,
-    items: ItemInput[],
-    tx: any,
-  ): Promise<void> {
+  private async persistItems(documentId: string, items: ItemInput[], tx: any): Promise<void> {
     for (const item of items) {
       if (item.price === undefined) {
         throw new Error('Price undefined - bug en resolveItems');
@@ -271,10 +228,7 @@ export class DocumentsSalesService {
         },
       });
 
-      // Solo los taxes de línea van a document_item_taxes
-      const lineTaxes = (item.taxes ?? []).filter(
-        (t) => (t.calculation_level ?? 'line') === 'line',
-      );
+      const lineTaxes = (item.taxes ?? []).filter((t) => (t.calculation_level ?? 'line') === 'line');
 
       if (lineTaxes.length) {
         await tx.document_item_taxes.createMany({
@@ -295,21 +249,16 @@ export class DocumentsSalesService {
       where: { id: dto.document_type_id },
       include: { document_sequences: true },
     });
-    if (!docType)
-      throw new NotFoundException('Tipo de documento no encontrado');
+    if (!docType) throw new NotFoundException('Tipo de documento no encontrado');
 
     // Resolver precios e impuestos ANTES de abrir la transacción
-    const items = await this.resolveItems(dto.items);
+    const items = await this.resolveItems(dto.items, dto.currency_code); // ← currency_code del DTO
     const totals = await this.calculateTotals(items);
 
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
-      const number = await this.getNextNumber(
-        dto.document_type_id,
-        docType.document_sequences?.id ?? null,
-        tx,
-      );
+      const number = await this.getNextNumber(dto.document_type_id, docType.document_sequences?.id ?? null, tx);
 
       const document = await tx.documents.create({
         data: {
@@ -341,16 +290,13 @@ export class DocumentsSalesService {
       }
     });
 
-    if (!createdId)
-      throw new BadRequestException('Error al crear el documento');
+    if (!createdId) throw new BadRequestException('Error al crear el documento');
 
     return this.findOne(createdId);
   }
 
   // ─── Generar borradores desde viaje completado ────────────────────────────
-  async generateDraftsFromTrip(
-    tripId: string,
-  ): Promise<{ created: number; skipped: number }> {
+  async generateDraftsFromTrip(tripId: string): Promise<{ created: number; skipped: number }> {
     const trip = await this.prisma.trips.findUnique({
       where: { id: tripId },
       include: {
@@ -420,8 +366,7 @@ export class DocumentsSalesService {
       where: { code: 'VEN' },
       include: { document_sequences: true },
     });
-    if (!docType)
-      throw new NotFoundException('Tipo de documento VEN no configurado');
+    if (!docType) throw new NotFoundException('Tipo de documento VEN no configurado');
 
     let created = 0;
     let skipped = 0;
@@ -454,11 +399,7 @@ export class DocumentsSalesService {
       const totals = await this.calculateTotals(items);
 
       await this.prisma.$transaction(async (tx) => {
-        const number = await this.getNextNumber(
-          docType.id,
-          docType.document_sequences?.id ?? null,
-          tx,
-        );
+        const number = await this.getNextNumber(docType.id, docType.document_sequences?.id ?? null, tx);
 
         const document = await tx.documents.create({
           data: {
@@ -472,11 +413,7 @@ export class DocumentsSalesService {
             total_taxes: totals.total_taxes,
             total: totals.total,
             ref: `TRIP-${tripId}`.substring(0, 50),
-            descrip:
-              `V:${trip.reference_number ?? tripId.substring(0, 8)} ${group.customerName}`.substring(
-                0,
-                50,
-              ),
+            descrip: `V:${trip.reference_number ?? tripId.substring(0, 8)} ${group.customerName}`.substring(0, 50),
           },
         });
 
@@ -555,21 +492,17 @@ export class DocumentsSalesService {
   async update(id: string, dto: UpdateDocumentDto) {
     const doc = await this.findOne(id);
 
-    if (doc.status === STATUS_CONFIRMED)
-      throw new BadRequestException(
-        'No se puede modificar un documento confirmado',
-      );
-    if (doc.status === STATUS_CANCELLED)
-      throw new BadRequestException(
-        'No se puede modificar un documento anulado',
-      );
+    if (doc.status === STATUS_CONFIRMED) throw new BadRequestException('No se puede modificar un documento confirmado');
+    if (doc.status === STATUS_CANCELLED) throw new BadRequestException('No se puede modificar un documento anulado');
 
-    // Resolver ítems ANTES de abrir la transacción
     let items: ItemInput[] | null = null;
     let totals: CalculatedTotals | null = null;
 
     if (dto.items?.length) {
-      items = await this.resolveItems(dto.items);
+      if (!dto.currency_code) {
+        throw new BadRequestException('currency_code es requerido al actualizar ítems');
+      }
+      items = await this.resolveItems(dto.items, dto.currency_code);
       totals = await this.calculateTotals(items);
     }
 
@@ -614,10 +547,8 @@ export class DocumentsSalesService {
   // ─── Confirmar ────────────────────────────────────────────────────────────
   async confirm(id: string) {
     const doc = await this.findOne(id);
-    if (doc.status === STATUS_CONFIRMED)
-      throw new BadRequestException('El documento ya está confirmado');
-    if (!doc.document_items.length)
-      throw new BadRequestException('El documento no tiene ítems');
+    if (doc.status === STATUS_CONFIRMED) throw new BadRequestException('El documento ya está confirmado');
+    if (!doc.document_items.length) throw new BadRequestException('El documento no tiene ítems');
 
     return this.prisma.documents.update({
       where: { id },
@@ -628,8 +559,7 @@ export class DocumentsSalesService {
   // ─── Anular ───────────────────────────────────────────────────────────────
   async cancel(id: string) {
     const doc = await this.findOne(id);
-    if (doc.status === STATUS_CANCELLED)
-      throw new BadRequestException('El documento ya está anulado');
+    if (doc.status === STATUS_CANCELLED) throw new BadRequestException('El documento ya está anulado');
 
     return this.prisma.documents.update({
       where: { id },
@@ -640,10 +570,7 @@ export class DocumentsSalesService {
   // ─── Eliminar (solo borradores) ───────────────────────────────────────────
   async remove(id: string) {
     const doc = await this.findOne(id);
-    if (doc.status !== STATUS_DRAFT)
-      throw new BadRequestException(
-        'Solo se pueden eliminar documentos en borrador',
-      );
+    if (doc.status !== STATUS_DRAFT) throw new BadRequestException('Solo se pueden eliminar documentos en borrador');
 
     return this.prisma.$transaction(async (tx) => {
       await tx.document_item_taxes.deleteMany({
@@ -656,11 +583,7 @@ export class DocumentsSalesService {
   }
 
   // ─── Secuencia ────────────────────────────────────────────────────────────
-  private async getNextNumber(
-    documentTypeId: string,
-    sequenceId: string | null,
-    tx?: any,
-  ): Promise<number> {
+  private async getNextNumber(documentTypeId: string, sequenceId: string | null, tx?: any): Promise<number> {
     const db = tx ?? this.prisma;
 
     if (!sequenceId) {

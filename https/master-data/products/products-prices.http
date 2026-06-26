@@ -1,0 +1,120 @@
+### =========================================================
+### VARIABLES
+### =========================================================
+
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+@productId = 553e3358-be8a-48e3-8bc4-1764d96f2936
+@currencyIdUsd = 839c208c-744d-4321-a375-2a747c911fa2
+@currencyIdArs = c02aaadd-43ed-4ee6-b6e6-69a791d55269
+
+@productPriceId = 389becae-6db2-4250-b9b3-2bc89ba5f1d2
+
+### =========================================================
+### CREATE PRODUCT PRICE (USD)
+### =========================================================
+
+POST {{baseUrl}}/product-prices
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "product_id": "{{productId}}",
+  "currency_id": "{{currencyIdUsd}}",
+  "price": 1000,
+  "exemption_rate": 0
+}
+
+### =========================================================
+### CREATE PRODUCT PRICE (ARS)
+### =========================================================
+
+POST {{baseUrl}}/product-prices
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "currency_id": "{{currencyIdArs}}",
+  "price": 1500000,
+  "exemption_rate": 0
+}
+
+### =========================================================
+### FIND ALL PRICES BY PRODUCT
+### =========================================================
+
+GET {{baseUrl}}/product-prices/product/{{productId}}
+
+### =========================================================
+### FIND ONE PRICE
+### =========================================================
+
+GET {{baseUrl}}/product-prices/{{productPriceId}}
+
+### =========================================================
+### UPDATE PRICE
+### =========================================================
+
+PATCH {{baseUrl}}/product-prices/{{productPriceId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "price": 1200,
+  "exemption_rate": 10
+}
+
+### =========================================================
+### DELETE PRICE (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/product-prices/{{productPriceId}}
+
+### =========================================================
+### GET UNIT PRICE (AUTO CONVERSION)
+### =========================================================
+
+GET {{baseUrl}}/pricing/unit/{{productId}}?currency=ARS
+
+### =========================================================
+### GET SELL PRICE WITH TAXES
+### =========================================================
+
+GET {{baseUrl}}/pricing/sell/{{productId}}?qty=2&currency=ARS&unitPrice=1500
+
+### =========================================================
+### CONVERT CURRENCY
+### =========================================================
+
+GET {{baseUrl}}/pricing/convert?amount=100&from=USD&to=ARS
+
+### =========================================================
+### CALCULATE CART
+### =========================================================
+
+POST {{baseUrl}}/pricing/cart
+Content-Type: application/json
+
+{
+  "currency": "ARS",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "quantity": 2
+    }
+  ]
+}

@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -132,23 +128,22 @@ export class AuthService {
 
     const GRACE_WINDOW_MS = 60000;
 
-    const stored: RefreshTokenWithUser | null =
-      await this.prisma.refresh_tokens.findFirst({
-        where: {
-          token_hash: hashed,
-          expires_at: { gt: now },
-          OR: [
-            { revoked: false },
-            {
-              revoked: true,
-              revoked_at: {
-                gte: new Date(now.getTime() - GRACE_WINDOW_MS),
-              },
+    const stored: RefreshTokenWithUser | null = await this.prisma.refresh_tokens.findFirst({
+      where: {
+        token_hash: hashed,
+        expires_at: { gt: now },
+        OR: [
+          { revoked: false },
+          {
+            revoked: true,
+            revoked_at: {
+              gte: new Date(now.getTime() - GRACE_WINDOW_MS),
             },
-          ],
-        },
-        include: { users: true },
-      });
+          },
+        ],
+      },
+      include: { users: true },
+    });
 
     if (!stored) {
       throw new UnauthorizedException('Refresh token invalido');
@@ -204,11 +199,7 @@ export class AuthService {
   // =========================
   // CHANGE PASSWORD
   // =========================
-  async changePassword(
-    userId: string,
-    currentPassword: string,
-    newPassword: string,
-  ) {
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
     const user = await this.prisma.users.findUnique({
       where: { id: userId },
     });

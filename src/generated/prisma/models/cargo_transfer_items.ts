@@ -365,14 +365,6 @@ export type cargo_transfer_itemsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type cargo_transfer_itemsCreateNestedManyWithoutCargo_transfersInput = {
   create?: Prisma.XOR<Prisma.cargo_transfer_itemsCreateWithoutCargo_transfersInput, Prisma.cargo_transfer_itemsUncheckedCreateWithoutCargo_transfersInput> | Prisma.cargo_transfer_itemsCreateWithoutCargo_transfersInput[] | Prisma.cargo_transfer_itemsUncheckedCreateWithoutCargo_transfersInput[]
   connectOrCreate?: Prisma.cargo_transfer_itemsCreateOrConnectWithoutCargo_transfersInput | Prisma.cargo_transfer_itemsCreateOrConnectWithoutCargo_transfersInput[]

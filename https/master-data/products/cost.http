@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:3000/api
+
+### =========================================================
+### VARIABLES
+### =========================================================
+
+@productId = 3c26c231-1f84-4de7-8e69-defac353ab83
+@currencyId = c02aaadd-43ed-4ee6-b6e6-69a791d55269
+
+### =========================================================
+### CALCULATE PRODUCT COST
+### =========================================================
+
+POST {{baseUrl}}/products/costing/calculate
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "currency_id": "{{currencyId}}",
+  "save_snapshot": false
+}
+
+###
+
+### =========================================================
+### CALCULATE PRODUCT COST + SAVE SNAPSHOT
+### =========================================================
+
+POST {{baseUrl}}/products/costing/calculate
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "currency_id": "{{currencyId}}",
+  "save_snapshot": true
+}
+
+###
+
+### =========================================================
+### GET COST HISTORY
+### =========================================================
+
+GET {{baseUrl}}/products/costing/{{productId}}/history
+
+###

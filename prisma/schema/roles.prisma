@@ -1,0 +1,76 @@
+//***---------------
+//** ROLES
+//***---------------
+
+enum PermissionEffect {
+  ALLOW
+  DENY
+  @@schema("tenant")
+}
+
+model permissions {
+  id               String                      @id @default(uuid()) @db.Uuid
+  code             String                      @unique @db.VarChar(120)
+  description      String?
+  active           Boolean                     @default(true)
+  role_permissions business_role_permissions[]
+  overrides        user_permission_overrides[]
+  created_at       DateTime                    @default(now())
+  updated_at       DateTime                    @updatedAt
+  deleted_at       DateTime?
+  created_by       String?                     @db.Uuid
+  updated_by       String?                     @db.Uuid
+  deleted_by       String?                     @db.Uuid
+    @@schema("tenant")
+}
+
+model business_roles {
+  id          String                      @id @default(uuid()) @db.Uuid
+  code        String                      @unique @db.VarChar(80)
+  name        String                      @db.VarChar(120)
+  description String?
+  is_system   Boolean                     @default(false)
+  active      Boolean                     @default(true)
+  deleted_at  DateTime?
+  created_by  String?                     @db.Uuid
+  updated_by  String?                     @db.Uuid
+  deleted_by  String?                     @db.Uuid
+  created_at  DateTime                    @default(now())
+  updated_at  DateTime                    @updatedAt
+  permissions business_role_permissions[]
+  users       business_user_roles[]
+    @@schema("tenant")
+}
+
+model business_role_permissions {
+  role_id       String         @db.Uuid
+  permission_id String         @db.Uuid
+  role          business_roles @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission    permissions    @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  @@id([role_id, permission_id])
+    @@schema("tenant")
+}
+
+model business_user_roles {
+  user_id     String         @db.Uuid
+  role_id     String         @db.Uuid
+  role        business_roles @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  assigned_at DateTime       @default(now())
+
+  @@id([user_id, role_id])
+  @@index([user_id])
+    @@schema("tenant")
+}
+
+model user_permission_overrides {
+  user_id       String           @db.Uuid
+  permission_id String           @db.Uuid
+  effect        PermissionEffect
+  permission    permissions      @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+  created_at    DateTime         @default(now())
+
+  @@id([user_id, permission_id])
+  @@index([user_id])
+    @@schema("tenant")
+}

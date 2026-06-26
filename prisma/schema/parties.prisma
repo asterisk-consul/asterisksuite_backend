@@ -1,0 +1,58 @@
+model business_parties {
+  id              String            @id @default(uuid()) @db.Uuid
+  type            String            @db.VarChar(20)
+  name            String            @db.VarChar(255)
+  tax_id          String?           @db.VarChar(50)
+  exemption_rate  Decimal           @default(0) @db.Decimal(5, 2)
+  active          Boolean           @default(true)
+  created_at      DateTime          @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?           @db.Uuid
+  updated_by      String?           @db.Uuid
+  deleted_by      String?           @db.Uuid
+  delivery_notes  delivery_notes[]
+  dispatch_orders dispatch_orders[]
+  documents       documents[]
+  party_contacts  party_contacts[]
+  party_locations party_locations[]
+
+  @@index([tax_id], map: "idx_business_parties_tax_id")
+    @@schema("tenant")
+}
+
+model party_locations {
+  id               String           @id @default(uuid()) @db.Uuid
+  party_id         String           @db.Uuid
+  location_id      String           @db.Uuid
+  label            String?          @db.VarChar(100)
+  created_at       DateTime         @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at       DateTime?
+  created_by       String?          @db.Uuid
+  updated_by       String?          @db.Uuid
+  deleted_by       String?          @db.Uuid
+  locations        locations        @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    @@schema("tenant")
+}
+
+model party_contacts {
+  id               String            @id @default(uuid()) @db.Uuid
+  party_id         String?           @db.Uuid
+  first_name       String            @db.VarChar(100)
+  last_name        String            @db.VarChar(100)
+  role             String?           @db.VarChar(100)
+  phone            String?           @db.VarChar(50)
+  email            String?           @db.VarChar(150)
+  created_at       DateTime          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at       DateTime?
+  created_by       String?           @db.Uuid
+  updated_by       String?           @db.Uuid
+  deleted_by       String?           @db.Uuid
+  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: Cascade)
+
+  @@index([party_id], map: "idx_party_contacts_party")
+    @@schema("tenant")
+}

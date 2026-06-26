@@ -197,7 +197,7 @@ export type DriversGroupByOutputType = {
   phone: string | null
   active: boolean
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -233,7 +233,7 @@ export type driversWhereInput = {
   phone?: Prisma.StringNullableFilter<"drivers"> | string | null
   active?: Prisma.BoolFilter<"drivers"> | boolean
   created_at?: Prisma.DateTimeFilter<"drivers"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"drivers"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"drivers"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"drivers"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"drivers"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"drivers"> | string | null
@@ -250,7 +250,7 @@ export type driversOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -270,7 +270,7 @@ export type driversWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"drivers"> | string | null
   active?: Prisma.BoolFilter<"drivers"> | boolean
   created_at?: Prisma.DateTimeFilter<"drivers"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"drivers"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"drivers"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"drivers"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"drivers"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"drivers"> | string | null
@@ -287,7 +287,7 @@ export type driversOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -308,7 +308,7 @@ export type driversScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"drivers"> | string | null
   active?: Prisma.BoolWithAggregatesFilter<"drivers"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"drivers"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"drivers"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"drivers"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"drivers"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"drivers"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"drivers"> | string | null
@@ -323,7 +323,7 @@ export type driversCreateInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -340,7 +340,7 @@ export type driversUncheckedCreateInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -357,7 +357,7 @@ export type driversUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -374,7 +374,7 @@ export type driversUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -391,7 +391,7 @@ export type driversCreateManyInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -406,7 +406,7 @@ export type driversUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -421,7 +421,7 @@ export type driversUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -521,7 +521,7 @@ export type driversCreateWithoutVehicleCombinationsInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -537,7 +537,7 @@ export type driversUncheckedCreateWithoutVehicleCombinationsInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -569,7 +569,7 @@ export type driversUpdateWithoutVehicleCombinationsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -585,7 +585,7 @@ export type driversUncheckedUpdateWithoutVehicleCombinationsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -601,7 +601,7 @@ export type driversCreateWithoutDriverDocumentsInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -617,7 +617,7 @@ export type driversUncheckedCreateWithoutDriverDocumentsInput = {
   phone?: string | null
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -649,7 +649,7 @@ export type driversUpdateWithoutDriverDocumentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -665,7 +665,7 @@ export type driversUncheckedUpdateWithoutDriverDocumentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -799,7 +799,7 @@ export type $driversPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     phone: string | null
     active: boolean
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

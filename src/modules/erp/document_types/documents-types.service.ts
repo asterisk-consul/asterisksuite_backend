@@ -33,6 +33,13 @@ export class DocumentsTypesService {
       include: {
         document_sequences: true,
         document_type_taxes: { include: { taxes: true } },
+        system_modules: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
       },
     });
   }
