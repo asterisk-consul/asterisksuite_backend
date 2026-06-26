@@ -148,6 +148,24 @@ export const CostValueType = {
 export type CostValueType = (typeof CostValueType)[keyof typeof CostValueType]
 
 
+export const CompanyRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  USER: 'USER'
+} as const
+
+export type CompanyRole = (typeof CompanyRole)[keyof typeof CompanyRole]
+
+
+export const PlatformRole = {
+  PLATFORM_OWNER: 'PLATFORM_OWNER',
+  SUPPORT: 'SUPPORT',
+  PLATFORM_ADMIN: 'PLATFORM_ADMIN'
+} as const
+
+export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
+
+
 export const PermissionEffect = {
   ALLOW: 'ALLOW',
   DENY: 'DENY'

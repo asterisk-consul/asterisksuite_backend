@@ -333,16 +333,6 @@ export type product_variant_costs = Prisma.product_variant_costsModel
  */
 export type companies = Prisma.companiesModel
 /**
- * Model users
- * 
- */
-export type users = Prisma.usersModel
-/**
- * Model company_users
- * 
- */
-export type company_users = Prisma.company_usersModel
-/**
  * Model refresh_tokens
  * 
  */
@@ -352,6 +342,16 @@ export type refresh_tokens = Prisma.refresh_tokensModel
  * 
  */
 export type audit_logs_public = Prisma.audit_logs_publicModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel
+/**
+ * Model company_users
+ * 
+ */
+export type company_users = Prisma.company_usersModel
 /**
  * Model permissions
  * 

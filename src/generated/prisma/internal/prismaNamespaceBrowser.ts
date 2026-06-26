@@ -114,10 +114,10 @@ export const ModelName = {
   product_variant_prices: 'product_variant_prices',
   product_variant_costs: 'product_variant_costs',
   companies: 'companies',
-  users: 'users',
-  company_users: 'company_users',
   refresh_tokens: 'refresh_tokens',
   audit_logs_public: 'audit_logs_public',
+  users: 'users',
+  company_users: 'company_users',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -1240,33 +1240,6 @@ export const CompaniesScalarFieldEnum = {
 export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
 
 
-export const UsersScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  password_hash: 'password_hash',
-  role: 'role',
-  active: 'active',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  deleted_at: 'deleted_at',
-  created_by: 'created_by',
-  updated_by: 'updated_by',
-  deleted_by: 'deleted_by'
-} as const
-
-export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
-
-
-export const Company_usersScalarFieldEnum = {
-  company_id: 'company_id',
-  user_id: 'user_id',
-  role: 'role'
-} as const
-
-export type Company_usersScalarFieldEnum = (typeof Company_usersScalarFieldEnum)[keyof typeof Company_usersScalarFieldEnum]
-
-
 export const Refresh_tokensScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -1294,6 +1267,33 @@ export const Audit_logs_publicScalarFieldEnum = {
 } as const
 
 export type Audit_logs_publicScalarFieldEnum = (typeof Audit_logs_publicScalarFieldEnum)[keyof typeof Audit_logs_publicScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password_hash: 'password_hash',
+  role: 'role',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const Company_usersScalarFieldEnum = {
+  company_id: 'company_id',
+  user_id: 'user_id',
+  role: 'role'
+} as const
+
+export type Company_usersScalarFieldEnum = (typeof Company_usersScalarFieldEnum)[keyof typeof Company_usersScalarFieldEnum]
 
 
 export const PermissionsScalarFieldEnum = {

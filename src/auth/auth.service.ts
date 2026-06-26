@@ -58,8 +58,22 @@ export class AuthService {
       role: user.role,
     };
 
+    // 🔎 Empresas del usuario
+    const companyMemberships = await this.prisma.company_users.findMany({
+      where: { user_id: user.id },
+      include: { company: true },
+    });
+
+    const companies = companyMemberships.map((cu) => ({
+      id: cu.company.id,
+      name: cu.company.name,
+      subdomain: cu.company.subdomain,
+      role: cu.role,
+    }));
+
     return {
       user: safeUser,
+      companies,
       accessToken,
       refreshToken,
     };
@@ -243,7 +257,8 @@ export class AuthService {
   }
 
   async getCurrentUser(userId: string) {
-    const user = await this.prisma.users.findUnique({
+    const publicPrisma = this.db.getDefaultClient();
+    const user = await publicPrisma.users.findUnique({
       where: {
         id: userId,
       },
