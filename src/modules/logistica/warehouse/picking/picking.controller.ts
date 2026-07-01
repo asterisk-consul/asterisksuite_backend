@@ -11,6 +11,7 @@ import { CreatePickingOrderDto } from './dto/create-picking-order.dto';
 import { ExecutePickingDto } from './dto/execute-picking-order.dto';
 import { TransferPalletDto } from './dto/transfer-pallet.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('logistica/picking')
 @UseGuards(JwtAuthGuard)
@@ -21,6 +22,7 @@ export class PickingController {
    * ETAPA 1
    * Crear orden de picking (reserva stock)
    */
+  // @RequirePermissions('picking.create')
   @Post('orders')
   async createOrder(@Body() dto: CreatePickingOrderDto) {
     return this.pickingService.createPickingOrder(dto);
@@ -30,6 +32,7 @@ export class PickingController {
    * ETAPA 2
    * Ejecutar picking (descuenta stock real)
    */
+  // @RequirePermissions('picking.execute')
   @Post('orders/:id/execute')
   async execute(
     @Param('id') pickingOrderId: string,
@@ -44,6 +47,7 @@ export class PickingController {
   /**
    * Transferencia de pallet entre depósitos
    */
+  // @RequirePermissions('picking.transfer')
   @Patch('pallets/transfer')
   async transfer(@Body() dto: TransferPalletDto) {
     return this.pickingService.transfer(dto);

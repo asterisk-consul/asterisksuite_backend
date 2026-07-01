@@ -10,12 +10,14 @@ import {
 import { QueryPurchasesDto } from './dto/query-purchases.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { GlobalPurchaseDocumentsResponseDto } from './dto/documents_purchases/global-purchases-documents';
+// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('purchases')
 @UseGuards(JwtAuthGuard)
 export class PurchasesController {
   constructor(private readonly purchasesService: PurchasesService) {}
 
+  // @RequirePermissions('purchases.read')
   @Get('summary')
   getPurchaseSummary(
     @Query() query: QueryPurchasesDto,
@@ -23,6 +25,7 @@ export class PurchasesController {
     return this.purchasesService.getPurchaseSummary(query);
   }
 
+  // @RequirePermissions('purchases.read')
   @Get('products/:id')
   getProductPurchaseDetail(
     @Param('id') id: string,
@@ -31,12 +34,15 @@ export class PurchasesController {
     return this.purchasesService.getProductPurchaseDetail(id, query);
   }
 
+  // @RequirePermissions('purchases.read')
   @Get('movements')
   getPurchaseMovements(
     @Query() query: QueryPurchasesDto,
   ): Promise<PurchaseMovementResponseDto[]> {
     return this.purchasesService.getPurchaseMovements(query);
   }
+
+  // @RequirePermissions('purchases.read')
   @Get('purchases-documents')
   getPurchaseDocuments(
     @Query() query: QueryPurchasesDto,
@@ -44,6 +50,7 @@ export class PurchasesController {
     return this.purchasesService.getPurchaseDocuments(query);
   }
 
+  // @RequirePermissions('purchases.read')
   @Get('products')
   getAvailableProducts(): Promise<AvailableProductResponseDto[]> {
     return this.purchasesService.getAvailableProducts();

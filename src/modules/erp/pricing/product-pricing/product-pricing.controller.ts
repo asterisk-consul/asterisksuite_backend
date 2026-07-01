@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
 import { ProductPricingFacadeService } from './product-pricing-facade.service';
+// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('pricing')
 export class ProductPricingController {
@@ -9,6 +10,7 @@ export class ProductPricingController {
   // PRECIO UNITARIO (LISTADOS / UI)
   // GET /pricing/unit/:productId?currency=ARS
   // ─────────────────────────────────────────────
+  // @RequirePermissions('product-pricing.read')
   @Get('unit/:productId')
   async getUnitPrice(
     @Param('productId') productId: string,
@@ -21,6 +23,7 @@ export class ProductPricingController {
   // PRECIO DE VENTA (CON IMPUESTOS)
   // GET /pricing/sell/:productId?qty=2&currency=USD
   // ─────────────────────────────────────────────
+  // @RequirePermissions('product-pricing.read')
   @Get('sell/:productId')
   async getSellPrice(
     @Param('productId') productId: string,
@@ -45,6 +48,7 @@ export class ProductPricingController {
   // CALCULAR CARRITO / DOCUMENTO
   // POST /pricing/cart
   // ─────────────────────────────────────────────
+  // @RequirePermissions('product-pricing.create')
   @Post('cart')
   async calculateCart(
     @Body()
@@ -63,6 +67,7 @@ export class ProductPricingController {
   // CONVERSIÓN SIMPLE (debug / admin)
   // GET /pricing/convert?amount=100&from=USD&to=ARS
   // ─────────────────────────────────────────────
+  // @RequirePermissions('product-pricing.read')
   @Get('convert')
   async convert(
     @Query('amount') amount: string,

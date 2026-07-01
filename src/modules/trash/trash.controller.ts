@@ -12,12 +12,14 @@ import { TrashService } from '@/common/services/trash.service';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+// import { RequirePermissions } from '@/auth/decorators/require-permissions.decorator';
 
 @Controller('trash')
 @UseGuards(JwtAuthGuard)
 export class TrashController {
   constructor(private readonly trashService: TrashService) {}
 
+  // @RequirePermissions('trash.read')
   // 🗑️ VER TODA LA PAPELERA
   @Get()
   findAll(@Query('days') days?: string, @Query('table') table?: string) {
@@ -27,6 +29,7 @@ export class TrashController {
     );
   }
 
+  // @RequirePermissions('trash.delete')
   // 🗑️ SOFT DELETE GENÉRICO
   @Delete(':table/:id')
   softDelete(
@@ -37,12 +40,14 @@ export class TrashController {
     return this.trashService.softDelete(table, id, user.id);
   }
 
+  // @RequirePermissions('trash.restore')
   // ♻️ RESTORE GENÉRICO
   @Patch(':table/:id/restore')
   restore(@Param('table') table: string, @Param('id') id: string) {
     return this.trashService.restore(table, id);
   }
 
+  // @RequirePermissions('trash.delete')
   // 🗑️ SOFT DELETE BULK
   @Delete('bulk/:table')
   softDeleteMany(
@@ -53,12 +58,14 @@ export class TrashController {
     return this.trashService.softDeleteMany(table, body.ids, user.id);
   }
 
+  // @RequirePermissions('trash.restore')
   // ♻️ RESTORE BULK
   @Patch('bulk/:table/restore')
   restoreMany(@Param('table') table: string, @Body() body: { ids: string[] }) {
     return this.trashService.restoreMany(table, body.ids);
   }
 
+  // @RequirePermissions('trash.delete')
   // 💀 HARD DELETE BULK
   @Delete('hard/:table')
   hardDeleteMany(

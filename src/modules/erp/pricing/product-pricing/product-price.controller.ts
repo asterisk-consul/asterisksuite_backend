@@ -18,6 +18,7 @@ import { CreateProductPriceDto } from './dto/create-product-price.dto';
 import { UpdateProductPriceDto } from './dto/update-product-price.dto';
 
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('product-prices')
 @UseGuards(JwtAuthGuard)
@@ -28,6 +29,7 @@ export class ProductPriceController {
   // CREATE
   // =========================================================
 
+  // @RequirePermissions('product-prices.create')
   @Post()
   create(
     @Body()
@@ -43,6 +45,7 @@ export class ProductPriceController {
   // FIND BY PRODUCT
   // =========================================================
 
+  // @RequirePermissions('product-prices.read')
   @Get('product/:productId')
   findByProduct(
     @Param('productId')
@@ -55,6 +58,7 @@ export class ProductPriceController {
   // FIND ONE
   // =========================================================
 
+  // @RequirePermissions('product-prices.read')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productPriceService.findOne(id);
@@ -64,6 +68,7 @@ export class ProductPriceController {
   // UPDATE
   // =========================================================
 
+  // @RequirePermissions('product-prices.update')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -77,6 +82,7 @@ export class ProductPriceController {
   // DELETE
   // =========================================================
 
+  // @RequirePermissions('product-prices.delete')
   @Delete(':id')
   remove(
     @Param('id') id: string,

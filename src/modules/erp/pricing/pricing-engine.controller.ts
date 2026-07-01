@@ -3,6 +3,7 @@
 import { Controller, Get, Query, Param, ParseFloatPipe } from '@nestjs/common';
 
 import { PricingEngineService } from './pricing-engine.service';
+// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('pricing-engine')
 export class PricingEngineController {
@@ -11,6 +12,7 @@ export class PricingEngineController {
   // ─────────────────────────────────────────────
   // GET PRICE
   // ─────────────────────────────────────────────
+  // @RequirePermissions('pricing-engine.read')
   @Get('product/:productId')
   async resolveProductPrice(
     @Param('productId') productId: string,
@@ -24,6 +26,7 @@ export class PricingEngineController {
   // ─────────────────────────────────────────────
   // CALCULATE ITEM
   // ─────────────────────────────────────────────
+  // @RequirePermissions('pricing-engine.read')
   @Get('product/:productId/item')
   async resolveItem(
     @Param('productId')

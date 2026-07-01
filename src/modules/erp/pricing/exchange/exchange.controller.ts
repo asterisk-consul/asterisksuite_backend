@@ -10,6 +10,7 @@ import {
 import { CurrencyRateType } from '@/generated/prisma/enums';
 
 import { ExchangeService } from './exchange.service';
+// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('exchange')
 export class ExchangeController {
@@ -19,11 +20,13 @@ export class ExchangeController {
   // SYNC
   // =========================================================
 
+  // @RequirePermissions('exchange.sync')
   @Post('sync/official')
   syncOfficialRates() {
     return this.exchangeService.syncOfficialRates();
   }
 
+  // @RequirePermissions('exchange.sync')
   @Post('sync/dollars')
   syncDollarRates() {
     return this.exchangeService.syncDollarRates();
@@ -33,6 +36,7 @@ export class ExchangeController {
   // CONVERT
   // =========================================================
 
+  // @RequirePermissions('exchange.read')
   @Get('convert')
   convert(
     @Query('amount', ParseFloatPipe)
@@ -54,6 +58,7 @@ export class ExchangeController {
   // RATE
   // =========================================================
 
+  // @RequirePermissions('exchange.read')
   @Get('rate/:from/:to')
   getRate(
     @Param('from')

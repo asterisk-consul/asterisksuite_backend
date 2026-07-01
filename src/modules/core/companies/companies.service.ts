@@ -1,18 +1,283 @@
 import { execSync } from 'child_process';
-import { Injectable, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, ConflictException, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CreateCompanyUserDto } from './dto/create-company-user.dto';
 import { Pool, Client } from 'pg';
 import * as bcrypt from 'bcrypt';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@/generated/prisma/client';
 
 @Injectable()
 export class CompaniesService {
+  private readonly logger = new Logger(CompaniesService.name);
+
   constructor(private db: PrismaService) {}
 
   private get prisma() {
     return this.db.getDefaultClient();
+  }
+
+  // ─── Default RBAC seed data ────────────────────────────────────
+  // NOTA: Estos permisos se crean automáticamente al crear una empresa.
+  // Para agregar permisos de nuevos módulos, descomentar en rbac.seed.ts
+  // y agregarlos aquí en el mismo orden.
+
+  private readonly defaultPermissions = [
+    // Access Control
+    { code: 'roles.read', description: 'Ver roles' },
+    { code: 'roles.create', description: 'Crear roles' },
+    { code: 'roles.update', description: 'Editar roles' },
+    { code: 'roles.delete', description: 'Eliminar roles' },
+    { code: 'roles.manage_permissions', description: 'Asignar permisos a roles' },
+    { code: 'roles.test', description: 'Probar permisos de usuarios' },
+    { code: 'permissions.read', description: 'Ver catálogo de permisos' },
+    { code: 'users.read_roles', description: 'Ver roles de un usuario' },
+    { code: 'users.assign_roles', description: 'Asignar roles a usuarios' },
+    { code: 'users.read_permissions', description: 'Ver permisos efectivos de un usuario' },
+
+    // Master Data - Products
+    { code: 'products.read', description: 'Ver productos' },
+    { code: 'products.create', description: 'Crear productos' },
+    { code: 'products.update', description: 'Editar productos' },
+    { code: 'products.delete', description: 'Eliminar productos' },
+
+    // ERP - Documents
+    { code: 'documents.read', description: 'Ver documentos' },
+    { code: 'documents.create', description: 'Crear documentos' },
+    { code: 'documents.update', description: 'Editar documentos' },
+    { code: 'documents.delete', description: 'Eliminar documentos' },
+    { code: 'documents.confirm', description: 'Confirmar documentos' },
+    { code: 'documents.cancel', description: 'Cancelar documentos' },
+
+    // ERP - Currencies
+    { code: 'currencies.read', description: 'Ver monedas' },
+    { code: 'currencies.create', description: 'Crear monedas' },
+    { code: 'currencies.update', description: 'Editar monedas' },
+    { code: 'currencies.delete', description: 'Eliminar monedas' },
+
+    // ERP - Taxes
+    { code: 'taxes.read', description: 'Ver impuestos' },
+    { code: 'taxes.create', description: 'Crear impuestos' },
+    { code: 'taxes.update', description: 'Editar impuestos' },
+    { code: 'taxes.delete', description: 'Eliminar impuestos' },
+
+    // ERP - Accounts
+    { code: 'accounts.read', description: 'Ver cuentas contables' },
+    { code: 'accounts.create', description: 'Crear cuentas contables' },
+    { code: 'accounts.update', description: 'Editar cuentas contables' },
+    { code: 'accounts.delete', description: 'Eliminar cuentas contables' },
+
+    // Inventory - Units
+    { code: 'units.read', description: 'Ver unidades de medida' },
+    { code: 'units.create', description: 'Crear unidades de medida' },
+    { code: 'units.update', description: 'Editar unidades de medida' },
+    { code: 'units.delete', description: 'Eliminar unidades de medida' },
+
+    // Inventory - Categories
+    { code: 'categories.read', description: 'Ver categorías' },
+    { code: 'categories.create', description: 'Crear categorías' },
+    { code: 'categories.update', description: 'Editar categorías' },
+    { code: 'categories.delete', description: 'Eliminar categorías' },
+
+    // Logística - Warehouses
+    { code: 'warehouses.read', description: 'Ver almacenes' },
+    { code: 'warehouses.create', description: 'Crear almacenes' },
+    { code: 'warehouses.update', description: 'Editar almacenes' },
+    { code: 'warehouses.delete', description: 'Eliminar almacenes' },
+
+    // Logística - Trips
+    { code: 'trips.read', description: 'Ver viajes' },
+    { code: 'trips.create', description: 'Crear viajes' },
+    { code: 'trips.update', description: 'Editar viajes' },
+    { code: 'trips.delete', description: 'Eliminar viajes' },
+
+    // Core - Companies
+    { code: 'companies.read', description: 'Ver empresas' },
+    { code: 'companies.create', description: 'Crear empresas' },
+    { code: 'companies.update', description: 'Editar empresas' },
+    { code: 'companies.delete', description: 'Eliminar empresas' },
+
+    // ═════════════════════════════════════════════════════════════
+    // MÓDULOS PENDIENTES — agregar aquí al descomentar en seed
+    // ═════════════════════════════════════════════════════════════
+    // currency_rates.read, currency_rates.create, currency_rates.update, currency_rates.delete
+    // document_types.read, document_types.create, document_types.update, document_types.delete
+    // purchases.read, purchases.create, purchases.update, purchases.delete, purchases.confirm, purchases.cancel
+    // sales_reports.read
+    // pricing.read, pricing.create, pricing.update, pricing.delete
+    // exchange.read, exchange.sync
+    // business_parties.read, business_parties.create, business_parties.update, business_parties.delete
+    // contacts.read, contacts.create, contacts.update, contacts.delete
+    // locations.read, locations.create, locations.update, locations.delete
+    // product_variants.read, product_variants.create, product_variants.update, product_variants.delete
+    // product_components.read, product_components.create, product_components.update, product_components.delete
+    // attributes.read, attributes.create, attributes.update, attributes.delete
+    // product_attribute_values.read, product_attribute_values.create, product_attribute_values.update, product_attribute_values.delete
+    // product_categories.read, product_categories.create, product_categories.delete
+    // tags.read, tags.create, tags.update, tags.delete
+    // product_tags.read, product_tags.create, product_tags.delete
+    // engineering.read, engineering.create, engineering.update, engineering.delete
+    // cost_templates.read, cost_templates.create, cost_templates.update, cost_templates.delete
+    // cost_components.read, cost_components.create, cost_components.update, cost_components.delete
+    // document_sequences.read, document_sequences.create
+    // drivers.read, drivers.create, drivers.update, drivers.delete
+    // vehicles.read, vehicles.create, vehicles.update, vehicles.delete
+    // vehicle_combinations.read, vehicle_combinations.create, vehicle_combinations.update, vehicle_combinations.delete
+    // corridors.read, corridors.create, corridors.update, corridors.delete
+    // transfer_rates.read, transfer_rates.create, transfer_rates.update, transfer_rates.delete
+    // dispatch_orders.read, dispatch_orders.create, dispatch_orders.update, dispatch_orders.delete
+    // delivery_notes.read, delivery_notes.create, delivery_notes.update, delivery_notes.confirm, delivery_notes.delete
+    // transport_document_types.read, transport_document_types.create, transport_document_types.update, transport_document_types.delete
+    // pallets.read, pallets.create, pallets.update, pallets.delete
+    // picking.read, picking.create, picking.execute, picking.transfer
+    // stock.read, stock.movements, stock.create
+    // media.read, media.upload
+    // trash.read, trash.restore, trash.delete
+    // data_import.execute
+  ];
+
+  private readonly defaultRoles = [
+    {
+      code: 'admin',
+      name: 'Administrador',
+      description: 'Acceso total al sistema',
+      is_system: true,
+      permissionCodes: this.defaultPermissions.map((p) => p.code),
+    },
+    {
+      code: 'manager',
+      name: 'Gerente',
+      description: 'Acceso a módulos de negocio sin administración de roles',
+      is_system: true,
+      permissionCodes: this.defaultPermissions
+        .filter((p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.'))
+        .map((p) => p.code),
+    },
+    {
+      code: 'user',
+      name: 'Usuario',
+      description: 'Lectura y escritura básica',
+      is_system: true,
+      permissionCodes: [
+        'products.read', 'products.create', 'products.update',
+        'documents.read', 'documents.create', 'documents.update',
+        'currencies.read', 'taxes.read', 'accounts.read',
+        'units.read', 'units.create', 'units.update',
+        'categories.read', 'categories.create', 'categories.update',
+        'warehouses.read', 'trips.read', 'companies.read',
+      ],
+    },
+    {
+      code: 'viewer',
+      name: 'Observador',
+      description: 'Solo lectura',
+      is_system: true,
+      permissionCodes: this.defaultPermissions.filter((p) => p.code.endsWith('.read')).map((p) => p.code),
+    },
+  ];
+
+  // ─── Tenant client helper ──────────────────────────────────────
+
+  private createTenantPrismaClient(tenantDb: string) {
+    const connectionString = `${process.env.DATABASE_URL_BASE}${tenantDb}`;
+    const pool = new Pool({
+      connectionString,
+      options: `-c search_path="tenant",public`,
+      max: 5,
+    });
+    const adapter = new PrismaPg(pool, { schema: 'tenant' });
+    const client = new PrismaClient({ adapter });
+    return { client, pool };
+  }
+
+  // ─── RBAC seed for new tenant ──────────────────────────────────
+
+  private async seedRbacForTenant(tenantDb: string): Promise<void> {
+    const { client: prisma, pool } = this.createTenantPrismaClient(tenantDb);
+
+    try {
+      // 1. Create permissions
+      for (const perm of this.defaultPermissions) {
+        await prisma.permissions.upsert({
+          where: { code: perm.code },
+          update: { description: perm.description, active: true },
+          create: { code: perm.code, description: perm.description },
+        });
+      }
+      this.logger.log(`Tenant "${tenantDb}": ${this.defaultPermissions.length} permisos creados`);
+
+      // 2. Create roles and assign permissions
+      for (const role of this.defaultRoles) {
+        const created = await prisma.business_roles.upsert({
+          where: { code: role.code },
+          update: { name: role.name, description: role.description, is_system: role.is_system },
+          create: {
+            code: role.code,
+            name: role.name,
+            description: role.description,
+            is_system: role.is_system,
+          },
+        });
+
+        // Clean existing permissions for this role
+        await prisma.business_role_permissions.deleteMany({
+          where: { role_id: created.id },
+        });
+
+        // Get permissions by code
+        const perms = await prisma.permissions.findMany({
+          where: { code: { in: role.permissionCodes }, active: true },
+        });
+
+        // Assign permissions
+        if (perms.length) {
+          await prisma.business_role_permissions.createMany({
+            data: perms.map((p) => ({
+              role_id: created.id,
+              permission_id: p.id,
+            })),
+          });
+        }
+
+        this.logger.log(`Tenant "${tenantDb}": Rol "${role.name}" → ${perms.length} permisos`);
+      }
+    } finally {
+      await prisma.$disconnect();
+      await pool.end();
+    }
+  }
+
+  // ─── Assign admin role to creator ──────────────────────────────
+
+  private async assignDefaultRoleToUser(tenantDb: string, userId: string): Promise<void> {
+    const { client: prisma, pool } = this.createTenantPrismaClient(tenantDb);
+
+    try {
+      // Find the admin role
+      const adminRole = await prisma.business_roles.findUnique({
+        where: { code: 'admin' },
+      });
+
+      if (!adminRole) {
+        this.logger.warn(`Tenant "${tenantDb}": Rol "admin" no encontrado, saltando asignación`);
+        return;
+      }
+
+      // Assign admin role to the user
+      await prisma.business_user_roles.create({
+        data: {
+          user_id: userId,
+          role_id: adminRole.id,
+        },
+      });
+
+      this.logger.log(`Tenant "${tenantDb}": Rol "admin" asignado al usuario ${userId}`);
+    } finally {
+      await prisma.$disconnect();
+      await pool.end();
+    }
   }
 
   private async assertUserIsCompanyMember(userId: string, companyId: string) {
@@ -144,6 +409,12 @@ export class CompaniesService {
     });
 
     console.log('COMPANY_USER created:', cu);
+
+    // ── Seed RBAC defaults into tenant DB ──────────────────────
+    await this.seedRbacForTenant(tenantDb);
+
+    // ── Assign admin role to the creator ───────────────────────
+    await this.assignDefaultRoleToUser(tenantDb, user.id);
 
     return company;
   }
