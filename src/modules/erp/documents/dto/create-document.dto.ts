@@ -1,14 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Min,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsDateString, IsNumber, IsOptional, IsString, IsUUID, Min, ValidateNested } from 'class-validator';
 
 export class CreateDocumentItemTaxDto {
   @IsUUID()
@@ -77,6 +68,10 @@ export class CreateDocumentDto {
   descrip?: string;
 
   @IsString()
+  @IsOptional() // o IsNotEmpty() si es requerido
+  currency_code!: string;
+
+  @IsString()
   @IsOptional()
   ref?: string;
 
@@ -105,9 +100,6 @@ export class CreateDocumentDto {
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentItemDto)
   items!: CreateDocumentItemDto[];
-
-  @IsString()
-  currency_code!: string;
 
   // ✅ opcional (backend los genera)
   @IsArray()

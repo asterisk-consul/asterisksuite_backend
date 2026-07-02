@@ -1,0 +1,135 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+@docId =
+@partyId = 6199dbb7-d74e-46af-95e5-3ee2e4e793ef
+@productId = 593f4d4d-1f0b-4c16-b9ce-15ce1b4e201d
+@docTypeId = 84052621-1431-425b-a301-ce6429fafb6a
+
+### =====================================================
+### Listar todos los documentos de compra
+### =====================================================
+
+GET {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar solo borradores
+### =====================================================
+
+GET {{baseUrl}}/documents/purchases-documents?status=0
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar solo pendientes
+### =====================================================
+
+GET {{baseUrl}}/documents/purchases-documents?status=1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Listar por tipo de documento
+### =====================================================
+
+GET {{baseUrl}}/documents/purchases-documents?documentTypeId={{docTypeId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Obtener documento por ID
+### =====================================================
+
+GET {{baseUrl}}/documents/purchases-documents/{{docId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Crear documento manual
+### =====================================================
+
+POST {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "document_type_id": "{{docTypeId}}",
+  "party_id": "{{partyId}}",
+  "date": "2026-04-23",
+  "descrip": "Factura de Compra",
+  "ref": "REF-001",
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 1,
+      "unit_price": 0
+    }
+  ]
+}
+
+###
+
+### =====================================================
+### Actualizar documento
+### =====================================================
+
+PATCH {{baseUrl}}/documents/purchases-documents/{{docId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 2,
+      "unit_price": 1000
+    }
+  ],
+  "descrip": "Factura de compra actualizada"
+}
+
+###
+
+### =====================================================
+### Confirmar documento
+### =====================================================
+
+PATCH {{baseUrl}}/documents/purchases-documents/{{docId}}/confirm
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Anular documento
+### =====================================================
+
+PATCH {{baseUrl}}/documents/purchases-documents/{{docId}}/cancel
+Authorization: Bearer {{accessToken}}
+
+###
+
+### =====================================================
+### Eliminar documento
+### =====================================================
+
+DELETE {{baseUrl}}/documents/purchases-documents/{{docId}}
+Authorization: Bearer {{accessToken}}
