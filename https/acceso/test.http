@@ -11,7 +11,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@mail.com",
+  "email": "usuariodev@test.com",
   "password": "123456"
 }
 
@@ -28,6 +28,7 @@ Content-Type: application/json
 
 GET {{baseUrl}}/access-control/permissions
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
