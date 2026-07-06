@@ -19,18 +19,8 @@ if (!DATABASE_URL_BASE) {
   throw new Error('DATABASE_URL_BASE environment variable is not defined');
 }
 
-// ✅ Cliente compartido para audit log — apunta a DB pública
-const publicRawClient = new PrismaClient({
-  adapter: new PrismaPg(
-    new Pool({
-      connectionString: DATABASE_URL_PUBLIC,
-      options: `-c search_path="public"`,
-    }),
-    { schema: 'public' },
-  ),
-});
-
 // ✅ Cliente para tablas PUBLIC (users, companies, refresh_tokens...)
+// Audit → escribe en public.audit_logs via audit_logs_public
 function createPublicClient() {
   const pool = new Pool({
     connectionString: DATABASE_URL_PUBLIC,
@@ -40,11 +30,14 @@ function createPublicClient() {
   const adapter = new PrismaPg(pool, { schema: 'public' });
   const raw = new PrismaClient({ adapter });
 
-  return { client: withAudit(publicRawClient)(raw), pool };
+  // ✅ Public: audit logs → public.audit_logs (via audit_logs_public model)
+  const writeAuditLog = (data: any) => raw.audit_logs_public.create({ data });
+  return { client: withAudit(writeAuditLog)(raw), pool };
 }
 
 // ✅ Cliente para tablas TENANT (products, taxes, transfer_rates...)
 // Cada tenant tiene su propia DB con schema "tenant" fijo
+// Audit → escribe en tenant.audit_logs via audit_logs
 function createTenantClient(tenantDb: string) {
   // ✅ URL dinámica — cambia la base de datos por tenant
   const connectionString = `${DATABASE_URL_BASE}${tenantDb}`;
@@ -60,7 +53,9 @@ function createTenantClient(tenantDb: string) {
   const adapter = new PrismaPg(pool, { schema: 'tenant' });
   const raw = new PrismaClient({ adapter });
 
-  return { client: withAudit(publicRawClient)(raw), pool };
+  // ✅ Tenant: audit logs → tenant.audit_logs (via audit_logs model)
+  const writeAuditLog = (data: any) => raw.audit_logs.create({ data });
+  return { client: withAudit(writeAuditLog)(raw), pool };
 }
 
 // ✅ Tipos inferidos
@@ -142,8 +137,5 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
       await pool.end();
     }
     this.tenantPoolCache.clear();
-
-    // ✅ Desconectar cliente de audit
-    await publicRawClient.$disconnect();
   }
 }

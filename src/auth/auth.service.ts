@@ -21,7 +21,7 @@ export class AuthService {
 
   // Getter privado para reutilizar en todos los métodos
   private get prisma() {
-    return this.db.getClientForCurrentContext();
+    return this.db.getDefaultClient();
   }
 
   private hashToken(token: string) {

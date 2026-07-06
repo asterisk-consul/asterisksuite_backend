@@ -20,7 +20,7 @@ enum AuditAction {
   UPDATE
   DELETE
   RESTORE
-  @@schema("tenant")
+  @@schema("public")
 }
 
 enum ProductType {

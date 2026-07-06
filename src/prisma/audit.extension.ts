@@ -1,10 +1,9 @@
 import { requestContext } from '@/common/context/request-context';
-import { PrismaClient } from '../generated/prisma/client';
+import { AuditAction } from '../generated/prisma/client';
 
 function isRestore(oldData: any, newData: any): boolean {
   return oldData?.deleted_at != null && newData?.deleted_at == null;
 }
-import { AuditAction } from '../generated/prisma/client';
 
 function isSoftDeleteChange(newData: any): boolean {
   return newData?.deleted_at != null;
@@ -23,16 +22,18 @@ function resolveAction(
   return AuditAction.UPDATE;
 }
 
-// ✅ Accepts publicClient separately so audit logs always go to public.audit_logs
-export function withAudit(publicClient: PrismaClient) {
+// ✅ writeAuditLog: callback that writes to the correct audit_logs table
+//   - Public context:  (data) => rawClient.audit_logs_public.create({ data }) → public.audit_logs
+//   - Tenant context:  (data) => rawClient.audit_logs.create({ data }) → tenant.audit_logs
+export function withAudit(writeAuditLog: (data: any) => Promise<any>) {
   return (client: any) =>
     client.$extends({
       name: 'audit',
       query: {
         $allModels: {
           async create({ model, args, query }: any) {
-            // ✅ Guard: never audit the audit table itself
-            if (model === 'audit_logs') return query(args);
+            if (model === 'audit_logs' || model === 'audit_logs_public')
+              return query(args);
 
             const ctx = requestContext.getStore();
             const result = await query(args);
@@ -41,15 +42,13 @@ export function withAudit(publicClient: PrismaClient) {
             if (!recordId) return result;
 
             try {
-              await publicClient.audit_logs.create({
-                data: {
-                  table_name: model,
-                  record_id: recordId,
-                  new_data: result,
-                  action: 'CREATE',
-                  changed_by: ctx?.userId ?? null,
-                  ip_address: ctx?.ip ?? null,
-                },
+              await writeAuditLog({
+                table_name: model,
+                record_id: recordId,
+                new_data: result,
+                action: 'CREATE',
+                changed_by: ctx?.userId ?? null,
+                ip_address: ctx?.ip ?? null,
               });
             } catch (e) {
               console.error('Audit log failed (create):', e);
@@ -59,14 +58,14 @@ export function withAudit(publicClient: PrismaClient) {
           },
 
           async update({ model, args, query }: any) {
-            if (model === 'audit_logs') return query(args);
+            if (model === 'audit_logs' || model === 'audit_logs_public')
+              return query(args);
 
             const ctx = requestContext.getStore();
             let old: any = null;
 
             try {
               if (args?.where) {
-                // ✅ Use client (tenant-scoped) to read old data
                 old = await client[model].findUnique({ where: args.where });
               }
             } catch (e) {}
@@ -77,16 +76,14 @@ export function withAudit(publicClient: PrismaClient) {
             const action = resolveAction('update', old, result);
 
             try {
-              await publicClient.audit_logs.create({
-                data: {
-                  table_name: model,
-                  record_id: recordId,
-                  old_data: old,
-                  new_data: result,
-                  action,
-                  changed_by: ctx?.userId ?? null,
-                  ip_address: ctx?.ip ?? null,
-                },
+              await writeAuditLog({
+                table_name: model,
+                record_id: recordId,
+                old_data: old,
+                new_data: result,
+                action,
+                changed_by: ctx?.userId ?? null,
+                ip_address: ctx?.ip ?? null,
               });
             } catch (e) {
               console.error('Audit log failed (update):', e);
@@ -96,14 +93,14 @@ export function withAudit(publicClient: PrismaClient) {
           },
 
           async delete({ model, args, query }: any) {
-            if (model === 'audit_logs') return query(args);
+            if (model === 'audit_logs' || model === 'audit_logs_public')
+              return query(args);
 
             const ctx = requestContext.getStore();
             let old: any = null;
 
             try {
               if (args?.where) {
-                // ✅ Use client (tenant-scoped) to read old data before delete
                 old = await client[model].findUnique({ where: args.where });
               }
             } catch (e) {}
@@ -112,16 +109,14 @@ export function withAudit(publicClient: PrismaClient) {
             const recordId = old?.id?.toString() ?? JSON.stringify(args.where);
 
             try {
-              await publicClient.audit_logs.create({
-                data: {
-                  table_name: model,
-                  record_id: recordId,
-                  old_data: old,
-                  new_data: result ?? null,
-                  action: 'DELETE',
-                  changed_by: ctx?.userId ?? null,
-                  ip_address: ctx?.ip ?? null,
-                },
+              await writeAuditLog({
+                table_name: model,
+                record_id: recordId,
+                old_data: old,
+                new_data: result ?? null,
+                action: 'DELETE',
+                changed_by: ctx?.userId ?? null,
+                ip_address: ctx?.ip ?? null,
               });
             } catch (e) {
               console.error('Audit log failed (delete):', e);
