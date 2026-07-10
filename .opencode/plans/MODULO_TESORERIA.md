@@ -158,6 +158,14 @@ enum InstallmentStatus {
   PAID        // Cuota pagada
   OVERDUE     // Vencida
 }
+
+// Tipo de tercero (business_parties)
+enum PartyType {
+  CUSTOMER    // Cliente
+  SUPPLIER    // Proveedor
+  EMPLOYEE    // Empleado
+  PARTNER     // Socio
+}
 ```
 
 ---
@@ -2298,6 +2306,926 @@ Cuando se crea una compra en cuotas:
 
 ---
 
+## Parte 14: Transferencias y Caja Principal
+
+### 14.1 Cambios a Modelos Existentes
+
+#### 14.1.1 `cash_boxes` — Agregar campo `is_main`
+
+```prisma
+// prisma/schema/payments.prisma - Modificar model cash_boxes:
+
+model cash_boxes {
+  // ... campos existentes ...
+  is_main         Boolean          @default(false)  // Marca como caja principal
+  // ... resto igual ...
+}
+```
+
+#### 14.1.2 `cash_box_sessions` — Campos para cierre con transferencia
+
+```prisma
+// prisma/schema/payments.prisma - Modificar model cash_box_sessions:
+
+model cash_box_sessions {
+  // ... campos existentes ...
+  auto_transfer_enabled Boolean    @default(false)
+  transfer_dest_id      String?    @db.Uuid
+  transfer_dest_type    String?    @db.VarChar(20)       // "cash_box" o "bank_account"
+  transferred_amount    Decimal?   @db.Decimal(15, 2)
+  transferred_at        DateTime?
+  // ... resto igual ...
+}
+```
+
+#### 14.1.3 `AccountEntryType` — Agregar tipos de transferencia
+
+```prisma
+// prisma/schema/enums.prisma - Modificar enum AccountEntryType:
+
+enum AccountEntryType {
+  // ... valores existentes ...
+  TRANSFER_OUT
+  TRANSFER_IN
+}
+```
+
+### 14.2 Nuevo Modelo: `cash_box_transfers`
+
+```prisma
+// prisma/schema/payments.prisma - Agregar:
+
+model cash_box_transfers {
+  id              String           @id @default(uuid()) @db.Uuid
+  session_id      String?          @db.Uuid
+  source_type     String           @db.VarChar(20)       // "cash_box" o "bank_account"
+  source_id       String           @db.Uuid
+  dest_type       String           @db.VarChar(20)       // "cash_box" o "bank_account"
+  dest_id         String           @db.Uuid
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  rate_type       CurrencyRateType?
+  converted_amount Decimal?        @db.Decimal(15, 2)
+  description     String?          @db.VarChar(255)
+  reference       String?          @db.VarChar(100)
+  transfer_type   String           @db.VarChar(30)       // "manual", "auto_close", "compensation"
+  status          String           @default("completed") @db.VarChar(20)
+  created_at      DateTime         @default(now())
+  updated_at      DateTime?        @updatedAt
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+  session         cash_box_sessions? @relation(fields: [session_id], references: [id])
+
+  @@index([source_type, source_id])
+  @@index([dest_type, dest_id])
+  @@index([session_id])
+  @@schema("tenant")
+}
+```
+
+### 14.3 DTOs
+
+#### 14.3.1 `create-cash-box-transfer.dto.ts`
+
+```typescript
+// src/modules/tesoreria/dto/create-cash-box-transfer.dto.ts
+
+import { IsIn, IsUUID, IsString, IsOptional, Min, IsNumber } from 'class-validator';
+import { CurrencyRateType } from '@/generated/prisma/enums';
+
+export class CreateCashBoxTransferDto {
+  @IsIn(['cash_box', 'bank_account'])
+  source_type!: string;
+
+  @IsUUID()
+  source_id!: string;
+
+  @IsIn(['cash_box', 'bank_account'])
+  dest_type!: string;
+
+  @IsUUID()
+  dest_id!: string;
+
+  @IsNumber()
+  @Min(0.01)
+  amount!: number;
+
+  @IsString()
+  currency_code!: string;
+
+  @IsOptional()
+  @IsNumber()
+  exchange_rate?: number;
+
+  @IsOptional()
+  @IsIn(['OFFICIAL', 'BLUE', 'MEP', 'CCL', 'WHOLESALE', 'CRYPTO', 'CARD'])
+  rate_type?: CurrencyRateType;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  reference?: string;
+}
+```
+
+#### 14.3.2 `close-cash-box.dto.ts` (actualizado)
+
+```typescript
+// src/modules/tesoreria/dto/close-cash-box.dto.ts
+
+import { IsNumber, IsOptional, IsBoolean, IsUUID, IsIn, ValidateIf, Min } from 'class-validator';
+
+export class CloseCashBoxDto {
+  @IsNumber()
+  @Min(0)
+  actual_balance!: number;
+
+  @IsOptional()
+  @IsBoolean()
+  auto_transfer?: boolean;
+
+  @ValidateIf(o => o.auto_transfer === true)
+  @IsOptional()
+  @IsUUID()
+  transfer_dest_id?: string;
+
+  @ValidateIf(o => o.auto_transfer === true)
+  @IsOptional()
+  @IsIn(['cash_box', 'bank_account'])
+  transfer_dest_type?: string;
+}
+```
+
+### 14.4 Services
+
+#### 14.4.1 `cash-box-transfers.service.ts`
+
+```typescript
+// src/modules/tesoreria/services/cash-box-transfers.service.ts
+
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
+import { CreateCashBoxTransferDto } from '../dto/create-cash-box-transfer.dto';
+import { ExchangeService } from '@/modules/erp/pricing/exchange/exchange.service';
+import { AccountEntryType, CurrencyRateType } from '@/generated/prisma/enums';
+
+@Injectable()
+export class CashBoxTransfersService {
+  constructor(
+    private db: PrismaService,
+    private exchangeService: ExchangeService,
+  ) {}
+
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
+
+  async create(dto: CreateCashBoxTransferDto, userId: string) {
+    // 1. Validar que origen y destino sean diferentes
+    if (dto.source_type === dto.dest_type && dto.source_id === dto.dest_id) {
+      throw new BadRequestException('Origen y destino deben ser diferentes');
+    }
+
+    // 2. Verificar fondos suficientes en origen
+    const sourceBalance = await this.getBalance(dto.source_type, dto.source_id, dto.currency_code);
+    if (sourceBalance < dto.amount) {
+      throw new BadRequestException(
+        `Fondos insuficientes en origen. Disponible: ${sourceBalance}, Solicitado: ${dto.amount}`
+      );
+    }
+
+    // 3. Calcular conversión si moneda distinta
+    let exchangeRate = dto.exchange_rate;
+    let rateType = dto.rate_type;
+    let convertedAmount = dto.amount;
+
+    const destCurrency = await this.getDestCurrencyCode(dto.dest_type, dto.dest_id);
+    if (destCurrency && destCurrency !== dto.currency_code) {
+      if (!exchangeRate) {
+        const rateResult = await this.exchangeService.convertAmount(
+          dto.amount,
+          dto.currency_code,
+          destCurrency,
+          rateType,
+        );
+        exchangeRate = rateResult.rate;
+        convertedAmount = rateResult.converted_amount;
+      } else {
+        convertedAmount = dto.amount * exchangeRate;
+      }
+    }
+
+    // 4. Ejecutar en transacción
+    return this.prisma.$transaction(async (tx) => {
+      // Descontar de origen
+      await this.adjustBalance(tx, dto.source_type, dto.source_id, dto.currency_code, -dto.amount);
+
+      // Sumar a destino
+      await this.adjustBalance(tx, dto.dest_type, dto.dest_id, destCurrency ?? dto.currency_code, convertedAmount);
+
+      // Crear movimiento en origen
+      const sourceBalanceBefore = sourceBalance;
+      const sourceBalanceAfter = sourceBalance - dto.amount;
+      await this.createMovement(tx, {
+        source_type: dto.source_type,
+        source_id: dto.source_id,
+        type: AccountEntryType.TRANSFER_OUT,
+        amount: -dto.amount,
+        currency_code: dto.currency_code,
+        balance_before: sourceBalanceBefore,
+        balance_after: sourceBalanceAfter,
+        description: dto.description ?? `Transferencia a ${dto.dest_type}`,
+        reference_type: 'cash_box_transfer',
+        reference_id: null, // Se setea después
+      });
+
+      // Crear movimiento en destino
+      const destBalanceBefore = await this.getBalance(tx, dto.dest_type, dto.dest_id, destCurrency ?? dto.currency_code);
+      const destBalanceAfter = destBalanceBefore + convertedAmount;
+      await this.createMovement(tx, {
+        source_type: dto.dest_type,
+        source_id: dto.dest_id,
+        type: AccountEntryType.TRANSFER_IN,
+        amount: convertedAmount,
+        currency_code: destCurrency ?? dto.currency_code,
+        exchange_rate: exchangeRate,
+        rate_type: rateType,
+        balance_before: destBalanceBefore,
+        balance_after: destBalanceAfter,
+        description: dto.description ?? `Transferencia desde ${dto.source_type}`,
+        reference_type: 'cash_box_transfer',
+        reference_id: null,
+      });
+
+      // Crear registro de transferencia
+      const transfer = await tx.cash_box_transfers.create({
+        data: {
+          source_type: dto.source_type,
+          source_id: dto.source_id,
+          dest_type: dto.dest_type,
+          dest_id: dto.dest_id,
+          amount: dto.amount,
+          currency_code: dto.currency_code,
+          exchange_rate: exchangeRate,
+          rate_type: rateType,
+          converted_amount: convertedAmount !== dto.amount ? convertedAmount : null,
+          description: dto.description,
+          reference: dto.reference,
+          transfer_type: 'manual',
+          status: 'completed',
+          created_by: userId,
+        },
+      });
+
+      return transfer;
+    });
+  }
+
+  async findAll() {
+    return this.prisma.cash_box_transfers.findMany({
+      where: { deleted_at: null },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async findOne(id: string) {
+    const transfer = await this.prisma.cash_box_transfers.findFirst({
+      where: { id, deleted_at: null },
+    });
+    if (!transfer) {
+      throw new NotFoundException('Transferencia no encontrada');
+    }
+    return transfer;
+  }
+
+  async findByCashBox(cashBoxId: string) {
+    return this.prisma.cash_box_transfers.findMany({
+      where: {
+        deleted_at: null,
+        OR: [
+          { source_type: 'cash_box', source_id: cashBoxId },
+          { dest_type: 'cash_box', dest_id: cashBoxId },
+        ],
+      },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async getMainCashBox() {
+    const mainBox = await this.prisma.cash_boxes.findFirst({
+      where: { is_main: true, deleted_at: null },
+    });
+    if (!mainBox) {
+      throw new NotFoundException('No existe caja principal');
+    }
+    return mainBox;
+  }
+
+  // Métodos privados de ayuda
+  private async getBalance(
+    type: string,
+    id: string,
+    currencyCode: string,
+    tx?: any,
+  ): Promise<number> {
+    const prisma = tx ?? this.prisma;
+    if (type === 'cash_box') {
+      const balance = await prisma.cash_box_balances.findFirst({
+        where: { cash_box_id: id, currency_code: currencyCode, deleted_at: null },
+      });
+      return Number(balance?.balance ?? 0);
+    } else if (type === 'bank_account') {
+      const account = await prisma.bank_accounts.findFirst({
+        where: { id, deleted_at: null },
+      });
+      return Number(account?.balance ?? 0);
+    }
+    return 0;
+  }
+
+  private async getDestCurrencyCode(type: string, id: string): Promise<string | null> {
+    if (type === 'cash_box') {
+      const balance = await this.prisma.cash_box_balances.findFirst({
+        where: { cash_box_id: id, deleted_at: null },
+      });
+      return balance?.currency_code ?? null;
+    } else if (type === 'bank_account') {
+      const account = await this.prisma.bank_accounts.findFirst({
+        where: { id, deleted_at: null },
+      });
+      return account?.currency_code ?? null;
+    }
+    return null;
+  }
+
+  private async adjustBalance(
+    tx: any,
+    type: string,
+    id: string,
+    currencyCode: string,
+    amount: number,
+  ) {
+    if (type === 'cash_box') {
+      await tx.cash_box_balances.updateMany({
+        where: { cash_box_id: id, currency_code: currencyCode },
+        data: { balance: { increment: amount } },
+      });
+    } else if (type === 'bank_account') {
+      await tx.bank_accounts.update({
+        where: { id },
+        data: { balance: { increment: amount } },
+      });
+    }
+  }
+
+  private async createMovement(tx: any, data: {
+    source_type: string;
+    source_id: string;
+    type: AccountEntryType;
+    amount: number;
+    currency_code: string;
+    exchange_rate?: number;
+    rate_type?: CurrencyRateType;
+    balance_before: number;
+    balance_after: number;
+    description: string;
+    reference_type: string;
+    reference_id: string | null;
+  }) {
+    if (data.source_type === 'cash_box') {
+      return tx.cash_box_movements.create({
+        data: {
+          cash_box_id: data.source_id,
+          type: data.type,
+          amount: data.amount,
+          currency_code: data.currency_code,
+          exchange_rate: data.exchange_rate,
+          balance_before: data.balance_before,
+          balance_after: data.balance_after,
+          description: data.description,
+          reference_type: data.reference_type,
+          reference_id: data.reference_id,
+        },
+      });
+    } else if (data.source_type === 'bank_account') {
+      return tx.bank_account_movements.create({
+        data: {
+          bank_account_id: data.source_id,
+          type: data.type,
+          amount: data.amount,
+          currency_code: data.currency_code,
+          exchange_rate: data.exchange_rate,
+          balance_before: data.balance_before,
+          balance_after: data.balance_after,
+          description: data.description,
+          reference_type: data.reference_type,
+          reference_id: data.reference_id,
+        },
+      });
+    }
+  }
+}
+```
+
+#### 14.4.2 `cash-box-closure.service.ts`
+
+```typescript
+// src/modules/tesoreria/services/cash-box-closure.service.ts
+
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
+import { CloseCashBoxDto } from '../dto/close-cash-box.dto';
+import { CashBoxTransfersService } from './cash-box-transfers.service';
+import { AccountEntryType, CashBoxSessionStatus } from '@/generated/prisma/enums';
+
+@Injectable()
+export class CashBoxClosureService {
+  constructor(
+    private db: PrismaService,
+    private transfersService: CashBoxTransfersService,
+  ) {}
+
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
+
+  async closeSession(cashBoxId: string, dto: CloseCashBoxDto, userId: string) {
+    // 1. Buscar sesión abierta
+    const session = await this.prisma.cash_box_sessions.findFirst({
+      where: {
+        cash_box_id: cashBoxId,
+        status: 'OPEN',
+        deleted_at: null,
+      },
+    });
+
+    if (!session) {
+      throw new BadRequestException('No hay sesión abierta para esta caja');
+    }
+
+    // 2. Calcular saldo teórico
+    const movements = await this.prisma.cash_box_movements.findMany({
+      where: {
+        cash_box_id: cashBoxId,
+        session_id: session.id,
+        deleted_at: null,
+      },
+    });
+
+    const closingBalance = movements.reduce(
+      (sum, m) => sum + Number(m.amount),
+      Number(session.opening_balance),
+    );
+
+    const difference = dto.actual_balance - closingBalance;
+
+    // 3. Cerrar sesión
+    const closedSession = await this.prisma.cash_box_sessions.update({
+      where: { id: session.id },
+      data: {
+        status: CashBoxSessionStatus.CLOSED,
+        closed_at: new Date(),
+        closing_balance: closingBalance,
+        actual_balance: dto.actual_balance,
+        difference: difference,
+      },
+    });
+
+    // 4. Ejecutar transferencia automática si está habilitada
+    if (dto.auto_transfer && dto.transfer_dest_id && dto.transfer_dest_type) {
+      // Obtener moneda de la caja origen
+      const sourceBalance = await this.prisma.cash_box_balances.findFirst({
+        where: { cash_box_id: cashBoxId, deleted_at: null },
+      });
+
+      if (sourceBalance && dto.actual_balance > 0) {
+        await this.transfersService.create(
+          {
+            source_type: 'cash_box',
+            source_id: cashBoxId,
+            dest_type: dto.transfer_dest_type,
+            dest_id: dto.transfer_dest_id,
+            amount: dto.actual_balance,
+            currency_code: sourceBalance.currency_code,
+            description: `Transferencia automática al cerrar sesión ${session.id}`,
+          },
+          userId,
+        );
+
+        // Actualizar sesión con datos de transferencia
+        await this.prisma.cash_box_sessions.update({
+          where: { id: session.id },
+          data: {
+            auto_transfer_enabled: true,
+            transfer_dest_id: dto.transfer_dest_id,
+            transfer_dest_type: dto.transfer_dest_type,
+            transferred_amount: dto.actual_balance,
+            transferred_at: new Date(),
+          },
+        });
+      }
+    }
+
+    // 5. Actualizar caja
+    await this.prisma.cash_boxes.update({
+      where: { id: cashBoxId },
+      data: {
+        current_session_id: null,
+        last_session_closed_at: new Date(),
+      },
+    });
+
+    return closedSession;
+  }
+}
+```
+
+### 14.5 Controller
+
+```typescript
+// src/modules/tesoreria/controllers/cash-box-transfers.controller.ts
+
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { CashBoxTransfersService } from '../services/cash-box-transfers.service';
+import { CreateCashBoxTransferDto } from '../dto/create-cash-box-transfer.dto';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
+
+@UseGuards(JwtAuthGuard)
+@Controller('cash-box-transfers')
+export class CashBoxTransfersController {
+  constructor(private readonly transfersService: CashBoxTransfersService) {}
+
+  @Post()
+  // @RequirePermissions('cash-boxes.create')
+  create(
+    @Body() dto: CreateCashBoxTransferDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.transfersService.create(dto, user.id);
+  }
+
+  @Get()
+  // @RequirePermissions('cash-boxes.read')
+  findAll() {
+    return this.transfersService.findAll();
+  }
+
+  @Get('main')
+  // @RequirePermissions('cash-boxes.read')
+  getMainCashBox() {
+    return this.transfersService.getMainCashBox();
+  }
+
+  @Get(':id')
+  // @RequirePermissions('cash-boxes.read')
+  findOne(@Param('id') id: string) {
+    return this.transfersService.findOne(id);
+  }
+}
+```
+
+#### 14.5.1 Endpoint adicional en CashBoxesController
+
+```typescript
+// Agregar al controller de cash_boxes existente:
+
+@Get(':id/transfers')
+// @RequirePermissions('cash-boxes.read')
+getTransfers(@Param('id') id: string) {
+  return this.transfersService.findByCashBox(id);
+}
+```
+
+### 14.6 Helper
+
+```typescript
+// src/modules/tesoreria/helpers/transfer.helper.ts
+
+export class TransferHelper {
+  /**
+   * Valida que el tipo de transferencia sea válido
+   */
+  static isValidTransferType(type: string): boolean {
+    return ['manual', 'auto_close', 'compensation'].includes(type);
+  }
+
+  /**
+   * Valida que source y dest sean del mismo tipo (ambos cash_box o ambos bank_account)
+   * o de tipos diferentes (cash_box <-> bank_account)
+   */
+  static isValidTransferPair(
+    sourceType: string,
+    destType: string,
+  ): boolean {
+    const validTypes = ['cash_box', 'bank_account'];
+    return (
+      validTypes.includes(sourceType) &&
+      validTypes.includes(destType) &&
+      sourceType !== destType
+    );
+  }
+
+  /**
+   * Calcula el monto convertido usando la tasa de cambio
+   */
+  static convertAmount(
+    amount: number,
+    exchangeRate: number,
+  ): number {
+    return Math.round(amount * exchangeRate * 100) / 100;
+  }
+
+  /**
+   * Genera descripción por defecto para la transferencia
+   */
+  static generateDescription(
+    sourceType: string,
+    destType: string,
+    amount: number,
+    currencyCode: string,
+  ): string {
+    const sourceLabel = sourceType === 'cash_box' ? 'Caja' : 'Banco';
+    const destLabel = destType === 'cash_box' ? 'Caja' : 'Banco';
+    return `Transferencia ${amount} ${currencyCode} de ${sourceLabel} a ${destLabel}`;
+  }
+}
+```
+
+### 14.7 Estructura de Archivos (agregar)
+
+```
+src/modules/tesoreria/
+├── dto/
+│   ├── create-cash-box-transfer.dto.ts    // NUEVO
+│   └── close-cash-box.dto.ts              // ACTUALIZADO
+├── controllers/
+│   └── cash-box-transfers.controller.ts   // NUEVO
+├── services/
+│   ├── cash-box-transfers.service.ts      // NUEVO
+│   └── cash-box-closure.service.ts        // NUEVO
+└── helpers/
+    └── transfer.helper.ts                 // NUEVO
+```
+
+### 14.8 Flujos de Implementación
+
+#### Flujo A: Cierre con Transferencia Automática
+
+```
+POST /cash-boxes/:id/close {
+  actual_balance: 14800,
+  auto_transfer: true,
+  transfer_dest_id: "caja-principal-uuid",
+  transfer_dest_type: "cash_box"
+}
+
+→ 1. Cierra sesión (status: CLOSED, actual_balance: 14800)
+→ 2. Descuenta de caja origen: 14800
+→ 3. Suma a caja destino: 14800
+→ 4. Registra cash_box_transfers (transfer_type: "auto_close")
+→ 5. Registra movimientos en ambas cajas (TRANSFER_OUT + TRANSFER_IN)
+→ 6. Actualiza sesión con datos de transferencia
+```
+
+#### Flujo B: Transferencia Manual Caja → Caja
+
+```
+POST /cash-box-transfers {
+  source_type: "cash_box",
+  source_id: "caja-norte-uuid",
+  dest_type: "cash_box",
+  dest_id: "caja-sur-uuid",
+  amount: 50000,
+  currency_code: "ARS"
+}
+
+→ 1. Verifica fondos en origen (≥ 50000 ARS)
+→ 2. Descuenta origen: -50000
+→ 3. Suma destino: +50000
+→ 4. Crea movimientos (TRANSFER_OUT + TRANSFER_IN)
+→ 5. Registra transferencia
+```
+
+#### Flujo C: Caja ↔ Banco
+
+```
+POST /cash-box-transfers {
+  source_type: "cash_box",
+  source_id: "caja-principal-uuid",
+  dest_type: "bank_account",
+  dest_id: "cuenta-nacion-uuid",
+  amount: 100000,
+  currency_code: "ARS"
+}
+
+→ 1. Verifica fondos en caja (≥ 100000 ARS)
+→ 2. Descuenta caja: -100000
+→ 3. Suma banco: +100000
+→ 4. Crea movimientos en ambas entidades
+→ 5. Registra transferencia
+```
+
+### 14.9 Endpoints Nuevos
+
+| Método | Endpoint | Descripción | Permisos |
+|--------|----------|-------------|----------|
+| POST | `/cash-box-transfers` | Transferir entre cajas/bancos | `cash-boxes.create` |
+| GET | `/cash-box-transfers` | Listar transferencias | `cash-boxes.read` |
+| GET | `/cash-box-transfers/:id` | Detalle de transferencia | `cash-boxes.read` |
+| GET | `/cash-boxes/:id/transfers` | Transferencias de una caja | `cash-boxes.read` |
+| GET | `/cash-boxes/main` | Obtener caja principal | `cash-boxes.read` |
+
+### 14.10 Checklist de Implementación
+
+- [ ] Modelo `cash_box_transfers` creado en Prisma schema
+- [ ] Campo `is_main` agregado a `cash_boxes`
+- [ ] Campos de transferencia agregados a `cash_box_sessions`
+- [ ] `TRANSFER_OUT` y `TRANSFER_IN` agregados a `AccountEntryType`
+- [ ] `CreateCashBoxTransferDto` implementado
+- [ ] `CloseCashBoxDto` actualizado con campos de transferencia
+- [ ] `CashBoxTransfersService` implementado
+- [ ] `CashBoxClosureService` implementado
+- [ ] `POST /cash-box-transfers` funcionando
+- [ ] `GET /cash-box-transfers` funcionando
+- [ ] `GET /cash-box-transfers/:id` funcionando
+- [ ] `GET /cash-boxes/:id/transfers` funcionando
+- [ ] `GET /cash-boxes/main` funcionando
+- [ ] Flujo caja → caja funcionando
+- [ ] Flujo caja ↔ banco funcionando
+- [ ] Flujo cierre con transferencia auto/manual funcionando
+- [ ] Validación: solo una principal por empresa
+- [ ] Validación: fondos suficientes antes de transferir
+- [ ] Validación: conversión con ExchangeService si moneda distinta
+- [ ] Migración de base de datos ejecutada
+- [ ] Pruebas unitarias escritas
+
+---
+
+## Parte 15: Identificación de Terceros - Enum PartyType
+
+### 15.1 Cambio en `business_parties`
+
+```prisma
+// prisma/schema/parties.prisma - Modificar:
+
+model business_parties {
+  // ... campos existentes ...
+  type            PartyType        // ← Cambiar de String a PartyType enum
+  // ... resto igual ...
+}
+```
+
+### 15.2 Arquitectura de 3 Capas
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  PUBLIC SCHEMA                                          │
+│  users (identidad, login)                               │
+│    ├── employee_id → employees (opcional)               │
+│    └── partner_id  → partners (opcional)                │
+└───────────────────────┬─────────────────────────────────┘
+                        │
+┌───────────────────────▼─────────────────────────────────┐
+│  TENANT SCHEMA                                          │
+│                                                         │
+│  business_parties (type=EMPLOYEE)                       │
+│    ├── id ──────────────► employees.party_id            │
+│    ├── contacts, locations (datos legales/tributarios)  │
+│    └── CUIT, nombre legal, dirección                    │
+│                                                         │
+│  employees (datos específicos de RRHH)                  │
+│    ├── position, department, salary                     │
+│    ├── user_id → users (acceso al sistema)              │
+│    └── responsible de cash_boxes                        │
+│                                                         │
+│  partners (datos de ownership)                          │
+│    ├── share_percentage, capital_contributed            │
+│    └── user_id → users (acceso al sistema)              │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 15.3 Creación de Empleado (Flujo)
+
+```
+Paso 1: Crear business_party con type=EMPLOYEE
+  → POST /master-data/business-parties {
+      type: "EMPLOYEE",
+      name: "Juan Pérez",
+      tax_id: "20-12345678-9"
+    }
+  → Retorna: { id: "uuid-1", type: "EMPLOYEE", ... }
+
+Paso 2: Crear employee vinculado
+  → POST /employees {
+      party_id: "uuid-1",        ← FK al business_party
+      first_name: "Juan",
+      last_name: "Pérez",
+      position: "Cajero",
+      user_id: "user-uuid"       ← opcional, para acceso al sistema
+    }
+  → Employee vinculado al business_party
+```
+
+### 15.4 Creación de Socio (Flujo)
+
+```
+Paso 1: Crear business_party con type=PARTNER
+  → POST /master-data/business-parties {
+      type: "PARTNER",
+      name: "María López",
+      tax_id: "23-98765432-1"
+    }
+  → Retorna: { id: "uuid-2", type: "PARTNER", ... }
+
+Paso 2: Crear partner vinculado
+  → POST /partners {
+      party_id: "uuid-2",
+      first_name: "María",
+      last_name: "López",
+      share_percentage: 30.5,
+      capital_contributed: 500000,
+      user_id: "user-uuid-2"     ← opcional
+    }
+```
+
+### 15.5 Consultas por Tipo
+
+```typescript
+// Todos los empleados con datos legales
+const employees = await prisma.business_parties.findMany({
+  where: { type: 'EMPLOYEE', deleted_at: null },
+  include: { employee: true }
+});
+
+// Todos los socios con datos de ownership
+const partners = await prisma.business_parties.findMany({
+  where: { type: 'PARTNER', deleted_at: null },
+  include: { partner: true }
+});
+
+// Proveedores (como ahora)
+const suppliers = await prisma.business_parties.findMany({
+  where: { type: 'SUPPLIER', deleted_at: null }
+});
+
+// Clientes (como ahora)
+const customers = await prisma.business_parties.findMany({
+  where: { type: 'CUSTOMER', deleted_at: null }
+});
+```
+
+### 15.6 Migración de Datos Existentes
+
+```typescript
+// Valores actuales en la DB (texto libre) → mapear a enum:
+// "client" / "customer" → CUSTOMER
+// "supplier" / "proveedor" → SUPPLIER
+// (employees y partners no existen aún, se crean con el enum correcto)
+```
+
+### 15.7 Relación con Tesorería
+
+```
+employees
+  ├── party_id → business_parties (datos legales del empleado)
+  ├── user_id → users (login al sistema)
+  ├── [reverse] ← cash_boxes.responsible_id (quién es responsable)
+  └── [reverse] ← cash_box_movements.employee_id (quién hizo el movimiento)
+
+partners
+  ├── party_id → business_parties (datos legales del socio)
+  ├── user_id → users (login al sistema)
+  └── (sin relación directa con tesorería)
+```
+
+### 15.8 Checklist
+
+- [ ] Enum `PartyType` creado en `prisma/schema/enums.prisma`
+- [ ] `business_parties.type` cambiado de `String` a `PartyType`
+- [ ] Migración de datos existentes (texto libre → enum)
+- [ ] DTO de `business_parties` actualizado para usar el enum
+- [ ] Servicio de `business_parties` validado con el enum
+- [ ] EmployeeService crea business_party + employee en flujo de 2 pasos
+- [ ] PartnerService crea business_party + partner en flujo de 2 pasos
+
+---
+
 ## Parte 11: Verificaciones Finales
 
 - [ ] Todos los modelos tienen `@@schema("tenant")`
@@ -2346,3 +3274,38 @@ Cuando se crea una compra en cuotas:
 - [ ] Libro mayor siempre muestra en moneda del tercero
 - [ ] Cheques rechazados usan moneda del pago original
 - [ ] Tarjetas de crédito soportan multi-moneda correctamente
+
+### Transferencias y Caja Principal
+- [ ] Modelo `cash_box_transfers` creado con `@@schema("tenant")`
+- [ ] Campo `is_main` agregado a `cash_boxes` (default false)
+- [ ] Campos de transferencia en `cash_box_sessions`: `auto_transfer_enabled`, `transfer_dest_id`, `transfer_dest_type`, `transferred_amount`, `transferred_at`
+- [ ] `TRANSFER_OUT` y `TRANSFER_IN` agregados a `AccountEntryType`
+- [ ] `CreateCashBoxTransferDto` con validaciones de source/dest types
+- [ ] `CloseCashBoxDto` actualizado con `auto_transfer`, `transfer_dest_id`, `transfer_dest_type`
+- [ ] `CashBoxTransfersService` con create, findAll, findOne, findByCashBox, getMainCashBox
+- [ ] `CashBoxClosureService` con closeSession (incluye transferencia automática)
+- [ ] Endpoint `POST /cash-box-transfers` funcionando
+- [ ] Endpoint `GET /cash-box-transfers` funcionando
+- [ ] Endpoint `GET /cash-box-transfers/:id` funcionando
+- [ ] Endpoint `GET /cash-boxes/:id/transfers` funcionando
+- [ ] Endpoint `GET /cash-boxes/main` funcionando
+- [ ] Flujo caja → caja con verificación de fondos
+- [ ] Flujo caja ↔ banco con verificación de fondos
+- [ ] Flujo cierre con transferencia automática (auto_close)
+- [ ] Flujo cierre con transferencia manual
+- [ ] Conversión de moneda con ExchangeService en transferencias
+- [ ] Movimientos registrados en ambas entidades (TRANSFER_OUT + TRANSFER_IN)
+- [ ] Validación: solo una caja principal por empresa
+- [ ] Validación: fondos suficientes antes de transferir
+- [ ] Migración de base de datos ejecutada
+- [ ] TransferHelper con métodos de validación y cálculo
+
+### Identificación de Terceros (PartyType)
+- [ ] Enum `PartyType` creado (CUSTOMER, SUPPLIER, EMPLOYEE, PARTNER)
+- [ ] `business_parties.type` cambiado de `String` a `PartyType`
+- [ ] Migración de datos existentes (texto libre → enum)
+- [ ] EmployeeService crea business_party + employee en flujo de 2 pasos
+- [ ] PartnerService crea business_party + partner en flujo de 2 pasos
+- [ ] Consultas por tipo funcionan (employees, partners, suppliers, customers)
+- [ ] Employee vinculado a cash_boxes como responsible
+- [ ] Employee vinculado a cash_box_movements como actor

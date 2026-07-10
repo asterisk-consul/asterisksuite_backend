@@ -16,7 +16,14 @@ import { PermissionsGuard } from './guards/permissions.guard';
 @Module({
   imports: [PrismaModule],
   controllers: [RolesController, PermissionsController, UsersController, RbacTestController],
-  providers: [RolesService, PermissionsService, AuthorizationService, PermissionContextBuilder, PermissionsGuard],
-  exports: [AuthorizationService, PermissionContextBuilder],
+  providers: [
+    RolesService,
+    PermissionsService,
+    AuthorizationService,
+    PermissionContextBuilder,
+    PermissionsGuard,
+    // { provide: APP_GUARD, useClass: PermissionsGuard },  // ← COMENTADO: activar cuando se habilite RBAC global
+  ],
+  exports: [AuthorizationService, PermissionContextBuilder, PermissionsGuard],
 })
 export class AccessControlModule {}

@@ -12,8 +12,8 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-"name": "Usuario Dev",
-"email": "usuariodev@test.com",
+"name": "Administrador Dyfma",
+"email": "admindyfma@test.com",
 "password": "123456",
 "role": "PLATFORM_OWNER"
 }
@@ -26,7 +26,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-"email": "usuariodev@test.com",
+"email": "admindyfma@test.com",
 "password": "123456"
 }
 
@@ -47,9 +47,9 @@ Authorization: Bearer {{tokenA}}
 Content-Type: application/json
 
 {
-"name": "Empresa Dev",
-"subdomain": "dev",
-"schemaName": "tenant_dev"
+"name": "Dyfma",
+"subdomain": "dyfma",
+"schemaName": "dyfma"
 }
 
 ########################################################

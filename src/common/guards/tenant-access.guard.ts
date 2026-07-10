@@ -83,6 +83,10 @@ export class TenantAccessGuard implements CanActivate {
       );
     }
 
+    // Setear rol de empresa en request para que PermissionsGuard pueda usarlo
+    // (OWNER bypass en PermissionsGuard)
+    req['companyUserRole'] = membership.role;
+
     return true;
   }
 }

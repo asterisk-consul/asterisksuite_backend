@@ -1,0 +1,2 @@
+﻿Issue Type,Summary,Description,Priority,Labels
+Epic,Módulo de Tesorería,"Sistema completo de gestión de tesorería para Asterisk Suite: cajas, cuentas bancarias, pagos, cobros, cheques, tarjetas de crédito, cuentas corrientes, transferencias, empleados, socios. Multi-tenant con NestJS + Prisma + PostgreSQL.",High,tesoreria
