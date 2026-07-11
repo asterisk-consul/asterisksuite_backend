@@ -400,6 +400,8 @@ export const ModelName = {
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
   documents: 'documents',
+  employees: 'employees',
+  partners: 'partners',
   product_structure_versions: 'product_structure_versions',
   entity_photos: 'entity_photos',
   files: 'files',
@@ -458,6 +460,25 @@ export const ModelName = {
   user_permission_overrides: 'user_permission_overrides',
   product_taxes: 'product_taxes',
   taxes: 'taxes',
+  bank_accounts: 'bank_accounts',
+  bank_account_movements: 'bank_account_movements',
+  cash_boxes: 'cash_boxes',
+  cash_box_sessions: 'cash_box_sessions',
+  cash_box_balances: 'cash_box_balances',
+  cash_box_movements: 'cash_box_movements',
+  cash_box_renditions: 'cash_box_renditions',
+  cash_box_user_roles: 'cash_box_user_roles',
+  cash_box_transfers: 'cash_box_transfers',
+  payments: 'payments',
+  payment_documents: 'payment_documents',
+  checks: 'checks',
+  credit_cards: 'credit_cards',
+  credit_card_transactions: 'credit_card_transactions',
+  credit_card_installments: 'credit_card_installments',
+  credit_card_summaries: 'credit_card_summaries',
+  credit_card_summary_items: 'credit_card_summary_items',
+  current_accounts: 'current_accounts',
+  current_account_entries: 'current_account_entries',
   warehouse_stock: 'warehouse_stock',
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses'
@@ -476,7 +497,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "product_structure_versions" | "entity_photos" | "files" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "pallet_items" | "pallets" | "business_parties" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "product_taxes" | "taxes" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "pallet_items" | "pallets" | "business_parties" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1661,6 +1682,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.documentsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DocumentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    employees: {
+      payload: Prisma.$employeesPayload<ExtArgs>
+      fields: Prisma.employeesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.employeesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.employeesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>
+        }
+        findFirst: {
+          args: Prisma.employeesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.employeesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>
+        }
+        findMany: {
+          args: Prisma.employeesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>[]
+        }
+        create: {
+          args: Prisma.employeesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>
+        }
+        createMany: {
+          args: Prisma.employeesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.employeesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>[]
+        }
+        delete: {
+          args: Prisma.employeesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>
+        }
+        update: {
+          args: Prisma.employeesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>
+        }
+        deleteMany: {
+          args: Prisma.employeesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.employeesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.employeesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>[]
+        }
+        upsert: {
+          args: Prisma.employeesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$employeesPayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployees>
+        }
+        groupBy: {
+          args: Prisma.employeesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.employeesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeesCountAggregateOutputType> | number
+        }
+      }
+    }
+    partners: {
+      payload: Prisma.$partnersPayload<ExtArgs>
+      fields: Prisma.partnersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.partnersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.partnersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>
+        }
+        findFirst: {
+          args: Prisma.partnersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.partnersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>
+        }
+        findMany: {
+          args: Prisma.partnersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>[]
+        }
+        create: {
+          args: Prisma.partnersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>
+        }
+        createMany: {
+          args: Prisma.partnersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.partnersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>[]
+        }
+        delete: {
+          args: Prisma.partnersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>
+        }
+        update: {
+          args: Prisma.partnersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>
+        }
+        deleteMany: {
+          args: Prisma.partnersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.partnersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.partnersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>[]
+        }
+        upsert: {
+          args: Prisma.partnersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$partnersPayload>
+        }
+        aggregate: {
+          args: Prisma.PartnersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePartners>
+        }
+        groupBy: {
+          args: Prisma.partnersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PartnersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.partnersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PartnersCountAggregateOutputType> | number
         }
       }
     }
@@ -5956,6 +6125,1412 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    bank_accounts: {
+      payload: Prisma.$bank_accountsPayload<ExtArgs>
+      fields: Prisma.bank_accountsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.bank_accountsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.bank_accountsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>
+        }
+        findFirst: {
+          args: Prisma.bank_accountsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.bank_accountsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>
+        }
+        findMany: {
+          args: Prisma.bank_accountsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>[]
+        }
+        create: {
+          args: Prisma.bank_accountsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>
+        }
+        createMany: {
+          args: Prisma.bank_accountsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.bank_accountsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>[]
+        }
+        delete: {
+          args: Prisma.bank_accountsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>
+        }
+        update: {
+          args: Prisma.bank_accountsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>
+        }
+        deleteMany: {
+          args: Prisma.bank_accountsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.bank_accountsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.bank_accountsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>[]
+        }
+        upsert: {
+          args: Prisma.bank_accountsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_accountsPayload>
+        }
+        aggregate: {
+          args: Prisma.Bank_accountsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBank_accounts>
+        }
+        groupBy: {
+          args: Prisma.bank_accountsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_accountsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.bank_accountsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_accountsCountAggregateOutputType> | number
+        }
+      }
+    }
+    bank_account_movements: {
+      payload: Prisma.$bank_account_movementsPayload<ExtArgs>
+      fields: Prisma.bank_account_movementsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.bank_account_movementsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.bank_account_movementsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>
+        }
+        findFirst: {
+          args: Prisma.bank_account_movementsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.bank_account_movementsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>
+        }
+        findMany: {
+          args: Prisma.bank_account_movementsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>[]
+        }
+        create: {
+          args: Prisma.bank_account_movementsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>
+        }
+        createMany: {
+          args: Prisma.bank_account_movementsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.bank_account_movementsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>[]
+        }
+        delete: {
+          args: Prisma.bank_account_movementsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>
+        }
+        update: {
+          args: Prisma.bank_account_movementsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>
+        }
+        deleteMany: {
+          args: Prisma.bank_account_movementsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.bank_account_movementsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.bank_account_movementsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>[]
+        }
+        upsert: {
+          args: Prisma.bank_account_movementsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_movementsPayload>
+        }
+        aggregate: {
+          args: Prisma.Bank_account_movementsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBank_account_movements>
+        }
+        groupBy: {
+          args: Prisma.bank_account_movementsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_account_movementsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.bank_account_movementsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_account_movementsCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_boxes: {
+      payload: Prisma.$cash_boxesPayload<ExtArgs>
+      fields: Prisma.cash_boxesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_boxesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_boxesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_boxesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_boxesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>
+        }
+        findMany: {
+          args: Prisma.cash_boxesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>[]
+        }
+        create: {
+          args: Prisma.cash_boxesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>
+        }
+        createMany: {
+          args: Prisma.cash_boxesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_boxesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_boxesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>
+        }
+        update: {
+          args: Prisma.cash_boxesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_boxesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_boxesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_boxesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_boxesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_boxesPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_boxesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_boxes>
+        }
+        groupBy: {
+          args: Prisma.cash_boxesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_boxesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_boxesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_boxesCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_box_sessions: {
+      payload: Prisma.$cash_box_sessionsPayload<ExtArgs>
+      fields: Prisma.cash_box_sessionsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_box_sessionsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_box_sessionsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_box_sessionsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_box_sessionsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>
+        }
+        findMany: {
+          args: Prisma.cash_box_sessionsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>[]
+        }
+        create: {
+          args: Prisma.cash_box_sessionsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>
+        }
+        createMany: {
+          args: Prisma.cash_box_sessionsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_box_sessionsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_box_sessionsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>
+        }
+        update: {
+          args: Prisma.cash_box_sessionsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_box_sessionsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_box_sessionsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_box_sessionsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_box_sessionsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_sessionsPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_box_sessionsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_box_sessions>
+        }
+        groupBy: {
+          args: Prisma.cash_box_sessionsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_sessionsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_box_sessionsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_sessionsCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_box_balances: {
+      payload: Prisma.$cash_box_balancesPayload<ExtArgs>
+      fields: Prisma.cash_box_balancesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_box_balancesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_box_balancesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_box_balancesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_box_balancesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>
+        }
+        findMany: {
+          args: Prisma.cash_box_balancesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>[]
+        }
+        create: {
+          args: Prisma.cash_box_balancesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>
+        }
+        createMany: {
+          args: Prisma.cash_box_balancesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_box_balancesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_box_balancesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>
+        }
+        update: {
+          args: Prisma.cash_box_balancesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_box_balancesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_box_balancesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_box_balancesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_box_balancesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_balancesPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_box_balancesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_box_balances>
+        }
+        groupBy: {
+          args: Prisma.cash_box_balancesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_balancesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_box_balancesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_balancesCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_box_movements: {
+      payload: Prisma.$cash_box_movementsPayload<ExtArgs>
+      fields: Prisma.cash_box_movementsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_box_movementsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_box_movementsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_box_movementsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_box_movementsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>
+        }
+        findMany: {
+          args: Prisma.cash_box_movementsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>[]
+        }
+        create: {
+          args: Prisma.cash_box_movementsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>
+        }
+        createMany: {
+          args: Prisma.cash_box_movementsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_box_movementsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_box_movementsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>
+        }
+        update: {
+          args: Prisma.cash_box_movementsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_box_movementsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_box_movementsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_box_movementsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_box_movementsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_movementsPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_box_movementsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_box_movements>
+        }
+        groupBy: {
+          args: Prisma.cash_box_movementsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_movementsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_box_movementsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_movementsCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_box_renditions: {
+      payload: Prisma.$cash_box_renditionsPayload<ExtArgs>
+      fields: Prisma.cash_box_renditionsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_box_renditionsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_box_renditionsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_box_renditionsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_box_renditionsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>
+        }
+        findMany: {
+          args: Prisma.cash_box_renditionsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>[]
+        }
+        create: {
+          args: Prisma.cash_box_renditionsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>
+        }
+        createMany: {
+          args: Prisma.cash_box_renditionsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_box_renditionsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_box_renditionsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>
+        }
+        update: {
+          args: Prisma.cash_box_renditionsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_box_renditionsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_box_renditionsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_box_renditionsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_box_renditionsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_renditionsPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_box_renditionsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_box_renditions>
+        }
+        groupBy: {
+          args: Prisma.cash_box_renditionsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_renditionsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_box_renditionsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_renditionsCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_box_user_roles: {
+      payload: Prisma.$cash_box_user_rolesPayload<ExtArgs>
+      fields: Prisma.cash_box_user_rolesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_box_user_rolesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_box_user_rolesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_box_user_rolesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_box_user_rolesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>
+        }
+        findMany: {
+          args: Prisma.cash_box_user_rolesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>[]
+        }
+        create: {
+          args: Prisma.cash_box_user_rolesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>
+        }
+        createMany: {
+          args: Prisma.cash_box_user_rolesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_box_user_rolesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_box_user_rolesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>
+        }
+        update: {
+          args: Prisma.cash_box_user_rolesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_box_user_rolesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_box_user_rolesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_box_user_rolesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_box_user_rolesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_user_rolesPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_box_user_rolesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_box_user_roles>
+        }
+        groupBy: {
+          args: Prisma.cash_box_user_rolesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_user_rolesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_box_user_rolesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_user_rolesCountAggregateOutputType> | number
+        }
+      }
+    }
+    cash_box_transfers: {
+      payload: Prisma.$cash_box_transfersPayload<ExtArgs>
+      fields: Prisma.cash_box_transfersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.cash_box_transfersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.cash_box_transfersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>
+        }
+        findFirst: {
+          args: Prisma.cash_box_transfersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.cash_box_transfersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>
+        }
+        findMany: {
+          args: Prisma.cash_box_transfersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>[]
+        }
+        create: {
+          args: Prisma.cash_box_transfersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>
+        }
+        createMany: {
+          args: Prisma.cash_box_transfersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.cash_box_transfersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>[]
+        }
+        delete: {
+          args: Prisma.cash_box_transfersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>
+        }
+        update: {
+          args: Prisma.cash_box_transfersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>
+        }
+        deleteMany: {
+          args: Prisma.cash_box_transfersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.cash_box_transfersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.cash_box_transfersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>[]
+        }
+        upsert: {
+          args: Prisma.cash_box_transfersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$cash_box_transfersPayload>
+        }
+        aggregate: {
+          args: Prisma.Cash_box_transfersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCash_box_transfers>
+        }
+        groupBy: {
+          args: Prisma.cash_box_transfersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_transfersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.cash_box_transfersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Cash_box_transfersCountAggregateOutputType> | number
+        }
+      }
+    }
+    payments: {
+      payload: Prisma.$paymentsPayload<ExtArgs>
+      fields: Prisma.paymentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.paymentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.paymentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>
+        }
+        findFirst: {
+          args: Prisma.paymentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.paymentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>
+        }
+        findMany: {
+          args: Prisma.paymentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>[]
+        }
+        create: {
+          args: Prisma.paymentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>
+        }
+        createMany: {
+          args: Prisma.paymentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.paymentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>[]
+        }
+        delete: {
+          args: Prisma.paymentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>
+        }
+        update: {
+          args: Prisma.paymentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.paymentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.paymentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.paymentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.paymentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$paymentsPayload>
+        }
+        aggregate: {
+          args: Prisma.PaymentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePayments>
+        }
+        groupBy: {
+          args: Prisma.paymentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PaymentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.paymentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PaymentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    payment_documents: {
+      payload: Prisma.$payment_documentsPayload<ExtArgs>
+      fields: Prisma.payment_documentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.payment_documentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.payment_documentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>
+        }
+        findFirst: {
+          args: Prisma.payment_documentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.payment_documentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>
+        }
+        findMany: {
+          args: Prisma.payment_documentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>[]
+        }
+        create: {
+          args: Prisma.payment_documentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>
+        }
+        createMany: {
+          args: Prisma.payment_documentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.payment_documentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>[]
+        }
+        delete: {
+          args: Prisma.payment_documentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>
+        }
+        update: {
+          args: Prisma.payment_documentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.payment_documentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.payment_documentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.payment_documentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.payment_documentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_documentsPayload>
+        }
+        aggregate: {
+          args: Prisma.Payment_documentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePayment_documents>
+        }
+        groupBy: {
+          args: Prisma.payment_documentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Payment_documentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.payment_documentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Payment_documentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    checks: {
+      payload: Prisma.$checksPayload<ExtArgs>
+      fields: Prisma.checksFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.checksFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.checksFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>
+        }
+        findFirst: {
+          args: Prisma.checksFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.checksFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>
+        }
+        findMany: {
+          args: Prisma.checksFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>[]
+        }
+        create: {
+          args: Prisma.checksCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>
+        }
+        createMany: {
+          args: Prisma.checksCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.checksCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>[]
+        }
+        delete: {
+          args: Prisma.checksDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>
+        }
+        update: {
+          args: Prisma.checksUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>
+        }
+        deleteMany: {
+          args: Prisma.checksDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.checksUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.checksUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>[]
+        }
+        upsert: {
+          args: Prisma.checksUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$checksPayload>
+        }
+        aggregate: {
+          args: Prisma.ChecksAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChecks>
+        }
+        groupBy: {
+          args: Prisma.checksGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChecksGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.checksCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChecksCountAggregateOutputType> | number
+        }
+      }
+    }
+    credit_cards: {
+      payload: Prisma.$credit_cardsPayload<ExtArgs>
+      fields: Prisma.credit_cardsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.credit_cardsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.credit_cardsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>
+        }
+        findFirst: {
+          args: Prisma.credit_cardsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.credit_cardsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>
+        }
+        findMany: {
+          args: Prisma.credit_cardsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>[]
+        }
+        create: {
+          args: Prisma.credit_cardsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>
+        }
+        createMany: {
+          args: Prisma.credit_cardsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.credit_cardsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>[]
+        }
+        delete: {
+          args: Prisma.credit_cardsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>
+        }
+        update: {
+          args: Prisma.credit_cardsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>
+        }
+        deleteMany: {
+          args: Prisma.credit_cardsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.credit_cardsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.credit_cardsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>[]
+        }
+        upsert: {
+          args: Prisma.credit_cardsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_cardsPayload>
+        }
+        aggregate: {
+          args: Prisma.Credit_cardsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCredit_cards>
+        }
+        groupBy: {
+          args: Prisma.credit_cardsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_cardsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.credit_cardsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_cardsCountAggregateOutputType> | number
+        }
+      }
+    }
+    credit_card_transactions: {
+      payload: Prisma.$credit_card_transactionsPayload<ExtArgs>
+      fields: Prisma.credit_card_transactionsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.credit_card_transactionsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.credit_card_transactionsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>
+        }
+        findFirst: {
+          args: Prisma.credit_card_transactionsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.credit_card_transactionsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>
+        }
+        findMany: {
+          args: Prisma.credit_card_transactionsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>[]
+        }
+        create: {
+          args: Prisma.credit_card_transactionsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>
+        }
+        createMany: {
+          args: Prisma.credit_card_transactionsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.credit_card_transactionsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>[]
+        }
+        delete: {
+          args: Prisma.credit_card_transactionsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>
+        }
+        update: {
+          args: Prisma.credit_card_transactionsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>
+        }
+        deleteMany: {
+          args: Prisma.credit_card_transactionsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.credit_card_transactionsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.credit_card_transactionsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>[]
+        }
+        upsert: {
+          args: Prisma.credit_card_transactionsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_transactionsPayload>
+        }
+        aggregate: {
+          args: Prisma.Credit_card_transactionsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCredit_card_transactions>
+        }
+        groupBy: {
+          args: Prisma.credit_card_transactionsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_transactionsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.credit_card_transactionsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_transactionsCountAggregateOutputType> | number
+        }
+      }
+    }
+    credit_card_installments: {
+      payload: Prisma.$credit_card_installmentsPayload<ExtArgs>
+      fields: Prisma.credit_card_installmentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.credit_card_installmentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.credit_card_installmentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>
+        }
+        findFirst: {
+          args: Prisma.credit_card_installmentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.credit_card_installmentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>
+        }
+        findMany: {
+          args: Prisma.credit_card_installmentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>[]
+        }
+        create: {
+          args: Prisma.credit_card_installmentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>
+        }
+        createMany: {
+          args: Prisma.credit_card_installmentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.credit_card_installmentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>[]
+        }
+        delete: {
+          args: Prisma.credit_card_installmentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>
+        }
+        update: {
+          args: Prisma.credit_card_installmentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.credit_card_installmentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.credit_card_installmentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.credit_card_installmentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.credit_card_installmentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_installmentsPayload>
+        }
+        aggregate: {
+          args: Prisma.Credit_card_installmentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCredit_card_installments>
+        }
+        groupBy: {
+          args: Prisma.credit_card_installmentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_installmentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.credit_card_installmentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_installmentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    credit_card_summaries: {
+      payload: Prisma.$credit_card_summariesPayload<ExtArgs>
+      fields: Prisma.credit_card_summariesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.credit_card_summariesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.credit_card_summariesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>
+        }
+        findFirst: {
+          args: Prisma.credit_card_summariesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.credit_card_summariesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>
+        }
+        findMany: {
+          args: Prisma.credit_card_summariesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>[]
+        }
+        create: {
+          args: Prisma.credit_card_summariesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>
+        }
+        createMany: {
+          args: Prisma.credit_card_summariesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.credit_card_summariesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>[]
+        }
+        delete: {
+          args: Prisma.credit_card_summariesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>
+        }
+        update: {
+          args: Prisma.credit_card_summariesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>
+        }
+        deleteMany: {
+          args: Prisma.credit_card_summariesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.credit_card_summariesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.credit_card_summariesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>[]
+        }
+        upsert: {
+          args: Prisma.credit_card_summariesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summariesPayload>
+        }
+        aggregate: {
+          args: Prisma.Credit_card_summariesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCredit_card_summaries>
+        }
+        groupBy: {
+          args: Prisma.credit_card_summariesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_summariesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.credit_card_summariesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_summariesCountAggregateOutputType> | number
+        }
+      }
+    }
+    credit_card_summary_items: {
+      payload: Prisma.$credit_card_summary_itemsPayload<ExtArgs>
+      fields: Prisma.credit_card_summary_itemsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.credit_card_summary_itemsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.credit_card_summary_itemsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>
+        }
+        findFirst: {
+          args: Prisma.credit_card_summary_itemsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.credit_card_summary_itemsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>
+        }
+        findMany: {
+          args: Prisma.credit_card_summary_itemsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>[]
+        }
+        create: {
+          args: Prisma.credit_card_summary_itemsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>
+        }
+        createMany: {
+          args: Prisma.credit_card_summary_itemsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.credit_card_summary_itemsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>[]
+        }
+        delete: {
+          args: Prisma.credit_card_summary_itemsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>
+        }
+        update: {
+          args: Prisma.credit_card_summary_itemsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>
+        }
+        deleteMany: {
+          args: Prisma.credit_card_summary_itemsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.credit_card_summary_itemsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.credit_card_summary_itemsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>[]
+        }
+        upsert: {
+          args: Prisma.credit_card_summary_itemsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$credit_card_summary_itemsPayload>
+        }
+        aggregate: {
+          args: Prisma.Credit_card_summary_itemsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCredit_card_summary_items>
+        }
+        groupBy: {
+          args: Prisma.credit_card_summary_itemsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_summary_itemsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.credit_card_summary_itemsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Credit_card_summary_itemsCountAggregateOutputType> | number
+        }
+      }
+    }
+    current_accounts: {
+      payload: Prisma.$current_accountsPayload<ExtArgs>
+      fields: Prisma.current_accountsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.current_accountsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.current_accountsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>
+        }
+        findFirst: {
+          args: Prisma.current_accountsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.current_accountsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>
+        }
+        findMany: {
+          args: Prisma.current_accountsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>[]
+        }
+        create: {
+          args: Prisma.current_accountsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>
+        }
+        createMany: {
+          args: Prisma.current_accountsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.current_accountsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>[]
+        }
+        delete: {
+          args: Prisma.current_accountsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>
+        }
+        update: {
+          args: Prisma.current_accountsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>
+        }
+        deleteMany: {
+          args: Prisma.current_accountsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.current_accountsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.current_accountsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>[]
+        }
+        upsert: {
+          args: Prisma.current_accountsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_accountsPayload>
+        }
+        aggregate: {
+          args: Prisma.Current_accountsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCurrent_accounts>
+        }
+        groupBy: {
+          args: Prisma.current_accountsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Current_accountsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.current_accountsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Current_accountsCountAggregateOutputType> | number
+        }
+      }
+    }
+    current_account_entries: {
+      payload: Prisma.$current_account_entriesPayload<ExtArgs>
+      fields: Prisma.current_account_entriesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.current_account_entriesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.current_account_entriesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>
+        }
+        findFirst: {
+          args: Prisma.current_account_entriesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.current_account_entriesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>
+        }
+        findMany: {
+          args: Prisma.current_account_entriesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>[]
+        }
+        create: {
+          args: Prisma.current_account_entriesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>
+        }
+        createMany: {
+          args: Prisma.current_account_entriesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.current_account_entriesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>[]
+        }
+        delete: {
+          args: Prisma.current_account_entriesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>
+        }
+        update: {
+          args: Prisma.current_account_entriesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>
+        }
+        deleteMany: {
+          args: Prisma.current_account_entriesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.current_account_entriesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.current_account_entriesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>[]
+        }
+        upsert: {
+          args: Prisma.current_account_entriesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$current_account_entriesPayload>
+        }
+        aggregate: {
+          args: Prisma.Current_account_entriesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCurrent_account_entries>
+        }
+        groupBy: {
+          args: Prisma.current_account_entriesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Current_account_entriesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.current_account_entriesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Current_account_entriesCountAggregateOutputType> | number
+        }
+      }
+    }
     warehouse_stock: {
       payload: Prisma.$warehouse_stockPayload<ExtArgs>
       fields: Prisma.warehouse_stockFieldRefs
@@ -6490,6 +8065,7 @@ export const DocumentsScalarFieldEnum = {
   exempt_amount: 'exempt_amount',
   total_taxes: 'total_taxes',
   total: 'total',
+  paid_amount: 'paid_amount',
   descrip: 'descrip',
   ref: 'ref',
   currency_code: 'currency_code',
@@ -6504,6 +8080,53 @@ export const DocumentsScalarFieldEnum = {
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const EmployeesScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  user_id: 'user_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  document_type: 'document_type',
+  document_number: 'document_number',
+  position: 'position',
+  department: 'department',
+  hire_date: 'hire_date',
+  salary: 'salary',
+  currency_code: 'currency_code',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type EmployeesScalarFieldEnum = (typeof EmployeesScalarFieldEnum)[keyof typeof EmployeesScalarFieldEnum]
+
+
+export const PartnersScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  user_id: 'user_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  document_type: 'document_type',
+  document_number: 'document_number',
+  share_percentage: 'share_percentage',
+  capital_contributed: 'capital_contributed',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type PartnersScalarFieldEnum = (typeof PartnersScalarFieldEnum)[keyof typeof PartnersScalarFieldEnum]
 
 
 export const Product_structure_versionsScalarFieldEnum = {
@@ -7347,6 +8970,8 @@ export const UsersScalarFieldEnum = {
   password_hash: 'password_hash',
   role: 'role',
   active: 'active',
+  employee_id: 'employee_id',
+  partner_id: 'partner_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -7463,6 +9088,484 @@ export const TaxesScalarFieldEnum = {
 } as const
 
 export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
+
+
+export const Bank_accountsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  bank_name: 'bank_name',
+  account_type: 'account_type',
+  cbu: 'cbu',
+  alias: 'alias',
+  account_number: 'account_number',
+  currency_code: 'currency_code',
+  balance: 'balance',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_accountsScalarFieldEnum = (typeof Bank_accountsScalarFieldEnum)[keyof typeof Bank_accountsScalarFieldEnum]
+
+
+export const Bank_account_movementsScalarFieldEnum = {
+  id: 'id',
+  bank_account_id: 'bank_account_id',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  balance_before: 'balance_before',
+  balance_after: 'balance_after',
+  description: 'description',
+  reference_type: 'reference_type',
+  reference_id: 'reference_id',
+  payment_id: 'payment_id',
+  date: 'date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_account_movementsScalarFieldEnum = (typeof Bank_account_movementsScalarFieldEnum)[keyof typeof Bank_account_movementsScalarFieldEnum]
+
+
+export const Cash_boxesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  responsible_id: 'responsible_id',
+  opening_balance: 'opening_balance',
+  max_limit: 'max_limit',
+  status: 'status',
+  active: 'active',
+  is_main: 'is_main',
+  current_session_id: 'current_session_id',
+  last_session_closed_at: 'last_session_closed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_boxesScalarFieldEnum = (typeof Cash_boxesScalarFieldEnum)[keyof typeof Cash_boxesScalarFieldEnum]
+
+
+export const Cash_box_sessionsScalarFieldEnum = {
+  id: 'id',
+  cash_box_id: 'cash_box_id',
+  user_id: 'user_id',
+  opened_at: 'opened_at',
+  opening_balance: 'opening_balance',
+  closed_at: 'closed_at',
+  closing_balance: 'closing_balance',
+  actual_balance: 'actual_balance',
+  difference: 'difference',
+  total_income: 'total_income',
+  total_expenses: 'total_expenses',
+  movement_count: 'movement_count',
+  status: 'status',
+  force_closed: 'force_closed',
+  force_closed_by: 'force_closed_by',
+  force_closed_at: 'force_closed_at',
+  force_close_reason: 'force_close_reason',
+  overdue_detected: 'overdue_detected',
+  overdue_detected_at: 'overdue_detected_at',
+  overdue_notified: 'overdue_notified',
+  auto_transfer_enabled: 'auto_transfer_enabled',
+  transfer_dest_id: 'transfer_dest_id',
+  transfer_dest_type: 'transfer_dest_type',
+  transferred_amount: 'transferred_amount',
+  transferred_at: 'transferred_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_box_sessionsScalarFieldEnum = (typeof Cash_box_sessionsScalarFieldEnum)[keyof typeof Cash_box_sessionsScalarFieldEnum]
+
+
+export const Cash_box_balancesScalarFieldEnum = {
+  id: 'id',
+  cash_box_id: 'cash_box_id',
+  currency_code: 'currency_code',
+  balance: 'balance',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_box_balancesScalarFieldEnum = (typeof Cash_box_balancesScalarFieldEnum)[keyof typeof Cash_box_balancesScalarFieldEnum]
+
+
+export const Cash_box_movementsScalarFieldEnum = {
+  id: 'id',
+  cash_box_id: 'cash_box_id',
+  session_id: 'session_id',
+  employee_id: 'employee_id',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  balance_before: 'balance_before',
+  balance_after: 'balance_after',
+  description: 'description',
+  reference_type: 'reference_type',
+  reference_id: 'reference_id',
+  payment_id: 'payment_id',
+  bank_account_id: 'bank_account_id',
+  date: 'date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_box_movementsScalarFieldEnum = (typeof Cash_box_movementsScalarFieldEnum)[keyof typeof Cash_box_movementsScalarFieldEnum]
+
+
+export const Cash_box_renditionsScalarFieldEnum = {
+  id: 'id',
+  cash_box_id: 'cash_box_id',
+  rendition_number: 'rendition_number',
+  start_date: 'start_date',
+  end_date: 'end_date',
+  opening_balance: 'opening_balance',
+  total_expenses: 'total_expenses',
+  total_income: 'total_income',
+  closing_balance: 'closing_balance',
+  actual_balance: 'actual_balance',
+  difference: 'difference',
+  status: 'status',
+  notes: 'notes',
+  approved_by: 'approved_by',
+  approved_at: 'approved_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_box_renditionsScalarFieldEnum = (typeof Cash_box_renditionsScalarFieldEnum)[keyof typeof Cash_box_renditionsScalarFieldEnum]
+
+
+export const Cash_box_user_rolesScalarFieldEnum = {
+  id: 'id',
+  cash_box_id: 'cash_box_id',
+  user_id: 'user_id',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_box_user_rolesScalarFieldEnum = (typeof Cash_box_user_rolesScalarFieldEnum)[keyof typeof Cash_box_user_rolesScalarFieldEnum]
+
+
+export const Cash_box_transfersScalarFieldEnum = {
+  id: 'id',
+  session_id: 'session_id',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  dest_type: 'dest_type',
+  dest_id: 'dest_id',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  rate_type: 'rate_type',
+  converted_amount: 'converted_amount',
+  description: 'description',
+  reference: 'reference',
+  transfer_type: 'transfer_type',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Cash_box_transfersScalarFieldEnum = (typeof Cash_box_transfersScalarFieldEnum)[keyof typeof Cash_box_transfersScalarFieldEnum]
+
+
+export const PaymentsScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  type: 'type',
+  date: 'date',
+  party_id: 'party_id',
+  party_type: 'party_type',
+  payment_method: 'payment_method',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  rate_type: 'rate_type',
+  converted_amount: 'converted_amount',
+  exchange_note: 'exchange_note',
+  description: 'description',
+  reference: 'reference',
+  bank_account_id: 'bank_account_id',
+  cash_box_id: 'cash_box_id',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type PaymentsScalarFieldEnum = (typeof PaymentsScalarFieldEnum)[keyof typeof PaymentsScalarFieldEnum]
+
+
+export const Payment_documentsScalarFieldEnum = {
+  id: 'id',
+  payment_id: 'payment_id',
+  document_id: 'document_id',
+  amount_applied: 'amount_applied',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Payment_documentsScalarFieldEnum = (typeof Payment_documentsScalarFieldEnum)[keyof typeof Payment_documentsScalarFieldEnum]
+
+
+export const ChecksScalarFieldEnum = {
+  id: 'id',
+  payment_id: 'payment_id',
+  check_number: 'check_number',
+  bank_name: 'bank_name',
+  bank_branch: 'bank_branch',
+  account_number: 'account_number',
+  issuer_name: 'issuer_name',
+  issuer_id: 'issuer_id',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  issue_date: 'issue_date',
+  due_date: 'due_date',
+  status: 'status',
+  is_own: 'is_own',
+  notes: 'notes',
+  payment_date: 'payment_date',
+  notification_sent: 'notification_sent',
+  confirmed_by: 'confirmed_by',
+  confirmed_at: 'confirmed_at',
+  deposit_date: 'deposit_date',
+  clearing_date: 'clearing_date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type ChecksScalarFieldEnum = (typeof ChecksScalarFieldEnum)[keyof typeof ChecksScalarFieldEnum]
+
+
+export const Credit_cardsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  brand: 'brand',
+  last_four: 'last_four',
+  bank_name: 'bank_name',
+  holder_name: 'holder_name',
+  holder_id: 'holder_id',
+  credit_limit: 'credit_limit',
+  currency_code: 'currency_code',
+  commission_rate: 'commission_rate',
+  clearing_days: 'clearing_days',
+  closing_day: 'closing_day',
+  due_day: 'due_day',
+  party_id: 'party_id',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Credit_cardsScalarFieldEnum = (typeof Credit_cardsScalarFieldEnum)[keyof typeof Credit_cardsScalarFieldEnum]
+
+
+export const Credit_card_transactionsScalarFieldEnum = {
+  id: 'id',
+  credit_card_id: 'credit_card_id',
+  payment_id: 'payment_id',
+  type: 'type',
+  date: 'date',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  rate_type: 'rate_type',
+  converted_amount: 'converted_amount',
+  commission_rate: 'commission_rate',
+  commission_amount: 'commission_amount',
+  net_amount: 'net_amount',
+  net_currency_code: 'net_currency_code',
+  net_exchange_rate: 'net_exchange_rate',
+  expected_clearing_date: 'expected_clearing_date',
+  actual_clearing_date: 'actual_clearing_date',
+  clearing_status: 'clearing_status',
+  installments_total: 'installments_total',
+  installment_amount: 'installment_amount',
+  description: 'description',
+  authorization: 'authorization',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Credit_card_transactionsScalarFieldEnum = (typeof Credit_card_transactionsScalarFieldEnum)[keyof typeof Credit_card_transactionsScalarFieldEnum]
+
+
+export const Credit_card_installmentsScalarFieldEnum = {
+  id: 'id',
+  transaction_id: 'transaction_id',
+  installment_number: 'installment_number',
+  total_installments: 'total_installments',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  due_date: 'due_date',
+  status: 'status',
+  paid_date: 'paid_date',
+  paid_amount: 'paid_amount',
+  paid_currency_code: 'paid_currency_code',
+  paid_exchange_rate: 'paid_exchange_rate',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Credit_card_installmentsScalarFieldEnum = (typeof Credit_card_installmentsScalarFieldEnum)[keyof typeof Credit_card_installmentsScalarFieldEnum]
+
+
+export const Credit_card_summariesScalarFieldEnum = {
+  id: 'id',
+  credit_card_id: 'credit_card_id',
+  month: 'month',
+  year: 'year',
+  closing_date: 'closing_date',
+  due_date: 'due_date',
+  currency_code: 'currency_code',
+  total_purchases: 'total_purchases',
+  total_installments: 'total_installments',
+  total_payments: 'total_payments',
+  balance: 'balance',
+  display_currency_code: 'display_currency_code',
+  display_exchange_rate: 'display_exchange_rate',
+  display_total_purchases: 'display_total_purchases',
+  display_total_installments: 'display_total_installments',
+  display_total_payments: 'display_total_payments',
+  display_balance: 'display_balance',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Credit_card_summariesScalarFieldEnum = (typeof Credit_card_summariesScalarFieldEnum)[keyof typeof Credit_card_summariesScalarFieldEnum]
+
+
+export const Credit_card_summary_itemsScalarFieldEnum = {
+  id: 'id',
+  summary_id: 'summary_id',
+  transaction_id: 'transaction_id',
+  installment_number: 'installment_number',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Credit_card_summary_itemsScalarFieldEnum = (typeof Credit_card_summary_itemsScalarFieldEnum)[keyof typeof Credit_card_summary_itemsScalarFieldEnum]
+
+
+export const Current_accountsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  party_type: 'party_type',
+  currency_code: 'currency_code',
+  balance: 'balance',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Current_accountsScalarFieldEnum = (typeof Current_accountsScalarFieldEnum)[keyof typeof Current_accountsScalarFieldEnum]
+
+
+export const Current_account_entriesScalarFieldEnum = {
+  id: 'id',
+  current_account_id: 'current_account_id',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  balance_before: 'balance_before',
+  balance_after: 'balance_after',
+  description: 'description',
+  reference_type: 'reference_type',
+  reference_id: 'reference_id',
+  payment_id: 'payment_id',
+  date: 'date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Current_account_entriesScalarFieldEnum = (typeof Current_account_entriesScalarFieldEnum)[keyof typeof Current_account_entriesScalarFieldEnum]
 
 
 export const Warehouse_stockScalarFieldEnum = {
@@ -7764,6 +9867,20 @@ export type ListEnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'PartyType'
+ */
+export type EnumPartyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartyType'>
+    
+
+
+/**
+ * Reference to a field of type 'PartyType[]'
+ */
+export type ListEnumPartyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartyType[]'>
+    
+
+
+/**
  * Reference to a field of type 'ProductType'
  */
 export type EnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductType'>
@@ -7872,6 +9989,188 @@ export type EnumPermissionEffectFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'PermissionEffect[]'
  */
 export type ListEnumPermissionEffectFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PermissionEffect[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AccountEntryType'
+ */
+export type EnumAccountEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountEntryType'>
+    
+
+
+/**
+ * Reference to a field of type 'AccountEntryType[]'
+ */
+export type ListEnumAccountEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountEntryType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxType'
+ */
+export type EnumCashBoxTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxType'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxType[]'
+ */
+export type ListEnumCashBoxTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxStatus'
+ */
+export type EnumCashBoxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxStatus[]'
+ */
+export type ListEnumCashBoxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxSessionStatus'
+ */
+export type EnumCashBoxSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxSessionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxSessionStatus[]'
+ */
+export type ListEnumCashBoxSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxSessionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxUserRole'
+ */
+export type EnumCashBoxUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxUserRole'>
+    
+
+
+/**
+ * Reference to a field of type 'CashBoxUserRole[]'
+ */
+export type ListEnumCashBoxUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashBoxUserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentType'
+ */
+export type EnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentType[]'
+ */
+export type ListEnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentMethod'
+ */
+export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentMethod[]'
+ */
+export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CheckStatus'
+ */
+export type EnumCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CheckStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CheckStatus[]'
+ */
+export type ListEnumCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CheckStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CreditCardType'
+ */
+export type EnumCreditCardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditCardType'>
+    
+
+
+/**
+ * Reference to a field of type 'CreditCardType[]'
+ */
+export type ListEnumCreditCardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditCardType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CreditCardBrand'
+ */
+export type EnumCreditCardBrandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditCardBrand'>
+    
+
+
+/**
+ * Reference to a field of type 'CreditCardBrand[]'
+ */
+export type ListEnumCreditCardBrandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditCardBrand[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CreditCardTransactionType'
+ */
+export type EnumCreditCardTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditCardTransactionType'>
+    
+
+
+/**
+ * Reference to a field of type 'CreditCardTransactionType[]'
+ */
+export type ListEnumCreditCardTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditCardTransactionType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ClearingStatus'
+ */
+export type EnumClearingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClearingStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ClearingStatus[]'
+ */
+export type ListEnumClearingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClearingStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InstallmentStatus'
+ */
+export type EnumInstallmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InstallmentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InstallmentStatus[]'
+ */
+export type ListEnumInstallmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InstallmentStatus[]'>
     
 
 
@@ -7999,6 +10298,8 @@ export type GlobalOmitConfig = {
   document_types?: Prisma.document_typesOmit
   document_type_taxes?: Prisma.document_type_taxesOmit
   documents?: Prisma.documentsOmit
+  employees?: Prisma.employeesOmit
+  partners?: Prisma.partnersOmit
   product_structure_versions?: Prisma.product_structure_versionsOmit
   entity_photos?: Prisma.entity_photosOmit
   files?: Prisma.filesOmit
@@ -8057,6 +10358,25 @@ export type GlobalOmitConfig = {
   user_permission_overrides?: Prisma.user_permission_overridesOmit
   product_taxes?: Prisma.product_taxesOmit
   taxes?: Prisma.taxesOmit
+  bank_accounts?: Prisma.bank_accountsOmit
+  bank_account_movements?: Prisma.bank_account_movementsOmit
+  cash_boxes?: Prisma.cash_boxesOmit
+  cash_box_sessions?: Prisma.cash_box_sessionsOmit
+  cash_box_balances?: Prisma.cash_box_balancesOmit
+  cash_box_movements?: Prisma.cash_box_movementsOmit
+  cash_box_renditions?: Prisma.cash_box_renditionsOmit
+  cash_box_user_roles?: Prisma.cash_box_user_rolesOmit
+  cash_box_transfers?: Prisma.cash_box_transfersOmit
+  payments?: Prisma.paymentsOmit
+  payment_documents?: Prisma.payment_documentsOmit
+  checks?: Prisma.checksOmit
+  credit_cards?: Prisma.credit_cardsOmit
+  credit_card_transactions?: Prisma.credit_card_transactionsOmit
+  credit_card_installments?: Prisma.credit_card_installmentsOmit
+  credit_card_summaries?: Prisma.credit_card_summariesOmit
+  credit_card_summary_items?: Prisma.credit_card_summary_itemsOmit
+  current_accounts?: Prisma.current_accountsOmit
+  current_account_entries?: Prisma.current_account_entriesOmit
   warehouse_stock?: Prisma.warehouse_stockOmit
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOmit
   warehouses?: Prisma.warehousesOmit

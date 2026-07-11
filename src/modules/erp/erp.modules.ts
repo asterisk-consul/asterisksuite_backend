@@ -17,6 +17,9 @@ import { PurchasesModule } from './purchase/purchases.module';
 import { RatePriceModule } from './services/rate-price.module';
 import { TaxesModule } from './taxes/taxes.module';
 import { DocumentsPurchasesModule } from './documents-purchases/documents_purchases.module';
+import { EmployeesModule } from './employees/employees.module';
+import { PartnersModule } from './partners/partners.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -35,6 +38,9 @@ import { DocumentsPurchasesModule } from './documents-purchases/documents_purcha
     PurchasesModule,
     RatePriceModule,
     TaxesModule,
+    EmployeesModule,
+    PartnersModule,
+    AuditModule,
   ],
   exports: [
     AccountsModule,
@@ -51,6 +57,9 @@ import { DocumentsPurchasesModule } from './documents-purchases/documents_purcha
     PurchasesModule,
     RatePriceModule,
     TaxesModule,
+    EmployeesModule,
+    PartnersModule,
+    AuditModule,
   ],
 })
 export class ErpModulesModule {}

@@ -110,3 +110,116 @@ enum CostValueType {
   FIXED_PER_UNIT
   @@schema("tenant")
 }
+
+// ══════════════════════════════════════════════════════════
+// TESORERÍA — Enums
+// ══════════════════════════════════════════════════════════
+
+enum PaymentMethod {
+  CASH
+  CHECK
+  BANK_TRANSFER
+  CREDIT_CARD
+  DEBIT_CARD
+  VIRTUAL_WALLET
+  @@schema("tenant")
+}
+
+enum PaymentType {
+  PAYMENT
+  COLLECTION
+  @@schema("tenant")
+}
+
+enum CheckStatus {
+  PENDING
+  CLEARED
+  BOUNCED
+  CANCELLED
+  @@schema("tenant")
+}
+
+enum AccountEntryType {
+  PAYMENT
+  COLLECTION
+  ADVANCE
+  LOAN
+  LOAN_PAYMENT
+  ADJUSTMENT
+  TRANSFER
+  CHECK_ISSUED
+  CHECK_RECEIVED
+  CHECK_BOUNCED
+  @@schema("tenant")
+}
+
+enum CashBoxType {
+  MAIN
+  FIXED
+  REGISTER
+  @@schema("tenant")
+}
+
+enum CashBoxStatus {
+  OPEN
+  CLOSED
+  @@schema("tenant")
+}
+
+enum CashBoxSessionStatus {
+  OPEN
+  CLOSED
+  FORCED
+  @@schema("tenant")
+}
+
+enum CashBoxUserRole {
+  RESPONSIBLE
+  OPERATOR
+  VIEWER
+  @@schema("tenant")
+}
+
+enum CreditCardType {
+  COMPANY
+  CUSTOMER
+  @@schema("tenant")
+}
+
+enum CreditCardBrand {
+  VISA
+  MASTERCARD
+  AMEX
+  NARANJA
+  CABAL
+  OTHER
+  @@schema("tenant")
+}
+
+enum CreditCardTransactionType {
+  PURCHASE
+  COLLECTION
+  @@schema("tenant")
+}
+
+enum ClearingStatus {
+  PENDING
+  CLEARED
+  FAILED
+  @@schema("tenant")
+}
+
+enum InstallmentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  @@schema("tenant")
+}
+
+enum PartyType {
+  CUSTOMER
+  SUPPLIER
+  EMPLOYEE
+  PARTNER
+  @@schema("tenant")
+}

@@ -98,6 +98,16 @@ export type document_type_taxes = Prisma.document_type_taxesModel
  */
 export type documents = Prisma.documentsModel
 /**
+ * Model employees
+ * 
+ */
+export type employees = Prisma.employeesModel
+/**
+ * Model partners
+ * 
+ */
+export type partners = Prisma.partnersModel
+/**
  * Model product_structure_versions
  * 
  */
@@ -387,6 +397,101 @@ export type product_taxes = Prisma.product_taxesModel
  * 
  */
 export type taxes = Prisma.taxesModel
+/**
+ * Model bank_accounts
+ * 
+ */
+export type bank_accounts = Prisma.bank_accountsModel
+/**
+ * Model bank_account_movements
+ * 
+ */
+export type bank_account_movements = Prisma.bank_account_movementsModel
+/**
+ * Model cash_boxes
+ * 
+ */
+export type cash_boxes = Prisma.cash_boxesModel
+/**
+ * Model cash_box_sessions
+ * 
+ */
+export type cash_box_sessions = Prisma.cash_box_sessionsModel
+/**
+ * Model cash_box_balances
+ * 
+ */
+export type cash_box_balances = Prisma.cash_box_balancesModel
+/**
+ * Model cash_box_movements
+ * 
+ */
+export type cash_box_movements = Prisma.cash_box_movementsModel
+/**
+ * Model cash_box_renditions
+ * 
+ */
+export type cash_box_renditions = Prisma.cash_box_renditionsModel
+/**
+ * Model cash_box_user_roles
+ * 
+ */
+export type cash_box_user_roles = Prisma.cash_box_user_rolesModel
+/**
+ * Model cash_box_transfers
+ * 
+ */
+export type cash_box_transfers = Prisma.cash_box_transfersModel
+/**
+ * Model payments
+ * 
+ */
+export type payments = Prisma.paymentsModel
+/**
+ * Model payment_documents
+ * 
+ */
+export type payment_documents = Prisma.payment_documentsModel
+/**
+ * Model checks
+ * 
+ */
+export type checks = Prisma.checksModel
+/**
+ * Model credit_cards
+ * 
+ */
+export type credit_cards = Prisma.credit_cardsModel
+/**
+ * Model credit_card_transactions
+ * 
+ */
+export type credit_card_transactions = Prisma.credit_card_transactionsModel
+/**
+ * Model credit_card_installments
+ * 
+ */
+export type credit_card_installments = Prisma.credit_card_installmentsModel
+/**
+ * Model credit_card_summaries
+ * 
+ */
+export type credit_card_summaries = Prisma.credit_card_summariesModel
+/**
+ * Model credit_card_summary_items
+ * 
+ */
+export type credit_card_summary_items = Prisma.credit_card_summary_itemsModel
+/**
+ * Model current_accounts
+ * 
+ */
+export type current_accounts = Prisma.current_accountsModel
+/**
+ * Model current_account_entries
+ * 
+ */
+export type current_account_entries = Prisma.current_account_entriesModel
 /**
  * Model warehouse_stock
  * 

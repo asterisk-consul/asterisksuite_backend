@@ -1,6 +1,6 @@
 model business_parties {
   id              String            @id @default(uuid()) @db.Uuid
-  type            String            @db.VarChar(20)
+  type            PartyType
   name            String            @db.VarChar(255)
   tax_id          String?           @db.VarChar(50)
   exemption_rate  Decimal           @default(0) @db.Decimal(5, 2)
@@ -16,6 +16,11 @@ model business_parties {
   documents       documents[]
   party_contacts  party_contacts[]
   party_locations party_locations[]
+  employees       employees[]
+  partners        partners[]
+  payments        payments[]
+  credit_cards    credit_cards[]
+  current_accounts current_accounts[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
     @@schema("tenant")

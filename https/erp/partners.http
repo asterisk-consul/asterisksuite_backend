@@ -1,0 +1,150 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@partnerId = 0fdd928f-31c1-4b16-9af7-a5aeaf0e9606
+@userId = 9c331e1a-b343-43eb-bfe7-15c9f00631d2
+
+### =========================================================
+### CREATE PARTNER - Sin user
+### =========================================================
+
+POST {{baseUrl}}/erp/partners
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Ana",
+  "last_name": "Martínez",
+  "share_percentage": "25.00",
+  "capital_contributed": "3000000"
+}
+
+###
+
+### =========================================================
+### CREATE PARTNER - Vincular user existente
+### =========================================================
+
+POST {{baseUrl}}/erp/partners
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Pedro",
+  "last_name": "Sánchez",
+  "user_id": "{{userId}}"
+}
+
+###
+
+### =========================================================
+### CREATE PARTNER - Crear user nuevo y vincular
+### =========================================================
+
+POST {{baseUrl}}/erp/partners
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Laura",
+  "last_name": "Fernández",
+  "share_percentage": "15.00",
+  "capital_contributed": "2000000",
+  "create_user": {
+    "name": "Laura Fernández",
+    "email": "laura@test.com",
+    "password": "123456"
+  }
+}
+
+###
+
+### =========================================================
+### GET ALL PARTNERS
+### =========================================================
+
+GET {{baseUrl}}/erp/partners
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE PARTNER (incluye user si está vinculado)
+### =========================================================
+
+GET {{baseUrl}}/erp/partners/{{partnerId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### LINK USER - Vincular partner con user existente
+### =========================================================
+
+PATCH {{baseUrl}}/erp/partners/{{partnerId}}/link-user
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "user_id": "{{userId}}"
+}
+
+###
+
+### =========================================================
+### UNLINK USER - Desvincular partner de su user
+### =========================================================
+
+PATCH {{baseUrl}}/erp/partners/{{partnerId}}/unlink-user
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### UPDATE PARTNER
+### =========================================================
+
+PATCH {{baseUrl}}/erp/partners/{{partnerId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "share_percentage": "30.00",
+  "capital_contributed": "5000000"
+}
+
+###
+
+### =========================================================
+### DELETE PARTNER (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/erp/partners/{{partnerId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

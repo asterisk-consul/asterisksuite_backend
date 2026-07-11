@@ -128,6 +128,7 @@ model documents {
   exempt_amount    Decimal           @default(0) @db.Decimal(15, 2)
   total_taxes      Decimal           @default(0) @db.Decimal(15, 2)
   total            Decimal           @default(0) @db.Decimal(15, 2)
+  paid_amount      Decimal           @default(0) @db.Decimal(15, 2)
   descrip          String?           @db.VarChar(50)
   ref              String?           @db.VarChar(50)
   currency_code    String?           @db.VarChar(10)
@@ -143,6 +144,7 @@ model documents {
   document_taxes   document_taxes[]
   document_types   document_types    @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_documents payment_documents[]
 
   @@unique([document_type_id, number], map: "uq_document_number")
     @@schema("tenant")

@@ -33,6 +33,7 @@ export type DocumentsAvgAggregateOutputType = {
   exempt_amount: runtime.Decimal | null
   total_taxes: runtime.Decimal | null
   total: runtime.Decimal | null
+  paid_amount: runtime.Decimal | null
   taxable_base: runtime.Decimal | null
 }
 
@@ -43,6 +44,7 @@ export type DocumentsSumAggregateOutputType = {
   exempt_amount: runtime.Decimal | null
   total_taxes: runtime.Decimal | null
   total: runtime.Decimal | null
+  paid_amount: runtime.Decimal | null
   taxable_base: runtime.Decimal | null
 }
 
@@ -57,6 +59,7 @@ export type DocumentsMinAggregateOutputType = {
   exempt_amount: runtime.Decimal | null
   total_taxes: runtime.Decimal | null
   total: runtime.Decimal | null
+  paid_amount: runtime.Decimal | null
   descrip: string | null
   ref: string | null
   currency_code: string | null
@@ -81,6 +84,7 @@ export type DocumentsMaxAggregateOutputType = {
   exempt_amount: runtime.Decimal | null
   total_taxes: runtime.Decimal | null
   total: runtime.Decimal | null
+  paid_amount: runtime.Decimal | null
   descrip: string | null
   ref: string | null
   currency_code: string | null
@@ -105,6 +109,7 @@ export type DocumentsCountAggregateOutputType = {
   exempt_amount: number
   total_taxes: number
   total: number
+  paid_amount: number
   descrip: number
   ref: number
   currency_code: number
@@ -127,6 +132,7 @@ export type DocumentsAvgAggregateInputType = {
   exempt_amount?: true
   total_taxes?: true
   total?: true
+  paid_amount?: true
   taxable_base?: true
 }
 
@@ -137,6 +143,7 @@ export type DocumentsSumAggregateInputType = {
   exempt_amount?: true
   total_taxes?: true
   total?: true
+  paid_amount?: true
   taxable_base?: true
 }
 
@@ -151,6 +158,7 @@ export type DocumentsMinAggregateInputType = {
   exempt_amount?: true
   total_taxes?: true
   total?: true
+  paid_amount?: true
   descrip?: true
   ref?: true
   currency_code?: true
@@ -175,6 +183,7 @@ export type DocumentsMaxAggregateInputType = {
   exempt_amount?: true
   total_taxes?: true
   total?: true
+  paid_amount?: true
   descrip?: true
   ref?: true
   currency_code?: true
@@ -199,6 +208,7 @@ export type DocumentsCountAggregateInputType = {
   exempt_amount?: true
   total_taxes?: true
   total?: true
+  paid_amount?: true
   descrip?: true
   ref?: true
   currency_code?: true
@@ -310,6 +320,7 @@ export type DocumentsGroupByOutputType = {
   exempt_amount: runtime.Decimal
   total_taxes: runtime.Decimal
   total: runtime.Decimal
+  paid_amount: runtime.Decimal
   descrip: string | null
   ref: string | null
   currency_code: string | null
@@ -357,6 +368,7 @@ export type documentsWhereInput = {
   exempt_amount?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
@@ -372,6 +384,7 @@ export type documentsWhereInput = {
   document_taxes?: Prisma.Document_taxesListRelationFilter
   document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
   business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
+  payment_documents?: Prisma.Payment_documentsListRelationFilter
 }
 
 export type documentsOrderByWithRelationInput = {
@@ -385,6 +398,7 @@ export type documentsOrderByWithRelationInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -400,6 +414,7 @@ export type documentsOrderByWithRelationInput = {
   document_taxes?: Prisma.document_taxesOrderByRelationAggregateInput
   document_types?: Prisma.document_typesOrderByWithRelationInput
   business_parties?: Prisma.business_partiesOrderByWithRelationInput
+  payment_documents?: Prisma.payment_documentsOrderByRelationAggregateInput
 }
 
 export type documentsWhereUniqueInput = Prisma.AtLeast<{
@@ -417,6 +432,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   exempt_amount?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
@@ -432,6 +448,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   document_taxes?: Prisma.Document_taxesListRelationFilter
   document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
   business_parties?: Prisma.XOR<Prisma.Business_partiesNullableScalarRelationFilter, Prisma.business_partiesWhereInput> | null
+  payment_documents?: Prisma.Payment_documentsListRelationFilter
 }, "id" | "document_type_id_number">
 
 export type documentsOrderByWithAggregationInput = {
@@ -445,6 +462,7 @@ export type documentsOrderByWithAggregationInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -477,6 +495,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   exempt_amount?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   ref?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
@@ -499,6 +518,7 @@ export type documentsCreateInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -514,6 +534,7 @@ export type documentsCreateInput = {
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateInput = {
@@ -527,6 +548,7 @@ export type documentsUncheckedCreateInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -540,6 +562,7 @@ export type documentsUncheckedCreateInput = {
   source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUpdateInput = {
@@ -551,6 +574,7 @@ export type documentsUpdateInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -566,6 +590,7 @@ export type documentsUpdateInput = {
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateInput = {
@@ -579,6 +604,7 @@ export type documentsUncheckedUpdateInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -592,6 +618,7 @@ export type documentsUncheckedUpdateInput = {
   source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateManyInput = {
@@ -605,6 +632,7 @@ export type documentsCreateManyInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -627,6 +655,7 @@ export type documentsUpdateManyMutationInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -651,6 +680,7 @@ export type documentsUncheckedUpdateManyInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -695,6 +725,7 @@ export type documentsCountOrderByAggregateInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   descrip?: Prisma.SortOrder
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
@@ -715,6 +746,7 @@ export type documentsAvgOrderByAggregateInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
 }
 
@@ -729,6 +761,7 @@ export type documentsMaxOrderByAggregateInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   descrip?: Prisma.SortOrder
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
@@ -753,6 +786,7 @@ export type documentsMinOrderByAggregateInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   descrip?: Prisma.SortOrder
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
@@ -773,6 +807,7 @@ export type documentsSumOrderByAggregateInput = {
   exempt_amount?: Prisma.SortOrder
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  paid_amount?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
 }
 
@@ -888,6 +923,20 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput = {
   deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
 }
 
+export type documentsCreateNestedOneWithoutPayment_documentsInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutPayment_documentsInput, Prisma.documentsUncheckedCreateWithoutPayment_documentsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPayment_documentsInput
+  connect?: Prisma.documentsWhereUniqueInput
+}
+
+export type documentsUpdateOneRequiredWithoutPayment_documentsNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutPayment_documentsInput, Prisma.documentsUncheckedCreateWithoutPayment_documentsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutPayment_documentsInput
+  upsert?: Prisma.documentsUpsertWithoutPayment_documentsInput
+  connect?: Prisma.documentsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutPayment_documentsInput, Prisma.documentsUpdateWithoutPayment_documentsInput>, Prisma.documentsUncheckedUpdateWithoutPayment_documentsInput>
+}
+
 export type documentsCreateWithoutDocument_itemsInput = {
   id?: string
   number: number
@@ -897,6 +946,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -911,6 +961,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_itemsInput = {
@@ -924,6 +975,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -936,6 +988,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   deleted_by?: string | null
   source?: string
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_itemsInput = {
@@ -963,6 +1016,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -977,6 +1031,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
@@ -990,6 +1045,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1002,6 +1058,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutDocument_taxesInput = {
@@ -1013,6 +1070,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1027,6 +1085,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_taxesInput = {
@@ -1040,6 +1099,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1052,6 +1112,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   deleted_by?: string | null
   source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_taxesInput = {
@@ -1079,6 +1140,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1093,6 +1155,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
@@ -1106,6 +1169,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1118,6 +1182,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutDocument_typesInput = {
@@ -1129,6 +1194,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1143,6 +1209,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_typesInput = {
@@ -1155,6 +1222,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1168,6 +1236,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_typesInput = {
@@ -1210,6 +1279,7 @@ export type documentsScalarWhereInput = {
   exempt_amount?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
@@ -1232,6 +1302,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1246,6 +1317,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
   document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
@@ -1258,6 +1330,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1271,6 +1344,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   source?: string
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutBusiness_partiesInput = {
@@ -1299,6 +1373,130 @@ export type documentsUpdateManyWithWhereWithoutBusiness_partiesInput = {
   data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesInput>
 }
 
+export type documentsCreateWithoutPayment_documentsInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+}
+
+export type documentsUncheckedCreateWithoutPayment_documentsInput = {
+  id?: string
+  document_type_id: string
+  party_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+}
+
+export type documentsCreateOrConnectWithoutPayment_documentsInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutPayment_documentsInput, Prisma.documentsUncheckedCreateWithoutPayment_documentsInput>
+}
+
+export type documentsUpsertWithoutPayment_documentsInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutPayment_documentsInput, Prisma.documentsUncheckedUpdateWithoutPayment_documentsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutPayment_documentsInput, Prisma.documentsUncheckedCreateWithoutPayment_documentsInput>
+  where?: Prisma.documentsWhereInput
+}
+
+export type documentsUpdateToOneWithWhereWithoutPayment_documentsInput = {
+  where?: Prisma.documentsWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutPayment_documentsInput, Prisma.documentsUncheckedUpdateWithoutPayment_documentsInput>
+}
+
+export type documentsUpdateWithoutPayment_documentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+}
+
 export type documentsCreateManyDocument_typesInput = {
   id?: string
   party_id?: string | null
@@ -1309,6 +1507,7 @@ export type documentsCreateManyDocument_typesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1331,6 +1530,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1345,6 +1545,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_typesInput = {
@@ -1357,6 +1558,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1370,6 +1572,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
@@ -1382,6 +1585,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1405,6 +1609,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
@@ -1427,6 +1632,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1441,6 +1647,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
   document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
@@ -1453,6 +1660,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1466,6 +1674,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   source?: Prisma.StringFieldUpdateOperationsInput | string
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
@@ -1478,6 +1687,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1499,11 +1709,13 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
 export type DocumentsCountOutputType = {
   document_items: number
   document_taxes: number
+  payment_documents: number
 }
 
 export type DocumentsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | DocumentsCountOutputTypeCountDocument_itemsArgs
   document_taxes?: boolean | DocumentsCountOutputTypeCountDocument_taxesArgs
+  payment_documents?: boolean | DocumentsCountOutputTypeCountPayment_documentsArgs
 }
 
 /**
@@ -1530,6 +1742,13 @@ export type DocumentsCountOutputTypeCountDocument_taxesArgs<ExtArgs extends runt
   where?: Prisma.document_taxesWhereInput
 }
 
+/**
+ * DocumentsCountOutputType without action
+ */
+export type DocumentsCountOutputTypeCountPayment_documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.payment_documentsWhereInput
+}
+
 
 export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1542,6 +1761,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   exempt_amount?: boolean
   total_taxes?: boolean
   total?: boolean
+  paid_amount?: boolean
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
@@ -1557,6 +1777,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
+  payment_documents?: boolean | Prisma.documents$payment_documentsArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
@@ -1571,6 +1792,7 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   exempt_amount?: boolean
   total_taxes?: boolean
   total?: boolean
+  paid_amount?: boolean
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
@@ -1597,6 +1819,7 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   exempt_amount?: boolean
   total_taxes?: boolean
   total?: boolean
+  paid_amount?: boolean
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
@@ -1623,6 +1846,7 @@ export type documentsSelectScalar = {
   exempt_amount?: boolean
   total_taxes?: boolean
   total?: boolean
+  paid_amount?: boolean
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
@@ -1636,12 +1860,13 @@ export type documentsSelectScalar = {
   source?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "descrip" | "ref" | "currency_code" | "taxable_base" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "taxable_base" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
+  payment_documents?: boolean | Prisma.documents$payment_documentsArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type documentsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1660,6 +1885,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     document_taxes: Prisma.$document_taxesPayload<ExtArgs>[]
     document_types: Prisma.$document_typesPayload<ExtArgs>
     business_parties: Prisma.$business_partiesPayload<ExtArgs> | null
+    payment_documents: Prisma.$payment_documentsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1672,6 +1898,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     exempt_amount: runtime.Decimal
     total_taxes: runtime.Decimal
     total: runtime.Decimal
+    paid_amount: runtime.Decimal
     descrip: string | null
     ref: string | null
     currency_code: string | null
@@ -2081,6 +2308,7 @@ export interface Prisma__documentsClient<T, Null = never, ExtArgs extends runtim
   document_taxes<T extends Prisma.documents$document_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$document_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   document_types<T extends Prisma.document_typesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_typesDefaultArgs<ExtArgs>>): Prisma.Prisma__document_typesClient<runtime.Types.Result.GetResult<Prisma.$document_typesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   business_parties<T extends Prisma.documents$business_partiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$business_partiesArgs<ExtArgs>>): Prisma.Prisma__business_partiesClient<runtime.Types.Result.GetResult<Prisma.$business_partiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  payment_documents<T extends Prisma.documents$payment_documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$payment_documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$payment_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2120,6 +2348,7 @@ export interface documentsFieldRefs {
   readonly exempt_amount: Prisma.FieldRef<"documents", 'Decimal'>
   readonly total_taxes: Prisma.FieldRef<"documents", 'Decimal'>
   readonly total: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly paid_amount: Prisma.FieldRef<"documents", 'Decimal'>
   readonly descrip: Prisma.FieldRef<"documents", 'String'>
   readonly ref: Prisma.FieldRef<"documents", 'String'>
   readonly currency_code: Prisma.FieldRef<"documents", 'String'>
@@ -2596,6 +2825,30 @@ export type documents$business_partiesArgs<ExtArgs extends runtime.Types.Extensi
    */
   include?: Prisma.business_partiesInclude<ExtArgs> | null
   where?: Prisma.business_partiesWhereInput
+}
+
+/**
+ * documents.payment_documents
+ */
+export type documents$payment_documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the payment_documents
+   */
+  select?: Prisma.payment_documentsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the payment_documents
+   */
+  omit?: Prisma.payment_documentsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.payment_documentsInclude<ExtArgs> | null
+  where?: Prisma.payment_documentsWhereInput
+  orderBy?: Prisma.payment_documentsOrderByWithRelationInput | Prisma.payment_documentsOrderByWithRelationInput[]
+  cursor?: Prisma.payment_documentsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Payment_documentsScalarFieldEnum | Prisma.Payment_documentsScalarFieldEnum[]
 }
 
 /**

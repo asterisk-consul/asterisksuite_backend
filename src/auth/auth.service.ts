@@ -102,6 +102,37 @@ export class AuthService {
       },
     });
 
+    // Vincular con employee/partner si se solicita (requiere tenant context)
+    if (dto.link_employee_id || dto.link_partner_id) {
+      try {
+        const tenantPrisma = this.db.getClientForCurrentContext();
+
+        if (dto.link_employee_id) {
+          await tenantPrisma.employees.update({
+            where: { id: dto.link_employee_id },
+            data: { user_id: user.id },
+          });
+          await this.prisma.users.update({
+            where: { id: user.id },
+            data: { employee_id: dto.link_employee_id },
+          });
+        }
+
+        if (dto.link_partner_id) {
+          await tenantPrisma.partners.update({
+            where: { id: dto.link_partner_id },
+            data: { user_id: user.id },
+          });
+          await this.prisma.users.update({
+            where: { id: user.id },
+            data: { partner_id: dto.link_partner_id },
+          });
+        }
+      } catch (e) {
+        // Si no hay tenant context, ignora el linking (el endpoint es público)
+      }
+    }
+
     return this.generateTokens({
       id: user.id,
       name: user.name,

@@ -1,0 +1,609 @@
+// ══════════════════════════════════════════════════════════
+// TESORERÍA — Modelos financieros
+// ══════════════════════════════════════════════════════════
+
+// ─── CUENTAS BANCARIAS ──────────────────────────────────
+
+model bank_accounts {
+  id              String           @id @default(uuid()) @db.Uuid
+  name            String           @db.VarChar(100)
+  bank_name       String           @db.VarChar(100)
+  account_type    String           @db.VarChar(50)
+  cbu             String?          @db.VarChar(30)
+  alias           String?          @db.VarChar(50)
+  account_number  String?          @db.VarChar(50)
+  currency_code   String           @db.VarChar(10)
+  balance         Decimal          @default(0) @db.Decimal(15, 2)
+  active          Boolean          @default(true)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  payments        payments[]
+  movements       bank_account_movements[]
+  cash_box_movements cash_box_movements[]
+
+  @@schema("tenant")
+}
+
+model bank_account_movements {
+  id              String           @id @default(uuid()) @db.Uuid
+  bank_account_id String           @db.Uuid
+  type            AccountEntryType
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  balance_before  Decimal          @db.Decimal(15, 2)
+  balance_after   Decimal          @db.Decimal(15, 2)
+  description     String?          @db.VarChar(255)
+  reference_type  String?          @db.VarChar(50)
+  reference_id    String?          @db.Uuid
+  payment_id      String?          @db.Uuid
+  date            DateTime         @default(now())
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  bank_account    bank_accounts    @relation(fields: [bank_account_id], references: [id])
+  payment         payments?        @relation(fields: [payment_id], references: [id])
+
+  @@index([bank_account_id])
+  @@index([payment_id])
+  @@schema("tenant")
+}
+
+// ─── CAJAS ──────────────────────────────────────────────
+
+model cash_boxes {
+  id                  String              @id @default(uuid()) @db.Uuid
+  name                String              @db.VarChar(100)
+  type                CashBoxType         @default(FIXED)
+  responsible_id      String?             @db.Uuid
+  opening_balance     Decimal             @default(0) @db.Decimal(15, 2)
+  max_limit           Decimal?            @db.Decimal(15, 2)
+  status              CashBoxStatus       @default(OPEN)
+  active              Boolean             @default(true)
+  is_main             Boolean             @default(false)
+  current_session_id  String?             @db.Uuid @unique
+  last_session_closed_at DateTime?
+
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+
+  responsible         employees?          @relation(fields: [responsible_id], references: [id])
+  current_session     cash_box_sessions?  @relation("CurrentSession", fields: [current_session_id], references: [id])
+  balances            cash_box_balances[]
+  movements           cash_box_movements[]
+  renditions          cash_box_renditions[]
+  user_roles          cash_box_user_roles[]
+  sessions            cash_box_sessions[] @relation("SessionHistory")
+  payments            payments[]
+
+  @@schema("tenant")
+}
+
+model cash_box_sessions {
+  id                  String                @id @default(uuid()) @db.Uuid
+  cash_box_id         String                @db.Uuid
+  user_id             String                @db.Uuid
+
+  opened_at           DateTime              @default(now())
+  opening_balance     Decimal               @db.Decimal(15, 2)
+
+  closed_at           DateTime?
+  closing_balance     Decimal?              @db.Decimal(15, 2)
+  actual_balance      Decimal?              @db.Decimal(15, 2)
+  difference          Decimal?              @db.Decimal(15, 2)
+
+  total_income        Decimal               @default(0) @db.Decimal(15, 2)
+  total_expenses      Decimal               @default(0) @db.Decimal(15, 2)
+  movement_count      Int                   @default(0)
+
+  status              CashBoxSessionStatus  @default(OPEN)
+
+  force_closed        Boolean               @default(false)
+  force_closed_by     String?               @db.Uuid
+  force_closed_at     DateTime?
+  force_close_reason  String?               @db.VarChar(255)
+
+  overdue_detected    Boolean               @default(false)
+  overdue_detected_at DateTime?
+  overdue_notified    Boolean               @default(false)
+
+  auto_transfer_enabled Boolean             @default(false)
+  transfer_dest_id    String?               @db.Uuid
+  transfer_dest_type  String?               @db.VarChar(20)
+  transferred_amount  Decimal?              @db.Decimal(15, 2)
+  transferred_at      DateTime?
+
+  created_at          DateTime              @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?             @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?               @db.Uuid
+  updated_by          String?               @db.Uuid
+  deleted_by          String?               @db.Uuid
+
+  cash_box            cash_boxes            @relation("SessionHistory", fields: [cash_box_id], references: [id])
+  current_session_of  cash_boxes[]          @relation("CurrentSession")
+  movements           cash_box_movements[]
+  transfers           cash_box_transfers[]
+
+  @@index([cash_box_id])
+  @@index([user_id])
+  @@index([status])
+  @@schema("tenant")
+}
+
+model cash_box_balances {
+  id              String           @id @default(uuid()) @db.Uuid
+  cash_box_id     String           @db.Uuid
+  currency_code   String           @db.VarChar(10)
+  balance         Decimal          @default(0) @db.Decimal(15, 2)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  cash_box        cash_boxes       @relation(fields: [cash_box_id], references: [id])
+
+  @@unique([cash_box_id, currency_code])
+  @@schema("tenant")
+}
+
+model cash_box_movements {
+  id              String           @id @default(uuid()) @db.Uuid
+  cash_box_id     String           @db.Uuid
+  session_id      String?          @db.Uuid
+  employee_id     String?          @db.Uuid
+  type            AccountEntryType
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  balance_before  Decimal          @db.Decimal(15, 2)
+  balance_after   Decimal          @db.Decimal(15, 2)
+  description     String?          @db.VarChar(255)
+  reference_type  String?          @db.VarChar(50)
+  reference_id    String?          @db.Uuid
+  payment_id      String?          @db.Uuid
+  bank_account_id String?          @db.Uuid
+  date            DateTime         @default(now())
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  cash_box        cash_boxes       @relation(fields: [cash_box_id], references: [id])
+  session         cash_box_sessions? @relation(fields: [session_id], references: [id])
+  employee        employees?       @relation(fields: [employee_id], references: [id])
+  payment         payments?        @relation(fields: [payment_id], references: [id])
+  bank_account    bank_accounts?   @relation(fields: [bank_account_id], references: [id])
+
+  @@index([cash_box_id])
+  @@index([session_id])
+  @@index([payment_id])
+  @@schema("tenant")
+}
+
+model cash_box_renditions {
+  id              String           @id @default(uuid()) @db.Uuid
+  cash_box_id     String           @db.Uuid
+  rendition_number Int
+  start_date      DateTime         @db.Date
+  end_date        DateTime         @db.Date
+  opening_balance Decimal          @db.Decimal(15, 2)
+  total_expenses  Decimal          @default(0) @db.Decimal(15, 2)
+  total_income    Decimal          @default(0) @db.Decimal(15, 2)
+  closing_balance Decimal          @db.Decimal(15, 2)
+  actual_balance  Decimal?         @db.Decimal(15, 2)
+  difference      Decimal?         @db.Decimal(15, 2)
+  status          String           @default("pending") @db.VarChar(20)
+  notes           String?          @db.Text
+  approved_by     String?          @db.Uuid
+  approved_at     DateTime?
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  cash_box        cash_boxes       @relation(fields: [cash_box_id], references: [id])
+
+  @@index([cash_box_id])
+  @@schema("tenant")
+}
+
+model cash_box_user_roles {
+  id              String           @id @default(uuid()) @db.Uuid
+  cash_box_id     String           @db.Uuid
+  user_id         String           @db.Uuid
+  role            CashBoxUserRole  @default(VIEWER)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  cash_box        cash_boxes       @relation(fields: [cash_box_id], references: [id])
+
+  @@unique([cash_box_id, user_id])
+  @@schema("tenant")
+}
+
+model cash_box_transfers {
+  id              String           @id @default(uuid()) @db.Uuid
+  session_id      String?          @db.Uuid
+  source_type     String           @db.VarChar(20)
+  source_id       String           @db.Uuid
+  dest_type       String           @db.VarChar(20)
+  dest_id         String           @db.Uuid
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  rate_type       CurrencyRateType?
+  converted_amount Decimal?        @db.Decimal(15, 2)
+  description     String?          @db.VarChar(255)
+  reference       String?          @db.VarChar(100)
+  transfer_type   String           @db.VarChar(20)
+  status          String           @default("pending") @db.VarChar(20)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  session         cash_box_sessions? @relation(fields: [session_id], references: [id])
+
+  @@index([session_id])
+  @@index([source_type, source_id])
+  @@index([dest_type, dest_id])
+  @@schema("tenant")
+}
+
+// ─── PAGOS Y COBROS ─────────────────────────────────────
+
+model payments {
+  id              String           @id @default(uuid()) @db.Uuid
+  number          Int
+  type            PaymentType
+  date            DateTime         @db.Date
+  party_id        String?          @db.Uuid
+  party_type      String?          @db.VarChar(20)
+  payment_method  PaymentMethod
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  rate_type       CurrencyRateType?
+  converted_amount Decimal?        @db.Decimal(15, 2)
+  exchange_note   String?          @db.VarChar(255)
+  description     String?          @db.VarChar(255)
+  reference       String?          @db.VarChar(100)
+  bank_account_id String?          @db.Uuid
+  cash_box_id     String?          @db.Uuid
+  status          Int              @default(1)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  party           business_parties? @relation(fields: [party_id], references: [id])
+  bank_account    bank_accounts?   @relation(fields: [bank_account_id], references: [id])
+  cash_box        cash_boxes?      @relation(fields: [cash_box_id], references: [id])
+  documents       payment_documents[]
+  checks          checks[]
+  credit_card_transactions credit_card_transactions[]
+  account_entries current_account_entries[]
+  bank_account_movements bank_account_movements[]
+  cash_box_movements cash_box_movements[]
+
+  @@unique([number])
+  @@index([party_id])
+  @@index([date])
+  @@schema("tenant")
+}
+
+model payment_documents {
+  id              String           @id @default(uuid()) @db.Uuid
+  payment_id      String           @db.Uuid
+  document_id     String           @db.Uuid
+  amount_applied  Decimal          @db.Decimal(15, 2)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  payment         payments         @relation(fields: [payment_id], references: [id])
+  document        documents        @relation(fields: [document_id], references: [id])
+
+  @@unique([payment_id, document_id])
+  @@schema("tenant")
+}
+
+// ─── CHEQUES ────────────────────────────────────────────
+
+model checks {
+  id              String           @id @default(uuid()) @db.Uuid
+  payment_id      String?          @db.Uuid
+  check_number    String           @db.VarChar(20)
+  bank_name       String           @db.VarChar(100)
+  bank_branch     String?          @db.VarChar(100)
+  account_number  String?          @db.VarChar(50)
+  issuer_name     String           @db.VarChar(255)
+  issuer_id       String?          @db.VarChar(50)
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  issue_date      DateTime         @db.Date
+  due_date        DateTime         @db.Date
+  status          CheckStatus      @default(PENDING)
+  is_own          Boolean          @default(false)
+  notes           String?          @db.VarChar(255)
+
+  payment_date      DateTime?      @db.Date
+  notification_sent Boolean        @default(false)
+  confirmed_by      String?        @db.Uuid
+  confirmed_at      DateTime?
+
+  deposit_date      DateTime?      @db.Date
+  clearing_date     DateTime?      @db.Date
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  payment         payments?        @relation(fields: [payment_id], references: [id])
+
+  @@index([payment_id])
+  @@index([status])
+  @@index([due_date])
+  @@index([payment_date])
+  @@schema("tenant")
+}
+
+// ─── TARJETAS DE CRÉDITO ────────────────────────────────
+
+model credit_cards {
+  id              String           @id @default(uuid()) @db.Uuid
+  name            String           @db.VarChar(100)
+  type            CreditCardType
+  brand           CreditCardBrand
+  last_four       String           @db.VarChar(4)
+  bank_name       String           @db.VarChar(100)
+  holder_name     String           @db.VarChar(255)
+  holder_id       String?          @db.VarChar(50)
+  credit_limit    Decimal?         @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  commission_rate Decimal?         @db.Decimal(5, 2)
+  clearing_days   Int?
+  closing_day     Int?
+  due_day         Int?
+  party_id        String?          @db.Uuid
+  active          Boolean          @default(true)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  party           business_parties? @relation(fields: [party_id], references: [id])
+  transactions    credit_card_transactions[]
+  summaries       credit_card_summaries[]
+
+  @@schema("tenant")
+}
+
+model credit_card_transactions {
+  id              String           @id @default(uuid()) @db.Uuid
+  credit_card_id  String           @db.Uuid
+  payment_id      String?          @db.Uuid
+  type            CreditCardTransactionType
+  date            DateTime         @db.Date
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  rate_type       CurrencyRateType?
+  converted_amount Decimal?        @db.Decimal(15, 2)
+  commission_rate Decimal?         @db.Decimal(5, 2)
+  commission_amount Decimal?       @db.Decimal(15, 2)
+  net_amount      Decimal?         @db.Decimal(15, 2)
+  net_currency_code String?        @db.VarChar(10)
+  net_exchange_rate Decimal?       @db.Decimal(18, 6)
+  expected_clearing_date DateTime? @db.Date
+  actual_clearing_date   DateTime? @db.Date
+  clearing_status ClearingStatus   @default(PENDING)
+  installments_total Int?
+  installment_amount Decimal?     @db.Decimal(15, 2)
+  description     String?          @db.VarChar(255)
+  authorization   String?          @db.VarChar(50)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  credit_card     credit_cards     @relation(fields: [credit_card_id], references: [id])
+  payment         payments?        @relation(fields: [payment_id], references: [id])
+  installments    credit_card_installments[]
+  summary_items   credit_card_summary_items[]
+
+  @@index([credit_card_id])
+  @@index([payment_id])
+  @@index([clearing_status])
+  @@schema("tenant")
+}
+
+model credit_card_installments {
+  id              String           @id @default(uuid()) @db.Uuid
+  transaction_id  String           @db.Uuid
+  installment_number Int
+  total_installments Int
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  due_date        DateTime         @db.Date
+  status          InstallmentStatus @default(PENDING)
+  paid_date       DateTime?        @db.Date
+  paid_amount     Decimal?         @db.Decimal(15, 2)
+  paid_currency_code String?       @db.VarChar(10)
+  paid_exchange_rate Decimal?      @db.Decimal(18, 6)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  transaction     credit_card_transactions @relation(fields: [transaction_id], references: [id])
+
+  @@index([transaction_id])
+  @@index([due_date])
+  @@index([status])
+  @@schema("tenant")
+}
+
+model credit_card_summaries {
+  id              String           @id @default(uuid()) @db.Uuid
+  credit_card_id  String           @db.Uuid
+  month           Int
+  year            Int
+  closing_date    DateTime         @db.Date
+  due_date        DateTime         @db.Date
+  currency_code   String           @db.VarChar(10)
+  total_purchases Decimal          @default(0) @db.Decimal(15, 2)
+  total_installments Decimal       @default(0) @db.Decimal(15, 2)
+  total_payments  Decimal          @default(0) @db.Decimal(15, 2)
+  balance         Decimal          @default(0) @db.Decimal(15, 2)
+  display_currency_code String?    @db.VarChar(10)
+  display_exchange_rate Decimal?   @db.Decimal(18, 6)
+  display_total_purchases Decimal? @db.Decimal(15, 2)
+  display_total_installments Decimal? @db.Decimal(15, 2)
+  display_total_payments Decimal?  @db.Decimal(15, 2)
+  display_balance Decimal?         @db.Decimal(15, 2)
+  status          String           @default("pending") @db.VarChar(20)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  credit_card     credit_cards     @relation(fields: [credit_card_id], references: [id])
+  items           credit_card_summary_items[]
+
+  @@unique([credit_card_id, month, year])
+  @@schema("tenant")
+}
+
+model credit_card_summary_items {
+  id              String           @id @default(uuid()) @db.Uuid
+  summary_id      String           @db.Uuid
+  transaction_id  String           @db.Uuid
+  installment_number Int
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  summary         credit_card_summaries @relation(fields: [summary_id], references: [id])
+  transaction     credit_card_transactions @relation(fields: [transaction_id], references: [id])
+
+  @@unique([summary_id, transaction_id])
+  @@schema("tenant")
+}
+
+// ─── CUENTAS CORRIENTES ─────────────────────────────────
+
+model current_accounts {
+  id              String           @id @default(uuid()) @db.Uuid
+  party_id        String           @db.Uuid
+  party_type      String           @db.VarChar(20)
+  currency_code   String           @db.VarChar(10)
+  balance         Decimal          @default(0) @db.Decimal(15, 2)
+  active          Boolean          @default(true)
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  party           business_parties @relation(fields: [party_id], references: [id])
+  entries         current_account_entries[]
+
+  @@unique([party_id, currency_code])
+  @@index([party_id])
+  @@schema("tenant")
+}
+
+model current_account_entries {
+  id              String           @id @default(uuid()) @db.Uuid
+  current_account_id String        @db.Uuid
+  type            AccountEntryType
+  amount          Decimal          @db.Decimal(15, 2)
+  currency_code   String           @db.VarChar(10)
+  exchange_rate   Decimal?         @db.Decimal(18, 6)
+  balance_before  Decimal          @db.Decimal(15, 2)
+  balance_after   Decimal          @db.Decimal(15, 2)
+  description     String?          @db.VarChar(255)
+  reference_type  String?          @db.VarChar(50)
+  reference_id    String?          @db.Uuid
+  payment_id      String?          @db.Uuid
+  date            DateTime         @default(now())
+
+  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?          @db.Uuid
+  updated_by      String?          @db.Uuid
+  deleted_by      String?          @db.Uuid
+
+  current_account current_accounts @relation(fields: [current_account_id], references: [id])
+  payment         payments?        @relation(fields: [payment_id], references: [id])
+
+  @@index([current_account_id])
+  @@index([date])
+  @@schema("tenant")
+}

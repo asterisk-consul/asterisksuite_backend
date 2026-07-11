@@ -26,10 +26,10 @@ x-tenant: dev
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
-x-tenant: dev
+x-tenant: avanzia
 
 {
-  "email": "usuariodev@test.com",
+  "email": "adminavanzia@test.com",
   "password": "123456"
 }
 

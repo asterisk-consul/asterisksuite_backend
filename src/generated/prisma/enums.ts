@@ -148,6 +148,143 @@ export const CostValueType = {
 export type CostValueType = (typeof CostValueType)[keyof typeof CostValueType]
 
 
+export const PaymentMethod = {
+  CASH: 'CASH',
+  CHECK: 'CHECK',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CREDIT_CARD: 'CREDIT_CARD',
+  DEBIT_CARD: 'DEBIT_CARD',
+  VIRTUAL_WALLET: 'VIRTUAL_WALLET'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const PaymentType = {
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION'
+} as const
+
+export type PaymentType = (typeof PaymentType)[keyof typeof PaymentType]
+
+
+export const CheckStatus = {
+  PENDING: 'PENDING',
+  CLEARED: 'CLEARED',
+  BOUNCED: 'BOUNCED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type CheckStatus = (typeof CheckStatus)[keyof typeof CheckStatus]
+
+
+export const AccountEntryType = {
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  ADVANCE: 'ADVANCE',
+  LOAN: 'LOAN',
+  LOAN_PAYMENT: 'LOAN_PAYMENT',
+  ADJUSTMENT: 'ADJUSTMENT',
+  TRANSFER: 'TRANSFER',
+  CHECK_ISSUED: 'CHECK_ISSUED',
+  CHECK_RECEIVED: 'CHECK_RECEIVED',
+  CHECK_BOUNCED: 'CHECK_BOUNCED'
+} as const
+
+export type AccountEntryType = (typeof AccountEntryType)[keyof typeof AccountEntryType]
+
+
+export const CashBoxType = {
+  MAIN: 'MAIN',
+  FIXED: 'FIXED',
+  REGISTER: 'REGISTER'
+} as const
+
+export type CashBoxType = (typeof CashBoxType)[keyof typeof CashBoxType]
+
+
+export const CashBoxStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+} as const
+
+export type CashBoxStatus = (typeof CashBoxStatus)[keyof typeof CashBoxStatus]
+
+
+export const CashBoxSessionStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  FORCED: 'FORCED'
+} as const
+
+export type CashBoxSessionStatus = (typeof CashBoxSessionStatus)[keyof typeof CashBoxSessionStatus]
+
+
+export const CashBoxUserRole = {
+  RESPONSIBLE: 'RESPONSIBLE',
+  OPERATOR: 'OPERATOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type CashBoxUserRole = (typeof CashBoxUserRole)[keyof typeof CashBoxUserRole]
+
+
+export const CreditCardType = {
+  COMPANY: 'COMPANY',
+  CUSTOMER: 'CUSTOMER'
+} as const
+
+export type CreditCardType = (typeof CreditCardType)[keyof typeof CreditCardType]
+
+
+export const CreditCardBrand = {
+  VISA: 'VISA',
+  MASTERCARD: 'MASTERCARD',
+  AMEX: 'AMEX',
+  NARANJA: 'NARANJA',
+  CABAL: 'CABAL',
+  OTHER: 'OTHER'
+} as const
+
+export type CreditCardBrand = (typeof CreditCardBrand)[keyof typeof CreditCardBrand]
+
+
+export const CreditCardTransactionType = {
+  PURCHASE: 'PURCHASE',
+  COLLECTION: 'COLLECTION'
+} as const
+
+export type CreditCardTransactionType = (typeof CreditCardTransactionType)[keyof typeof CreditCardTransactionType]
+
+
+export const ClearingStatus = {
+  PENDING: 'PENDING',
+  CLEARED: 'CLEARED',
+  FAILED: 'FAILED'
+} as const
+
+export type ClearingStatus = (typeof ClearingStatus)[keyof typeof ClearingStatus]
+
+
+export const InstallmentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE'
+} as const
+
+export type InstallmentStatus = (typeof InstallmentStatus)[keyof typeof InstallmentStatus]
+
+
+export const PartyType = {
+  CUSTOMER: 'CUSTOMER',
+  SUPPLIER: 'SUPPLIER',
+  EMPLOYEE: 'EMPLOYEE',
+  PARTNER: 'PARTNER'
+} as const
+
+export type PartyType = (typeof PartyType)[keyof typeof PartyType]
+
+
 export const CompanyRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',
@@ -160,7 +297,8 @@ export type CompanyRole = (typeof CompanyRole)[keyof typeof CompanyRole]
 export const PlatformRole = {
   PLATFORM_OWNER: 'PLATFORM_OWNER',
   SUPPORT: 'SUPPORT',
-  PLATFORM_ADMIN: 'PLATFORM_ADMIN'
+  PLATFORM_ADMIN: 'PLATFORM_ADMIN',
+  PLATFORM_USER: 'PLATFORM_USER'
 } as const
 
 export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]

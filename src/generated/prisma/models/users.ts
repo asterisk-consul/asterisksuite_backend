@@ -31,6 +31,8 @@ export type UsersMinAggregateOutputType = {
   password_hash: string | null
   role: $Enums.PlatformRole | null
   active: boolean | null
+  employee_id: string | null
+  partner_id: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -46,6 +48,8 @@ export type UsersMaxAggregateOutputType = {
   password_hash: string | null
   role: $Enums.PlatformRole | null
   active: boolean | null
+  employee_id: string | null
+  partner_id: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -61,6 +65,8 @@ export type UsersCountAggregateOutputType = {
   password_hash: number
   role: number
   active: number
+  employee_id: number
+  partner_id: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -78,6 +84,8 @@ export type UsersMinAggregateInputType = {
   password_hash?: true
   role?: true
   active?: true
+  employee_id?: true
+  partner_id?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -93,6 +101,8 @@ export type UsersMaxAggregateInputType = {
   password_hash?: true
   role?: true
   active?: true
+  employee_id?: true
+  partner_id?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -108,6 +118,8 @@ export type UsersCountAggregateInputType = {
   password_hash?: true
   role?: true
   active?: true
+  employee_id?: true
+  partner_id?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -196,6 +208,8 @@ export type UsersGroupByOutputType = {
   password_hash: string | null
   role: $Enums.PlatformRole | null
   active: boolean | null
+  employee_id: string | null
+  partner_id: string | null
   created_at: Date
   updated_at: Date
   deleted_at: Date | null
@@ -232,6 +246,8 @@ export type usersWhereInput = {
   password_hash?: Prisma.StringNullableFilter<"users"> | string | null
   role?: Prisma.EnumPlatformRoleNullableFilter<"users"> | $Enums.PlatformRole | null
   active?: Prisma.BoolNullableFilter<"users"> | boolean | null
+  employee_id?: Prisma.UuidNullableFilter<"users"> | string | null
+  partner_id?: Prisma.UuidNullableFilter<"users"> | string | null
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
@@ -260,6 +276,8 @@ export type usersOrderByWithRelationInput = {
   password_hash?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
+  employee_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  partner_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -291,6 +309,8 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   password_hash?: Prisma.StringNullableFilter<"users"> | string | null
   role?: Prisma.EnumPlatformRoleNullableFilter<"users"> | $Enums.PlatformRole | null
   active?: Prisma.BoolNullableFilter<"users"> | boolean | null
+  employee_id?: Prisma.UuidNullableFilter<"users"> | string | null
+  partner_id?: Prisma.UuidNullableFilter<"users"> | string | null
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
@@ -319,6 +339,8 @@ export type usersOrderByWithAggregationInput = {
   password_hash?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
+  employee_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  partner_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -340,6 +362,8 @@ export type usersScalarWhereWithAggregatesInput = {
   password_hash?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   role?: Prisma.EnumPlatformRoleNullableWithAggregatesFilter<"users"> | $Enums.PlatformRole | null
   active?: Prisma.BoolNullableWithAggregatesFilter<"users"> | boolean | null
+  employee_id?: Prisma.UuidNullableWithAggregatesFilter<"users"> | string | null
+  partner_id?: Prisma.UuidNullableWithAggregatesFilter<"users"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
@@ -355,6 +379,8 @@ export type usersCreateInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -383,6 +409,8 @@ export type usersUncheckedCreateInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -411,6 +439,8 @@ export type usersUpdateInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -439,6 +469,8 @@ export type usersUncheckedUpdateInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -467,6 +499,8 @@ export type usersCreateManyInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -482,6 +516,8 @@ export type usersUpdateManyMutationInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -497,6 +533,8 @@ export type usersUncheckedUpdateManyInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -522,6 +560,8 @@ export type usersCountOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  employee_id?: Prisma.SortOrder
+  partner_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -537,6 +577,8 @@ export type usersMaxOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  employee_id?: Prisma.SortOrder
+  partner_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -552,6 +594,8 @@ export type usersMinOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   role?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  employee_id?: Prisma.SortOrder
+  partner_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -775,6 +819,8 @@ export type usersCreateWithoutAuditLogsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -802,6 +848,8 @@ export type usersUncheckedCreateWithoutAuditLogsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -845,6 +893,8 @@ export type usersUpdateWithoutAuditLogsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -872,6 +922,8 @@ export type usersUncheckedUpdateWithoutAuditLogsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -899,6 +951,8 @@ export type usersCreateWithoutFilesInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -926,6 +980,8 @@ export type usersUncheckedCreateWithoutFilesInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -969,6 +1025,8 @@ export type usersUpdateWithoutFilesInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -996,6 +1054,8 @@ export type usersUncheckedUpdateWithoutFilesInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1023,6 +1083,8 @@ export type usersCreateWithoutCargo_transfersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1050,6 +1112,8 @@ export type usersUncheckedCreateWithoutCargo_transfersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1093,6 +1157,8 @@ export type usersUpdateWithoutCargo_transfersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1120,6 +1186,8 @@ export type usersUncheckedUpdateWithoutCargo_transfersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1147,6 +1215,8 @@ export type usersCreateWithoutDelivery_notesInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1174,6 +1244,8 @@ export type usersUncheckedCreateWithoutDelivery_notesInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1217,6 +1289,8 @@ export type usersUpdateWithoutDelivery_notesInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1244,6 +1318,8 @@ export type usersUncheckedUpdateWithoutDelivery_notesInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1271,6 +1347,8 @@ export type usersCreateWithoutPicking_ordersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1298,6 +1376,8 @@ export type usersUncheckedCreateWithoutPicking_ordersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1341,6 +1421,8 @@ export type usersUpdateWithoutPicking_ordersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1368,6 +1450,8 @@ export type usersUncheckedUpdateWithoutPicking_ordersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1395,6 +1479,8 @@ export type usersCreateWithoutTrip_temperature_logsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1422,6 +1508,8 @@ export type usersUncheckedCreateWithoutTrip_temperature_logsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1465,6 +1553,8 @@ export type usersUpdateWithoutTrip_temperature_logsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1492,6 +1582,8 @@ export type usersUncheckedUpdateWithoutTrip_temperature_logsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1519,6 +1611,8 @@ export type usersCreateWithoutDispatch_ordersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1546,6 +1640,8 @@ export type usersUncheckedCreateWithoutDispatch_ordersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1589,6 +1685,8 @@ export type usersUpdateWithoutDispatch_ordersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1616,6 +1714,8 @@ export type usersUncheckedUpdateWithoutDispatch_ordersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1643,6 +1743,8 @@ export type usersCreateWithoutTripsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1670,6 +1772,8 @@ export type usersUncheckedCreateWithoutTripsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1713,6 +1817,8 @@ export type usersUpdateWithoutTripsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1740,6 +1846,8 @@ export type usersUncheckedUpdateWithoutTripsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1767,6 +1875,8 @@ export type usersCreateWithoutVehicle_combinationsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1794,6 +1904,8 @@ export type usersUncheckedCreateWithoutVehicle_combinationsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1837,6 +1949,8 @@ export type usersUpdateWithoutVehicle_combinationsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1864,6 +1978,8 @@ export type usersUncheckedUpdateWithoutVehicle_combinationsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1891,6 +2007,8 @@ export type usersCreateWithoutPalletsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1918,6 +2036,8 @@ export type usersUncheckedCreateWithoutPalletsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -1961,6 +2081,8 @@ export type usersUpdateWithoutPalletsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1988,6 +2110,8 @@ export type usersUncheckedUpdateWithoutPalletsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2015,6 +2139,8 @@ export type usersCreateWithoutRefreshTokensInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -2042,6 +2168,8 @@ export type usersUncheckedCreateWithoutRefreshTokensInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -2085,6 +2213,8 @@ export type usersUpdateWithoutRefreshTokensInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2112,6 +2242,8 @@ export type usersUncheckedUpdateWithoutRefreshTokensInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2139,6 +2271,8 @@ export type usersCreateWithoutCompanyUsersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -2166,6 +2300,8 @@ export type usersUncheckedCreateWithoutCompanyUsersInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -2209,6 +2345,8 @@ export type usersUpdateWithoutCompanyUsersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2236,6 +2374,8 @@ export type usersUncheckedUpdateWithoutCompanyUsersInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2263,6 +2403,8 @@ export type usersCreateWithoutWarehouse_stock_movementsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -2290,6 +2432,8 @@ export type usersUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   password_hash?: string | null
   role?: $Enums.PlatformRole | null
   active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   deleted_at?: Date | string | null
@@ -2333,6 +2477,8 @@ export type usersUpdateWithoutWarehouse_stock_movementsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2360,6 +2506,8 @@ export type usersUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2526,6 +2674,8 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   password_hash?: boolean
   role?: boolean
   active?: boolean
+  employee_id?: boolean
+  partner_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2555,6 +2705,8 @@ export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   password_hash?: boolean
   role?: boolean
   active?: boolean
+  employee_id?: boolean
+  partner_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2570,6 +2722,8 @@ export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   password_hash?: boolean
   role?: boolean
   active?: boolean
+  employee_id?: boolean
+  partner_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2585,6 +2739,8 @@ export type usersSelectScalar = {
   password_hash?: boolean
   role?: boolean
   active?: boolean
+  employee_id?: boolean
+  partner_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2593,7 +2749,7 @@ export type usersSelectScalar = {
   deleted_by?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password_hash" | "role" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password_hash" | "role" | "active" | "employee_id" | "partner_id" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auditLogs?: boolean | Prisma.users$auditLogsArgs<ExtArgs>
   cargo_transfers?: boolean | Prisma.users$cargo_transfersArgs<ExtArgs>
@@ -2637,6 +2793,8 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     password_hash: string | null
     role: $Enums.PlatformRole | null
     active: boolean | null
+    employee_id: string | null
+    partner_id: string | null
     created_at: Date
     updated_at: Date
     deleted_at: Date | null
@@ -3085,6 +3243,8 @@ export interface usersFieldRefs {
   readonly password_hash: Prisma.FieldRef<"users", 'String'>
   readonly role: Prisma.FieldRef<"users", 'PlatformRole'>
   readonly active: Prisma.FieldRef<"users", 'Boolean'>
+  readonly employee_id: Prisma.FieldRef<"users", 'String'>
+  readonly partner_id: Prisma.FieldRef<"users", 'String'>
   readonly created_at: Prisma.FieldRef<"users", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"users", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"users", 'DateTime'>
