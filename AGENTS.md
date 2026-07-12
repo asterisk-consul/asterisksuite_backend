@@ -111,6 +111,7 @@ TenantMiddleware → TenantAccessGuard → JwtAuthGuard → PermissionsGuard
 - **Identity**: `permissions`, `business_roles`, `business_role_permissions`, `business_user_roles`, `user_permission_overrides`
 - **Products**: `products`, `product_variants`, `product_components` (BOM), `product_price`, `product_costs`, `product_cost_breakdowns`, `product_categories`, `product_tags`, `product_attribute_values`, `categories`, `tags`, `attributes`, `units`
 - **ERP**: `documents`, `document_items`, `document_item_taxes`, `document_taxes`, `document_types`, `document_sequences`, `taxes`, `currencies`, `currency_rates`, `accounts`
+- **Treasury**: `employees`, `partners`, `bank_accounts`, `bank_account_movements`, `cash_boxes`, `cash_box_sessions`, `cash_box_balances`, `cash_box_movements`, `cash_box_renditions`, `cash_box_user_roles`, `cash_box_transfers`, `payments`, `payment_documents`, `current_accounts`, `current_account_entries`
 - **Transport**: `drivers`, `vehicles`, `vehicle_combinations`, `trips`, `trip_stops`, `corridors`, `dispatch_orders`, `delivery_notes`
 - **Warehouse**: `warehouses`, `warehouse_stock`, `warehouse_stock_movements`, `pallets`, `pallet_items`, `picking_orders`, `picking_items`, `picking_sources`, `picking_results`
 - **Other**: `business_parties`, `party_contacts`, `locations`, `files`, `entity_photos`

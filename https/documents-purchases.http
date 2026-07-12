@@ -4,6 +4,7 @@
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+x-tenant: dev
 
 {
   "email": "admin@mail.com",
@@ -24,6 +25,7 @@ Content-Type: application/json
 
 GET {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -33,6 +35,7 @@ Authorization: Bearer {{accessToken}}
 
 GET {{baseUrl}}/documents/purchases-documents?status=0
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -42,6 +45,7 @@ Authorization: Bearer {{accessToken}}
 
 GET {{baseUrl}}/documents/purchases-documents?status=1
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -51,6 +55,7 @@ Authorization: Bearer {{accessToken}}
 
 GET {{baseUrl}}/documents/purchases-documents?documentTypeId={{docTypeId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -60,6 +65,7 @@ Authorization: Bearer {{accessToken}}
 
 GET {{baseUrl}}/documents/purchases-documents/{{docId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -70,6 +76,7 @@ Authorization: Bearer {{accessToken}}
 POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+x-tenant: dev
 
 {
   "document_type_id": "{{docTypeId}}",
@@ -95,6 +102,7 @@ Content-Type: application/json
 PATCH {{baseUrl}}/documents/purchases-documents/{{docId}}
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+x-tenant: dev
 
 {
   "items": [
@@ -115,6 +123,7 @@ Content-Type: application/json
 
 PATCH {{baseUrl}}/documents/purchases-documents/{{docId}}/confirm
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -124,6 +133,7 @@ Authorization: Bearer {{accessToken}}
 
 PATCH {{baseUrl}}/documents/purchases-documents/{{docId}}/cancel
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -133,3 +143,4 @@ Authorization: Bearer {{accessToken}}
 
 DELETE {{baseUrl}}/documents/purchases-documents/{{docId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 // import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
@@ -26,8 +27,8 @@ export class BusinessPartiesController {
 
   // @RequirePermissions('business_parties.read')
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(@Query('type') type?: string) {
+    return this.service.findAll(type);
   }
 
   // @RequirePermissions('business_parties.read')

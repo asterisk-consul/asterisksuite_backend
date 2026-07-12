@@ -716,15 +716,63 @@ export class DocumentsSalesService {
       throw new BadRequestException('El documento no tiene ítems');
     }
 
-    return this.prisma.documents.update({
+    await this.prisma.documents.update({
       where: { id },
-
       data: {
         status: STATUS_CONFIRMED,
-
         updated_at: new Date(),
       },
     });
+
+    // Crear entrada DEBIT en cuenta corriente del tercero
+    if (doc.party_id) {
+      const partyType = doc.document_type?.code?.startsWith('VEN') ? 'CUSTOMER' : 'SUPPLIER';
+      let currentAccount = await this.prisma.current_accounts.findUnique({
+        where: {
+          party_id_currency_code: {
+            party_id: doc.party_id,
+            currency_code: doc.currency_code,
+          },
+        },
+      });
+
+      if (!currentAccount) {
+        currentAccount = await this.prisma.current_accounts.create({
+          data: {
+            party_id: doc.party_id,
+            party_type: partyType,
+            currency_code: doc.currency_code,
+            balance: 0,
+          },
+        });
+      }
+
+      const currentBalance = currentAccount.balance.toNumber();
+      const docTotal = doc.total.toNumber();
+      const balanceAfter = currentBalance - docTotal;
+
+      await this.prisma.current_account_entries.create({
+        data: {
+          current_account_id: currentAccount.id,
+          type: 'DEBIT',
+          amount: docTotal,
+          currency_code: doc.currency_code,
+          balance_before: currentBalance,
+          balance_after: balanceAfter,
+          description: `Factura venta #${doc.number}`,
+          reference_type: 'document',
+          reference_id: doc.id,
+          date: new Date(),
+        },
+      });
+
+      await this.prisma.current_accounts.update({
+        where: { id: currentAccount.id },
+        data: { balance: balanceAfter, updated_at: new Date() },
+      });
+    }
+
+    return this.prisma.documents.findUnique({ where: { id } });
   }
 
   // ─────────────────────────────────────────────
@@ -737,15 +785,53 @@ export class DocumentsSalesService {
       throw new BadRequestException('El documento ya está anulado');
     }
 
-    return this.prisma.documents.update({
+    await this.prisma.documents.update({
       where: { id },
-
       data: {
         status: STATUS_CANCELLED,
-
         updated_at: new Date(),
       },
     });
+
+    // Revertir entrada DEBIT en cuenta corriente
+    if (doc.party_id) {
+      const currentAccount = await this.prisma.current_accounts.findUnique({
+        where: {
+          party_id_currency_code: {
+            party_id: doc.party_id,
+            currency_code: doc.currency_code,
+          },
+        },
+      });
+
+      if (currentAccount) {
+        const currentBalance = currentAccount.balance.toNumber();
+        const docTotal = doc.total.toNumber();
+        const balanceAfter = currentBalance + docTotal;
+
+        await this.prisma.current_account_entries.create({
+          data: {
+            current_account_id: currentAccount.id,
+            type: 'DEBIT',
+            amount: docTotal,
+            currency_code: doc.currency_code,
+            balance_before: currentBalance,
+            balance_after: balanceAfter,
+            description: `Anulación factura venta #${doc.number}`,
+            reference_type: 'document_reversal',
+            reference_id: doc.id,
+            date: new Date(),
+          },
+        });
+
+        await this.prisma.current_accounts.update({
+          where: { id: currentAccount.id },
+          data: { balance: balanceAfter, updated_at: new Date() },
+        });
+      }
+    }
+
+    return this.prisma.documents.findUnique({ where: { id } });
   }
 
   // ─────────────────────────────────────────────

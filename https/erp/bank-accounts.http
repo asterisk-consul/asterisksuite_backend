@@ -1,0 +1,97 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@bankAccountId = a099a654-e109-4436-97d1-79ded226420b
+
+### =========================================================
+### CREATE BANK ACCOUNT
+### =========================================================
+
+POST {{baseUrl}}/erp/bank-accounts
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "name": "Cuenta Corriente USD",
+  "bank_name": "Banco Galicia",
+  "account_type": "CORRIENTE",
+  "cbu": "1234567890123456789012",
+  "alias": "CUENTA-USD-GALICIA",
+  "account_number": "123456789",
+  "currency_code": "USD",
+  "balance": 500000
+}
+
+###
+
+### =========================================================
+### GET ALL BANK ACCOUNTS
+### =========================================================
+
+GET {{baseUrl}}/erp/bank-accounts
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE BANK ACCOUNT
+### =========================================================
+
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### UPDATE BANK ACCOUNT
+### =========================================================
+
+PATCH {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "alias": "NUEVO-ALIAS"
+}
+
+###
+
+### =========================================================
+### GET BANK ACCOUNT MOVEMENTS
+### =========================================================
+
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### DELETE BANK ACCOUNT (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

@@ -1,0 +1,138 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@cashBoxId = REEMPLAZAR_CASH_BOX_ID
+@transferId = REEMPLAZAR_TRANSFER_ID
+@destCashBoxId = REEMPLAZAR_DEST_CASH_BOX_ID
+
+### =========================================================
+### CREATE TRANSFER - CAJA A CAJA
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-transfers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "source_type": "cash_box",
+  "source_id": "{{cashBoxId}}",
+  "dest_type": "cash_box",
+  "dest_id": "{{destCashBoxId}}",
+  "amount": 10000,
+  "currency_code": "USD",
+  "transfer_type": "CASH_TO_CASH",
+  "description": "Traslado de efectivo entre cajas"
+}
+
+###
+
+### =========================================================
+### CREATE TRANSFER - CAJA A BANCO
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-transfers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "source_type": "cash_box",
+  "source_id": "{{cashBoxId}}",
+  "dest_type": "bank_account",
+  "dest_id": "REEMPLAZAR_BANK_ACCOUNT_ID",
+  "amount": 50000,
+  "currency_code": "USD",
+  "transfer_type": "CASH_TO_BANK",
+  "description": "Depósito a cuenta bancaria"
+}
+
+###
+
+### =========================================================
+### CREATE TRANSFER - BANCO A CAJA
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-transfers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "source_type": "bank_account",
+  "source_id": "REEMPLAZAR_BANK_ACCOUNT_ID",
+  "dest_type": "cash_box",
+  "dest_id": "{{cashBoxId}}",
+  "amount": 20000,
+  "currency_code": "USD",
+  "transfer_type": "BANK_TO_CASH",
+  "description": "Retiro de banco a caja"
+}
+
+###
+
+### =========================================================
+### GET ALL TRANSFERS
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-transfers
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE TRANSFER
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-transfers/{{transferId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### CONFIRM TRANSFER
+### =========================================================
+
+PATCH {{baseUrl}}/logistica/cash-box-transfers/{{transferId}}/confirm
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### CANCEL TRANSFER
+### =========================================================
+
+PATCH {{baseUrl}}/logistica/cash-box-transfers/{{transferId}}/cancel
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### DELETE TRANSFER (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/logistica/cash-box-transfers/{{transferId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

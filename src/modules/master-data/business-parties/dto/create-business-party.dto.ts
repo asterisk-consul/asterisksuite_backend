@@ -4,8 +4,10 @@ import {
   IsArray,
   ValidateNested,
   IsBoolean,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { PartyType } from '@/generated/prisma/client';
 
 class CreatePartyLocationDto {
   @IsString()
@@ -40,8 +42,8 @@ export class CreateBusinessPartyDto {
   @IsBoolean()
   active: boolean;
 
-  @IsString()
-  type!: string;
+  @IsEnum(PartyType)
+  type!: PartyType;
 
   @IsString()
   name!: string;

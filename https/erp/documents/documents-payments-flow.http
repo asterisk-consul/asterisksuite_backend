@@ -1,0 +1,359 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@documentId = REEMPLAZAR_DOCUMENT_ID
+@docTypeId = 0453babd-adda-499f-9c8b-25bc7a52a762
+@partyId = 5661195f-d6f9-4641-b52a-60fe77dcff78
+@productId = 19e8697f-3084-4c4b-81b4-b0bb348cdb93
+@cashBoxId = c2ef3f0a-2b1b-4579-af51-a6f744ebaea8
+@bankAccountId = a099a654-e109-4436-97d1-79ded226420b
+
+# =====================================================
+# FLUJO COMPLETO: DOCUMENTO → PAGO → CUENTA CORRIENTE
+# =====================================================
+# 1. Crear business_party (si no existe)
+# 2. Crear documento de venta/compra
+# 3. Confirmar documento
+# 4. Crear pago parcial o total
+# 5. Verificar saldo en cuenta corriente + caja + banco
+
+# =====================================================
+# PASO 1: CREAR BUSINESS PARTY
+# =====================================================
+
+### Crear cliente
+# @name createCustomer
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "CUSTOMER",
+  "name": "Cliente Facturación SA",
+  "tax_id": "30-11111111-1"
+}
+
+###
+@customerId = 40289234-773d-473f-9748-bc3b090adcea
+
+### Crear proveedor
+# @name createSupplier
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "SUPPLIER",
+  "name": "Proveedor Insumos SRL",
+  "tax_id": "30-22222222-2"
+}
+
+###
+@supplierId = 5661195f-d6f9-4641-b52a-60fe77dcff78
+
+# =====================================================
+# PASO 2: CREAR DOCUMENTO DE VENTA
+# =====================================================
+
+### Crear factura de venta (borrador status=0)
+# @name createSaleDoc
+POST {{baseUrl}}/documents/sales
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "document_type_id": "{{docTypeId}}",
+  "party_id": "{{customerId}}",
+  "date": "2026-07-11",
+  "currency_code": "USD",
+  "descrip": "Venta de productos",
+  "ref": "VENTA-001",
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 2,
+      "unit_price": 5000
+    }
+  ]
+}
+
+###
+@saleDocId = {{createSaleDoc.response.body.id}}
+
+### Confirmar documento de venta (status → 2 confirmado)
+PATCH {{baseUrl}}/documents/sales/{{saleDocId}}/confirm
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar documento — total=10000, paid_amount=0
+GET {{baseUrl}}/documents/sales/{{saleDocId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar cuenta corriente DESPUÉS de confirmar — DEBIT 10000 (deuda del cliente)
+GET {{baseUrl}}/erp/current-accounts/party/{{customerId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# PASO 3: CREAR DOCUMENTO DE COMPRA
+# =====================================================
+
+### Crear factura de compra (borrador)
+# @name createPurchaseDoc
+POST {{baseUrl}}/documents/purchases-documents
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "document_type_id": "{{docTypeId}}",
+  "party_id": "{{supplierId}}",
+  "date": "2026-07-11",
+  "currency_code": "USD",
+  "descrip": "Compra de insumos",
+  "ref": "COMPRA-003",
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "quantity": 5,
+      "unit_price": 2000
+    }
+  ]
+}
+
+###
+@purchaseDocId = {{createPurchaseDoc.response.body.id}}
+
+### Confirmar documento de compra
+PATCH {{baseUrl}}/documents/purchases-documents/{{purchaseDocId}}/confirm
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar cuenta corriente del proveedor DESPUÉS de confirmar — DEBIT 10000
+GET {{baseUrl}}/erp/current-accounts/party/{{supplierId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# PASO 4: PAGOS
+# =====================================================
+
+### PAGO PARCIAL — Factura venta (5000 de 10000)
+### paid_amount queda en 5000, pendiente 5000
+# @name payPartialSale
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "COLLECTION",
+  "date": "2026-07-11",
+  "party_id": "{{customerId}}",
+  "party_type": "CUSTOMER",
+  "payment_method": "CASH",
+  "amount": 5000,
+  "currency_code": "USD",
+  "cash_box_id": "{{cashBoxId}}",
+  "description": "Pago parcial venta #VENTA-001",
+  "documents": [
+    {
+      "document_id": "{{saleDocId}}",
+      "amount_applied": 5000
+    }
+  ]
+}
+
+###
+@partialPaymentId = {{payPartialSale.response.body.id}}
+
+### Verificar factura — paid_amount=5000, pendiente=5000
+GET {{baseUrl}}/documents/sales/{{saleDocId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar saldo de caja DESPUÉS del pago parcial
+GET {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/balances
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar movimientos de caja — pago parcial
+GET {{baseUrl}}/logistica/cash-box-movements?cash_box_id={{cashBoxId}}&currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar cuenta corriente del cliente DESPUÉS del pago parcial
+GET {{baseUrl}}/erp/current-accounts/party/{{customerId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### PAGO TOTAL — Saldar factura venta (resto 5000)
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "COLLECTION",
+  "date": "2026-07-12",
+  "party_id": "{{customerId}}",
+  "party_type": "CUSTOMER",
+  "payment_method": "BANK_TRANSFER",
+  "amount": 5000,
+  "currency_code": "USD",
+  "bank_account_id": "{{bankAccountId}}",
+  "description": "Pago final venta #VENTA-001",
+  "documents": [
+    {
+      "document_id": "{{saleDocId}}",
+      "amount_applied": 5000
+    }
+  ]
+}
+
+###
+
+### Verificar factura — paid_amount=10000, saldada
+GET {{baseUrl}}/documents/sales/{{saleDocId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar saldo del banco DESPUÉS del pago por transferencia
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar movimientos del banco — transferencia recibida
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar cuenta corriente del cliente DESPUÉS del pago total — saldo 0
+GET {{baseUrl}}/erp/current-accounts/party/{{customerId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### PAGO A PROVEEDOR — Factura compra (total 10000)
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "PAYMENT",
+  "date": "2026-07-11",
+  "party_id": "{{supplierId}}",
+  "party_type": "SUPPLIER",
+  "payment_method": "CASH",
+  "amount": 10000,
+  "currency_code": "USD",
+  "cash_box_id": "{{cashBoxId}}",
+  "description": "Pago compra #COMPRA-001",
+  "documents": [
+    {
+      "document_id": "{{purchaseDocId}}",
+      "amount_applied": 10000
+    }
+  ]
+}
+
+###
+
+### Verificar saldo de caja DESPUÉS del pago a proveedor
+GET {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/balances
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Verificar movimientos de caja — pago a proveedor
+GET {{baseUrl}}/logistica/cash-box-movements?cash_box_id={{cashBoxId}}&currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# PASO 5: VERIFICAR CUENTAS CORRIENTES
+# =====================================================
+
+### Cuenta corriente del cliente — debería tener saldo 0
+GET {{baseUrl}}/erp/current-accounts/party/{{customerId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Cuenta corriente del proveedor — debería tener saldo 0
+GET {{baseUrl}}/erp/current-accounts/party/{{supplierId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Saldo del cliente
+GET {{baseUrl}}/erp/current-accounts/party/{{customerId}}/balance?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Saldo del proveedor
+GET {{baseUrl}}/erp/current-accounts/party/{{supplierId}}/balance?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# ERRORES COMUNES
+# =====================================================
+# - amount_applied > saldo pendiente → 400 "excede el saldo pendiente"
+# - suma applied ≠ amount pago → 400 "no coincide con el monto del pago"
+# - documento ya saldado → 400 "ya está saldado"
+# - party_id requerido con documentos → 400 "party_id es requerido"

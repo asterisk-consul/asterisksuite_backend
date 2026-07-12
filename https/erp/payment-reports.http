@@ -1,0 +1,111 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@cashBoxId = c2ef3f0a-2b1b-4579-af51-a6f744ebaea8
+@bankAccountId = a099a654-e109-4436-97d1-79ded226420b
+@userId = REEMPLAZAR_USER_ID
+
+# =====================================================
+# REPORTES DE PAGOS
+# =====================================================
+
+# =====================================================
+# REPORTE 1: PAGOS POR USUARIO/DÍA
+# =====================================================
+
+### Pagos del día actual (todos los usuarios)
+GET {{baseUrl}}/erp/payment-reports/by-user?date_from=2026-07-12&date_to=2026-07-12
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Pagos de un usuario específico
+GET {{baseUrl}}/erp/payment-reports/by-user?date_from=2026-07-12&date_to=2026-07-12&created_by={{userId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Pagos por moneda
+GET {{baseUrl}}/erp/payment-reports/by-user?date_from=2026-07-12&date_to=2026-07-12&currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# REPORTE 2: REPORTE DIARIO DE CAJA
+# =====================================================
+
+### Movimientos de caja del día
+GET {{baseUrl}}/erp/payment-reports/cash-box-daily?cash_box_id={{cashBoxId}}&date=2026-07-12
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Movimientos de caja — fecha específica
+GET {{baseUrl}}/erp/payment-reports/cash-box-daily?cash_box_id={{cashBoxId}}&date=2026-07-11
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# REPORTE 3: REPORTE DIARIO DE BANCO
+# =====================================================
+
+### Movimientos bancarios del día
+GET {{baseUrl}}/erp/payment-reports/bank-daily?bank_account_id={{bankAccountId}}&date=2026-07-12
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Movimientos bancarios — fecha específica
+GET {{baseUrl}}/erp/payment-reports/bank-daily?bank_account_id={{bankAccountId}}&date=2026-07-11
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# REPORTE 4: DASHBOARD DIARIO COMPLETO
+# =====================================================
+
+### Dashboard del día actual
+GET {{baseUrl}}/erp/payment-reports/daily-summary?date=2026-07-12
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Dashboard — fecha específica
+GET {{baseUrl}}/erp/payment-reports/daily-summary?date=2026-07-11
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### Dashboard — solo USD
+GET {{baseUrl}}/erp/payment-reports/daily-summary?date=2026-07-12&currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

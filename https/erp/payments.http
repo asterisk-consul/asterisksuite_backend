@@ -1,0 +1,185 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@paymentId = REEMPLAZAR_PAYMENT_ID
+@documentId = REEMPLAZAR_DOCUMENT_ID
+@cashBoxId = REEMPLAZAR_CASH_BOX_ID
+@bankAccountId = a099a654-e109-4436-97d1-79ded226420b
+
+### =========================================================
+### CREATE PAYMENT - PAGO A PROVEEDOR (CAJA)
+### =========================================================
+
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "PAYMENT",
+  "date": "2026-07-11",
+  "party_id": "REEMPLAZAR_PARTY_ID",
+  "party_type": "SUPPLIER",
+  "payment_method": "CASH",
+  "amount": 5000,
+  "currency_code": "USD",
+  "cash_box_id": "{{cashBoxId}}",
+  "description": "Pago factura compra #001",
+  "documents": [
+    {
+      "document_id": "{{documentId}}",
+      "amount_applied": 5000
+    }
+  ]
+}
+
+###
+
+### =========================================================
+### CREATE PAYMENT - PAGO A PROVEEDOR (BANCO)
+### =========================================================
+
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "PAYMENT",
+  "date": "2026-07-11",
+  "party_id": "REEMPLAZAR_PARTY_ID",
+  "party_type": "SUPPLIER",
+  "payment_method": "BANK_TRANSFER",
+  "amount": 10000,
+  "currency_code": "USD",
+  "bank_account_id": "{{bankAccountId}}",
+  "description": "Transferencia a proveedor"
+}
+
+###
+
+### =========================================================
+### CREATE PAYMENT - COBRO A CLIENTE
+### =========================================================
+
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "COLLECTION",
+  "date": "2026-07-11",
+  "party_id": "REEMPLAZAR_CLIENT_ID",
+  "party_type": "CUSTOMER",
+  "payment_method": "CASH",
+  "amount": 8000,
+  "currency_code": "USD",
+  "cash_box_id": "{{cashBoxId}}",
+  "description": "Cobro factura venta"
+}
+
+###
+
+### =========================================================
+### CREATE PAYMENT - CON CHEQUE
+### =========================================================
+
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "PAYMENT",
+  "date": "2026-07-11",
+  "party_id": "REEMPLAZAR_PARTY_ID",
+  "party_type": "SUPPLIER",
+  "payment_method": "CHECK",
+  "amount": 3000,
+  "currency_code": "USD",
+  "description": "Cheque #1234"
+}
+
+###
+
+### =========================================================
+### GET ALL PAYMENTS
+### =========================================================
+
+GET {{baseUrl}}/erp/payments
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET PAYMENTS FILTERED
+### =========================================================
+
+GET {{baseUrl}}/erp/payments?type=PAYMENT&payment_method=CASH
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE PAYMENT
+### =========================================================
+
+GET {{baseUrl}}/erp/payments/{{paymentId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### UPDATE PAYMENT (SOLO BORRADOR)
+### =========================================================
+
+PATCH {{baseUrl}}/erp/payments/{{paymentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "description": "Descripción actualizada"
+}
+
+###
+
+### =========================================================
+### REVERSE PAYMENT
+### =========================================================
+
+POST {{baseUrl}}/erp/payments/{{paymentId}}/reverse
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### DELETE PAYMENT (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/erp/payments/{{paymentId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

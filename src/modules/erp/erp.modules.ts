@@ -20,6 +20,10 @@ import { DocumentsPurchasesModule } from './documents-purchases/documents_purcha
 import { EmployeesModule } from './employees/employees.module';
 import { PartnersModule } from './partners/partners.module';
 import { AuditModule } from './audit/audit.module';
+import { PaymentsModule } from './payments/payments.module';
+import { BankAccountsModule } from './bank-accounts/bank-accounts.module';
+import { CurrentAccountsModule } from './current-accounts/current-accounts.module';
+import { PaymentReportsModule } from './payment-reports/payment-reports.module';
 
 @Module({
   imports: [
@@ -41,6 +45,10 @@ import { AuditModule } from './audit/audit.module';
     EmployeesModule,
     PartnersModule,
     AuditModule,
+    PaymentsModule,
+    BankAccountsModule,
+    CurrentAccountsModule,
+    PaymentReportsModule,
   ],
   exports: [
     AccountsModule,
@@ -60,6 +68,10 @@ import { AuditModule } from './audit/audit.module';
     EmployeesModule,
     PartnersModule,
     AuditModule,
+    PaymentsModule,
+    BankAccountsModule,
+    CurrentAccountsModule,
+    PaymentReportsModule,
   ],
 })
 export class ErpModulesModule {}

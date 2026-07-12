@@ -150,6 +150,8 @@ enum AccountEntryType {
   CHECK_ISSUED
   CHECK_RECEIVED
   CHECK_BOUNCED
+  DEBIT
+  CREDIT
   @@schema("tenant")
 }
 

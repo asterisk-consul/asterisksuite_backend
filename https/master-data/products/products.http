@@ -4,6 +4,7 @@
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+x-tenant: dev
 
 {
   "email": "admin@mail.com",
@@ -152,6 +153,7 @@ Content-Type: application/json
 
 GET {{baseUrl}}/master-data/products/{{rateProductId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###
 
@@ -194,7 +196,7 @@ Content-Type: application/json
 
 GET {{baseUrl}}/master-data/products
 Authorization: Bearer {{accessToken}}
-
+x-tenant: dev
 ###
 
 ### =====================================================

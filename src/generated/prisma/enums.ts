@@ -188,7 +188,9 @@ export const AccountEntryType = {
   TRANSFER: 'TRANSFER',
   CHECK_ISSUED: 'CHECK_ISSUED',
   CHECK_RECEIVED: 'CHECK_RECEIVED',
-  CHECK_BOUNCED: 'CHECK_BOUNCED'
+  CHECK_BOUNCED: 'CHECK_BOUNCED',
+  DEBIT: 'DEBIT',
+  CREDIT: 'CREDIT'
 } as const
 
 export type AccountEntryType = (typeof AccountEntryType)[keyof typeof AccountEntryType]

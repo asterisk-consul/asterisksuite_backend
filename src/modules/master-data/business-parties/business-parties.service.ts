@@ -12,11 +12,11 @@ export class BusinessPartiesService {
     return this.db.getClientForCurrentContext();
   }
 
-  // ✅ CREATE con relaciones
+  // ✅ CREATE con relaciones + auto-creación de employee/partner
   async create(data: CreateBusinessPartyDto) {
     const { locations, contacts, ...partyData } = data;
 
-    return this.prisma.business_parties.create({
+    const party = await this.prisma.business_parties.create({
       data: {
         ...partyData,
 
@@ -44,11 +44,52 @@ export class BusinessPartiesService {
 
       include: this.fullInclude(),
     });
+
+    // Auto-crear employee o partner si el tipo lo indica
+    if (party.type === 'EMPLOYEE') {
+      const nameParts = party.name.split(' ');
+      const firstName = nameParts[0] || party.name;
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      await this.prisma.employees.create({
+        data: {
+          party_id: party.id,
+          first_name: firstName,
+          last_name: lastName,
+          document_type: 'CUIT',
+          document_number: party.tax_id,
+          currency_code: 'USD',
+          is_active: true,
+          created_by: party.created_by,
+        },
+      });
+    }
+
+    if (party.type === 'PARTNER') {
+      const nameParts = party.name.split(' ');
+      const firstName = nameParts[0] || party.name;
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      await this.prisma.partners.create({
+        data: {
+          party_id: party.id,
+          first_name: firstName,
+          last_name: lastName,
+          document_type: 'CUIT',
+          document_number: party.tax_id,
+          is_active: true,
+          created_by: party.created_by,
+        },
+      });
+    }
+
+    return party;
   }
 
   // ✅ FIND ALL
-  async findAll() {
+  async findAll(type?: string) {
     return this.prisma.business_parties.findMany({
+      where: type ? { type: type as any } : undefined,
       orderBy: { created_at: 'desc' },
       include: this.fullInclude(),
     });

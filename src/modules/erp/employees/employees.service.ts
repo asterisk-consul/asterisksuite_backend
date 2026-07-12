@@ -17,6 +17,20 @@ export class EmployeesService {
       throw new BadRequestException('No se puede enviar user_id y create_user al mismo tiempo');
     }
 
+    // Validar duplicados por document_type + document_number
+    if (dto.document_type && dto.document_number) {
+      const existing = await this.prisma.employees.findFirst({
+        where: {
+          document_type: dto.document_type,
+          document_number: dto.document_number,
+          deleted_at: null,
+        },
+      });
+      if (existing) {
+        throw new BadRequestException(`Ya existe un empleado con ${dto.document_type} ${dto.document_number}`);
+      }
+    }
+
     let finalUserId = dto.user_id;
 
     // Crear usuario en public.users si se solicita
@@ -43,10 +57,36 @@ export class EmployeesService {
       finalUserId = newUser.id;
     }
 
+    // Auto-crear business_party si no se provee party_id
+    let partyId = dto.party_id;
+    if (partyId) {
+      // Validar que el party exista y sea tipo EMPLOYEE
+      const party = await this.prisma.business_parties.findFirst({
+        where: { id: partyId, deleted_at: null },
+      });
+      if (!party) {
+        throw new NotFoundException('business_party no encontrado');
+      }
+      if (party.type !== 'EMPLOYEE') {
+        throw new BadRequestException(`El business_party tiene tipo "${party.type}", se esperaba "EMPLOYEE"`);
+      }
+    } else {
+      const party = await this.prisma.business_parties.create({
+        data: {
+          type: 'EMPLOYEE',
+          name: `${dto.first_name} ${dto.last_name}`,
+          tax_id: dto.document_number,
+          active: true,
+          created_by: userId,
+        },
+      });
+      partyId = party.id;
+    }
+
     // Crear employee
     const employee = await this.prisma.employees.create({
       data: {
-        party_id: dto.party_id,
+        party_id: partyId,
         user_id: finalUserId,
         first_name: dto.first_name,
         last_name: dto.last_name,
@@ -103,6 +143,22 @@ export class EmployeesService {
 
   async update(id: string, dto: UpdateEmployeeDto, userId: string) {
     await this.findOne(id);
+
+    // Validar duplicados si cambia document_type/document_number
+    if (dto.document_type && dto.document_number) {
+      const existing = await this.prisma.employees.findFirst({
+        where: {
+          document_type: dto.document_type,
+          document_number: dto.document_number,
+          deleted_at: null,
+          NOT: { id },
+        },
+      });
+      if (existing) {
+        throw new BadRequestException(`Ya existe un empleado con ${dto.document_type} ${dto.document_number}`);
+      }
+    }
+
     return this.prisma.employees.update({
       where: { id },
       data: {
