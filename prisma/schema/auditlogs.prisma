@@ -9,7 +9,6 @@ model audit_logs {
   ip_address String?     @db.VarChar(50)
   request_id String?     @db.VarChar(100)
   action     AuditAction
-  users      users?      @relation(fields: [changed_by], references: [id])
 
   @@index([table_name, record_id])
   @@index([changed_by])

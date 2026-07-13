@@ -65,7 +65,6 @@ model users {
   created_by                String?                     @db.Uuid
   updated_by                String?                     @db.Uuid
   deleted_by                String?                     @db.Uuid
-  auditLogs                 audit_logs[]
   cargo_transfers           cargo_transfers[]
   delivery_notes            delivery_notes[]
   dispatch_orders           dispatch_orders[]

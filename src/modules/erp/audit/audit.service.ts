@@ -2,12 +2,61 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { QueryAuditDto } from './dto/query-audit.dto';
 
+type AuditLog = {
+  id: string;
+  table_name: string;
+  record_id: string;
+  old_data: any;
+  new_data: any;
+  changed_by: string | null;
+  changed_at: Date;
+  ip_address: string | null;
+  request_id: string | null;
+  action: any;
+};
+
+type UserSummary = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type AuditLogWithUser = AuditLog & { user: UserSummary | null };
+
 @Injectable()
 export class AuditService {
   constructor(private db: PrismaService) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  /**
+   * Cross-DB: resuelve info de usuario desde public.users para una lista de audit logs.
+   * Los audit logs del tenant solo tienen el UUID (changed_by),
+   * pero la tabla users vive en la base public.
+   */
+  private async resolveUsers(logs: AuditLog[]): Promise<AuditLogWithUser[]> {
+    const userIds = [
+      ...new Set(logs.map((l) => l.changed_by).filter(Boolean)),
+    ] as string[];
+
+    if (userIds.length === 0) {
+      return logs.map((log) => ({ ...log, user: null }));
+    }
+
+    const publicPrisma = this.db.getDefaultClient();
+    const found = await publicPrisma.users.findMany({
+      where: { id: { in: userIds } },
+      select: { id: true, name: true, email: true },
+    });
+
+    const usersMap = Object.fromEntries(found.map((u) => [u.id, u]));
+
+    return logs.map((log) => ({
+      ...log,
+      user: log.changed_by ? (usersMap[log.changed_by] ?? null) : null,
+    }));
   }
 
   /**
@@ -37,8 +86,10 @@ export class AuditService {
       this.prisma.audit_logs.count({ where }),
     ]);
 
+    const data = await this.resolveUsers(logs);
+
     return {
-      data: logs,
+      data,
       pagination: {
         total,
         limit,
@@ -60,23 +111,7 @@ export class AuditService {
       orderBy: { changed_at: 'desc' },
     });
 
-    // Cross-DB: resolver nombres de usuario desde public.users
-    const userIds = [...new Set(logs.map((l) => l.changed_by).filter(Boolean))] as string[];
-    let users: Record<string, { id: string; name: string; email: string }> = {};
-
-    if (userIds.length > 0) {
-      const publicPrisma = this.db.getDefaultClient();
-      const found = await publicPrisma.users.findMany({
-        where: { id: { in: userIds } },
-        select: { id: true, name: true, email: true },
-      });
-      users = Object.fromEntries(found.map((u) => [u.id, u]));
-    }
-
-    return logs.map((log) => ({
-      ...log,
-      user: log.changed_by ? users[log.changed_by] ?? null : null,
-    }));
+    return this.resolveUsers(logs);
   }
 
   /**
@@ -98,7 +133,7 @@ export class AuditService {
       take: 100,
     });
 
-    return logs;
+    return this.resolveUsers(logs);
   }
 
   /**

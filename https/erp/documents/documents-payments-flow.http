@@ -96,7 +96,7 @@ x-tenant: dev
 }
 
 ###
-@saleDocId = {{createSaleDoc.response.body.id}}
+@saleDocId = b704a67d-d25c-4d19-879d-eba8c4ea1d1d
 
 ### Confirmar documento de venta (status → 2 confirmado)
 PATCH {{baseUrl}}/documents/sales/{{saleDocId}}/confirm

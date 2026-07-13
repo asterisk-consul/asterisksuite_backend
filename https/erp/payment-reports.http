@@ -18,7 +18,7 @@ x-tenant: dev
 
 @cashBoxId = c2ef3f0a-2b1b-4579-af51-a6f744ebaea8
 @bankAccountId = a099a654-e109-4436-97d1-79ded226420b
-@userId = REEMPLAZAR_USER_ID
+@userId = 9c331e1a-b343-43eb-bfe7-15c9f00631d2
 
 # =====================================================
 # REPORTES DE PAGOS
@@ -36,7 +36,7 @@ x-tenant: dev
 ###
 
 ### Pagos de un usuario específico
-GET {{baseUrl}}/erp/payment-reports/by-user?date_from=2026-07-12&date_to=2026-07-12&created_by={{userId}}
+GET {{baseUrl}}/erp/payment-reports/by-user?date_from=2026-07-10&date_to=2026-07-12&created_by={{userId}}
 Authorization: Bearer {{accessToken}}
 x-tenant: dev
 
