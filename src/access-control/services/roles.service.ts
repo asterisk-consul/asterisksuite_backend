@@ -31,6 +31,13 @@ export class RolesService {
         id,
         deleted_at: null,
       },
+      include: {
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
+      },
     });
 
     if (!role) {

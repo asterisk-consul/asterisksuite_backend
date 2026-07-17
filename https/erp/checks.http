@@ -1,0 +1,294 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@checkId = REEMPLAZAR_CHECK_ID
+@paymentId = REEMPLAZAR_PAYMENT_ID
+@partyId = REEMPLAZAR_PARTY_ID
+@documentId = REEMPLAZAR_DOCUMENT_ID
+@bankAccountId = REEMPLAZAR_BANK_ACCOUNT_ID
+
+### =========================================================
+### =========================================================
+### FLUJO COMPLETO: PAGO A PROVEEDOR CON CHEQUE PROPIO
+### =========================================================
+### =========================================================
+
+### ---------------------------------------------------------
+### PASO 1: Crear cheque propio (IMPACTA CUENTA CORRIENTE)
+### ---------------------------------------------------------
+# Al registrar se crea el pago, se impacta cuenta corriente y se asocia la cuenta bancaria
+
+POST {{baseUrl}}/erp/checks
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "check_number": "90000001",
+  "bank_name": "Banco Nación",
+  "bank_branch": "Sucursal Centro",
+  "account_number": "123456789",
+  "issuer_name": "Mi Empresa S.A.",
+  "issuer_id": "30-12345678-9",
+  "amount": 50000,
+  "currency_code": "ARS",
+  "issue_date": "2026-07-13",
+  "due_date": "2026-07-13",
+  "is_own": true,
+  "payment_date": "2026-07-13",
+  "bank_account_id": "{{bankAccountId}}",
+  "party_id": "{{partyId}}",
+  "party_type": "SUPPLIER",
+  "notes": "Cheque propio para pago a proveedor"
+}
+
+###
+@ownCheckId = {{createOwnCheck.response.body.id}}
+
+### ---------------------------------------------------------
+### PASO 2: Verificar cuenta corriente del proveedor (DEBITADA)
+### ---------------------------------------------------------
+# Se espera que el saldo disminuya
+
+GET {{baseUrl}}/erp/current-accounts/{{partyId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 3: Verificar movimientos en cuenta corriente
+### ---------------------------------------------------------
+# Se espera ver entrada PAYMENT con monto negativo
+
+GET {{baseUrl}}/erp/current-accounts/{{partyId}}/entries
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 4: Confirmar cheque (IMPACTA BANCO)
+### ---------------------------------------------------------
+# Al confirmar se descuenta el dinero del banco usando la cuenta asociada al cheque
+
+PATCH {{baseUrl}}/erp/checks/{{ownCheckId}}/confirm
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 5: Verificar movimientos bancarios
+### ---------------------------------------------------------
+# Se espera ver movimiento CHECK_ISSUED negativo
+
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### =========================================================
+### =========================================================
+### FLUJO COMPLETO: COBRO A CLIENTE CON CHEQUE DE TERCERO
+### =========================================================
+### =========================================================
+
+### ---------------------------------------------------------
+### PASO 1: Crear cheque de tercero (IMPACTA CUENTA CORRIENTE)
+### ---------------------------------------------------------
+# Al registrar se crea el cobro, se impacta cuenta corriente y se asocia la cuenta bancaria
+
+POST {{baseUrl}}/erp/checks
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "check_number": "70000001",
+  "bank_name": "Banco Galicia",
+  "bank_branch": "Sucursal Norte",
+  "account_number": "987654321",
+  "issuer_name": "Cliente S.R.L.",
+  "issuer_id": "30-98765432-1",
+  "amount": 75000,
+  "currency_code": "ARS",
+  "issue_date": "2026-07-13",
+  "due_date": "2026-07-25",
+  "is_own": false,
+  "bank_account_id": "{{bankAccountId}}",
+  "party_id": "{{partyId}}",
+  "party_type": "CUSTOMER",
+  "notes": "Cheque recibido por venta a cliente"
+}
+
+###
+@thirdPartyCheckId = {{createThirdPartyCheck.response.body.id}}
+
+### ---------------------------------------------------------
+### PASO 2: Verificar cuenta corriente del cliente (ACREDITADA)
+### ---------------------------------------------------------
+# Se espera que el saldo aumente
+
+GET {{baseUrl}}/erp/current-accounts/{{partyId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 3: Verificar movimientos en cuenta corriente
+### ---------------------------------------------------------
+# Se espera ver entrada COLLECTION con monto positivo
+
+GET {{baseUrl}}/erp/current-accounts/{{partyId}}/entries
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 4: Cobrar cheque (IMPACTA BANCO)
+### ---------------------------------------------------------
+# Al cobrar se acredita el dinero en el banco usando la cuenta asociada al cheque
+
+PATCH {{baseUrl}}/erp/checks/{{thirdPartyCheckId}}/clear
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 5: Verificar movimientos bancarios
+### ---------------------------------------------------------
+# Se espera ver movimiento COLLECTION positivo
+
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### =========================================================
+### =========================================================
+### FLUJO: REVERSIÓN DE PAGO CON CHEQUE
+### =========================================================
+### =========================================================
+
+### ---------------------------------------------------------
+### PASO 1: Revertir el pago al proveedor
+### ---------------------------------------------------------
+# Esto debería revertir cuenta corriente y banco
+
+POST {{baseUrl}}/erp/payments/{{paymentId}}/reverse
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 2: Verificar que la cuenta corriente se revirtió
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/current-accounts/{{partyId}}/entries
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 3: Verificar que el banco se revirtió
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### =========================================================
+### =========================================================
+### FLUJO: RECHAZO DE CHEQUE PROPIO (FONDOS INSUFICIENTES)
+### =========================================================
+### =========================================================
+
+### ---------------------------------------------------------
+### PASO 1: Rechazar el cheque propio
+### ---------------------------------------------------------
+# Esto debería crear una deuda en cuenta corriente
+
+PATCH {{baseUrl}}/erp/checks/{{ownCheckId}}/reject
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PASO 2: Verificar que se creó deuda en cuenta corriente
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/current-accounts/{{partyId}}/entries
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### =========================================================
+### =========================================================
+### CRUD BÁSICO DE CHEQUES
+### =========================================================
+### =========================================================
+
+### ---------------------------------------------------------
+### LISTAR TODOS LOS CHEQUES
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/checks
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### FILTRAR POR STATUS
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/checks?status=PENDING
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### FILTRAR POR BANCO
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/checks?bank_name=Galicia
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### CHEQUES PRÓXIMOS A VENCER
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/checks/upcoming?days=30
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### PENDIENTES DE NOTIFICACIÓN
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/checks/pending-notification
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### ACTUALIZAR CHEQUE
+### ---------------------------------------------------------
+
+PATCH {{baseUrl}}/erp/checks/{{ownCheckId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "notes": "Cheque actualizado con nueva observación"
+}
+
+### ---------------------------------------------------------
+### ELIMINAR CHEQUE (SOFT DELETE)
+### ---------------------------------------------------------
+
+DELETE {{baseUrl}}/erp/checks/{{thirdPartyCheckId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

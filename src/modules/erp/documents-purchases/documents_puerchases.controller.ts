@@ -16,6 +16,12 @@ export class DocumentsPurchasesController {
     return this.service.create(dto);
   }
 
+  @Get('pending')
+  // @RequirePermissions('documents-purchases.read')
+  findPending(@Query('party_id') partyId?: string) {
+    return this.service.findPending(partyId);
+  }
+
   // @RequirePermissions('documents-purchases.read')
   @Get()
   findAll(@Query('documentTypeId') documentTypeId?: string, @Query('status') status?: string) {

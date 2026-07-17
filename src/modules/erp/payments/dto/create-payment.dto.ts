@@ -68,6 +68,11 @@ export class CreatePaymentDto {
   cash_box_id?: string;
 
   @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  check_ids?: string[];
+
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PaymentDocumentDto)
   @IsOptional()

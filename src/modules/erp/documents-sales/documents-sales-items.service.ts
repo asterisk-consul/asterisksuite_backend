@@ -84,6 +84,8 @@ export class DocumentsSalesItemsService {
         Number(item.quantity),
 
         currencyCode,
+
+        overridePrice,
       );
 
       const productTaxes: TaxInput[] = resolvedItem.taxes.map((t) => ({

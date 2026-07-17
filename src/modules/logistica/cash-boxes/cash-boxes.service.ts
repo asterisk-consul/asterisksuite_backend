@@ -40,13 +40,26 @@ export class CashBoxesService {
     });
   }
 
-  async findAll() {
+  async findAll(userId?: string) {
+    const where: Record<string, any> = { deleted_at: null };
+
+    // Si userId viene, filtrar solo cajas donde el usuario tiene rol
+    if (userId) {
+      const userRoleIds = await this.prisma.cash_box_user_roles.findMany({
+        where: { user_id: userId },
+        select: { cash_box_id: true },
+      });
+      const allowedBoxIds = userRoleIds.map(r => r.cash_box_id);
+      where.id = { in: allowedBoxIds };
+    }
+
     return this.prisma.cash_boxes.findMany({
-      where: { deleted_at: null },
+      where,
       orderBy: { name: 'asc' },
       include: {
         responsible: { select: { id: true, first_name: true, last_name: true } },
         balances: true,
+        user_roles: true,
       },
     });
   }
@@ -91,6 +104,16 @@ export class CashBoxesService {
     if (box.current_session) {
       throw new BadRequestException('No se puede eliminar una caja con sesión abierta');
     }
+
+    // Check if box has any balance
+    const balances = await this.prisma.cash_box_balances.findMany({
+      where: { cash_box_id: id, deleted_at: null },
+    });
+    const hasBalance = balances.some(b => Number(b.balance) !== 0);
+    if (hasBalance) {
+      throw new BadRequestException('No se puede eliminar una caja con saldo. Transferí el saldo a otra caja primero.');
+    }
+
     return this.prisma.cash_boxes.update({
       where: { id },
       data: { deleted_at: new Date(), deleted_by: userId, active: false },
@@ -153,6 +176,48 @@ export class CashBoxesService {
   }
 
   // ═══════════════════════════════════════════
+  // USER ROLES
+  // ═══════════════════════════════════════════
+
+  async addUserRole(cashBoxId: string, userId: string, role: string) {
+    const existing = await this.prisma.cash_box_user_roles.findUnique({
+      where: { cash_box_id_user_id: { cash_box_id: cashBoxId, user_id: userId } },
+    });
+    if (existing) {
+      return this.prisma.cash_box_user_roles.update({
+        where: { id: existing.id },
+        data: { role: role as any, updated_at: new Date() },
+      });
+    }
+    return this.prisma.cash_box_user_roles.create({
+      data: {
+        cash_box_id: cashBoxId,
+        user_id: userId,
+        role: role as any,
+        created_by: userId,
+      },
+    });
+  }
+
+  async removeUserRole(cashBoxId: string, userId: string) {
+    const existing = await this.prisma.cash_box_user_roles.findUnique({
+      where: { cash_box_id_user_id: { cash_box_id: cashBoxId, user_id: userId } },
+    });
+    if (!existing) {
+      throw new NotFoundException('Rol de usuario no encontrado en esta caja');
+    }
+    return this.prisma.cash_box_user_roles.delete({
+      where: { id: existing.id },
+    });
+  }
+
+  async getUserRoles(cashBoxId: string) {
+    return this.prisma.cash_box_user_roles.findMany({
+      where: { cash_box_id: cashBoxId },
+    });
+  }
+
+  // ═══════════════════════════════════════════
   // SESIONES
   // ═══════════════════════════════════════════
 
@@ -193,10 +258,11 @@ export class CashBoxesService {
     }
 
     const session = box.current_session;
-    const income = session.total_income.toNumber();
-    const expenses = session.total_expenses.toNumber();
-    const theoreticalBalance = session.opening_balance.toNumber() + income - expenses;
-    const difference = dto.actual_balance - theoreticalBalance;
+    const income = Number(session.total_income ?? 0);
+    const expenses = Number(session.total_expenses ?? 0);
+    const openingBalance = Number(session.opening_balance ?? 0);
+    const theoreticalBalance = openingBalance + income - expenses;
+    const difference = Number(dto.actual_balance ?? 0) - theoreticalBalance;
 
     const closed = await this.prisma.cash_box_sessions.update({
       where: { id: session.id },
@@ -229,10 +295,11 @@ export class CashBoxesService {
     }
 
     const session = box.current_session;
-    const income = session.total_income.toNumber();
-    const expenses = session.total_expenses.toNumber();
-    const theoreticalBalance = session.opening_balance.toNumber() + income - expenses;
-    const difference = dto.actual_balance - theoreticalBalance;
+    const income = Number(session.total_income ?? 0);
+    const expenses = Number(session.total_expenses ?? 0);
+    const openingBalance = Number(session.opening_balance ?? 0);
+    const theoreticalBalance = openingBalance + income - expenses;
+    const difference = Number(dto.actual_balance ?? 0) - theoreticalBalance;
 
     const closed = await this.prisma.cash_box_sessions.update({
       where: { id: session.id },
@@ -264,7 +331,7 @@ export class CashBoxesService {
   async getCurrentSession(cashBoxId: string) {
     const box = await this.findOne(cashBoxId);
     if (!box.current_session) {
-      return { message: 'No hay sesión abierta', session: null };
+      return null;
     }
     return this.prisma.cash_box_sessions.findUnique({
       where: { id: box.current_session_id! },

@@ -367,6 +367,49 @@ export class DocumentsSalesService {
   }
 
   // ─────────────────────────────────────────────
+  // FIND PENDING (saldo pendiente de pago/cobro)
+  // ─────────────────────────────────────────────
+  async findPending(partyId?: string) {
+    const docs = await this.prisma.documents.findMany({
+      where: {
+        document_types: {
+          code: { in: this.SALE_CODES },
+        },
+        status: 2,
+        deleted_at: null,
+        ...(partyId ? { party_id: partyId } : {}),
+      },
+      include: {
+        document_types: { select: { code: true, description: true, direction: true } },
+        business_parties: { select: { id: true, name: true, type: true } },
+      },
+      orderBy: { date: 'asc' },
+    });
+
+    return docs
+      .map((d) => {
+        const total = Number(d.total);
+        const paid = Number(d.paid_amount);
+        const pending = total - paid;
+        return {
+          id: d.id,
+          number: d.number,
+          date: d.date,
+          total,
+          paid_amount: paid,
+          pending_amount: pending,
+          currency_code: d.currency_code,
+          party_id: d.party_id,
+          party_name: d.business_parties?.name ?? null,
+          party_type: d.business_parties?.type ?? null,
+          document_type_code: d.document_types?.code ?? null,
+          document_type_description: d.document_types?.description ?? null,
+        };
+      })
+      .filter((d) => d.pending_amount > 0.01);
+  }
+
+  // ─────────────────────────────────────────────
   // FIND ONE
   // ─────────────────────────────────────────────
   async findOne(id: string) {

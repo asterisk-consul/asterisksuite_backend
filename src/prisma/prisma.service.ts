@@ -107,8 +107,15 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
       return this.defaultClient;
     }
 
+    return this.getTenantClient(tenantDb);
+  }
+
+  /**
+   * Retorna el cliente del tenant para un DB name específico.
+   * Usar en schedulers que corren fuera de contexto HTTP.
+   */
+  public getTenantClient(tenantDb: string): ExtendedClient {
     if (!this.tenantClientCache.has(tenantDb)) {
-      // ✅ Crea cliente con URL dinámica apuntando a la DB del tenant
       const { client, pool } = createTenantClient(tenantDb);
       this.tenantClientCache.set(tenantDb, client);
       this.tenantPoolCache.set(tenantDb, pool);

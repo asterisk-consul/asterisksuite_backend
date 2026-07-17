@@ -1,28 +1,38 @@
 import { Injectable, Logger } from '@nestjs/common';
-
 import { Cron } from '@nestjs/schedule';
-
+import { PrismaService } from '@/prisma/prisma.service';
 import { ExchangeService } from './exchange.service';
 
 @Injectable()
 export class ExchangeScheduler {
   private readonly logger = new Logger(ExchangeScheduler.name);
 
-  constructor(private readonly exchangeService: ExchangeService) {}
+  constructor(
+    private readonly exchangeService: ExchangeService,
+    private readonly db: PrismaService,
+  ) {}
 
-  //cada 1 de 10 a 15 hs arg lunes a viernes
-  @Cron('0 10-15 * * 1-5', {
+  @Cron('0 13 * * 1-5', {
     timeZone: 'America/Argentina/Buenos_Aires',
   })
   async handleSyncRates() {
     this.logger.log('Sincronizando cotizaciones...');
 
-    try {
-      await this.exchangeService.syncAllRates();
+    const companies = await this.db.getDefaultClient().companies.findMany({
+      where: { deleted_at: null },
+      select: { db_name: true, name: true },
+    });
 
-      this.logger.log('Cotizaciones sincronizadas');
-    } catch (error) {
-      this.logger.error('Error sincronizando cotizaciones', error);
+    for (const company of companies) {
+      if (!company.db_name) continue;
+
+      try {
+        const prisma = this.db.getTenantClient(company.db_name);
+        await this.exchangeService.syncAllRatesForClient(prisma);
+        this.logger.log(`[${company.name}] Cotizaciones sincronizadas`);
+      } catch (error) {
+        this.logger.error(`[${company.name}] Error sincronizando cotizaciones`, error);
+      }
     }
   }
 }

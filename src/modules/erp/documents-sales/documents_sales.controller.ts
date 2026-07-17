@@ -47,6 +47,12 @@ export class DocumentsSalesController {
     return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined);
   }
 
+  @Get('pending')
+  // @RequirePermissions('documents.read')
+  findPending(@Query('party_id') partyId?: string) {
+    return this.service.findPending(partyId);
+  }
+
   @Get(':id')
   // @RequirePermissions('documents.read')
   findOne(@Param('id') id: string) {

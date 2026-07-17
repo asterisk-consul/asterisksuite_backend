@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+// import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { CurrentAccountsService } from './current-accounts.service';
@@ -11,16 +12,19 @@ export class CurrentAccountsController {
   constructor(private readonly currentAccountsService: CurrentAccountsService) {}
 
   @Post('entries')
+  // @RequirePermissions('treasury.current_accounts.create')
   addEntry(@Body() dto: CreateCurrentAccountEntryDto, @CurrentUser() user: AuthUser) {
     return this.currentAccountsService.addEntry(dto, user.id);
   }
 
   @Get('party/:partyId')
+  // @RequirePermissions('treasury.current_accounts.read')
   findByParty(@Param('partyId') partyId: string) {
     return this.currentAccountsService.findByParty(partyId);
   }
 
   @Get('party/:partyId/entries')
+  // @RequirePermissions('treasury.current_accounts.read')
   getEntries(
     @Param('partyId') partyId: string,
     @Query('currency_code') currencyCode?: string,
@@ -29,6 +33,7 @@ export class CurrentAccountsController {
   }
 
   @Get('party/:partyId/statement')
+  // @RequirePermissions('treasury.current_accounts.read')
   getStatement(
     @Param('partyId') partyId: string,
     @Query('currency_code') currencyCode: string,
@@ -37,10 +42,17 @@ export class CurrentAccountsController {
   }
 
   @Get('party/:partyId/balance')
+  // @RequirePermissions('treasury.current_accounts.read')
   getBalance(
     @Param('partyId') partyId: string,
     @Query('currency_code') currencyCode: string,
   ) {
     return this.currentAccountsService.getBalance(partyId, currencyCode);
+  }
+
+  @Get('active')
+  // @RequirePermissions('treasury.current_accounts.read')
+  findActive() {
+    return this.currentAccountsService.findActive();
   }
 }

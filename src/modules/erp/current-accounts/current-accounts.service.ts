@@ -83,10 +83,24 @@ export class CurrentAccountsService {
 
     if (!account) return [];
 
-    return this.prisma.current_account_entries.findMany({
+    const entries = await this.prisma.current_account_entries.findMany({
       where: { current_account_id: account.id, deleted_at: null },
       orderBy: { date: 'desc' },
     });
+
+    const userIds = [...new Set(entries.map(e => e.created_by).filter(Boolean))] as string[];
+    const users = userIds.length > 0
+      ? await this.db.getDefaultClient().users.findMany({
+          where: { id: { in: userIds } },
+          select: { id: true, name: true }
+        })
+      : [];
+    const userMap = new Map(users.map(u => [u.id, u.name]));
+
+    return entries.map(e => ({
+      ...e,
+      user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
+    }));
   }
 
   async getStatement(partyId: string, currencyCode: string) {
@@ -105,10 +119,24 @@ export class CurrentAccountsService {
 
     if (!account) throw new NotFoundException('Cuenta corriente no encontrada');
 
+    const userIds = [...new Set(account.entries.map(e => e.created_by).filter(Boolean))] as string[];
+    const users = userIds.length > 0
+      ? await this.db.getDefaultClient().users.findMany({
+          where: { id: { in: userIds } },
+          select: { id: true, name: true }
+        })
+      : [];
+    const userMap = new Map(users.map(u => [u.id, u.name]));
+
+    const entriesWithUser = account.entries.map(e => ({
+      ...e,
+      user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
+    }));
+
     return {
       account,
       balance: account.balance,
-      entries: account.entries,
+      entries: entriesWithUser,
     };
   }
 
@@ -127,5 +155,18 @@ export class CurrentAccountsService {
       currency_code: currencyCode,
       balance: account?.balance ?? 0,
     };
+  }
+
+  async findActive() {
+    return this.prisma.current_accounts.findMany({
+      where: {
+        deleted_at: null,
+        balance: { not: 0 },
+      },
+      include: {
+        party: { select: { id: true, name: true, type: true, tax_id: true } },
+      },
+      orderBy: { balance: 'asc' },
+    });
   }
 }

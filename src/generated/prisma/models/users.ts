@@ -254,7 +254,6 @@ export type usersWhereInput = {
   created_by?: Prisma.UuidNullableFilter<"users"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"users"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"users"> | string | null
-  auditLogs?: Prisma.Audit_logsListRelationFilter
   cargo_transfers?: Prisma.Cargo_transfersListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
@@ -284,7 +283,6 @@ export type usersOrderByWithRelationInput = {
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  auditLogs?: Prisma.audit_logsOrderByRelationAggregateInput
   cargo_transfers?: Prisma.cargo_transfersOrderByRelationAggregateInput
   delivery_notes?: Prisma.delivery_notesOrderByRelationAggregateInput
   dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
@@ -317,7 +315,6 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   created_by?: Prisma.UuidNullableFilter<"users"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"users"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"users"> | string | null
-  auditLogs?: Prisma.Audit_logsListRelationFilter
   cargo_transfers?: Prisma.Cargo_transfersListRelationFilter
   delivery_notes?: Prisma.Delivery_notesListRelationFilter
   dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
@@ -387,7 +384,6 @@ export type usersCreateInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -417,7 +413,6 @@ export type usersUncheckedCreateInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -447,7 +442,6 @@ export type usersUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -477,7 +471,6 @@ export type usersUncheckedUpdateInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -602,22 +595,6 @@ export type usersMinOrderByAggregateInput = {
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
-}
-
-export type usersCreateNestedOneWithoutAuditLogsInput = {
-  create?: Prisma.XOR<Prisma.usersCreateWithoutAuditLogsInput, Prisma.usersUncheckedCreateWithoutAuditLogsInput>
-  connectOrCreate?: Prisma.usersCreateOrConnectWithoutAuditLogsInput
-  connect?: Prisma.usersWhereUniqueInput
-}
-
-export type usersUpdateOneWithoutAuditLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.usersCreateWithoutAuditLogsInput, Prisma.usersUncheckedCreateWithoutAuditLogsInput>
-  connectOrCreate?: Prisma.usersCreateOrConnectWithoutAuditLogsInput
-  upsert?: Prisma.usersUpsertWithoutAuditLogsInput
-  disconnect?: Prisma.usersWhereInput | boolean
-  delete?: Prisma.usersWhereInput | boolean
-  connect?: Prisma.usersWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.usersUpdateWithoutAuditLogsInput>, Prisma.usersUncheckedUpdateWithoutAuditLogsInput>
 }
 
 export type usersCreateNestedOneWithoutFilesInput = {
@@ -812,138 +789,6 @@ export type usersUpdateOneWithoutWarehouse_stock_movementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.usersUpdateWithoutWarehouse_stock_movementsInput>, Prisma.usersUncheckedUpdateWithoutWarehouse_stock_movementsInput>
 }
 
-export type usersCreateWithoutAuditLogsInput = {
-  id?: string
-  name: string
-  email: string
-  password_hash?: string | null
-  role?: $Enums.PlatformRole | null
-  active?: boolean | null
-  employee_id?: string | null
-  partner_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
-  files?: Prisma.filesCreateNestedManyWithoutUsersInput
-  pallets?: Prisma.palletsCreateNestedManyWithoutUsersInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutUsersInput
-  trips?: Prisma.tripsCreateNestedManyWithoutUsersInput
-  vehicle_combinations?: Prisma.vehicle_combinationsCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutUsersInput
-  companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
-}
-
-export type usersUncheckedCreateWithoutAuditLogsInput = {
-  id?: string
-  name: string
-  email: string
-  password_hash?: string | null
-  role?: $Enums.PlatformRole | null
-  active?: boolean | null
-  employee_id?: string | null
-  partner_id?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
-  files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
-  pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutUsersInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutUsersInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput
-  trips?: Prisma.tripsUncheckedCreateNestedManyWithoutUsersInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedCreateNestedManyWithoutUsersInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutUsersInput
-  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type usersCreateOrConnectWithoutAuditLogsInput = {
-  where: Prisma.usersWhereUniqueInput
-  create: Prisma.XOR<Prisma.usersCreateWithoutAuditLogsInput, Prisma.usersUncheckedCreateWithoutAuditLogsInput>
-}
-
-export type usersUpsertWithoutAuditLogsInput = {
-  update: Prisma.XOR<Prisma.usersUpdateWithoutAuditLogsInput, Prisma.usersUncheckedUpdateWithoutAuditLogsInput>
-  create: Prisma.XOR<Prisma.usersCreateWithoutAuditLogsInput, Prisma.usersUncheckedCreateWithoutAuditLogsInput>
-  where?: Prisma.usersWhereInput
-}
-
-export type usersUpdateToOneWithWhereWithoutAuditLogsInput = {
-  where?: Prisma.usersWhereInput
-  data: Prisma.XOR<Prisma.usersUpdateWithoutAuditLogsInput, Prisma.usersUncheckedUpdateWithoutAuditLogsInput>
-}
-
-export type usersUpdateWithoutAuditLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
-  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
-  files?: Prisma.filesUpdateManyWithoutUsersNestedInput
-  pallets?: Prisma.palletsUpdateManyWithoutUsersNestedInput
-  picking_orders?: Prisma.picking_ordersUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutUsersNestedInput
-  trips?: Prisma.tripsUpdateManyWithoutUsersNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutUsersNestedInput
-  companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
-}
-
-export type usersUncheckedUpdateWithoutAuditLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
-  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
-  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
-  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
-  pallets?: Prisma.palletsUncheckedUpdateManyWithoutUsersNestedInput
-  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutUsersNestedInput
-  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput
-  trips?: Prisma.tripsUncheckedUpdateManyWithoutUsersNestedInput
-  vehicle_combinations?: Prisma.vehicle_combinationsUncheckedUpdateManyWithoutUsersNestedInput
-  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutUsersNestedInput
-  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
-}
-
 export type usersCreateWithoutFilesInput = {
   id?: string
   name: string
@@ -959,7 +804,6 @@ export type usersCreateWithoutFilesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -988,7 +832,6 @@ export type usersUncheckedCreateWithoutFilesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -1033,7 +876,6 @@ export type usersUpdateWithoutFilesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -1062,7 +904,6 @@ export type usersUncheckedUpdateWithoutFilesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -1091,7 +932,6 @@ export type usersCreateWithoutCargo_transfersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
@@ -1120,7 +960,6 @@ export type usersUncheckedCreateWithoutCargo_transfersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
@@ -1165,7 +1004,6 @@ export type usersUpdateWithoutCargo_transfersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
@@ -1194,7 +1032,6 @@ export type usersUncheckedUpdateWithoutCargo_transfersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
@@ -1223,7 +1060,6 @@ export type usersCreateWithoutDelivery_notesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
@@ -1252,7 +1088,6 @@ export type usersUncheckedCreateWithoutDelivery_notesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
@@ -1297,7 +1132,6 @@ export type usersUpdateWithoutDelivery_notesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
@@ -1326,7 +1160,6 @@ export type usersUncheckedUpdateWithoutDelivery_notesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
@@ -1355,7 +1188,6 @@ export type usersCreateWithoutPicking_ordersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -1384,7 +1216,6 @@ export type usersUncheckedCreateWithoutPicking_ordersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -1429,7 +1260,6 @@ export type usersUpdateWithoutPicking_ordersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -1458,7 +1288,6 @@ export type usersUncheckedUpdateWithoutPicking_ordersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -1487,7 +1316,6 @@ export type usersCreateWithoutTrip_temperature_logsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -1516,7 +1344,6 @@ export type usersUncheckedCreateWithoutTrip_temperature_logsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -1561,7 +1388,6 @@ export type usersUpdateWithoutTrip_temperature_logsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -1590,7 +1416,6 @@ export type usersUncheckedUpdateWithoutTrip_temperature_logsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -1619,7 +1444,6 @@ export type usersCreateWithoutDispatch_ordersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   files?: Prisma.filesCreateNestedManyWithoutUsersInput
@@ -1648,7 +1472,6 @@ export type usersUncheckedCreateWithoutDispatch_ordersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   files?: Prisma.filesUncheckedCreateNestedManyWithoutUsersInput
@@ -1693,7 +1516,6 @@ export type usersUpdateWithoutDispatch_ordersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUpdateManyWithoutUsersNestedInput
@@ -1722,7 +1544,6 @@ export type usersUncheckedUpdateWithoutDispatch_ordersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   files?: Prisma.filesUncheckedUpdateManyWithoutUsersNestedInput
@@ -1751,7 +1572,6 @@ export type usersCreateWithoutTripsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -1780,7 +1600,6 @@ export type usersUncheckedCreateWithoutTripsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -1825,7 +1644,6 @@ export type usersUpdateWithoutTripsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -1854,7 +1672,6 @@ export type usersUncheckedUpdateWithoutTripsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -1883,7 +1700,6 @@ export type usersCreateWithoutVehicle_combinationsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -1912,7 +1728,6 @@ export type usersUncheckedCreateWithoutVehicle_combinationsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -1957,7 +1772,6 @@ export type usersUpdateWithoutVehicle_combinationsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -1986,7 +1800,6 @@ export type usersUncheckedUpdateWithoutVehicle_combinationsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -2015,7 +1828,6 @@ export type usersCreateWithoutPalletsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -2044,7 +1856,6 @@ export type usersUncheckedCreateWithoutPalletsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -2089,7 +1900,6 @@ export type usersUpdateWithoutPalletsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -2118,7 +1928,6 @@ export type usersUncheckedUpdateWithoutPalletsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -2147,7 +1956,6 @@ export type usersCreateWithoutRefreshTokensInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -2176,7 +1984,6 @@ export type usersUncheckedCreateWithoutRefreshTokensInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -2221,7 +2028,6 @@ export type usersUpdateWithoutRefreshTokensInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -2250,7 +2056,6 @@ export type usersUncheckedUpdateWithoutRefreshTokensInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -2279,7 +2084,6 @@ export type usersCreateWithoutCompanyUsersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -2308,7 +2112,6 @@ export type usersUncheckedCreateWithoutCompanyUsersInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -2353,7 +2156,6 @@ export type usersUpdateWithoutCompanyUsersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -2382,7 +2184,6 @@ export type usersUncheckedUpdateWithoutCompanyUsersInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -2411,7 +2212,6 @@ export type usersCreateWithoutWarehouse_stock_movementsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutUsersInput
@@ -2440,7 +2240,6 @@ export type usersUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
-  auditLogs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutUsersInput
   delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutUsersInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutUsersInput
@@ -2485,7 +2284,6 @@ export type usersUpdateWithoutWarehouse_stock_movementsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutUsersNestedInput
@@ -2514,7 +2312,6 @@ export type usersUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auditLogs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
   cargo_transfers?: Prisma.cargo_transfersUncheckedUpdateManyWithoutUsersNestedInput
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutUsersNestedInput
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutUsersNestedInput
@@ -2534,7 +2331,6 @@ export type usersUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
  */
 
 export type UsersCountOutputType = {
-  auditLogs: number
   cargo_transfers: number
   delivery_notes: number
   dispatch_orders: number
@@ -2550,7 +2346,6 @@ export type UsersCountOutputType = {
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  auditLogs?: boolean | UsersCountOutputTypeCountAuditLogsArgs
   cargo_transfers?: boolean | UsersCountOutputTypeCountCargo_transfersArgs
   delivery_notes?: boolean | UsersCountOutputTypeCountDelivery_notesArgs
   dispatch_orders?: boolean | UsersCountOutputTypeCountDispatch_ordersArgs
@@ -2573,13 +2368,6 @@ export type UsersCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Select specific fields to fetch from the UsersCountOutputType
    */
   select?: Prisma.UsersCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * UsersCountOutputType without action
- */
-export type UsersCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.audit_logsWhereInput
 }
 
 /**
@@ -2682,7 +2470,6 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   created_by?: boolean
   updated_by?: boolean
   deleted_by?: boolean
-  auditLogs?: boolean | Prisma.users$auditLogsArgs<ExtArgs>
   cargo_transfers?: boolean | Prisma.users$cargo_transfersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.users$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.users$dispatch_ordersArgs<ExtArgs>
@@ -2751,7 +2538,6 @@ export type usersSelectScalar = {
 
 export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password_hash" | "role" | "active" | "employee_id" | "partner_id" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  auditLogs?: boolean | Prisma.users$auditLogsArgs<ExtArgs>
   cargo_transfers?: boolean | Prisma.users$cargo_transfersArgs<ExtArgs>
   delivery_notes?: boolean | Prisma.users$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.users$dispatch_ordersArgs<ExtArgs>
@@ -2772,7 +2558,6 @@ export type usersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "users"
   objects: {
-    auditLogs: Prisma.$audit_logsPayload<ExtArgs>[]
     cargo_transfers: Prisma.$cargo_transfersPayload<ExtArgs>[]
     delivery_notes: Prisma.$delivery_notesPayload<ExtArgs>[]
     dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
@@ -3195,7 +2980,6 @@ readonly fields: usersFieldRefs;
  */
 export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  auditLogs<T extends Prisma.users$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$audit_logsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cargo_transfers<T extends Prisma.users$cargo_transfersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$cargo_transfersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cargo_transfersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   delivery_notes<T extends Prisma.users$delivery_notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$delivery_notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$delivery_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dispatch_orders<T extends Prisma.users$dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3641,30 +3425,6 @@ export type usersDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many users to delete.
    */
   limit?: number
-}
-
-/**
- * users.auditLogs
- */
-export type users$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the audit_logs
-   */
-  select?: Prisma.audit_logsSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the audit_logs
-   */
-  omit?: Prisma.audit_logsOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.audit_logsInclude<ExtArgs> | null
-  where?: Prisma.audit_logsWhereInput
-  orderBy?: Prisma.audit_logsOrderByWithRelationInput | Prisma.audit_logsOrderByWithRelationInput[]
-  cursor?: Prisma.audit_logsWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Audit_logsScalarFieldEnum | Prisma.Audit_logsScalarFieldEnum[]
 }
 
 /**

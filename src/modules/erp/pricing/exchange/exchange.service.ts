@@ -39,6 +39,21 @@ export class ExchangeService {
     });
   }
 
+  async syncAllRatesForClient(prisma: any) {
+    return prisma.$transaction(async (tx: any) => {
+      const official = await this.syncOfficialRates(tx);
+
+      const dollars = await this.syncDollarRates(tx);
+
+      return {
+        success: true,
+        official_created: official.length,
+        dollar_created: dollars.length,
+        total_created: official.length + dollars.length,
+      };
+    });
+  }
+
   // =========================================================
   // SYNC MONEDAS OFICIALES
   // https://dolarapi.com/v1/cotizaciones

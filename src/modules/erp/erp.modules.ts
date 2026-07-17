@@ -24,6 +24,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { BankAccountsModule } from './bank-accounts/bank-accounts.module';
 import { CurrentAccountsModule } from './current-accounts/current-accounts.module';
 import { PaymentReportsModule } from './payment-reports/payment-reports.module';
+import { ChecksModule } from './checks/checks.module';
+import { TreasuryReportsModule } from './treasury-reports/treasury-reports.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { PaymentReportsModule } from './payment-reports/payment-reports.module';
     BankAccountsModule,
     CurrentAccountsModule,
     PaymentReportsModule,
+    ChecksModule,
+    TreasuryReportsModule,
   ],
   exports: [
     AccountsModule,
@@ -72,6 +76,8 @@ import { PaymentReportsModule } from './payment-reports/payment-reports.module';
     BankAccountsModule,
     CurrentAccountsModule,
     PaymentReportsModule,
+    ChecksModule,
+    TreasuryReportsModule,
   ],
 })
 export class ErpModulesModule {}

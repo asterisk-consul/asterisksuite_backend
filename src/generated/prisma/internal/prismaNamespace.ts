@@ -9330,6 +9330,9 @@ export const PaymentsScalarFieldEnum = {
   bank_account_id: 'bank_account_id',
   cash_box_id: 'cash_box_id',
   status: 'status',
+  confirmed_at: 'confirmed_at',
+  confirmed_by: 'confirmed_by',
+  payment_date: 'payment_date',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -9360,6 +9363,7 @@ export type Payment_documentsScalarFieldEnum = (typeof Payment_documentsScalarFi
 export const ChecksScalarFieldEnum = {
   id: 'id',
   payment_id: 'payment_id',
+  bank_account_id: 'bank_account_id',
   check_number: 'check_number',
   bank_name: 'bank_name',
   bank_branch: 'bank_branch',
@@ -10087,6 +10091,20 @@ export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'PaymentMethod[]'
  */
 export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentStatus'
+ */
+export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentStatus[]'
+ */
+export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
     
 
 

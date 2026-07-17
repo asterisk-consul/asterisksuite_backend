@@ -10,54 +10,21 @@ export class PaymentsService {
     return this.db.getClientForCurrentContext();
   }
 
+  // ═══════════════════════════════════════════
+  // CREATE (DRAFT — no side effects)
+  // ═══════════════════════════════════════════
+
   async create(dto: CreatePaymentDto, userId: string) {
-    // Validar que si hay documentos, party_id esté presente
     if (dto.documents && dto.documents.length > 0 && !dto.party_id) {
       throw new BadRequestException('party_id es requerido cuando se aplican documentos');
     }
 
-    // Validar que la suma de amount_applied coincida con el amount del pago
-    if (dto.documents && dto.documents.length > 0) {
-      const totalApplied = dto.documents.reduce((sum, d) => sum + d.amount_applied, 0);
-      if (Math.abs(totalApplied - dto.amount) > 0.01) {
-        throw new BadRequestException(
-          `La suma de los montos aplicados (${totalApplied}) no coincide con el monto del pago (${dto.amount})`,
-        );
-      }
-    }
-
-    // Validar saldo pendiente de documentos
-    if (dto.documents && dto.documents.length > 0) {
-      for (const doc of dto.documents) {
-        const document = await this.prisma.documents.findUnique({
-          where: { id: doc.document_id },
-        });
-        if (!document) {
-          throw new NotFoundException(`Documento ${doc.document_id} no encontrado`);
-        }
-
-        const pending = document.total.toNumber() - document.paid_amount.toNumber();
-        if (pending <= 0) {
-          throw new BadRequestException(
-            `El documento ${document.number} ya está saldado (total: ${document.total}, pagado: ${document.paid_amount})`,
-          );
-        }
-        if (doc.amount_applied > pending) {
-          throw new BadRequestException(
-            `El monto aplicado (${doc.amount_applied}) excede el saldo pendiente (${pending}) del documento ${document.number}`,
-          );
-        }
-      }
-    }
-
-    // Obtener próximo número secuencial
     const lastPayment = await this.prisma.payments.findFirst({
       where: { deleted_at: null },
       orderBy: { number: 'desc' },
     });
     const nextNumber = (lastPayment?.number ?? 0) + 1;
 
-    // Crear pago
     const payment = await this.prisma.payments.create({
       data: {
         number: nextNumber,
@@ -76,12 +43,12 @@ export class PaymentsService {
         reference: dto.reference,
         bank_account_id: dto.bank_account_id,
         cash_box_id: dto.cash_box_id,
-        status: dto.status ?? 1,
+        status: 'DRAFT',
         created_by: userId,
       },
     });
 
-    // Aplicar a documentos
+    // Store documents for later confirmation
     if (dto.documents && dto.documents.length > 0) {
       for (const doc of dto.documents) {
         await this.prisma.payment_documents.create({
@@ -92,173 +59,174 @@ export class PaymentsService {
             created_by: userId,
           },
         });
-
-        // Actualizar paid_amount del documento
-        await this.prisma.documents.update({
-          where: { id: doc.document_id },
-          data: {
-            paid_amount: { increment: doc.amount_applied },
-            updated_at: new Date(),
-            updated_by: userId,
-          },
-        });
       }
-    }
-
-    // Crear movimiento en caja
-    if (dto.cash_box_id) {
-      const balance = await this.prisma.cash_box_balances.findUnique({
-        where: {
-          cash_box_id_currency_code: {
-            cash_box_id: dto.cash_box_id,
-            currency_code: dto.currency_code,
-          },
-        },
-      });
-
-      const currentBalance = balance?.balance.toNumber() ?? 0;
-      const isOutflow = dto.type === 'PAYMENT';
-      const balanceAfter = isOutflow ? currentBalance - dto.amount : currentBalance + dto.amount;
-
-      if (isOutflow && balanceAfter < 0) {
-        throw new BadRequestException('Saldo insuficiente en la caja');
-      }
-
-      // Crear movimiento
-      await this.prisma.cash_box_movements.create({
-        data: {
-          cash_box_id: dto.cash_box_id,
-          session_id: undefined,
-          type: dto.type as any,
-          amount: dto.amount,
-          currency_code: dto.currency_code,
-          exchange_rate: dto.exchange_rate,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
-          description: dto.description ?? `Pago #${nextNumber}`,
-          payment_id: payment.id,
-          reference_type: dto.documents?.length ? 'document' : undefined,
-          reference_id: dto.documents?.length ? dto.documents[0].document_id : undefined,
-          date: new Date(dto.date),
-          created_by: userId,
-        },
-      });
-
-      // Actualizar saldo
-      if (balance) {
-        await this.prisma.cash_box_balances.update({
-          where: { id: balance.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
-        });
-      } else {
-        await this.prisma.cash_box_balances.create({
-          data: {
-            cash_box_id: dto.cash_box_id,
-            currency_code: dto.currency_code,
-            balance: balanceAfter,
-            created_by: userId,
-          },
-        });
-      }
-    }
-
-    // Crear movimiento bancario
-    if (dto.bank_account_id) {
-      const bankBalance = await this.prisma.bank_accounts.findUnique({
-        where: { id: dto.bank_account_id },
-      });
-
-      if (bankBalance) {
-        const currentBankBalance = bankBalance.balance.toNumber();
-        const isOutflow = dto.type === 'PAYMENT';
-        const bankBalanceAfter = isOutflow ? currentBankBalance - dto.amount : currentBankBalance + dto.amount;
-
-        await this.prisma.bank_account_movements.create({
-          data: {
-            bank_account_id: dto.bank_account_id,
-            type: dto.type as any,
-            amount: dto.amount,
-            currency_code: dto.currency_code,
-            exchange_rate: dto.exchange_rate,
-            balance_before: currentBankBalance,
-            balance_after: bankBalanceAfter,
-            description: dto.description ?? `Pago #${nextNumber}`,
-            payment_id: payment.id,
-            date: new Date(dto.date),
-            created_by: userId,
-          },
-        });
-
-        await this.prisma.bank_accounts.update({
-          where: { id: dto.bank_account_id },
-          data: { balance: bankBalanceAfter, updated_at: new Date() },
-        });
-      }
-    }
-
-    // Actualizar cuenta corriente del tercero
-    if (dto.party_id) {
-      // Buscar o crear cuenta corriente
-      let currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: dto.party_id,
-            currency_code: dto.currency_code,
-          },
-        },
-      });
-
-      if (!currentAccount) {
-        currentAccount = await this.prisma.current_accounts.create({
-          data: {
-            party_id: dto.party_id,
-            party_type: dto.party_type ?? 'CUSTOMER',
-            currency_code: dto.currency_code,
-            balance: 0,
-            created_by: userId,
-          },
-        });
-      }
-
-      const currentBalance = currentAccount.balance.toNumber();
-      const isDebit = dto.type === 'PAYMENT';
-      const balanceAfter = isDebit ? currentBalance - dto.amount : currentBalance + dto.amount;
-
-      await this.prisma.current_account_entries.create({
-        data: {
-          current_account_id: currentAccount.id,
-          type: dto.type as any,
-          amount: dto.amount,
-          currency_code: dto.currency_code,
-          exchange_rate: dto.exchange_rate,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
-          description: dto.description ?? `Pago #${nextNumber}`,
-          reference_type: 'payment',
-          reference_id: payment.id,
-          payment_id: payment.id,
-          date: new Date(dto.date),
-          created_by: userId,
-        },
-      });
-
-      await this.prisma.current_accounts.update({
-        where: { id: currentAccount.id },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
     }
 
     return payment;
   }
 
-  async findAll(filters?: { party_id?: string; type?: string; payment_method?: string; status?: number }) {
+  // ═══════════════════════════════════════════
+  // CONFIRM (apply side effects)
+  // ═══════════════════════════════════════════
+
+  async confirm(id: string, userId: string) {
+    const payment = await this.findOne(id);
+    if (payment.status !== 'DRAFT') {
+      throw new BadRequestException('Solo se pueden confirmar pagos en borrador');
+    }
+
+    // Validate documents if present
+    const paymentDocs = await this.prisma.payment_documents.findMany({
+      where: { payment_id: id },
+    });
+
+    if (paymentDocs.length > 0) {
+      if (!payment.party_id) {
+        throw new BadRequestException('party_id es requerido cuando se aplican documentos');
+      }
+
+      for (const pd of paymentDocs) {
+        const document = await this.prisma.documents.findUnique({
+          where: { id: pd.document_id },
+        });
+        if (!document) {
+          throw new NotFoundException(`Documento ${pd.document_id} no encontrado`);
+        }
+        const pending = document.total.toNumber() - document.paid_amount.toNumber();
+        if (pending <= 0) {
+          throw new BadRequestException(
+            `El documento ${document.number} ya está saldado`,
+          );
+        }
+        if (pd.amount_applied.toNumber() > pending) {
+          throw new BadRequestException(
+            `El monto aplicado (${pd.amount_applied}) excede el saldo pendiente (${pending}) del documento ${document.number}`,
+          );
+        }
+      }
+    }
+
+    // Apply to documents
+    for (const pd of paymentDocs) {
+      await this.prisma.documents.update({
+        where: { id: pd.document_id },
+        data: {
+          paid_amount: { increment: pd.amount_applied.toNumber() },
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+    }
+
+    // Create cash box movement
+    if (payment.cash_box_id) {
+      await this.createCashBoxMovement(payment, userId);
+    }
+
+    // Create bank account movement
+    if (payment.bank_account_id) {
+      await this.createBankMovement(payment, userId);
+    }
+
+    // Update current account
+    if (payment.party_id) {
+      await this.createCurrentAccountEntry(payment, userId);
+    }
+
+    // Update status
+    return this.prisma.payments.update({
+      where: { id },
+      data: {
+        status: 'CONFIRMED',
+        confirmed_at: new Date(),
+        confirmed_by: userId,
+        updated_at: new Date(),
+        updated_by: userId,
+      },
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // MARK AS PAID (check received/cashed)
+  // ═══════════════════════════════════════════
+
+  async markAsPaid(id: string, userId: string) {
+    const payment = await this.findOne(id);
+    if (payment.status !== 'CONFIRMED') {
+      throw new BadRequestException('Solo se pueden marcar como pagados pagos confirmados');
+    }
+
+    return this.prisma.payments.update({
+      where: { id },
+      data: {
+        status: 'PAID',
+        payment_date: new Date(),
+        updated_at: new Date(),
+        updated_by: userId,
+      },
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // REJECT (reverse side effects)
+  // ═══════════════════════════════════════════
+
+  async reject(id: string, userId: string) {
+    const payment = await this.findOne(id);
+    if (payment.status !== 'CONFIRMED') {
+      throw new BadRequestException('Solo se pueden rechazar pagos confirmados');
+    }
+
+    await this.reverseSideEffects(payment, userId, 'payment_rejection');
+
+    return this.prisma.payments.update({
+      where: { id },
+      data: {
+        status: 'REVERSED',
+        updated_at: new Date(),
+        updated_by: userId,
+      },
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // REVERSE (cancel confirmed payment)
+  // ═══════════════════════════════════════════
+
+  async reverse(id: string, userId: string) {
+    const payment = await this.findOne(id);
+    if (payment.status === 'DRAFT') {
+      throw new BadRequestException('No se puede anular un pago en borrador. Use eliminar.');
+    }
+    if (payment.status === 'CANCELLED') {
+      throw new BadRequestException('El pago ya está anulado');
+    }
+
+    await this.reverseSideEffects(payment, userId, 'payment_reversal');
+
+    return this.prisma.payments.update({
+      where: { id },
+      data: {
+        status: 'CANCELLED',
+        updated_at: new Date(),
+        updated_by: userId,
+      },
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // FIND ALL / ONE
+  // ═══════════════════════════════════════════
+
+  async findAll(filters?: { party_id?: string; type?: string; payment_method?: string; status?: string; user_id?: string }) {
     const where: Record<string, any> = { deleted_at: null };
     if (filters?.party_id) where.party_id = filters.party_id;
     if (filters?.type) where.type = filters.type;
     if (filters?.payment_method) where.payment_method = filters.payment_method;
-    if (filters?.status !== undefined) where.status = filters.status;
+    if (filters?.status) where.status = filters.status;
+    if (filters?.user_id) where.created_by = filters.user_id;
 
-    return this.prisma.payments.findMany({
+    const payments = await this.prisma.payments.findMany({
       where,
       orderBy: { number: 'desc' },
       include: {
@@ -270,6 +238,21 @@ export class PaymentsService {
         },
       },
     });
+
+    const creatorIds = [...new Set(payments.map(p => p.created_by).filter(Boolean))] as string[];
+    let userMap: Record<string, { name: string; email: string }> = {};
+    if (creatorIds.length > 0) {
+      const users = await this.db.getDefaultClient().users.findMany({
+        where: { id: { in: creatorIds } },
+        select: { id: true, name: true, email: true },
+      });
+      userMap = Object.fromEntries(users.map(u => [u.id, { name: u.name, email: u.email }]));
+    }
+
+    return payments.map(p => ({
+      ...p,
+      creator: p.created_by ? userMap[p.created_by] ?? null : null,
+    }));
   }
 
   async findOne(id: string) {
@@ -289,9 +272,13 @@ export class PaymentsService {
     return payment;
   }
 
+  // ═══════════════════════════════════════════
+  // UPDATE (only DRAFT)
+  // ═══════════════════════════════════════════
+
   async update(id: string, dto: UpdatePaymentDto, userId: string) {
     const payment = await this.findOne(id);
-    if (payment.status !== 1) {
+    if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden editar pagos en borrador');
     }
 
@@ -321,24 +308,20 @@ export class PaymentsService {
     });
   }
 
+  // ═══════════════════════════════════════════
+  // REMOVE (soft delete, only DRAFT or CANCELLED)
+  // ═══════════════════════════════════════════
+
   async remove(id: string, userId: string) {
     const payment = await this.findOne(id);
+    if (payment.status === 'CONFIRMED' || payment.status === 'PAID') {
+      throw new BadRequestException('No se puede eliminar un pago confirmado o pagado. Anúlelo primero.');
+    }
 
-    // Revertir applied amounts
-    const paymentDocs = await this.prisma.payment_documents.findMany({
+    // Remove linked payment_documents
+    await this.prisma.payment_documents.deleteMany({
       where: { payment_id: id },
     });
-
-    for (const pd of paymentDocs) {
-      await this.prisma.documents.update({
-        where: { id: pd.document_id },
-        data: {
-          paid_amount: { decrement: pd.amount_applied.toNumber() },
-          updated_at: new Date(),
-          updated_by: userId,
-        },
-      });
-    }
 
     return this.prisma.payments.update({
       where: { id },
@@ -349,12 +332,153 @@ export class PaymentsService {
     });
   }
 
-  async reverse(id: string, userId: string) {
-    const payment = await this.findOne(id);
+  // ═══════════════════════════════════════════
+  // PRIVATE HELPERS
+  // ═══════════════════════════════════════════
 
-    // Revertir applied amounts
+  private async createCashBoxMovement(payment: any, userId: string) {
+    const balance = await this.prisma.cash_box_balances.findUnique({
+      where: {
+        cash_box_id_currency_code: {
+          cash_box_id: payment.cash_box_id,
+          currency_code: payment.currency_code,
+        },
+      },
+    });
+
+    const currentBalance = balance?.balance.toNumber() ?? 0;
+    const isOutflow = payment.type === 'PAYMENT';
+    const amount = payment.amount.toNumber();
+    const balanceAfter = isOutflow ? currentBalance - amount : currentBalance + amount;
+
+    if (isOutflow && balanceAfter < 0) {
+      throw new BadRequestException('Saldo insuficiente en la caja');
+    }
+
+    await this.prisma.cash_box_movements.create({
+      data: {
+        cash_box_id: payment.cash_box_id,
+        type: payment.type as any,
+        amount: payment.amount,
+        currency_code: payment.currency_code,
+        exchange_rate: payment.exchange_rate,
+        balance_before: currentBalance,
+        balance_after: balanceAfter,
+        description: payment.description ?? `Pago #${payment.number}`,
+        payment_id: payment.id,
+        reference_type: 'payment',
+        reference_id: payment.id,
+        date: payment.date,
+        created_by: userId,
+      },
+    });
+
+    if (balance) {
+      await this.prisma.cash_box_balances.update({
+        where: { id: balance.id },
+        data: { balance: balanceAfter, updated_at: new Date() },
+      });
+    } else {
+      await this.prisma.cash_box_balances.create({
+        data: {
+          cash_box_id: payment.cash_box_id,
+          currency_code: payment.currency_code,
+          balance: balanceAfter,
+          created_by: userId,
+        },
+      });
+    }
+  }
+
+  private async createBankMovement(payment: any, userId: string) {
+    const bankAccount = await this.prisma.bank_accounts.findUnique({
+      where: { id: payment.bank_account_id },
+    });
+
+    if (!bankAccount) return;
+
+    const currentBankBalance = bankAccount.balance.toNumber();
+    const isOutflow = payment.type === 'PAYMENT';
+    const amount = payment.amount.toNumber();
+    const bankBalanceAfter = isOutflow ? currentBankBalance - amount : currentBankBalance + amount;
+
+    await this.prisma.bank_account_movements.create({
+      data: {
+        bank_account_id: payment.bank_account_id,
+        type: payment.type as any,
+        amount: payment.amount,
+        currency_code: payment.currency_code,
+        exchange_rate: payment.exchange_rate,
+        balance_before: currentBankBalance,
+        balance_after: bankBalanceAfter,
+        description: payment.description ?? `Pago #${payment.number}`,
+        payment_id: payment.id,
+        date: payment.date,
+        created_by: userId,
+      },
+    });
+
+    await this.prisma.bank_accounts.update({
+      where: { id: payment.bank_account_id },
+      data: { balance: bankBalanceAfter, updated_at: new Date() },
+    });
+  }
+
+  private async createCurrentAccountEntry(payment: any, userId: string) {
+    let currentAccount = await this.prisma.current_accounts.findUnique({
+      where: {
+        party_id_currency_code: {
+          party_id: payment.party_id,
+          currency_code: payment.currency_code,
+        },
+      },
+    });
+
+    if (!currentAccount) {
+      currentAccount = await this.prisma.current_accounts.create({
+        data: {
+          party_id: payment.party_id,
+          party_type: payment.party_type ?? 'CUSTOMER',
+          currency_code: payment.currency_code,
+          balance: 0,
+          created_by: userId,
+        },
+      });
+    }
+
+    const currentBalance = currentAccount.balance.toNumber();
+    const isDebit = payment.type === 'PAYMENT';
+    const amount = payment.amount.toNumber();
+    const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
+
+    await this.prisma.current_account_entries.create({
+      data: {
+        current_account_id: currentAccount.id,
+        type: payment.type as any,
+        amount: payment.amount,
+        currency_code: payment.currency_code,
+        exchange_rate: payment.exchange_rate,
+        balance_before: currentBalance,
+        balance_after: balanceAfter,
+        description: payment.description ?? `Pago #${payment.number}`,
+        reference_type: 'payment',
+        reference_id: payment.id,
+        payment_id: payment.id,
+        date: payment.date,
+        created_by: userId,
+      },
+    });
+
+    await this.prisma.current_accounts.update({
+      where: { id: currentAccount.id },
+      data: { balance: balanceAfter, updated_at: new Date() },
+    });
+  }
+
+  private async reverseSideEffects(payment: any, userId: string, referenceType: string) {
+    // Revert documents
     const paymentDocs = await this.prisma.payment_documents.findMany({
-      where: { payment_id: id },
+      where: { payment_id: payment.id },
     });
 
     for (const pd of paymentDocs) {
@@ -368,7 +492,84 @@ export class PaymentsService {
       });
     }
 
-    // Revertir entrada en cuenta corriente
+    // Revert cash box movement
+    if (payment.cash_box_id) {
+      const balance = await this.prisma.cash_box_balances.findUnique({
+        where: {
+          cash_box_id_currency_code: {
+            cash_box_id: payment.cash_box_id,
+            currency_code: payment.currency_code,
+          },
+        },
+      });
+
+      if (balance) {
+        const currentBalance = balance.balance.toNumber();
+        const isOutflow = payment.type === 'PAYMENT';
+        const amount = payment.amount.toNumber();
+        const balanceAfter = isOutflow ? currentBalance + amount : currentBalance - amount;
+
+        await this.prisma.cash_box_movements.create({
+          data: {
+            cash_box_id: payment.cash_box_id,
+            type: payment.type as any,
+            amount: payment.amount,
+            currency_code: payment.currency_code,
+            exchange_rate: payment.exchange_rate,
+            balance_before: currentBalance,
+            balance_after: balanceAfter,
+            description: `Reversión de pago #${payment.number}`,
+            payment_id: payment.id,
+            reference_type: referenceType,
+            reference_id: payment.id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+
+        await this.prisma.cash_box_balances.update({
+          where: { id: balance.id },
+          data: { balance: balanceAfter, updated_at: new Date() },
+        });
+      }
+    }
+
+    // Revert bank movement
+    if (payment.bank_account_id) {
+      const bankAccount = await this.prisma.bank_accounts.findUnique({
+        where: { id: payment.bank_account_id },
+      });
+
+      if (bankAccount) {
+        const currentBankBalance = bankAccount.balance.toNumber();
+        const isOutflow = payment.type === 'PAYMENT';
+        const amount = payment.amount.toNumber();
+        const bankBalanceAfter = isOutflow ? currentBankBalance + amount : currentBankBalance - amount;
+
+        await this.prisma.bank_account_movements.create({
+          data: {
+            bank_account_id: payment.bank_account_id,
+            type: payment.type as any,
+            amount: payment.amount,
+            currency_code: payment.currency_code,
+            exchange_rate: payment.exchange_rate,
+            balance_before: currentBankBalance,
+            balance_after: bankBalanceAfter,
+            description: `Reversión de pago #${payment.number}`,
+            payment_id: payment.id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+
+        await this.prisma.bank_accounts.update({
+          where: { id: payment.bank_account_id },
+          data: { balance: bankBalanceAfter, updated_at: new Date() },
+        });
+      }
+    }
+
+    // Revert current account entry
     if (payment.party_id) {
       const currentAccount = await this.prisma.current_accounts.findUnique({
         where: {
@@ -382,7 +583,8 @@ export class PaymentsService {
       if (currentAccount) {
         const currentBalance = currentAccount.balance.toNumber();
         const isDebit = payment.type === 'PAYMENT';
-        const balanceAfter = isDebit ? currentBalance + payment.amount.toNumber() : currentBalance - payment.amount.toNumber();
+        const amount = payment.amount.toNumber();
+        const balanceAfter = isDebit ? currentBalance + amount : currentBalance - amount;
 
         await this.prisma.current_account_entries.create({
           data: {
@@ -394,7 +596,7 @@ export class PaymentsService {
             balance_before: currentBalance,
             balance_after: balanceAfter,
             description: `Reversión de pago #${payment.number}`,
-            reference_type: 'payment_reversal',
+            reference_type: referenceType,
             reference_id: payment.id,
             payment_id: payment.id,
             date: new Date(),
@@ -408,15 +610,5 @@ export class PaymentsService {
         });
       }
     }
-
-    // Marcar como reversado (status = 0)
-    return this.prisma.payments.update({
-      where: { id },
-      data: {
-        status: 0,
-        updated_at: new Date(),
-        updated_by: userId,
-      },
-    });
   }
 }

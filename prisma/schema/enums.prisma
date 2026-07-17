@@ -131,8 +131,18 @@ enum PaymentType {
   @@schema("tenant")
 }
 
+enum PaymentStatus {
+  DRAFT
+  CONFIRMED
+  PAID
+  REVERSED
+  CANCELLED
+  @@schema("tenant")
+}
+
 enum CheckStatus {
   PENDING
+  CONFIRMED
   CLEARED
   BOUNCED
   CANCELLED

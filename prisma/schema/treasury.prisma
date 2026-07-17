@@ -26,6 +26,7 @@ model bank_accounts {
   payments        payments[]
   movements       bank_account_movements[]
   cash_box_movements cash_box_movements[]
+  checks          checks[]
 
   @@schema("tenant")
 }
@@ -303,7 +304,10 @@ model payments {
   reference       String?          @db.VarChar(100)
   bank_account_id String?          @db.Uuid
   cash_box_id     String?          @db.Uuid
-  status          Int              @default(1)
+  status          PaymentStatus   @default(DRAFT)
+  confirmed_at    DateTime?
+  confirmed_by    String?          @db.Uuid
+  payment_date    DateTime?        @db.Date
 
   created_at      DateTime         @default(now()) @db.Timestamp(6)
   updated_at      DateTime?        @updatedAt @db.Timestamp(6)
@@ -353,6 +357,7 @@ model payment_documents {
 model checks {
   id              String           @id @default(uuid()) @db.Uuid
   payment_id      String?          @db.Uuid
+  bank_account_id String?          @db.Uuid
   check_number    String           @db.VarChar(20)
   bank_name       String           @db.VarChar(100)
   bank_branch     String?          @db.VarChar(100)
@@ -383,8 +388,10 @@ model checks {
   deleted_by      String?          @db.Uuid
 
   payment         payments?        @relation(fields: [payment_id], references: [id])
+  bank_account    bank_accounts?   @relation(fields: [bank_account_id], references: [id])
 
   @@index([payment_id])
+  @@index([bank_account_id])
   @@index([status])
   @@index([due_date])
   @@index([payment_date])

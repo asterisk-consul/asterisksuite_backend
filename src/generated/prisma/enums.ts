@@ -168,8 +168,20 @@ export const PaymentType = {
 export type PaymentType = (typeof PaymentType)[keyof typeof PaymentType]
 
 
+export const PaymentStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  PAID: 'PAID',
+  REVERSED: 'REVERSED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
 export const CheckStatus = {
   PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
   CLEARED: 'CLEARED',
   BOUNCED: 'BOUNCED',
   CANCELLED: 'CANCELLED'

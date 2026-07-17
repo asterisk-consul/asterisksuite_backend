@@ -9,7 +9,7 @@ const PUBLIC_SUBDOMAINS = new Set(['public', 'api', 'www', 'admin']);
 export class TenantMiddleware implements NestMiddleware {
   private readonly logger = new Logger(TenantMiddleware.name);
 
-  private tenantCache = new Map<string, { tenantDb: string; expiresAt: number }>();
+  private tenantCache = new Map<string, { tenantDb: string; companyId: string; expiresAt: number }>();
   private readonly CACHE_TTL_MS = 5 * 60 * 1000;
 
   constructor(private readonly prisma: PrismaService) {}
@@ -22,19 +22,21 @@ export class TenantMiddleware implements NestMiddleware {
     }
 
     try {
-      const tenantDb = await this.resolveTenantDb(subdomain);
+      const result = await this.resolveTenantDb(subdomain);
 
-      if (!tenantDb) {
+      if (!result) {
         return res.status(404).json({
           message: `Tenant not found for subdomain: ${subdomain}`,
         });
       }
 
+      const { tenantDb, companyId } = result;
+
       this.logger.log(`TENANT: ${subdomain} → DB: ${tenantDb}`);
 
       // ✅ schema ahora guarda el nombre de la DB del tenant
       // ej: "empresaa_db" — usado en PrismaService.getClientForCurrentContext()
-      return requestContext.run({ schema: tenantDb }, () => next());
+      return requestContext.run({ schema: tenantDb, companyId }, () => next());
     } catch (error: any) {
       this.logger.error(`Error resolving tenant DB for subdomain "${subdomain}": ${error.message}`);
       return res.status(500).json({
@@ -48,12 +50,12 @@ export class TenantMiddleware implements NestMiddleware {
    * Resuelve el nombre de la DB del tenant para un subdomain dado.
    * Usa cache en memoria con TTL para evitar queries en cada request.
    */
-  private async resolveTenantDb(subdomain: string): Promise<string | null> {
+  private async resolveTenantDb(subdomain: string): Promise<{ tenantDb: string; companyId: string } | null> {
     const now = Date.now();
     const cached = this.tenantCache.get(subdomain);
 
     if (cached && cached.expiresAt > now) {
-      return cached.tenantDb;
+      return { tenantDb: cached.tenantDb, companyId: cached.companyId };
     }
 
     const company = await this.prisma.getDefaultClient().companies.findFirst({
@@ -62,6 +64,7 @@ export class TenantMiddleware implements NestMiddleware {
         deleted_at: null,
       },
       select: {
+        id: true,
         subdomain: true,
       },
     });
@@ -74,10 +77,11 @@ export class TenantMiddleware implements NestMiddleware {
 
     this.tenantCache.set(subdomain, {
       tenantDb,
+      companyId: company.id,
       expiresAt: now + this.CACHE_TTL_MS,
     });
 
-    return tenantDb;
+    return { tenantDb, companyId: company.id };
   }
 
   /**
