@@ -18,6 +18,10 @@ import { NotaTransformer } from './compras/transformer/notas.transformer';
 import { VentasTransformer } from './sales/transformer/sales.transformer';
 import { FacturaVentaParser } from './sales/parsers/sales.parser';
 
+import { ProductParser } from './products/product.parser';
+import { ProductTransformer } from './products/product.transformer';
+import { ProductSink } from './products/product.sink';
+
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -73,6 +77,16 @@ export class DataImportService {
       new NotaParser(),
       new NotaTransformer(this.db, 'ND'),
       new FacturaSink(this.db),
+    );
+    return pipeline.run();
+  }
+
+  async importProducts(file: Express.Multer.File) {
+    const pipeline = new ImportPipeline(
+      new ExcelSource(file),
+      new ProductParser(),
+      new ProductTransformer(),
+      new ProductSink(this.db),
     );
     return pipeline.run();
   }

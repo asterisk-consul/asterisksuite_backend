@@ -47,4 +47,11 @@ export class DataImportController {
   importNotaDebito(@UploadedFile() file: Express.Multer.File) {
     return this.service.importNotaDebito(file);
   }
+
+  // @RequirePermissions('data_import.execute')
+  @Post('products')
+  @UseInterceptors(FileInterceptor('file'))
+  importProducts(@UploadedFile() file: Express.Multer.File) {
+    return this.service.importProducts(file);
+  }
 }

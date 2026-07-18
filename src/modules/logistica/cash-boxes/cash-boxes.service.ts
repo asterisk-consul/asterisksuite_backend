@@ -224,6 +224,8 @@ export class CashBoxesService {
   async openSession(cashBoxId: string, dto: OpenSessionDto, userId: string) {
     const box = await this.findOne(cashBoxId);
 
+    console.log('[openSession] box.current_session_id:', box.current_session_id, 'current_session:', box.current_session ? 'EXISTS' : 'null');
+
     // Verificar que no haya sesión abierta
     if (box.current_session) {
       throw new BadRequestException('Ya hay una sesión abierta en esta caja');
