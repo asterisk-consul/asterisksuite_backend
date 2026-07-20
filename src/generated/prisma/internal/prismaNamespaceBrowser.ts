@@ -104,6 +104,7 @@ export const ModelName = {
   pallet_items: 'pallet_items',
   pallets: 'pallets',
   business_parties: 'business_parties',
+  party_bank_accounts: 'party_bank_accounts',
   party_locations: 'party_locations',
   party_contacts: 'party_contacts',
   product_price: 'product_price',
@@ -1095,9 +1096,11 @@ export const Business_partiesScalarFieldEnum = {
   id: 'id',
   type: 'type',
   name: 'name',
+  business_names: 'business_names',
+  document_type: 'document_type',
+  email: 'email',
   tax_id: 'tax_id',
   vat_condition: 'vat_condition',
-  province: 'province',
   exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',
@@ -1109,6 +1112,29 @@ export const Business_partiesScalarFieldEnum = {
 } as const
 
 export type Business_partiesScalarFieldEnum = (typeof Business_partiesScalarFieldEnum)[keyof typeof Business_partiesScalarFieldEnum]
+
+
+export const Party_bank_accountsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  cbu: 'cbu',
+  alias: 'alias',
+  bank_name: 'bank_name',
+  account_type: 'account_type',
+  currency: 'currency',
+  description: 'description',
+  holder_name: 'holder_name',
+  is_default: 'is_default',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Party_bank_accountsScalarFieldEnum = (typeof Party_bank_accountsScalarFieldEnum)[keyof typeof Party_bank_accountsScalarFieldEnum]
 
 
 export const Party_locationsScalarFieldEnum = {

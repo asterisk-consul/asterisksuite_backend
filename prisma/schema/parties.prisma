@@ -1,33 +1,60 @@
 model business_parties {
-  id              String            @id @default(uuid()) @db.Uuid
-  type            PartyType
-  name            String            @db.VarChar(255)
-  tax_id          String?           @db.VarChar(50)
-  vat_condition   String?           @db.VarChar(30)    // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, CONSUMIDOR_FINAL, EXENTO
-  province        String?           @db.VarChar(50)    // Provincia para IIBB
-  exemption_rate  Decimal           @default(0) @db.Decimal(5, 2)
-  active          Boolean           @default(true)
-  created_at      DateTime          @default(now()) @db.Timestamp(6)
-  updated_at      DateTime?         @updatedAt @db.Timestamp(6)
-  deleted_at      DateTime?
-  created_by      String?           @db.Uuid
-  updated_by      String?           @db.Uuid
-  deleted_by      String?           @db.Uuid
-  delivery_notes  delivery_notes[]
-  dispatch_orders dispatch_orders[]
-  documents       documents[]
-  party_contacts  party_contacts[]
-  party_locations party_locations[]
-  employees       employees[]
-  partners        partners[]
-  payments        payments[]
-  credit_cards    credit_cards[]
-  current_accounts current_accounts[]
-  hr_accounts      hr_accounts[]
-  hr_vales         hr_vales[]
+  id                 String                 @id @default(uuid()) @db.Uuid
+  type               PartyType
+  name               String                 @db.VarChar(255)
+  business_names     String?                @db.VarChar(255)
+  document_type      String?                @db.VarChar(20)   // CUIT, DNI, CUIL
+  email              String?                @db.VarChar(150)
+  tax_id             String?                @db.VarChar(50)
+  vat_condition      String?                @db.VarChar(30)   // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, CONSUMIDOR_FINAL, EXENTO
+  exemption_rate     Decimal                @default(0) @db.Decimal(5, 2)
+  active             Boolean                @default(true)
+  created_at         DateTime               @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?              @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?                @db.Uuid
+  updated_by         String?                @db.Uuid
+  deleted_by         String?                @db.Uuid
+  delivery_notes     delivery_notes[]
+  dispatch_orders    dispatch_orders[]
+  documents          documents[]
+  party_contacts     party_contacts[]
+  party_locations    party_locations[]
+  party_bank_accounts party_bank_accounts[]
+  employees          employees[]
+  partners           partners[]
+  payments           payments[]
+  credit_cards       credit_cards[]
+  current_accounts   current_accounts[]
+  hr_accounts        hr_accounts[]
+  hr_vales           hr_vales[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
     @@schema("tenant")
+}
+
+model party_bank_accounts {
+  id               String            @id @default(uuid()) @db.Uuid
+  party_id         String            @db.Uuid
+  cbu              String            @db.VarChar(22)
+  alias            String?           @db.VarChar(50)
+  bank_name        String?           @db.VarChar(100)
+  account_type     String?           @db.VarChar(30)   // CUENTA_CORRIENTE, CAJA_AHORRO
+  currency         String?           @db.VarChar(3)    // USD, ARS
+  description      String?           @db.VarChar(255)
+  holder_name       String?           @db.VarChar(255)  // Nombre a quien está la cuenta
+  is_default       Boolean           @default(false)
+  active           Boolean           @default(true)
+  created_at       DateTime          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at       DateTime?
+  created_by       String?           @db.Uuid
+  updated_by       String?           @db.Uuid
+  deleted_by       String?           @db.Uuid
+  business_parties business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade)
+
+  @@index([party_id])
+  @@schema("tenant")
 }
 
 model party_locations {

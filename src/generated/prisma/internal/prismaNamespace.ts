@@ -437,6 +437,7 @@ export const ModelName = {
   pallet_items: 'pallet_items',
   pallets: 'pallets',
   business_parties: 'business_parties',
+  party_bank_accounts: 'party_bank_accounts',
   party_locations: 'party_locations',
   party_contacts: 'party_contacts',
   product_price: 'product_price',
@@ -501,7 +502,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "pallet_items" | "pallets" | "business_parties" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4424,6 +4425,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.business_partiesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Business_partiesCountAggregateOutputType> | number
+        }
+      }
+    }
+    party_bank_accounts: {
+      payload: Prisma.$party_bank_accountsPayload<ExtArgs>
+      fields: Prisma.party_bank_accountsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.party_bank_accountsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.party_bank_accountsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>
+        }
+        findFirst: {
+          args: Prisma.party_bank_accountsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.party_bank_accountsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>
+        }
+        findMany: {
+          args: Prisma.party_bank_accountsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>[]
+        }
+        create: {
+          args: Prisma.party_bank_accountsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>
+        }
+        createMany: {
+          args: Prisma.party_bank_accountsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.party_bank_accountsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>[]
+        }
+        delete: {
+          args: Prisma.party_bank_accountsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>
+        }
+        update: {
+          args: Prisma.party_bank_accountsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>
+        }
+        deleteMany: {
+          args: Prisma.party_bank_accountsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.party_bank_accountsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.party_bank_accountsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>[]
+        }
+        upsert: {
+          args: Prisma.party_bank_accountsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$party_bank_accountsPayload>
+        }
+        aggregate: {
+          args: Prisma.Party_bank_accountsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateParty_bank_accounts>
+        }
+        groupBy: {
+          args: Prisma.party_bank_accountsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Party_bank_accountsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.party_bank_accountsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Party_bank_accountsCountAggregateOutputType> | number
         }
       }
     }
@@ -9016,9 +9091,11 @@ export const Business_partiesScalarFieldEnum = {
   id: 'id',
   type: 'type',
   name: 'name',
+  business_names: 'business_names',
+  document_type: 'document_type',
+  email: 'email',
   tax_id: 'tax_id',
   vat_condition: 'vat_condition',
-  province: 'province',
   exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',
@@ -9030,6 +9107,29 @@ export const Business_partiesScalarFieldEnum = {
 } as const
 
 export type Business_partiesScalarFieldEnum = (typeof Business_partiesScalarFieldEnum)[keyof typeof Business_partiesScalarFieldEnum]
+
+
+export const Party_bank_accountsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  cbu: 'cbu',
+  alias: 'alias',
+  bank_name: 'bank_name',
+  account_type: 'account_type',
+  currency: 'currency',
+  description: 'description',
+  holder_name: 'holder_name',
+  is_default: 'is_default',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Party_bank_accountsScalarFieldEnum = (typeof Party_bank_accountsScalarFieldEnum)[keyof typeof Party_bank_accountsScalarFieldEnum]
 
 
 export const Party_locationsScalarFieldEnum = {
@@ -10794,6 +10894,7 @@ export type GlobalOmitConfig = {
   pallet_items?: Prisma.pallet_itemsOmit
   pallets?: Prisma.palletsOmit
   business_parties?: Prisma.business_partiesOmit
+  party_bank_accounts?: Prisma.party_bank_accountsOmit
   party_locations?: Prisma.party_locationsOmit
   party_contacts?: Prisma.party_contactsOmit
   product_price?: Prisma.product_priceOmit

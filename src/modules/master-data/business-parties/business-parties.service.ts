@@ -14,7 +14,7 @@ export class BusinessPartiesService {
 
   // ✅ CREATE con relaciones + auto-creación de employee/partner
   async create(data: CreateBusinessPartyDto) {
-    const { locations, contacts, ...partyData } = data;
+    const { locations, contacts, bank_accounts, ...partyData } = data;
 
     const party = await this.prisma.business_parties.create({
       data: {
@@ -37,6 +37,21 @@ export class BusinessPartiesService {
                 role: c.role,
                 phone: c.phone,
                 email: c.email,
+              })),
+            }
+          : undefined,
+
+        party_bank_accounts: bank_accounts
+          ? {
+              create: bank_accounts.map((b) => ({
+                cbu: b.cbu,
+                alias: b.alias,
+                bank_name: b.bank_name,
+                account_type: b.account_type,
+                currency: b.currency,
+                description: b.description,
+                holder_name: b.holder_name,
+                is_default: b.is_default ?? false,
               })),
             }
           : undefined,
@@ -111,7 +126,7 @@ export class BusinessPartiesService {
   async update(id: string, data: UpdateBusinessPartyDto) {
     await this.findOne(id);
 
-    const { locations, contacts, ...partyData } = data;
+    const { locations, contacts, bank_accounts, ...partyData } = data;
 
     return this.prisma.business_parties.update({
       where: { id },
@@ -142,6 +157,23 @@ export class BusinessPartiesService {
               })),
             }
           : undefined,
+
+        // 🔥 BANK ACCOUNTS sync
+        party_bank_accounts: bank_accounts
+          ? {
+              deleteMany: {},
+              create: bank_accounts.map((b) => ({
+                cbu: b.cbu,
+                alias: b.alias,
+                bank_name: b.bank_name,
+                account_type: b.account_type,
+                currency: b.currency,
+                description: b.description,
+                holder_name: b.holder_name,
+                is_default: b.is_default ?? false,
+              })),
+            }
+          : undefined,
       },
 
       include: this.fullInclude(),
@@ -167,6 +199,7 @@ export class BusinessPartiesService {
         },
       },
       party_contacts: true,
+      party_bank_accounts: true,
     };
   }
 }

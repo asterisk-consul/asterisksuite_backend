@@ -5,6 +5,7 @@ import {
   ValidateNested,
   IsBoolean,
   IsEnum,
+  IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PartyType } from '@/generated/prisma/client';
@@ -38,6 +39,39 @@ class CreatePartyContactDto {
   email?: string;
 }
 
+class CreatePartyBankAccountDto {
+  @IsString()
+  cbu!: string;
+
+  @IsOptional()
+  @IsString()
+  alias?: string;
+
+  @IsOptional()
+  @IsString()
+  bank_name?: string;
+
+  @IsOptional()
+  @IsString()
+  account_type?: string;
+
+  @IsOptional()
+  @IsString()
+  currency?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  holder_name?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  is_default?: boolean;
+}
+
 export class CreateBusinessPartyDto {
   @IsBoolean()
   active: boolean;
@@ -50,6 +84,18 @@ export class CreateBusinessPartyDto {
 
   @IsOptional()
   @IsString()
+  business_names?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  document_type?: string;
+
+  @IsOptional()
+  @IsString()
   tax_id?: string;
 
   @IsOptional()
@@ -57,24 +103,8 @@ export class CreateBusinessPartyDto {
   vat_condition?: string;
 
   @IsOptional()
-  @IsString()
-  province?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  iibb_registered?: boolean;
-
-  @IsOptional()
-  @IsString()
-  iibb_jurisdiction?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  retention_agent?: boolean;
-
-  @IsOptional()
-  @IsString()
-  operation_type?: string;
+  @IsNumber()
+  exemption_rate?: number;
 
   @IsOptional()
   @IsArray()
@@ -89,5 +119,8 @@ export class CreateBusinessPartyDto {
   contacts?: CreatePartyContactDto[];
 
   @IsOptional()
-  exemption_rate?: number;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePartyBankAccountDto)
+  bank_accounts?: CreatePartyBankAccountDto[];
 }

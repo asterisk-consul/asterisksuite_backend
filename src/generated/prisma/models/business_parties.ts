@@ -38,9 +38,11 @@ export type Business_partiesMinAggregateOutputType = {
   id: string | null
   type: $Enums.PartyType | null
   name: string | null
+  business_names: string | null
+  document_type: string | null
+  email: string | null
   tax_id: string | null
   vat_condition: string | null
-  province: string | null
   exemption_rate: runtime.Decimal | null
   active: boolean | null
   created_at: Date | null
@@ -55,9 +57,11 @@ export type Business_partiesMaxAggregateOutputType = {
   id: string | null
   type: $Enums.PartyType | null
   name: string | null
+  business_names: string | null
+  document_type: string | null
+  email: string | null
   tax_id: string | null
   vat_condition: string | null
-  province: string | null
   exemption_rate: runtime.Decimal | null
   active: boolean | null
   created_at: Date | null
@@ -72,9 +76,11 @@ export type Business_partiesCountAggregateOutputType = {
   id: number
   type: number
   name: number
+  business_names: number
+  document_type: number
+  email: number
   tax_id: number
   vat_condition: number
-  province: number
   exemption_rate: number
   active: number
   created_at: number
@@ -99,9 +105,11 @@ export type Business_partiesMinAggregateInputType = {
   id?: true
   type?: true
   name?: true
+  business_names?: true
+  document_type?: true
+  email?: true
   tax_id?: true
   vat_condition?: true
-  province?: true
   exemption_rate?: true
   active?: true
   created_at?: true
@@ -116,9 +124,11 @@ export type Business_partiesMaxAggregateInputType = {
   id?: true
   type?: true
   name?: true
+  business_names?: true
+  document_type?: true
+  email?: true
   tax_id?: true
   vat_condition?: true
-  province?: true
   exemption_rate?: true
   active?: true
   created_at?: true
@@ -133,9 +143,11 @@ export type Business_partiesCountAggregateInputType = {
   id?: true
   type?: true
   name?: true
+  business_names?: true
+  document_type?: true
+  email?: true
   tax_id?: true
   vat_condition?: true
-  province?: true
   exemption_rate?: true
   active?: true
   created_at?: true
@@ -237,9 +249,11 @@ export type Business_partiesGroupByOutputType = {
   id: string
   type: $Enums.PartyType
   name: string
+  business_names: string | null
+  document_type: string | null
+  email: string | null
   tax_id: string | null
   vat_condition: string | null
-  province: string | null
   exemption_rate: runtime.Decimal
   active: boolean
   created_at: Date
@@ -277,9 +291,11 @@ export type business_partiesWhereInput = {
   id?: Prisma.UuidFilter<"business_parties"> | string
   type?: Prisma.EnumPartyTypeFilter<"business_parties"> | $Enums.PartyType
   name?: Prisma.StringFilter<"business_parties"> | string
+  business_names?: Prisma.StringNullableFilter<"business_parties"> | string | null
+  document_type?: Prisma.StringNullableFilter<"business_parties"> | string | null
+  email?: Prisma.StringNullableFilter<"business_parties"> | string | null
   tax_id?: Prisma.StringNullableFilter<"business_parties"> | string | null
   vat_condition?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  province?: Prisma.StringNullableFilter<"business_parties"> | string | null
   exemption_rate?: Prisma.DecimalFilter<"business_parties"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeFilter<"business_parties"> | Date | string
@@ -293,6 +309,7 @@ export type business_partiesWhereInput = {
   documents?: Prisma.DocumentsListRelationFilter
   party_contacts?: Prisma.Party_contactsListRelationFilter
   party_locations?: Prisma.Party_locationsListRelationFilter
+  party_bank_accounts?: Prisma.Party_bank_accountsListRelationFilter
   employees?: Prisma.EmployeesListRelationFilter
   partners?: Prisma.PartnersListRelationFilter
   payments?: Prisma.PaymentsListRelationFilter
@@ -306,9 +323,11 @@ export type business_partiesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  business_names?: Prisma.SortOrderInput | Prisma.SortOrder
+  document_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   vat_condition?: Prisma.SortOrderInput | Prisma.SortOrder
-  province?: Prisma.SortOrderInput | Prisma.SortOrder
   exemption_rate?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -322,6 +341,7 @@ export type business_partiesOrderByWithRelationInput = {
   documents?: Prisma.documentsOrderByRelationAggregateInput
   party_contacts?: Prisma.party_contactsOrderByRelationAggregateInput
   party_locations?: Prisma.party_locationsOrderByRelationAggregateInput
+  party_bank_accounts?: Prisma.party_bank_accountsOrderByRelationAggregateInput
   employees?: Prisma.employeesOrderByRelationAggregateInput
   partners?: Prisma.partnersOrderByRelationAggregateInput
   payments?: Prisma.paymentsOrderByRelationAggregateInput
@@ -338,9 +358,11 @@ export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.business_partiesWhereInput | Prisma.business_partiesWhereInput[]
   type?: Prisma.EnumPartyTypeFilter<"business_parties"> | $Enums.PartyType
   name?: Prisma.StringFilter<"business_parties"> | string
+  business_names?: Prisma.StringNullableFilter<"business_parties"> | string | null
+  document_type?: Prisma.StringNullableFilter<"business_parties"> | string | null
+  email?: Prisma.StringNullableFilter<"business_parties"> | string | null
   tax_id?: Prisma.StringNullableFilter<"business_parties"> | string | null
   vat_condition?: Prisma.StringNullableFilter<"business_parties"> | string | null
-  province?: Prisma.StringNullableFilter<"business_parties"> | string | null
   exemption_rate?: Prisma.DecimalFilter<"business_parties"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeFilter<"business_parties"> | Date | string
@@ -354,6 +376,7 @@ export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
   documents?: Prisma.DocumentsListRelationFilter
   party_contacts?: Prisma.Party_contactsListRelationFilter
   party_locations?: Prisma.Party_locationsListRelationFilter
+  party_bank_accounts?: Prisma.Party_bank_accountsListRelationFilter
   employees?: Prisma.EmployeesListRelationFilter
   partners?: Prisma.PartnersListRelationFilter
   payments?: Prisma.PaymentsListRelationFilter
@@ -367,9 +390,11 @@ export type business_partiesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  business_names?: Prisma.SortOrderInput | Prisma.SortOrder
+  document_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
   vat_condition?: Prisma.SortOrderInput | Prisma.SortOrder
-  province?: Prisma.SortOrderInput | Prisma.SortOrder
   exemption_rate?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -392,9 +417,11 @@ export type business_partiesScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"business_parties"> | string
   type?: Prisma.EnumPartyTypeWithAggregatesFilter<"business_parties"> | $Enums.PartyType
   name?: Prisma.StringWithAggregatesFilter<"business_parties"> | string
+  business_names?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
+  document_type?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
+  email?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
   tax_id?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
   vat_condition?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
-  province?: Prisma.StringNullableWithAggregatesFilter<"business_parties"> | string | null
   exemption_rate?: Prisma.DecimalWithAggregatesFilter<"business_parties"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolWithAggregatesFilter<"business_parties"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"business_parties"> | Date | string
@@ -409,9 +436,11 @@ export type business_partiesCreateInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -425,6 +454,7 @@ export type business_partiesCreateInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -438,9 +468,11 @@ export type business_partiesUncheckedCreateInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -454,6 +486,7 @@ export type business_partiesUncheckedCreateInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -467,9 +500,11 @@ export type business_partiesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -483,6 +518,7 @@ export type business_partiesUpdateInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -496,9 +532,11 @@ export type business_partiesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -512,6 +550,7 @@ export type business_partiesUncheckedUpdateInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -525,9 +564,11 @@ export type business_partiesCreateManyInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -542,9 +583,11 @@ export type business_partiesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -559,9 +602,11 @@ export type business_partiesUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -586,9 +631,11 @@ export type business_partiesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  business_names?: Prisma.SortOrder
+  document_type?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
   vat_condition?: Prisma.SortOrder
-  province?: Prisma.SortOrder
   exemption_rate?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -607,9 +654,11 @@ export type business_partiesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  business_names?: Prisma.SortOrder
+  document_type?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
   vat_condition?: Prisma.SortOrder
-  province?: Prisma.SortOrder
   exemption_rate?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -624,9 +673,11 @@ export type business_partiesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  business_names?: Prisma.SortOrder
+  document_type?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
   vat_condition?: Prisma.SortOrder
-  province?: Prisma.SortOrder
   exemption_rate?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -753,6 +804,20 @@ export type EnumPartyTypeFieldUpdateOperationsInput = {
   set?: $Enums.PartyType
 }
 
+export type business_partiesCreateNestedOneWithoutParty_bank_accountsInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutParty_bank_accountsInput, Prisma.business_partiesUncheckedCreateWithoutParty_bank_accountsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutParty_bank_accountsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+}
+
+export type business_partiesUpdateOneRequiredWithoutParty_bank_accountsNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutParty_bank_accountsInput, Prisma.business_partiesUncheckedCreateWithoutParty_bank_accountsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutParty_bank_accountsInput
+  upsert?: Prisma.business_partiesUpsertWithoutParty_bank_accountsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutParty_bank_accountsInput, Prisma.business_partiesUpdateWithoutParty_bank_accountsInput>, Prisma.business_partiesUncheckedUpdateWithoutParty_bank_accountsInput>
+}
+
 export type business_partiesCreateNestedOneWithoutParty_locationsInput = {
   create?: Prisma.XOR<Prisma.business_partiesCreateWithoutParty_locationsInput, Prisma.business_partiesUncheckedCreateWithoutParty_locationsInput>
   connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutParty_locationsInput
@@ -833,9 +898,11 @@ export type business_partiesCreateWithoutDocumentsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -848,6 +915,7 @@ export type business_partiesCreateWithoutDocumentsInput = {
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -861,9 +929,11 @@ export type business_partiesUncheckedCreateWithoutDocumentsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -876,6 +946,7 @@ export type business_partiesUncheckedCreateWithoutDocumentsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -905,9 +976,11 @@ export type business_partiesUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -920,6 +993,7 @@ export type business_partiesUpdateWithoutDocumentsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -933,9 +1007,11 @@ export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -948,6 +1024,7 @@ export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -961,9 +1038,11 @@ export type business_partiesCreateWithoutEmployeesInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -977,6 +1056,7 @@ export type business_partiesCreateWithoutEmployeesInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
@@ -989,9 +1069,11 @@ export type business_partiesUncheckedCreateWithoutEmployeesInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1005,6 +1087,7 @@ export type business_partiesUncheckedCreateWithoutEmployeesInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
@@ -1033,9 +1116,11 @@ export type business_partiesUpdateWithoutEmployeesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1049,6 +1134,7 @@ export type business_partiesUpdateWithoutEmployeesInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
@@ -1061,9 +1147,11 @@ export type business_partiesUncheckedUpdateWithoutEmployeesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1077,6 +1165,7 @@ export type business_partiesUncheckedUpdateWithoutEmployeesInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1089,9 +1178,11 @@ export type business_partiesCreateWithoutPartnersInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1105,6 +1196,7 @@ export type business_partiesCreateWithoutPartnersInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
@@ -1117,9 +1209,11 @@ export type business_partiesUncheckedCreateWithoutPartnersInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1133,6 +1227,7 @@ export type business_partiesUncheckedCreateWithoutPartnersInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
@@ -1161,9 +1256,11 @@ export type business_partiesUpdateWithoutPartnersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1177,6 +1274,7 @@ export type business_partiesUpdateWithoutPartnersInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
@@ -1189,9 +1287,11 @@ export type business_partiesUncheckedUpdateWithoutPartnersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1205,6 +1305,7 @@ export type business_partiesUncheckedUpdateWithoutPartnersInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1217,9 +1318,11 @@ export type business_partiesCreateWithoutHr_accountsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1233,6 +1336,7 @@ export type business_partiesCreateWithoutHr_accountsInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -1245,9 +1349,11 @@ export type business_partiesUncheckedCreateWithoutHr_accountsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1261,6 +1367,7 @@ export type business_partiesUncheckedCreateWithoutHr_accountsInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -1289,9 +1396,11 @@ export type business_partiesUpdateWithoutHr_accountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1305,6 +1414,7 @@ export type business_partiesUpdateWithoutHr_accountsInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -1317,9 +1427,11 @@ export type business_partiesUncheckedUpdateWithoutHr_accountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1333,6 +1445,7 @@ export type business_partiesUncheckedUpdateWithoutHr_accountsInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1345,9 +1458,11 @@ export type business_partiesCreateWithoutHr_valesInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1361,6 +1476,7 @@ export type business_partiesCreateWithoutHr_valesInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -1373,9 +1489,11 @@ export type business_partiesUncheckedCreateWithoutHr_valesInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1389,6 +1507,7 @@ export type business_partiesUncheckedCreateWithoutHr_valesInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -1417,9 +1536,11 @@ export type business_partiesUpdateWithoutHr_valesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1433,6 +1554,7 @@ export type business_partiesUpdateWithoutHr_valesInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -1445,9 +1567,11 @@ export type business_partiesUncheckedUpdateWithoutHr_valesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1461,6 +1585,7 @@ export type business_partiesUncheckedUpdateWithoutHr_valesInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1473,9 +1598,11 @@ export type business_partiesCreateWithoutDelivery_notesInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1488,6 +1615,7 @@ export type business_partiesCreateWithoutDelivery_notesInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -1501,9 +1629,11 @@ export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1516,6 +1646,7 @@ export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -1545,9 +1676,11 @@ export type business_partiesUpdateWithoutDelivery_notesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1560,6 +1693,7 @@ export type business_partiesUpdateWithoutDelivery_notesInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -1573,9 +1707,11 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1588,6 +1724,7 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1601,9 +1738,11 @@ export type business_partiesCreateWithoutDispatch_ordersInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1616,6 +1755,7 @@ export type business_partiesCreateWithoutDispatch_ordersInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -1629,9 +1769,11 @@ export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1644,6 +1786,7 @@ export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -1673,9 +1816,11 @@ export type business_partiesUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1688,6 +1833,7 @@ export type business_partiesUpdateWithoutDispatch_ordersInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -1701,9 +1847,11 @@ export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1713,6 +1861,147 @@ export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
+}
+
+export type business_partiesCreateWithoutParty_bank_accountsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
+}
+
+export type business_partiesUncheckedCreateWithoutParty_bank_accountsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
+}
+
+export type business_partiesCreateOrConnectWithoutParty_bank_accountsInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutParty_bank_accountsInput, Prisma.business_partiesUncheckedCreateWithoutParty_bank_accountsInput>
+}
+
+export type business_partiesUpsertWithoutParty_bank_accountsInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutParty_bank_accountsInput, Prisma.business_partiesUncheckedUpdateWithoutParty_bank_accountsInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutParty_bank_accountsInput, Prisma.business_partiesUncheckedCreateWithoutParty_bank_accountsInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutParty_bank_accountsInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutParty_bank_accountsInput, Prisma.business_partiesUncheckedUpdateWithoutParty_bank_accountsInput>
+}
+
+export type business_partiesUpdateWithoutParty_bank_accountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutParty_bank_accountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1729,9 +2018,11 @@ export type business_partiesCreateWithoutParty_locationsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1744,6 +2035,7 @@ export type business_partiesCreateWithoutParty_locationsInput = {
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -1757,9 +2049,11 @@ export type business_partiesUncheckedCreateWithoutParty_locationsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1772,6 +2066,7 @@ export type business_partiesUncheckedCreateWithoutParty_locationsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -1801,9 +2096,11 @@ export type business_partiesUpdateWithoutParty_locationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1816,6 +2113,7 @@ export type business_partiesUpdateWithoutParty_locationsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -1829,9 +2127,11 @@ export type business_partiesUncheckedUpdateWithoutParty_locationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1844,6 +2144,7 @@ export type business_partiesUncheckedUpdateWithoutParty_locationsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1857,9 +2158,11 @@ export type business_partiesCreateWithoutParty_contactsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1872,6 +2175,7 @@ export type business_partiesCreateWithoutParty_contactsInput = {
   dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -1885,9 +2189,11 @@ export type business_partiesUncheckedCreateWithoutParty_contactsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -1900,6 +2206,7 @@ export type business_partiesUncheckedCreateWithoutParty_contactsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -1929,9 +2236,11 @@ export type business_partiesUpdateWithoutParty_contactsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1944,6 +2253,7 @@ export type business_partiesUpdateWithoutParty_contactsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -1957,9 +2267,11 @@ export type business_partiesUncheckedUpdateWithoutParty_contactsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1972,6 +2284,7 @@ export type business_partiesUncheckedUpdateWithoutParty_contactsInput = {
   dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -1985,9 +2298,11 @@ export type business_partiesCreateWithoutPaymentsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -2001,6 +2316,7 @@ export type business_partiesCreateWithoutPaymentsInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
@@ -2013,9 +2329,11 @@ export type business_partiesUncheckedCreateWithoutPaymentsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -2029,6 +2347,7 @@ export type business_partiesUncheckedCreateWithoutPaymentsInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
@@ -2057,9 +2376,11 @@ export type business_partiesUpdateWithoutPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2073,6 +2394,7 @@ export type business_partiesUpdateWithoutPaymentsInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
@@ -2085,9 +2407,11 @@ export type business_partiesUncheckedUpdateWithoutPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2101,6 +2425,7 @@ export type business_partiesUncheckedUpdateWithoutPaymentsInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
@@ -2113,9 +2438,11 @@ export type business_partiesCreateWithoutCredit_cardsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -2129,6 +2456,7 @@ export type business_partiesCreateWithoutCredit_cardsInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -2141,9 +2469,11 @@ export type business_partiesUncheckedCreateWithoutCredit_cardsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -2157,6 +2487,7 @@ export type business_partiesUncheckedCreateWithoutCredit_cardsInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -2185,9 +2516,11 @@ export type business_partiesUpdateWithoutCredit_cardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2201,6 +2534,7 @@ export type business_partiesUpdateWithoutCredit_cardsInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -2213,9 +2547,11 @@ export type business_partiesUncheckedUpdateWithoutCredit_cardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2229,6 +2565,7 @@ export type business_partiesUncheckedUpdateWithoutCredit_cardsInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -2241,9 +2578,11 @@ export type business_partiesCreateWithoutCurrent_accountsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -2257,6 +2596,7 @@ export type business_partiesCreateWithoutCurrent_accountsInput = {
   documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
@@ -2269,9 +2609,11 @@ export type business_partiesUncheckedCreateWithoutCurrent_accountsInput = {
   id?: string
   type: $Enums.PartyType
   name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
   tax_id?: string | null
   vat_condition?: string | null
-  province?: string | null
   exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: boolean
   created_at?: Date | string
@@ -2285,6 +2627,7 @@ export type business_partiesUncheckedCreateWithoutCurrent_accountsInput = {
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
   employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
@@ -2313,9 +2656,11 @@ export type business_partiesUpdateWithoutCurrent_accountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2329,6 +2674,7 @@ export type business_partiesUpdateWithoutCurrent_accountsInput = {
   documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
@@ -2341,9 +2687,11 @@ export type business_partiesUncheckedUpdateWithoutCurrent_accountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2357,6 +2705,7 @@ export type business_partiesUncheckedUpdateWithoutCurrent_accountsInput = {
   documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
@@ -2376,6 +2725,7 @@ export type Business_partiesCountOutputType = {
   documents: number
   party_contacts: number
   party_locations: number
+  party_bank_accounts: number
   employees: number
   partners: number
   payments: number
@@ -2391,6 +2741,7 @@ export type Business_partiesCountOutputTypeSelect<ExtArgs extends runtime.Types.
   documents?: boolean | Business_partiesCountOutputTypeCountDocumentsArgs
   party_contacts?: boolean | Business_partiesCountOutputTypeCountParty_contactsArgs
   party_locations?: boolean | Business_partiesCountOutputTypeCountParty_locationsArgs
+  party_bank_accounts?: boolean | Business_partiesCountOutputTypeCountParty_bank_accountsArgs
   employees?: boolean | Business_partiesCountOutputTypeCountEmployeesArgs
   partners?: boolean | Business_partiesCountOutputTypeCountPartnersArgs
   payments?: boolean | Business_partiesCountOutputTypeCountPaymentsArgs
@@ -2448,6 +2799,13 @@ export type Business_partiesCountOutputTypeCountParty_locationsArgs<ExtArgs exte
 /**
  * Business_partiesCountOutputType without action
  */
+export type Business_partiesCountOutputTypeCountParty_bank_accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.party_bank_accountsWhereInput
+}
+
+/**
+ * Business_partiesCountOutputType without action
+ */
 export type Business_partiesCountOutputTypeCountEmployeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.employeesWhereInput
 }
@@ -2499,9 +2857,11 @@ export type business_partiesSelect<ExtArgs extends runtime.Types.Extensions.Inte
   id?: boolean
   type?: boolean
   name?: boolean
+  business_names?: boolean
+  document_type?: boolean
+  email?: boolean
   tax_id?: boolean
   vat_condition?: boolean
-  province?: boolean
   exemption_rate?: boolean
   active?: boolean
   created_at?: boolean
@@ -2515,6 +2875,7 @@ export type business_partiesSelect<ExtArgs extends runtime.Types.Extensions.Inte
   documents?: boolean | Prisma.business_parties$documentsArgs<ExtArgs>
   party_contacts?: boolean | Prisma.business_parties$party_contactsArgs<ExtArgs>
   party_locations?: boolean | Prisma.business_parties$party_locationsArgs<ExtArgs>
+  party_bank_accounts?: boolean | Prisma.business_parties$party_bank_accountsArgs<ExtArgs>
   employees?: boolean | Prisma.business_parties$employeesArgs<ExtArgs>
   partners?: boolean | Prisma.business_parties$partnersArgs<ExtArgs>
   payments?: boolean | Prisma.business_parties$paymentsArgs<ExtArgs>
@@ -2529,9 +2890,11 @@ export type business_partiesSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   type?: boolean
   name?: boolean
+  business_names?: boolean
+  document_type?: boolean
+  email?: boolean
   tax_id?: boolean
   vat_condition?: boolean
-  province?: boolean
   exemption_rate?: boolean
   active?: boolean
   created_at?: boolean
@@ -2546,9 +2909,11 @@ export type business_partiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   type?: boolean
   name?: boolean
+  business_names?: boolean
+  document_type?: boolean
+  email?: boolean
   tax_id?: boolean
   vat_condition?: boolean
-  province?: boolean
   exemption_rate?: boolean
   active?: boolean
   created_at?: boolean
@@ -2563,9 +2928,11 @@ export type business_partiesSelectScalar = {
   id?: boolean
   type?: boolean
   name?: boolean
+  business_names?: boolean
+  document_type?: boolean
+  email?: boolean
   tax_id?: boolean
   vat_condition?: boolean
-  province?: boolean
   exemption_rate?: boolean
   active?: boolean
   created_at?: boolean
@@ -2576,13 +2943,14 @@ export type business_partiesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type business_partiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "name" | "tax_id" | "vat_condition" | "province" | "exemption_rate" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["business_parties"]>
+export type business_partiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "name" | "business_names" | "document_type" | "email" | "tax_id" | "vat_condition" | "exemption_rate" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["business_parties"]>
 export type business_partiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   delivery_notes?: boolean | Prisma.business_parties$delivery_notesArgs<ExtArgs>
   dispatch_orders?: boolean | Prisma.business_parties$dispatch_ordersArgs<ExtArgs>
   documents?: boolean | Prisma.business_parties$documentsArgs<ExtArgs>
   party_contacts?: boolean | Prisma.business_parties$party_contactsArgs<ExtArgs>
   party_locations?: boolean | Prisma.business_parties$party_locationsArgs<ExtArgs>
+  party_bank_accounts?: boolean | Prisma.business_parties$party_bank_accountsArgs<ExtArgs>
   employees?: boolean | Prisma.business_parties$employeesArgs<ExtArgs>
   partners?: boolean | Prisma.business_parties$partnersArgs<ExtArgs>
   payments?: boolean | Prisma.business_parties$paymentsArgs<ExtArgs>
@@ -2603,6 +2971,7 @@ export type $business_partiesPayload<ExtArgs extends runtime.Types.Extensions.In
     documents: Prisma.$documentsPayload<ExtArgs>[]
     party_contacts: Prisma.$party_contactsPayload<ExtArgs>[]
     party_locations: Prisma.$party_locationsPayload<ExtArgs>[]
+    party_bank_accounts: Prisma.$party_bank_accountsPayload<ExtArgs>[]
     employees: Prisma.$employeesPayload<ExtArgs>[]
     partners: Prisma.$partnersPayload<ExtArgs>[]
     payments: Prisma.$paymentsPayload<ExtArgs>[]
@@ -2615,9 +2984,11 @@ export type $business_partiesPayload<ExtArgs extends runtime.Types.Extensions.In
     id: string
     type: $Enums.PartyType
     name: string
+    business_names: string | null
+    document_type: string | null
+    email: string | null
     tax_id: string | null
     vat_condition: string | null
-    province: string | null
     exemption_rate: runtime.Decimal
     active: boolean
     created_at: Date
@@ -3025,6 +3396,7 @@ export interface Prisma__business_partiesClient<T, Null = never, ExtArgs extends
   documents<T extends Prisma.business_parties$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   party_contacts<T extends Prisma.business_parties$party_contactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$party_contactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_contactsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   party_locations<T extends Prisma.business_parties$party_locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$party_locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_locationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  party_bank_accounts<T extends Prisma.business_parties$party_bank_accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$party_bank_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$party_bank_accountsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.business_parties$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$employeesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   partners<T extends Prisma.business_parties$partnersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$partnersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$partnersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.business_parties$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3064,9 +3436,11 @@ export interface business_partiesFieldRefs {
   readonly id: Prisma.FieldRef<"business_parties", 'String'>
   readonly type: Prisma.FieldRef<"business_parties", 'PartyType'>
   readonly name: Prisma.FieldRef<"business_parties", 'String'>
+  readonly business_names: Prisma.FieldRef<"business_parties", 'String'>
+  readonly document_type: Prisma.FieldRef<"business_parties", 'String'>
+  readonly email: Prisma.FieldRef<"business_parties", 'String'>
   readonly tax_id: Prisma.FieldRef<"business_parties", 'String'>
   readonly vat_condition: Prisma.FieldRef<"business_parties", 'String'>
-  readonly province: Prisma.FieldRef<"business_parties", 'String'>
   readonly exemption_rate: Prisma.FieldRef<"business_parties", 'Decimal'>
   readonly active: Prisma.FieldRef<"business_parties", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"business_parties", 'DateTime'>
@@ -3585,6 +3959,30 @@ export type business_parties$party_locationsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.Party_locationsScalarFieldEnum | Prisma.Party_locationsScalarFieldEnum[]
+}
+
+/**
+ * business_parties.party_bank_accounts
+ */
+export type business_parties$party_bank_accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the party_bank_accounts
+   */
+  select?: Prisma.party_bank_accountsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the party_bank_accounts
+   */
+  omit?: Prisma.party_bank_accountsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.party_bank_accountsInclude<ExtArgs> | null
+  where?: Prisma.party_bank_accountsWhereInput
+  orderBy?: Prisma.party_bank_accountsOrderByWithRelationInput | Prisma.party_bank_accountsOrderByWithRelationInput[]
+  cursor?: Prisma.party_bank_accountsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Party_bank_accountsScalarFieldEnum | Prisma.Party_bank_accountsScalarFieldEnum[]
 }
 
 /**
