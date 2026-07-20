@@ -10,6 +10,8 @@ import { CurrencyRatesModule } from './currency-rates/currency-rates.module';
 import { DocumentsSalesModule } from './documents-sales/documents_sales.module';
 import { SalesReportModule } from './documents-sales/sales-reports/sales_reports.module';
 import { DocumentsTypesErpModule } from './document_types/documents-types.module';
+import { DocumentSequencesModule } from './document-sequences/document-sequences.module';
+import { BankConceptsModule } from './bank-concepts/bank-concepts.module';
 import { PricingEngineModule } from './pricing/pricing-engine.module';
 import { ExchangeModule } from './pricing/exchange/exchange.module';
 import { ProductPricingModule } from './pricing/product-pricing/product-pricing.module';
@@ -26,6 +28,7 @@ import { CurrentAccountsModule } from './current-accounts/current-accounts.modul
 import { PaymentReportsModule } from './payment-reports/payment-reports.module';
 import { ChecksModule } from './checks/checks.module';
 import { TreasuryReportsModule } from './treasury-reports/treasury-reports.module';
+import { HrModule } from './hr/hr.module';
 
 @Module({
   imports: [
@@ -33,11 +36,12 @@ import { TreasuryReportsModule } from './treasury-reports/treasury-reports.modul
     alarteModule,
     CurrenciesModule,
     CurrencyRatesModule,
-    // DocumentsSalesModule,
     DocumentsSalesModule,
     SalesReportModule,
     DocumentsPurchasesModule,
     DocumentsTypesErpModule,
+    DocumentSequencesModule,
+    BankConceptsModule,
     PricingEngineModule,
     ExchangeModule,
     ProductPricingModule,
@@ -53,16 +57,19 @@ import { TreasuryReportsModule } from './treasury-reports/treasury-reports.modul
     PaymentReportsModule,
     ChecksModule,
     TreasuryReportsModule,
+    HrModule,
   ],
   exports: [
     AccountsModule,
     alarteModule,
     CurrenciesModule,
     CurrencyRatesModule,
-    // DocumentsSalesModule,
     DocumentsSalesModule,
     SalesReportModule,
+    DocumentsPurchasesModule,
     DocumentsTypesErpModule,
+    DocumentSequencesModule,
+    BankConceptsModule,
     PricingEngineModule,
     ExchangeModule,
     ProductPricingModule,
@@ -78,6 +85,7 @@ import { TreasuryReportsModule } from './treasury-reports/treasury-reports.modul
     PaymentReportsModule,
     ChecksModule,
     TreasuryReportsModule,
+    HrModule,
   ],
 })
 export class ErpModulesModule {}

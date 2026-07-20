@@ -454,7 +454,7 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // GENERAR BORRADORES DESDE VIAJE
   // ─────────────────────────────────────────────
-  async generateDraftsFromTrip(tripId: string): Promise<{ created: number; skipped: number }> {
+  async generateDraftsFromTrip(tripId: string, overrideDocumentTypeId?: string): Promise<{ created: number; skipped: number }> {
     const trip = await this.prisma.trips.findUnique({
       where: {
         id: tripId,
@@ -583,19 +583,33 @@ export class DocumentsSalesService {
     // ─────────────────────────────────────────────
     // TIPO DOC
     // ─────────────────────────────────────────────
-    const docType = await this.prisma.document_types.findUnique({
-      where: {
-        code: 'VEN',
-      },
-
-      include: {
-        document_sequences: true,
-      },
-    });
+    const docType = overrideDocumentTypeId
+      ? await this.prisma.document_types.findUnique({
+          where: { id: overrideDocumentTypeId },
+          include: { document_sequences: true },
+        })
+      : await this.prisma.document_types.findUnique({
+          where: { code: 'VEN' },
+          include: { document_sequences: true },
+        });
 
     if (!docType) {
-      throw new NotFoundException('Tipo de documento VEN no configurado');
+      throw new NotFoundException('Tipo de documento no encontrado');
     }
+
+    // ─────────────────────────────────────────────
+    // IMPUESTOS DEL TIPO DE DOCUMENTO
+    // ─────────────────────────────────────────────
+    const docTypeTaxRows = await this.prisma.document_type_taxes.findMany({
+      where: { document_type_id: docType.id },
+      include: { taxes: true },
+    });
+
+    const docTypeTaxes = docTypeTaxRows.map((r) => ({
+      tax_id: r.tax_id,
+      tax_rate: Number(r.taxes.rate),
+      calculation_level: r.taxes.calculation_level,
+    }));
 
     // ─────────────────────────────────────────────
     // MONEDA BASE
@@ -644,31 +658,32 @@ export class DocumentsSalesService {
       }
 
       const items: ItemInput[] = group.dispatches.flatMap((dispatch) =>
-        dispatch.rates.map((rate) => ({
-          product_id: null,
+        dispatch.rates.map((rate) => {
+          const taxes = docTypeTaxes.map((t) => ({
+            tax_id: t.tax_id,
+            tax_rate: t.tax_rate,
+            tax_amount: Math.round(rate.value * (t.tax_rate / 100) * 100) / 100,
+            calculation_level: t.calculation_level,
+            is_included_in_price: false,
+          }));
 
-          quantity: 1,
+          const totalTaxes = taxes.reduce((acc, t) => acc + t.tax_amount, 0);
 
-          currency: baseCurrency.code,
-
-          exchange_rate: 1,
-
-          original_unit_price: rate.value,
-
-          unit_price: rate.value,
-
-          price: rate.value,
-
-          exempt_amount: 0,
-
-          taxable_base: rate.value,
-
-          total_taxes: 0,
-
-          total: rate.value,
-
-          taxes: [],
-        })),
+          return {
+            product_id: null,
+            quantity: 1,
+            currency: baseCurrency.code,
+            exchange_rate: 1,
+            original_unit_price: rate.value,
+            unit_price: rate.value,
+            price: rate.value,
+            exempt_amount: 0,
+            taxable_base: rate.value,
+            total_taxes: totalTaxes,
+            total: rate.value + totalTaxes,
+            taxes,
+          };
+        }),
       );
 
       const totals = this.totalsService.calculate(items);
@@ -970,5 +985,91 @@ export class DocumentsSalesService {
     });
 
     return trips.map((t) => t.id);
+  }
+
+  // ─────────────────────────────────────────────
+  // GET COMPLETED TRIPS PENDING INVOICING
+  // ─────────────────────────────────────────────
+  async getCompletedTripsPending() {
+    const completedTrips = await this.prisma.trips.findMany({
+      where: { status: 'COMPLETED' },
+      select: {
+        id: true,
+        reference_number: true,
+        status: true,
+      },
+    });
+
+    const results: {
+      id: string;
+      reference_number: string | null;
+      total_orders: number;
+      total_amount: number;
+    }[] = [];
+
+    for (const trip of completedTrips) {
+      const existingDocs = await this.prisma.documents.findMany({
+        where: {
+          ref: `TRIP-${trip.id}`.substring(0, 50),
+          status: { in: [STATUS_DRAFT, STATUS_PENDING, STATUS_CONFIRMED] },
+        },
+        select: { id: true },
+      });
+
+      if (existingDocs.length > 0) continue;
+
+      const tripOrders = await this.prisma.trip_stop_orders.findMany({
+        where: { trip_stop: { trip_id: trip.id } },
+        select: {
+          dispatch_order: {
+            select: {
+              dispatch_rates: {
+                select: { value: true },
+              },
+            },
+          },
+        },
+      });
+
+      const totalAmount = tripOrders.reduce((acc, row) => {
+        const rates = row.dispatch_order?.dispatch_rates ?? [];
+        return acc + rates.reduce((sum, r) => sum + Number(r.value), 0);
+      }, 0);
+
+      results.push({
+        id: trip.id,
+        reference_number: trip.reference_number,
+        total_orders: tripOrders.length,
+        total_amount: totalAmount,
+      });
+    }
+
+    return results;
+  }
+
+  // ─────────────────────────────────────────────
+  // GENERATE FROM SELECTED TRIPS
+  // ─────────────────────────────────────────────
+  async generateFromSelectedTrips(
+    tripIds: string[],
+    documentTypeId: string,
+  ): Promise<{ results: { tripId: string; created: number; skipped: number }[] }> {
+    const docType = await this.prisma.document_types.findUnique({
+      where: { id: documentTypeId },
+      select: { id: true, code: true, direction: true },
+    });
+
+    if (!docType) {
+      throw new NotFoundException('Tipo de documento no encontrado');
+    }
+
+    const results: { tripId: string; created: number; skipped: number }[] = [];
+
+    for (const tripId of tripIds) {
+      const result = await this.generateDraftsFromTrip(tripId, documentTypeId);
+      results.push({ tripId, created: result.created, skipped: result.skipped });
+    }
+
+    return { results };
   }
 }

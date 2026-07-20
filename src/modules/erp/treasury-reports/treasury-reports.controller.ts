@@ -29,4 +29,28 @@ export class TreasuryReportsController {
       limit: limit ? parseInt(limit, 10) : undefined,
     });
   }
+
+  @Get('libro-iva')
+  async libroIva(
+    @Query('date_from') dateFrom?: string,
+    @Query('date_to') dateTo?: string,
+  ) {
+    return this.reportsService.libroIva(dateFrom, dateTo);
+  }
+
+  @Get('regulatory-payments')
+  async regulatoryPayments(
+    @Query('date_from') dateFrom?: string,
+    @Query('date_to') dateTo?: string,
+  ) {
+    return this.reportsService.regulatoryPayments(dateFrom, dateTo);
+  }
+
+  @Get('utility-payments')
+  async utilityPayments(
+    @Query('date_from') dateFrom?: string,
+    @Query('date_to') dateTo?: string,
+  ) {
+    return this.reportsService.utilityPayments(dateFrom, dateTo);
+  }
 }

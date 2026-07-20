@@ -114,6 +114,7 @@ export type DocumentsCountAggregateOutputType = {
   ref: number
   currency_code: number
   taxable_base: number
+  custom_fields: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -213,6 +214,7 @@ export type DocumentsCountAggregateInputType = {
   ref?: true
   currency_code?: true
   taxable_base?: true
+  custom_fields?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -325,6 +327,7 @@ export type DocumentsGroupByOutputType = {
   ref: string | null
   currency_code: string | null
   taxable_base: runtime.Decimal | null
+  custom_fields: runtime.JsonValue | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -373,6 +376,7 @@ export type documentsWhereInput = {
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
   taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.JsonNullableFilter<"documents">
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -403,6 +407,7 @@ export type documentsOrderByWithRelationInput = {
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
   taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
+  custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -437,6 +442,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
   taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.JsonNullableFilter<"documents">
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -467,6 +473,7 @@ export type documentsOrderByWithAggregationInput = {
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
   taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
+  custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -500,6 +507,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   ref?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   taxable_base?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.JsonNullableWithAggregatesFilter<"documents">
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
@@ -523,6 +531,7 @@ export type documentsCreateInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -553,6 +562,7 @@ export type documentsUncheckedCreateInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -579,6 +589,7 @@ export type documentsUpdateInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609,6 +620,7 @@ export type documentsUncheckedUpdateInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637,6 +649,7 @@ export type documentsCreateManyInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -660,6 +673,7 @@ export type documentsUpdateManyMutationInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685,6 +699,7 @@ export type documentsUncheckedUpdateManyInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -730,6 +745,7 @@ export type documentsCountOrderByAggregateInput = {
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
+  custom_fields?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -951,6 +967,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -980,6 +997,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1021,6 +1039,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1050,6 +1069,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1075,6 +1095,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1104,6 +1125,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1145,6 +1167,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1174,6 +1197,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1199,6 +1223,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1227,6 +1252,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1284,6 +1310,7 @@ export type documentsScalarWhereInput = {
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
   taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.JsonNullableFilter<"documents">
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -1307,6 +1334,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1335,6 +1363,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1387,6 +1416,7 @@ export type documentsCreateWithoutPayment_documentsInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1416,6 +1446,7 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1457,6 +1488,7 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1486,6 +1518,7 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1512,6 +1545,7 @@ export type documentsCreateManyDocument_typesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1535,6 +1569,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1563,6 +1598,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1590,6 +1626,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1614,6 +1651,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   ref?: string | null
   currency_code?: string | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string | null
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1637,6 +1675,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1665,6 +1704,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1692,6 +1732,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1766,6 +1807,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   ref?: boolean
   currency_code?: boolean
   taxable_base?: boolean
+  custom_fields?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1797,6 +1839,7 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   ref?: boolean
   currency_code?: boolean
   taxable_base?: boolean
+  custom_fields?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1824,6 +1867,7 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   ref?: boolean
   currency_code?: boolean
   taxable_base?: boolean
+  custom_fields?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1851,6 +1895,7 @@ export type documentsSelectScalar = {
   ref?: boolean
   currency_code?: boolean
   taxable_base?: boolean
+  custom_fields?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1860,7 +1905,7 @@ export type documentsSelectScalar = {
   source?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "taxable_base" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "taxable_base" | "custom_fields" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -1903,6 +1948,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     ref: string | null
     currency_code: string | null
     taxable_base: runtime.Decimal | null
+    custom_fields: runtime.JsonValue | null
     created_at: Date | null
     updated_at: Date | null
     deleted_at: Date | null
@@ -2353,6 +2399,7 @@ export interface documentsFieldRefs {
   readonly ref: Prisma.FieldRef<"documents", 'String'>
   readonly currency_code: Prisma.FieldRef<"documents", 'String'>
   readonly taxable_base: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly custom_fields: Prisma.FieldRef<"documents", 'Json'>
   readonly created_at: Prisma.FieldRef<"documents", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"documents", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"documents", 'DateTime'>

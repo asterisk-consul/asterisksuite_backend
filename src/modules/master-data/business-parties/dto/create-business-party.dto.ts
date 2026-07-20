@@ -53,6 +53,30 @@ export class CreateBusinessPartyDto {
   tax_id?: string;
 
   @IsOptional()
+  @IsString()
+  vat_condition?: string;
+
+  @IsOptional()
+  @IsString()
+  province?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  iibb_registered?: boolean;
+
+  @IsOptional()
+  @IsString()
+  iibb_jurisdiction?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  retention_agent?: boolean;
+
+  @IsOptional()
+  @IsString()
+  operation_type?: string;
+
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePartyLocationDto)

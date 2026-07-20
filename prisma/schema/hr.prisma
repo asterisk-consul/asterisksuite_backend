@@ -1,0 +1,107 @@
+// ══════════════════════════════════════════════════════════
+// RRHH — Enums
+// ══════════════════════════════════════════════════════════
+
+enum HrValeType {
+  RETIRO      // Socio/empleado retira dinero
+  ADELANTO    // Adelanto de sueldo/capital
+  REEMBOLSO   // Reembolso de gasto
+  PRESTAMO    // Préstamo de la empresa
+  @@schema("tenant")
+}
+
+enum HrValeStatus {
+  DRAFT
+  CONFIRMED
+  PAID
+  CANCELLED
+  @@schema("tenant")
+}
+
+enum HrAccountEntryType {
+  VALE_DEBIT       // Vale retiro/adelanto
+  VALE_CREDIT      // Vale reembolso/préstamo
+  PAYMENT          // Pago registrado
+  COLLECTION       // Cobro registrado
+  ADJUSTMENT       // Ajuste manual
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// RRHH — Models
+// ══════════════════════════════════════════════════════════
+
+model hr_accounts {
+  id              String    @id @default(uuid()) @db.Uuid
+  party_id        String    @db.Uuid
+  party_type      String    @db.VarChar(20)    // EMPLOYEE | PARTNER
+  currency_code   String    @db.VarChar(10)
+  balance         Decimal   @default(0) @db.Decimal(15, 2)
+  active          Boolean   @default(true)
+  created_at      DateTime  @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?   @db.Uuid
+  updated_by      String?   @db.Uuid
+  deleted_by      String?   @db.Uuid
+
+  party           business_parties @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  entries         hr_account_entries[]
+
+  @@unique([party_id, currency_code])
+  @@index([party_id])
+  @@schema("tenant")
+}
+
+model hr_account_entries {
+  id                  String    @id @default(uuid()) @db.Uuid
+  hr_account_id       String    @db.Uuid
+  type                HrAccountEntryType
+  amount              Decimal   @db.Decimal(15, 2)
+  currency_code       String    @db.VarChar(10)
+  balance_before      Decimal   @db.Decimal(15, 2)
+  balance_after       Decimal   @db.Decimal(15, 2)
+  description         String?   @db.VarChar(255)
+  reference_type      String?   @db.VarChar(50)
+  reference_id        String?   @db.Uuid
+  date                DateTime  @default(now()) @db.Timestamp(6)
+  created_at          DateTime  @default(now()) @db.Timestamp(6)
+  updated_at          DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?   @db.Uuid
+  updated_by          String?   @db.Uuid
+  deleted_by          String?   @db.Uuid
+
+  hr_account          hr_accounts @relation(fields: [hr_account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([hr_account_id])
+  @@schema("tenant")
+}
+
+model hr_vales {
+  id              String        @id @default(uuid()) @db.Uuid
+  number          Int
+  party_id        String        @db.Uuid
+  party_type      String        @db.VarChar(20)    // EMPLOYEE | PARTNER
+  type            HrValeType
+  amount          Decimal       @db.Decimal(15, 2)
+  currency_code   String        @db.VarChar(10)
+  status          HrValeStatus  @default(DRAFT)
+  description     String?       @db.VarChar(255)
+  date            DateTime      @db.Date
+  paid_at         DateTime?
+  confirmed_at    DateTime?
+  confirmed_by    String?       @db.Uuid
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?     @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?       @db.Uuid
+  updated_by      String?       @db.Uuid
+  deleted_by      String?       @db.Uuid
+
+  party           business_parties @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([party_id, number])
+  @@index([party_id])
+  @@schema("tenant")
+}

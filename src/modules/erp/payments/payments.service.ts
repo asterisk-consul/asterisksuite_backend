@@ -611,4 +611,26 @@ export class PaymentsService {
       }
     }
   }
+
+  // ═══════════════════════════════════════════
+  // FIND PARTY BY NAME OR TAX ID
+  // ═══════════════════════════════════════════
+
+  async findPartyByNameOrTaxId(name: string, taxId: string) {
+    if (taxId) {
+      const byTaxId = await this.prisma.business_parties.findFirst({
+        where: { tax_id: taxId, deleted_at: null },
+      });
+      if (byTaxId) return byTaxId;
+    }
+
+    if (name) {
+      const byName = await this.prisma.business_parties.findFirst({
+        where: { name: { contains: name, mode: 'insensitive' }, deleted_at: null },
+      });
+      if (byName) return byName;
+    }
+
+    return null;
+  }
 }

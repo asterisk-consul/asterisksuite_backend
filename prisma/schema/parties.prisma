@@ -3,6 +3,8 @@ model business_parties {
   type            PartyType
   name            String            @db.VarChar(255)
   tax_id          String?           @db.VarChar(50)
+  vat_condition   String?           @db.VarChar(30)    // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, CONSUMIDOR_FINAL, EXENTO
+  province        String?           @db.VarChar(50)    // Provincia para IIBB
   exemption_rate  Decimal           @default(0) @db.Decimal(5, 2)
   active          Boolean           @default(true)
   created_at      DateTime          @default(now()) @db.Timestamp(6)
@@ -21,6 +23,8 @@ model business_parties {
   payments        payments[]
   credit_cards    credit_cards[]
   current_accounts current_accounts[]
+  hr_accounts      hr_accounts[]
+  hr_vales         hr_vales[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
     @@schema("tenant")

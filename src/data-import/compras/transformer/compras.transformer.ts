@@ -22,6 +22,7 @@ export type ComprasTransformado = {
   status: number;
   subtotal: number;
   exempt_amount: number;
+  taxable_base: number;
   total_taxes: number;
   total: number;
   document_taxes: {
@@ -73,9 +74,17 @@ export class ComprasTransformer implements Transformer<
       documentTypes.map((dt) => [dt.code, dt]),
     );
 
-    const documentType = documentTypeMap.get('COM');
+    // Buscar tipo de documento por categoría INVOICE o por código COM
+    let documentType = documentTypes.find(dt => dt.category === 'INVOICE' && dt.direction === -1);
     if (!documentType) {
-      throw new Error('Tipo de documento "COM" no encontrado en la BD');
+      documentType = documentTypeMap.get('COM');
+    }
+    if (!documentType) {
+      // Buscar cualquier tipo de compra
+      documentType = documentTypes.find(dt => dt.direction === -1);
+    }
+    if (!documentType) {
+      throw new Error('No se encontró un tipo de documento de compra en la BD');
     }
 
     // Para manejar refs duplicadas (ej: A-00099-31012026 con múltiples filas)
@@ -143,6 +152,7 @@ export class ComprasTransformer implements Transformer<
         status: 1,
         subtotal: factura.Imp_gravado,
         exempt_amount: factura.Imp_Excento,
+        taxable_base: factura.Imp_gravado,
         total_taxes: totalTaxes,
         total: factura.Imp_total,
 

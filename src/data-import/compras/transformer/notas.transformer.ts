@@ -52,7 +52,13 @@ export class NotaTransformer implements Transformer<
       documentTypes.map((dt) => [dt.code, dt]),
     );
 
-    const documentType = documentTypeMap.get(this.documentTypeCode);
+    // Buscar tipo de documento por categoría o por código
+    let documentType = documentTypes.find(dt => dt.code === this.documentTypeCode);
+    if (!documentType) {
+      // Buscar por categoría (NC para notas de crédito, ND para notas de débito)
+      const category = this.documentTypeCode === 'NC' ? 'CREDIT_NOTE' : 'DEBIT_NOTE';
+      documentType = documentTypes.find(dt => dt.category === category);
+    }
     if (!documentType) {
       throw new Error(
         `Tipo de documento "${this.documentTypeCode}" no encontrado en la BD`,
@@ -120,6 +126,7 @@ export class NotaTransformer implements Transformer<
         status: 1,
         subtotal: nota.Imp_Gravado ?? 0,
         exempt_amount: nota.Imp_Exento ?? 0,
+        taxable_base: nota.Imp_Gravado ?? 0,
         total_taxes: totalTaxes,
         total: nota.Imp_Total ?? 0,
 

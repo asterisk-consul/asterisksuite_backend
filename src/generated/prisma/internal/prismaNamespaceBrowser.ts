@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   accounts: 'accounts',
   audit_logs: 'audit_logs',
+  bank_concepts: 'bank_concepts',
   product_costs: 'product_costs',
   product_cost_breakdowns: 'product_cost_breakdowns',
   cost_components: 'cost_components',
@@ -72,6 +73,9 @@ export const ModelName = {
   product_structure_versions: 'product_structure_versions',
   entity_photos: 'entity_photos',
   files: 'files',
+  hr_accounts: 'hr_accounts',
+  hr_account_entries: 'hr_account_entries',
+  hr_vales: 'hr_vales',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -199,6 +203,30 @@ export const Audit_logsScalarFieldEnum = {
 } as const
 
 export type Audit_logsScalarFieldEnum = (typeof Audit_logsScalarFieldEnum)[keyof typeof Audit_logsScalarFieldEnum]
+
+
+export const Bank_conceptsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  concept_type: 'concept_type',
+  accounting_account: 'accounting_account',
+  calculates_iva: 'calculates_iva',
+  iva_rate: 'iva_rate',
+  generates_credit: 'generates_credit',
+  impacts_iva_book: 'impacts_iva_book',
+  default_percentage: 'default_percentage',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_conceptsScalarFieldEnum = (typeof Bank_conceptsScalarFieldEnum)[keyof typeof Bank_conceptsScalarFieldEnum]
 
 
 export const Product_costsScalarFieldEnum = {
@@ -407,6 +435,12 @@ export const Document_typesScalarFieldEnum = {
   affects_accounting: 'affects_accounting',
   affects_tax_book: 'affects_tax_book',
   active: 'active',
+  category: 'category',
+  letter_type: 'letter_type',
+  afip_code: 'afip_code',
+  requires_cae: 'requires_cae',
+  is_electronic: 'is_electronic',
+  custom_fields_config: 'custom_fields_config',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -445,6 +479,7 @@ export const DocumentsScalarFieldEnum = {
   ref: 'ref',
   currency_code: 'currency_code',
   taxable_base: 'taxable_base',
+  custom_fields: 'custom_fields',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -550,6 +585,72 @@ export const FilesScalarFieldEnum = {
 } as const
 
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
+
+
+export const Hr_accountsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  party_type: 'party_type',
+  currency_code: 'currency_code',
+  balance: 'balance',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Hr_accountsScalarFieldEnum = (typeof Hr_accountsScalarFieldEnum)[keyof typeof Hr_accountsScalarFieldEnum]
+
+
+export const Hr_account_entriesScalarFieldEnum = {
+  id: 'id',
+  hr_account_id: 'hr_account_id',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  balance_before: 'balance_before',
+  balance_after: 'balance_after',
+  description: 'description',
+  reference_type: 'reference_type',
+  reference_id: 'reference_id',
+  date: 'date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Hr_account_entriesScalarFieldEnum = (typeof Hr_account_entriesScalarFieldEnum)[keyof typeof Hr_account_entriesScalarFieldEnum]
+
+
+export const Hr_valesScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  party_id: 'party_id',
+  party_type: 'party_type',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  status: 'status',
+  description: 'description',
+  date: 'date',
+  paid_at: 'paid_at',
+  confirmed_at: 'confirmed_at',
+  confirmed_by: 'confirmed_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Hr_valesScalarFieldEnum = (typeof Hr_valesScalarFieldEnum)[keyof typeof Hr_valesScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {
@@ -995,6 +1096,8 @@ export const Business_partiesScalarFieldEnum = {
   type: 'type',
   name: 'name',
   tax_id: 'tax_id',
+  vat_condition: 'vat_condition',
+  province: 'province',
   exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',

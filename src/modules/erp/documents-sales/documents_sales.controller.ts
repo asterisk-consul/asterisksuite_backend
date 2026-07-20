@@ -3,8 +3,6 @@ import { DocumentsSalesService } from './documents_sales.services';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-// import { PermissionsGuard } from '@/access-control/guards/permissions.guard';
-// import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('documents/sales')
@@ -12,7 +10,6 @@ export class DocumentsSalesController {
   constructor(private readonly service: DocumentsSalesService) {}
 
   @Post('generate-from-all-completed-trips')
-  // @RequirePermissions('documents.create')
   async generateFromAllCompletedTrips() {
     const tripIds = await this.service.getAllCompletedTripIds();
     const results: { tripId: string; created: number; skipped: number }[] = [];
@@ -30,9 +27,20 @@ export class DocumentsSalesController {
   }
 
   @Post('generate-from-trip/:tripId')
-  // @RequirePermissions('documents.create')
   generateFromTrip(@Param('tripId') tripId: string) {
     return this.service.generateDraftsFromTrip(tripId);
+  }
+
+  @Post('generate-from-trips')
+  async generateFromTrips(
+    @Body() body: { tripIds: string[]; documentTypeId: string },
+  ) {
+    return this.service.generateFromSelectedTrips(body.tripIds, body.documentTypeId);
+  }
+
+  @Get('completed-trips-pending')
+  async getCompletedTripsPending() {
+    return this.service.getCompletedTripsPending();
   }
 
   @Post()

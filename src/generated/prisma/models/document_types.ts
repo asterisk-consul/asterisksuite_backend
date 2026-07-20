@@ -45,6 +45,11 @@ export type Document_typesMinAggregateOutputType = {
   affects_accounting: boolean | null
   affects_tax_book: boolean | null
   active: boolean | null
+  category: string | null
+  letter_type: string | null
+  afip_code: string | null
+  requires_cae: boolean | null
+  is_electronic: boolean | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -64,6 +69,11 @@ export type Document_typesMaxAggregateOutputType = {
   affects_accounting: boolean | null
   affects_tax_book: boolean | null
   active: boolean | null
+  category: string | null
+  letter_type: string | null
+  afip_code: string | null
+  requires_cae: boolean | null
+  is_electronic: boolean | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -83,6 +93,12 @@ export type Document_typesCountAggregateOutputType = {
   affects_accounting: number
   affects_tax_book: number
   active: number
+  category: number
+  letter_type: number
+  afip_code: number
+  requires_cae: number
+  is_electronic: number
+  custom_fields_config: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -112,6 +128,11 @@ export type Document_typesMinAggregateInputType = {
   affects_accounting?: true
   affects_tax_book?: true
   active?: true
+  category?: true
+  letter_type?: true
+  afip_code?: true
+  requires_cae?: true
+  is_electronic?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -131,6 +152,11 @@ export type Document_typesMaxAggregateInputType = {
   affects_accounting?: true
   affects_tax_book?: true
   active?: true
+  category?: true
+  letter_type?: true
+  afip_code?: true
+  requires_cae?: true
+  is_electronic?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -150,6 +176,12 @@ export type Document_typesCountAggregateInputType = {
   affects_accounting?: true
   affects_tax_book?: true
   active?: true
+  category?: true
+  letter_type?: true
+  afip_code?: true
+  requires_cae?: true
+  is_electronic?: true
+  custom_fields_config?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -256,6 +288,12 @@ export type Document_typesGroupByOutputType = {
   affects_accounting: boolean
   affects_tax_book: boolean
   active: boolean
+  category: string | null
+  letter_type: string | null
+  afip_code: string | null
+  requires_cae: boolean
+  is_electronic: boolean
+  custom_fields_config: runtime.JsonValue | null
   created_at: Date
   updated_at: Date | null
   deleted_at: Date | null
@@ -298,6 +336,12 @@ export type document_typesWhereInput = {
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
+  category?: Prisma.StringNullableFilter<"document_types"> | string | null
+  letter_type?: Prisma.StringNullableFilter<"document_types"> | string | null
+  afip_code?: Prisma.StringNullableFilter<"document_types"> | string | null
+  requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
+  is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
+  custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
@@ -321,6 +365,12 @@ export type document_typesOrderByWithRelationInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
+  letter_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  afip_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  requires_cae?: Prisma.SortOrder
+  is_electronic?: Prisma.SortOrder
+  custom_fields_config?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -347,6 +397,12 @@ export type document_typesWhereUniqueInput = Prisma.AtLeast<{
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
+  category?: Prisma.StringNullableFilter<"document_types"> | string | null
+  letter_type?: Prisma.StringNullableFilter<"document_types"> | string | null
+  afip_code?: Prisma.StringNullableFilter<"document_types"> | string | null
+  requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
+  is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
+  custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
@@ -370,6 +426,12 @@ export type document_typesOrderByWithAggregationInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
+  letter_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  afip_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  requires_cae?: Prisma.SortOrder
+  is_electronic?: Prisma.SortOrder
+  custom_fields_config?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -397,6 +459,12 @@ export type document_typesScalarWhereWithAggregatesInput = {
   affects_accounting?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  category?: Prisma.StringNullableWithAggregatesFilter<"document_types"> | string | null
+  letter_type?: Prisma.StringNullableWithAggregatesFilter<"document_types"> | string | null
+  afip_code?: Prisma.StringNullableWithAggregatesFilter<"document_types"> | string | null
+  requires_cae?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  is_electronic?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  custom_fields_config?: Prisma.JsonNullableWithAggregatesFilter<"document_types">
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_types"> | Date | string | null
@@ -414,6 +482,12 @@ export type document_typesCreateInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -437,6 +511,12 @@ export type document_typesUncheckedCreateInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -456,6 +536,12 @@ export type document_typesUpdateInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -479,6 +565,12 @@ export type document_typesUncheckedUpdateInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -500,6 +592,12 @@ export type document_typesCreateManyInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -517,6 +615,12 @@ export type document_typesUpdateManyMutationInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -536,6 +640,12 @@ export type document_typesUncheckedUpdateManyInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -565,6 +675,12 @@ export type document_typesCountOrderByAggregateInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  letter_type?: Prisma.SortOrder
+  afip_code?: Prisma.SortOrder
+  requires_cae?: Prisma.SortOrder
+  is_electronic?: Prisma.SortOrder
+  custom_fields_config?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -588,6 +704,11 @@ export type document_typesMaxOrderByAggregateInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  letter_type?: Prisma.SortOrder
+  afip_code?: Prisma.SortOrder
+  requires_cae?: Prisma.SortOrder
+  is_electronic?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -607,6 +728,11 @@ export type document_typesMinOrderByAggregateInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  letter_type?: Prisma.SortOrder
+  afip_code?: Prisma.SortOrder
+  requires_cae?: Prisma.SortOrder
+  is_electronic?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -745,6 +871,12 @@ export type document_typesCreateWithoutDocument_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -766,6 +898,12 @@ export type document_typesUncheckedCreateWithoutDocument_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -816,6 +954,12 @@ export type document_typesScalarWhereInput = {
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
+  category?: Prisma.StringNullableFilter<"document_types"> | string | null
+  letter_type?: Prisma.StringNullableFilter<"document_types"> | string | null
+  afip_code?: Prisma.StringNullableFilter<"document_types"> | string | null
+  requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
+  is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
+  custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
@@ -833,6 +977,12 @@ export type document_typesCreateWithoutDocument_type_taxesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -855,6 +1005,12 @@ export type document_typesUncheckedCreateWithoutDocument_type_taxesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -889,6 +1045,12 @@ export type document_typesUpdateWithoutDocument_type_taxesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -911,6 +1073,12 @@ export type document_typesUncheckedUpdateWithoutDocument_type_taxesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -929,6 +1097,12 @@ export type document_typesCreateWithoutDocumentsInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -951,6 +1125,12 @@ export type document_typesUncheckedCreateWithoutDocumentsInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -985,6 +1165,12 @@ export type document_typesUpdateWithoutDocumentsInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1007,6 +1193,12 @@ export type document_typesUncheckedUpdateWithoutDocumentsInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1025,6 +1217,12 @@ export type document_typesCreateWithoutSystem_modulesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1046,6 +1244,12 @@ export type document_typesUncheckedCreateWithoutSystem_modulesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1092,6 +1296,12 @@ export type document_typesCreateManyDocument_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1109,6 +1319,12 @@ export type document_typesUpdateWithoutDocument_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1130,6 +1346,12 @@ export type document_typesUncheckedUpdateWithoutDocument_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1150,6 +1372,12 @@ export type document_typesUncheckedUpdateManyWithoutDocument_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1168,6 +1396,12 @@ export type document_typesCreateManySystem_modulesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: string | null
+  letter_type?: string | null
+  afip_code?: string | null
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1185,6 +1419,12 @@ export type document_typesUpdateWithoutSystem_modulesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1206,6 +1446,12 @@ export type document_typesUncheckedUpdateWithoutSystem_modulesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1226,6 +1472,12 @@ export type document_typesUncheckedUpdateManyWithoutSystem_modulesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1285,6 +1537,12 @@ export type document_typesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: boolean
+  letter_type?: boolean
+  afip_code?: boolean
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1309,6 +1567,12 @@ export type document_typesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: boolean
+  letter_type?: boolean
+  afip_code?: boolean
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1330,6 +1594,12 @@ export type document_typesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: boolean
+  letter_type?: boolean
+  afip_code?: boolean
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1351,6 +1621,12 @@ export type document_typesSelectScalar = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   active?: boolean
+  category?: boolean
+  letter_type?: boolean
+  afip_code?: boolean
+  requires_cae?: boolean
+  is_electronic?: boolean
+  custom_fields_config?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1359,7 +1635,7 @@ export type document_typesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
+export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "custom_fields_config" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
 export type document_typesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_type_taxes?: boolean | Prisma.document_types$document_type_taxesArgs<ExtArgs>
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
@@ -1395,6 +1671,12 @@ export type $document_typesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     affects_accounting: boolean
     affects_tax_book: boolean
     active: boolean
+    category: string | null
+    letter_type: string | null
+    afip_code: string | null
+    requires_cae: boolean
+    is_electronic: boolean
+    custom_fields_config: runtime.JsonValue | null
     created_at: Date
     updated_at: Date | null
     deleted_at: Date | null
@@ -1838,6 +2120,12 @@ export interface document_typesFieldRefs {
   readonly affects_accounting: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly affects_tax_book: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly active: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly category: Prisma.FieldRef<"document_types", 'String'>
+  readonly letter_type: Prisma.FieldRef<"document_types", 'String'>
+  readonly afip_code: Prisma.FieldRef<"document_types", 'String'>
+  readonly requires_cae: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly is_electronic: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly custom_fields_config: Prisma.FieldRef<"document_types", 'Json'>
   readonly created_at: Prisma.FieldRef<"document_types", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"document_types", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"document_types", 'DateTime'>

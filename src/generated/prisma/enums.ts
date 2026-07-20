@@ -293,10 +293,45 @@ export const PartyType = {
   CUSTOMER: 'CUSTOMER',
   SUPPLIER: 'SUPPLIER',
   EMPLOYEE: 'EMPLOYEE',
-  PARTNER: 'PARTNER'
+  PARTNER: 'PARTNER',
+  TAX_AUTHORITY: 'TAX_AUTHORITY',
+  UTILITY: 'UTILITY',
+  FINANCIAL: 'FINANCIAL',
+  SERVICE_PROVIDER: 'SERVICE_PROVIDER'
 } as const
 
 export type PartyType = (typeof PartyType)[keyof typeof PartyType]
+
+
+export const HrValeType = {
+  RETIRO: 'RETIRO',
+  ADELANTO: 'ADELANTO',
+  REEMBOLSO: 'REEMBOLSO',
+  PRESTAMO: 'PRESTAMO'
+} as const
+
+export type HrValeType = (typeof HrValeType)[keyof typeof HrValeType]
+
+
+export const HrValeStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type HrValeStatus = (typeof HrValeStatus)[keyof typeof HrValeStatus]
+
+
+export const HrAccountEntryType = {
+  VALE_DEBIT: 'VALE_DEBIT',
+  VALE_CREDIT: 'VALE_CREDIT',
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type HrAccountEntryType = (typeof HrAccountEntryType)[keyof typeof HrAccountEntryType]
 
 
 export const CompanyRole = {

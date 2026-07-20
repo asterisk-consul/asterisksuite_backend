@@ -91,6 +91,12 @@ model document_types {
   affects_accounting   Boolean               @default(false)
   affects_tax_book     Boolean               @default(false)
   active               Boolean               @default(true)
+  category             String?               @db.VarChar(30)    // INVOICE, CREDIT_NOTE, DEBIT_NOTE, ORDER, QUOTE
+  letter_type          String?               @db.VarChar(5)     // A, B, C, X
+  afip_code            String?               @db.VarChar(5)     // 01, 06, 11, etc.
+  requires_cae         Boolean               @default(false)
+  is_electronic        Boolean               @default(false)
+  custom_fields_config Json?
   created_at           DateTime              @default(now()) @db.Timestamp(6)
   updated_at           DateTime?             @updatedAt @db.Timestamp(6)
   deleted_at           DateTime?
@@ -133,6 +139,7 @@ model documents {
   ref              String?           @db.VarChar(50)
   currency_code    String?           @db.VarChar(10)
   taxable_base     Decimal?          @db.Decimal(15, 2)
+  custom_fields    Json?                                                  // Campos personalizados por tipo de documento
   created_at       DateTime?         @default(now()) @db.Timestamp(6)
   updated_at       DateTime?         @updatedAt @db.Timestamp(6)
   deleted_at       DateTime?

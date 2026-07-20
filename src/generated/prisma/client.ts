@@ -50,6 +50,11 @@ export type accounts = Prisma.accountsModel
  */
 export type audit_logs = Prisma.audit_logsModel
 /**
+ * Model bank_concepts
+ * 
+ */
+export type bank_concepts = Prisma.bank_conceptsModel
+/**
  * Model product_costs
  * 
  */
@@ -144,6 +149,21 @@ export type entity_photos = Prisma.entity_photosModel
  * 
  */
 export type files = Prisma.filesModel
+/**
+ * Model hr_accounts
+ * 
+ */
+export type hr_accounts = Prisma.hr_accountsModel
+/**
+ * Model hr_account_entries
+ * 
+ */
+export type hr_account_entries = Prisma.hr_account_entriesModel
+/**
+ * Model hr_vales
+ * 
+ */
+export type hr_vales = Prisma.hr_valesModel
 /**
  * Model cargo_transfer_items
  * 

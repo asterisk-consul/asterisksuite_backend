@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   accounts: 'accounts',
   audit_logs: 'audit_logs',
+  bank_concepts: 'bank_concepts',
   product_costs: 'product_costs',
   product_cost_breakdowns: 'product_cost_breakdowns',
   cost_components: 'cost_components',
@@ -405,6 +406,9 @@ export const ModelName = {
   product_structure_versions: 'product_structure_versions',
   entity_photos: 'entity_photos',
   files: 'files',
+  hr_accounts: 'hr_accounts',
+  hr_account_entries: 'hr_account_entries',
+  hr_vales: 'hr_vales',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -497,7 +501,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "pallet_items" | "pallets" | "business_parties" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "pallet_items" | "pallets" | "business_parties" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -646,6 +650,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.audit_logsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Audit_logsCountAggregateOutputType> | number
+        }
+      }
+    }
+    bank_concepts: {
+      payload: Prisma.$bank_conceptsPayload<ExtArgs>
+      fields: Prisma.bank_conceptsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.bank_conceptsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.bank_conceptsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>
+        }
+        findFirst: {
+          args: Prisma.bank_conceptsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.bank_conceptsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>
+        }
+        findMany: {
+          args: Prisma.bank_conceptsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>[]
+        }
+        create: {
+          args: Prisma.bank_conceptsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>
+        }
+        createMany: {
+          args: Prisma.bank_conceptsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.bank_conceptsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>[]
+        }
+        delete: {
+          args: Prisma.bank_conceptsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>
+        }
+        update: {
+          args: Prisma.bank_conceptsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>
+        }
+        deleteMany: {
+          args: Prisma.bank_conceptsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.bank_conceptsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.bank_conceptsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>[]
+        }
+        upsert: {
+          args: Prisma.bank_conceptsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_conceptsPayload>
+        }
+        aggregate: {
+          args: Prisma.Bank_conceptsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBank_concepts>
+        }
+        groupBy: {
+          args: Prisma.bank_conceptsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_conceptsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.bank_conceptsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_conceptsCountAggregateOutputType> | number
         }
       }
     }
@@ -2052,6 +2130,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.filesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FilesCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_accounts: {
+      payload: Prisma.$hr_accountsPayload<ExtArgs>
+      fields: Prisma.hr_accountsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_accountsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_accountsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_accountsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_accountsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>
+        }
+        findMany: {
+          args: Prisma.hr_accountsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>[]
+        }
+        create: {
+          args: Prisma.hr_accountsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>
+        }
+        createMany: {
+          args: Prisma.hr_accountsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_accountsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_accountsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>
+        }
+        update: {
+          args: Prisma.hr_accountsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_accountsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_accountsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_accountsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_accountsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_accountsPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_accountsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_accounts>
+        }
+        groupBy: {
+          args: Prisma.hr_accountsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_accountsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_accountsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_accountsCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_account_entries: {
+      payload: Prisma.$hr_account_entriesPayload<ExtArgs>
+      fields: Prisma.hr_account_entriesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_account_entriesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_account_entriesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_account_entriesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_account_entriesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>
+        }
+        findMany: {
+          args: Prisma.hr_account_entriesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>[]
+        }
+        create: {
+          args: Prisma.hr_account_entriesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>
+        }
+        createMany: {
+          args: Prisma.hr_account_entriesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_account_entriesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_account_entriesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>
+        }
+        update: {
+          args: Prisma.hr_account_entriesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_account_entriesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_account_entriesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_account_entriesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_account_entriesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_account_entriesPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_account_entriesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_account_entries>
+        }
+        groupBy: {
+          args: Prisma.hr_account_entriesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_account_entriesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_account_entriesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_account_entriesCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_vales: {
+      payload: Prisma.$hr_valesPayload<ExtArgs>
+      fields: Prisma.hr_valesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_valesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_valesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_valesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_valesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>
+        }
+        findMany: {
+          args: Prisma.hr_valesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>[]
+        }
+        create: {
+          args: Prisma.hr_valesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>
+        }
+        createMany: {
+          args: Prisma.hr_valesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_valesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_valesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>
+        }
+        update: {
+          args: Prisma.hr_valesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_valesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_valesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_valesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_valesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_valesPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_valesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_vales>
+        }
+        groupBy: {
+          args: Prisma.hr_valesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_valesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_valesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_valesCountAggregateOutputType> | number
         }
       }
     }
@@ -7826,6 +8126,30 @@ export const Audit_logsScalarFieldEnum = {
 export type Audit_logsScalarFieldEnum = (typeof Audit_logsScalarFieldEnum)[keyof typeof Audit_logsScalarFieldEnum]
 
 
+export const Bank_conceptsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  concept_type: 'concept_type',
+  accounting_account: 'accounting_account',
+  calculates_iva: 'calculates_iva',
+  iva_rate: 'iva_rate',
+  generates_credit: 'generates_credit',
+  impacts_iva_book: 'impacts_iva_book',
+  default_percentage: 'default_percentage',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_conceptsScalarFieldEnum = (typeof Bank_conceptsScalarFieldEnum)[keyof typeof Bank_conceptsScalarFieldEnum]
+
+
 export const Product_costsScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
@@ -8032,6 +8356,12 @@ export const Document_typesScalarFieldEnum = {
   affects_accounting: 'affects_accounting',
   affects_tax_book: 'affects_tax_book',
   active: 'active',
+  category: 'category',
+  letter_type: 'letter_type',
+  afip_code: 'afip_code',
+  requires_cae: 'requires_cae',
+  is_electronic: 'is_electronic',
+  custom_fields_config: 'custom_fields_config',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -8070,6 +8400,7 @@ export const DocumentsScalarFieldEnum = {
   ref: 'ref',
   currency_code: 'currency_code',
   taxable_base: 'taxable_base',
+  custom_fields: 'custom_fields',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -8175,6 +8506,72 @@ export const FilesScalarFieldEnum = {
 } as const
 
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
+
+
+export const Hr_accountsScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  party_type: 'party_type',
+  currency_code: 'currency_code',
+  balance: 'balance',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Hr_accountsScalarFieldEnum = (typeof Hr_accountsScalarFieldEnum)[keyof typeof Hr_accountsScalarFieldEnum]
+
+
+export const Hr_account_entriesScalarFieldEnum = {
+  id: 'id',
+  hr_account_id: 'hr_account_id',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  balance_before: 'balance_before',
+  balance_after: 'balance_after',
+  description: 'description',
+  reference_type: 'reference_type',
+  reference_id: 'reference_id',
+  date: 'date',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Hr_account_entriesScalarFieldEnum = (typeof Hr_account_entriesScalarFieldEnum)[keyof typeof Hr_account_entriesScalarFieldEnum]
+
+
+export const Hr_valesScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  party_id: 'party_id',
+  party_type: 'party_type',
+  type: 'type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  status: 'status',
+  description: 'description',
+  date: 'date',
+  paid_at: 'paid_at',
+  confirmed_at: 'confirmed_at',
+  confirmed_by: 'confirmed_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Hr_valesScalarFieldEnum = (typeof Hr_valesScalarFieldEnum)[keyof typeof Hr_valesScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {
@@ -8620,6 +9017,8 @@ export const Business_partiesScalarFieldEnum = {
   type: 'type',
   name: 'name',
   tax_id: 'tax_id',
+  vat_condition: 'vat_condition',
+  province: 'province',
   exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',
@@ -9759,20 +10158,6 @@ export type ListEnumAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
- * Reference to a field of type 'ProductCostSource'
- */
-export type EnumProductCostSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCostSource'>
-    
-
-
-/**
- * Reference to a field of type 'ProductCostSource[]'
- */
-export type ListEnumProductCostSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCostSource[]'>
-    
-
-
-/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -9783,6 +10168,20 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductCostSource'
+ */
+export type EnumProductCostSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCostSource'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductCostSource[]'
+ */
+export type ListEnumProductCostSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCostSource[]'>
     
 
 
@@ -9839,6 +10238,48 @@ export type EnumCurrencyRateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'CurrencyRateType[]'
  */
 export type ListEnumCurrencyRateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CurrencyRateType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrAccountEntryType'
+ */
+export type EnumHrAccountEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrAccountEntryType'>
+    
+
+
+/**
+ * Reference to a field of type 'HrAccountEntryType[]'
+ */
+export type ListEnumHrAccountEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrAccountEntryType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrValeType'
+ */
+export type EnumHrValeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrValeType'>
+    
+
+
+/**
+ * Reference to a field of type 'HrValeType[]'
+ */
+export type ListEnumHrValeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrValeType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HrValeStatus'
+ */
+export type EnumHrValeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrValeStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HrValeStatus[]'
+ */
+export type ListEnumHrValeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrValeStatus[]'>
     
 
 
@@ -10302,6 +10743,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   accounts?: Prisma.accountsOmit
   audit_logs?: Prisma.audit_logsOmit
+  bank_concepts?: Prisma.bank_conceptsOmit
   product_costs?: Prisma.product_costsOmit
   product_cost_breakdowns?: Prisma.product_cost_breakdownsOmit
   cost_components?: Prisma.cost_componentsOmit
@@ -10321,6 +10763,9 @@ export type GlobalOmitConfig = {
   product_structure_versions?: Prisma.product_structure_versionsOmit
   entity_photos?: Prisma.entity_photosOmit
   files?: Prisma.filesOmit
+  hr_accounts?: Prisma.hr_accountsOmit
+  hr_account_entries?: Prisma.hr_account_entriesOmit
+  hr_vales?: Prisma.hr_valesOmit
   cargo_transfer_items?: Prisma.cargo_transfer_itemsOmit
   cargo_transfers?: Prisma.cargo_transfersOmit
   delivery_notes?: Prisma.delivery_notesOmit

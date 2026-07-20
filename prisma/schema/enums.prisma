@@ -229,9 +229,13 @@ enum InstallmentStatus {
 }
 
 enum PartyType {
-  CUSTOMER
-  SUPPLIER
-  EMPLOYEE
-  PARTNER
+  CUSTOMER          // Cliente
+  SUPPLIER          // Proveedor
+  EMPLOYEE          // Empleado
+  PARTNER           // Socio
+  TAX_AUTHORITY     // Ente impositivo (ARCA, IIBB, etc.)
+  UTILITY           // Servicios públicos (EPEC, gas, etc.)
+  FINANCIAL         // Entidades financieras (banco, tarjeta)
+  SERVICE_PROVIDER  // Proveedor de servicios
   @@schema("tenant")
 }

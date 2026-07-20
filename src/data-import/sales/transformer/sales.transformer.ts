@@ -17,6 +17,7 @@ export type VentasTransformado = {
   status: number;
   subtotal: number;
   exempt_amount: number;
+  taxable_base: number;
   total_taxes: number;
   total: number;
   document_taxes: {
@@ -57,9 +58,18 @@ export class VentasTransformer implements Transformer<FacturaVentaRaw, VentasTra
     const taxMap = new Map<string, taxes>(taxes.map((t) => [t.code, t]));
 
     const documentTypeMap = new Map<string, document_types>(documentTypes.map((dt) => [dt.code, dt]));
-    const documentType = documentTypeMap.get('FAV');
+    
+    // Buscar tipo de documento por categoría INVOICE o por código FAV
+    let documentType = documentTypes.find(dt => dt.category === 'INVOICE' && dt.direction === 1);
     if (!documentType) {
-      throw new Error('Tipo de documento "FAV" no encontrado en la BD');
+      documentType = documentTypeMap.get('FAV');
+    }
+    if (!documentType) {
+      // Buscar cualquier tipo de venta
+      documentType = documentTypes.find(dt => dt.direction === 1);
+    }
+    if (!documentType) {
+      throw new Error('No se encontró un tipo de documento de venta en la BD');
     }
 
     // Para manejar refs duplicadas (ej: A-00099-31012026 con múltiples filas)
@@ -125,6 +135,7 @@ export class VentasTransformer implements Transformer<FacturaVentaRaw, VentasTra
         status: 1,
         subtotal: factura.Imp_gravado,
         exempt_amount: factura.Imp_Excento,
+        taxable_base: factura.Imp_gravado,
         total_taxes: totalTaxes,
         total: factura.Imp_total,
 

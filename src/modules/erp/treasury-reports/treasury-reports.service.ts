@@ -242,4 +242,191 @@ export class TreasuryReportsService {
 
     return results.slice(0, limit);
   }
+
+  async libroIva(dateFrom?: string, dateTo?: string) {
+    const where: any = {
+      deleted_at: null,
+      status: 2,
+      document_types: {
+        affects_tax_book: true,
+      },
+    };
+
+    // Si no hay documentos con affects_tax_book, traer todos los de venta/compra
+    const documentsWithTaxBook = await this.prisma.documents.findMany({
+      where,
+      select: { id: true },
+      take: 1,
+    });
+
+    if (documentsWithTaxBook.length === 0) {
+      where.document_types = {
+        direction: { in: [1, -1] },
+      };
+    }
+
+    if (dateFrom || dateTo) {
+      where.date = {};
+      if (dateFrom) where.date.gte = new Date(dateFrom);
+      if (dateTo) where.date.lte = new Date(dateTo);
+    }
+
+    const documents = await this.prisma.documents.findMany({
+      where,
+      include: {
+        document_types: {
+          select: { code: true, description: true, direction: true }
+        },
+        business_parties: {
+          select: { name: true, tax_id: true }
+        },
+        document_taxes: {
+          include: {
+            taxes: { select: { name: true, code: true } }
+          }
+        }
+      },
+      orderBy: { date: 'asc' },
+    });
+
+    return documents.map(doc => ({
+      id: doc.id,
+      date: doc.date,
+      number: doc.number,
+      type_code: doc.document_types?.code,
+      type_description: doc.document_types?.description,
+      direction: doc.document_types?.direction,
+      party_name: doc.business_parties?.name || '—',
+      party_tax_id: doc.business_parties?.tax_id || '—',
+      subtotal: Number(doc.subtotal),
+      total_taxes: Number(doc.total_taxes),
+      total: Number(doc.total),
+      taxable_base: Number(doc.taxable_base || doc.subtotal),
+      taxes: doc.document_taxes.map(t => ({
+        name: t.taxes?.name,
+        code: t.taxes?.code,
+        rate: Number(t.tax_rate),
+        amount: Number(t.tax_amount)
+      }))
+    }));
+  }
+
+  async regulatoryPayments(dateFrom?: string, dateTo?: string) {
+    const where: any = {
+      deleted_at: null,
+      status: { in: ['CONFIRMED', 'PAID'] },
+      party: {
+        type: { in: ['TAX_AUTHORITY', 'UTILITY'] },
+      },
+    };
+
+    if (dateFrom || dateTo) {
+      where.date = {};
+      if (dateFrom) where.date.gte = new Date(dateFrom);
+      if (dateTo) where.date.lte = new Date(dateTo);
+    }
+
+    const payments = await this.prisma.payments.findMany({
+      where,
+      include: {
+        party: { select: { id: true, name: true, type: true } },
+      },
+      orderBy: { date: 'asc' },
+    });
+
+    const byPartyAndMonth: Record<string, {
+      party_id: string;
+      party_name: string;
+      party_type: string;
+      months: Record<string, number>;
+      total: number;
+    }> = {};
+
+    for (const p of payments) {
+      const partyId = p.party_id ?? 'unknown';
+      const partyName = p.party?.name ?? 'Sin ente';
+      const partyType = p.party?.type ?? 'UNKNOWN';
+      const monthKey = p.date.toISOString().slice(0, 7);
+      const amount = Number(p.amount);
+
+      if (!byPartyAndMonth[partyId]) {
+        byPartyAndMonth[partyId] = {
+          party_id: partyId,
+          party_name: partyName,
+          party_type: partyType,
+          months: {},
+          total: 0,
+        };
+      }
+
+      byPartyAndMonth[partyId].months[monthKey] =
+        (byPartyAndMonth[partyId].months[monthKey] ?? 0) + amount;
+      byPartyAndMonth[partyId].total += amount;
+    }
+
+    const allMonths = [...new Set(payments.map(p => p.date.toISOString().slice(0, 7)))].sort();
+
+    return {
+      months: allMonths,
+      parties: Object.values(byPartyAndMonth).sort((a, b) => b.total - a.total),
+    };
+  }
+
+  async utilityPayments(dateFrom?: string, dateTo?: string) {
+    const where: any = {
+      deleted_at: null,
+      status: { in: ['CONFIRMED', 'PAID'] },
+      party: {
+        type: 'UTILITY',
+      },
+    };
+
+    if (dateFrom || dateTo) {
+      where.date = {};
+      if (dateFrom) where.date.gte = new Date(dateFrom);
+      if (dateTo) where.date.lte = new Date(dateTo);
+    }
+
+    const payments = await this.prisma.payments.findMany({
+      where,
+      include: {
+        party: { select: { id: true, name: true, type: true } },
+      },
+      orderBy: { date: 'asc' },
+    });
+
+    const byPartyAndMonth: Record<string, {
+      party_id: string;
+      party_name: string;
+      months: Record<string, number>;
+      total: number;
+    }> = {};
+
+    for (const p of payments) {
+      const partyId = p.party_id ?? 'unknown';
+      const partyName = p.party?.name ?? 'Sin servicio';
+      const monthKey = p.date.toISOString().slice(0, 7);
+      const amount = Number(p.amount);
+
+      if (!byPartyAndMonth[partyId]) {
+        byPartyAndMonth[partyId] = {
+          party_id: partyId,
+          party_name: partyName,
+          months: {},
+          total: 0,
+        };
+      }
+
+      byPartyAndMonth[partyId].months[monthKey] =
+        (byPartyAndMonth[partyId].months[monthKey] ?? 0) + amount;
+      byPartyAndMonth[partyId].total += amount;
+    }
+
+    const allMonths = [...new Set(payments.map(p => p.date.toISOString().slice(0, 7)))].sort();
+
+    return {
+      months: allMonths,
+      parties: Object.values(byPartyAndMonth).sort((a, b) => b.total - a.total),
+    };
+  }
 }

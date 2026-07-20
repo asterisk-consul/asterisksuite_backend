@@ -243,10 +243,91 @@ export class CompaniesService {
 
         this.logger.log(`Tenant "${tenantDb}": Rol "${role.name}" → ${perms.length} permisos`);
       }
+
+      // 3. Create default document types
+      await this.seedDocumentTypesForTenant(prisma);
     } finally {
       await prisma.$disconnect();
       await pool.end();
     }
+  }
+
+  // ─── Document Types seed for new tenant ──────────────────────────
+
+  private async seedDocumentTypesForTenant(prisma: any): Promise<void> {
+    const documentTypes = [
+      // FACTURAS DE VENTA
+      { code: 'FA-A', description: 'Factura A - Responsable Inscripto', direction: 1, category: 'INVOICE', letter_type: 'A', afip_code: '01', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'FB-A', description: 'Factura B - Consumidor Final', direction: 1, category: 'INVOICE', letter_type: 'B', afip_code: '06', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'FC-A', description: 'Factura C - Exento', direction: 1, category: 'INVOICE', letter_type: 'C', afip_code: '11', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'FX-A', description: 'Factura X - Comprobante interno', direction: 1, category: 'INVOICE', letter_type: 'X', afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: false },
+
+      // NOTAS DE CRÉDITO VENTA
+      { code: 'NCA', description: 'Nota de Crédito A', direction: 1, category: 'CREDIT_NOTE', letter_type: 'A', afip_code: '128', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'NCB', description: 'Nota de Crédito B', direction: 1, category: 'CREDIT_NOTE', letter_type: 'B', afip_code: '132', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+
+      // NOTAS DE DÉBITO VENTA
+      { code: 'NDA', description: 'Nota de Débito A', direction: 1, category: 'DEBIT_NOTE', letter_type: 'A', afip_code: '135', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
+      { code: 'NDB', description: 'Nota de Débito B', direction: 1, category: 'DEBIT_NOTE', letter_type: 'B', afip_code: '139', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
+
+      // FACTURAS DE COMPRA
+      { code: 'FA-C', description: 'Factura A Compra - Proveedor RI', direction: -1, category: 'INVOICE', letter_type: 'A', afip_code: '01', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'FB-C', description: 'Factura B Compra - Proveedor CF', direction: -1, category: 'INVOICE', letter_type: 'B', afip_code: '06', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'FC-C', description: 'Factura C Compra - Proveedor Exento', direction: -1, category: 'INVOICE', letter_type: 'C', afip_code: '11', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+
+      // NOTAS DE COMPRA
+      { code: 'NCA-C', description: 'Nota de Crédito Compra A', direction: -1, category: 'CREDIT_NOTE', letter_type: 'A', afip_code: '128', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'NDA-C', description: 'Nota de Débito Compra A', direction: -1, category: 'DEBIT_NOTE', letter_type: 'A', afip_code: '135', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
+
+      // ÓRDENES
+      { code: 'OV', description: 'Orden de Venta', direction: 1, category: 'ORDER', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
+      { code: 'OC', description: 'Orden de Compra', direction: -1, category: 'ORDER', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
+
+      // PRESUPUESTOS
+      { code: 'PRES', description: 'Presupuesto', direction: 1, category: 'QUOTE', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
+
+      // RECIBOS
+      { code: 'REC', description: 'Recibo de Pago', direction: 1, category: 'RECEIPT', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false },
+
+      // REMITOS
+      { code: 'REM-V', description: 'Remito de Venta', direction: 1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
+      { code: 'REM-C', description: 'Remito de Compra', direction: -1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
+      { code: 'REM-T', description: 'Remito de Traslado', direction: 1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
+    ];
+
+    for (const dt of documentTypes) {
+      await prisma.document_types.upsert({
+        where: { code: dt.code },
+        update: {
+          description: dt.description,
+          direction: dt.direction,
+          category: dt.category,
+          letter_type: dt.letter_type,
+          afip_code: dt.afip_code,
+          requires_cae: dt.requires_cae,
+          is_electronic: dt.is_electronic,
+          affects_stock: dt.affects_stock,
+          affects_accounting: dt.affects_accounting,
+          affects_tax_book: dt.affects_tax_book,
+        },
+        create: {
+          code: dt.code,
+          description: dt.description,
+          direction: dt.direction,
+          category: dt.category,
+          letter_type: dt.letter_type,
+          afip_code: dt.afip_code,
+          requires_cae: dt.requires_cae,
+          is_electronic: dt.is_electronic,
+          affects_stock: dt.affects_stock,
+          affects_accounting: dt.affects_accounting,
+          affects_tax_book: dt.affects_tax_book,
+          active: true,
+        },
+      });
+    }
+
+    this.logger.log(`Tenant: ${documentTypes.length} tipos de documento creados`);
   }
 
   // ─── Assign admin role to creator ──────────────────────────────
