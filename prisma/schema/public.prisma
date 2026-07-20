@@ -68,7 +68,6 @@ model users {
   cargo_transfers           cargo_transfers[]
   delivery_notes            delivery_notes[]
   dispatch_orders           dispatch_orders[]
-  files                     files[]
   pallets                   pallets[]
   picking_orders            picking_orders[]
   refreshTokens             refresh_tokens[]

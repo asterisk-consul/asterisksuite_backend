@@ -4,6 +4,7 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RequestContextInterceptor } from './common/interceptors/request-context.interceptor.js';
 import * as express from 'express';
+import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,10 @@ async function bootstrap() {
   // ✅ Aumentar límite de body para uploads (50MB)
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+  // ✅ Servir archivos estáticos desde /uploads
+  const uploadsPath = path.resolve(process.cwd(), 'uploads');
+  app.use('/uploads', express.static(uploadsPath));
 
   // Un solo enableCors con todos los orígenes
   app.enableCors({

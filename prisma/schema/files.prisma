@@ -32,6 +32,5 @@ model files {
   updated_by       String?         @db.Uuid
   deleted_by       String?         @db.Uuid
   entity_photos    entity_photos[]
-  users            users?          @relation(fields: [uploaded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    @@schema("tenant")
+  @@schema("tenant")
 }
