@@ -45,17 +45,15 @@ export class PurchasesService {
     return this.db.getClientForCurrentContext();
   }
 
-  private readonly documentTypeCodeMap: Record<DocumentTypeFilter, string> = {
-    [DocumentTypeFilter.INVOICE]: 'COM',
-    [DocumentTypeFilter.CREDIT_NOTE]: 'NC',
-    [DocumentTypeFilter.DEBIT_NOTE]: 'ND',
-  };
-
   /**
-   * Códigos internos válidos para documentos de COMPRA.
-   * Se usa como whitelist para que nunca se filtren documentos de compra.
+   * Mapa de filtros públicos (enum) a categorías internas de documento.
+   * Las categorías coinciden con los valores del campo `category` en document_types.
    */
-  private readonly purchaseCodes = Object.values(this.documentTypeCodeMap);
+  private readonly categoryMap: Record<DocumentTypeFilter, string> = {
+    [DocumentTypeFilter.INVOICE]: 'INVOICE',
+    [DocumentTypeFilter.CREDIT_NOTE]: 'CREDIT_NOTE',
+    [DocumentTypeFilter.DEBIT_NOTE]: 'DEBIT_NOTE',
+  };
 
   async getPurchaseSummary(
     query: QueryPurchasesDto,
@@ -107,7 +105,7 @@ export class PurchasesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
       const isInvoice = sign === 1;
 
       const documentSubtotal = Number(doc.subtotal) * sign;
@@ -211,7 +209,7 @@ export class PurchasesService {
     const negTotal = documents.reduce((sum, doc) => {
       if (!doc.document_types) return sum;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
 
       if (sign === -1) {
         return sum + Number(doc.subtotal);
@@ -296,7 +294,7 @@ export class PurchasesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
 
       const productTotal =
         doc.document_items.reduce((sum, item) => {
@@ -479,7 +477,7 @@ export class PurchasesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
 
       const transactionType = sign === 1 ? 'Compra' : 'Nota Crédito/Débito';
 
@@ -565,7 +563,7 @@ export class PurchasesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
 
       const subtotal = Number(doc.subtotal) * sign;
 
@@ -623,7 +621,7 @@ export class PurchasesService {
             documents: {
               document_types: {
                 active: true,
-                code: { in: this.purchaseCodes },
+                direction: -1,
               },
             },
           },
@@ -649,12 +647,10 @@ export class PurchasesService {
   private buildWhereCondition(query: QueryPurchasesDto): any {
     const where: any = {};
     if (query.documentTypeFilter) {
-      // Filtro específico: un solo tipo de documento de venta
-      const internalCode = this.documentTypeCodeMap[query.documentTypeFilter];
-      where.document_types = { code: internalCode };
+      const category = this.categoryMap[query.documentTypeFilter];
+      where.document_types = { direction: -1, category };
     } else {
-      // Sin filtro: traer todos los tipos de venta (whitelist)
-      where.document_types = { code: { in: this.purchaseCodes } };
+      where.document_types = { direction: -1 };
     }
 
     if (query) {
@@ -690,35 +686,13 @@ export class PurchasesService {
     return where;
   }
 
-  private getDocumentSign(documentCode: string): number {
-    const positiveDocuments = [
-      'FC',
-      'FACT',
-      'COM',
-      'FCA',
-      'FCB',
-      'FCC',
-      'FCE',
-      'FCR',
-    ];
-
-    const negativeDocuments = [
-      'NC',
-      'ND',
-      'CREDIT',
-      'NOTA_CREDITO',
-      'NDC',
-      'NDD',
-    ];
-
-    if (positiveDocuments.includes(documentCode)) {
-      return 1;
-    }
-
-    if (negativeDocuments.includes(documentCode)) {
-      return -1;
-    }
-
+  /**
+   * Retorna el signo contable del documento según su categoría:
+   *  1 → suma (INVOICE, DEBIT_NOTE)
+   * -1 → resta (CREDIT_NOTE)
+   */
+  private getDocumentSign(category: string | null): number {
+    if (category === 'CREDIT_NOTE') return -1;
     return 1;
   }
 }

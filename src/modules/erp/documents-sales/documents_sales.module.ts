@@ -6,13 +6,13 @@ import { ProductPricingModule } from '../pricing/product-pricing/product-pricing
 import { SalesReportModule } from './sales-reports/sales_reports.module';
 import { DocumentsSalesItemsService } from './documents-sales-items.service';
 import { DocumentsSalesTotalsService } from './documents-sales-totals.service';
+import { CurrentAccountsModule } from '../current-accounts/current-accounts.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, SalesReportModule],
+  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule],
   controllers: [DocumentsSalesController],
   providers: [
     DocumentsSalesService,
-    // ← ProductPriceService eliminado, viene via ProductPricingModule
     DocumentsSalesItemsService,
     DocumentsSalesTotalsService,
   ],

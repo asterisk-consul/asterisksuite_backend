@@ -140,6 +140,9 @@ export class PricingEngineService {
       },
     });
 
+    console.log('[pricing] productId:', productId);
+    console.log('[pricing] product.product_taxes:', product?.product_taxes);
+
     if (!product) {
       throw new NotFoundException('Producto no encontrado');
     }
@@ -205,6 +208,8 @@ export class PricingEngineService {
         taxAmount = round2(taxableBase * (taxRate / 100));
       }
 
+      console.log('[pricing] tax:', tax.name, 'rate:', taxRate, 'amount:', taxAmount, 'included:', isIncluded);
+
       return {
         tax_id: tax.id,
 
@@ -219,6 +224,7 @@ export class PricingEngineService {
     });
 
     const totalTaxes = round2(taxes.reduce((acc, tax) => acc + tax.tax_amount, 0));
+    console.log('[pricing] totalTaxes:', totalTaxes);
 
     const total = round2(taxableBase + totalTaxes);
 

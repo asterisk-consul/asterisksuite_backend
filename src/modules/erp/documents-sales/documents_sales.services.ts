@@ -12,6 +12,8 @@ import { DocumentsSalesItemsService } from './documents-sales-items.service';
 
 import { DocumentsSalesTotalsService } from './documents-sales-totals.service';
 
+import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
+
 import { ItemInput } from './interfaces/item-input.interface';
 
 const STATUS_DRAFT = 0;
@@ -24,7 +26,6 @@ const STATUS_CANCELLED = 3;
 
 @Injectable()
 export class DocumentsSalesService {
-  private readonly SALE_CODES = ['VEN', 'NCV', 'NDV'];
 
   constructor(
     private readonly db: PrismaService,
@@ -32,6 +33,8 @@ export class DocumentsSalesService {
     private readonly itemsService: DocumentsSalesItemsService,
 
     private readonly totalsService: DocumentsSalesTotalsService,
+
+    private readonly currentAccountsService: CurrentAccountsService,
   ) {}
 
   private get prisma() {
@@ -322,9 +325,7 @@ export class DocumentsSalesService {
     return this.prisma.documents.findMany({
       where: {
         document_types: {
-          code: {
-            in: this.SALE_CODES,
-          },
+          direction: 1,
         },
 
         ...(documentTypeId
@@ -373,7 +374,7 @@ export class DocumentsSalesService {
     const docs = await this.prisma.documents.findMany({
       where: {
         document_types: {
-          code: { in: this.SALE_CODES },
+          direction: 1,
         },
         status: 2,
         deleted_at: null,
@@ -454,7 +455,10 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // GENERAR BORRADORES DESDE VIAJE
   // ─────────────────────────────────────────────
-  async generateDraftsFromTrip(tripId: string, overrideDocumentTypeId?: string): Promise<{ created: number; skipped: number }> {
+  async generateDraftsFromTrip(
+    tripId: string,
+    overrideDocumentTypeId?: string,
+  ): Promise<{ created: number; skipped: number }> {
     const trip = await this.prisma.trips.findUnique({
       where: {
         id: tripId,
@@ -782,52 +786,24 @@ export class DocumentsSalesService {
       },
     });
 
-    // Crear entrada DEBIT en cuenta corriente del tercero
-    if (doc.party_id) {
+    // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
+    if (doc.party_id && doc.document_type?.affects_accounting) {
       const partyType = doc.document_type?.code?.startsWith('VEN') ? 'CUSTOMER' : 'SUPPLIER';
-      let currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: doc.party_id,
-            currency_code: doc.currency_code,
-          },
-        },
-      });
-
-      if (!currentAccount) {
-        currentAccount = await this.prisma.current_accounts.create({
-          data: {
-            party_id: doc.party_id,
-            party_type: partyType,
-            currency_code: doc.currency_code,
-            balance: 0,
-          },
-        });
-      }
-
-      const currentBalance = currentAccount.balance.toNumber();
       const docTotal = doc.total.toNumber();
-      const balanceAfter = currentBalance - docTotal;
 
-      await this.prisma.current_account_entries.create({
-        data: {
-          current_account_id: currentAccount.id,
-          type: 'DEBIT',
-          amount: docTotal,
+      await this.currentAccountsService.addEntry(
+        {
+          party_id: doc.party_id,
+          party_type: partyType,
           currency_code: doc.currency_code,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
+          type: 'INVOICE',
+          amount: docTotal,
           description: `Factura venta #${doc.number}`,
           reference_type: 'document',
           reference_id: doc.id,
-          date: new Date(),
         },
-      });
-
-      await this.prisma.current_accounts.update({
-        where: { id: currentAccount.id },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
+        'system',
+      );
     }
 
     return this.prisma.documents.findUnique({ where: { id } });
@@ -851,42 +827,24 @@ export class DocumentsSalesService {
       },
     });
 
-    // Revertir entrada DEBIT en cuenta corriente
-    if (doc.party_id) {
-      const currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: doc.party_id,
-            currency_code: doc.currency_code,
-          },
+    // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
+    if (doc.party_id && doc.document_type?.affects_accounting) {
+      const partyType = doc.document_type?.code?.startsWith('VEN') ? 'CUSTOMER' : 'SUPPLIER';
+      const docTotal = doc.total.toNumber();
+
+      await this.currentAccountsService.addEntry(
+        {
+          party_id: doc.party_id,
+          party_type: partyType,
+          currency_code: doc.currency_code,
+          type: 'CREDIT_NOTE',
+          amount: docTotal,
+          description: `Anulación factura venta #${doc.number}`,
+          reference_type: 'document_reversal',
+          reference_id: doc.id,
         },
-      });
-
-      if (currentAccount) {
-        const currentBalance = currentAccount.balance.toNumber();
-        const docTotal = doc.total.toNumber();
-        const balanceAfter = currentBalance + docTotal;
-
-        await this.prisma.current_account_entries.create({
-          data: {
-            current_account_id: currentAccount.id,
-            type: 'DEBIT',
-            amount: docTotal,
-            currency_code: doc.currency_code,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Anulación factura venta #${doc.number}`,
-            reference_type: 'document_reversal',
-            reference_id: doc.id,
-            date: new Date(),
-          },
-        });
-
-        await this.prisma.current_accounts.update({
-          where: { id: currentAccount.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
-        });
-      }
+        'system',
+      );
     }
 
     return this.prisma.documents.findUnique({ where: { id } });

@@ -24,7 +24,6 @@ const STATUS_CANCELLED = 3;
 
 @Injectable()
 export class DocumentsPurchasesService {
-  private readonly SALE_CODES = ['COM'];
 
   constructor(
     private readonly db: PrismaService,
@@ -322,9 +321,7 @@ export class DocumentsPurchasesService {
     return this.prisma.documents.findMany({
       where: {
         document_types: {
-          code: {
-            in: this.SALE_CODES,
-          },
+          direction: -1,
         },
 
         ...(documentTypeId
@@ -416,7 +413,7 @@ export class DocumentsPurchasesService {
     const docs = await this.prisma.documents.findMany({
       where: {
         document_types: {
-          code: { in: this.SALE_CODES },
+          direction: -1,
         },
         status: 2,
         deleted_at: null,

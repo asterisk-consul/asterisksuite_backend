@@ -29,12 +29,16 @@ export class DocumentsSalesItemsService {
     currencyCode: string,
   ): Promise<ItemInput[]> {
     const docTypeTaxes = await this.loadDocTypeTaxes(documentTypeId);
+    console.log('[resolveItems] docTypeTaxes:', docTypeTaxes);
 
     const resolved: ItemInput[] = [];
 
     for (const item of dtoItems) {
+      console.log('[resolveItems] procesando item:', item);
+
       // ITEM LIBRE
       if (!item.product_id) {
+        console.log('[resolveItems] item libre, usando docTypeTaxes:', docTypeTaxes);
         const price = round2(item.unit_price * item.quantity);
 
         resolved.push({
@@ -100,6 +104,8 @@ export class DocumentsSalesItemsService {
         is_included_in_price: t.is_included_in_price,
       }));
 
+      console.log('[resolveItems] productTaxes:', productTaxes);
+
       const productTaxIds = new Set(productTaxes.map((t) => t.tax_id));
 
       const fallbackTaxes = docTypeTaxes
@@ -115,6 +121,9 @@ export class DocumentsSalesItemsService {
 
           is_included_in_price: false,
         }));
+
+      console.log('[resolveItems] fallbackTaxes:', fallbackTaxes);
+      console.log('[resolveItems] final taxes:', [...productTaxes, ...fallbackTaxes]);
 
       resolved.push({
         product_id: resolvedItem.product_id,

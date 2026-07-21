@@ -33,7 +33,7 @@ export class CurrentAccountsService {
     }
 
     const currentBalance = account.balance.toNumber();
-    const isDebit = ['PAYMENT', 'LOAN', 'CHECK_ISSUED', 'TRANSFER'].includes(dto.type);
+    const isDebit = ['PAYMENT', 'LOAN', 'CHECK_ISSUED', 'TRANSFER', 'INVOICE', 'DEBIT_NOTE', 'DEBIT'].includes(dto.type);
     const balanceAfter = isDebit ? currentBalance - dto.amount : currentBalance + dto.amount;
 
     const entry = await this.prisma.current_account_entries.create({

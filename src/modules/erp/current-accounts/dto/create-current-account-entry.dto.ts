@@ -10,7 +10,23 @@ export class CreateCurrentAccountEntryDto {
   @IsString()
   currency_code!: string;
 
-  @IsEnum(['PAYMENT', 'COLLECTION', 'ADVANCE', 'LOAN', 'LOAN_PAYMENT', 'ADJUSTMENT', 'TRANSFER', 'CHECK_ISSUED', 'CHECK_RECEIVED'] as const)
+  @IsEnum([
+    'PAYMENT',
+    'COLLECTION',
+    'ADVANCE',
+    'LOAN',
+    'LOAN_PAYMENT',
+    'ADJUSTMENT',
+    'TRANSFER',
+    'CHECK_ISSUED',
+    'CHECK_RECEIVED',
+    'INVOICE',
+    'CREDIT_NOTE',
+    'DEBIT_NOTE',
+    'NO_DEBIT',
+    'DEBIT',
+    'CREDIT'
+  ] as const)
   type!: string;
 
   @IsNumber()
