@@ -12,6 +12,8 @@ import { DocumentsPurchasesItemsService } from './documents-purchases-items-serv
 
 import { DocumentsPurchasesTotalsService } from './documents-purchases-totals';
 
+import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
+
 import { ItemInput } from '../documents-sales/interfaces/item-input.interface';
 
 const STATUS_DRAFT = 0;
@@ -31,6 +33,8 @@ export class DocumentsPurchasesService {
     private readonly itemsService: DocumentsPurchasesItemsService,
 
     private readonly totalsService: DocumentsPurchasesTotalsService,
+
+    private readonly currentAccountsService: CurrentAccountsService,
   ) {}
 
   private get prisma() {
@@ -746,7 +750,7 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string) {
+  async confirm(id: string, userId: string) {
     const doc = await this.findOne(id);
 
     if (doc.status === STATUS_CONFIRMED) {
@@ -765,52 +769,31 @@ export class DocumentsPurchasesService {
       },
     });
 
-    // Crear entrada DEBIT en cuenta corriente del tercero
-    if (doc.party_id) {
-      const partyType = 'SUPPLIER';
-      let currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: doc.party_id,
-            currency_code: doc.currency_code,
-          },
-        },
-      });
+    // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
+    console.log('[confirm-purchases] doc.party_id:', doc.party_id)
+    console.log('[confirm-purchases] doc.document_types:', doc.document_types)
+    console.log('[confirm-purchases] affects_accounting:', doc.document_types?.affects_accounting)
+    console.log('[confirm-purchases] direction:', doc.document_types?.direction)
 
-      if (!currentAccount) {
-        currentAccount = await this.prisma.current_accounts.create({
-          data: {
-            party_id: doc.party_id,
-            party_type: partyType,
-            currency_code: doc.currency_code,
-            balance: 0,
-          },
-        });
-      }
-
-      const currentBalance = currentAccount.balance.toNumber();
+    if (doc.party_id && doc.document_types?.affects_accounting) {
+      const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
       const docTotal = doc.total.toNumber();
-      const balanceAfter = currentBalance + docTotal;
 
-      await this.prisma.current_account_entries.create({
-        data: {
-          current_account_id: currentAccount.id,
-          type: 'DEBIT',
-          amount: docTotal,
+      console.log('[confirm-purchases] CREATING current account entry...')
+      await this.currentAccountsService.addEntry(
+        {
+          party_id: doc.party_id,
+          party_type: partyType,
           currency_code: doc.currency_code,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
+          type: 'INVOICE',
+          amount: docTotal,
           description: `Factura compra #${doc.number}`,
           reference_type: 'document',
           reference_id: doc.id,
-          date: new Date(),
         },
-      });
-
-      await this.prisma.current_accounts.update({
-        where: { id: currentAccount.id },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
+        userId,
+      );
+      console.log('[confirm-purchases] Current account entry CREATED successfully')
     }
 
     return this.prisma.documents.findUnique({ where: { id } });
@@ -819,7 +802,7 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CANCEL
   // ─────────────────────────────────────────────
-  async cancel(id: string) {
+  async cancel(id: string, userId: string) {
     const doc = await this.findOne(id);
 
     if (doc.status === STATUS_CANCELLED) {
@@ -834,42 +817,29 @@ export class DocumentsPurchasesService {
       },
     });
 
-    // Revertir entrada DEBIT en cuenta corriente
-    if (doc.party_id) {
-      const currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: doc.party_id,
-            currency_code: doc.currency_code,
-          },
+    // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
+    console.log('[cancel-purchases] doc.party_id:', doc.party_id)
+    console.log('[cancel-purchases] affects_accounting:', doc.document_types?.affects_accounting)
+
+    if (doc.party_id && doc.document_types?.affects_accounting) {
+      const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
+      const docTotal = doc.total.toNumber();
+
+      console.log('[cancel-purchases] CREATING reversal entry...')
+      await this.currentAccountsService.addEntry(
+        {
+          party_id: doc.party_id,
+          party_type: partyType,
+          currency_code: doc.currency_code,
+          type: 'CREDIT_NOTE',
+          amount: docTotal,
+          description: `Anulación factura compra #${doc.number}`,
+          reference_type: 'document_reversal',
+          reference_id: doc.id,
         },
-      });
-
-      if (currentAccount) {
-        const currentBalance = currentAccount.balance.toNumber();
-        const docTotal = doc.total.toNumber();
-        const balanceAfter = currentBalance - docTotal;
-
-        await this.prisma.current_account_entries.create({
-          data: {
-            current_account_id: currentAccount.id,
-            type: 'DEBIT',
-            amount: docTotal,
-            currency_code: doc.currency_code,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Anulación factura compra #${doc.number}`,
-            reference_type: 'document_reversal',
-            reference_id: doc.id,
-            date: new Date(),
-          },
-        });
-
-        await this.prisma.current_accounts.update({
-          where: { id: currentAccount.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
-        });
-      }
+        userId,
+      );
+      console.log('[cancel-purchases] Reversal entry CREATED successfully')
     }
 
     return this.prisma.documents.findUnique({ where: { id } });

@@ -767,52 +767,60 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string) {
-    const doc = await this.findOne(id);
+  async confirm(id: string, userId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const doc = await this.findOne(id);
 
-    if (doc.status === STATUS_CONFIRMED) {
-      throw new BadRequestException('El documento ya está confirmado');
-    }
+      if (doc.status === STATUS_CONFIRMED) {
+        throw new BadRequestException('El documento ya está confirmado');
+      }
 
-    if (!doc.document_items.length) {
-      throw new BadRequestException('El documento no tiene ítems');
-    }
+      if (!doc.document_items.length) {
+        throw new BadRequestException('El documento no tiene ítems');
+      }
 
-    await this.prisma.documents.update({
-      where: { id },
-      data: {
-        status: STATUS_CONFIRMED,
-        updated_at: new Date(),
-      },
-    });
-
-    // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
-    if (doc.party_id && doc.document_type?.affects_accounting) {
-      const partyType = doc.document_type?.code?.startsWith('VEN') ? 'CUSTOMER' : 'SUPPLIER';
-      const docTotal = doc.total.toNumber();
-
-      await this.currentAccountsService.addEntry(
-        {
-          party_id: doc.party_id,
-          party_type: partyType,
-          currency_code: doc.currency_code,
-          type: 'INVOICE',
-          amount: docTotal,
-          description: `Factura venta #${doc.number}`,
-          reference_type: 'document',
-          reference_id: doc.id,
+      await tx.documents.update({
+        where: { id },
+        data: {
+          status: STATUS_CONFIRMED,
+          updated_at: new Date(),
         },
-        'system',
-      );
-    }
+      });
 
-    return this.prisma.documents.findUnique({ where: { id } });
+      if (doc.party_id && doc.document_types?.affects_accounting) {
+        let currencyCode = doc.currency_code;
+
+        if (!currencyCode) {
+          const baseCurrency = await tx.currencies.findFirst({ where: { is_base: true } });
+          currencyCode = baseCurrency?.code ?? 'ARS';
+        }
+
+        const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
+        const docTotal = doc.total.toNumber();
+
+        await this.currentAccountsService.addEntry(
+          {
+            party_id: doc.party_id,
+            party_type: partyType,
+            currency_code: currencyCode,
+            type: 'INVOICE',
+            amount: docTotal,
+            description: `Factura venta #${doc.number}`,
+            reference_type: 'document',
+            reference_id: doc.id,
+          },
+          userId,
+        );
+      }
+
+      return this.findOne(id);
+    });
   }
 
   // ─────────────────────────────────────────────
   // CANCEL
   // ─────────────────────────────────────────────
-  async cancel(id: string) {
+  async cancel(id: string, userId: string) {
     const doc = await this.findOne(id);
 
     if (doc.status === STATUS_CANCELLED) {
@@ -828,8 +836,12 @@ export class DocumentsSalesService {
     });
 
     // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
-    if (doc.party_id && doc.document_type?.affects_accounting) {
-      const partyType = doc.document_type?.code?.startsWith('VEN') ? 'CUSTOMER' : 'SUPPLIER';
+    console.log('[cancel] doc.party_id:', doc.party_id)
+    console.log('[cancel] affects_accounting:', doc.document_types?.affects_accounting)
+    console.log('[cancel] would create entry:', !!(doc.party_id && doc.document_types?.affects_accounting))
+
+    if (doc.party_id && doc.document_types?.affects_accounting) {
+      const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
       const docTotal = doc.total.toNumber();
 
       await this.currentAccountsService.addEntry(
@@ -843,7 +855,7 @@ export class DocumentsSalesService {
           reference_type: 'document_reversal',
           reference_id: doc.id,
         },
-        'system',
+        userId,
       );
     }
 

@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:3000/api
+
+### =========================================================
+### LOGIN
+### =========================================================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+### =========================================================
+### TEST: CREATE PAYMENT - COBRO (misma data del frontend)
+### =========================================================
+
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "COLLECTION",
+  "date": "2026-07-22",
+  "party_id": "c5355b6f-7f51-469d-b6a1-3c837fff46e9",
+  "payment_method": "BANK_TRANSFER",
+  "amount": 5000,
+  "currency_code": "ARS",
+  "documents": [
+    {
+      "document_id": "bc353095-9cc2-4fd8-b163-4d70c5e890f7",
+      "amount_applied": 5000
+    }
+  ]
+}
+
+###
+
+### =========================================================
+### TEST: CREATE PAYMENT SIN DOCUMENTOS
+### =========================================================
+
+POST {{baseUrl}}/erp/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "COLLECTION",
+  "date": "2026-07-22",
+  "payment_method": "CASH",
+  "amount": 3000,
+  "currency_code": "ARS",
+  "description": "Test sin documentos"
+}
+
+###

@@ -20,10 +20,10 @@ export class CreateCurrentAccountEntryDto {
     'TRANSFER',
     'CHECK_ISSUED',
     'CHECK_RECEIVED',
+    'CHECK_BOUNCED',
     'INVOICE',
     'CREDIT_NOTE',
     'DEBIT_NOTE',
-    'NO_DEBIT',
     'DEBIT',
     'CREDIT'
   ] as const)

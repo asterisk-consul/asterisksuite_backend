@@ -15,6 +15,9 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async create(dto: CreatePaymentDto, userId: string) {
+    console.log('[payments] create DTO:', JSON.stringify(dto, null, 2))
+    console.log('[payments] create userId:', userId)
+
     if (dto.documents && dto.documents.length > 0 && !dto.party_id) {
       throw new BadRequestException('party_id es requerido cuando se aplican documentos');
     }
@@ -25,18 +28,19 @@ export class PaymentsService {
     });
     const nextNumber = (lastPayment?.number ?? 0) + 1;
 
-    const payment = await this.prisma.payments.create({
-      data: {
-        number: nextNumber,
-        type: dto.type as any,
-        date: new Date(dto.date),
-        party_id: dto.party_id,
-        party_type: dto.party_type,
-        payment_method: dto.payment_method as any,
-        amount: dto.amount,
-        currency_code: dto.currency_code,
-        exchange_rate: dto.exchange_rate,
-        rate_type: dto.rate_type as any,
+    try {
+      const payment = await this.prisma.payments.create({
+        data: {
+          number: nextNumber,
+          type: dto.type as any,
+          date: new Date(dto.date),
+          party_id: dto.party_id,
+          party_type: dto.party_type,
+          payment_method: dto.payment_method as any,
+          amount: dto.amount,
+          currency_code: dto.currency_code,
+          exchange_rate: dto.exchange_rate,
+          rate_type: dto.rate_type as any,
         converted_amount: dto.converted_amount,
         exchange_note: dto.exchange_note,
         description: dto.description,
@@ -63,6 +67,10 @@ export class PaymentsService {
     }
 
     return payment;
+    } catch (error) {
+      console.error('[payments] create ERROR:', error)
+      throw error
+    }
   }
 
   // ═══════════════════════════════════════════

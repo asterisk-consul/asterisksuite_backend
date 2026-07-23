@@ -3,7 +3,8 @@ import { DocumentsPurchasesService } from './documents_purchases.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 
 @Controller('documents/purchases-documents')
 @UseGuards(JwtAuthGuard)
@@ -42,14 +43,14 @@ export class DocumentsPurchasesController {
 
   // @RequirePermissions('documents-purchases.confirm')
   @Patch(':id/confirm')
-  confirm(@Param('id') id: string) {
-    return this.service.confirm(id);
+  confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.confirm(id, user.id);
   }
 
   // @RequirePermissions('documents-purchases.cancel')
   @Patch(':id/cancel')
-  cancel(@Param('id') id: string) {
-    return this.service.cancel(id);
+  cancel(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.cancel(id, user.id);
   }
 
   // @RequirePermissions('documents-purchases.delete')

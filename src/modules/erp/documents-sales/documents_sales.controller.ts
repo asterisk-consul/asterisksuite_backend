@@ -3,6 +3,8 @@ import { DocumentsSalesService } from './documents_sales.services';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 
 @UseGuards(JwtAuthGuard)
 @Controller('documents/sales')
@@ -75,14 +77,14 @@ export class DocumentsSalesController {
 
   @Patch(':id/confirm')
   // @RequirePermissions('documents.confirm')
-  confirm(@Param('id') id: string) {
-    return this.service.confirm(id);
+  confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.confirm(id, user.id);
   }
 
   @Patch(':id/cancel')
   // @RequirePermissions('documents.cancel')
-  cancel(@Param('id') id: string) {
-    return this.service.cancel(id);
+  cancel(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.cancel(id, user.id);
   }
 
   @Delete(':id')

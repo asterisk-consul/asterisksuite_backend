@@ -18,6 +18,8 @@ export class PaymentsController {
   @Post()
   // @RequirePermissions('treasury.payments.create')
   create(@Body() dto: CreatePaymentDto, @CurrentUser() user: AuthUser) {
+    console.log('[payments-controller] create called, dto:', JSON.stringify(dto, null, 2))
+    console.log('[payments-controller] user.id:', user.id)
     return this.paymentsService.create(dto, user.id);
   }
 

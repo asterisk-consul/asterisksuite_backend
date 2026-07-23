@@ -5,9 +5,10 @@ import { DocumentsPurchasesController } from './documents_puerchases.controller'
 import { DocumentsPurchasesItemsService } from './documents-purchases-items-services';
 import { DocumentsPurchasesTotalsService } from './documents-purchases-totals';
 import { PrismaModule } from '@/prisma/prisma.module';
+import { CurrentAccountsModule } from '../current-accounts/current-accounts.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule],
+  imports: [PrismaModule, ProductPricingModule, CurrentAccountsModule],
   controllers: [DocumentsPurchasesController],
   providers: [DocumentsPurchasesService, DocumentsPurchasesItemsService, DocumentsPurchasesTotalsService],
   exports: [DocumentsPurchasesService],
