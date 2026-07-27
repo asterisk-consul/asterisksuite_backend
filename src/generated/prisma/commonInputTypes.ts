@@ -748,6 +748,23 @@ export type EnumCompanyRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumCompanyRoleFilter<$PrismaModel>
 }
 
+export type EnumFiscalModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FiscalMode | Prisma.EnumFiscalModeFieldRefInput<$PrismaModel>
+  in?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFiscalModeFilter<$PrismaModel> | $Enums.FiscalMode
+}
+
+export type EnumFiscalModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FiscalMode | Prisma.EnumFiscalModeFieldRefInput<$PrismaModel>
+  in?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFiscalModeWithAggregatesFilter<$PrismaModel> | $Enums.FiscalMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFiscalModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFiscalModeFilter<$PrismaModel>
+}
+
 export type EnumPermissionEffectFilter<$PrismaModel = never> = {
   equals?: $Enums.PermissionEffect | Prisma.EnumPermissionEffectFieldRefInput<$PrismaModel>
   in?: $Enums.PermissionEffect[] | Prisma.ListEnumPermissionEffectFieldRefInput<$PrismaModel>
@@ -1707,6 +1724,23 @@ export type NestedEnumCompanyRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCompanyRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCompanyRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumFiscalModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FiscalMode | Prisma.EnumFiscalModeFieldRefInput<$PrismaModel>
+  in?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFiscalModeFilter<$PrismaModel> | $Enums.FiscalMode
+}
+
+export type NestedEnumFiscalModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FiscalMode | Prisma.EnumFiscalModeFieldRefInput<$PrismaModel>
+  in?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FiscalMode[] | Prisma.ListEnumFiscalModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFiscalModeWithAggregatesFilter<$PrismaModel> | $Enums.FiscalMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFiscalModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFiscalModeFilter<$PrismaModel>
 }
 
 export type NestedEnumPermissionEffectFilter<$PrismaModel = never> = {

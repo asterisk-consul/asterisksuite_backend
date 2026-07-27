@@ -101,6 +101,7 @@ export const ModelName = {
   dispatch_rates: 'dispatch_rates',
   system_modules: 'system_modules',
   locations: 'locations',
+  operation_taxes: 'operation_taxes',
   pallet_items: 'pallet_items',
   pallets: 'pallets',
   business_parties: 'business_parties',
@@ -125,11 +126,14 @@ export const ModelName = {
   audit_logs_public: 'audit_logs_public',
   users: 'users',
   company_users: 'company_users',
+  company_tax_settings: 'company_tax_settings',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
   business_user_roles: 'business_user_roles',
   user_permission_overrides: 'user_permission_overrides',
+  tax_categories: 'tax_categories',
+  tax_category_taxes: 'tax_category_taxes',
   product_taxes: 'product_taxes',
   taxes: 'taxes',
   bank_accounts: 'bank_accounts',
@@ -1066,6 +1070,21 @@ export const LocationsScalarFieldEnum = {
 export type LocationsScalarFieldEnum = (typeof LocationsScalarFieldEnum)[keyof typeof LocationsScalarFieldEnum]
 
 
+export const Operation_taxesScalarFieldEnum = {
+  id: 'id',
+  tax_id: 'tax_id',
+  jurisdiction: 'jurisdiction',
+  document_type: 'document_type',
+  rate: 'rate',
+  min_amount: 'min_amount',
+  active: 'active',
+  created_at: 'created_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type Operation_taxesScalarFieldEnum = (typeof Operation_taxesScalarFieldEnum)[keyof typeof Operation_taxesScalarFieldEnum]
+
+
 export const Pallet_itemsScalarFieldEnum = {
   id: 'id',
   pallet_id: 'pallet_id',
@@ -1199,6 +1218,7 @@ export const ProductsScalarFieldEnum = {
   is_rate_type: 'is_rate_type',
   rate_id: 'rate_id',
   taxId: 'taxId',
+  tax_category_id: 'tax_category_id',
   active: 'active',
   product_type: 'product_type',
   is_composed: 'is_composed',
@@ -1424,6 +1444,9 @@ export const CompaniesScalarFieldEnum = {
   id: 'id',
   name: 'name',
   tax_id: 'tax_id',
+  vat_condition: 'vat_condition',
+  address: 'address',
+  email: 'email',
   phone: 'phone',
   subdomain: 'subdomain',
   schema_name: 'schema_name',
@@ -1496,6 +1519,20 @@ export const Company_usersScalarFieldEnum = {
 export type Company_usersScalarFieldEnum = (typeof Company_usersScalarFieldEnum)[keyof typeof Company_usersScalarFieldEnum]
 
 
+export const Company_tax_settingsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  fiscal_mode: 'fiscal_mode',
+  prices_include_tax: 'prices_include_tax',
+  show_tax_breakdown: 'show_tax_breakdown',
+  country: 'country',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_tax_settingsScalarFieldEnum = (typeof Company_tax_settingsScalarFieldEnum)[keyof typeof Company_tax_settingsScalarFieldEnum]
+
+
 export const PermissionsScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -1555,6 +1592,32 @@ export const User_permission_overridesScalarFieldEnum = {
 } as const
 
 export type User_permission_overridesScalarFieldEnum = (typeof User_permission_overridesScalarFieldEnum)[keyof typeof User_permission_overridesScalarFieldEnum]
+
+
+export const Tax_categoriesScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by'
+} as const
+
+export type Tax_categoriesScalarFieldEnum = (typeof Tax_categoriesScalarFieldEnum)[keyof typeof Tax_categoriesScalarFieldEnum]
+
+
+export const Tax_category_taxesScalarFieldEnum = {
+  id: 'id',
+  tax_category_id: 'tax_category_id',
+  tax_id: 'tax_id',
+  is_included_in_price: 'is_included_in_price',
+  active: 'active'
+} as const
+
+export type Tax_category_taxesScalarFieldEnum = (typeof Tax_category_taxesScalarFieldEnum)[keyof typeof Tax_category_taxesScalarFieldEnum]
 
 
 export const Product_taxesScalarFieldEnum = {

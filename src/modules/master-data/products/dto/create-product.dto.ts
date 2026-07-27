@@ -41,6 +41,10 @@ export class CreateProductDto {
   taxId?: string;
 
   @IsOptional()
+  @IsUUID()
+  tax_category_id?: string;
+
+  @IsOptional()
   @IsBoolean()
   active?: boolean;
 

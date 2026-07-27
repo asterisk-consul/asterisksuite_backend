@@ -29,6 +29,7 @@ model products {
   is_rate_type             Boolean           @default(false)
   rate_id                  String?           @db.Uuid
   taxId                    String?           @db.Uuid
+  tax_category_id          String?           @db.Uuid
   active                   Boolean?          @default(true)
   product_type             ProductType       @default(FINISHED_PRODUCT)
   is_composed              Boolean           @default(false)
@@ -70,6 +71,7 @@ model products {
   picking_items             picking_items[]
   product_price             product_price[]
   product_taxes             product_taxes[]
+  tax_category              tax_categories?             @relation(fields: [tax_category_id], references: [id])
   transfer_rate             transfer_rates?              @relation(fields: [rate_id], references: [id])
   warehouse_stock           warehouse_stock[]
   warehouse_stock_movements warehouse_stock_movements[]

@@ -1,4 +1,4 @@
-// src/modules/erp/documents-sales/documents_sales.service.ts
+// src/modules/erp/documents-purchases/documents_purchases.service.ts
 
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 
@@ -8,13 +8,19 @@ import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 
-import { DocumentsPurchasesItemsService } from './documents-purchases-items-services';
-
 import { DocumentsPurchasesTotalsService } from './documents-purchases-totals';
 
 import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
 
+import { TaxResolutionService } from '../tax-engine/services/tax-resolution.service';
+
+import { TaxCalculationService } from '../tax-engine/services/tax-calculation.service';
+
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+
 import { ItemInput } from '../documents-sales/interfaces/item-input.interface';
+
+import type { TaxContext } from '../tax-engine/interfaces/tax-context.interface';
 
 const STATUS_DRAFT = 0;
 
@@ -30,11 +36,13 @@ export class DocumentsPurchasesService {
   constructor(
     private readonly db: PrismaService,
 
-    private readonly itemsService: DocumentsPurchasesItemsService,
-
     private readonly totalsService: DocumentsPurchasesTotalsService,
 
     private readonly currentAccountsService: CurrentAccountsService,
+
+    private readonly taxResolution: TaxResolutionService,
+
+    private readonly taxCalculation: TaxCalculationService,
   ) {}
 
   private get prisma() {
@@ -45,6 +53,8 @@ export class DocumentsPurchasesService {
   // CREATE
   // ─────────────────────────────────────────────
   async create(dto: CreateDocumentDto) {
+    console.log('[PurchasesService] create() called with dto:', JSON.stringify(dto, null, 2))
+
     const docType = await this.prisma.document_types.findUnique({
       where: {
         id: dto.document_type_id,
@@ -59,15 +69,111 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
-    const items = await this.itemsService.resolveItems(
-      dto.items,
+    // ─── Validar compatibilidad proveedor ↔ comprobante ──────────
+    if (dto.party_id && docType.letter_type) {
+      const partner = await this.prisma.business_parties.findUnique({
+        where: { id: dto.party_id },
+        select: { vat_condition: true },
+      })
 
-      dto.document_type_id,
+      if (partner?.vat_condition) {
+        const validLetters = this.getValidLetterTypes(partner.vat_condition)
+        if (validLetters.length > 0 && !validLetters.includes(docType.letter_type)) {
+          throw new BadRequestException(
+            `El comprobante "${docType.code}" (letter_type: ${docType.letter_type}) ` +
+            `no es válido para un proveedor "${partner.vat_condition}". ` +
+            `Use comprobantes con letter_type: ${validLetters.join(', ')}`
+          )
+        }
+      }
+    }
 
-      dto.currency_code,
-    );
+    // ─── Tax Engine: resolver impuestos ──────────────────────────
+    console.log('[PurchasesService] Resolving taxes via Tax Engine...')
 
-    const totals = this.totalsService.calculate(items);
+    const company = await this.db.getDefaultClient().companies.findUnique({
+      where: { id: getCurrentCompanyId() ?? '' },
+      select: { vat_condition: true },
+    })
+
+    // ─── Validar compatibilidad emisor × receptor → letter_type ──
+    // En compras: emisor = PROVEEDOR (partner), receptor = EMPRESA (company)
+    if (company?.vat_condition && dto.party_id && docType.letter_type) {
+      const partner = await this.prisma.business_parties.findUnique({
+        where: { id: dto.party_id },
+        select: { vat_condition: true },
+      })
+
+      if (partner?.vat_condition) {
+        const expectedLetter = this.getExpectedLetterType(partner.vat_condition, company.vat_condition)
+        if (expectedLetter && docType.letter_type !== expectedLetter) {
+          throw new BadRequestException(
+            `Para emisor "${partner.vat_condition}" (proveedor) y receptor "${company.vat_condition}" (empresa), ` +
+            `el comprobante debe ser letra ${expectedLetter} (usó letra ${docType.letter_type}).`
+          )
+        }
+      }
+    }
+
+    const taxContext: TaxContext = {
+      issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
+      issuerVatCondition: company?.vat_condition ?? undefined,
+      partnerId: dto.party_id ?? undefined,
+      partnerVatCondition: undefined,
+      documentTypeId: dto.document_type_id,
+      documentLetterType: docType.letter_type ?? undefined,
+      currency: dto.currency_code ?? 'ARS',
+      date: dto.date,
+      operationType: 'PURCHASE',
+      items: dto.items.map(i => ({
+        productId: i.product_id,
+        quantity: Number(i.quantity),
+        unitPrice: Number(i.unit_price),
+      })),
+    }
+
+    const resolution = await this.taxResolution.resolve(taxContext)
+    const calculation = this.taxCalculation.calculate(resolution, taxContext.items)
+
+    console.log('[PurchasesService] Tax Engine result:', JSON.stringify(calculation.document, null, 2))
+
+    // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
+    const items: ItemInput[] = calculation.document.items.map((item, idx) => ({
+      product_id: item.productId ?? null,
+      quantity: item.quantity,
+      currency: dto.currency_code ?? 'ARS',
+      exchange_rate: 1,
+      original_unit_price: item.unitPrice,
+      unit_price: item.unitPrice,
+      converted_unit_price: item.unitPrice,
+      price: item.total,
+      total: item.total,
+      exempt_amount: item.exemptAmount,
+      taxable_base: item.taxableBase,
+      total_taxes: item.totalTaxes,
+      taxes: item.taxes.map(t => ({
+        tax_id: t.tax_id,
+        tax_rate: t.rate,
+        tax_amount: t.amount,
+        calculation_level: 'line' as const,
+        is_included_in_price: t.isIncludedInPrice,
+      })),
+    }))
+
+    // Usar totals del Tax Engine
+    const totals = {
+      subtotal: calculation.document.subtotal,
+      exempt_amount: calculation.document.exemptAmount,
+      taxable_base: calculation.document.taxableBase,
+      total_taxes: calculation.document.totalTaxes,
+      total: calculation.document.total,
+      documentTaxes: calculation.document.documentTaxes.map(t => ({
+        tax_id: t.tax_id,
+        tax_rate: t.rate,
+        taxable_base: t.taxableBase,
+        tax_amount: t.amount,
+      })),
+    }
 
     let createdId = '';
 
@@ -171,15 +277,70 @@ export class DocumentsPurchasesService {
         throw new BadRequestException('currency_code es requerido');
       }
 
-      items = await this.itemsService.resolveItems(
-        dto.items,
+      const docType = await this.prisma.document_types.findUnique({
+        where: { id: doc.document_type_id },
+      });
 
-        doc.document_type_id,
+      const company = await this.db.getDefaultClient().companies.findUnique({
+        where: { id: getCurrentCompanyId() ?? '' },
+        select: { vat_condition: true },
+      })
 
-        dto.currency_code,
-      );
+      const taxContext: TaxContext = {
+        issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
+        issuerVatCondition: company?.vat_condition ?? undefined,
+        partnerId: dto.party_id ?? doc.party_id ?? undefined,
+        partnerVatCondition: undefined,
+        documentTypeId: doc.document_type_id,
+        documentLetterType: docType?.letter_type ?? undefined,
+        currency: dto.currency_code,
+        date: dto.date ?? new Date(doc.date).toISOString(),
+        operationType: 'PURCHASE',
+        items: dto.items.map(i => ({
+          productId: i.product_id,
+          quantity: Number(i.quantity),
+          unitPrice: Number(i.unit_price),
+        })),
+      };
 
-      totals = this.totalsService.calculate(items);
+      const resolution = await this.taxResolution.resolve(taxContext);
+      const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+
+      items = calculation.document.items.map((item) => ({
+        product_id: item.productId ?? null,
+        quantity: item.quantity,
+        currency: dto.currency_code ?? 'ARS',
+        exchange_rate: 1,
+        original_unit_price: item.unitPrice,
+        unit_price: item.unitPrice,
+        converted_unit_price: item.unitPrice,
+        price: item.total,
+        total: item.total,
+        exempt_amount: item.exemptAmount,
+        taxable_base: item.taxableBase,
+        total_taxes: item.totalTaxes,
+        taxes: item.taxes.map(t => ({
+          tax_id: t.tax_id,
+          tax_rate: t.rate,
+          tax_amount: t.amount,
+          calculation_level: 'line' as const,
+          is_included_in_price: t.isIncludedInPrice,
+        })),
+      }));
+
+      totals = {
+        subtotal: calculation.document.subtotal,
+        exempt_amount: calculation.document.exemptAmount,
+        taxable_base: calculation.document.taxableBase,
+        total_taxes: calculation.document.totalTaxes,
+        total: calculation.document.total,
+        documentTaxes: calculation.document.documentTaxes.map(t => ({
+          tax_id: t.tax_id,
+          tax_rate: t.rate,
+          taxable_base: t.taxableBase,
+          tax_amount: t.amount,
+        })),
+      };
     }
 
     await this.prisma.$transaction(async (tx) => {
@@ -938,5 +1099,23 @@ export class DocumentsPurchasesService {
     });
 
     return trips.map((t) => t.id);
+  }
+
+  private getValidLetterTypes(issuerCondition: string): string[] {
+    const map: Record<string, string[]> = {
+      'RESPONSABLE_INSCRIPTO': ['A', 'B'],
+      'MONOTRIBUTO': ['C'],
+      'EXENTO': ['C'],
+    }
+    return map[issuerCondition] ?? []
+  }
+
+  private getExpectedLetterType(issuer: string, partner: string): string | null {
+    const issuerNorm = issuer.toUpperCase()
+    if (issuerNorm === 'MONOTRIBUTO' || issuerNorm === 'EXENTO') return 'C'
+
+    const partnerNorm = partner.toUpperCase()
+    if (partnerNorm === 'RI' || partnerNorm === 'RESPONSABLE_INSCRIPTO') return 'A'
+    return 'B'
   }
 }

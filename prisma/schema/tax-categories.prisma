@@ -1,0 +1,34 @@
+// ══════════════════════════════════════════════════════════
+// TAX ENGINE — Categorías fiscales de productos
+// ══════════════════════════════════════════════════════════
+
+model tax_categories {
+  id          String   @id @default(uuid()) @db.Uuid
+  code        String   @unique @db.VarChar(20)
+  name        String   @db.VarChar(100)
+  description String?  @db.VarChar(255)
+  active      Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at  DateTime?
+  created_by  String?  @db.Uuid
+
+  products       products[]
+  category_taxes tax_category_taxes[]
+
+  @@schema("tenant")
+}
+
+model tax_category_taxes {
+  id                    String  @id @default(uuid()) @db.Uuid
+  tax_category_id       String  @db.Uuid
+  tax_id                String  @db.Uuid
+  is_included_in_price  Boolean @default(false)
+  active                Boolean @default(true)
+
+  tax_category tax_categories @relation(fields: [tax_category_id], references: [id])
+  tax          taxes          @relation(fields: [tax_id], references: [id])
+
+  @@unique([tax_category_id, tax_id])
+  @@schema("tenant")
+}

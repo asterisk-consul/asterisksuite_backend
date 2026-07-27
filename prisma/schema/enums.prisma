@@ -242,3 +242,13 @@ enum PartyType {
   SERVICE_PROVIDER  // Proveedor de servicios
   @@schema("tenant")
 }
+
+// ══════════════════════════════════════════════════════════
+// TAX ENGINE — Enums
+// ══════════════════════════════════════════════════════════
+
+enum FiscalMode {
+  SIMPLE     // Precio final, sin discriminación de impuestos
+  COMPLETE   // Motor fiscal completo: IVA, percepciones, etc.
+  @@schema("public")
+}

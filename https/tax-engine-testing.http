@@ -1,0 +1,777 @@
+@baseUrl = http://localhost:3000/api
+@tenant = dev
+
+# =====================================================
+# TAX ENGINE — Testing Completo (IDs Hardcodeados)
+# =====================================================
+
+# ==============================
+# 📋 IDs HARDCODEADOS
+# ==============================
+
+# --- Document Types VENTA ---
+@docType_FA_VENTA  = ee0dc43c-a3da-4b05-979d-9a6a4497b34b
+@docType_FB_VENTA  = 9b8f9096-5109-425a-9f27-80899a95241e
+@docType_FC_VENTA  = b532858c-6b9c-469d-9816-7481bb1a1a35
+@docType_FX_VENTA  = 0bcbea63-d6a7-4ff7-b110-86414fe41bc0
+
+# --- Document Types COMPRA ---
+@docType_FA_COMPRA = bea7ab3b-b292-4fd2-98c1-95d86b54b5df
+@docType_FB_COMPRA = e8adcdfa-07c3-4296-a092-d2edfcc3000f
+@docType_FC_COMPRA = d5d4dbe8-32b9-4dc4-96d6-cb9a0efe0fbb
+
+# --- Products ---
+@prod_EXENTO   = 817cfb23-4f92-46e6-9f5e-97fc91774224
+@prod_IVA27    = 425faaa2-9774-4fbe-96bb-15c58ddca74b
+@prod_IVA105   = b7f71351-d9a2-4cc4-a73c-283e76196565
+@prod_IVA21    = f4a9ec9c-cdde-4563-a8e5-85c66def6a6c
+
+# --- Business Parties ---
+@party_CF             = 375bacbf-c331-40f3-9f47-5e129a57f62d
+@party_PROV_EXENTO    = 8daf5dc5-0d63-4d6d-b541-c92177102665
+@party_PROV_RI        = e4608877-1323-4a53-880b-8d50b98b920f
+@party_CLI_EXENTO     = 8cf06dad-3998-4674-bbbe-95dffd352ec6
+@party_CLI_MONO       = 278859ca-e731-4274-bccc-d76d1d50ee90
+@party_CLI_RI         = 57cc8a9c-d28c-4dcd-b382-18ac2acd1adc
+
+# ==============================
+# 1. LOGIN + SETUP
+# ==============================
+
+### 🔐 Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+### 👤 Obtener companyId del usuario actual
+# @name me
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+###
+@companyId = {{me.response.body.companies.0.id}}
+
+### 📋 Verificar/crear company_tax_settings
+# @name getSettings
+GET {{baseUrl}}/company-tax-settings?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+###
+@settingsId = {{getSettings.response.body.id}}
+
+# =====================================================
+# 3. CONFIGURAR COMPANY → COMPLETE
+# =====================================================
+
+### ⚙️ Activar modo COMPLETE (IVA + IIBB)
+PATCH {{baseUrl}}/company-tax-settings
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "company_id": "{{companyId}}",
+  "fiscal_mode": "COMPLETE",
+  "prices_include_tax": false,
+  "show_tax_breakdown": true
+}
+
+### ✅ Verificar configuración
+GET {{baseUrl}}/company-tax-settings?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =====================================================
+# 4. TAX ENGINE PREVIEW — MODO COMPLETE
+# =====================================================
+
+### 🔍 Preview: Prod IVA 21 + Cliente RI → IVA 21%
+# @name preview21
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_RI}}",
+  "documentTypeId": "{{docType_FA_VENTA}}",
+  "documentLetterType": "A",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA21}}", "quantity": 1, "unitPrice": 1000 }
+  ]
+}
+
+### 🔍 Preview: Prod Exento + Cliente RI → 0 taxes
+# @name previewExento
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_RI}}",
+  "documentTypeId": "{{docType_FA_VENTA}}",
+  "documentLetterType": "A",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_EXENTO}}", "quantity": 1, "unitPrice": 5000 }
+  ]
+}
+
+### 🔍 Preview: Prod IVA 21 + Cliente Mono → IVA incluido (FB)
+# @name previewMono21
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_MONO}}",
+  "documentTypeId": "{{docType_FB_VENTA}}",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA21}}", "quantity": 1, "unitPrice": 1000 }
+  ]
+}
+
+### 🔍 Preview: Prod IVA 21 + Cliente Exento → IVA incluido (FB)
+# @name previewExentoCliente21
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_EXENTO}}",
+  "documentTypeId": "{{docType_FB_VENTA}}",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA21}}", "quantity": 1, "unitPrice": 1000 }
+  ]
+}
+
+### 🔍 Preview: Prod IVA 10.5 + Cliente RI → IVA 10.5%
+# @name preview105
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_RI}}",
+  "documentTypeId": "{{docType_FA_VENTA}}",
+  "documentLetterType": "A",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA105}}", "quantity": 2, "unitPrice": 3000 }
+  ]
+}
+
+### 🔍 Preview: Prod IVA 27 + Cliente RI → IVA 27%
+# @name preview27
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_RI}}",
+  "documentTypeId": "{{docType_FA_VENTA}}",
+  "documentLetterType": "A",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA27}}", "quantity": 1, "unitPrice": 8000 }
+  ]
+}
+
+### 🔍 Preview: 3 productos mixtos (IVA 21 + IVA 10.5 + Exento)
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_RI}}",
+  "documentTypeId": "{{docType_FA_VENTA}}",
+  "documentLetterType": "A",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA21}}",  "quantity": 2, "unitPrice": 1000 },
+    { "productId": "{{prod_IVA105}}", "quantity": 1, "unitPrice": 3000 },
+    { "productId": "{{prod_EXENTO}}", "quantity": 1, "unitPrice": 500 }
+  ]
+}
+
+# =====================================================
+# 5. CREAR VENTAS CON CONFIG COMPLETE
+# =====================================================
+
+### 🧾 Venta FA: Cliente RI + Prod IVA 21
+# @name saleRI21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 1000 }
+  ]
+}
+
+###
+@saleId_RI21 = {{saleRI21.response.body.id}}
+
+### 🧾 Venta FB: Cliente Mono + Prod IVA 21
+# @name saleMono21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FB_VENTA}}",
+  "party_id": "{{party_CLI_MONO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FB - Cliente Mono - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 2, "unit_price": 1500 }
+  ]
+}
+
+###
+@saleId_Mono21 = {{saleMono21.response.body.id}}
+
+### 🧾 Venta FB: Cliente Exento + Prod IVA 21
+# @name saleExento21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FB_VENTA}}",
+  "party_id": "{{party_CLI_EXENTO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FB - Cliente Exento - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 2000 }
+  ]
+}
+
+###
+@saleId_Exento21 = {{saleExento21.response.body.id}}
+
+### 🧾 Venta FA: Cliente RI + Prod Exento → 0 taxes
+# @name saleExento
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Prod Exento",
+  "items": [
+    { "product_id": "{{prod_EXENTO}}", "quantity": 3, "unit_price": 500 }
+  ]
+}
+
+###
+@saleId_Exento = {{saleExento.response.body.id}}
+
+### 🧾 Venta FA: Cliente RI + Prod IVA 10.5
+# @name saleRI105
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Prod IVA 10.5",
+  "items": [
+    { "product_id": "{{prod_IVA105}}", "quantity": 4, "unit_price": 1000 }
+  ]
+}
+
+###
+@saleId_RI105 = {{saleRI105.response.body.id}}
+
+### 🧾 Venta FA: Cliente RI + Prod IVA 27
+# @name saleRI27
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Prod IVA 27",
+  "items": [
+    { "product_id": "{{prod_IVA27}}", "quantity": 1, "unit_price": 8000 }
+  ]
+}
+
+###
+@saleId_RI27 = {{saleRI27.response.body.id}}
+
+### 🧾 Venta FA: Cliente RI + 3 productos mixtos
+# @name saleMixta
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Mixto IVA 21 + 10.5 + Exento",
+  "items": [
+    { "product_id": "{{prod_IVA21}}",  "quantity": 2, "unit_price": 1000 },
+    { "product_id": "{{prod_IVA105}}", "quantity": 1, "unit_price": 3000 },
+    { "product_id": "{{prod_EXENTO}}", "quantity": 1, "unit_price": 500 }
+  ]
+}
+
+###
+@saleId_Mixta = {{saleMixta.response.body.id}}
+
+### 🧾 Venta FB: Consumidor Final + Prod IVA 21
+# @name saleCF21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FB_VENTA}}",
+  "party_id": "{{party_CF}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FB - Consumidor Final - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 3, "unit_price": 2100 }
+  ]
+}
+
+###
+@saleId_CF21 = {{saleCF21.response.body.id}}
+
+# =====================================================
+# 6. VERIFICAR VENTAS CREADAS
+# =====================================================
+
+### 📋 Verificar venta FA - Cliente RI - IVA 21
+GET {{baseUrl}}/documents/sales/{{saleId_RI21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FB - Cliente Mono - IVA 21
+GET {{baseUrl}}/documents/sales/{{saleId_Mono21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FB - Cliente Exento - IVA 21
+GET {{baseUrl}}/documents/sales/{{saleId_Exento21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FA - Prod Exento
+GET {{baseUrl}}/documents/sales/{{saleId_Exento}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FA - IVA 10.5
+GET {{baseUrl}}/documents/sales/{{saleId_RI105}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FA - IVA 27
+GET {{baseUrl}}/documents/sales/{{saleId_RI27}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FA - Mixta
+GET {{baseUrl}}/documents/sales/{{saleId_Mixta}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar venta FB - CF - IVA 21
+GET {{baseUrl}}/documents/sales/{{saleId_CF21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =====================================================
+# 7. CONFIGURAR COMPANY → SIMPLE
+# =====================================================
+
+### ⚙️ Activar modo SIMPLE
+PATCH {{baseUrl}}/company-tax-settings
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "company_id": "{{companyId}}",
+  "fiscal_mode": "SIMPLE",
+  "prices_include_tax": true,
+  "show_tax_breakdown": false
+}
+
+### ✅ Verificar configuración SIMPLE
+GET {{baseUrl}}/company-tax-settings?company_id={{companyId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =====================================================
+# 8. TAX ENGINE PREVIEW — MODO SIMPLE
+# =====================================================
+
+### 🔍 Preview SIMPLE: Prod IVA 21 → 0 taxes (IVA filtrado)
+POST {{baseUrl}}/tax-engine/calculate-preview
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "issuerCompanyId": "{{companyId}}",
+  "partnerId": "{{party_CLI_RI}}",
+  "documentTypeId": "{{docType_FA_VENTA}}",
+  "documentLetterType": "A",
+  "currency": "ARS",
+  "date": "2026-07-25",
+  "operationType": "SALE",
+  "items": [
+    { "productId": "{{prod_IVA21}}", "quantity": 1, "unitPrice": 1000 }
+  ]
+}
+
+# =====================================================
+# 9. CREAR VENTAS CON CONFIG SIMPLE
+# =====================================================
+
+### 🧾 Venta SIMPLE: Cliente RI + Prod IVA 21 → 0 taxes
+# @name saleSimple21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta SIMPLE - Cliente RI - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 1000 }
+  ]
+}
+
+###
+@saleId_Simple21 = {{saleSimple21.response.body.id}}
+
+### 📋 Verificar venta SIMPLE → 0 document_item_taxes, 0 total_taxes
+GET {{baseUrl}}/documents/sales/{{saleId_Simple21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =====================================================
+# 10. VOLVER A COMPLETE PARA COMPRAS
+# =====================================================
+
+### ⚙️ Volver a modo COMPLETE
+PATCH {{baseUrl}}/company-tax-settings
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "company_id": "{{companyId}}",
+  "fiscal_mode": "COMPLETE",
+  "prices_include_tax": false,
+  "show_tax_breakdown": true
+}
+
+# =====================================================
+# 11. CREAR COMPRAS CON CONFIG COMPLETE
+# =====================================================
+
+### 🧾 Compra FA: Proveedor RI + Prod IVA 21
+# @name purchaseRI21
+POST {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FA - Proveedor RI - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 1000 }
+  ]
+}
+
+###
+@purchaseId_RI21 = {{purchaseRI21.response.body.id}}
+
+### 🧾 Compra FC: Proveedor Exento + Prod Exento → letra C (Exento solo emite C)
+# @name purchaseExento
+POST {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FC_COMPRA}}",
+  "party_id": "{{party_PROV_EXENTO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FC - Proveedor Exento - Prod Exento (letra C)",
+  "items": [
+    { "product_id": "{{prod_EXENTO}}", "quantity": 5, "unit_price": 5000 }
+  ]
+}
+
+###
+@purchaseId_Exento = {{purchaseExento.response.body.id}}
+
+### 🧾 Compra FA: Proveedor RI + Prod IVA 10.5
+# @name purchaseRI105
+POST {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FA - Proveedor RI - Prod IVA 10.5",
+  "items": [
+    { "product_id": "{{prod_IVA105}}", "quantity": 3, "unit_price": 1000 }
+  ]
+}
+
+###
+@purchaseId_RI105 = {{purchaseRI105.response.body.id}}
+
+### 🧾 Compra FA: Proveedor RI + Mixto
+# @name purchaseMixta
+POST {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FA - Proveedor RI - Mixto",
+  "items": [
+    { "product_id": "{{prod_IVA21}}",  "quantity": 2, "unit_price": 2100 },
+    { "product_id": "{{prod_IVA105}}", "quantity": 1, "unit_price": 1000 },
+    { "product_id": "{{prod_EXENTO}}", "quantity": 3, "unit_price": 5000 }
+  ]
+}
+
+###
+@purchaseId_Mixta = {{purchaseMixta.response.body.id}}
+
+# =====================================================
+# 12. VERIFICAR COMPRAS CREADAS
+# =====================================================
+
+### 📋 Verificar compra FA - Proveedor RI - IVA 21
+GET {{baseUrl}}/documents/purchases-documents/{{purchaseId_RI21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar compra FC - Proveedor Exento
+GET {{baseUrl}}/documents/purchases-documents/{{purchaseId_Exento}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar compra FA - Proveedor RI - IVA 10.5
+GET {{baseUrl}}/documents/purchases-documents/{{purchaseId_RI105}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 📋 Verificar compra FA - Mixta
+GET {{baseUrl}}/documents/purchases-documents/{{purchaseId_Mixta}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =====================================================
+# 13. COMPRAS CON CONFIG SIMPLE
+# =====================================================
+
+### ⚙️ Modo SIMPLE
+PATCH {{baseUrl}}/company-tax-settings
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "company_id": "{{companyId}}",
+  "fiscal_mode": "SIMPLE",
+  "prices_include_tax": true,
+  "show_tax_breakdown": false
+}
+
+### 🧾 Compra SIMPLE: Proveedor RI + Prod IVA 21 → 0 taxes
+# @name purchaseSimple21
+POST {{baseUrl}}/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra SIMPLE - Proveedor RI - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 1000 }
+  ]
+}
+
+###
+@purchaseId_Simple21 = {{purchaseSimple21.response.body.id}}
+
+### 📋 Verificar compra SIMPLE → 0 taxes
+GET {{baseUrl}}/documents/purchases-documents/{{purchaseId_Simple21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =====================================================
+# CLEANUP (ejecutar al finalizar)
+# =====================================================
+
+### 🗑️ Eliminar ventas
+DELETE {{baseUrl}}/documents/sales/{{saleId_RI21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_Mono21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_Exento21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_Exento}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_RI105}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_RI27}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_Mixta}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_CF21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/sales/{{saleId_Simple21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 🗑️ Eliminar compras
+DELETE {{baseUrl}}/documents/purchases-documents/{{purchaseId_RI21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/purchases-documents/{{purchaseId_Exento}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/purchases-documents/{{purchaseId_RI105}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/purchases-documents/{{purchaseId_Mixta}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+### 
+DELETE {{baseUrl}}/documents/purchases-documents/{{purchaseId_Simple21}}
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}

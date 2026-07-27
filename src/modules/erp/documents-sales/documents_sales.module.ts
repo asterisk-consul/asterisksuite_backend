@@ -7,9 +7,10 @@ import { SalesReportModule } from './sales-reports/sales_reports.module';
 import { DocumentsSalesItemsService } from './documents-sales-items.service';
 import { DocumentsSalesTotalsService } from './documents-sales-totals.service';
 import { CurrentAccountsModule } from '../current-accounts/current-accounts.module';
+import { TaxEngineModule } from '../tax-engine/tax-engine.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule],
+  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule],
   controllers: [DocumentsSalesController],
   providers: [
     DocumentsSalesService,

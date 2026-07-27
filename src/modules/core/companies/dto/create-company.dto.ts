@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEmail, MaxLength } from 'class-validator';
+import { IsString, IsOptional, IsEmail, MaxLength, IsIn } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsString()
@@ -9,6 +9,10 @@ export class CreateCompanyDto {
   @IsString()
   @MaxLength(20)
   taxId?: string;
+
+  @IsOptional()
+  @IsIn(['RESPONSABLE_INSCRIPTO', 'MONOTRIBUTO', 'EXENTO'])
+  vat_condition?: string;
 
   @IsOptional()
   @IsString()

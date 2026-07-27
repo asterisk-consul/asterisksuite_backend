@@ -14,7 +14,7 @@ x-tenant: dev
 ###
 
 @accessToken = {{login.response.body.accessToken}}
-@docId =
+@docId = b704a67d-d25c-4d19-879d-eba8c4ea1d1d
 @partyId = 6199dbb7-d74e-46af-95e5-3ee2e4e793ef
 @productId = 593f4d4d-1f0b-4c16-b9ce-15ce1b4e201d
 @docTypeId = 84052621-1431-425b-a301-ce6429fafb6a

@@ -6,9 +6,10 @@ import { DocumentsPurchasesItemsService } from './documents-purchases-items-serv
 import { DocumentsPurchasesTotalsService } from './documents-purchases-totals';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { CurrentAccountsModule } from '../current-accounts/current-accounts.module';
+import { TaxEngineModule } from '../tax-engine/tax-engine.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, CurrentAccountsModule],
+  imports: [PrismaModule, ProductPricingModule, CurrentAccountsModule, TaxEngineModule],
   controllers: [DocumentsPurchasesController],
   providers: [DocumentsPurchasesService, DocumentsPurchasesItemsService, DocumentsPurchasesTotalsService],
   exports: [DocumentsPurchasesService],

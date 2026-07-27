@@ -473,6 +473,9 @@ export class CompaniesService {
       data: {
         name: createCompanyDto.name,
         tax_id: createCompanyDto.taxId,
+        vat_condition: createCompanyDto.vat_condition,
+        address: createCompanyDto.address,
+        email: createCompanyDto.email,
         phone: createCompanyDto.phone,
         subdomain,
         schema_name: tenantDb,
@@ -533,6 +536,9 @@ export class CompaniesService {
       data: {
         name: updateCompanyDto.name,
         tax_id: updateCompanyDto.taxId,
+        vat_condition: updateCompanyDto.vat_condition,
+        address: updateCompanyDto.address,
+        email: updateCompanyDto.email,
         phone: updateCompanyDto.phone,
         ...(subdomain !== undefined ? { subdomain } : {}),
         ...(schemaName !== undefined ? { schema_name: schemaName } : {}),

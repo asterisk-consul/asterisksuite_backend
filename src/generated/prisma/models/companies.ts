@@ -28,6 +28,9 @@ export type CompaniesMinAggregateOutputType = {
   id: string | null
   name: string | null
   tax_id: string | null
+  vat_condition: string | null
+  address: string | null
+  email: string | null
   phone: string | null
   subdomain: string | null
   schema_name: string | null
@@ -43,6 +46,9 @@ export type CompaniesMaxAggregateOutputType = {
   id: string | null
   name: string | null
   tax_id: string | null
+  vat_condition: string | null
+  address: string | null
+  email: string | null
   phone: string | null
   subdomain: string | null
   schema_name: string | null
@@ -58,6 +64,9 @@ export type CompaniesCountAggregateOutputType = {
   id: number
   name: number
   tax_id: number
+  vat_condition: number
+  address: number
+  email: number
   phone: number
   subdomain: number
   schema_name: number
@@ -75,6 +84,9 @@ export type CompaniesMinAggregateInputType = {
   id?: true
   name?: true
   tax_id?: true
+  vat_condition?: true
+  address?: true
+  email?: true
   phone?: true
   subdomain?: true
   schema_name?: true
@@ -90,6 +102,9 @@ export type CompaniesMaxAggregateInputType = {
   id?: true
   name?: true
   tax_id?: true
+  vat_condition?: true
+  address?: true
+  email?: true
   phone?: true
   subdomain?: true
   schema_name?: true
@@ -105,6 +120,9 @@ export type CompaniesCountAggregateInputType = {
   id?: true
   name?: true
   tax_id?: true
+  vat_condition?: true
+  address?: true
+  email?: true
   phone?: true
   subdomain?: true
   schema_name?: true
@@ -193,6 +211,9 @@ export type CompaniesGroupByOutputType = {
   id: string
   name: string
   tax_id: string | null
+  vat_condition: string | null
+  address: string | null
+  email: string | null
   phone: string | null
   subdomain: string | null
   schema_name: string | null
@@ -229,6 +250,9 @@ export type companiesWhereInput = {
   id?: Prisma.UuidFilter<"companies"> | string
   name?: Prisma.StringFilter<"companies"> | string
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
+  vat_condition?: Prisma.StringNullableFilter<"companies"> | string | null
+  address?: Prisma.StringNullableFilter<"companies"> | string | null
+  email?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
   subdomain?: Prisma.StringNullableFilter<"companies"> | string | null
   schema_name?: Prisma.StringNullableFilter<"companies"> | string | null
@@ -245,6 +269,9 @@ export type companiesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  vat_condition?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   subdomain?: Prisma.SortOrderInput | Prisma.SortOrder
   schema_name?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -266,6 +293,9 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.companiesWhereInput | Prisma.companiesWhereInput[]
   name?: Prisma.StringFilter<"companies"> | string
   tax_id?: Prisma.StringNullableFilter<"companies"> | string | null
+  vat_condition?: Prisma.StringNullableFilter<"companies"> | string | null
+  address?: Prisma.StringNullableFilter<"companies"> | string | null
+  email?: Prisma.StringNullableFilter<"companies"> | string | null
   phone?: Prisma.StringNullableFilter<"companies"> | string | null
   created_at?: Prisma.DateTimeFilter<"companies"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"companies"> | Date | string
@@ -280,6 +310,9 @@ export type companiesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  vat_condition?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   subdomain?: Prisma.SortOrderInput | Prisma.SortOrder
   schema_name?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -301,6 +334,9 @@ export type companiesScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"companies"> | string
   name?: Prisma.StringWithAggregatesFilter<"companies"> | string
   tax_id?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
+  vat_condition?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
+  address?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
+  email?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   subdomain?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
   schema_name?: Prisma.StringNullableWithAggregatesFilter<"companies"> | string | null
@@ -316,6 +352,9 @@ export type companiesCreateInput = {
   id?: string
   name: string
   tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
   phone?: string | null
   subdomain?: string | null
   schema_name?: string | null
@@ -332,6 +371,9 @@ export type companiesUncheckedCreateInput = {
   id?: string
   name: string
   tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
   phone?: string | null
   subdomain?: string | null
   schema_name?: string | null
@@ -348,6 +390,9 @@ export type companiesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -364,6 +409,9 @@ export type companiesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -380,6 +428,9 @@ export type companiesCreateManyInput = {
   id?: string
   name: string
   tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
   phone?: string | null
   subdomain?: string | null
   schema_name?: string | null
@@ -395,6 +446,9 @@ export type companiesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -410,6 +464,9 @@ export type companiesUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -425,6 +482,9 @@ export type companiesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
+  vat_condition?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   schema_name?: Prisma.SortOrder
@@ -440,6 +500,9 @@ export type companiesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
+  vat_condition?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   schema_name?: Prisma.SortOrder
@@ -455,6 +518,9 @@ export type companiesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   tax_id?: Prisma.SortOrder
+  vat_condition?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   schema_name?: Prisma.SortOrder
@@ -489,6 +555,9 @@ export type companiesCreateWithoutCompanyUsersInput = {
   id?: string
   name: string
   tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
   phone?: string | null
   subdomain?: string | null
   schema_name?: string | null
@@ -504,6 +573,9 @@ export type companiesUncheckedCreateWithoutCompanyUsersInput = {
   id?: string
   name: string
   tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
   phone?: string | null
   subdomain?: string | null
   schema_name?: string | null
@@ -535,6 +607,9 @@ export type companiesUpdateWithoutCompanyUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -550,6 +625,9 @@ export type companiesUncheckedUpdateWithoutCompanyUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -596,6 +674,9 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   id?: boolean
   name?: boolean
   tax_id?: boolean
+  vat_condition?: boolean
+  address?: boolean
+  email?: boolean
   phone?: boolean
   subdomain?: boolean
   schema_name?: boolean
@@ -613,6 +694,9 @@ export type companiesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   name?: boolean
   tax_id?: boolean
+  vat_condition?: boolean
+  address?: boolean
+  email?: boolean
   phone?: boolean
   subdomain?: boolean
   schema_name?: boolean
@@ -628,6 +712,9 @@ export type companiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   name?: boolean
   tax_id?: boolean
+  vat_condition?: boolean
+  address?: boolean
+  email?: boolean
   phone?: boolean
   subdomain?: boolean
   schema_name?: boolean
@@ -643,6 +730,9 @@ export type companiesSelectScalar = {
   id?: boolean
   name?: boolean
   tax_id?: boolean
+  vat_condition?: boolean
+  address?: boolean
+  email?: boolean
   phone?: boolean
   subdomain?: boolean
   schema_name?: boolean
@@ -654,7 +744,7 @@ export type companiesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tax_id" | "phone" | "subdomain" | "schema_name" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["companies"]>
+export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tax_id" | "vat_condition" | "address" | "email" | "phone" | "subdomain" | "schema_name" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["companies"]>
 export type companiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companyUsers?: boolean | Prisma.companies$companyUsersArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
@@ -671,6 +761,9 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     id: string
     name: string
     tax_id: string | null
+    vat_condition: string | null
+    address: string | null
+    email: string | null
     phone: string | null
     subdomain: string | null
     schema_name: string | null
@@ -1107,6 +1200,9 @@ export interface companiesFieldRefs {
   readonly id: Prisma.FieldRef<"companies", 'String'>
   readonly name: Prisma.FieldRef<"companies", 'String'>
   readonly tax_id: Prisma.FieldRef<"companies", 'String'>
+  readonly vat_condition: Prisma.FieldRef<"companies", 'String'>
+  readonly address: Prisma.FieldRef<"companies", 'String'>
+  readonly email: Prisma.FieldRef<"companies", 'String'>
   readonly phone: Prisma.FieldRef<"companies", 'String'>
   readonly subdomain: Prisma.FieldRef<"companies", 'String'>
   readonly schema_name: Prisma.FieldRef<"companies", 'String'>

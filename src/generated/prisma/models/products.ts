@@ -43,6 +43,7 @@ export type ProductsMinAggregateOutputType = {
   is_rate_type: boolean | null
   rate_id: string | null
   taxId: string | null
+  tax_category_id: string | null
   active: boolean | null
   product_type: $Enums.ProductType | null
   is_composed: boolean | null
@@ -75,6 +76,7 @@ export type ProductsMaxAggregateOutputType = {
   is_rate_type: boolean | null
   rate_id: string | null
   taxId: string | null
+  tax_category_id: string | null
   active: boolean | null
   product_type: $Enums.ProductType | null
   is_composed: boolean | null
@@ -107,6 +109,7 @@ export type ProductsCountAggregateOutputType = {
   is_rate_type: number
   rate_id: number
   taxId: number
+  tax_category_id: number
   active: number
   product_type: number
   is_composed: number
@@ -149,6 +152,7 @@ export type ProductsMinAggregateInputType = {
   is_rate_type?: true
   rate_id?: true
   taxId?: true
+  tax_category_id?: true
   active?: true
   product_type?: true
   is_composed?: true
@@ -181,6 +185,7 @@ export type ProductsMaxAggregateInputType = {
   is_rate_type?: true
   rate_id?: true
   taxId?: true
+  tax_category_id?: true
   active?: true
   product_type?: true
   is_composed?: true
@@ -213,6 +218,7 @@ export type ProductsCountAggregateInputType = {
   is_rate_type?: true
   rate_id?: true
   taxId?: true
+  tax_category_id?: true
   active?: true
   product_type?: true
   is_composed?: true
@@ -332,6 +338,7 @@ export type ProductsGroupByOutputType = {
   is_rate_type: boolean
   rate_id: string | null
   taxId: string | null
+  tax_category_id: string | null
   active: boolean | null
   product_type: $Enums.ProductType
   is_composed: boolean
@@ -387,6 +394,7 @@ export type productsWhereInput = {
   is_rate_type?: Prisma.BoolFilter<"products"> | boolean
   rate_id?: Prisma.UuidNullableFilter<"products"> | string | null
   taxId?: Prisma.UuidNullableFilter<"products"> | string | null
+  tax_category_id?: Prisma.UuidNullableFilter<"products"> | string | null
   active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeFilter<"products"> | $Enums.ProductType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
@@ -422,6 +430,7 @@ export type productsWhereInput = {
   picking_items?: Prisma.Picking_itemsListRelationFilter
   product_price?: Prisma.Product_priceListRelationFilter
   product_taxes?: Prisma.Product_taxesListRelationFilter
+  tax_category?: Prisma.XOR<Prisma.Tax_categoriesNullableScalarRelationFilter, Prisma.tax_categoriesWhereInput> | null
   transfer_rate?: Prisma.XOR<Prisma.Transfer_ratesNullableScalarRelationFilter, Prisma.transfer_ratesWhereInput> | null
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
@@ -440,6 +449,7 @@ export type productsOrderByWithRelationInput = {
   is_rate_type?: Prisma.SortOrder
   rate_id?: Prisma.SortOrderInput | Prisma.SortOrder
   taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tax_category_id?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   product_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
@@ -475,6 +485,7 @@ export type productsOrderByWithRelationInput = {
   picking_items?: Prisma.picking_itemsOrderByRelationAggregateInput
   product_price?: Prisma.product_priceOrderByRelationAggregateInput
   product_taxes?: Prisma.product_taxesOrderByRelationAggregateInput
+  tax_category?: Prisma.tax_categoriesOrderByWithRelationInput
   transfer_rate?: Prisma.transfer_ratesOrderByWithRelationInput
   warehouse_stock?: Prisma.warehouse_stockOrderByRelationAggregateInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
@@ -496,6 +507,7 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   is_rate_type?: Prisma.BoolFilter<"products"> | boolean
   rate_id?: Prisma.UuidNullableFilter<"products"> | string | null
   taxId?: Prisma.UuidNullableFilter<"products"> | string | null
+  tax_category_id?: Prisma.UuidNullableFilter<"products"> | string | null
   active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeFilter<"products"> | $Enums.ProductType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
@@ -531,6 +543,7 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   picking_items?: Prisma.Picking_itemsListRelationFilter
   product_price?: Prisma.Product_priceListRelationFilter
   product_taxes?: Prisma.Product_taxesListRelationFilter
+  tax_category?: Prisma.XOR<Prisma.Tax_categoriesNullableScalarRelationFilter, Prisma.tax_categoriesWhereInput> | null
   transfer_rate?: Prisma.XOR<Prisma.Transfer_ratesNullableScalarRelationFilter, Prisma.transfer_ratesWhereInput> | null
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
@@ -549,6 +562,7 @@ export type productsOrderByWithAggregationInput = {
   is_rate_type?: Prisma.SortOrder
   rate_id?: Prisma.SortOrderInput | Prisma.SortOrder
   taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tax_category_id?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   product_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
@@ -589,6 +603,7 @@ export type productsScalarWhereWithAggregatesInput = {
   is_rate_type?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   rate_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
   taxId?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  tax_category_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
   active?: Prisma.BoolNullableWithAggregatesFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeWithAggregatesFilter<"products"> | $Enums.ProductType
   is_composed?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
@@ -651,6 +666,7 @@ export type productsCreateInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -669,6 +685,7 @@ export type productsUncheckedCreateInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -747,6 +764,7 @@ export type productsUpdateInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -765,6 +783,7 @@ export type productsUncheckedUpdateInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -813,6 +832,7 @@ export type productsCreateManyInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -872,6 +892,7 @@ export type productsUncheckedUpdateManyInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -924,6 +945,7 @@ export type productsCountOrderByAggregateInput = {
   is_rate_type?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   taxId?: Prisma.SortOrder
+  tax_category_id?: Prisma.SortOrder
   active?: Prisma.SortOrder
   product_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
@@ -960,6 +982,7 @@ export type productsMaxOrderByAggregateInput = {
   is_rate_type?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   taxId?: Prisma.SortOrder
+  tax_category_id?: Prisma.SortOrder
   active?: Prisma.SortOrder
   product_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
@@ -992,6 +1015,7 @@ export type productsMinOrderByAggregateInput = {
   is_rate_type?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   taxId?: Prisma.SortOrder
+  tax_category_id?: Prisma.SortOrder
   active?: Prisma.SortOrder
   product_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
@@ -1423,6 +1447,48 @@ export type productsUpdateOneWithoutProduct_attribute_valuesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutProduct_attribute_valuesInput, Prisma.productsUpdateWithoutProduct_attribute_valuesInput>, Prisma.productsUncheckedUpdateWithoutProduct_attribute_valuesInput>
 }
 
+export type productsCreateNestedManyWithoutTax_categoryInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTax_categoryInput, Prisma.productsUncheckedCreateWithoutTax_categoryInput> | Prisma.productsCreateWithoutTax_categoryInput[] | Prisma.productsUncheckedCreateWithoutTax_categoryInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTax_categoryInput | Prisma.productsCreateOrConnectWithoutTax_categoryInput[]
+  createMany?: Prisma.productsCreateManyTax_categoryInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUncheckedCreateNestedManyWithoutTax_categoryInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTax_categoryInput, Prisma.productsUncheckedCreateWithoutTax_categoryInput> | Prisma.productsCreateWithoutTax_categoryInput[] | Prisma.productsUncheckedCreateWithoutTax_categoryInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTax_categoryInput | Prisma.productsCreateOrConnectWithoutTax_categoryInput[]
+  createMany?: Prisma.productsCreateManyTax_categoryInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUpdateManyWithoutTax_categoryNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTax_categoryInput, Prisma.productsUncheckedCreateWithoutTax_categoryInput> | Prisma.productsCreateWithoutTax_categoryInput[] | Prisma.productsUncheckedCreateWithoutTax_categoryInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTax_categoryInput | Prisma.productsCreateOrConnectWithoutTax_categoryInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTax_categoryInput | Prisma.productsUpsertWithWhereUniqueWithoutTax_categoryInput[]
+  createMany?: Prisma.productsCreateManyTax_categoryInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutTax_categoryInput | Prisma.productsUpdateWithWhereUniqueWithoutTax_categoryInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTax_categoryInput | Prisma.productsUpdateManyWithWhereWithoutTax_categoryInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
+export type productsUncheckedUpdateManyWithoutTax_categoryNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTax_categoryInput, Prisma.productsUncheckedCreateWithoutTax_categoryInput> | Prisma.productsCreateWithoutTax_categoryInput[] | Prisma.productsUncheckedCreateWithoutTax_categoryInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTax_categoryInput | Prisma.productsCreateOrConnectWithoutTax_categoryInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutTax_categoryInput | Prisma.productsUpsertWithWhereUniqueWithoutTax_categoryInput[]
+  createMany?: Prisma.productsCreateManyTax_categoryInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutTax_categoryInput | Prisma.productsUpdateWithWhereUniqueWithoutTax_categoryInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutTax_categoryInput | Prisma.productsUpdateManyWithWhereWithoutTax_categoryInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
 export type productsCreateNestedOneWithoutProduct_taxesInput = {
   create?: Prisma.XOR<Prisma.productsCreateWithoutProduct_taxesInput, Prisma.productsUncheckedCreateWithoutProduct_taxesInput>
   connectOrCreate?: Prisma.productsCreateOrConnectWithoutProduct_taxesInput
@@ -1503,6 +1569,7 @@ export type productsCreateWithoutIncome_accountInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -1521,6 +1588,7 @@ export type productsUncheckedCreateWithoutIncome_accountInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -1607,6 +1675,7 @@ export type productsCreateWithoutExpense_accountInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -1625,6 +1694,7 @@ export type productsUncheckedCreateWithoutExpense_accountInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -1711,6 +1781,7 @@ export type productsCreateWithoutInventory_accountInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -1729,6 +1800,7 @@ export type productsUncheckedCreateWithoutInventory_accountInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -1805,6 +1877,7 @@ export type productsScalarWhereInput = {
   is_rate_type?: Prisma.BoolFilter<"products"> | boolean
   rate_id?: Prisma.UuidNullableFilter<"products"> | string | null
   taxId?: Prisma.UuidNullableFilter<"products"> | string | null
+  tax_category_id?: Prisma.UuidNullableFilter<"products"> | string | null
   active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeFilter<"products"> | $Enums.ProductType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
@@ -1899,6 +1972,7 @@ export type productsCreateWithoutProduct_costsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -1916,6 +1990,7 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -2009,6 +2084,7 @@ export type productsUpdateWithoutProduct_costsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -2026,6 +2102,7 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2103,6 +2180,7 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -2120,6 +2198,7 @@ export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -2213,6 +2292,7 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -2230,6 +2310,7 @@ export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2307,6 +2388,7 @@ export type productsCreateWithoutCost_templateInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -2324,6 +2406,7 @@ export type productsUncheckedCreateWithoutCost_templateInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -2426,6 +2509,7 @@ export type productsCreateWithoutDocument_itemsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -2444,6 +2528,7 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -2536,6 +2621,7 @@ export type productsUpdateWithoutDocument_itemsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -2554,6 +2640,7 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2631,6 +2718,7 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -2648,6 +2736,7 @@ export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -2741,6 +2830,7 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -2758,6 +2848,7 @@ export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2834,6 +2925,7 @@ export type productsCreateWithoutPicking_itemsInput = {
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -2852,6 +2944,7 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -2944,6 +3037,7 @@ export type productsUpdateWithoutPicking_itemsInput = {
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -2962,6 +3056,7 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3039,6 +3134,7 @@ export type productsCreateWithoutTransfer_rateInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
@@ -3055,6 +3151,7 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   price_enabled?: boolean
   is_rate_type?: boolean
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -3158,6 +3255,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -3176,6 +3274,7 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -3268,6 +3367,7 @@ export type productsUpdateWithoutPallet_itemsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -3286,6 +3386,7 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3362,6 +3463,7 @@ export type productsCreateWithoutProduct_priceInput = {
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -3380,6 +3482,7 @@ export type productsUncheckedCreateWithoutProduct_priceInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -3472,6 +3575,7 @@ export type productsUpdateWithoutProduct_priceInput = {
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -3490,6 +3594,7 @@ export type productsUncheckedUpdateWithoutProduct_priceInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3566,6 +3671,7 @@ export type productsCreateWithoutProduct_variantsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -3584,6 +3690,7 @@ export type productsUncheckedCreateWithoutProduct_variantsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -3676,6 +3783,7 @@ export type productsUpdateWithoutProduct_variantsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -3694,6 +3802,7 @@ export type productsUncheckedUpdateWithoutProduct_variantsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3770,6 +3879,7 @@ export type productsCreateWithoutParent_componentsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -3788,6 +3898,7 @@ export type productsUncheckedCreateWithoutParent_componentsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -3869,6 +3980,7 @@ export type productsCreateWithoutChild_componentsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -3887,6 +3999,7 @@ export type productsUncheckedCreateWithoutChild_componentsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -3979,6 +4092,7 @@ export type productsUpdateWithoutParent_componentsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -3997,6 +4111,7 @@ export type productsUncheckedUpdateWithoutParent_componentsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4084,6 +4199,7 @@ export type productsUpdateWithoutChild_componentsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -4102,6 +4218,7 @@ export type productsUncheckedUpdateWithoutChild_componentsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4178,6 +4295,7 @@ export type productsCreateWithoutProduct_categoriesInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -4196,6 +4314,7 @@ export type productsUncheckedCreateWithoutProduct_categoriesInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -4288,6 +4407,7 @@ export type productsUpdateWithoutProduct_categoriesInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -4306,6 +4426,7 @@ export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4382,6 +4503,7 @@ export type productsCreateWithoutProduct_tagsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -4400,6 +4522,7 @@ export type productsUncheckedCreateWithoutProduct_tagsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -4492,6 +4615,7 @@ export type productsUpdateWithoutProduct_tagsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -4510,6 +4634,7 @@ export type productsUncheckedUpdateWithoutProduct_tagsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4586,6 +4711,7 @@ export type productsCreateWithoutProduct_attribute_valuesInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -4604,6 +4730,7 @@ export type productsUncheckedCreateWithoutProduct_attribute_valuesInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -4696,6 +4823,7 @@ export type productsUpdateWithoutProduct_attribute_valuesInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -4714,6 +4842,7 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4750,6 +4879,128 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsCreateWithoutTax_categoryInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+}
+
+export type productsUncheckedCreateWithoutTax_categoryInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type productsCreateOrConnectWithoutTax_categoryInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutTax_categoryInput, Prisma.productsUncheckedCreateWithoutTax_categoryInput>
+}
+
+export type productsCreateManyTax_categoryInputEnvelope = {
+  data: Prisma.productsCreateManyTax_categoryInput | Prisma.productsCreateManyTax_categoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsUpsertWithWhereUniqueWithoutTax_categoryInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutTax_categoryInput, Prisma.productsUncheckedUpdateWithoutTax_categoryInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutTax_categoryInput, Prisma.productsUncheckedCreateWithoutTax_categoryInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutTax_categoryInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutTax_categoryInput, Prisma.productsUncheckedUpdateWithoutTax_categoryInput>
+}
+
+export type productsUpdateManyWithWhereWithoutTax_categoryInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutTax_categoryInput>
 }
 
 export type productsCreateWithoutProduct_taxesInput = {
@@ -4790,6 +5041,7 @@ export type productsCreateWithoutProduct_taxesInput = {
   pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
@@ -4808,6 +5060,7 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -4900,6 +5153,7 @@ export type productsUpdateWithoutProduct_taxesInput = {
   pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -4918,6 +5172,7 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4995,6 +5250,7 @@ export type productsCreateWithoutWarehouse_stockInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
@@ -5012,6 +5268,7 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -5105,6 +5362,7 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
@@ -5122,6 +5380,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5199,6 +5458,7 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
   product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
   product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
@@ -5216,6 +5476,7 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -5309,6 +5570,7 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
@@ -5326,6 +5588,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5373,6 +5636,7 @@ export type productsCreateManyIncome_accountInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -5404,6 +5668,7 @@ export type productsCreateManyExpense_accountInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -5435,6 +5700,7 @@ export type productsCreateManyInventory_accountInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -5495,6 +5761,7 @@ export type productsUpdateWithoutIncome_accountInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -5513,6 +5780,7 @@ export type productsUncheckedUpdateWithoutIncome_accountInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5560,6 +5828,7 @@ export type productsUncheckedUpdateManyWithoutIncome_accountInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5620,6 +5889,7 @@ export type productsUpdateWithoutExpense_accountInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -5638,6 +5908,7 @@ export type productsUncheckedUpdateWithoutExpense_accountInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5685,6 +5956,7 @@ export type productsUncheckedUpdateManyWithoutExpense_accountInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5745,6 +6017,7 @@ export type productsUpdateWithoutInventory_accountInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -5763,6 +6036,7 @@ export type productsUncheckedUpdateWithoutInventory_accountInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5810,6 +6084,7 @@ export type productsUncheckedUpdateManyWithoutInventory_accountInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5841,6 +6116,7 @@ export type productsCreateManyCost_templateInput = {
   is_rate_type?: boolean
   rate_id?: string | null
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -5902,6 +6178,7 @@ export type productsUpdateWithoutCost_templateInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
@@ -5919,6 +6196,7 @@ export type productsUncheckedUpdateWithoutCost_templateInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5966,6 +6244,7 @@ export type productsUncheckedUpdateManyWithoutCost_templateInput = {
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5996,6 +6275,7 @@ export type productsCreateManyTransfer_rateInput = {
   price_enabled?: boolean
   is_rate_type?: boolean
   taxId?: string | null
+  tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
   is_composed?: boolean
@@ -6058,6 +6338,7 @@ export type productsUpdateWithoutTransfer_rateInput = {
   picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
@@ -6074,6 +6355,7 @@ export type productsUncheckedUpdateWithoutTransfer_rateInput = {
   price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6120,6 +6402,167 @@ export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
   requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type productsCreateManyTax_categoryInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type productsUpdateWithoutTax_categoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateWithoutTax_categoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type productsUncheckedUpdateManyWithoutTax_categoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
@@ -6319,6 +6762,7 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   is_rate_type?: boolean
   rate_id?: boolean
   taxId?: boolean
+  tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
   is_composed?: boolean
@@ -6354,6 +6798,7 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   picking_items?: boolean | Prisma.products$picking_itemsArgs<ExtArgs>
   product_price?: boolean | Prisma.products$product_priceArgs<ExtArgs>
   product_taxes?: boolean | Prisma.products$product_taxesArgs<ExtArgs>
+  tax_category?: boolean | Prisma.products$tax_categoryArgs<ExtArgs>
   transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
@@ -6373,6 +6818,7 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   is_rate_type?: boolean
   rate_id?: boolean
   taxId?: boolean
+  tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
   is_composed?: boolean
@@ -6397,6 +6843,7 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
+  tax_category?: boolean | Prisma.products$tax_categoryArgs<ExtArgs>
   transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
@@ -6410,6 +6857,7 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   is_rate_type?: boolean
   rate_id?: boolean
   taxId?: boolean
+  tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
   is_composed?: boolean
@@ -6434,6 +6882,7 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
+  tax_category?: boolean | Prisma.products$tax_categoryArgs<ExtArgs>
   transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
@@ -6447,6 +6896,7 @@ export type productsSelectScalar = {
   is_rate_type?: boolean
   rate_id?: boolean
   taxId?: boolean
+  tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
   is_composed?: boolean
@@ -6470,7 +6920,7 @@ export type productsSelectScalar = {
   current_cost?: boolean
 }
 
-export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "active" | "product_type" | "is_composed" | "auto_calculate_cost" | "has_engineering" | "manages_stock" | "income_account_id" | "expense_account_id" | "inventory_account_id" | "calculation_type" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "cost_source" | "needs_cost_recalculation" | "last_cost_calculated_at" | "cost_template_id" | "current_cost", ExtArgs["result"]["products"]>
+export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "tax_category_id" | "active" | "product_type" | "is_composed" | "auto_calculate_cost" | "has_engineering" | "manages_stock" | "income_account_id" | "expense_account_id" | "inventory_account_id" | "calculation_type" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "cost_source" | "needs_cost_recalculation" | "last_cost_calculated_at" | "cost_template_id" | "current_cost", ExtArgs["result"]["products"]>
 export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product_variants?: boolean | Prisma.products$product_variantsArgs<ExtArgs>
   parent_components?: boolean | Prisma.products$parent_componentsArgs<ExtArgs>
@@ -6486,6 +6936,7 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   picking_items?: boolean | Prisma.products$picking_itemsArgs<ExtArgs>
   product_price?: boolean | Prisma.products$product_priceArgs<ExtArgs>
   product_taxes?: boolean | Prisma.products$product_taxesArgs<ExtArgs>
+  tax_category?: boolean | Prisma.products$tax_categoryArgs<ExtArgs>
   transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
@@ -6499,6 +6950,7 @@ export type productsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
+  tax_category?: boolean | Prisma.products$tax_categoryArgs<ExtArgs>
   transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
 }
@@ -6506,6 +6958,7 @@ export type productsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
+  tax_category?: boolean | Prisma.products$tax_categoryArgs<ExtArgs>
   transfer_rate?: boolean | Prisma.products$transfer_rateArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
 }
@@ -6527,6 +6980,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     picking_items: Prisma.$picking_itemsPayload<ExtArgs>[]
     product_price: Prisma.$product_pricePayload<ExtArgs>[]
     product_taxes: Prisma.$product_taxesPayload<ExtArgs>[]
+    tax_category: Prisma.$tax_categoriesPayload<ExtArgs> | null
     transfer_rate: Prisma.$transfer_ratesPayload<ExtArgs> | null
     warehouse_stock: Prisma.$warehouse_stockPayload<ExtArgs>[]
     warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
@@ -6544,6 +6998,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     is_rate_type: boolean
     rate_id: string | null
     taxId: string | null
+    tax_category_id: string | null
     active: boolean | null
     product_type: $Enums.ProductType
     is_composed: boolean
@@ -6973,6 +7428,7 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
   picking_items<T extends Prisma.products$picking_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$picking_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$picking_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_price<T extends Prisma.products$product_priceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_priceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_pricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_taxes<T extends Prisma.products$product_taxesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_taxesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_taxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tax_category<T extends Prisma.products$tax_categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$tax_categoryArgs<ExtArgs>>): Prisma.Prisma__tax_categoriesClient<runtime.Types.Result.GetResult<Prisma.$tax_categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   transfer_rate<T extends Prisma.products$transfer_rateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$transfer_rateArgs<ExtArgs>>): Prisma.Prisma__transfer_ratesClient<runtime.Types.Result.GetResult<Prisma.$transfer_ratesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   warehouse_stock<T extends Prisma.products$warehouse_stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock_movements<T extends Prisma.products$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7017,6 +7473,7 @@ export interface productsFieldRefs {
   readonly is_rate_type: Prisma.FieldRef<"products", 'Boolean'>
   readonly rate_id: Prisma.FieldRef<"products", 'String'>
   readonly taxId: Prisma.FieldRef<"products", 'String'>
+  readonly tax_category_id: Prisma.FieldRef<"products", 'String'>
   readonly active: Prisma.FieldRef<"products", 'Boolean'>
   readonly product_type: Prisma.FieldRef<"products", 'ProductType'>
   readonly is_composed: Prisma.FieldRef<"products", 'Boolean'>
@@ -7757,6 +8214,25 @@ export type products$product_taxesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.Product_taxesScalarFieldEnum | Prisma.Product_taxesScalarFieldEnum[]
+}
+
+/**
+ * products.tax_category
+ */
+export type products$tax_categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tax_categories
+   */
+  select?: Prisma.tax_categoriesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tax_categories
+   */
+  omit?: Prisma.tax_categoriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.tax_categoriesInclude<ExtArgs> | null
+  where?: Prisma.tax_categoriesWhereInput
 }
 
 /**

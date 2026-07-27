@@ -1,5 +1,4 @@
 @baseUrl = http://localhost:3000/api
-#@baseUrl = https://apidonandres.asterisksuite.cloud/api
 
 ###
 # ==============================
@@ -17,50 +16,224 @@ x-tenant: dev
 ###
 @accessToken = {{login.response.body.accessToken}}
 
+# ==============================
+# 📋 IDs HARDCODEADOS
+# ==============================
 
-@documentId = REEMPLAZAR_DOCUMENT_ID
-@documentTypeId = ff5f0707-80e0-45f3-8a34-4dd5f68441ff
-@partyId = REEMPLAZAR_PARTY_ID
-@tripId = REEMPLAZAR_TRIP_ID
-@productId = REEMPLAZAR_PRODUCT_ID
+# --- Tipos de documento VENTA ---
+@docType_FA_VENTA  = ee0dc43c-a3da-4b05-979d-9a6a4497b34b
+@docType_FB_VENTA  = 9b8f9096-5109-425a-9f27-80899a95241e
+@docType_FC_VENTA  = b532858c-6b9c-469d-9816-7481bb1a1a35
+@docType_FX_VENTA  = 0bcbea63-d6a7-4ff7-b110-86414fe41bc0
 
-### Generar borradores desde TODOS los viajes completados
-POST {{baseUrl}}/documents/sales/generate-from-all-completed-trips
-Authorization: Bearer {{accessToken}}
-x-tenant: dev
+# --- Tipos de documento COMPRA ---
+@docType_FA_COMPRA = bea7ab3b-b292-4fd2-98c1-95d86b54b5df
+@docType_FB_COMPRA = e8adcdfa-07c3-4296-a092-d2edfcc3000f
+@docType_FC_COMPRA = d5d4dbe8-32b9-4dc4-96d6-cb9a0efe0fbb
 
-###
+# --- Productos ---
+@prod_EXENTO   = 817cfb23-4f92-46e6-9f5e-97fc91774224
+@prod_IVA27    = 425faaa2-9774-4fbe-96bb-15c58ddca74b
+@prod_IVA105   = b7f71351-d9a2-4cc4-a73c-283e76196565
+@prod_IVA21    = f4a9ec9c-cdde-4563-a8e5-85c66def6a6c
 
-### Generar borradores desde un viaje
-POST {{baseUrl}}/documents/sales/generate-from-trip/{{tripId}}
-Authorization: Bearer {{accessToken}}
-x-tenant: dev
+# --- Business Parties (Clientes / Proveedores) ---
+@party_CF             = 375bacbf-c331-40f3-9f47-5e129a57f62d
+@party_PROV_EXENTO    = 8daf5dc5-0d63-4d6d-b541-c92177102665
+@party_PROV_RI        = e4608877-1323-4a53-880b-8d50b98b920f
+@party_CLI_EXENTO     = 8cf06dad-3998-4674-bbbe-95dffd352ec6
+@party_CLI_MONO       = 278859ca-e731-4274-bccc-d76d1d50ee90
+@party_CLI_RI         = 57cc8a9c-d28c-4dcd-b382-18ac2acd1adc
 
-###
+# ==============================
+# 🧾 VENTAS - TESTS
+# ==============================
 
-### Crear documento de venta
+### ─────────────────────────────────────────────
+### 🧾 Venta FA: Cliente RI + Prod GRAV_21 → IVA discriminado
+### ─────────────────────────────────────────────
+# @name saleFA_RI_21
 POST {{baseUrl}}/documents/sales
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 x-tenant: dev
 
 {
-  "document_type_id": "{{documentTypeId}}",
-  "party_id": "{{partyId}}",
-  "date": "2026-05-19",
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
   "currency_code": "ARS",
-  "descrip": "Venta de productos",
-  "ref": "REF-001",
+  "descrip": "Venta FA - Cliente RI - Prod IVA 21",
   "items": [
-    {
-      "product_id": "{{productId}}",
-      "quantity": 2,
-      "unit_price": 15000
-    }
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 2100 }
   ]
 }
 
-###
+### ─────────────────────────────────────────────
+### 🧾 Venta FB: Cliente Mono + Prod GRAV_21 → IVA incluido
+### ─────────────────────────────────────────────
+# @name saleFB_MONO_21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FB_VENTA}}",
+  "party_id": "{{party_CLI_MONO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FB - Cliente Mono - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 2, "unit_price": 2100 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FB: Cliente CF + Prod GRAV_21 → IVA incluido
+### ─────────────────────────────────────────────
+# @name saleFB_CF_21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FB_VENTA}}",
+  "party_id": "{{party_CF}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FB - Consumidor Final - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 3, "unit_price": 2100 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FB: Cliente Exento + Prod GRAV_21
+### ─────────────────────────────────────────────
+# @name saleFB_EXENTO_21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FB_VENTA}}",
+  "party_id": "{{party_CLI_EXENTO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FB - Cliente Exento - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 2100 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FC: Cliente Mono + Prod Exento → sin IVA
+### ─────────────────────────────────────────────
+# @name saleFC_MONO_EXENTO
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FC_VENTA}}",
+  "party_id": "{{party_CLI_MONO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FC - Cliente Mono - Prod Exento",
+  "items": [
+    { "product_id": "{{prod_EXENTO}}", "quantity": 1, "unit_price": 5000 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FA: Cliente RI + Prod IVA 10.5
+### ─────────────────────────────────────────────
+# @name saleFA_RI_105
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Prod IVA 10.5",
+  "items": [
+    { "product_id": "{{prod_IVA105}}", "quantity": 4, "unit_price": 1000 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FA: Cliente RI + Prod IVA 27
+### ─────────────────────────────────────────────
+# @name saleFA_RI_27
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Prod IVA 27",
+  "items": [
+    { "product_id": "{{prod_IVA27}}", "quantity": 1, "unit_price": 5000 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FA: Cliente RI + Varios productos
+### ─────────────────────────────────────────────
+# @name saleFA_RI_MIXED
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FA_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FA - Cliente RI - Productos mixtos",
+  "items": [
+    { "product_id": "{{prod_IVA21}}",  "quantity": 2, "unit_price": 2100 },
+    { "product_id": "{{prod_IVA105}}", "quantity": 3, "unit_price": 1000 },
+    { "product_id": "{{prod_EXENTO}}", "quantity": 1, "unit_price": 5000 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Venta FX: Comprobante interno (sin CAE)
+### ─────────────────────────────────────────────
+# @name saleFX_RI_21
+POST {{baseUrl}}/documents/sales
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "{{docType_FX_VENTA}}",
+  "party_id": "{{party_CLI_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Venta FX - Comprobante interno",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 1000 }
+  ]
+}
+
+# ==============================
+# 📋 OPERACIONES CRUD
+# ==============================
 
 ### Obtener todos los documentos
 GET {{baseUrl}}/documents/sales
@@ -69,73 +242,29 @@ x-tenant: dev
 
 ###
 
-### Obtener documentos filtrados por tipo
-GET {{baseUrl}}/documents/sales?documentTypeId={{documentTypeId}}
-Authorization: Bearer {{accessToken}}
-x-tenant: dev
-
-###
-
-### Obtener documentos filtrados por estado
-GET {{baseUrl}}/documents/sales?status=1
-Authorization: Bearer {{accessToken}}
-x-tenant: dev
-
-###
-
-### Obtener documentos filtrados por tipo y estado
-GET {{baseUrl}}/documents/sales?documentTypeId={{documentTypeId}}&status=2
-Authorization: Bearer {{accessToken}}
-x-tenant: dev
-
-###
-
 ### Obtener documento por ID
-GET {{baseUrl}}/documents/sales/{{documentId}}
+GET {{baseUrl}}/documents/sales/{{saleFA_RI_21.response.body.id}}
 Authorization: Bearer {{accessToken}}
 x-tenant: dev
-
-###
-
-### Actualizar documento
-PATCH {{baseUrl}}/documents/sales/{{documentId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-x-tenant: dev
-
-{
-  "party_id": "{{partyId}}",
-  "currency_code": "ARS",
-  "descrip": "Documento actualizado",
-  "ref": "REF-UPDATE",
-  "status": 1,
-  "items": [
-    {
-      "product_id": "{{productId}}",
-      "quantity": 3,
-      "unit_price": 18000
-    }
-  ]
-}
 
 ###
 
 ### Confirmar documento
-PATCH {{baseUrl}}/documents/sales/{{documentId}}/confirm
+PATCH {{baseUrl}}/documents/sales/{{saleFA_RI_21.response.body.id}}/confirm
 Authorization: Bearer {{accessToken}}
 x-tenant: dev
 
 ###
 
 ### Cancelar documento
-PATCH {{baseUrl}}/documents/sales/{{documentId}}/cancel
+PATCH {{baseUrl}}/documents/sales/{{saleFA_RI_21.response.body.id}}/cancel
 Authorization: Bearer {{accessToken}}
 x-tenant: dev
 
 ###
 
 ### Eliminar documento (solo borradores)
-DELETE {{baseUrl}}/documents/sales/{{documentId}}
+DELETE {{baseUrl}}/documents/sales/{{saleFA_RI_21.response.body.id}}
 Authorization: Bearer {{accessToken}}
 x-tenant: dev
 

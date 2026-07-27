@@ -1,0 +1,5 @@
+// ══════════════════════════════════════════════════════════
+// TAX ENGINE — Configuración fiscal por empresa
+// ══════════════════════════════════════════════════════════
+// Modelo movido a public.prisma (base de datos general)
+// company_tax_settings está en la base compartida, no en cada tenant

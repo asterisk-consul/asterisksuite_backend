@@ -36,6 +36,8 @@ model taxes {
   document_taxes      document_taxes[]
   document_type_taxes document_type_taxes[]
   product_taxes       product_taxes[]
+  category_taxes      tax_category_taxes[]
+  operation_taxes     operation_taxes[]
 
   @@index([tax_type, active], map: "idx_taxes_type_active")
     @@schema("tenant")

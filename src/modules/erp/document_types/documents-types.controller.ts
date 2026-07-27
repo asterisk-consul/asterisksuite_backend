@@ -28,8 +28,14 @@ export class DocumentsTypesController {
 
   // @RequirePermissions('documents-types.read')
   @Get()
-  findAll() {
-    return this.documentsTypesService.findAll();
+  findAll(
+    @Query('direction') direction?: string,
+    @Query('issuer_condition') issuerCondition?: string,
+  ) {
+    return this.documentsTypesService.findAll(
+      direction ? Number(direction) : undefined,
+      issuerCondition,
+    );
   }
 
   // @RequirePermissions('documents-types.read')

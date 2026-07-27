@@ -29,6 +29,7 @@ import { PaymentReportsModule } from './payment-reports/payment-reports.module';
 import { ChecksModule } from './checks/checks.module';
 import { TreasuryReportsModule } from './treasury-reports/treasury-reports.module';
 import { HrModule } from './hr/hr.module';
+import { TaxEngineModule } from './tax-engine/tax-engine.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { HrModule } from './hr/hr.module';
     ChecksModule,
     TreasuryReportsModule,
     HrModule,
+    TaxEngineModule,
   ],
   exports: [
     AccountsModule,
@@ -86,6 +88,7 @@ import { HrModule } from './hr/hr.module';
     ChecksModule,
     TreasuryReportsModule,
     HrModule,
+    TaxEngineModule,
   ],
 })
 export class ErpModulesModule {}

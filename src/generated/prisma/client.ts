@@ -290,6 +290,11 @@ export type system_modules = Prisma.system_modulesModel
  */
 export type locations = Prisma.locationsModel
 /**
+ * Model operation_taxes
+ * 
+ */
+export type operation_taxes = Prisma.operation_taxesModel
+/**
  * Model pallet_items
  * 
  */
@@ -410,6 +415,11 @@ export type users = Prisma.usersModel
  */
 export type company_users = Prisma.company_usersModel
 /**
+ * Model company_tax_settings
+ * 
+ */
+export type company_tax_settings = Prisma.company_tax_settingsModel
+/**
  * Model permissions
  * 
  */
@@ -434,6 +444,16 @@ export type business_user_roles = Prisma.business_user_rolesModel
  * 
  */
 export type user_permission_overrides = Prisma.user_permission_overridesModel
+/**
+ * Model tax_categories
+ * 
+ */
+export type tax_categories = Prisma.tax_categoriesModel
+/**
+ * Model tax_category_taxes
+ * 
+ */
+export type tax_category_taxes = Prisma.tax_category_taxesModel
 /**
  * Model product_taxes
  * 

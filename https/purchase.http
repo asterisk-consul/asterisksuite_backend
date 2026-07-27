@@ -1,5 +1,4 @@
 @baseUrl = http://localhost:3000/api
-#@baseUrl = https://apidonandres.asterisksuite.cloud/api
 
 ###
 # ==============================
@@ -8,6 +7,7 @@
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+x-tenant: dev
 
 {
   "email": "admin@mail.com",
@@ -16,100 +16,155 @@ Content-Type: application/json
 ###
 @accessToken = {{login.response.body.accessToken}}
 
+# ==============================
+# 📋 IDs HARDCODEADOS
+# ==============================
 
-### =====================================================
-### 📊 RESUMEN DE COMPRAS
-### GET /purchases/summary
-### =====================================================
+# --- Tipos de documento COMPRA ---
+@docType_FA_COMPRA = bea7ab3b-b292-4fd2-98c1-95d86b54b5df
+@docType_FB_COMPRA = e8adcdfa-07c3-4296-a092-d2edfcc3000f
+@docType_FC_COMPRA = d5d4dbe8-32b9-4dc4-96d6-cb9a0efe0fbb
 
-### Resumen completo (todos los productos)
-GET {{baseUrl}}/purchases/summary
+# --- Tipos de documento VENTA ---
+@docType_FA_VENTA = ee0dc43c-a3da-4b05-979d-9a6a4497b34b
+@docType_FB_VENTA = 9b8f9096-5109-425a-9f27-80899a95241e
+@docType_FC_VENTA = b532858c-6b9c-469d-9816-7481bb1a1a35
+@docType_FX_VENTA = 0bcbea63-d6a7-4ff7-b110-86414fe41bc0
+
+# --- Productos ---
+@prod_EXENTO   = 817cfb23-4f92-46e6-9f5e-97fc91774224
+@prod_IVA27    = 425faaa2-9774-4fbe-96bb-15c58ddca74b
+@prod_IVA105   = b7f71351-d9a2-4cc4-a73c-283e76196565
+@prod_IVA21    = f4a9ec9c-cdde-4563-a8e5-85c66def6a6c
+
+# --- Business Parties (Clientes / Proveedores) ---
+@party_CF             = 375bacbf-c331-40f3-9f47-5e129a57f62d
+@party_PROV_EXENTO    = 8daf5dc5-0d63-4d6d-b541-c92177102665
+@party_PROV_RI        = e4608877-1323-4a53-880b-8d50b98b920f
+@party_CLI_EXENTO     = 8cf06dad-3998-4674-bbbe-95dffd352ec6
+@party_CLI_MONO       = 278859ca-e731-4274-bccc-d76d1d50ee90
+@party_CLI_RI         = 57cc8a9c-d28c-4dcd-b382-18ac2acd1adc
+
+# ==============================
+# 🧾 COMPRAS - TESTS
+# ==============================
+
+### ─────────────────────────────────────────────
+### 🧾 Compra FA: Proveedor RI + Prod IVA 21
+### ─────────────────────────────────────────────
+# @name purchaseFA_RI_21
+POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
 
-### Resumen filtrado por fechas
-GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-02-25
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FA - Proveedor RI - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 2, "unit_price": 2100 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Compra FB: Proveedor CF + Prod IVA 21
+### ─────────────────────────────────────────────
+# @name purchaseFB_CF_21
+POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
 
-### Resumen filtrado por proveedor
-GET {{baseUrl}}/purchases/summary?supplierId=123
+{
+  "document_type_id": "{{docType_FB_COMPRA}}",
+  "party_id": "{{party_CF}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FB - Consumidor Final - Prod IVA 21",
+  "items": [
+    { "product_id": "{{prod_IVA21}}", "quantity": 1, "unit_price": 2100 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Compra FC: Proveedor Exento + Prod Exento
+### ─────────────────────────────────────────────
+# @name purchaseFC_EXENTO
+POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
 
-### Resumen filtrado por tipo de documento
-GET {{baseUrl}}/purchases/summary?documentTypeId=84052621-1431-425b-a301-ce6429fafb6a
+{
+  "document_type_id": "{{docType_FC_COMPRA}}",
+  "party_id": "{{party_PROV_EXENTO}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FC - Proveedor Exento - Prod Exento",
+  "items": [
+    { "product_id": "{{prod_EXENTO}}", "quantity": 5, "unit_price": 5000 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Compra FA: Proveedor RI + Prod IVA 10.5
+### ─────────────────────────────────────────────
+# @name purchaseFA_RI_105
+POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
 
-### Resumen filtrado por producto
-GET {{baseUrl}}/purchases/summary?productId=b63868c0-4713-4481-ab2a-3f0754483e92
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FA - Proveedor RI - Prod IVA 10.5",
+  "items": [
+    { "product_id": "{{prod_IVA105}}", "quantity": 3, "unit_price": 1000 }
+  ]
+}
+
+### ─────────────────────────────────────────────
+### 🧾 Compra FA: Proveedor RI + Varios productos
+### ─────────────────────────────────────────────
+# @name purchaseFA_RI_MIXED
+POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
 
-### Resumen con todos los filtros combinados
-GET {{baseUrl}}/purchases/summary?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
+{
+  "document_type_id": "{{docType_FA_COMPRA}}",
+  "party_id": "{{party_PROV_RI}}",
+  "date": "2026-07-25",
+  "currency_code": "ARS",
+  "descrip": "Compra FA - Proveedor RI - Mixto",
+  "items": [
+    { "product_id": "{{prod_IVA21}}",  "quantity": 2, "unit_price": 2100 },
+    { "product_id": "{{prod_IVA105}}", "quantity": 1, "unit_price": 1000 },
+    { "product_id": "{{prod_EXENTO}}", "quantity": 3, "unit_price": 5000 }
+  ]
+}
+
+# ==============================
+# 📋 OPERACIONES CRUD
+# ==============================
+
+### Obtener todas las compras
+GET {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
+###
 
-### =====================================================
-### 🔍 DETALLE DE COMPRAS POR PRODUCTO
-### GET /purchases/products/:id
-### =====================================================
-
-### Detalle de un producto específico
-GET {{baseUrl}}/purchases/products/1
+### Obtener compra por ID
+GET {{baseUrl}}/documents/purchases-documents/{{purchaseFA_RI_21.response.body.id}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
-### Detalle filtrado por fechas
-GET {{baseUrl}}/purchases/products/1?startDate=2026-01-01&endDate=2026-12-31
-Authorization: Bearer {{accessToken}}
-
-### Detalle filtrado por proveedor
-GET {{baseUrl}}/purchases/products/1?supplierId=123
-Authorization: Bearer {{accessToken}}
-
-### Detalle con todos los filtros
-GET {{baseUrl}}/purchases/products/1?startDate=2026-01-01&endDate=2026-12-31&supplierId=123
-Authorization: Bearer {{accessToken}}
-
-
-### =====================================================
-### 📋 MOVIMIENTOS DE COMPRAS
-### GET /purchases/movements
-### =====================================================
-
-### Todos los movimientos
-GET {{baseUrl}}/purchases/movements
-Authorization: Bearer {{accessToken}}
-
-
-### Movimientos filtrados por fechas
-GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31
-Authorization: Bearer {{accessToken}}
-
-### Movimientos filtrados por proveedor
-GET {{baseUrl}}/purchases/movements?supplierId=123
-Authorization: Bearer {{accessToken}}
-
-### Movimientos filtrados por tipo de documento
-GET {{baseUrl}}/purchases/movements?documentTypeId=1
-Authorization: Bearer {{accessToken}}
-
-### Movimientos filtrados por producto
-GET {{baseUrl}}/purchases/movements?productId=fe8abe1b-337a-482d-b037-82ab6365d3dc
-Authorization: Bearer {{accessToken}}
-
-### Movimientos con todos los filtros
-GET {{baseUrl}}/purchases/movements?startDate=2026-01-01&endDate=2026-12-31&supplierId=123&documentTypeId=1&productId=456
-Authorization: Bearer {{accessToken}}
-### =====================================================
-### 🧾 DOCUMENTOS DE COMPRA
-### GET /purchases/purchases-documents
-### =====================================================
-
-GET {{baseUrl}}/purchases/purchases-documents
-Authorization: Bearer {{accessToken}}
-### =====================================================
-### 📦 PRODUCTOS DISPONIBLES
-### GET /purchases/products
-### =====================================================
-
-### Listar todos los productos con compras
-GET {{baseUrl}}/purchases/products
-Authorization: Bearer {{accessToken}}
+###

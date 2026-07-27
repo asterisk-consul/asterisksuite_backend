@@ -27,8 +27,16 @@ export class DocumentsTypesController {
 
   // @RequirePermissions('document_types.read')
   @Get()
-  findAll(@Query('company_id') companyId: string) {
-    return this.documentsTypesService.findAll(companyId);
+  findAll(
+    @Query('company_id') companyId: string,
+    @Query('direction') direction?: string,
+    @Query('issuer_condition') issuerCondition?: string,
+  ) {
+    return this.documentsTypesService.findAll(
+      companyId,
+      direction ? Number(direction) : undefined,
+      issuerCondition,
+    );
   }
 
   // @RequirePermissions('document_types.update')

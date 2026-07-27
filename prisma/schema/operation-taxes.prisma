@@ -1,0 +1,20 @@
+// ══════════════════════════════════════════════════════════
+// TAX ENGINE — Impuestos de operación (IIBB, percepciones, etc.)
+// ══════════════════════════════════════════════════════════
+
+model operation_taxes {
+  id              String   @id @default(uuid()) @db.Uuid
+  tax_id          String   @db.Uuid
+  jurisdiction    String   @db.VarChar(50)    // "CORDOBA", "BUENOS_AIRES", "CABA"
+  document_type   String?  @db.VarChar(20)    // "A", "B", "C" (null = todos)
+  rate            Decimal  @db.Decimal(6, 3)
+  min_amount      Decimal? @db.Decimal(15, 2)
+  active          Boolean  @default(true)
+  created_at      DateTime @default(now()) @db.Timestamp(6)
+  deleted_at      DateTime?
+
+  tax taxes @relation(fields: [tax_id], references: [id])
+
+  @@unique([tax_id, jurisdiction, document_type])
+  @@schema("tenant")
+}

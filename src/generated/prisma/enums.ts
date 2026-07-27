@@ -306,6 +306,14 @@ export const PartyType = {
 export type PartyType = (typeof PartyType)[keyof typeof PartyType]
 
 
+export const FiscalMode = {
+  SIMPLE: 'SIMPLE',
+  COMPLETE: 'COMPLETE'
+} as const
+
+export type FiscalMode = (typeof FiscalMode)[keyof typeof FiscalMode]
+
+
 export const HrValeType = {
   RETIRO: 'RETIRO',
   ADELANTO: 'ADELANTO',

@@ -19,12 +19,38 @@ export class DocumentsTypesService {
     });
   }
 
-  async findAll(companyId: string) {
+  async findAll(companyId: string, direction?: number, issuerCondition?: string) {
+    const where: any = { deleted_at: null }
+
+    if (direction !== undefined) {
+      where.direction = direction
+    }
+
+    if (issuerCondition) {
+      const validLetters = this.getValidLetterTypes(issuerCondition)
+      if (validLetters.length > 0) {
+        where.OR = [
+          { letter_type: { in: validLetters } },
+          { letter_type: null },
+        ]
+      }
+    }
+
     return this.prisma.document_types.findMany({
+      where,
       include: {
         document_sequences: true,
       },
     });
+  }
+
+  private getValidLetterTypes(issuerCondition: string): string[] {
+    const map: Record<string, string[]> = {
+      'RESPONSABLE_INSCRIPTO': ['A', 'B'],
+      'MONOTRIBUTO': ['C'],
+      'EXENTO': ['C'],
+    }
+    return map[issuerCondition] ?? []
   }
 
   async update(id: string, dto: UpdateDocumentsTypeDto) {
