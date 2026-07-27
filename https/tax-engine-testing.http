@@ -570,7 +570,7 @@ x-tenant: {{tenant}}
 ###
 @purchaseId_RI21 = {{purchaseRI21.response.body.id}}
 
-### 🧾 Compra FC: Proveedor Exento + Prod Exento → letra C (Exento solo emite C)
+### 🧾 Compra FC: Proveedor Exento + Prod Exento
 # @name purchaseExento
 POST {{baseUrl}}/documents/purchases-documents
 Authorization: Bearer {{accessToken}}
@@ -582,7 +582,7 @@ x-tenant: {{tenant}}
   "party_id": "{{party_PROV_EXENTO}}",
   "date": "2026-07-25",
   "currency_code": "ARS",
-  "descrip": "Compra FC - Proveedor Exento - Prod Exento (letra C)",
+  "descrip": "Compra FC - Proveedor Exento - Prod Exento",
   "items": [
     { "product_id": "{{prod_EXENTO}}", "quantity": 5, "unit_price": 5000 }
   ]
