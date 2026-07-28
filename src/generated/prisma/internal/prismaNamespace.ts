@@ -9999,6 +9999,7 @@ export const Cash_boxesScalarFieldEnum = {
   id: 'id',
   name: 'name',
   type: 'type',
+  currency_code: 'currency_code',
   responsible_id: 'responsible_id',
   opening_balance: 'opening_balance',
   max_limit: 'max_limit',

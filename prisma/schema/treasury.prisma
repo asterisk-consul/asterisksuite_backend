@@ -67,6 +67,7 @@ model cash_boxes {
   id                  String              @id @default(uuid()) @db.Uuid
   name                String              @db.VarChar(100)
   type                CashBoxType         @default(FIXED)
+  currency_code       String?             @db.VarChar(10)
   responsible_id      String?             @db.Uuid
   opening_balance     Decimal             @default(0) @db.Decimal(15, 2)
   max_limit           Decimal?            @db.Decimal(15, 2)

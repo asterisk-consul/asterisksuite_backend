@@ -965,7 +965,20 @@ export class DocumentsSalesService {
         );
       }
 
-      return this.findOne(id);
+      return tx.documents.findUnique({
+        where: { id },
+        include: {
+          document_types: true,
+          business_parties: true,
+          document_items: {
+            include: {
+              products: true,
+              document_item_taxes: { include: { taxes: true } },
+            },
+          },
+          document_taxes: { include: { taxes: true } },
+        },
+      });
     });
   }
 
@@ -973,45 +986,63 @@ export class DocumentsSalesService {
   // CANCEL
   // ─────────────────────────────────────────────
   async cancel(id: string, userId: string) {
-    const doc = await this.findOne(id);
+    return this.prisma.$transaction(async (tx) => {
+      const doc = await this.findOne(id);
 
-    if (doc.status === STATUS_CANCELLED) {
-      throw new BadRequestException('El documento ya está anulado');
-    }
+      if (doc.status === STATUS_CANCELLED) {
+        throw new BadRequestException('El documento ya está anulado');
+      }
 
-    await this.prisma.documents.update({
-      where: { id },
-      data: {
-        status: STATUS_CANCELLED,
-        updated_at: new Date(),
-      },
-    });
+      // Validar que no existan pagos activos asociados al documento
+      const associatedPayments = await tx.payment_documents.findMany({
+        where: { document_id: id },
+        include: { payments: true },
+      });
 
-    // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
-    console.log('[cancel] doc.party_id:', doc.party_id)
-    console.log('[cancel] affects_accounting:', doc.document_types?.affects_accounting)
-    console.log('[cancel] would create entry:', !!(doc.party_id && doc.document_types?.affects_accounting))
-
-    if (doc.party_id && doc.document_types?.affects_accounting) {
-      const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
-      const docTotal = doc.total.toNumber();
-
-      await this.currentAccountsService.addEntry(
-        {
-          party_id: doc.party_id,
-          party_type: partyType,
-          currency_code: doc.currency_code,
-          type: 'CREDIT_NOTE',
-          amount: docTotal,
-          description: `Anulación factura venta #${doc.number}`,
-          reference_type: 'document_reversal',
-          reference_id: doc.id,
-        },
-        userId,
+      const activePayments = associatedPayments.filter(
+        ap => ap.payments.status === 'CONFIRMED' || ap.payments.status === 'PAID'
       );
-    }
 
-    return this.prisma.documents.findUnique({ where: { id } });
+      if (activePayments.length > 0) {
+        throw new BadRequestException(
+          'No se puede anular el documento porque tiene pagos asociados. Primero anule los pagos.'
+        );
+      }
+
+      await tx.documents.update({
+        where: { id },
+        data: {
+          status: STATUS_CANCELLED,
+          updated_at: new Date(),
+        },
+      });
+
+      // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
+      console.log('[cancel] doc.party_id:', doc.party_id)
+      console.log('[cancel] affects_accounting:', doc.document_types?.affects_accounting)
+      console.log('[cancel] would create entry:', !!(doc.party_id && doc.document_types?.affects_accounting))
+
+      if (doc.party_id && doc.document_types?.affects_accounting) {
+        const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
+        const docTotal = doc.total.toNumber();
+
+        await this.currentAccountsService.addEntry(
+          {
+            party_id: doc.party_id,
+            party_type: partyType,
+            currency_code: doc.currency_code,
+            type: 'CREDIT_NOTE',
+            amount: docTotal,
+            description: `Anulación factura venta #${doc.number}`,
+            reference_type: 'document_reversal',
+            reference_id: doc.id,
+          },
+          userId,
+        );
+      }
+
+      return tx.documents.findUnique({ where: { id } });
+    });
   }
 
   // ─────────────────────────────────────────────

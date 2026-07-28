@@ -912,98 +912,118 @@ export class DocumentsPurchasesService {
   // CONFIRM
   // ─────────────────────────────────────────────
   async confirm(id: string, userId: string) {
-    const doc = await this.findOne(id);
+    return this.prisma.$transaction(async (tx) => {
+      const doc = await this.findOne(id);
 
-    if (doc.status === STATUS_CONFIRMED) {
-      throw new BadRequestException('El documento ya está confirmado');
-    }
+      if (doc.status === STATUS_CONFIRMED) {
+        throw new BadRequestException('El documento ya está confirmado');
+      }
 
-    if (!doc.document_items.length) {
-      throw new BadRequestException('El documento no tiene ítems');
-    }
+      if (!doc.document_items.length) {
+        throw new BadRequestException('El documento no tiene ítems');
+      }
 
-    await this.prisma.documents.update({
-      where: { id },
-      data: {
-        status: STATUS_CONFIRMED,
-        updated_at: new Date(),
-      },
-    });
-
-    // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
-    console.log('[confirm-purchases] doc.party_id:', doc.party_id)
-    console.log('[confirm-purchases] doc.document_types:', doc.document_types)
-    console.log('[confirm-purchases] affects_accounting:', doc.document_types?.affects_accounting)
-    console.log('[confirm-purchases] direction:', doc.document_types?.direction)
-
-    if (doc.party_id && doc.document_types?.affects_accounting) {
-      const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
-      const docTotal = doc.total.toNumber();
-
-      console.log('[confirm-purchases] CREATING current account entry...')
-      await this.currentAccountsService.addEntry(
-        {
-          party_id: doc.party_id,
-          party_type: partyType,
-          currency_code: doc.currency_code,
-          type: 'INVOICE',
-          amount: docTotal,
-          description: `Factura compra #${doc.number}`,
-          reference_type: 'document',
-          reference_id: doc.id,
+      await tx.documents.update({
+        where: { id },
+        data: {
+          status: STATUS_CONFIRMED,
+          updated_at: new Date(),
         },
-        userId,
-      );
-      console.log('[confirm-purchases] Current account entry CREATED successfully')
-    }
+      });
 
-    return this.prisma.documents.findUnique({ where: { id } });
+      // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
+      console.log('[confirm-purchases] doc.party_id:', doc.party_id)
+      console.log('[confirm-purchases] doc.document_types:', doc.document_types)
+      console.log('[confirm-purchases] affects_accounting:', doc.document_types?.affects_accounting)
+      console.log('[confirm-purchases] direction:', doc.document_types?.direction)
+
+      if (doc.party_id && doc.document_types?.affects_accounting) {
+        const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
+        const docTotal = doc.total.toNumber();
+
+        console.log('[confirm-purchases] CREATING current account entry...')
+        await this.currentAccountsService.addEntry(
+          {
+            party_id: doc.party_id,
+            party_type: partyType,
+            currency_code: doc.currency_code,
+            type: 'INVOICE',
+            amount: docTotal,
+            description: `Factura compra #${doc.number}`,
+            reference_type: 'document',
+            reference_id: doc.id,
+          },
+          userId,
+        );
+        console.log('[confirm-purchases] Current account entry CREATED successfully')
+      }
+
+      return tx.documents.findUnique({ where: { id } });
+    });
   }
 
   // ─────────────────────────────────────────────
   // CANCEL
   // ─────────────────────────────────────────────
   async cancel(id: string, userId: string) {
-    const doc = await this.findOne(id);
+    return this.prisma.$transaction(async (tx) => {
+      const doc = await this.findOne(id);
 
-    if (doc.status === STATUS_CANCELLED) {
-      throw new BadRequestException('El documento ya está anulado');
-    }
+      if (doc.status === STATUS_CANCELLED) {
+        throw new BadRequestException('El documento ya está anulado');
+      }
 
-    await this.prisma.documents.update({
-      where: { id },
-      data: {
-        status: STATUS_CANCELLED,
-        updated_at: new Date(),
-      },
-    });
+      // Validar que no existan pagos activos asociados al documento
+      const associatedPayments = await tx.payment_documents.findMany({
+        where: { document_id: id },
+        include: { payments: true },
+      });
 
-    // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
-    console.log('[cancel-purchases] doc.party_id:', doc.party_id)
-    console.log('[cancel-purchases] affects_accounting:', doc.document_types?.affects_accounting)
-
-    if (doc.party_id && doc.document_types?.affects_accounting) {
-      const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
-      const docTotal = doc.total.toNumber();
-
-      console.log('[cancel-purchases] CREATING reversal entry...')
-      await this.currentAccountsService.addEntry(
-        {
-          party_id: doc.party_id,
-          party_type: partyType,
-          currency_code: doc.currency_code,
-          type: 'CREDIT_NOTE',
-          amount: docTotal,
-          description: `Anulación factura compra #${doc.number}`,
-          reference_type: 'document_reversal',
-          reference_id: doc.id,
-        },
-        userId,
+      const activePayments = associatedPayments.filter(
+        ap => ap.payments.status === 'CONFIRMED' || ap.payments.status === 'PAID'
       );
-      console.log('[cancel-purchases] Reversal entry CREATED successfully')
-    }
 
-    return this.prisma.documents.findUnique({ where: { id } });
+      if (activePayments.length > 0) {
+        throw new BadRequestException(
+          'No se puede anular el documento porque tiene pagos asociados. Primero anule los pagos.'
+        );
+      }
+
+      await tx.documents.update({
+        where: { id },
+        data: {
+          status: STATUS_CANCELLED,
+          updated_at: new Date(),
+        },
+      });
+
+      // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
+      console.log('[cancel-purchases] doc.party_id:', doc.party_id)
+      console.log('[cancel-purchases] affects_accounting:', doc.document_types?.affects_accounting)
+
+      if (doc.party_id && doc.document_types?.affects_accounting) {
+        const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
+        const docTotal = doc.total.toNumber();
+
+        console.log('[cancel-purchases] CREATING reversal entry...')
+        await this.currentAccountsService.addEntry(
+          {
+            party_id: doc.party_id,
+            party_type: partyType,
+            currency_code: doc.currency_code,
+            type: 'CREDIT_NOTE',
+            amount: docTotal,
+            description: `Anulación factura compra #${doc.number}`,
+            reference_type: 'document_reversal',
+            reference_id: doc.id,
+          },
+          userId,
+        );
+        console.log('[cancel-purchases] Reversal entry CREATED successfully')
+      }
+
+      return tx.documents.findUnique({ where: { id } });
+    });
   }
 
   // ─────────────────────────────────────────────

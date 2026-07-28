@@ -72,6 +72,8 @@ export class TaxResolutionService {
     return {
       ...base,
       country: raw.country ?? base.country,
+      pricesIncludeTax: raw.prices_include_tax ?? base.pricesIncludeTax,
+      showTaxBreakdown: raw.show_tax_breakdown ?? base.showTaxBreakdown,
     }
   }
 
@@ -104,7 +106,7 @@ export class TaxResolutionService {
         tax_type: ct.tax.tax_type,
         calculation_level: ct.tax.calculation_level,
         is_included_in_price: ct.tax.tax_type === 'IVA'
-          ? (documentLetterType === 'B' || documentLetterType === 'C')
+          ? settings.pricesIncludeTax
           : ct.is_included_in_price,
         source: 'PRODUCT' as const,
         reason: `Categoría fiscal: ${ct.tax_category.name}`,

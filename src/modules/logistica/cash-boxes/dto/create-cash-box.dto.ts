@@ -1,9 +1,13 @@
-import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
 
 export class CreateCashBoxDto {
   @IsString()
   @MaxLength(100)
   name!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  currency_code!: string;
 
   @IsOptional()
   @IsEnum(['MAIN', 'FIXED', 'REGISTER'] as const)

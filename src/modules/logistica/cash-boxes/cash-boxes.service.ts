@@ -26,10 +26,12 @@ export class CashBoxesService {
       });
     }
 
-    return this.prisma.cash_boxes.create({
+    const box = await this.prisma.cash_boxes.create({
       data: {
         name: dto.name,
         type: dto.type as any ?? 'FIXED',
+        currency_code: dto.currency_code,
+        status: 'CLOSED',
         responsible_id: dto.responsible_id,
         opening_balance: dto.opening_balance ?? 0,
         max_limit: dto.max_limit,
@@ -38,6 +40,20 @@ export class CashBoxesService {
         created_by: userId,
       },
     });
+
+    // Crear balance inicial con la currency seleccionada
+    if (dto.opening_balance && dto.opening_balance > 0) {
+      await this.prisma.cash_box_balances.create({
+        data: {
+          cash_box_id: box.id,
+          currency_code: dto.currency_code,
+          balance: dto.opening_balance,
+          created_by: userId,
+        },
+      });
+    }
+
+    return box;
   }
 
   async findAll(userId?: string) {

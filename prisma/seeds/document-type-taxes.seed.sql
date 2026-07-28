@@ -98,9 +98,23 @@ WHERE t.code = 'IVA_21'
   );
 
 -- ═══════════════════════════════════════════════════════════
+-- PRODUCTS.TAX_CATEGORY_ID: Asignar categoría fiscal a productos
+-- (el motor fiscal lee de tax_category_id, NO de product_taxes)
+-- ═══════════════════════════════════════════════════════════
+
+-- Productos con IVA 21% por defecto → GRAV_21
+UPDATE tenant.products
+SET tax_category_id = (
+  SELECT id FROM tenant.tax_categories WHERE code = 'GRAV_21' LIMIT 1
+)
+WHERE tax_category_id IS NULL;
+
+-- ═══════════════════════════════════════════════════════════
 -- RESUMEN
 -- ═══════════════════════════════════════════════════════════
 
 SELECT 'document_type_taxes' as tabla, COUNT(*) as registros FROM tenant.document_type_taxes
 UNION ALL
-SELECT 'product_taxes', COUNT(*) FROM tenant.product_taxes;
+SELECT 'product_taxes', COUNT(*) FROM tenant.product_taxes
+UNION ALL
+SELECT 'products_with_category', COUNT(*) FROM tenant.products WHERE tax_category_id IS NOT NULL;
