@@ -53,8 +53,6 @@ export class DocumentsPurchasesService {
   // CREATE
   // ─────────────────────────────────────────────
   async create(dto: CreateDocumentDto) {
-    console.log('[PurchasesService] create() called with dto:', JSON.stringify(dto, null, 2))
-
     const docType = await this.prisma.document_types.findUnique({
       where: {
         id: dto.document_type_id,
@@ -89,7 +87,6 @@ export class DocumentsPurchasesService {
     }
 
     // ─── Tax Engine: resolver impuestos ──────────────────────────
-    console.log('[PurchasesService] Resolving taxes via Tax Engine...')
 
     const company = await this.db.getDefaultClient().companies.findUnique({
       where: { id: getCurrentCompanyId() ?? '' },

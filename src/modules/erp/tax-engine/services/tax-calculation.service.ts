@@ -5,19 +5,12 @@ import type { TaxContextItem } from '../interfaces/tax-context.interface'
 @Injectable()
 export class TaxCalculationService {
   calculate(resolution: TaxResolutionResult, items: TaxContextItem[]): TaxCalculationResult {
-    console.log('[TaxCalculation] calculate() called')
-    console.log('[TaxCalculation] pricesIncludeTax:', resolution.settings.pricesIncludeTax)
-    console.log('[TaxCalculation] items:', items)
-
     const calcItems: CalculatedItem[] = []
     const allItemTaxes: CalculatedItemTax[] = []
 
     for (const item of items) {
-      console.log('[TaxCalculation] Processing item:', item)
       const productTaxes = resolution.productTaxes.get(item.productId ?? '') ?? []
       const allTaxes = [...productTaxes, ...resolution.operationTaxes]
-      console.log('[TaxCalculation] productTaxes:', productTaxes)
-      console.log('[TaxCalculation] allTaxes:', allTaxes)
 
       const price = item.quantity * item.unitPrice
       const itemTaxes: CalculatedItemTax[] = []
@@ -25,14 +18,10 @@ export class TaxCalculationService {
       let includedTaxes = 0
 
       for (const tax of allTaxes) {
-        if (tax.calculation_level !== 'line') {
-          console.log('[TaxCalculation] Skipping tax (not line level):', tax.name, tax.calculation_level)
-          continue
-        }
+        if (tax.calculation_level !== 'line') continue
 
         if (tax.is_included_in_price) {
           const amount = price - price / (1 + tax.rate / 100)
-          console.log('[TaxCalculation] Included tax:', tax.name, 'rate:', tax.rate, 'amount:', amount)
           itemTaxes.push({
             tax_id: tax.tax_id,
             code: tax.code,
@@ -47,7 +36,6 @@ export class TaxCalculationService {
           includedTaxes += amount
         } else {
           const amount = price * (tax.rate / 100)
-          console.log('[TaxCalculation] Added tax:', tax.name, 'rate:', tax.rate, 'amount:', amount)
           itemTaxes.push({
             tax_id: tax.tax_id,
             code: tax.code,
@@ -75,16 +63,14 @@ export class TaxCalculationService {
         totalTaxes,
         total: price + addedTaxes,
       }
-      console.log('[TaxCalculation] calcItem:', calcItem)
       calcItems.push(calcItem)
 
       allItemTaxes.push(...itemTaxes)
     }
 
     const documentTaxes = this.groupTaxesByTaxId(allItemTaxes)
-    console.log('[TaxCalculation] documentTaxes:', documentTaxes)
 
-    const result = {
+    return {
       document: {
         settings: resolution.settings,
         items: calcItems,
@@ -96,8 +82,6 @@ export class TaxCalculationService {
         total: calcItems.reduce((s, i) => s + i.total, 0),
       },
     }
-    console.log('[TaxCalculation] Final result:', result)
-    return result
   }
 
   private groupTaxesByTaxId(taxes: CalculatedItemTax[]): CalculatedDocumentTax[] {

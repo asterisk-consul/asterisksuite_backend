@@ -33,7 +33,7 @@ export class CurrentAccountsService {
     }
 
     const currentBalance = account.balance.toNumber();
-    const isDebit = ['PAYMENT', 'LOAN', 'CHECK_ISSUED', 'TRANSFER', 'INVOICE', 'DEBIT_NOTE', 'DEBIT'].includes(dto.type);
+    const isDebit = this.resolveIsDebit(dto.type, dto.party_type);
     const balanceAfter = isDebit ? currentBalance - dto.amount : currentBalance + dto.amount;
 
     const entry = await this.prisma.current_account_entries.create({
@@ -85,19 +85,20 @@ export class CurrentAccountsService {
 
     const entries = await this.prisma.current_account_entries.findMany({
       where: { current_account_id: account.id, deleted_at: null },
-      orderBy: { date: 'desc' },
+      orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
     });
 
-    const userIds = [...new Set(entries.map(e => e.created_by).filter(Boolean))] as string[];
-    const users = userIds.length > 0
-      ? await this.db.getDefaultClient().users.findMany({
-          where: { id: { in: userIds } },
-          select: { id: true, name: true }
-        })
-      : [];
-    const userMap = new Map(users.map(u => [u.id, u.name]));
+    const userIds = [...new Set(entries.map((e) => e.created_by).filter(Boolean))] as string[];
+    const users =
+      userIds.length > 0
+        ? await this.db.getDefaultClient().users.findMany({
+            where: { id: { in: userIds } },
+            select: { id: true, name: true },
+          })
+        : [];
+    const userMap = new Map(users.map((u) => [u.id, u.name]));
 
-    return entries.map(e => ({
+    return entries.map((e) => ({
       ...e,
       user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
     }));
@@ -119,16 +120,17 @@ export class CurrentAccountsService {
 
     if (!account) throw new NotFoundException('Cuenta corriente no encontrada');
 
-    const userIds = [...new Set(account.entries.map(e => e.created_by).filter(Boolean))] as string[];
-    const users = userIds.length > 0
-      ? await this.db.getDefaultClient().users.findMany({
-          where: { id: { in: userIds } },
-          select: { id: true, name: true }
-        })
-      : [];
-    const userMap = new Map(users.map(u => [u.id, u.name]));
+    const userIds = [...new Set(account.entries.map((e) => e.created_by).filter(Boolean))] as string[];
+    const users =
+      userIds.length > 0
+        ? await this.db.getDefaultClient().users.findMany({
+            where: { id: { in: userIds } },
+            select: { id: true, name: true },
+          })
+        : [];
+    const userMap = new Map(users.map((u) => [u.id, u.name]));
 
-    const entriesWithUser = account.entries.map(e => ({
+    const entriesWithUser = account.entries.map((e) => ({
       ...e,
       user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
     }));
@@ -168,5 +170,41 @@ export class CurrentAccountsService {
       },
       orderBy: { balance: 'asc' },
     });
+  }
+
+  async findAll(filters?: { party_type?: string; currency_code?: string; balance_filter?: string }) {
+    const where: any = { deleted_at: null };
+
+    if (filters?.party_type) where.party_type = filters.party_type;
+    if (filters?.currency_code) where.currency_code = filters.currency_code;
+
+    if (filters?.balance_filter === 'positive') where.balance = { gt: 0 };
+    else if (filters?.balance_filter === 'negative') where.balance = { lt: 0 };
+    else if (filters?.balance_filter === 'zero') where.balance = 0;
+
+    return this.prisma.current_accounts.findMany({
+      where,
+      include: {
+        party: { select: { id: true, name: true, type: true, tax_id: true } },
+      },
+      orderBy: { balance: 'desc' },
+    });
+  }
+
+  private resolveIsDebit(type: string, partyType: string): boolean {
+    // isDebit = true → balance DISMINUYE (convención del backend)
+    // isDebit = false → balance AUMENTA
+    //
+    // CLIENTE (a cobrar):
+    //   Factura → balance sube (me deben) → isDebit = false
+    //   Cobro   → balance baja (pagaron)  → isDebit = true
+    //
+    // PROVEEDOR (a pagar):
+    //   Factura → balance baja (les debo más) → isDebit = true
+    //   Pago    → balance sube (les pagué)    → isDebit = false
+    if (type === 'INVOICE') return partyType === 'SUPPLIER';
+    if (type === 'CREDIT_NOTE') return partyType === 'CUSTOMER';
+    if (type === 'PAYMENT') return partyType === 'CUSTOMER';
+    return ['LOAN', 'CHECK_ISSUED', 'TRANSFER', 'DEBIT_NOTE', 'DEBIT'].includes(type);
   }
 }

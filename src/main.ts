@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
-import { ValidationPipe, Logger } from '@nestjs/common';
+import { ValidationPipe, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RequestContextInterceptor } from './common/interceptors/request-context.interceptor.js';
 import * as express from 'express';
@@ -39,6 +39,14 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
       forbidNonWhitelisted: true,
+      exceptionFactory: (errors) => {
+        console.log('[VALIDATION] Errors:', JSON.stringify(errors.map(e => ({
+          field: e.property,
+          constraints: e.constraints,
+          value: e.value
+        }))))
+        return new BadRequestException(errors)
+      }
     }),
   );
 

@@ -19,7 +19,7 @@ model product_taxes {
 
 model taxes {
   id                  String                @id @default(uuid()) @db.Uuid
-  code                String                @db.VarChar(20)
+  code                String                @unique @db.VarChar(20)
   name                String                @db.VarChar(100)
   tax_type            String                @db.VarChar(30)
   rate                Decimal               @db.Decimal(6, 3)

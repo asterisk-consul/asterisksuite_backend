@@ -55,4 +55,18 @@ export class CurrentAccountsController {
   findActive() {
     return this.currentAccountsService.findActive();
   }
+
+  @Get()
+  // @RequirePermissions('treasury.current_accounts.read')
+  findAll(
+    @Query('party_type') partyType?: string,
+    @Query('currency_code') currencyCode?: string,
+    @Query('balance_filter') balanceFilter?: string,
+  ) {
+    return this.currentAccountsService.findAll({
+      party_type: partyType,
+      currency_code: currencyCode,
+      balance_filter: balanceFilter,
+    });
+  }
 }
