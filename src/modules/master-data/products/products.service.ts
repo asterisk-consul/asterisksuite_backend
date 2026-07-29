@@ -123,6 +123,12 @@ export class ProductsService {
             taxes: true,
           },
         },
+
+        // ─────────────
+        // CATEGORÍA FISCAL
+        // ─────────────
+
+        tax_category: true,
       },
     });
   }
@@ -259,6 +265,12 @@ export class ProductsService {
             taxes: true,
           },
         },
+
+        // ─────────────
+        // CATEGORÍA FISCAL
+        // ─────────────
+
+        tax_category: true,
 
         // ─────────────
         // HIJOS — registros donde este producto es el PADRE

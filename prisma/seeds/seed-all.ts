@@ -40,27 +40,65 @@ console.log(`\n🌱 Seed unificado para tenant: ${tenantDb}`)
 console.log(`   URL: ${connectionString.replace(/\/\/.*@/, '//***@')}\n`)
 
 // ─── SQL Runner ───────────────────────────────────────────
-function runSql(label: string, sql: string) {
+async function runSql(label: string, sql: string) {
   console.log(`  📄 ${label}...`)
   const pool = new Pool({
     connectionString,
-    options: `-c search_path="tenant",public`,
+    options: `-c search_path=tenant,public`,
     max: 1,
   })
   try {
-    // Ejecutar cada línea SQL por separado
     const statements = sql
       .split(';')
       .map(s => s.trim())
-      .filter(s => s.length > 0 && !s.startsWith('--'))
+      .map(s => s.split('\n').filter(line => !line.trim().startsWith('--')).join('\n').trim())
+      .filter(s => s.length > 0)
 
+    let executed = 0
     for (const stmt of statements) {
-      pool.query(stmt).catch(() => {}) // ignore errors per statement
+      const preview = stmt.substring(0, 80).replace(/\n/g, ' ')
+      console.log(`     ▶ ${preview}...`)
+      const result = await pool.query(stmt)
+      console.log(`     ✅ ${result.rowCount} fila(s) afectada(s)`)
+      executed++
     }
-    console.log(`  ✅ ${label} — OK`)
+    console.log(`  ✅ ${label} — OK (${executed} statements)`)
+  } catch (e: any) {
+    console.error(`  ❌ ${label} — ERROR: ${e.message}`)
+    console.error(`     Detail: ${e.detail || 'sin detalle'}`)
+    console.error(`     Hint: ${e.hint || 'sin hint'}`)
   } finally {
-    pool.end()
+    await pool.end()
   }
+}
+
+async function debugConnection() {
+  console.log('🔍 DEBUG — Verificando conexión...')
+  console.log(`   DATABASE_URL_BASE: ${process.env.DATABASE_URL_BASE}`)
+  console.log(`   Tenant DB: ${tenantDb}`)
+  console.log(`   Connection string: ${connectionString.replace(/\/\/.*@/, '//***@')}`)
+
+  const pool = new Pool({ connectionString, max: 1 })
+  try {
+    const dbCheck = await pool.query(`SELECT current_database()`)
+    console.log(`   ✅ Conectado a: ${dbCheck.rows[0].current_database}`)
+
+    const schemas = await pool.query(`SELECT schema_name FROM information_schema.schemata ORDER BY schema_name`)
+    console.log(`   📋 Schemas: ${schemas.rows.map(r => r.schema_name).join(', ')}`)
+
+    const hasTenant = schemas.rows.some(r => r.schema_name === 'tenant')
+    if (hasTenant) {
+      const tables = await pool.query(`SELECT table_name FROM information_schema.tables WHERE table_schema = 'tenant' ORDER BY table_name`)
+      console.log(`   📋 Tablas en tenant: ${tables.rows.map(r => r.table_name).join(', ')}`)
+    } else {
+      console.log(`   ⚠️  Schema "tenant" NO existe en la base de datos`)
+    }
+  } catch (e: any) {
+    console.error(`   ❌ Error de conexión: ${e.message}`)
+  } finally {
+    await pool.end()
+  }
+  console.log('')
 }
 
 // ─── SQL Definitions ──────────────────────────────────────
@@ -76,8 +114,7 @@ VALUES
   (gen_random_uuid(), 'IMP_IVA1', 'IVA 21% (Importación)', 'IVA', 21.000, true, true, 'line'),
   (gen_random_uuid(), 'IMP_IVA2', 'IVA 10.5% (Importación)', 'IVA', 10.500, true, true, 'line'),
   (gen_random_uuid(), 'IMP_IVA3', 'IVA 27% (Importación)', 'IVA', 27.000, true, true, 'line')
-ON CONFLICT (code) DO UPDATE SET
-  name = EXCLUDED.name, rate = EXCLUDED.rate, calculation_level = EXCLUDED.calculation_level, active = true;
+ON CONFLICT DO NOTHING;
 
 -- Percepciones
 INSERT INTO tenant.taxes (id, code, name, tax_type, rate, is_percentage, active, calculation_level)
@@ -89,8 +126,7 @@ VALUES
   (gen_random_uuid(), 'COM_PERC_IIBB', 'Percepción IIBB (Compra)', 'PERCEPCION', 3.500, true, true, 'DOCUMENT'),
   (gen_random_uuid(), 'COM_PERC_MUN', 'Percepción Municipal (Compra)', 'PERCEPCION', 2.500, true, true, 'DOCUMENT'),
   (gen_random_uuid(), 'COM_PERC_IVA', 'Percepción IVA (Compra)', 'PERCEPCION', 3.000, true, true, 'DOCUMENT')
-ON CONFLICT (code) DO UPDATE SET
-  name = EXCLUDED.name, rate = EXCLUDED.rate, active = true;
+ON CONFLICT DO NOTHING;
 
 -- Retenciones
 INSERT INTO tenant.taxes (id, code, name, tax_type, rate, is_percentage, active, calculation_level)
@@ -99,15 +135,13 @@ VALUES
   (gen_random_uuid(), 'RET_IIBB', 'Retención IIBB', 'RETENCION', 2.500, true, true, 'DOCUMENT'),
   (gen_random_uuid(), 'RET_GANANCIAS', 'Retención Ganancias', 'RETENCION', 1.000, true, true, 'DOCUMENT'),
   (gen_random_uuid(), 'RET_SUSS', 'Retención SUSS', 'RETENCION', 1.000, true, true, 'DOCUMENT')
-ON CONFLICT (code) DO UPDATE SET
-  name = EXCLUDED.name, rate = EXCLUDED.rate, active = true;
+ON CONFLICT DO NOTHING;
 
 -- Impuestos Internos
 INSERT INTO tenant.taxes (id, code, name, tax_type, rate, is_percentage, active, calculation_level)
 VALUES
   (gen_random_uuid(), 'IIII', 'Impuestos Internos', 'IMPUESTO_INTERNO', 10.000, true, true, 'line')
-ON CONFLICT (code) DO UPDATE SET
-  name = EXCLUDED.name, rate = EXCLUDED.rate, active = true;
+ON CONFLICT DO NOTHING;
 `
 
 const SQL_TAX_CATEGORIES = `
@@ -308,36 +342,73 @@ VALUES
   (gen_random_uuid(), 'INTERES_CAP', 'Interés capitalizable', 'Interés que se capitaliza', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
   (gen_random_uuid(), 'AJUSTE_BCRA', 'Ajuste BCRA', 'Ajuste por resolución BCRA', 'ADJUSTMENT', '6205', false, NULL, false, false, NULL, true),
   (gen_random_uuid(), 'DIF_CAMBIO', 'Diferencia de cambio', 'Diferencia por tipo de cambio', 'ADJUSTMENT', '6205', false, NULL, false, false, NULL, true)
-ON CONFLICT (code) DO UPDATE SET
-  name = EXCLUDED.name, description = EXCLUDED.description, active = true;
+ON CONFLICT DO NOTHING;
+`
+
+const SQL_DOCUMENT_SEQUENCES = `
+-- Secuencias de documentos (Punto de venta 0001)
+INSERT INTO document_sequences (id, name, automatic, point_of_sale, current_number, prefix, active)
+VALUES
+  (gen_random_uuid(), 'Ventas A', true, '0001', 0, 'A', true),
+  (gen_random_uuid(), 'Ventas B', true, '0001', 0, 'B', true),
+  (gen_random_uuid(), 'Ventas C', true, '0001', 0, 'C', true),
+  (gen_random_uuid(), 'General', true, '0001', 0, NULL, true)
+ON CONFLICT DO NOTHING;
+`
+
+const SQL_LINK_SEQUENCES = `
+-- Vincular document_types con secuencias
+UPDATE document_types SET document_sequence_id = (
+  SELECT id FROM document_sequences WHERE name = 'Ventas A' AND point_of_sale = '0001' LIMIT 1
+) WHERE code IN ('FA-A', 'NCA', 'NDA');
+
+UPDATE document_types SET document_sequence_id = (
+  SELECT id FROM document_sequences WHERE name = 'Ventas B' AND point_of_sale = '0001' LIMIT 1
+) WHERE code IN ('FB-A', 'NCB', 'NDB');
+
+UPDATE document_types SET document_sequence_id = (
+  SELECT id FROM document_sequences WHERE name = 'Ventas C' AND point_of_sale = '0001' LIMIT 1
+) WHERE code = 'FC-A';
+
+UPDATE document_types SET document_sequence_id = (
+  SELECT id FROM document_sequences WHERE name = 'General' AND point_of_sale = '0001' LIMIT 1
+) WHERE code IN ('FX-A', 'OV', 'OC', 'PRES', 'REC', 'REM-V', 'REM-C', 'REM-T', 'FA-C', 'FB-C', 'FC-C', 'NCA-C', 'NDA-C');
 `
 
 // ─── Main ─────────────────────────────────────────────────
 async function main() {
   const startTime = Date.now()
 
+  await debugConnection()
+
   // 1. Impuestos
-  runSql('Impuestos (IVA, percepciones, retenciones)', SQL_TAXES)
+  await runSql('Impuestos (IVA, percepciones, retenciones)', SQL_TAXES)
 
   // 2. Categorías fiscales
-  runSql('Categorías fiscales (GRAV_21, GRAV_105, GRAV_27, EXENTO, NO_GRAV)', SQL_TAX_CATEGORIES)
+  await runSql('Categorías fiscales (GRAV_21, GRAV_105, GRAV_27, EXENTO, NO_GRAV)', SQL_TAX_CATEGORIES)
 
   // 3. Asociaciones categoría ↔ impuesto
-  runSql('Asociaciones categoría ↔ impuesto', SQL_TAX_CATEGORY_TAXES)
+  await runSql('Asociaciones categoría ↔ impuesto', SQL_TAX_CATEGORY_TAXES)
 
   // 4. Productos sin categoría → GRAV_21
-  runSql('Asignar GRAV_21 a productos sin categoría', SQL_PRODUCT_TAX_CATEGORY)
+  await runSql('Asignar GRAV_21 a productos sin categoría', SQL_PRODUCT_TAX_CATEGORY)
 
   // 5. Tipos de documento
-  runSql('Tipos de documento (FA, FB, FC, NC, ND, OV, OC, REC, REM, PRES, FX)', SQL_DOCUMENT_TYPES)
+  await runSql('Tipos de documento (FA, FB, FC, NC, ND, OV, OC, REC, REM, PRES, FX)', SQL_DOCUMENT_TYPES)
 
   // 6. Document types ↔ impuestos
-  runSql('Document types ↔ impuestos', SQL_DOCUMENT_TYPE_TAXES)
+  await runSql('Document types ↔ impuestos', SQL_DOCUMENT_TYPE_TAXES)
 
-  // 7. Conceptos bancarios
-  runSql('Conceptos bancarios (13 conceptos)', SQL_BANK_CONCEPTS)
+  // 7. Secuencias de documentos
+  await runSql('Secuencias de documentos (4 secuencias POS 0001)', SQL_DOCUMENT_SEQUENCES)
 
-  // 8. Plan de cuentas (TypeScript seed)
+  // 8. Vincular document_types ↔ secuencias
+  await runSql('Vincular document_types ↔ secuencias', SQL_LINK_SEQUENCES)
+
+  // 9. Conceptos bancarios
+  await runSql('Conceptos bancarios (13 conceptos)', SQL_BANK_CONCEPTS)
+
+  // 10. Plan de cuentas (TypeScript seed)
   console.log('  📄 Plan de cuentas...')
   try {
     execSync(`npx tsx prisma/seeds/accounts.seed.ts ${tenant}`, {
@@ -355,6 +426,7 @@ async function main() {
   console.log(`   Impuestos: IVA 21/10.5/27/0 + percepciones + retenciones`)
   console.log(`   Categorías: GRAV_21, GRAV_105, GRAV_27, EXENTO, NO_GRAV`)
   console.log(`   Documentos: 14 tipos (venta + compra + órdenes + recibos + remitos)`)
+  console.log(`   Secuencias: 4 (Ventas A/B/C + General) POS 0001`)
   console.log(`   Bancos: 13 conceptos`)
   console.log(`   Contabilidad: plan de cuentas argentino\n`)
 }
