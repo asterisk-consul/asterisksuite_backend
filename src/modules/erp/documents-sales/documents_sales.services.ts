@@ -950,14 +950,24 @@ export class DocumentsSalesService {
         const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
         const docTotal = doc.total.toNumber();
 
+        // Determinar tipo de entrada según la categoría del documento
+        const category = doc.document_types?.category;
+        const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
+                        : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
+                        : 'INVOICE';
+
+        const description = category === 'CREDIT_NOTE' ? `NC venta #${doc.number}`
+                          : category === 'DEBIT_NOTE' ? `ND venta #${doc.number}`
+                          : `Factura venta #${doc.number}`;
+
         await this.currentAccountsService.addEntry(
           {
             party_id: doc.party_id,
             party_type: partyType,
             currency_code: currencyCode,
-            type: 'INVOICE',
+            type: entryType,
             amount: docTotal,
-            description: `Factura venta #${doc.number}`,
+            description,
             reference_type: 'document',
             reference_id: doc.id,
           },
@@ -1026,6 +1036,13 @@ export class DocumentsSalesService {
         const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
         const docTotal = doc.total.toNumber();
 
+        // La reversión siempre es CREDIT_NOTE para ventas
+        // (incluso si el original era DEBIT_NOTE, la anulación es crédito)
+        const category = doc.document_types?.category;
+        const description = category === 'CREDIT_NOTE' ? `Anulación NC venta #${doc.number}`
+                          : category === 'DEBIT_NOTE' ? `Anulación ND venta #${doc.number}`
+                          : `Anulación factura venta #${doc.number}`;
+
         await this.currentAccountsService.addEntry(
           {
             party_id: doc.party_id,
@@ -1033,7 +1050,7 @@ export class DocumentsSalesService {
             currency_code: doc.currency_code,
             type: 'CREDIT_NOTE',
             amount: docTotal,
-            description: `Anulación factura venta #${doc.number}`,
+            description,
             reference_type: 'document_reversal',
             reference_id: doc.id,
           },

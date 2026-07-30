@@ -195,16 +195,23 @@ export class CurrentAccountsService {
     // isDebit = true → balance DISMINUYE (convención del backend)
     // isDebit = false → balance AUMENTA
     //
-    // CLIENTE (a cobrar):
-    //   Factura → balance sube (me deben) → isDebit = false
-    //   Cobro   → balance baja (pagaron)  → isDebit = true
+    // CUSTOMER (ventas - a cobrar):
+    //   INVOICE     → balance sube (me deben)     → isDebit = false
+    //   DEBIT_NOTE  → balance sube (aumenta deuda) → isDebit = false
+    //   CREDIT_NOTE → balance baja (disminuye deuda) → isDebit = true
+    //   PAYMENT     → balance baja (pagaron)       → isDebit = true
+    //   COLLECTION  → balance baja (cobrado)       → isDebit = true
     //
-    // PROVEEDOR (a pagar):
-    //   Factura → balance baja (les debo más) → isDebit = true
-    //   Pago    → balance sube (les pagué)    → isDebit = false
-    if (type === 'INVOICE') return partyType === 'SUPPLIER';
-    if (type === 'CREDIT_NOTE') return partyType === 'CUSTOMER';
-    if (type === 'PAYMENT') return partyType === 'CUSTOMER';
-    return ['LOAN', 'CHECK_ISSUED', 'TRANSFER', 'DEBIT_NOTE', 'DEBIT'].includes(type);
+    // SUPPLIER (compras - a pagar):
+    //   INVOICE     → balance baja (les debo más)  → isDebit = true
+    //   DEBIT_NOTE  → balance baja (aumenta deuda) → isDebit = true
+    //   CREDIT_NOTE → balance sube (disminuye deuda) → isDebit = false
+    //   PAYMENT     → balance sube (les pagué)      → isDebit = false
+
+    if (partyType === 'CUSTOMER') {
+      return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION'].includes(type)
+    }
+    // SUPPLIER
+    return ['INVOICE', 'DEBIT_NOTE', 'LOAN', 'CHECK_ISSUED', 'TRANSFER', 'DEBIT'].includes(type)
   }
 }

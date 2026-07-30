@@ -455,7 +455,9 @@ export class PaymentsService {
     }
 
     const currentBalance = currentAccount.balance.toNumber();
-    const isDebit = payment.type === 'PAYMENT';
+    // PAYMENT y COLLECTION son ambos "débito" para CUSTOMER (disminuyen deuda)
+    // Para SUPPLIER, PAYMENT es "crédito" (aumenta balance, disminuye lo que debés)
+    const isDebit = payment.type === 'PAYMENT' || payment.type === 'COLLECTION';
     const amount = payment.amount.toNumber();
     const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
 

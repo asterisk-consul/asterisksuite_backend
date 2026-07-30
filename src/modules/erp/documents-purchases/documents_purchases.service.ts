@@ -938,21 +938,29 @@ export class DocumentsPurchasesService {
         const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
         const docTotal = doc.total.toNumber();
 
-        console.log('[confirm-purchases] CREATING current account entry...')
+        // Determinar tipo de entrada según la categoría del documento
+        const category = doc.document_types?.category;
+        const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
+                        : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
+                        : 'INVOICE';
+
+        const description = category === 'CREDIT_NOTE' ? `NC compra #${doc.number}`
+                          : category === 'DEBIT_NOTE' ? `ND compra #${doc.number}`
+                          : `Factura compra #${doc.number}`;
+
         await this.currentAccountsService.addEntry(
           {
             party_id: doc.party_id,
             party_type: partyType,
             currency_code: doc.currency_code,
-            type: 'INVOICE',
+            type: entryType,
             amount: docTotal,
-            description: `Factura compra #${doc.number}`,
+            description,
             reference_type: 'document',
             reference_id: doc.id,
           },
           userId,
         );
-        console.log('[confirm-purchases] Current account entry CREATED successfully')
       }
 
       return tx.documents.findUnique({ where: { id } });
@@ -1002,7 +1010,12 @@ export class DocumentsPurchasesService {
         const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
         const docTotal = doc.total.toNumber();
 
-        console.log('[cancel-purchases] CREATING reversal entry...')
+        // La reversión siempre es CREDIT_NOTE para compras
+        const category = doc.document_types?.category;
+        const description = category === 'CREDIT_NOTE' ? `Anulación NC compra #${doc.number}`
+                          : category === 'DEBIT_NOTE' ? `Anulación ND compra #${doc.number}`
+                          : `Anulación factura compra #${doc.number}`;
+
         await this.currentAccountsService.addEntry(
           {
             party_id: doc.party_id,
@@ -1010,13 +1023,12 @@ export class DocumentsPurchasesService {
             currency_code: doc.currency_code,
             type: 'CREDIT_NOTE',
             amount: docTotal,
-            description: `Anulación factura compra #${doc.number}`,
+            description,
             reference_type: 'document_reversal',
             reference_id: doc.id,
           },
           userId,
         );
-        console.log('[cancel-purchases] Reversal entry CREATED successfully')
       }
 
       return tx.documents.findUnique({ where: { id } });
