@@ -1221,6 +1221,7 @@ export const ProductsScalarFieldEnum = {
   tax_category_id: 'tax_category_id',
   active: 'active',
   product_type: 'product_type',
+  usage_type: 'usage_type',
   is_composed: 'is_composed',
   auto_calculate_cost: 'auto_calculate_cost',
   has_engineering: 'has_engineering',

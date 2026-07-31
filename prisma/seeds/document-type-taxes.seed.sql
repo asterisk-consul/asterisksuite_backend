@@ -19,7 +19,7 @@ CROSS JOIN tenant.taxes t
 WHERE dt.code IN ('FA-A', 'FB-A', 'FC-A', 'FX-A')
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27');
 
--- NOTAS DE CRÉDITO VENTA (NCA, NCB) → IVA 21%, IVA 10.5%, IVA 27%
+-- NOTAS DE CRÉDITO VENTA (NCA, NCB, NCC-A) → IVA 21%, IVA 10.5%, IVA 27%
 INSERT INTO tenant.document_type_taxes (id, document_type_id, tax_id)
 SELECT
   gen_random_uuid(),
@@ -27,10 +27,10 @@ SELECT
   t.id
 FROM tenant.document_types dt
 CROSS JOIN tenant.taxes t
-WHERE dt.code IN ('NCA', 'NCB')
+WHERE dt.code IN ('NCA', 'NCB', 'NCC-A')
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27');
 
--- NOTAS DE DÉBITO VENTA (NDA, NDB) → IVA 21%, IVA 10.5%, IVA 27%
+-- NOTAS DE DÉBITO VENTA (NDA, NDB, NDC-A) → IVA 21%, IVA 10.5%, IVA 27%
 INSERT INTO tenant.document_type_taxes (id, document_type_id, tax_id)
 SELECT
   gen_random_uuid(),
@@ -38,7 +38,7 @@ SELECT
   t.id
 FROM tenant.document_types dt
 CROSS JOIN tenant.taxes t
-WHERE dt.code IN ('NDA', 'NDB')
+WHERE dt.code IN ('NDA', 'NDB', 'NDC-A')
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27');
 
 -- FACTURAS DE COMPRA (FA-C, FB-C, FC-C) → IVA 21%, IVA 10.5%, IVA 27%
@@ -52,7 +52,7 @@ CROSS JOIN tenant.taxes t
 WHERE dt.code IN ('FA-C', 'FB-C', 'FC-C')
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27');
 
--- NOTAS DE CRÉDITO COMPRA (NCA-C) → IVA 21%, IVA 10.5%, IVA 27%
+-- NOTAS DE CRÉDITO COMPRA (NCA-C, NCB-C, NCC-C) → IVA 21%, IVA 10.5%, IVA 27%
 INSERT INTO tenant.document_type_taxes (id, document_type_id, tax_id)
 SELECT
   gen_random_uuid(),
@@ -60,10 +60,10 @@ SELECT
   t.id
 FROM tenant.document_types dt
 CROSS JOIN tenant.taxes t
-WHERE dt.code = 'NCA-C'
+WHERE dt.code IN ('NCA-C', 'NCB-C', 'NCC-C')
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27');
 
--- NOTAS DE DÉBITO COMPRA (NDA-C) → IVA 21%, IVA 10.5%, IVA 27%
+-- NOTAS DE DÉBITO COMPRA (NDA-C, NDB-C, NDC-C) → IVA 21%, IVA 10.5%, IVA 27%
 INSERT INTO tenant.document_type_taxes (id, document_type_id, tax_id)
 SELECT
   gen_random_uuid(),
@@ -71,7 +71,7 @@ SELECT
   t.id
 FROM tenant.document_types dt
 CROSS JOIN tenant.taxes t
-WHERE dt.code = 'NDA-C'
+WHERE dt.code IN ('NDA-C', 'NDB-C', 'NDC-C')
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27');
 
 -- ═══════════════════════════════════════════════════════════

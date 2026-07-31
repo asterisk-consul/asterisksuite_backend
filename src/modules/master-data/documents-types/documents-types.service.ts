@@ -20,7 +20,7 @@ export class DocumentsTypesService {
   }
 
   async findAll(companyId: string, direction?: number, issuerCondition?: string) {
-    const where: any = { deleted_at: null }
+    const where: any = { deleted_at: null, active: true }
 
     if (direction !== undefined) {
       where.direction = direction

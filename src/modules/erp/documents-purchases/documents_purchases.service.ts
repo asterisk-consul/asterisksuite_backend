@@ -944,9 +944,12 @@ export class DocumentsPurchasesService {
                         : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
                         : 'INVOICE';
 
-        const description = category === 'CREDIT_NOTE' ? `NC compra #${doc.number}`
-                          : category === 'DEBIT_NOTE' ? `ND compra #${doc.number}`
-                          : `Factura compra #${doc.number}`;
+        // Descripción usando el nombre real del tipo de documento
+        const docTypeName = doc.document_types?.description ?? 'Documento';
+        const docRef = doc.descrip;
+        const description = docRef
+          ? `${docTypeName} #${doc.number} - ${docRef}`
+          : `${docTypeName} #${doc.number}`;
 
         await this.currentAccountsService.addEntry(
           {
@@ -1011,10 +1014,12 @@ export class DocumentsPurchasesService {
         const docTotal = doc.total.toNumber();
 
         // La reversión siempre es CREDIT_NOTE para compras
-        const category = doc.document_types?.category;
-        const description = category === 'CREDIT_NOTE' ? `Anulación NC compra #${doc.number}`
-                          : category === 'DEBIT_NOTE' ? `Anulación ND compra #${doc.number}`
-                          : `Anulación factura compra #${doc.number}`;
+        const docTypeName = doc.document_types?.description ?? 'Documento';
+        const docRef = doc.descrip;
+        const baseDesc = docRef
+          ? `${docTypeName} #${doc.number} - ${docRef}`
+          : `${docTypeName} #${doc.number}`;
+        const description = `Anulación ${baseDesc}`;
 
         await this.currentAccountsService.addEntry(
           {

@@ -32,6 +32,7 @@ model products {
   tax_category_id          String?           @db.Uuid
   active                   Boolean?          @default(true)
   product_type             ProductType       @default(FINISHED_PRODUCT)
+  usage_type               UsageType         @default(BOTH)
   is_composed              Boolean           @default(false)
   auto_calculate_cost      Boolean           @default(false)
   has_engineering          Boolean           @default(false)

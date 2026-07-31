@@ -10,6 +10,7 @@ import {
   CalculationType,
   ProductCostSource,
   ProductType,
+  UsageType,
 } from '@/generated/prisma/enums';
 
 export class CreateProductDto {
@@ -51,6 +52,10 @@ export class CreateProductDto {
   @IsOptional()
   @IsEnum(ProductType)
   product_type?: ProductType;
+
+  @IsOptional()
+  @IsEnum(UsageType)
+  usage_type?: UsageType;
 
   @IsOptional()
   @IsBoolean()

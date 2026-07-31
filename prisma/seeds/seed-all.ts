@@ -208,7 +208,8 @@ ON CONFLICT (code) DO UPDATE SET
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, active)
 VALUES
   (gen_random_uuid(), 'NCA', 'Nota de Crédito A', 1, 'CREDIT_NOTE', 'A', '128', true, true, true, true, true, true),
-  (gen_random_uuid(), 'NCB', 'Nota de Crédito B', 1, 'CREDIT_NOTE', 'B', '132', true, true, true, true, true, true)
+  (gen_random_uuid(), 'NCB', 'Nota de Crédito B', 1, 'CREDIT_NOTE', 'B', '132', true, true, true, true, true, true),
+  (gen_random_uuid(), 'NCC-A', 'Nota de Crédito C (Venta)', 1, 'CREDIT_NOTE', 'C', '203', true, true, true, true, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   letter_type = EXCLUDED.letter_type, afip_code = EXCLUDED.afip_code;
@@ -217,7 +218,8 @@ ON CONFLICT (code) DO UPDATE SET
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, active)
 VALUES
   (gen_random_uuid(), 'NDA', 'Nota de Débito A', 1, 'DEBIT_NOTE', 'A', '135', true, true, false, true, true, true),
-  (gen_random_uuid(), 'NDB', 'Nota de Débito B', 1, 'DEBIT_NOTE', 'B', '139', true, true, false, true, true, true)
+  (gen_random_uuid(), 'NDB', 'Nota de Débito B', 1, 'DEBIT_NOTE', 'B', '139', true, true, false, true, true, true),
+  (gen_random_uuid(), 'NDC-A', 'Nota de Débito C (Venta)', 1, 'DEBIT_NOTE', 'C', '213', true, true, false, true, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   letter_type = EXCLUDED.letter_type, afip_code = EXCLUDED.afip_code;
@@ -236,7 +238,11 @@ ON CONFLICT (code) DO UPDATE SET
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, active)
 VALUES
   (gen_random_uuid(), 'NCA-C', 'Nota de Crédito Compra A', -1, 'CREDIT_NOTE', 'A', '128', false, false, true, true, true, true),
-  (gen_random_uuid(), 'NDA-C', 'Nota de Débito Compra A', -1, 'DEBIT_NOTE', 'A', '135', false, false, false, true, true, true)
+  (gen_random_uuid(), 'NCB-C', 'Nota de Crédito B Compra', -1, 'CREDIT_NOTE', 'B', '132', false, false, true, true, true, true),
+  (gen_random_uuid(), 'NCC-C', 'Nota de Crédito C Compra', -1, 'CREDIT_NOTE', 'C', '203', false, false, true, true, true, true),
+  (gen_random_uuid(), 'NDA-C', 'Nota de Débito Compra A', -1, 'DEBIT_NOTE', 'A', '135', false, false, false, true, true, true),
+  (gen_random_uuid(), 'NDB-C', 'Nota de Débito B Compra', -1, 'DEBIT_NOTE', 'B', '139', false, false, false, true, true, true),
+  (gen_random_uuid(), 'NDC-C', 'Nota de Débito C Compra', -1, 'DEBIT_NOTE', 'C', '213', false, false, false, true, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   letter_type = EXCLUDED.letter_type, afip_code = EXCLUDED.afip_code;
@@ -346,21 +352,25 @@ ON CONFLICT DO NOTHING;
 `
 
 const SQL_DOCUMENT_SEQUENCES = `
--- Secuencias de documentos (Punto de venta 0001)
+-- Secuencias de documentos por letra (Ventas POS 0001, Compras POS 0002)
 INSERT INTO document_sequences (id, name, automatic, point_of_sale, current_number, prefix, active)
 VALUES
   (gen_random_uuid(), 'Ventas A', true, '0001', 0, 'A', true),
   (gen_random_uuid(), 'Ventas B', true, '0001', 0, 'B', true),
   (gen_random_uuid(), 'Ventas C', true, '0001', 0, 'C', true),
-  (gen_random_uuid(), 'General', true, '0001', 0, NULL, true)
+  (gen_random_uuid(), 'Compras A', true, '0002', 0, 'A', true),
+  (gen_random_uuid(), 'Compras B', true, '0002', 0, 'B', true),
+  (gen_random_uuid(), 'Compras C', true, '0002', 0, 'C', true)
 ON CONFLICT DO NOTHING;
 `
 
 const SQL_LINK_SEQUENCES = `
--- Vincular document_types con secuencias
+-- Vincular document_types con secuencias por letra
+
+-- VENTAS por letra
 UPDATE document_types SET document_sequence_id = (
   SELECT id FROM document_sequences WHERE name = 'Ventas A' AND point_of_sale = '0001' LIMIT 1
-) WHERE code IN ('FA-A', 'NCA', 'NDA');
+) WHERE code IN ('FA-A', 'NCA', 'NDA', 'NCC-A', 'NDC-A');
 
 UPDATE document_types SET document_sequence_id = (
   SELECT id FROM document_sequences WHERE name = 'Ventas B' AND point_of_sale = '0001' LIMIT 1
@@ -368,11 +378,20 @@ UPDATE document_types SET document_sequence_id = (
 
 UPDATE document_types SET document_sequence_id = (
   SELECT id FROM document_sequences WHERE name = 'Ventas C' AND point_of_sale = '0001' LIMIT 1
-) WHERE code = 'FC-A';
+) WHERE code IN ('FC-A', 'NCC-A', 'NDC-A');
+
+-- COMPRAS por letra
+UPDATE document_types SET document_sequence_id = (
+  SELECT id FROM document_sequences WHERE name = 'Compras A' AND point_of_sale = '0002' LIMIT 1
+) WHERE code IN ('FA-C', 'NCA-C', 'NDA-C');
 
 UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'General' AND point_of_sale = '0001' LIMIT 1
-) WHERE code IN ('FX-A', 'OV', 'OC', 'PRES', 'REC', 'REM-V', 'REM-C', 'REM-T', 'FA-C', 'FB-C', 'FC-C', 'NCA-C', 'NDA-C');
+  SELECT id FROM document_sequences WHERE name = 'Compras B' AND point_of_sale = '0002' LIMIT 1
+) WHERE code IN ('FB-C', 'NCB-C', 'NDB-C');
+
+UPDATE document_types SET document_sequence_id = (
+  SELECT id FROM document_sequences WHERE name = 'Compras C' AND point_of_sale = '0002' LIMIT 1
+) WHERE code IN ('FC-C', 'NCC-C', 'NDC-C');
 `
 
 // ─── Main ─────────────────────────────────────────────────

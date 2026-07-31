@@ -51,6 +51,15 @@ export const ProductType = {
 export type ProductType = (typeof ProductType)[keyof typeof ProductType]
 
 
+export const UsageType = {
+  SALE: 'SALE',
+  PURCHASE: 'PURCHASE',
+  BOTH: 'BOTH'
+} as const
+
+export type UsageType = (typeof UsageType)[keyof typeof UsageType]
+
+
 export const UnitType = {
   UNIT: 'UNIT',
   WEIGHT: 'WEIGHT',

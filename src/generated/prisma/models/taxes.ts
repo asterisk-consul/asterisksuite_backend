@@ -321,10 +321,10 @@ export type taxesOrderByWithRelationInput = {
 
 export type taxesWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  code?: string
   AND?: Prisma.taxesWhereInput | Prisma.taxesWhereInput[]
   OR?: Prisma.taxesWhereInput[]
   NOT?: Prisma.taxesWhereInput | Prisma.taxesWhereInput[]
-  code?: Prisma.StringFilter<"taxes"> | string
   name?: Prisma.StringFilter<"taxes"> | string
   tax_type?: Prisma.StringFilter<"taxes"> | string
   rate?: Prisma.DecimalFilter<"taxes"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -343,7 +343,7 @@ export type taxesWhereUniqueInput = Prisma.AtLeast<{
   product_taxes?: Prisma.Product_taxesListRelationFilter
   category_taxes?: Prisma.Tax_category_taxesListRelationFilter
   operation_taxes?: Prisma.Operation_taxesListRelationFilter
-}, "id">
+}, "id" | "code">
 
 export type taxesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

@@ -246,6 +246,9 @@ export class CompaniesService {
 
       // 3. Create default document types
       await this.seedDocumentTypesForTenant(prisma);
+
+      // 4. Create document sequences and link to types
+      await this.seedDocumentSequencesForTenant(prisma);
     } finally {
       await prisma.$disconnect();
       await pool.end();
@@ -265,10 +268,12 @@ export class CompaniesService {
       // NOTAS DE CRÉDITO VENTA
       { code: 'NCA', description: 'Nota de Crédito A', direction: 1, category: 'CREDIT_NOTE', letter_type: 'A', afip_code: '128', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
       { code: 'NCB', description: 'Nota de Crédito B', direction: 1, category: 'CREDIT_NOTE', letter_type: 'B', afip_code: '132', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'NCC-A', description: 'Nota de Crédito C (Venta)', direction: 1, category: 'CREDIT_NOTE', letter_type: 'C', afip_code: '203', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
 
       // NOTAS DE DÉBITO VENTA
       { code: 'NDA', description: 'Nota de Débito A', direction: 1, category: 'DEBIT_NOTE', letter_type: 'A', afip_code: '135', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
       { code: 'NDB', description: 'Nota de Débito B', direction: 1, category: 'DEBIT_NOTE', letter_type: 'B', afip_code: '139', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
+      { code: 'NDC-A', description: 'Nota de Débito C (Venta)', direction: 1, category: 'DEBIT_NOTE', letter_type: 'C', afip_code: '213', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
 
       // FACTURAS DE COMPRA
       { code: 'FA-C', description: 'Factura A Compra - Proveedor RI', direction: -1, category: 'INVOICE', letter_type: 'A', afip_code: '01', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
@@ -277,7 +282,11 @@ export class CompaniesService {
 
       // NOTAS DE COMPRA
       { code: 'NCA-C', description: 'Nota de Crédito Compra A', direction: -1, category: 'CREDIT_NOTE', letter_type: 'A', afip_code: '128', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'NCB-C', description: 'Nota de Crédito B Compra', direction: -1, category: 'CREDIT_NOTE', letter_type: 'B', afip_code: '132', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
+      { code: 'NCC-C', description: 'Nota de Crédito C Compra', direction: -1, category: 'CREDIT_NOTE', letter_type: 'C', afip_code: '203', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
       { code: 'NDA-C', description: 'Nota de Débito Compra A', direction: -1, category: 'DEBIT_NOTE', letter_type: 'A', afip_code: '135', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
+      { code: 'NDB-C', description: 'Nota de Débito B Compra', direction: -1, category: 'DEBIT_NOTE', letter_type: 'B', afip_code: '139', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
+      { code: 'NDC-C', description: 'Nota de Débito C Compra', direction: -1, category: 'DEBIT_NOTE', letter_type: 'C', afip_code: '213', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
 
       // ÓRDENES
       { code: 'OV', description: 'Orden de Venta', direction: 1, category: 'ORDER', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
@@ -328,6 +337,66 @@ export class CompaniesService {
     }
 
     this.logger.log(`Tenant: ${documentTypes.length} tipos de documento creados`);
+  }
+
+  // ─── Document Sequences seed for new tenant ──────────────────────
+
+  private async seedDocumentSequencesForTenant(prisma: any): Promise<void> {
+    // Crear 6 secuencias por letra (3 ventas + 3 compras)
+    const sequences = [
+      { name: 'Ventas A', point_of_sale: '0001', prefix: 'A' },
+      { name: 'Ventas B', point_of_sale: '0001', prefix: 'B' },
+      { name: 'Ventas C', point_of_sale: '0001', prefix: 'C' },
+      { name: 'Compras A', point_of_sale: '0002', prefix: 'A' },
+      { name: 'Compras B', point_of_sale: '0002', prefix: 'B' },
+      { name: 'Compras C', point_of_sale: '0002', prefix: 'C' },
+    ];
+
+    const createdSequences: Record<string, string> = {};
+
+    for (const seq of sequences) {
+      const existing = await prisma.document_sequences.findUnique({
+        where: { point_of_sale_prefix: { point_of_sale: seq.point_of_sale, prefix: seq.prefix } },
+      });
+
+      if (existing) {
+        createdSequences[seq.name] = existing.id;
+      } else {
+        const created = await prisma.document_sequences.create({
+          data: {
+            name: seq.name,
+            automatic: true,
+            point_of_sale: seq.point_of_sale,
+            current_number: 0,
+            prefix: seq.prefix,
+            active: true,
+          },
+        });
+        createdSequences[seq.name] = created.id;
+      }
+    }
+
+    // Vincular document_types con secuencias por letra
+    const linkMap: Record<string, string[]> = {
+      'Ventas A': ['FA-A', 'NCA', 'NDA', 'NCC-A', 'NDC-A'],
+      'Ventas B': ['FB-A', 'NCB', 'NDB'],
+      'Ventas C': ['FC-A', 'NCC-A', 'NDC-A'],
+      'Compras A': ['FA-C', 'NCA-C', 'NDA-C'],
+      'Compras B': ['FB-C', 'NCB-C', 'NDB-C'],
+      'Compras C': ['FC-C', 'NCC-C', 'NDC-C'],
+    };
+
+    for (const [seqName, codes] of Object.entries(linkMap)) {
+      const seqId = createdSequences[seqName];
+      if (!seqId) continue;
+
+      await prisma.document_types.updateMany({
+        where: { code: { in: codes } },
+        data: { document_sequence_id: seqId },
+      });
+    }
+
+    this.logger.log(`Tenant: ${sequences.length} secuencias de documentos creadas y vinculadas`);
   }
 
   // ─── Assign admin role to creator ──────────────────────────────

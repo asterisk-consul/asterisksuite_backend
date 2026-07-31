@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '@/prisma/prisma.module'; // ← agregar
 import { ExchangeModule } from '../exchange/exchange.module';
+import { AuditModule } from '../../audit/audit.module';
 
 import { ProductPricingController } from './product-pricing.controller';
 import { ProductPricingFacadeService } from './product-pricing-facade.service';
@@ -10,7 +11,7 @@ import { ProductPriceService } from './product-pricing.service';
 import { ProductsService } from '../../../master-data/products/products.service';
 import { PricingEngineService } from '../pricing-engine.service';
 @Module({
-  imports: [PrismaModule, ExchangeModule],
+  imports: [PrismaModule, ExchangeModule, AuditModule],
   controllers: [ProductPricingController, ProductPriceController],
   providers: [
     ProductPricingFacadeService,

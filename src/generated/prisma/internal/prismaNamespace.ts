@@ -9512,6 +9512,7 @@ export const ProductsScalarFieldEnum = {
   tax_category_id: 'tax_category_id',
   active: 'active',
   product_type: 'product_type',
+  usage_type: 'usage_type',
   is_composed: 'is_composed',
   auto_calculate_cost: 'auto_calculate_cost',
   has_engineering: 'has_engineering',
@@ -10796,6 +10797,20 @@ export type EnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'ProductType[]'
  */
 export type ListEnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UsageType'
+ */
+export type EnumUsageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UsageType'>
+    
+
+
+/**
+ * Reference to a field of type 'UsageType[]'
+ */
+export type ListEnumUsageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UsageType[]'>
     
 
 

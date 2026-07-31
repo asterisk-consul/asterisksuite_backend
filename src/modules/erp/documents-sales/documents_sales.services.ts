@@ -956,9 +956,12 @@ export class DocumentsSalesService {
                         : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
                         : 'INVOICE';
 
-        const description = category === 'CREDIT_NOTE' ? `NC venta #${doc.number}`
-                          : category === 'DEBIT_NOTE' ? `ND venta #${doc.number}`
-                          : `Factura venta #${doc.number}`;
+        // Descripción usando el nombre real del tipo de documento
+        const docTypeName = doc.document_types?.description ?? 'Documento';
+        const docRef = doc.descrip;
+        const description = docRef
+          ? `${docTypeName} #${doc.number} - ${docRef}`
+          : `${docTypeName} #${doc.number}`;
 
         await this.currentAccountsService.addEntry(
           {
@@ -1037,11 +1040,12 @@ export class DocumentsSalesService {
         const docTotal = doc.total.toNumber();
 
         // La reversión siempre es CREDIT_NOTE para ventas
-        // (incluso si el original era DEBIT_NOTE, la anulación es crédito)
-        const category = doc.document_types?.category;
-        const description = category === 'CREDIT_NOTE' ? `Anulación NC venta #${doc.number}`
-                          : category === 'DEBIT_NOTE' ? `Anulación ND venta #${doc.number}`
-                          : `Anulación factura venta #${doc.number}`;
+        const docTypeName = doc.document_types?.description ?? 'Documento';
+        const docRef = doc.descrip;
+        const baseDesc = docRef
+          ? `${docTypeName} #${doc.number} - ${docRef}`
+          : `${docTypeName} #${doc.number}`;
+        const description = `Anulación ${baseDesc}`;
 
         await this.currentAccountsService.addEntry(
           {

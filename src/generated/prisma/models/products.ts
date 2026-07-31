@@ -46,6 +46,7 @@ export type ProductsMinAggregateOutputType = {
   tax_category_id: string | null
   active: boolean | null
   product_type: $Enums.ProductType | null
+  usage_type: $Enums.UsageType | null
   is_composed: boolean | null
   auto_calculate_cost: boolean | null
   has_engineering: boolean | null
@@ -79,6 +80,7 @@ export type ProductsMaxAggregateOutputType = {
   tax_category_id: string | null
   active: boolean | null
   product_type: $Enums.ProductType | null
+  usage_type: $Enums.UsageType | null
   is_composed: boolean | null
   auto_calculate_cost: boolean | null
   has_engineering: boolean | null
@@ -112,6 +114,7 @@ export type ProductsCountAggregateOutputType = {
   tax_category_id: number
   active: number
   product_type: number
+  usage_type: number
   is_composed: number
   auto_calculate_cost: number
   has_engineering: number
@@ -155,6 +158,7 @@ export type ProductsMinAggregateInputType = {
   tax_category_id?: true
   active?: true
   product_type?: true
+  usage_type?: true
   is_composed?: true
   auto_calculate_cost?: true
   has_engineering?: true
@@ -188,6 +192,7 @@ export type ProductsMaxAggregateInputType = {
   tax_category_id?: true
   active?: true
   product_type?: true
+  usage_type?: true
   is_composed?: true
   auto_calculate_cost?: true
   has_engineering?: true
@@ -221,6 +226,7 @@ export type ProductsCountAggregateInputType = {
   tax_category_id?: true
   active?: true
   product_type?: true
+  usage_type?: true
   is_composed?: true
   auto_calculate_cost?: true
   has_engineering?: true
@@ -341,6 +347,7 @@ export type ProductsGroupByOutputType = {
   tax_category_id: string | null
   active: boolean | null
   product_type: $Enums.ProductType
+  usage_type: $Enums.UsageType
   is_composed: boolean
   auto_calculate_cost: boolean
   has_engineering: boolean
@@ -397,6 +404,7 @@ export type productsWhereInput = {
   tax_category_id?: Prisma.UuidNullableFilter<"products"> | string | null
   active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeFilter<"products"> | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolFilter<"products"> | boolean
   has_engineering?: Prisma.BoolFilter<"products"> | boolean
@@ -452,6 +460,7 @@ export type productsOrderByWithRelationInput = {
   tax_category_id?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   product_type?: Prisma.SortOrder
+  usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
@@ -510,6 +519,7 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   tax_category_id?: Prisma.UuidNullableFilter<"products"> | string | null
   active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeFilter<"products"> | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolFilter<"products"> | boolean
   has_engineering?: Prisma.BoolFilter<"products"> | boolean
@@ -565,6 +575,7 @@ export type productsOrderByWithAggregationInput = {
   tax_category_id?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrderInput | Prisma.SortOrder
   product_type?: Prisma.SortOrder
+  usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
@@ -606,6 +617,7 @@ export type productsScalarWhereWithAggregatesInput = {
   tax_category_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
   active?: Prisma.BoolNullableWithAggregatesFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeWithAggregatesFilter<"products"> | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeWithAggregatesFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   has_engineering?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
@@ -637,6 +649,7 @@ export type productsCreateInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -688,6 +701,7 @@ export type productsUncheckedCreateInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -735,6 +749,7 @@ export type productsUpdateInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -786,6 +801,7 @@ export type productsUncheckedUpdateInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -835,6 +851,7 @@ export type productsCreateManyInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -866,6 +883,7 @@ export type productsUpdateManyMutationInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -895,6 +913,7 @@ export type productsUncheckedUpdateManyInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -948,6 +967,7 @@ export type productsCountOrderByAggregateInput = {
   tax_category_id?: Prisma.SortOrder
   active?: Prisma.SortOrder
   product_type?: Prisma.SortOrder
+  usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
@@ -985,6 +1005,7 @@ export type productsMaxOrderByAggregateInput = {
   tax_category_id?: Prisma.SortOrder
   active?: Prisma.SortOrder
   product_type?: Prisma.SortOrder
+  usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
@@ -1018,6 +1039,7 @@ export type productsMinOrderByAggregateInput = {
   tax_category_id?: Prisma.SortOrder
   active?: Prisma.SortOrder
   product_type?: Prisma.SortOrder
+  usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
@@ -1357,6 +1379,10 @@ export type EnumProductTypeFieldUpdateOperationsInput = {
   set?: $Enums.ProductType
 }
 
+export type EnumUsageTypeFieldUpdateOperationsInput = {
+  set?: $Enums.UsageType
+}
+
 export type NullableEnumCalculationTypeFieldUpdateOperationsInput = {
   set?: $Enums.CalculationType | null
 }
@@ -1541,6 +1567,7 @@ export type productsCreateWithoutIncome_accountInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1591,6 +1618,7 @@ export type productsUncheckedCreateWithoutIncome_accountInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1647,6 +1675,7 @@ export type productsCreateWithoutExpense_accountInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1697,6 +1726,7 @@ export type productsUncheckedCreateWithoutExpense_accountInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1753,6 +1783,7 @@ export type productsCreateWithoutInventory_accountInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1803,6 +1834,7 @@ export type productsUncheckedCreateWithoutInventory_accountInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1880,6 +1912,7 @@ export type productsScalarWhereInput = {
   tax_category_id?: Prisma.UuidNullableFilter<"products"> | string | null
   active?: Prisma.BoolNullableFilter<"products"> | boolean | null
   product_type?: Prisma.EnumProductTypeFilter<"products"> | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolFilter<"products"> | boolean
   has_engineering?: Prisma.BoolFilter<"products"> | boolean
@@ -1943,6 +1976,7 @@ export type productsCreateWithoutProduct_costsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -1993,6 +2027,7 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2055,6 +2090,7 @@ export type productsUpdateWithoutProduct_costsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2105,6 +2141,7 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2151,6 +2188,7 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2201,6 +2239,7 @@ export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2263,6 +2302,7 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2313,6 +2353,7 @@ export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2359,6 +2400,7 @@ export type productsCreateWithoutCost_templateInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2409,6 +2451,7 @@ export type productsUncheckedCreateWithoutCost_templateInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2481,6 +2524,7 @@ export type productsCreateWithoutDocument_itemsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2531,6 +2575,7 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2593,6 +2638,7 @@ export type productsUpdateWithoutDocument_itemsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2643,6 +2689,7 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2689,6 +2736,7 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2739,6 +2787,7 @@ export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2801,6 +2850,7 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2851,6 +2901,7 @@ export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2897,6 +2948,7 @@ export type productsCreateWithoutPicking_itemsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -2947,6 +2999,7 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3009,6 +3062,7 @@ export type productsUpdateWithoutPicking_itemsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3059,6 +3113,7 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3105,6 +3160,7 @@ export type productsCreateWithoutTransfer_rateInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3154,6 +3210,7 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3227,6 +3284,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3277,6 +3335,7 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3339,6 +3398,7 @@ export type productsUpdateWithoutPallet_itemsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3389,6 +3449,7 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3435,6 +3496,7 @@ export type productsCreateWithoutProduct_priceInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3485,6 +3547,7 @@ export type productsUncheckedCreateWithoutProduct_priceInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3547,6 +3610,7 @@ export type productsUpdateWithoutProduct_priceInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3597,6 +3661,7 @@ export type productsUncheckedUpdateWithoutProduct_priceInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3643,6 +3708,7 @@ export type productsCreateWithoutProduct_variantsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3693,6 +3759,7 @@ export type productsUncheckedCreateWithoutProduct_variantsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3755,6 +3822,7 @@ export type productsUpdateWithoutProduct_variantsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3805,6 +3873,7 @@ export type productsUncheckedUpdateWithoutProduct_variantsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3851,6 +3920,7 @@ export type productsCreateWithoutParent_componentsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3901,6 +3971,7 @@ export type productsUncheckedCreateWithoutParent_componentsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -3952,6 +4023,7 @@ export type productsCreateWithoutChild_componentsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4002,6 +4074,7 @@ export type productsUncheckedCreateWithoutChild_componentsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4064,6 +4137,7 @@ export type productsUpdateWithoutParent_componentsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4114,6 +4188,7 @@ export type productsUncheckedUpdateWithoutParent_componentsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4171,6 +4246,7 @@ export type productsUpdateWithoutChild_componentsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4221,6 +4297,7 @@ export type productsUncheckedUpdateWithoutChild_componentsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4267,6 +4344,7 @@ export type productsCreateWithoutProduct_categoriesInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4317,6 +4395,7 @@ export type productsUncheckedCreateWithoutProduct_categoriesInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4379,6 +4458,7 @@ export type productsUpdateWithoutProduct_categoriesInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4429,6 +4509,7 @@ export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4475,6 +4556,7 @@ export type productsCreateWithoutProduct_tagsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4525,6 +4607,7 @@ export type productsUncheckedCreateWithoutProduct_tagsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4587,6 +4670,7 @@ export type productsUpdateWithoutProduct_tagsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4637,6 +4721,7 @@ export type productsUncheckedUpdateWithoutProduct_tagsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4683,6 +4768,7 @@ export type productsCreateWithoutProduct_attribute_valuesInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4733,6 +4819,7 @@ export type productsUncheckedCreateWithoutProduct_attribute_valuesInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4795,6 +4882,7 @@ export type productsUpdateWithoutProduct_attribute_valuesInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4845,6 +4933,7 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4891,6 +4980,7 @@ export type productsCreateWithoutTax_categoryInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -4940,6 +5030,7 @@ export type productsUncheckedCreateWithoutTax_categoryInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5013,6 +5104,7 @@ export type productsCreateWithoutProduct_taxesInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5063,6 +5155,7 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5125,6 +5218,7 @@ export type productsUpdateWithoutProduct_taxesInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5175,6 +5269,7 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5221,6 +5316,7 @@ export type productsCreateWithoutWarehouse_stockInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5271,6 +5367,7 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5333,6 +5430,7 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5383,6 +5481,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5429,6 +5528,7 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5479,6 +5579,7 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5541,6 +5642,7 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5591,6 +5693,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5639,6 +5742,7 @@ export type productsCreateManyIncome_accountInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5671,6 +5775,7 @@ export type productsCreateManyExpense_accountInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5703,6 +5808,7 @@ export type productsCreateManyInventory_accountInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -5733,6 +5839,7 @@ export type productsUpdateWithoutIncome_accountInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5783,6 +5890,7 @@ export type productsUncheckedUpdateWithoutIncome_accountInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5831,6 +5939,7 @@ export type productsUncheckedUpdateManyWithoutIncome_accountInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5861,6 +5970,7 @@ export type productsUpdateWithoutExpense_accountInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5911,6 +6021,7 @@ export type productsUncheckedUpdateWithoutExpense_accountInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5959,6 +6070,7 @@ export type productsUncheckedUpdateManyWithoutExpense_accountInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5989,6 +6101,7 @@ export type productsUpdateWithoutInventory_accountInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6039,6 +6152,7 @@ export type productsUncheckedUpdateWithoutInventory_accountInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6087,6 +6201,7 @@ export type productsUncheckedUpdateManyWithoutInventory_accountInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6119,6 +6234,7 @@ export type productsCreateManyCost_templateInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6149,6 +6265,7 @@ export type productsUpdateWithoutCost_templateInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6199,6 +6316,7 @@ export type productsUncheckedUpdateWithoutCost_templateInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6247,6 +6365,7 @@ export type productsUncheckedUpdateManyWithoutCost_templateInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6278,6 +6397,7 @@ export type productsCreateManyTransfer_rateInput = {
   tax_category_id?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6309,6 +6429,7 @@ export type productsUpdateWithoutTransfer_rateInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6358,6 +6479,7 @@ export type productsUncheckedUpdateWithoutTransfer_rateInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6406,6 +6528,7 @@ export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
   tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6438,6 +6561,7 @@ export type productsCreateManyTax_categoryInput = {
   taxId?: string | null
   active?: boolean | null
   product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6469,6 +6593,7 @@ export type productsUpdateWithoutTax_categoryInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6518,6 +6643,7 @@ export type productsUncheckedUpdateWithoutTax_categoryInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6566,6 +6692,7 @@ export type productsUncheckedUpdateManyWithoutTax_categoryInput = {
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6765,6 +6892,7 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
+  usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6821,6 +6949,7 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
+  usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6860,6 +6989,7 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
+  usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6899,6 +7029,7 @@ export type productsSelectScalar = {
   tax_category_id?: boolean
   active?: boolean
   product_type?: boolean
+  usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
   has_engineering?: boolean
@@ -6920,7 +7051,7 @@ export type productsSelectScalar = {
   current_cost?: boolean
 }
 
-export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "tax_category_id" | "active" | "product_type" | "is_composed" | "auto_calculate_cost" | "has_engineering" | "manages_stock" | "income_account_id" | "expense_account_id" | "inventory_account_id" | "calculation_type" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "cost_source" | "needs_cost_recalculation" | "last_cost_calculated_at" | "cost_template_id" | "current_cost", ExtArgs["result"]["products"]>
+export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "tax_category_id" | "active" | "product_type" | "usage_type" | "is_composed" | "auto_calculate_cost" | "has_engineering" | "manages_stock" | "income_account_id" | "expense_account_id" | "inventory_account_id" | "calculation_type" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "cost_source" | "needs_cost_recalculation" | "last_cost_calculated_at" | "cost_template_id" | "current_cost", ExtArgs["result"]["products"]>
 export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product_variants?: boolean | Prisma.products$product_variantsArgs<ExtArgs>
   parent_components?: boolean | Prisma.products$parent_componentsArgs<ExtArgs>
@@ -7001,6 +7132,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tax_category_id: string | null
     active: boolean | null
     product_type: $Enums.ProductType
+    usage_type: $Enums.UsageType
     is_composed: boolean
     auto_calculate_cost: boolean
     has_engineering: boolean
@@ -7476,6 +7608,7 @@ export interface productsFieldRefs {
   readonly tax_category_id: Prisma.FieldRef<"products", 'String'>
   readonly active: Prisma.FieldRef<"products", 'Boolean'>
   readonly product_type: Prisma.FieldRef<"products", 'ProductType'>
+  readonly usage_type: Prisma.FieldRef<"products", 'UsageType'>
   readonly is_composed: Prisma.FieldRef<"products", 'Boolean'>
   readonly auto_calculate_cost: Prisma.FieldRef<"products", 'Boolean'>
   readonly has_engineering: Prisma.FieldRef<"products", 'Boolean'>

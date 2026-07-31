@@ -32,6 +32,13 @@ enum ProductType {
   @@schema("tenant")
 }
 
+enum UsageType {
+  SALE
+  PURCHASE
+  BOTH
+  @@schema("tenant")
+}
+
 enum UnitType {
   UNIT //Unidad	un
   WEIGHT //Kilogramo	kg
