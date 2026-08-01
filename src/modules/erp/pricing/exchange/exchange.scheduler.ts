@@ -20,14 +20,14 @@ export class ExchangeScheduler {
 
     const companies = await this.db.getDefaultClient().companies.findMany({
       where: { deleted_at: null },
-      select: { db_name: true, name: true },
+      select: { schema_name: true, name: true },
     });
 
     for (const company of companies) {
-      if (!company.db_name) continue;
+      if (!company.schema_name) continue;
 
       try {
-        const prisma = this.db.getTenantClient(company.db_name);
+        const prisma = this.db.getTenantClient(company.schema_name);
         await this.exchangeService.syncAllRatesForClient(prisma);
         this.logger.log(`[${company.name}] Cotizaciones sincronizadas`);
       } catch (error) {

@@ -84,6 +84,42 @@ export class PricingEngineService {
       },
     });
 
+    // Si no hay precio manual Y auto_calculate_cost está activo, usar product_costs
+    if (!productPrice && product.auto_calculate_cost) {
+      const latestCost = await this.prisma.product_costs.findFirst({
+        where: {
+          product_id: productId,
+          active: true,
+          deleted_at: null,
+        },
+        include: { currencies: true },
+        orderBy: { created_at: 'desc' },
+      });
+
+      if (latestCost) {
+        const sourceCurrency = latestCost.currencies.code;
+        const originalPrice = Number(latestCost.total_cost);
+
+        let convertedPrice = originalPrice;
+        let exchangeRate = 1;
+        if (sourceCurrency !== targetCurrencyCode) {
+          const conversion = await this.exchangeService.convertAmount(originalPrice, sourceCurrency, targetCurrencyCode);
+          exchangeRate = conversion.rate;
+          convertedPrice = conversion.converted_amount;
+        }
+
+        return {
+          product_id: product.id,
+          currency: targetCurrencyCode,
+          original_currency: sourceCurrency,
+          original_price: round2(originalPrice),
+          exchange_rate: round6(exchangeRate),
+          converted_price: round2(convertedPrice),
+          exemption_rate: 0,
+        };
+      }
+    }
+
     if (!productPrice) {
       throw new NotFoundException('El producto no tiene precios configurados');
     }

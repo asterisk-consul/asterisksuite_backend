@@ -80,7 +80,37 @@ export class CostingTreeService {
           unitCost = resolved.converted_cost;
           source = resolved.source;
         } else {
-          unitCost = Number(component.child_product.current_cost || 0);
+          // Sin variante: buscar costo en product_costs con moneda correcta
+          const productCost = await this.prisma.product_costs.findFirst({
+            where: {
+              product_id: component.child_product_id,
+              active: true,
+              deleted_at: null,
+            },
+            include: { currencies: true },
+            orderBy: { created_at: 'desc' },
+          });
+
+          if (productCost) {
+            if (productCost.currency_id === currencyId) {
+              unitCost = Number(productCost.total_cost);
+            } else {
+              // Convertir via currency_rates
+              const rate = await this.prisma.currency_rates.findFirst({
+                where: {
+                  from_currency_id: productCost.currency_id,
+                  to_currency_id: currencyId,
+                },
+                orderBy: { effective_date: 'desc' },
+              });
+              unitCost = rate
+                ? Number(productCost.total_cost) * Number(rate.rate)
+                : Number(component.child_product.current_cost || 0);
+            }
+          } else {
+            // Sin product_costs: usar current_cost (fallback)
+            unitCost = Number(component.child_product.current_cost || 0);
+          }
         }
 
         const quantity = this.calculateEngineeringQuantity(component);
