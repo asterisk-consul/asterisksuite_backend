@@ -298,6 +298,9 @@ export class CompaniesService {
       // RECIBOS
       { code: 'REC', description: 'Recibo de Pago', direction: 1, category: 'RECEIPT', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false },
 
+      // VALES RRHH
+      { code: 'VALE', description: 'Recibo de Sueldo / Vale RRHH', direction: -1, category: 'VALE', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false },
+
       // REMITOS
       { code: 'REM-V', description: 'Remito de Venta', direction: 1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
       { code: 'REM-C', description: 'Remito de Compra', direction: -1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
@@ -342,7 +345,7 @@ export class CompaniesService {
   // ─── Document Sequences seed for new tenant ──────────────────────
 
   private async seedDocumentSequencesForTenant(prisma: any): Promise<void> {
-    // Crear 6 secuencias por letra (3 ventas + 3 compras)
+    // Crear secuencias por letra (3 ventas + 3 compras + VALES)
     const sequences = [
       { name: 'Ventas A', point_of_sale: '0001', prefix: 'A' },
       { name: 'Ventas B', point_of_sale: '0001', prefix: 'B' },
@@ -350,6 +353,7 @@ export class CompaniesService {
       { name: 'Compras A', point_of_sale: '0002', prefix: 'A' },
       { name: 'Compras B', point_of_sale: '0002', prefix: 'B' },
       { name: 'Compras C', point_of_sale: '0002', prefix: 'C' },
+      { name: 'VALES', point_of_sale: '0003', prefix: 'V' },
     ];
 
     const createdSequences: Record<string, string> = {};
@@ -384,6 +388,7 @@ export class CompaniesService {
       'Compras A': ['FA-C', 'NCA-C', 'NDA-C'],
       'Compras B': ['FB-C', 'NCB-C', 'NDB-C'],
       'Compras C': ['FC-C', 'NCC-C', 'NDC-C'],
+      'VALES': ['VALE'],
     };
 
     for (const [seqName, codes] of Object.entries(linkMap)) {

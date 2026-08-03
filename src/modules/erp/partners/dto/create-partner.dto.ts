@@ -1,6 +1,68 @@
-import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength, ValidateNested } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength, ValidateNested, IsArray, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateUserDto } from '../../employees/dto/create-user.dto';
+
+class CreatePartyLocationDto {
+  @IsString()
+  location_id!: string;
+
+  @IsOptional()
+  @IsString()
+  label?: string;
+}
+
+class CreatePartyContactDto {
+  @IsString()
+  first_name!: string;
+
+  @IsString()
+  last_name!: string;
+
+  @IsOptional()
+  @IsString()
+  role?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+}
+
+class CreatePartyBankAccountDto {
+  @IsString()
+  cbu!: string;
+
+  @IsOptional()
+  @IsString()
+  alias?: string;
+
+  @IsOptional()
+  @IsString()
+  bank_name?: string;
+
+  @IsOptional()
+  @IsString()
+  account_type?: string;
+
+  @IsOptional()
+  @IsString()
+  currency?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  holder_name?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  is_default?: boolean;
+}
 
 export class CreatePartnerDto {
   @IsOptional()
@@ -16,6 +78,7 @@ export class CreatePartnerDto {
   @Type(() => CreateUserDto)
   create_user?: CreateUserDto;
 
+  // ─── Partner fields ────────────────────────────
   @IsString()
   @MaxLength(100)
   first_name!: string;
@@ -45,4 +108,47 @@ export class CreatePartnerDto {
   @IsOptional()
   @IsBoolean()
   is_active?: boolean;
+
+  // ─── Business party fields (for auto-creation) ─
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  business_name?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  tax_id?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  vat_condition?: string;
+
+  @IsOptional()
+  @IsNumber()
+  exemption_rate?: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePartyLocationDto)
+  locations?: CreatePartyLocationDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePartyContactDto)
+  contacts?: CreatePartyContactDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePartyBankAccountDto)
+  bank_accounts?: CreatePartyBankAccountDto[];
 }

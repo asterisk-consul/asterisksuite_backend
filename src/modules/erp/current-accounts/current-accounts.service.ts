@@ -175,7 +175,11 @@ export class CurrentAccountsService {
   async findAll(filters?: { party_type?: string; currency_code?: string; balance_filter?: string }) {
     const where: any = { deleted_at: null };
 
-    if (filters?.party_type) where.party_type = filters.party_type;
+    if (filters?.party_type) {
+      // Soportar múltiples party_types separados por coma
+      const types = filters.party_type.split(',').map(t => t.trim()).filter(Boolean);
+      where.party_type = types.length === 1 ? types[0] : { in: types };
+    }
     if (filters?.currency_code) where.currency_code = filters.currency_code;
 
     if (filters?.balance_filter === 'positive') where.balance = { gt: 0 };

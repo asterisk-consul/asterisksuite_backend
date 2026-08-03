@@ -20,6 +20,22 @@ x-tenant: dev
 # 📋 IDs HARDCODEADOS
 # ==============================
 
+
+POST http://localhost:3000/api/documents/sales
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "document_type_id": "3fa80518-d453-4f02-a150-deb313907b33",
+  "party_id": "62dac1aa-bc38-43d9-8eed-0e28f7be3c33",
+  "date": "2026-08-02",
+  "currency_code": "ARS",
+  "items": [
+    { "product_id": "f66eb8f4-2c38-44d9-9d9b-60f0c82323d1", "quantity": 1, "unit_price": 1000 }
+  ]
+}
+
 # --- Tipos de documento COMPRA ---
 @docType_FA_COMPRA = bea7ab3b-b292-4fd2-98c1-95d86b54b5df
 @docType_FB_COMPRA = e8adcdfa-07c3-4296-a092-d2edfcc3000f

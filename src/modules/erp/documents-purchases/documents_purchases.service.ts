@@ -484,6 +484,7 @@ export class DocumentsPurchasesService {
       where: {
         document_types: {
           direction: -1,
+          category: { not: 'VALE' },
         },
 
         ...(documentTypeId

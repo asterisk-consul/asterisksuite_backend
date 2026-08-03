@@ -22,6 +22,8 @@ import { ItemInput } from './interfaces/item-input.interface';
 
 import type { TaxContext } from '../tax-engine/interfaces/tax-context.interface';
 
+import { Prisma } from '@/generated/prisma/client';
+
 const STATUS_DRAFT = 0;
 
 const STATUS_PENDING = 1;
@@ -473,11 +475,15 @@ export class DocumentsSalesService {
     documentTypeId?: string,
 
     status?: number,
+
+    category?: string,
   ) {
     return this.prisma.documents.findMany({
       where: {
         document_types: {
           direction: 1,
+
+          ...(category ? { category } : {}),
         },
 
         ...(documentTypeId
@@ -577,6 +583,28 @@ export class DocumentsSalesService {
         document_types: true,
 
         business_parties: true,
+
+        parent_document: {
+          select: {
+            id: true,
+            number: true,
+            descrip: true,
+            status: true,
+            document_types: { select: { code: true, description: true, category: true } },
+          },
+        },
+
+        child_documents: {
+          select: {
+            id: true,
+            number: true,
+            descrip: true,
+            status: true,
+            total: true,
+            document_types: { select: { code: true, description: true, category: true } },
+          },
+          orderBy: { created_at: 'asc' },
+        },
 
         document_items: {
           include: {
@@ -939,6 +967,69 @@ export class DocumentsSalesService {
         },
       });
 
+      // ─── Stock automático si affects_stock ──────────────────────
+      if (doc.document_types?.affects_stock) {
+        const direction = doc.document_types.direction === 1 ? 'OUT' : 'IN';
+
+        for (const item of doc.document_items) {
+          if (!item.product_id) continue;
+
+          // Buscar un almacén por defecto (el primero activo)
+          const warehouse = await tx.warehouses.findFirst({ where: { active: true } });
+          if (!warehouse) continue;
+
+          const qty = new Prisma.Decimal(item.quantity);
+          const signedQty = direction === 'IN' ? qty : qty.neg();
+
+          // Crear movimiento de stock
+          await tx.warehouse_stock_movements.create({
+            data: {
+              warehouse_id: warehouse.id,
+              product_id: item.product_id,
+              movement_type: 'DOCUMENT',
+              direction,
+              quantity: qty,
+              reference_type: 'document',
+              reference_id: doc.id,
+              created_by: userId,
+            },
+          });
+
+          // Actualizar stock
+          const stock = await tx.warehouse_stock.findUnique({
+            where: {
+              warehouse_id_product_id: {
+                warehouse_id: warehouse.id,
+                product_id: item.product_id,
+              },
+            },
+          });
+
+          if (!stock) {
+            if (direction === 'OUT') {
+              throw new BadRequestException(`No hay stock para el producto ${item.product_id}`);
+            }
+            await tx.warehouse_stock.create({
+              data: {
+                warehouse_id: warehouse.id,
+                product_id: item.product_id,
+                quantity: qty,
+              },
+            });
+          } else {
+            const newQty = stock.quantity.plus(signedQty);
+            if (newQty.isNegative()) {
+              throw new BadRequestException(`Stock negativo no permitido para producto ${item.product_id}`);
+            }
+            await tx.warehouse_stock.update({
+              where: { id: stock.id },
+              data: { quantity: newQty, updated_at: new Date() },
+            });
+          }
+        }
+      }
+
+      // ─── Cuenta corriente si affects_accounting ─────────────────
       if (doc.party_id && doc.document_types?.affects_accounting) {
         let currencyCode = doc.currency_code;
 
@@ -950,13 +1041,11 @@ export class DocumentsSalesService {
         const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
         const docTotal = doc.total.toNumber();
 
-        // Determinar tipo de entrada según la categoría del documento
         const category = doc.document_types?.category;
         const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
                         : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
                         : 'INVOICE';
 
-        // Descripción usando el nombre real del tipo de documento
         const docTypeName = doc.document_types?.description ?? 'Documento';
         const docRef = doc.descrip;
         const description = docRef
@@ -1101,6 +1190,155 @@ export class DocumentsSalesService {
         where: { id },
       });
     });
+  }
+
+  // ─────────────────────────────────────────────
+  // ACCEPT (QUOTE → ORDER)
+  // ─────────────────────────────────────────────
+  async accept(id: string, userId: string) {
+    const doc = await this.findOne(id);
+
+    if (doc.status !== STATUS_CONFIRMED) {
+      throw new BadRequestException('El presupuesto debe estar confirmado para aceptarlo');
+    }
+
+    // Buscar tipo de documento ORDER con la misma dirección
+    const orderType = await this.prisma.document_types.findFirst({
+      where: {
+        category: 'ORDER',
+        direction: doc.document_types.direction,
+        active: true,
+      },
+      include: { document_sequences: true },
+    });
+
+    if (!orderType) {
+      throw new NotFoundException('No hay tipo de documento "Orden" configurado. Creelo en Settings → Document Types.');
+    }
+
+    // Copiar items del presupuesto
+    const items: ItemInput[] = doc.document_items.map((item) => ({
+      product_id: item.product_id,
+      quantity: Number(item.quantity),
+      currency: item.currency_code ?? doc.currency_code ?? 'ARS',
+      exchange_rate: Number(item.exchange_rate ?? 1),
+      original_unit_price: Number(item.original_unit_price ?? item.unit_price),
+      unit_price: Number(item.unit_price),
+      converted_unit_price: Number(item.unit_price),
+      price: Number(item.price),
+      total: Number(item.price),
+      exempt_amount: 0,
+      taxable_base: Number(item.price),
+      total_taxes: 0,
+      taxes: [],
+    }));
+
+    const totals = this.totalsService.calculate(items);
+    let createdId = '';
+
+    await this.prisma.$transaction(async (tx) => {
+      const number = await this.getNextNumber(orderType.id, orderType.document_sequences?.id ?? null, tx);
+
+      const newDoc = await tx.documents.create({
+        data: {
+          document_type_id: orderType.id,
+          party_id: doc.party_id,
+          parent_document_id: doc.id,
+          number,
+          date: new Date(),
+          status: STATUS_DRAFT,
+          currency_code: doc.currency_code,
+          subtotal: totals.subtotal,
+          exempt_amount: totals.exempt_amount,
+          taxable_base: totals.taxable_base,
+          total_taxes: totals.total_taxes,
+          total: totals.total,
+          descrip: doc.descrip,
+          ref: `PRES-${doc.number}`,
+        },
+      });
+
+      createdId = newDoc.id;
+
+      await this.persistItems(newDoc.id, items, tx);
+    });
+
+    return this.findOne(createdId);
+  }
+
+  // ─────────────────────────────────────────────
+  // DELIVER (ORDER → REMITO)
+  // ─────────────────────────────────────────────
+  async deliver(id: string, userId: string) {
+    const doc = await this.findOne(id);
+
+    if (doc.status !== STATUS_CONFIRMED) {
+      throw new BadRequestException('La orden debe estar confirmada para despachar');
+    }
+
+    // Buscar tipo de documento REMITO con la misma dirección
+    const remitoType = await this.prisma.document_types.findFirst({
+      where: {
+        category: 'REMITO',
+        direction: doc.document_types.direction,
+        active: true,
+      },
+      include: { document_sequences: true },
+    });
+
+    if (!remitoType) {
+      throw new NotFoundException('No hay tipo de documento "Remito" configurado. Creelo en Settings → Document Types.');
+    }
+
+    // Copiar items de la orden
+    const items: ItemInput[] = doc.document_items.map((item) => ({
+      product_id: item.product_id,
+      quantity: Number(item.quantity),
+      currency: item.currency_code ?? doc.currency_code ?? 'ARS',
+      exchange_rate: Number(item.exchange_rate ?? 1),
+      original_unit_price: Number(item.original_unit_price ?? item.unit_price),
+      unit_price: Number(item.unit_price),
+      converted_unit_price: Number(item.unit_price),
+      price: Number(item.price),
+      total: Number(item.price),
+      exempt_amount: 0,
+      taxable_base: Number(item.price),
+      total_taxes: 0,
+      taxes: [],
+    }));
+
+    const totals = this.totalsService.calculate(items);
+    let createdId = '';
+
+    await this.prisma.$transaction(async (tx) => {
+      const number = await this.getNextNumber(remitoType.id, remitoType.document_sequences?.id ?? null, tx);
+
+      const newDoc = await tx.documents.create({
+        data: {
+          document_type_id: remitoType.id,
+          party_id: doc.party_id,
+          parent_document_id: doc.id,
+          number,
+          date: new Date(),
+          status: STATUS_DRAFT,
+          currency_code: doc.currency_code,
+          subtotal: totals.subtotal,
+          exempt_amount: totals.exempt_amount,
+          taxable_base: totals.taxable_base,
+          total_taxes: totals.total_taxes,
+          total: totals.total,
+          descrip: doc.descrip,
+          ref: `OV-${doc.number}`,
+          delivery_date: new Date(),
+        },
+      });
+
+      createdId = newDoc.id;
+
+      await this.persistItems(newDoc.id, items, tx);
+    });
+
+    return this.findOne(createdId);
   }
 
   // ─────────────────────────────────────────────

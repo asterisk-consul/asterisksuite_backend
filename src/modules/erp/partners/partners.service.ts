@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
+import { validateDocumentNumber } from '@/common/validators/document.validator';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -15,6 +16,9 @@ export class PartnersService {
     if (dto.user_id && dto.create_user) {
       throw new BadRequestException('No se puede enviar user_id y create_user al mismo tiempo');
     }
+
+    // Validar formato de documento
+    validateDocumentNumber(dto.document_type, dto.document_number);
 
     // Validar duplicados por document_type + document_number
     if (dto.document_type && dto.document_number) {
@@ -73,10 +77,23 @@ export class PartnersService {
       const party = await this.prisma.business_parties.create({
         data: {
           type: 'PARTNER',
-          name: `${dto.first_name} ${dto.last_name}`,
-          tax_id: dto.document_number,
-          active: true,
+          name: dto.business_name || `${dto.first_name} ${dto.last_name}`,
+          email: dto.email,
+          tax_id: dto.tax_id || dto.document_number,
+          document_type: dto.document_type,
+          vat_condition: dto.vat_condition,
+          exemption_rate: dto.exemption_rate,
+          active: dto.is_active ?? true,
           created_by: userId,
+          party_locations: dto.locations
+            ? { create: dto.locations.map((l) => ({ location_id: l.location_id, label: l.label })) }
+            : undefined,
+          party_contacts: dto.contacts
+            ? { create: dto.contacts.map((c) => ({ first_name: c.first_name, last_name: c.last_name, role: c.role, phone: c.phone, email: c.email })) }
+            : undefined,
+          party_bank_accounts: dto.bank_accounts
+            ? { create: dto.bank_accounts.map((b) => ({ cbu: b.cbu, alias: b.alias, bank_name: b.bank_name, account_type: b.account_type, currency: b.currency, description: b.description, holder_name: b.holder_name, is_default: b.is_default ?? false })) }
+            : undefined,
         },
       });
       partyId = party.id;
@@ -121,7 +138,15 @@ export class PartnersService {
   async findOne(id: string) {
     const partner = await this.prisma.partners.findFirst({
       where: { id, deleted_at: null },
-      include: { party: true },
+      include: {
+        party: {
+          include: {
+            party_locations: { include: { locations: true } },
+            party_contacts: true,
+            party_bank_accounts: true,
+          },
+        },
+      },
     });
     if (!partner) throw new NotFoundException('Socio no encontrado');
 
@@ -137,7 +162,7 @@ export class PartnersService {
   }
 
   async update(id: string, dto: UpdatePartnerDto, userId: string) {
-    await this.findOne(id);
+    const partner = await this.findOne(id);
 
     // Validar duplicados si cambia document_type/document_number
     if (dto.document_type && dto.document_number) {
@@ -154,10 +179,39 @@ export class PartnersService {
       }
     }
 
+    // Extraer campos de business_party del DTO
+    const { locations, contacts, bank_accounts, business_name, email, tax_id, vat_condition, exemption_rate, ...partnerData } = dto;
+
+    // Actualizar business_party si hay campos relacionados
+    if (partner.party_id && (business_name || email || tax_id || vat_condition || exemption_rate !== undefined || locations || contacts || bank_accounts)) {
+      const partyUpdateData: Record<string, any> = {};
+      if (business_name !== undefined) partyUpdateData.name = business_name;
+      if (email !== undefined) partyUpdateData.email = email;
+      if (tax_id !== undefined) partyUpdateData.tax_id = tax_id;
+      if (vat_condition !== undefined) partyUpdateData.vat_condition = vat_condition;
+      if (exemption_rate !== undefined) partyUpdateData.exemption_rate = exemption_rate;
+
+      await this.prisma.business_parties.update({
+        where: { id: partner.party_id },
+        data: {
+          ...partyUpdateData,
+          party_locations: locations
+            ? { deleteMany: {}, create: locations.map((l) => ({ location_id: l.location_id, label: l.label })) }
+            : undefined,
+          party_contacts: contacts
+            ? { deleteMany: {}, create: contacts.map((c) => ({ first_name: c.first_name, last_name: c.last_name, role: c.role, phone: c.phone, email: c.email })) }
+            : undefined,
+          party_bank_accounts: bank_accounts
+            ? { deleteMany: {}, create: bank_accounts.map((b) => ({ cbu: b.cbu, alias: b.alias, bank_name: b.bank_name, account_type: b.account_type, currency: b.currency, description: b.description, holder_name: b.holder_name, is_default: b.is_default ?? false })) }
+            : undefined,
+        },
+      });
+    }
+
     return this.prisma.partners.update({
       where: { id },
       data: {
-        ...dto,
+        ...partnerData,
         updated_at: new Date(),
         updated_by: userId,
       },

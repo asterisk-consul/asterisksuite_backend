@@ -3,10 +3,13 @@
 // ══════════════════════════════════════════════════════════
 
 enum HrValeType {
-  RETIRO      // Socio/empleado retira dinero
-  ADELANTO    // Adelanto de sueldo/capital
-  REEMBOLSO   // Reembolso de gasto
-  PRESTAMO    // Préstamo de la empresa
+  SUELDO       // Pago de sueldo regular
+  ADELANTO     // Adelanto de sueldo
+  EXTRAS       // Bonuses, horas extras, comisiones
+  RETIRO       // Socio retira dinero
+  REEMBOLSO    // Reembolso de gasto
+  PRESTAMO     // Préstamo de la empresa
+  APORTE       // Aporte de capital del socio
   @@schema("tenant")
 }
 

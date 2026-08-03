@@ -1,10 +1,13 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsDateString } from 'class-validator';
 
 export enum HrValeTypeDto {
-  RETIRO = 'RETIRO',
+  SUELDO = 'SUELDO',
   ADELANTO = 'ADELANTO',
+  EXTRAS = 'EXTRAS',
+  RETIRO = 'RETIRO',
   REEMBOLSO = 'REEMBOLSO',
   PRESTAMO = 'PRESTAMO',
+  APORTE = 'APORTE',
 }
 
 export class CreateHrValeDto {

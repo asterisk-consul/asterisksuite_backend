@@ -124,34 +124,39 @@ model document_type_taxes {
 }
 
 model documents {
-  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  document_type_id String            @db.Uuid
-  party_id         String?           @db.Uuid
-  number           Int
-  date             DateTime          @db.Date
-  status           Int               @default(0) @db.SmallInt
-  subtotal         Decimal           @default(0) @db.Decimal(15, 2)
-  exempt_amount    Decimal           @default(0) @db.Decimal(15, 2)
-  total_taxes      Decimal           @default(0) @db.Decimal(15, 2)
-  total            Decimal           @default(0) @db.Decimal(15, 2)
-  paid_amount      Decimal           @default(0) @db.Decimal(15, 2)
-  descrip          String?           @db.VarChar(50)
-  ref              String?           @db.VarChar(50)
-  currency_code    String?           @db.VarChar(10)
-  taxable_base     Decimal?          @db.Decimal(15, 2)
-  custom_fields    Json?                                                  // Campos personalizados por tipo de documento
-  created_at       DateTime?         @default(now()) @db.Timestamp(6)
-  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
-  deleted_at       DateTime?
-  created_by       String?           @db.Uuid
-  updated_by       String?           @db.Uuid
-  deleted_by       String?           @db.Uuid
-  source           String            @default("manual")
-  document_items   document_items[]
-  document_taxes   document_taxes[]
-  document_types   document_types    @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  business_parties business_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  payment_documents payment_documents[]
+  id                  String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_type_id    String            @db.Uuid
+  party_id            String?           @db.Uuid
+  parent_document_id  String?           @db.Uuid
+  number              Int
+  date                DateTime          @db.Date
+  status              Int               @default(0) @db.SmallInt
+  subtotal            Decimal           @default(0) @db.Decimal(15, 2)
+  exempt_amount       Decimal           @default(0) @db.Decimal(15, 2)
+  total_taxes         Decimal           @default(0) @db.Decimal(15, 2)
+  total               Decimal           @default(0) @db.Decimal(15, 2)
+  paid_amount         Decimal           @default(0) @db.Decimal(15, 2)
+  descrip             String?           @db.VarChar(50)
+  ref                 String?           @db.VarChar(50)
+  currency_code       String?           @db.VarChar(10)
+  taxable_base        Decimal?          @db.Decimal(15, 2)
+  custom_fields       Json?
+  validity_date       DateTime?         @db.Date
+  delivery_date       DateTime?         @db.Date
+  created_at          DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?           @db.Uuid
+  updated_by          String?           @db.Uuid
+  deleted_by          String?           @db.Uuid
+  source              String            @default("manual")
+  document_items      document_items[]
+  document_taxes      document_taxes[]
+  document_types      document_types    @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties    business_parties? @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_documents   payment_documents[]
+  parent_document     documents?        @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child_documents     documents[]       @relation("DocumentChain")
 
   @@unique([document_type_id, number], map: "uq_document_number")
     @@schema("tenant")

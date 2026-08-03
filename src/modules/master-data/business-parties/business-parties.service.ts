@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
+import { validateDocumentNumber } from '@/common/validators/document.validator';
 
 @Injectable()
 export class BusinessPartiesService {
@@ -14,6 +15,9 @@ export class BusinessPartiesService {
 
   // ✅ CREATE con relaciones + auto-creación de employee/partner
   async create(data: CreateBusinessPartyDto) {
+    // Validar formato de documento
+    validateDocumentNumber(data.document_type, data.tax_id);
+
     const { locations, contacts, bank_accounts, ...partyData } = data;
 
     const party = await this.prisma.business_parties.create({

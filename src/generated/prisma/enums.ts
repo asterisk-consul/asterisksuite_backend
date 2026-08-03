@@ -324,10 +324,13 @@ export type FiscalMode = (typeof FiscalMode)[keyof typeof FiscalMode]
 
 
 export const HrValeType = {
-  RETIRO: 'RETIRO',
+  SUELDO: 'SUELDO',
   ADELANTO: 'ADELANTO',
+  EXTRAS: 'EXTRAS',
+  RETIRO: 'RETIRO',
   REEMBOLSO: 'REEMBOLSO',
-  PRESTAMO: 'PRESTAMO'
+  PRESTAMO: 'PRESTAMO',
+  APORTE: 'APORTE'
 } as const
 
 export type HrValeType = (typeof HrValeType)[keyof typeof HrValeType]

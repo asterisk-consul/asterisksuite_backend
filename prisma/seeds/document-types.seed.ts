@@ -45,7 +45,7 @@ const documentTypes = [
     afip_code: '01',
     requires_cae: true,
     is_electronic: true,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -58,7 +58,7 @@ const documentTypes = [
     afip_code: '06',
     requires_cae: true,
     is_electronic: true,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -71,7 +71,7 @@ const documentTypes = [
     afip_code: '11',
     requires_cae: true,
     is_electronic: true,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -84,7 +84,7 @@ const documentTypes = [
     afip_code: null,
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: false,
   },
@@ -101,7 +101,7 @@ const documentTypes = [
     afip_code: '128',
     requires_cae: true,
     is_electronic: true,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -114,7 +114,7 @@ const documentTypes = [
     afip_code: '132',
     requires_cae: true,
     is_electronic: true,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -127,7 +127,7 @@ const documentTypes = [
     afip_code: '203',
     requires_cae: true,
     is_electronic: true,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -187,7 +187,7 @@ const documentTypes = [
     afip_code: '01',
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -200,7 +200,7 @@ const documentTypes = [
     afip_code: '06',
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -213,7 +213,7 @@ const documentTypes = [
     afip_code: '11',
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -230,7 +230,7 @@ const documentTypes = [
     afip_code: '128',
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -243,7 +243,7 @@ const documentTypes = [
     afip_code: '132',
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -256,7 +256,7 @@ const documentTypes = [
     afip_code: '203',
     requires_cae: false,
     is_electronic: false,
-    affects_stock: true,
+    affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
   },
@@ -412,9 +412,31 @@ const documentTypes = [
   },
 ];
 
+// Secuencias por defecto para los nuevos tipos
+const sequences = [
+  { name: 'Presupuestos', point_of_sale: '0001', prefix: 'PRES', forCategory: 'QUOTE' },
+  { name: 'Órdenes de Venta', point_of_sale: '0001', prefix: 'OV', forCategory: 'ORDER', direction: 1 },
+  { name: 'Órdenes de Compra', point_of_sale: '0001', prefix: 'OC', forCategory: 'ORDER', direction: -1 },
+  { name: 'Remitos de Venta', point_of_sale: '0001', prefix: 'REM', forCategory: 'REMITO', direction: 1 },
+  { name: 'Remitos de Compra', point_of_sale: '0001', prefix: 'REMC', forCategory: 'REMITO', direction: -1 },
+  { name: 'Facturas A Venta', point_of_sale: '0001', prefix: 'FA', forCategory: 'INVOICE', direction: 1, letterType: 'A' },
+  { name: 'Facturas B Venta', point_of_sale: '0001', prefix: 'FB', forCategory: 'INVOICE', direction: 1, letterType: 'B' },
+  { name: 'Facturas C Venta', point_of_sale: '0001', prefix: 'FC', forCategory: 'INVOICE', direction: 1, letterType: 'C' },
+  { name: 'Facturas X Venta', point_of_sale: '0001', prefix: 'FX', forCategory: 'INVOICE', direction: 1, letterType: 'X' },
+  { name: 'Facturas A Compra', point_of_sale: '0001', prefix: 'FA-C', forCategory: 'INVOICE', direction: -1, letterType: 'A' },
+  { name: 'Facturas B Compra', point_of_sale: '0001', prefix: 'FB-C', forCategory: 'INVOICE', direction: -1, letterType: 'B' },
+  { name: 'Facturas C Compra', point_of_sale: '0001', prefix: 'FC-C', forCategory: 'INVOICE', direction: -1, letterType: 'C' },
+  { name: 'Notas de Crédito A', point_of_sale: '0001', prefix: 'NCA', forCategory: 'CREDIT_NOTE', direction: 1, letterType: 'A' },
+  { name: 'Notas de Crédito B', point_of_sale: '0001', prefix: 'NCB', forCategory: 'CREDIT_NOTE', direction: 1, letterType: 'B' },
+  { name: 'Notas de Débito A', point_of_sale: '0001', prefix: 'NDA', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'A' },
+  { name: 'Notas de Débito B', point_of_sale: '0001', prefix: 'NDB', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'B' },
+  { name: 'Recibos', point_of_sale: '0001', prefix: 'REC', forCategory: 'RECEIPT' },
+];
+
 async function main() {
   console.log('Seeding document types...');
 
+  // 1. Crear document_types
   for (const docType of documentTypes) {
     await prisma.document_types.upsert({
       where: { code: docType.code },
@@ -449,7 +471,61 @@ async function main() {
   }
 
   console.log(`\n${documentTypes.length} tipos de documento creados/actualizados`);
-  console.log('Document types seed completado.');
+
+  // 2. Crear secuencias
+  console.log('\nSeeding document sequences...');
+
+  for (const seq of sequences) {
+    const existing = await prisma.document_sequences.findFirst({
+      where: { point_of_sale: seq.point_of_sale, prefix: seq.prefix },
+    });
+
+    if (existing) {
+      console.log(`  → ${seq.prefix} ya existe, vinculando...`);
+    } else {
+      await prisma.document_sequences.create({
+        data: {
+          name: seq.name,
+          point_of_sale: seq.point_of_sale,
+          prefix: seq.prefix,
+          current_number: 0,
+          automatic: true,
+          active: true,
+        },
+      });
+      console.log(`  ✓ ${seq.prefix} - ${seq.name}`);
+    }
+  }
+
+  // 3. Vincular document_types ↔ sequences
+  console.log('\nLinking document_types ↔ sequences...');
+
+  for (const seq of sequences) {
+    const sequence = await prisma.document_sequences.findFirst({
+      where: { point_of_sale: seq.point_of_sale, prefix: seq.prefix },
+    });
+
+    if (!sequence) continue;
+
+    // Find matching document types
+    const where: any = { category: seq.forCategory };
+    if (seq.direction) where.direction = seq.direction;
+    if (seq.letterType) where.letter_type = seq.letterType;
+
+    const docTypes = await prisma.document_types.findMany({ where });
+
+    for (const dt of docTypes) {
+      if (dt.document_sequence_id === sequence.id) continue;
+
+      await prisma.document_types.update({
+        where: { id: dt.id },
+        data: { document_sequence_id: sequence.id },
+      });
+      console.log(`  ✓ ${dt.code} → ${seq.prefix}`);
+    }
+  }
+
+  console.log('\nDocument types seed completado.');
 }
 
 main()

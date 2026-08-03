@@ -53,8 +53,12 @@ export class DocumentsSalesController {
 
   @Get()
   // @RequirePermissions('documents.read')
-  findAll(@Query('documentTypeId') documentTypeId?: string, @Query('status') status?: string) {
-    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined);
+  findAll(
+    @Query('documentTypeId') documentTypeId?: string,
+    @Query('status') status?: string,
+    @Query('category') category?: string,
+  ) {
+    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined, category);
   }
 
   @Get('pending')
@@ -85,6 +89,18 @@ export class DocumentsSalesController {
   // @RequirePermissions('documents.cancel')
   cancel(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.service.cancel(id, user.id);
+  }
+
+  @Patch(':id/accept')
+  // @RequirePermissions('documents.update')
+  accept(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.accept(id, user.id);
+  }
+
+  @Patch(':id/deliver')
+  // @RequirePermissions('documents.update')
+  deliver(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.deliver(id, user.id);
   }
 
   @Delete(':id')
