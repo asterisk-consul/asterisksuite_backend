@@ -103,6 +103,36 @@ export class DocumentsSalesController {
     return this.service.deliver(id, user.id);
   }
 
+  @Patch(':id/partial-deliver')
+  // @RequirePermissions('documents.update')
+  partialDeliver(
+    @Param('id') id: string,
+    @Body() body: { items: { document_item_id: string; quantity: number }[] },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.service.partialDeliver(id, body.items, user.id);
+  }
+
+  @Patch(':id/partial-invoice')
+  // @RequirePermissions('documents.update')
+  partialInvoice(
+    @Param('id') id: string,
+    @Body() body: { items: { document_item_id: string; quantity: number }[] },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.service.partialInvoice(id, body.items, user.id);
+  }
+
+  @Patch(':id/status')
+  // @RequirePermissions('documents.update')
+  changeStatus(
+    @Param('id') id: string,
+    @Body() body: { status: number },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.service.changeStatus(id, body.status, user.id);
+  }
+
   @Delete(':id')
   // @RequirePermissions('documents.delete')
   remove(@Param('id') id: string) {

@@ -90,6 +90,11 @@ export type currencies = Prisma.currenciesModel
  */
 export type currency_rates = Prisma.currency_ratesModel
 /**
+ * Model dashboard_configs
+ * 
+ */
+export type dashboard_configs = Prisma.dashboard_configsModel
+/**
  * Model document_sequences
  * 
  */
@@ -124,6 +129,16 @@ export type document_type_taxes = Prisma.document_type_taxesModel
  * 
  */
 export type documents = Prisma.documentsModel
+/**
+ * Model presupuesto_documents
+ * 
+ */
+export type presupuesto_documents = Prisma.presupuesto_documentsModel
+/**
+ * Model orden_venta_documents
+ * 
+ */
+export type orden_venta_documents = Prisma.orden_venta_documentsModel
 /**
  * Model employees
  * 

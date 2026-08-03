@@ -16,7 +16,7 @@ export class TrashService {
     const queries = models
       .filter((m) => !table || m === table)
       .map((model) => {
-        return this.prisma[model].findMany({
+        return this.prisma.getClientForCurrentContext()[model].findMany({
           where: {
             deleted_at: since ? { gte: since } : { not: null },
           },
@@ -38,7 +38,7 @@ export class TrashService {
 
   // 🗑️ soft delete
   softDelete(model: string, id: string, userId: string) {
-    return this.prisma[model].update({
+    return this.prisma.getClientForCurrentContext()[model].update({
       where: { id },
       data: {
         deleted_at: new Date(),
@@ -49,7 +49,7 @@ export class TrashService {
 
   // ♻️ restore
   restore(model: string, id: string) {
-    return this.prisma[model].update({
+    return this.prisma.getClientForCurrentContext()[model].update({
       where: { id },
       data: {
         deleted_at: null,
@@ -60,7 +60,7 @@ export class TrashService {
 
   // 🗑️ soft delete BULK
   softDeleteMany(model: string, ids: string[], userId: string) {
-    return this.prisma[model].updateMany({
+    return this.prisma.getClientForCurrentContext()[model].updateMany({
       where: { id: { in: ids } },
       data: {
         deleted_at: new Date(),
@@ -71,7 +71,7 @@ export class TrashService {
 
   // ♻️ restore BULK
   restoreMany(model: string, ids: string[]) {
-    return this.prisma[model].updateMany({
+    return this.prisma.getClientForCurrentContext()[model].updateMany({
       where: { id: { in: ids } },
       data: {
         deleted_at: null,
@@ -82,7 +82,7 @@ export class TrashService {
 
   // 💀 hard delete BULK (elimina físicamente)
   hardDeleteMany(model: string, ids: string[]) {
-    return this.prisma[model].deleteMany({
+    return this.prisma.getClientForCurrentContext()[model].deleteMany({
       where: { id: { in: ids } },
     });
   }

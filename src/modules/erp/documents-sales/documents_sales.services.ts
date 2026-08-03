@@ -206,10 +206,44 @@ export class DocumentsSalesService {
           descrip: dto.descrip ?? null,
 
           ref: dto.ref ?? null,
+
+          validity_date: dto.validity_date ? new Date(dto.validity_date) : null,
         },
       });
 
       createdId = document.id;
+
+      // ─── Crear extensión según categoría ────────────────────────
+      if (docType.category === 'QUOTE') {
+        await tx.presupuesto_documents.create({
+          data: {
+            document_id: document.id,
+            validity_date: dto.validity_date ? new Date(dto.validity_date) : null,
+            warranty_info: dto.warranty_info ?? null,
+            exclusions: dto.exclusions ?? null,
+            commercial_notes: dto.commercial_notes ?? null,
+            internal_notes: dto.internal_notes ?? null,
+            terms_and_conditions: dto.terms_and_conditions ?? null,
+          },
+        });
+      }
+
+      if (docType.category === 'ORDER') {
+        await tx.orden_venta_documents.create({
+          data: {
+            document_id: document.id,
+            priority: dto.priority ?? null,
+            delivery_address: dto.delivery_address ?? null,
+            delivery_contact: dto.delivery_contact ?? null,
+            delivery_phone: dto.delivery_phone ?? null,
+            delivery_time: dto.delivery_time ?? null,
+            delivery_instructions: dto.delivery_instructions ?? null,
+            transport_provider: dto.transport_provider ?? null,
+            confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
+            seller_id: dto.seller_id ?? null,
+          },
+        });
+      }
 
       await this.persistItems(
         document.id,
@@ -623,6 +657,9 @@ export class DocumentsSalesService {
             taxes: true,
           },
         },
+
+        presupuesto_doc: true,
+        orden_venta_doc: true,
       },
     });
 
@@ -1339,6 +1376,238 @@ export class DocumentsSalesService {
     });
 
     return this.findOne(createdId);
+  }
+
+  // ─────────────────────────────────────────────
+  // PARTIAL DELIVER (OV → Remito parcial)
+  // ─────────────────────────────────────────────
+  async partialDeliver(id: string, items: { document_item_id: string; quantity: number }[], userId: string) {
+    const doc = await this.findOne(id);
+
+    if (doc.status !== STATUS_CONFIRMED && doc.status !== 1) {
+      throw new BadRequestException('La orden debe estar confirmada o aprobada para despachar');
+    }
+
+    // Buscar tipo REMITO
+    const remitoType = await this.prisma.document_types.findFirst({
+      where: { category: 'REMITO', direction: doc.document_types.direction, active: true },
+      include: { document_sequences: true },
+    });
+
+    if (!remitoType) {
+      throw new NotFoundException('No hay tipo de documento "Remito" configurado');
+    }
+
+    // Validar cantidades
+    const sourceItems = doc.document_items;
+    for (const req of items) {
+      const sourceItem = sourceItems.find(i => i.id === req.document_item_id);
+      if (!sourceItem) throw new BadRequestException(`Item ${req.document_item_id} no encontrado en la OV`);
+      const alreadyDelivered = Number(sourceItem.quantity_delivered ?? 0);
+      const pending = Number(sourceItem.quantity) - alreadyDelivered;
+      if (req.quantity > pending) {
+        throw new BadRequestException(`Cantidad ${req.quantity} excede el pendiente (${pending}) para item ${sourceItem.product_id}`);
+      }
+    }
+
+    // Crear remito con solo los items indicados
+    const remitoItems: ItemInput[] = items.map(req => {
+      const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+      return {
+        product_id: sourceItem.product_id,
+        quantity: req.quantity,
+        currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
+        exchange_rate: Number(sourceItem.exchange_rate ?? 1),
+        original_unit_price: Number(sourceItem.original_unit_price ?? sourceItem.unit_price),
+        unit_price: Number(sourceItem.unit_price),
+        converted_unit_price: Number(sourceItem.unit_price),
+        price: Number(sourceItem.unit_price) * req.quantity,
+        total: Number(sourceItem.unit_price) * req.quantity,
+        exempt_amount: 0,
+        taxable_base: Number(sourceItem.unit_price) * req.quantity,
+        total_taxes: 0,
+        taxes: [],
+      };
+    });
+
+    const totals = this.totalsService.calculate(remitoItems);
+    let createdId = '';
+
+    await this.prisma.$transaction(async (tx) => {
+      const number = await this.getNextNumber(remitoType.id, remitoType.document_sequences?.id ?? null, tx);
+
+      const newDoc = await tx.documents.create({
+        data: {
+          document_type_id: remitoType.id,
+          party_id: doc.party_id,
+          parent_document_id: doc.id,
+          number,
+          date: new Date(),
+          status: STATUS_DRAFT,
+          currency_code: doc.currency_code,
+          subtotal: totals.subtotal,
+          exempt_amount: totals.exempt_amount,
+          taxable_base: totals.taxable_base,
+          total_taxes: totals.total_taxes,
+          total: totals.total,
+          descrip: doc.descrip,
+          ref: `OV-${doc.number}`,
+          delivery_date: new Date(),
+        },
+      });
+
+      createdId = newDoc.id;
+
+      await this.persistItems(newDoc.id, remitoItems, tx);
+
+      // Actualizar tracking en items de la OV
+      for (const req of items) {
+        const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+        const newDelivered = Number(sourceItem.quantity_delivered ?? 0) + req.quantity;
+        await tx.document_items.update({
+          where: { id: req.document_item_id },
+          data: { quantity_delivered: newDelivered },
+        });
+      }
+
+      // Verificar si todos los items fueron entregados
+      const allItems = await tx.document_items.findMany({ where: { document_id: id } });
+      const allDelivered = allItems.every(i => Number(i.quantity_delivered ?? 0) >= Number(i.quantity));
+      if (allDelivered) {
+        await tx.documents.update({ where: { id }, data: { status: 5 } }); // ENTREGADA
+      } else {
+        await tx.documents.update({ where: { id }, data: { status: 4 } }); // PARCIAL_ENTREGADA
+      }
+    });
+
+    return this.findOne(createdId);
+  }
+
+  // ─────────────────────────────────────────────
+  // PARTIAL INVOICE (OV → Factura parcial)
+  // ─────────────────────────────────────────────
+  async partialInvoice(id: string, items: { document_item_id: string; quantity: number }[], userId: string) {
+    const doc = await this.findOne(id);
+
+    if (doc.status < 1) {
+      throw new BadRequestException('La orden debe estar aprobada para facturar');
+    }
+
+    // Buscar tipo INVOICE
+    const invoiceType = await this.prisma.document_types.findFirst({
+      where: { category: 'INVOICE', direction: doc.document_types.direction, active: true },
+      include: { document_sequences: true },
+    });
+
+    if (!invoiceType) {
+      throw new NotFoundException('No hay tipo de documento "Factura" configurado');
+    }
+
+    // Validar cantidades
+    const sourceItems = doc.document_items;
+    for (const req of items) {
+      const sourceItem = sourceItems.find(i => i.id === req.document_item_id);
+      if (!sourceItem) throw new BadRequestException(`Item ${req.document_item_id} no encontrado`);
+      const alreadyInvoiced = Number(sourceItem.quantity_invoiced ?? 0);
+      const pending = Number(sourceItem.quantity) - alreadyInvoiced;
+      if (req.quantity > pending) {
+        throw new BadRequestException(`Cantidad ${req.quantity} excede el pendiente (${pending})`);
+      }
+    }
+
+    // Crear factura con items seleccionados
+    const invoiceItems: ItemInput[] = items.map(req => {
+      const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+      return {
+        product_id: sourceItem.product_id,
+        quantity: req.quantity,
+        currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
+        exchange_rate: Number(sourceItem.exchange_rate ?? 1),
+        original_unit_price: Number(sourceItem.original_unit_price ?? sourceItem.unit_price),
+        unit_price: Number(sourceItem.unit_price),
+        converted_unit_price: Number(sourceItem.unit_price),
+        price: Number(sourceItem.unit_price) * req.quantity,
+        total: Number(sourceItem.unit_price) * req.quantity,
+        exempt_amount: 0,
+        taxable_base: Number(sourceItem.unit_price) * req.quantity,
+        total_taxes: 0,
+        taxes: [],
+      };
+    });
+
+    const totals = this.totalsService.calculate(invoiceItems);
+    let createdId = '';
+
+    await this.prisma.$transaction(async (tx) => {
+      const number = await this.getNextNumber(invoiceType.id, invoiceType.document_sequences?.id ?? null, tx);
+
+      const newDoc = await tx.documents.create({
+        data: {
+          document_type_id: invoiceType.id,
+          party_id: doc.party_id,
+          parent_document_id: doc.id,
+          number,
+          date: new Date(),
+          status: STATUS_DRAFT,
+          currency_code: doc.currency_code,
+          subtotal: totals.subtotal,
+          exempt_amount: totals.exempt_amount,
+          taxable_base: totals.taxable_base,
+          total_taxes: totals.total_taxes,
+          total: totals.total,
+          descrip: doc.descrip,
+          ref: `OV-${doc.number}`,
+        },
+      });
+
+      createdId = newDoc.id;
+
+      await this.persistItems(newDoc.id, invoiceItems, tx);
+
+      // Actualizar tracking
+      for (const req of items) {
+        const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+        const newInvoiced = Number(sourceItem.quantity_invoiced ?? 0) + req.quantity;
+        await tx.document_items.update({
+          where: { id: req.document_item_id },
+          data: { quantity_invoiced: newInvoiced },
+        });
+      }
+
+      // Verificar si todos los items fueron facturados
+      const allItems = await tx.document_items.findMany({ where: { document_id: id } });
+      const allInvoiced = allItems.every(i => Number(i.quantity_invoiced ?? 0) >= Number(i.quantity));
+      if (allInvoiced) {
+        await tx.documents.update({ where: { id }, data: { status: 6 } }); // FACTURADA
+      }
+    });
+
+    return this.findOne(createdId);
+  }
+
+  // ─────────────────────────────────────────────
+  // CHANGE STATUS (con validación de transiciones)
+  // ─────────────────────────────────────────────
+  async changeStatus(id: string, newStatus: number, userId: string) {
+    const doc = await this.findOne(id);
+    const category = doc.document_types?.category;
+
+    // Importar dinámicamente para evitar circular deps
+    const { getValidTransitions } = await import('../documents/types/document-statuses.js');
+    const valid = getValidTransitions(category, doc.status);
+
+    if (!valid.includes(newStatus)) {
+      throw new BadRequestException(
+        `Transición inválida: ${doc.status} → ${newStatus} para categoría ${category}`
+      );
+    }
+
+    await this.prisma.documents.update({
+      where: { id },
+      data: { status: newStatus, updated_at: new Date() },
+    });
+
+    return this.findOne(id);
   }
 
   // ─────────────────────────────────────────────

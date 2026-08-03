@@ -32,6 +32,8 @@ export type Document_itemsAvgAggregateOutputType = {
   unit_price: runtime.Decimal | null
   exchange_rate: runtime.Decimal | null
   original_unit_price: runtime.Decimal | null
+  quantity_delivered: runtime.Decimal | null
+  quantity_invoiced: runtime.Decimal | null
 }
 
 export type Document_itemsSumAggregateOutputType = {
@@ -40,6 +42,8 @@ export type Document_itemsSumAggregateOutputType = {
   unit_price: runtime.Decimal | null
   exchange_rate: runtime.Decimal | null
   original_unit_price: runtime.Decimal | null
+  quantity_delivered: runtime.Decimal | null
+  quantity_invoiced: runtime.Decimal | null
 }
 
 export type Document_itemsMinAggregateOutputType = {
@@ -52,6 +56,8 @@ export type Document_itemsMinAggregateOutputType = {
   exchange_rate: runtime.Decimal | null
   currency_code: string | null
   original_unit_price: runtime.Decimal | null
+  quantity_delivered: runtime.Decimal | null
+  quantity_invoiced: runtime.Decimal | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -70,6 +76,8 @@ export type Document_itemsMaxAggregateOutputType = {
   exchange_rate: runtime.Decimal | null
   currency_code: string | null
   original_unit_price: runtime.Decimal | null
+  quantity_delivered: runtime.Decimal | null
+  quantity_invoiced: runtime.Decimal | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -88,6 +96,8 @@ export type Document_itemsCountAggregateOutputType = {
   exchange_rate: number
   currency_code: number
   original_unit_price: number
+  quantity_delivered: number
+  quantity_invoiced: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -104,6 +114,8 @@ export type Document_itemsAvgAggregateInputType = {
   unit_price?: true
   exchange_rate?: true
   original_unit_price?: true
+  quantity_delivered?: true
+  quantity_invoiced?: true
 }
 
 export type Document_itemsSumAggregateInputType = {
@@ -112,6 +124,8 @@ export type Document_itemsSumAggregateInputType = {
   unit_price?: true
   exchange_rate?: true
   original_unit_price?: true
+  quantity_delivered?: true
+  quantity_invoiced?: true
 }
 
 export type Document_itemsMinAggregateInputType = {
@@ -124,6 +138,8 @@ export type Document_itemsMinAggregateInputType = {
   exchange_rate?: true
   currency_code?: true
   original_unit_price?: true
+  quantity_delivered?: true
+  quantity_invoiced?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -142,6 +158,8 @@ export type Document_itemsMaxAggregateInputType = {
   exchange_rate?: true
   currency_code?: true
   original_unit_price?: true
+  quantity_delivered?: true
+  quantity_invoiced?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -160,6 +178,8 @@ export type Document_itemsCountAggregateInputType = {
   exchange_rate?: true
   currency_code?: true
   original_unit_price?: true
+  quantity_delivered?: true
+  quantity_invoiced?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -265,6 +285,8 @@ export type Document_itemsGroupByOutputType = {
   exchange_rate: runtime.Decimal | null
   currency_code: string | null
   original_unit_price: runtime.Decimal | null
+  quantity_delivered: runtime.Decimal | null
+  quantity_invoiced: runtime.Decimal | null
   created_at: Date
   updated_at: Date | null
   deleted_at: Date | null
@@ -306,6 +328,8 @@ export type document_itemsWhereInput = {
   exchange_rate?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableFilter<"document_items"> | string | null
   original_unit_price?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
@@ -327,6 +351,8 @@ export type document_itemsOrderByWithRelationInput = {
   exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
   original_unit_price?: Prisma.SortOrderInput | Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrderInput | Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -351,6 +377,8 @@ export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
   exchange_rate?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableFilter<"document_items"> | string | null
   original_unit_price?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
@@ -372,6 +400,8 @@ export type document_itemsOrderByWithAggregationInput = {
   exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
   original_unit_price?: Prisma.SortOrderInput | Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrderInput | Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -398,6 +428,8 @@ export type document_itemsScalarWhereWithAggregatesInput = {
   exchange_rate?: Prisma.DecimalNullableWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableWithAggregatesFilter<"document_items"> | string | null
   original_unit_price?: Prisma.DecimalNullableWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.DecimalNullableWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.DecimalNullableWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_items"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_items"> | Date | string | null
@@ -414,6 +446,8 @@ export type document_itemsCreateInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -435,6 +469,8 @@ export type document_itemsUncheckedCreateInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -452,6 +488,8 @@ export type document_itemsUpdateInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -473,6 +511,8 @@ export type document_itemsUncheckedUpdateInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -492,6 +532,8 @@ export type document_itemsCreateManyInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -508,6 +550,8 @@ export type document_itemsUpdateManyMutationInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -526,6 +570,8 @@ export type document_itemsUncheckedUpdateManyInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549,6 +595,8 @@ export type document_itemsCountOrderByAggregateInput = {
   exchange_rate?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -563,6 +611,8 @@ export type document_itemsAvgOrderByAggregateInput = {
   unit_price?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrder
 }
 
 export type document_itemsMaxOrderByAggregateInput = {
@@ -575,6 +625,8 @@ export type document_itemsMaxOrderByAggregateInput = {
   exchange_rate?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -593,6 +645,8 @@ export type document_itemsMinOrderByAggregateInput = {
   exchange_rate?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -607,6 +661,8 @@ export type document_itemsSumOrderByAggregateInput = {
   unit_price?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
+  quantity_delivered?: Prisma.SortOrder
+  quantity_invoiced?: Prisma.SortOrder
 }
 
 export type Document_itemsListRelationFilter = {
@@ -725,6 +781,8 @@ export type document_itemsCreateWithoutDocument_item_taxesInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -745,6 +803,8 @@ export type document_itemsUncheckedCreateWithoutDocument_item_taxesInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -777,6 +837,8 @@ export type document_itemsUpdateWithoutDocument_item_taxesInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -797,6 +859,8 @@ export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -813,6 +877,8 @@ export type document_itemsCreateWithoutDocumentsInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -832,6 +898,8 @@ export type document_itemsUncheckedCreateWithoutDocumentsInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -880,6 +948,8 @@ export type document_itemsScalarWhereInput = {
   exchange_rate?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableFilter<"document_items"> | string | null
   original_unit_price?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"document_items"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_items"> | Date | string | null
@@ -896,6 +966,8 @@ export type document_itemsCreateWithoutProductsInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -915,6 +987,8 @@ export type document_itemsUncheckedCreateWithoutProductsInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -959,6 +1033,8 @@ export type document_itemsCreateManyDocumentsInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -975,6 +1051,8 @@ export type document_itemsUpdateWithoutDocumentsInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -994,6 +1072,8 @@ export type document_itemsUncheckedUpdateWithoutDocumentsInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1012,6 +1092,8 @@ export type document_itemsUncheckedUpdateManyWithoutDocumentsInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1029,6 +1111,8 @@ export type document_itemsCreateManyProductsInput = {
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1045,6 +1129,8 @@ export type document_itemsUpdateWithoutProductsInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1064,6 +1150,8 @@ export type document_itemsUncheckedUpdateWithoutProductsInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1082,6 +1170,8 @@ export type document_itemsUncheckedUpdateManyWithoutProductsInput = {
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1131,6 +1221,8 @@ export type document_itemsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   exchange_rate?: boolean
   currency_code?: boolean
   original_unit_price?: boolean
+  quantity_delivered?: boolean
+  quantity_invoiced?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1153,6 +1245,8 @@ export type document_itemsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   exchange_rate?: boolean
   currency_code?: boolean
   original_unit_price?: boolean
+  quantity_delivered?: boolean
+  quantity_invoiced?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1173,6 +1267,8 @@ export type document_itemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   exchange_rate?: boolean
   currency_code?: boolean
   original_unit_price?: boolean
+  quantity_delivered?: boolean
+  quantity_invoiced?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1193,6 +1289,8 @@ export type document_itemsSelectScalar = {
   exchange_rate?: boolean
   currency_code?: boolean
   original_unit_price?: boolean
+  quantity_delivered?: boolean
+  quantity_invoiced?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1201,7 +1299,7 @@ export type document_itemsSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "quantity" | "price" | "unit_price" | "exchange_rate" | "currency_code" | "original_unit_price" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
+export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "quantity" | "price" | "unit_price" | "exchange_rate" | "currency_code" | "original_unit_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
 export type document_itemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_item_taxes?: boolean | Prisma.document_items$document_item_taxesArgs<ExtArgs>
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
@@ -1234,6 +1332,8 @@ export type $document_itemsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     exchange_rate: runtime.Decimal | null
     currency_code: string | null
     original_unit_price: runtime.Decimal | null
+    quantity_delivered: runtime.Decimal | null
+    quantity_invoiced: runtime.Decimal | null
     created_at: Date
     updated_at: Date | null
     deleted_at: Date | null
@@ -1675,6 +1775,8 @@ export interface document_itemsFieldRefs {
   readonly exchange_rate: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly currency_code: Prisma.FieldRef<"document_items", 'String'>
   readonly original_unit_price: Prisma.FieldRef<"document_items", 'Decimal'>
+  readonly quantity_delivered: Prisma.FieldRef<"document_items", 'Decimal'>
+  readonly quantity_invoiced: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly created_at: Prisma.FieldRef<"document_items", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"document_items", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"document_items", 'DateTime'>

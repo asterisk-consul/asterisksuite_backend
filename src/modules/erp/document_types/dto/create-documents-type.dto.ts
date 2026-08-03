@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsBoolean,
   IsInt,
   IsOptional,
@@ -60,4 +61,9 @@ export class CreateDocumentsTypeDto {
 
   @IsOptional()
   custom_fields_config?: any;
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  tax_ids?: string[];
 }

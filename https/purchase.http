@@ -36,6 +36,8 @@ x-tenant: dev
   ]
 }
 
+##### 
+
 # --- Tipos de documento COMPRA ---
 @docType_FA_COMPRA = bea7ab3b-b292-4fd2-98c1-95d86b54b5df
 @docType_FB_COMPRA = e8adcdfa-07c3-4296-a092-d2edfcc3000f

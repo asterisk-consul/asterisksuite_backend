@@ -61,6 +61,7 @@ export const ModelName = {
   cost_template_components: 'cost_template_components',
   currencies: 'currencies',
   currency_rates: 'currency_rates',
+  dashboard_configs: 'dashboard_configs',
   document_sequences: 'document_sequences',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
@@ -68,6 +69,8 @@ export const ModelName = {
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
   documents: 'documents',
+  presupuesto_documents: 'presupuesto_documents',
+  orden_venta_documents: 'orden_venta_documents',
   employees: 'employees',
   partners: 'partners',
   product_structure_versions: 'product_structure_versions',
@@ -352,6 +355,19 @@ export const Currency_ratesScalarFieldEnum = {
 export type Currency_ratesScalarFieldEnum = (typeof Currency_ratesScalarFieldEnum)[keyof typeof Currency_ratesScalarFieldEnum]
 
 
+export const Dashboard_configsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  dashboard_key: 'dashboard_key',
+  config: 'config',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type Dashboard_configsScalarFieldEnum = (typeof Dashboard_configsScalarFieldEnum)[keyof typeof Dashboard_configsScalarFieldEnum]
+
+
 export const Document_sequencesScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -400,6 +416,8 @@ export const Document_itemsScalarFieldEnum = {
   exchange_rate: 'exchange_rate',
   currency_code: 'currency_code',
   original_unit_price: 'original_unit_price',
+  quantity_delivered: 'quantity_delivered',
+  quantity_invoiced: 'quantity_invoiced',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -472,6 +490,7 @@ export const DocumentsScalarFieldEnum = {
   id: 'id',
   document_type_id: 'document_type_id',
   party_id: 'party_id',
+  parent_document_id: 'parent_document_id',
   number: 'number',
   date: 'date',
   status: 'status',
@@ -485,6 +504,8 @@ export const DocumentsScalarFieldEnum = {
   currency_code: 'currency_code',
   taxable_base: 'taxable_base',
   custom_fields: 'custom_fields',
+  validity_date: 'validity_date',
+  delivery_date: 'delivery_date',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -495,6 +516,41 @@ export const DocumentsScalarFieldEnum = {
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Presupuesto_documentsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  validity_date: 'validity_date',
+  warranty_info: 'warranty_info',
+  exclusions: 'exclusions',
+  commercial_notes: 'commercial_notes',
+  internal_notes: 'internal_notes',
+  terms_and_conditions: 'terms_and_conditions',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Presupuesto_documentsScalarFieldEnum = (typeof Presupuesto_documentsScalarFieldEnum)[keyof typeof Presupuesto_documentsScalarFieldEnum]
+
+
+export const Orden_venta_documentsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  priority: 'priority',
+  delivery_address: 'delivery_address',
+  delivery_contact: 'delivery_contact',
+  delivery_phone: 'delivery_phone',
+  delivery_time: 'delivery_time',
+  delivery_instructions: 'delivery_instructions',
+  transport_provider: 'transport_provider',
+  confirmed_delivery_date: 'confirmed_delivery_date',
+  seller_id: 'seller_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Orden_venta_documentsScalarFieldEnum = (typeof Orden_venta_documentsScalarFieldEnum)[keyof typeof Orden_venta_documentsScalarFieldEnum]
 
 
 export const EmployeesScalarFieldEnum = {

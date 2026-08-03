@@ -68,14 +68,13 @@ export class CreateDocumentDto {
   descrip?: string;
 
   @IsString()
-  @IsOptional() // o IsNotEmpty() si es requerido
+  @IsOptional()
   currency_code!: string;
 
   @IsString()
   @IsOptional()
   ref?: string;
 
-  // ✅ ahora opcionales (backend los recalcula)
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -101,10 +100,71 @@ export class CreateDocumentDto {
   @Type(() => CreateDocumentItemDto)
   items!: CreateDocumentItemDto[];
 
-  // ✅ opcional (backend los genera)
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentTaxDto)
   @IsOptional()
   taxes?: CreateDocumentTaxDto[];
+
+  // ─── Presupuesto fields ─────────────────────────
+  @IsOptional()
+  @IsDateString()
+  validity_date?: string;
+
+  @IsOptional()
+  @IsString()
+  warranty_info?: string;
+
+  @IsOptional()
+  @IsString()
+  exclusions?: string;
+
+  @IsOptional()
+  @IsString()
+  commercial_notes?: string;
+
+  @IsOptional()
+  @IsString()
+  internal_notes?: string;
+
+  @IsOptional()
+  @IsString()
+  terms_and_conditions?: string;
+
+  // ─── Orden de Venta fields ──────────────────────
+  @IsOptional()
+  @IsString()
+  priority?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_address?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_contact?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_phone?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_time?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_instructions?: string;
+
+  @IsOptional()
+  @IsString()
+  transport_provider?: string;
+
+  @IsOptional()
+  @IsDateString()
+  confirmed_delivery_date?: string;
+
+  @IsOptional()
+  @IsUUID()
+  seller_id?: string;
 }
