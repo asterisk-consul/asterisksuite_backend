@@ -1298,6 +1298,12 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, items, tx);
+
+      // Actualizar presupuesto a "Convertido" (status 5)
+      await tx.documents.update({
+        where: { id: doc.id },
+        data: { status: 5, updated_at: new Date() },
+      });
     });
 
     return this.findOne(createdId);
@@ -1373,6 +1379,12 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, items, tx);
+
+      // Actualizar OV a "Entregada" (status 5)
+      await tx.documents.update({
+        where: { id: doc.id },
+        data: { status: 5, updated_at: new Date() },
+      });
     });
 
     return this.findOne(createdId);
@@ -1636,19 +1648,30 @@ export class DocumentsSalesService {
       return (last?.number ?? 0) + 1;
     }
 
-    const seq = await db.document_sequences.update({
-      where: {
-        id: sequenceId,
-      },
-
-      data: {
-        current_number: {
-          increment: 1,
+    // Con secuencia: incrementar y verificar que no exista
+    let attempts = 0;
+    while (attempts < 100) {
+      const seq = await db.document_sequences.update({
+        where: {
+          id: sequenceId,
         },
-      },
-    });
 
-    return seq.current_number;
+        data: {
+          current_number: {
+            increment: 1,
+          },
+        },
+      });
+
+      const exists = await db.documents.findFirst({
+        where: { document_type_id: documentTypeId, number: seq.current_number },
+      });
+
+      if (!exists) return seq.current_number;
+      attempts++;
+    }
+
+    throw new BadRequestException('No se pudo generar un número único de documento');
   }
 
   // ─────────────────────────────────────────────

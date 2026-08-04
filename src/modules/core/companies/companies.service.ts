@@ -742,6 +742,57 @@ export class CompaniesService {
     });
   }
 
+  async updateUser(companyId: string, userId: string, dto: { name?: string; email?: string }, requestUserId: string) {
+    await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
+
+    const membership = await this.prisma.company_users.findUnique({
+      where: { company_id_user_id: { company_id: companyId, user_id: userId } },
+    });
+
+    if (!membership) {
+      throw new NotFoundException('Usuario no encontrado en esta empresa');
+    }
+
+    // Validar email único si se cambia
+    if (dto.email) {
+      const existing = await this.prisma.users.findUnique({
+        where: { email: dto.email },
+      });
+      if (existing && existing.id !== userId) {
+        throw new ConflictException('El email ya está registrado');
+      }
+    }
+
+    return this.prisma.users.update({
+      where: { id: userId },
+      data: {
+        ...(dto.name !== undefined && { name: dto.name }),
+        ...(dto.email !== undefined && { email: dto.email }),
+      },
+      select: { id: true, name: true, email: true },
+    });
+  }
+
+  async changeUserPassword(companyId: string, userId: string, newPassword: string, requestUserId: string) {
+    await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
+
+    const membership = await this.prisma.company_users.findUnique({
+      where: { company_id_user_id: { company_id: companyId, user_id: userId } },
+    });
+
+    if (!membership) {
+      throw new NotFoundException('Usuario no encontrado en esta empresa');
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+
+    return this.prisma.users.update({
+      where: { id: userId },
+      data: { password_hash: passwordHash },
+      select: { id: true, name: true, email: true },
+    });
+  }
+
   deactivate() {
     throw new Error('No existe isActive en el modelo companies');
   }

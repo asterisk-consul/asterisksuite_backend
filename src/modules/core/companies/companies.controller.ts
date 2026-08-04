@@ -12,6 +12,7 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { AddCompanyUserDto } from './dto/add-company-user.dto';
 import { CreateCompanyUserDto } from './dto/create-company-user.dto';
+import { UpdateCompanyUserDto, ChangeUserPasswordDto } from './dto/update-company-user.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
@@ -70,6 +71,28 @@ export class CompaniesController {
     @CurrentUser('id') userId: string,
   ) {
     return this.companiesService.createUserInCompany(companyId, dto, userId);
+  }
+
+  // @RequirePermissions('companies.update')
+  @Patch(':id/users/:userId')
+  updateUser(
+    @Param('id') companyId: string,
+    @Param('userId') userId: string,
+    @Body() dto: UpdateCompanyUserDto,
+    @CurrentUser('id') requestUserId: string,
+  ) {
+    return this.companiesService.updateUser(companyId, userId, dto, requestUserId);
+  }
+
+  // @RequirePermissions('companies.update')
+  @Patch(':id/users/:userId/password')
+  changeUserPassword(
+    @Param('id') companyId: string,
+    @Param('userId') userId: string,
+    @Body() dto: ChangeUserPasswordDto,
+    @CurrentUser('id') requestUserId: string,
+  ) {
+    return this.companiesService.changeUserPassword(companyId, userId, dto.newPassword, requestUserId);
   }
 
   // @RequirePermissions('companies.delete')

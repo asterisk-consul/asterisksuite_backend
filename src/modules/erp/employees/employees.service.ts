@@ -132,11 +132,26 @@ export class EmployeesService {
   }
 
   async findAll() {
-    return this.prisma.employees.findMany({
+    const employees = await this.prisma.employees.findMany({
       where: { deleted_at: null },
       orderBy: { last_name: 'asc' },
       include: { party: { select: { id: true, name: true } } },
     });
+
+    // Cross-DB lookup: resolver usuarios vinculados desde public.users
+    const userIds = employees.filter(e => e.user_id).map(e => e.user_id!) as string[];
+    const users = userIds.length > 0
+      ? await this.db.getDefaultClient().users.findMany({
+          where: { id: { in: userIds } },
+          select: { id: true, name: true, email: true, active: true },
+        })
+      : [];
+    const userMap = new Map(users.map(u => [u.id, u]));
+
+    return employees.map(e => ({
+      ...e,
+      user: e.user_id ? (userMap.get(e.user_id) ?? null) : null,
+    }));
   }
 
   async findOne(id: string) {

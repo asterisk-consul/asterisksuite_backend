@@ -16,16 +16,16 @@ export class CheckProcessingScheduler {
 
     const companies = await this.db.getDefaultClient().companies.findMany({
       where: { deleted_at: null },
-      select: { db_name: true, name: true },
+      select: { schema_name: true, name: true },
     });
 
     for (const company of companies) {
-      if (!company.db_name) continue;
+      if (!company.schema_name) continue;
 
       try {
-        await this.processChecksForTenant(company.db_name, company.name);
+        await this.processChecksForTenant(company.schema_name, company.name);
       } catch (error) {
-        this.logger.error(`Error procesando cheques en tenant ${company.db_name}`, error);
+        this.logger.error(`Error procesando cheques en tenant ${company.schema_name}`, error);
       }
     }
   }
