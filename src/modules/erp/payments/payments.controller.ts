@@ -8,6 +8,7 @@ import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { ApplyAdvanceDto } from './dto/apply-advance.dto';
 import type { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
@@ -82,6 +83,33 @@ export class PaymentsController {
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.remove(id, user.id);
+  }
+
+  // ═══════════════════════════════════════════
+  // ADVANCE PAYMENTS
+  // ═══════════════════════════════════════════
+
+  @Get('advance-available')
+  findAdvanceAvailable(@Query('party_id') partyId?: string) {
+    return this.paymentsService.findAdvanceAvailable(partyId);
+  }
+
+  @Post(':id/apply-advance')
+  applyAdvance(
+    @Param('id') id: string,
+    @Body() dto: ApplyAdvanceDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.paymentsService.applyAdvance(id, dto, user.id);
+  }
+
+  @Delete(':id/apply-advance/:documentId')
+  removeAdvanceApplication(
+    @Param('id') id: string,
+    @Param('documentId') documentId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.paymentsService.removeAdvanceApplication(id, documentId, user.id);
   }
 
   @Get('export')

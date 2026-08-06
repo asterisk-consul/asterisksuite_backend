@@ -14,6 +14,10 @@ export class CreatePaymentDto {
   @IsEnum(['PAYMENT', 'COLLECTION'] as const)
   type!: string;
 
+  @IsEnum(['NORMAL', 'ADVANCE'] as const)
+  @IsOptional()
+  payment_mode?: string;
+
   @IsDateString()
   date!: string;
 

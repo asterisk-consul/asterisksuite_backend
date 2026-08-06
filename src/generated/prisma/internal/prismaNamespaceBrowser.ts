@@ -1955,6 +1955,7 @@ export const PaymentsScalarFieldEnum = {
   bank_account_id: 'bank_account_id',
   cash_box_id: 'cash_box_id',
   status: 'status',
+  payment_mode: 'payment_mode',
   confirmed_at: 'confirmed_at',
   confirmed_by: 'confirmed_by',
   payment_date: 'payment_date',

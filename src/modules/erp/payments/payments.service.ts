@@ -22,6 +22,10 @@ export class PaymentsService {
       throw new BadRequestException('party_id es requerido cuando se aplican documentos');
     }
 
+    if (dto.payment_mode === 'ADVANCE' && !dto.party_id) {
+      throw new BadRequestException('party_id es requerido para anticipos');
+    }
+
     const lastPayment = await this.prisma.payments.findFirst({
       where: { deleted_at: null },
       orderBy: { number: 'desc' },
@@ -33,6 +37,7 @@ export class PaymentsService {
         data: {
           number: nextNumber,
           type: dto.type as any,
+          payment_mode: (dto.payment_mode as any) ?? 'NORMAL',
           date: new Date(dto.date),
           party_id: dto.party_id,
           party_type: dto.party_type,
@@ -85,7 +90,7 @@ export class PaymentsService {
 
     // Validate documents if present
     const paymentDocs = await this.prisma.payment_documents.findMany({
-      where: { payment_id: id },
+      where: { payment_id: id, deleted_at: null },
     });
 
     if (paymentDocs.length > 0) {
@@ -99,6 +104,11 @@ export class PaymentsService {
         });
         if (!document) {
           throw new NotFoundException(`Documento ${pd.document_id} no encontrado`);
+        }
+        if (document.currency_code !== payment.currency_code) {
+          throw new BadRequestException(
+            `El documento ${document.number} tiene moneda ${document.currency_code} pero el pago es en ${payment.currency_code}`,
+          );
         }
         const pending = document.total.toNumber() - document.paid_amount.toNumber();
         if (pending <= 0) {
@@ -114,43 +124,51 @@ export class PaymentsService {
       }
     }
 
-    // Apply to documents
-    for (const pd of paymentDocs) {
-      await this.prisma.documents.update({
-        where: { id: pd.document_id },
+    // Determine current account entry type:
+    // ADVANCE without docs → NO current account entry (pendiente de factura)
+    // Otherwise → PAYMENT/COLLECTION (como siempre)
+    const isAdvanceNoDocs = payment.payment_mode === 'ADVANCE' && paymentDocs.length === 0;
+
+    return this.prisma.$transaction(async (tx) => {
+      // Apply to documents
+      for (const pd of paymentDocs) {
+        await tx.documents.update({
+          where: { id: pd.document_id },
+          data: {
+            paid_amount: { increment: pd.amount_applied.toNumber() },
+            updated_at: new Date(),
+            updated_by: userId,
+          },
+        });
+      }
+
+      // Create cash box movement
+      if (payment.cash_box_id) {
+        await this.createCashBoxMovement(payment, userId, tx);
+      }
+
+      // Create bank account movement
+      if (payment.bank_account_id) {
+        await this.createBankMovement(payment, userId, tx);
+      }
+
+      // Update current account — NOT for advance without documents
+      // (the advance impacts CC only when applied to an invoice)
+      if (payment.party_id && !isAdvanceNoDocs) {
+        await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
+      }
+
+      // Update status
+      return tx.payments.update({
+        where: { id },
         data: {
-          paid_amount: { increment: pd.amount_applied.toNumber() },
+          status: 'CONFIRMED',
+          confirmed_at: new Date(),
+          confirmed_by: userId,
           updated_at: new Date(),
           updated_by: userId,
         },
       });
-    }
-
-    // Create cash box movement
-    if (payment.cash_box_id) {
-      await this.createCashBoxMovement(payment, userId);
-    }
-
-    // Create bank account movement
-    if (payment.bank_account_id) {
-      await this.createBankMovement(payment, userId);
-    }
-
-    // Update current account
-    if (payment.party_id) {
-      await this.createCurrentAccountEntry(payment, userId);
-    }
-
-    // Update status
-    return this.prisma.payments.update({
-      where: { id },
-      data: {
-        status: 'CONFIRMED',
-        confirmed_at: new Date(),
-        confirmed_by: userId,
-        updated_at: new Date(),
-        updated_by: userId,
-      },
     });
   }
 
@@ -309,6 +327,7 @@ export class PaymentsService {
     if (dto.reference) data.reference = dto.reference;
     if (dto.bank_account_id) data.bank_account_id = dto.bank_account_id;
     if (dto.cash_box_id) data.cash_box_id = dto.cash_box_id;
+    if (dto.payment_mode) data.payment_mode = dto.payment_mode;
 
     return this.prisma.payments.update({
       where: { id },
@@ -344,8 +363,9 @@ export class PaymentsService {
   // PRIVATE HELPERS
   // ═══════════════════════════════════════════
 
-  private async createCashBoxMovement(payment: any, userId: string) {
-    const balance = await this.prisma.cash_box_balances.findUnique({
+  private async createCashBoxMovement(payment: any, userId: string, tx?: any) {
+    const prisma = tx || this.prisma;
+    const balance = await prisma.cash_box_balances.findUnique({
       where: {
         cash_box_id_currency_code: {
           cash_box_id: payment.cash_box_id,
@@ -363,7 +383,7 @@ export class PaymentsService {
       throw new BadRequestException('Saldo insuficiente en la caja');
     }
 
-    await this.prisma.cash_box_movements.create({
+    await prisma.cash_box_movements.create({
       data: {
         cash_box_id: payment.cash_box_id,
         type: payment.type as any,
@@ -382,12 +402,12 @@ export class PaymentsService {
     });
 
     if (balance) {
-      await this.prisma.cash_box_balances.update({
+      await prisma.cash_box_balances.update({
         where: { id: balance.id },
         data: { balance: balanceAfter, updated_at: new Date() },
       });
     } else {
-      await this.prisma.cash_box_balances.create({
+      await prisma.cash_box_balances.create({
         data: {
           cash_box_id: payment.cash_box_id,
           currency_code: payment.currency_code,
@@ -398,8 +418,9 @@ export class PaymentsService {
     }
   }
 
-  private async createBankMovement(payment: any, userId: string) {
-    const bankAccount = await this.prisma.bank_accounts.findUnique({
+  private async createBankMovement(payment: any, userId: string, tx?: any) {
+    const prisma = tx || this.prisma;
+    const bankAccount = await prisma.bank_accounts.findUnique({
       where: { id: payment.bank_account_id },
     });
 
@@ -410,7 +431,7 @@ export class PaymentsService {
     const amount = payment.amount.toNumber();
     const bankBalanceAfter = isOutflow ? currentBankBalance - amount : currentBankBalance + amount;
 
-    await this.prisma.bank_account_movements.create({
+    await prisma.bank_account_movements.create({
       data: {
         bank_account_id: payment.bank_account_id,
         type: payment.type as any,
@@ -426,14 +447,15 @@ export class PaymentsService {
       },
     });
 
-    await this.prisma.bank_accounts.update({
+    await prisma.bank_accounts.update({
       where: { id: payment.bank_account_id },
       data: { balance: bankBalanceAfter, updated_at: new Date() },
     });
   }
 
-  private async createCurrentAccountEntry(payment: any, userId: string) {
-    let currentAccount = await this.prisma.current_accounts.findUnique({
+  private async createCurrentAccountEntry(payment: any, userId: string, tx?: any, entryType?: string) {
+    const prisma = tx || this.prisma;
+    let currentAccount = await prisma.current_accounts.findUnique({
       where: {
         party_id_currency_code: {
           party_id: payment.party_id,
@@ -443,7 +465,7 @@ export class PaymentsService {
     });
 
     if (!currentAccount) {
-      currentAccount = await this.prisma.current_accounts.create({
+      currentAccount = await prisma.current_accounts.create({
         data: {
           party_id: payment.party_id,
           party_type: payment.party_type ?? 'CUSTOMER',
@@ -455,16 +477,17 @@ export class PaymentsService {
     }
 
     const currentBalance = currentAccount.balance.toNumber();
-    // PAYMENT y COLLECTION son ambos "débito" para CUSTOMER (disminuyen deuda)
-    // Para SUPPLIER, PAYMENT es "crédito" (aumenta balance, disminuye lo que debés)
-    const isDebit = payment.type === 'PAYMENT' || payment.type === 'COLLECTION';
+    // ADVANCE: balance sube (proveedor te debe mercadería)
+    // PAYMENT/COLLECTION: balance baja (disminuye deuda)
+    const type = entryType ?? payment.type;
+    const isDebit = type === 'PAYMENT' || type === 'COLLECTION';
     const amount = payment.amount.toNumber();
     const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
 
-    await this.prisma.current_account_entries.create({
+    await prisma.current_account_entries.create({
       data: {
         current_account_id: currentAccount.id,
-        type: payment.type as any,
+        type: type as any,
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
@@ -479,7 +502,7 @@ export class PaymentsService {
       },
     });
 
-    await this.prisma.current_accounts.update({
+    await prisma.current_accounts.update({
       where: { id: currentAccount.id },
       data: { balance: balanceAfter, updated_at: new Date() },
     });
@@ -489,6 +512,7 @@ export class PaymentsService {
     // Revert documents
     const paymentDocs = await this.prisma.payment_documents.findMany({
       where: { payment_id: payment.id },
+      orderBy: { created_at: 'asc' },
     });
 
     for (const pd of paymentDocs) {
@@ -579,7 +603,8 @@ export class PaymentsService {
       }
     }
 
-    // Revert current account entry
+    // Revert ALL current account entries for this payment
+    // (could be multiple: the initial ADVANCE/PAYMENT + entries from applyAdvance)
     if (payment.party_id) {
       const currentAccount = await this.prisma.current_accounts.findUnique({
         where: {
@@ -591,35 +616,344 @@ export class PaymentsService {
       });
 
       if (currentAccount) {
-        const currentBalance = currentAccount.balance.toNumber();
-        const isDebit = payment.type === 'PAYMENT';
-        const amount = payment.amount.toNumber();
-        const balanceAfter = isDebit ? currentBalance + amount : currentBalance - amount;
+        // Find all entries for this payment
+        const entries = await this.prisma.current_account_entries.findMany({
+          where: { payment_id: payment.id },
+          orderBy: { created_at: 'asc' },
+        });
 
-        await this.prisma.current_account_entries.create({
+        let balance = currentAccount.balance.toNumber();
+        for (const entry of entries) {
+          // Reverse each entry: flip the direction
+          const wasDebit = entry.type === 'PAYMENT' || entry.type === 'COLLECTION';
+          const amount = entry.amount.toNumber();
+          const reversedBalance = wasDebit ? balance + amount : balance - amount;
+
+          await this.prisma.current_account_entries.create({
+            data: {
+              current_account_id: currentAccount.id,
+              type: entry.type as any,
+              amount: entry.amount,
+              currency_code: payment.currency_code,
+              exchange_rate: payment.exchange_rate,
+              balance_before: balance,
+              balance_after: reversedBalance,
+              description: `Reversión de pago #${payment.number}`,
+              reference_type: referenceType,
+              reference_id: payment.id,
+              payment_id: payment.id,
+              date: new Date(),
+              created_by: userId,
+            },
+          });
+
+          balance = reversedBalance;
+        }
+
+        await this.prisma.current_accounts.update({
+          where: { id: currentAccount.id },
+          data: { balance: balance, updated_at: new Date() },
+        });
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════
+  // APPLY ADVANCE — vincula anticipo a factura
+  // ═══════════════════════════════════════════
+
+  async applyAdvance(paymentId: string, dto: { document_id: string; amount: number }, userId: string) {
+    const payment = await this.findOne(paymentId);
+
+    if (payment.status !== 'CONFIRMED' && payment.status !== 'PAID') {
+      throw new BadRequestException('Solo se pueden aplicar anticipos a pagos confirmados o pagados');
+    }
+    if (payment.payment_mode !== 'ADVANCE') {
+      throw new BadRequestException('Este pago no es un anticipo');
+    }
+
+    // Validar documento (fuera de transacción — solo lectura)
+    const document = await this.prisma.documents.findUnique({
+      where: { id: dto.document_id },
+      include: { document_type: true },
+    });
+    if (!document) {
+      throw new NotFoundException('Documento no encontrado');
+    }
+    if (document.deleted_at) {
+      throw new NotFoundException('Documento eliminado');
+    }
+    if (document.party_id !== payment.party_id) {
+      throw new BadRequestException('El documento no pertenece al mismo tercero del pago');
+    }
+    if (document.currency_code !== payment.currency_code) {
+      throw new BadRequestException(
+        `La moneda del documento (${document.currency_code}) no coincide con la del anticipo (${payment.currency_code})`,
+      );
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      // Validar saldo disponible DENTRO de la transacción (evita race condition)
+      const applied = await tx.payment_documents.aggregate({
+        _sum: { amount_applied: true },
+        where: { payment_id: paymentId, deleted_at: null },
+      });
+      const totalApplied = applied._sum.amount_applied?.toNumber() ?? 0;
+      const available = payment.amount.toNumber() - totalApplied;
+
+      if (dto.amount > available) {
+        throw new BadRequestException(
+          `El monto solicitado (${dto.amount}) excede el saldo disponible (${available}) del anticipo`,
+        );
+      }
+
+      const docPending = document.total.toNumber() - document.paid_amount.toNumber();
+      if (docPending <= 0) {
+        throw new BadRequestException('El documento ya está saldado');
+      }
+      if (dto.amount > docPending) {
+        throw new BadRequestException(
+          `El monto (${dto.amount}) excede el saldo pendiente (${docPending}) del documento`,
+        );
+      }
+
+      // Verificar si ya existe un link para este pago-documento (upsert)
+      const existingLink = await tx.payment_documents.findUnique({
+        where: { payment_id_document_id: { payment_id: paymentId, document_id: dto.document_id } },
+      });
+      if (existingLink) {
+        // Incrementar monto aplicado en link existente
+        await tx.payment_documents.update({
+          where: { id: existingLink.id },
+          data: {
+            amount_applied: { increment: dto.amount },
+            updated_at: new Date(),
+            updated_by: userId,
+          },
+        });
+      } else {
+        // Crear nuevo link
+        await tx.payment_documents.create({
+          data: {
+            payment_id: paymentId,
+            document_id: dto.document_id,
+            amount_applied: dto.amount,
+            created_by: userId,
+          },
+        });
+      }
+
+      // Incrementar paid_amount del documento
+      await tx.documents.update({
+        where: { id: dto.document_id },
+        data: {
+          paid_amount: { increment: dto.amount },
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+
+      // Crear entradas en cuenta corriente:
+      // INVOICE: registra la deuda con el proveedor
+      // PAYMENT: registra que el anticipo cubre esa deuda
+      if (payment.party_id) {
+        // Buscar la cuenta corriente del proveedor
+        let currentAccount = await tx.current_accounts.findUnique({
+          where: {
+            party_id_currency_code: {
+              party_id: payment.party_id,
+              currency_code: payment.currency_code,
+            },
+          },
+        });
+
+        if (!currentAccount) {
+          currentAccount = await tx.current_accounts.create({
+            data: {
+              party_id: payment.party_id,
+              party_type: payment.party_type ?? 'SUPPLIER',
+              currency_code: payment.currency_code,
+              balance: 0,
+              created_by: userId,
+            },
+          });
+        }
+
+        let balance = currentAccount.balance.toNumber();
+        const applyAmount = dto.amount;
+
+        // Entry 1: INVOICE — increase debt (balance decreases for SUPPLIER)
+        const invoiceAfter = balance - applyAmount;
+        await tx.current_account_entries.create({
           data: {
             current_account_id: currentAccount.id,
-            type: payment.type as any,
-            amount: payment.amount,
+            type: 'INVOICE' as any,
+            amount: applyAmount,
             currency_code: payment.currency_code,
-            exchange_rate: payment.exchange_rate,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Reversión de pago #${payment.number}`,
-            reference_type: referenceType,
-            reference_id: payment.id,
-            payment_id: payment.id,
+            balance_before: balance,
+            balance_after: invoiceAfter,
+            description: `Factura asociada a anticipo #${payment.number}`,
+            reference_type: 'document',
+            reference_id: dto.document_id,
+            payment_id: paymentId,
             date: new Date(),
             created_by: userId,
           },
         });
 
-        await this.prisma.current_accounts.update({
+        // Entry 2: PAYMENT — decrease debt (balance increases for SUPPLIER)
+        const paymentAfter = invoiceAfter + applyAmount;
+        await tx.current_account_entries.create({
+          data: {
+            current_account_id: currentAccount.id,
+            type: 'PAYMENT' as any,
+            amount: applyAmount,
+            currency_code: payment.currency_code,
+            balance_before: invoiceAfter,
+            balance_after: paymentAfter,
+            description: `Anticipo #${payment.number} aplicado a factura`,
+            reference_type: 'payment',
+            reference_id: paymentId,
+            payment_id: paymentId,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+
+        // Update account balance
+        await tx.current_accounts.update({
           where: { id: currentAccount.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
+          data: { balance: paymentAfter, updated_at: new Date() },
+        });
+      }
+
+      // Retornar pago actualizado
+      return tx.payments.findUnique({
+        where: { id: paymentId },
+        include: {
+          party: { select: { id: true, name: true } },
+          documents: {
+            include: {
+              document: { select: { id: true, number: true, total: true, paid_amount: true } },
+            },
+          },
+        },
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // REMOVE ADVANCE APPLICATION — desvincula anticipo de factura
+  // ═══════════════════════════════════════════
+
+  async removeAdvanceApplication(paymentId: string, documentId: string, userId: string) {
+    const payment = await this.findOne(paymentId);
+
+    if (payment.status !== 'CONFIRMED' && payment.status !== 'PAID') {
+      throw new BadRequestException('Solo se pueden modificar aplicaciones de pagos confirmados o pagados');
+    }
+
+    const link = await this.prisma.payment_documents.findFirst({
+      where: { payment_id: paymentId, document_id: documentId, deleted_at: null },
+    });
+    if (!link) {
+      throw new NotFoundException('No existe aplicación de este anticipo a este documento');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      // Decrementar paid_amount del documento
+      await tx.documents.update({
+        where: { id: documentId },
+        data: {
+          paid_amount: { decrement: link.amount_applied.toNumber() },
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+
+      // Eliminar el link
+      await tx.payment_documents.delete({
+        where: { id: link.id },
+      });
+
+      // Retornar pago actualizado
+      return tx.payments.findUnique({
+        where: { id: paymentId },
+        include: {
+          party: { select: { id: true, name: true } },
+          documents: {
+            include: {
+              document: { select: { id: true, number: true, total: true, paid_amount: true } },
+            },
+          },
+        },
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // FIND ADVANCE AVAILABLE — anticipos con saldo disponible
+  // ═══════════════════════════════════════════
+
+  async findAdvanceAvailable(partyId?: string) {
+    const where: Record<string, any> = {
+      payment_mode: 'ADVANCE',
+      status: 'CONFIRMED',
+      deleted_at: null,
+    };
+    if (partyId) where.party_id = partyId;
+
+    const payments = await this.prisma.payments.findMany({
+      where,
+      orderBy: { date: 'asc' },
+      include: {
+        party: { select: { id: true, name: true } },
+      },
+    });
+
+    const results: Array<{
+      id: string;
+      number: number;
+      date: Date;
+      amount: number;
+      available: number;
+      currency_code: string;
+      party_id: string | null;
+      party_name: string | null;
+    }> = [];
+
+    // Batch aggregate to avoid N+1 queries
+    const paymentIds = payments.map(p => p.id);
+    const aggregates = paymentIds.length > 0
+      ? await this.prisma.payment_documents.groupBy({
+          by: ['payment_id'],
+          _sum: { amount_applied: true },
+          where: { payment_id: { in: paymentIds }, deleted_at: null },
+        })
+      : [];
+    const appliedMap = new Map<string, number>(
+      aggregates.map(a => [a.payment_id, a._sum.amount_applied?.toNumber() ?? 0])
+    );
+
+    for (const p of payments) {
+      const totalApplied = appliedMap.get(p.id) ?? 0;
+      const available = p.amount.toNumber() - totalApplied;
+
+      if (available > 0) {
+        results.push({
+          id: p.id,
+          number: p.number,
+          date: p.date,
+          amount: p.amount.toNumber(),
+          available,
+          currency_code: p.currency_code,
+          party_id: p.party_id,
+          party_name: p.party?.name ?? null,
         });
       }
     }
+
+    return results;
   }
 
   // ═══════════════════════════════════════════

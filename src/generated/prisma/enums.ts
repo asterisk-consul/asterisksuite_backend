@@ -188,6 +188,14 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const PaymentMode = {
+  NORMAL: 'NORMAL',
+  ADVANCE: 'ADVANCE'
+} as const
+
+export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
+
+
 export const CheckStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',

@@ -147,6 +147,12 @@ enum PaymentStatus {
   @@schema("tenant")
 }
 
+enum PaymentMode {
+  NORMAL
+  ADVANCE
+  @@schema("tenant")
+}
+
 enum CheckStatus {
   PENDING
   CONFIRMED

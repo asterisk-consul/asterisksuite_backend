@@ -306,6 +306,7 @@ model payments {
   bank_account_id String?          @db.Uuid
   cash_box_id     String?          @db.Uuid
   status          PaymentStatus   @default(DRAFT)
+  payment_mode    PaymentMode     @default(NORMAL)
   confirmed_at    DateTime?
   confirmed_by    String?          @db.Uuid
   payment_date    DateTime?        @db.Date
@@ -330,6 +331,8 @@ model payments {
   @@unique([number])
   @@index([party_id])
   @@index([date])
+  @@index([payment_mode])
+  @@index([payment_mode, status])
   @@schema("tenant")
 }
 

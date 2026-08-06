@@ -216,6 +216,7 @@ export class CurrentAccountsService {
       return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION'].includes(type)
     }
     // SUPPLIER
-    return ['INVOICE', 'DEBIT_NOTE', 'LOAN', 'CHECK_ISSUED', 'TRANSFER', 'DEBIT'].includes(type)
+    // ADVANCE: balance baja (pagué anticipadamente, disminuye lo que me deben)
+    return ['INVOICE', 'DEBIT_NOTE', 'LOAN', 'CHECK_ISSUED', 'TRANSFER', 'DEBIT', 'ADVANCE'].includes(type)
   }
 }
