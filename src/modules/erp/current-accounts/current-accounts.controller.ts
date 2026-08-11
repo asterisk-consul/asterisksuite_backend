@@ -25,29 +25,20 @@ export class CurrentAccountsController {
 
   @Get('party/:partyId/entries')
   // @RequirePermissions('treasury.current_accounts.read')
-  getEntries(
-    @Param('partyId') partyId: string,
-    @Query('currency_code') currencyCode?: string,
-  ) {
-    return this.currentAccountsService.getEntries(partyId, currencyCode);
+  getEntries(@Param('partyId') partyId: string) {
+    return this.currentAccountsService.getEntries(partyId);
   }
 
   @Get('party/:partyId/statement')
   // @RequirePermissions('treasury.current_accounts.read')
-  getStatement(
-    @Param('partyId') partyId: string,
-    @Query('currency_code') currencyCode: string,
-  ) {
-    return this.currentAccountsService.getStatement(partyId, currencyCode);
+  getStatement(@Param('partyId') partyId: string) {
+    return this.currentAccountsService.getStatement(partyId);
   }
 
   @Get('party/:partyId/balance')
   // @RequirePermissions('treasury.current_accounts.read')
-  getBalance(
-    @Param('partyId') partyId: string,
-    @Query('currency_code') currencyCode: string,
-  ) {
-    return this.currentAccountsService.getBalance(partyId, currencyCode);
+  getBalance(@Param('partyId') partyId: string) {
+    return this.currentAccountsService.getBalance(partyId);
   }
 
   @Get('active')
@@ -60,12 +51,10 @@ export class CurrentAccountsController {
   // @RequirePermissions('treasury.current_accounts.read')
   findAll(
     @Query('party_type') partyType?: string,
-    @Query('currency_code') currencyCode?: string,
     @Query('balance_filter') balanceFilter?: string,
   ) {
     return this.currentAccountsService.findAll({
       party_type: partyType,
-      currency_code: currencyCode,
       balance_filter: balanceFilter,
     });
   }

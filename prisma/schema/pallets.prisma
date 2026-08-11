@@ -7,7 +7,7 @@ model pallet_items {
   products   products @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([pallet_id, product_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model pallets {
@@ -28,5 +28,6 @@ model pallets {
   picking_results      picking_results[]
   picking_sources      picking_sources[]
   trip_cargo           trip_cargo[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }

@@ -24,5 +24,6 @@ model locations {
   trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
   trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
   warehouses                                     warehouses[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }

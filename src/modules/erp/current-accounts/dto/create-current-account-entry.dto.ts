@@ -25,7 +25,8 @@ export class CreateCurrentAccountEntryDto {
     'CREDIT_NOTE',
     'DEBIT_NOTE',
     'DEBIT',
-    'CREDIT'
+    'CREDIT',
+    'OPENING_BALANCE'
   ] as const)
   type!: string;
 
@@ -35,6 +36,14 @@ export class CreateCurrentAccountEntryDto {
   @IsNumber()
   @IsOptional()
   exchange_rate?: number;
+
+  @IsString()
+  @IsOptional()
+  rate_type?: string;
+
+  @IsNumber()
+  @IsOptional()
+  converted_amount?: number;
 
   @IsString()
   @IsOptional()

@@ -14,7 +14,7 @@ model product_taxes {
   taxes                taxes     @relation(fields: [tax_id], references: [id], onUpdate: NoAction)
 
   @@unique([product_id, tax_id], map: "uq_product_tax")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model taxes {
@@ -40,5 +40,5 @@ model taxes {
   operation_taxes     operation_taxes[]
 
   @@index([tax_type, active], map: "idx_taxes_type_active")
-    @@schema("tenant")
+  @@schema("tenant")
 }

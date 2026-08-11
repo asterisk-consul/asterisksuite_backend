@@ -14,5 +14,5 @@ model audit_logs {
   @@index([changed_by])
   @@index([changed_at])
   @@index([table_name, changed_at(sort: Desc)])
-   @@schema("tenant")
+  @@schema("tenant")
 }

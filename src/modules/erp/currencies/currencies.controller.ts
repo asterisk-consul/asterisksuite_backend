@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 
 import { CurrenciesService } from './currencies.service';
 
@@ -30,6 +30,16 @@ export class CurrenciesController {
   // @RequirePermissions('currencies.read')
   getBaseCurrency() {
     return this.currenciesService.getBaseCurrency();
+  }
+
+  @Get('latest')
+  // @RequirePermissions('currencies.read')
+  getLatestRate(
+    @Query('from') from: string,
+    @Query('to') to: string,
+    @Query('rateType') rateType?: string,
+  ) {
+    return this.currenciesService.getLatestRate(from, to, rateType as any);
   }
 
   @Get(':id')

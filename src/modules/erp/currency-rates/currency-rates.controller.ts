@@ -6,14 +6,17 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 import { CurrencyRatesService } from './currency-rates.service';
 
 import { CreateCurrencyRateDto } from './dto/create-currency-rate.dto';
 import { UpdateCurrencyRateDto } from './dto/update-currency-rate.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 // import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
+@UseGuards(JwtAuthGuard)
 @Controller('currency-rates')
 export class CurrencyRatesController {
   constructor(private readonly currencyRatesService: CurrencyRatesService) {}

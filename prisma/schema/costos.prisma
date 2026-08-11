@@ -25,7 +25,7 @@ model product_costs {
   @@index([product_id])
   @@index([currency_id])
   @@index([active])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model product_cost_breakdowns {
@@ -48,7 +48,7 @@ model product_cost_breakdowns {
   @@index([product_cost_id])
   @@index([component_product_id])
   @@index([parent_breakdown_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model cost_components {
@@ -66,7 +66,8 @@ model cost_components {
   updated_by String?           @db.Uuid
 
   template_components cost_template_components[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model cost_templates {
@@ -83,7 +84,8 @@ model cost_templates {
 
   components cost_template_components[]
   products   products[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model cost_template_components {
@@ -97,5 +99,5 @@ model cost_template_components {
 
   @@unique([template_id, cost_component_id])
   @@index([template_id])
-   @@schema("tenant")
+  @@schema("tenant")
 }

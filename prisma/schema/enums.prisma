@@ -4,6 +4,7 @@ enum DispatchStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+
   @@schema("tenant")
 }
 
@@ -12,6 +13,7 @@ enum TripStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+
   @@schema("tenant")
 }
 
@@ -20,6 +22,7 @@ enum AuditAction {
   UPDATE
   DELETE
   RESTORE
+
   @@schema("public")
 }
 
@@ -29,6 +32,7 @@ enum ProductType {
   FINISHED_PRODUCT
   SERVICE
   RATES
+
   @@schema("tenant")
 }
 
@@ -36,6 +40,7 @@ enum UsageType {
   SALE
   PURCHASE
   BOTH
+
   @@schema("tenant")
 }
 
@@ -45,6 +50,7 @@ enum UnitType {
   LENGTH //Metro	m
   AREA //Metro cuadrado	m2
   VOLUME //Metro cúbico	m3
+
   @@schema("tenant")
 }
 
@@ -54,6 +60,7 @@ enum AccountType {
   EQUITY
   REVENUE
   EXPENSE
+
   @@schema("tenant")
 }
 
@@ -62,6 +69,7 @@ enum AttributeType {
   NUMBER
   BOOLEAN
   SELECT
+
   @@schema("tenant")
 }
 
@@ -70,6 +78,7 @@ enum CalculationType {
   SURFACE
   VOLUME
   LINEAR
+
   @@schema("tenant")
 }
 
@@ -81,6 +90,7 @@ enum CurrencyRateType {
   WHOLESALE
   CRYPTO
   CARD
+
   @@schema("tenant")
 }
 
@@ -90,6 +100,7 @@ enum ProductCostSource {
   ENGINEERING
   PURCHASE
   RATE
+
   @@schema("tenant")
 }
 
@@ -99,6 +110,7 @@ enum VariantCostSource {
   IMPORT
   ENGINEERING
   SUPPLIER
+
   @@schema("tenant")
 }
 
@@ -107,6 +119,7 @@ enum CostComponentType {
   LABOR
   OVERHEAD
   OTHER
+
   @@schema("tenant")
 }
 
@@ -115,6 +128,7 @@ enum CostValueType {
   PERCENTAGE_OF_MATERIAL
   PERCENTAGE_OF_TOTAL
   FIXED_PER_UNIT
+
   @@schema("tenant")
 }
 
@@ -129,12 +143,14 @@ enum PaymentMethod {
   CREDIT_CARD
   DEBIT_CARD
   VIRTUAL_WALLET
+
   @@schema("tenant")
 }
 
 enum PaymentType {
   PAYMENT
   COLLECTION
+
   @@schema("tenant")
 }
 
@@ -144,12 +160,14 @@ enum PaymentStatus {
   PAID
   REVERSED
   CANCELLED
+
   @@schema("tenant")
 }
 
 enum PaymentMode {
   NORMAL
   ADVANCE
+
   @@schema("tenant")
 }
 
@@ -159,6 +177,7 @@ enum CheckStatus {
   CLEARED
   BOUNCED
   CANCELLED
+
   @@schema("tenant")
 }
 
@@ -178,6 +197,8 @@ enum AccountEntryType {
   DEBIT_NOTE
   DEBIT
   CREDIT
+  OPENING_BALANCE
+
   @@schema("tenant")
 }
 
@@ -185,12 +206,14 @@ enum CashBoxType {
   MAIN
   FIXED
   REGISTER
+
   @@schema("tenant")
 }
 
 enum CashBoxStatus {
   OPEN
   CLOSED
+
   @@schema("tenant")
 }
 
@@ -198,6 +221,7 @@ enum CashBoxSessionStatus {
   OPEN
   CLOSED
   FORCED
+
   @@schema("tenant")
 }
 
@@ -205,12 +229,14 @@ enum CashBoxUserRole {
   RESPONSIBLE
   OPERATOR
   VIEWER
+
   @@schema("tenant")
 }
 
 enum CreditCardType {
   COMPANY
   CUSTOMER
+
   @@schema("tenant")
 }
 
@@ -221,12 +247,14 @@ enum CreditCardBrand {
   NARANJA
   CABAL
   OTHER
+
   @@schema("tenant")
 }
 
 enum CreditCardTransactionType {
   PURCHASE
   COLLECTION
+
   @@schema("tenant")
 }
 
@@ -234,6 +262,7 @@ enum ClearingStatus {
   PENDING
   CLEARED
   FAILED
+
   @@schema("tenant")
 }
 
@@ -241,18 +270,20 @@ enum InstallmentStatus {
   PENDING
   PAID
   OVERDUE
+
   @@schema("tenant")
 }
 
 enum PartyType {
-  CUSTOMER          // Cliente
-  SUPPLIER          // Proveedor
-  EMPLOYEE          // Empleado
-  PARTNER           // Socio
-  TAX_AUTHORITY     // Ente impositivo (ARCA, IIBB, etc.)
-  UTILITY           // Servicios públicos (EPEC, gas, etc.)
-  FINANCIAL         // Entidades financieras (banco, tarjeta)
-  SERVICE_PROVIDER  // Proveedor de servicios
+  CUSTOMER // Cliente
+  SUPPLIER // Proveedor
+  EMPLOYEE // Empleado
+  PARTNER // Socio
+  TAX_AUTHORITY // Ente impositivo (ARCA, IIBB, etc.)
+  UTILITY // Servicios públicos (EPEC, gas, etc.)
+  FINANCIAL // Entidades financieras (banco, tarjeta)
+  SERVICE_PROVIDER // Proveedor de servicios
+
   @@schema("tenant")
 }
 
@@ -261,7 +292,8 @@ enum PartyType {
 // ══════════════════════════════════════════════════════════
 
 enum FiscalMode {
-  SIMPLE     // Precio final, sin discriminación de impuestos
-  COMPLETE   // Motor fiscal completo: IVA, percepciones, etc.
+  SIMPLE // Precio final, sin discriminación de impuestos
+  COMPLETE // Motor fiscal completo: IVA, percepciones, etc.
+
   @@schema("public")
 }

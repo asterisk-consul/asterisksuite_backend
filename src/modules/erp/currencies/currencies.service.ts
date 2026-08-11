@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { CurrencyRateType } from '@/generated/prisma/enums';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -132,6 +133,34 @@ export class CurrenciesService {
         deleted_at: new Date(),
       },
     });
+  }
+
+  // ─────────────────────────────────────────────
+  // GET LATEST RATE
+  // ─────────────────────────────────────────────
+  async getLatestRate(
+    fromCode: string,
+    toCode: string,
+    rateType?: CurrencyRateType,
+  ) {
+    const fromCurrency = await this.findByCode(fromCode);
+    const toCurrency = await this.findByCode(toCode);
+
+    const where: any = {
+      from_currency_id: fromCurrency.id,
+      to_currency_id: toCurrency.id,
+    };
+
+    if (rateType) {
+      where.rate_type = rateType;
+    }
+
+    const rate = await this.prisma.currency_rates.findFirst({
+      where,
+      orderBy: [{ effective_date: 'desc' }, { created_at: 'desc' }],
+    });
+
+    return rate ?? null;
   }
 
   // ─────────────────────────────────────────────

@@ -30,7 +30,7 @@ export class DocumentsPurchasesItemsService {
 
     const resolved: ItemInput[] = [];
 
-    for (const item of dtoItems) {
+    for (const item of dtoItems ?? []) {
       // ITEM LIBRE
       if (!item.product_id) {
         const price = round2(item.unit_price * item.quantity);

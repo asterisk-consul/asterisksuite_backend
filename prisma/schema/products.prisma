@@ -17,7 +17,7 @@ model product_price {
   @@unique([product_id, currency_id])
   @@index([product_id])
   @@index([currency_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model products {
@@ -72,7 +72,7 @@ model products {
   picking_items             picking_items[]
   product_price             product_price[]
   product_taxes             product_taxes[]
-  tax_category              tax_categories?             @relation(fields: [tax_category_id], references: [id])
+  tax_category              tax_categories?              @relation(fields: [tax_category_id], references: [id])
   transfer_rate             transfer_rates?              @relation(fields: [rate_id], references: [id])
   warehouse_stock           warehouse_stock[]
   warehouse_stock_movements warehouse_stock_movements[]
@@ -80,7 +80,8 @@ model products {
   productCostBreakdowns     product_cost_breakdowns[]
   cost_template             cost_templates?              @relation(fields: [cost_template_id], references: [id])
   productStructureVersions  product_structure_versions[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model units {
@@ -96,7 +97,8 @@ model units {
   updated_by         String?              @db.Uuid
   deleted_by         String?              @db.Uuid
   product_components product_components[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model product_variants {
@@ -124,7 +126,7 @@ model product_variants {
   productVariantCosts      product_variant_costs[]
 
   @@index([product_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model product_components {
@@ -156,7 +158,7 @@ model product_components {
   @@index([parent_product_id, order])
   @@index([child_product_id])
   @@index([child_variant_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model categories {
@@ -180,7 +182,7 @@ model categories {
   @@index([parent_id])
   @@index([sort_order])
   @@index([parent_id, sort_order])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model product_categories {
@@ -197,7 +199,7 @@ model product_categories {
 
   @@id([product_id, category_id])
   @@index([category_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model tags {
@@ -211,7 +213,8 @@ model tags {
   updated_by   String?        @db.Uuid
   deleted_by   String?        @db.Uuid
   product_tags product_tags[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model product_tags {
@@ -227,7 +230,7 @@ model product_tags {
   tags       tags      @relation(fields: [tag_id], references: [id], onDelete: Cascade)
 
   @@id([product_id, tag_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model attributes {
@@ -243,7 +246,8 @@ model attributes {
   updated_by               String?                    @db.Uuid
   deleted_by               String?                    @db.Uuid
   product_attribute_values product_attribute_values[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model product_attribute_values {
@@ -267,7 +271,7 @@ model product_attribute_values {
   @@index([product_id])
   @@index([variant_id])
   @@index([attribute_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model product_variant_prices {
@@ -286,7 +290,7 @@ model product_variant_prices {
 
   @@index([variant_id])
   @@index([currency_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model product_variant_costs {
@@ -309,5 +313,5 @@ model product_variant_costs {
   @@index([currency_id])
   @@index([source])
   @@index([effective_date])
-    @@schema("tenant")
+  @@schema("tenant")
 }

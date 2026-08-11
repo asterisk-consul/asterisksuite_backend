@@ -17,7 +17,8 @@ model currencies {
   productCosts         product_costs[]
   productVariantPrices product_variant_prices[]
   productVariantCosts  product_variant_costs[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model currency_rates {
@@ -28,11 +29,17 @@ model currency_rates {
   source           String?
   effective_date   DateTime
   rate_type        CurrencyRateType @default(OFFICIAL)
+  active           Boolean          @default(true)
   created_at       DateTime         @default(now())
+  updated_at       DateTime?        @updatedAt
+  deleted_at       DateTime?
+  created_by       String?          @db.Uuid
+  updated_by       String?          @db.Uuid
+  deleted_by       String?          @db.Uuid
   from_currency    currencies       @relation("rate_from", fields: [from_currency_id], references: [id])
   to_currency      currencies       @relation("rate_to", fields: [to_currency_id], references: [id])
 
   @@unique([from_currency_id, to_currency_id, effective_date, rate_type])
   @@index([effective_date])
-    @@schema("tenant")
+  @@schema("tenant")
 }

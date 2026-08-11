@@ -26,6 +26,18 @@ export class CreateHrValeDto {
   @IsString()
   currency_code: string;
 
+  @IsNumber()
+  @IsOptional()
+  exchange_rate?: number;
+
+  @IsString()
+  @IsOptional()
+  rate_type?: string;
+
+  @IsNumber()
+  @IsOptional()
+  converted_amount?: number;
+
   @IsDateString()
   date: string;
 

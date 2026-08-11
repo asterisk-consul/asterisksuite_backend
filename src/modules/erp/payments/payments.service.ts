@@ -2,10 +2,16 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { CurrencyConversionService } from '../currencies/currency-conversion.service';
+import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
 
 @Injectable()
 export class PaymentsService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private conversionService: CurrencyConversionService,
+    private currentAccountsService: CurrentAccountsService,
+  ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
   }
@@ -32,6 +38,32 @@ export class PaymentsService {
     });
     const nextNumber = (lastPayment?.number ?? 0) + 1;
 
+    // ─── Auto-calculate converted_amount if not provided ─────────
+    let convertedAmount = dto.converted_amount ?? null
+    let exchangeRate = dto.exchange_rate ?? null
+    let rateType = (dto.rate_type as any) ?? null
+
+    if (dto.currency_code && !convertedAmount) {
+      try {
+        const baseCurrency = await this.conversionService.getBaseCurrency()
+        if (dto.currency_code.toUpperCase() !== baseCurrency.code.toUpperCase()) {
+          if (!exchangeRate) {
+            const resolved = await this.conversionService.resolveRate(
+              dto.currency_code,
+              baseCurrency.code,
+              new Date(dto.date),
+              rateType,
+            )
+            exchangeRate = resolved.rate
+            rateType = resolved.rateType
+          }
+          convertedAmount = this.conversionService.convertAmount(dto.amount, exchangeRate)
+        }
+      } catch {
+        // If rate not found, leave as null
+      }
+    }
+
     try {
       const payment = await this.prisma.payments.create({
         data: {
@@ -44,18 +76,18 @@ export class PaymentsService {
           payment_method: dto.payment_method as any,
           amount: dto.amount,
           currency_code: dto.currency_code,
-          exchange_rate: dto.exchange_rate,
-          rate_type: dto.rate_type as any,
-        converted_amount: dto.converted_amount,
-        exchange_note: dto.exchange_note,
-        description: dto.description,
-        reference: dto.reference,
-        bank_account_id: dto.bank_account_id,
-        cash_box_id: dto.cash_box_id,
-        status: 'DRAFT',
-        created_by: userId,
-      },
-    });
+          exchange_rate: exchangeRate,
+          rate_type: rateType,
+          converted_amount: convertedAmount,
+          exchange_note: dto.exchange_note,
+          description: dto.description,
+          reference: dto.reference,
+          bank_account_id: dto.bank_account_id,
+          cash_box_id: dto.cash_box_id,
+          status: 'DRAFT',
+          created_by: userId,
+        },
+      });
 
     // Store documents for later confirmation
     if (dto.documents && dto.documents.length > 0) {
@@ -105,20 +137,22 @@ export class PaymentsService {
         if (!document) {
           throw new NotFoundException(`Documento ${pd.document_id} no encontrado`);
         }
-        if (document.currency_code !== payment.currency_code) {
-          throw new BadRequestException(
-            `El documento ${document.number} tiene moneda ${document.currency_code} pero el pago es en ${payment.currency_code}`,
-          );
-        }
         const pending = document.total.toNumber() - document.paid_amount.toNumber();
         if (pending <= 0) {
           throw new BadRequestException(
             `El documento ${document.number} ya está saldado`,
           );
         }
-        if (pd.amount_applied.toNumber() > pending) {
+        // Convertir pending a la moneda de pago si es cross-currency
+        const docCurrency = document.currency_code?.toUpperCase();
+        const payCurrency = payment.currency_code?.toUpperCase();
+        let pendingInPayCurrency = pending;
+        if (docCurrency !== payCurrency && document.exchange_rate) {
+          pendingInPayCurrency = Number((pending * Number(document.exchange_rate)).toFixed(2));
+        }
+        if (pd.amount_applied.toNumber() > pendingInPayCurrency + 0.01) {
           throw new BadRequestException(
-            `El monto aplicado (${pd.amount_applied}) excede el saldo pendiente (${pending}) del documento ${document.number}`,
+            `El monto aplicado (${pd.amount_applied}) excede el saldo pendiente (${pendingInPayCurrency} ${payCurrency}) del documento ${document.number}`,
           );
         }
       }
@@ -390,6 +424,8 @@ export class PaymentsService {
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
+        rate_type: payment.rate_type,
+        converted_amount: payment.converted_amount,
         balance_before: currentBalance,
         balance_after: balanceAfter,
         description: payment.description ?? `Pago #${payment.number}`,
@@ -438,6 +474,8 @@ export class PaymentsService {
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
+        rate_type: payment.rate_type,
+        converted_amount: payment.converted_amount,
         balance_before: currentBankBalance,
         balance_after: bankBalanceAfter,
         description: payment.description ?? `Pago #${payment.number}`,
@@ -454,58 +492,25 @@ export class PaymentsService {
   }
 
   private async createCurrentAccountEntry(payment: any, userId: string, tx?: any, entryType?: string) {
-    const prisma = tx || this.prisma;
-    let currentAccount = await prisma.current_accounts.findUnique({
-      where: {
-        party_id_currency_code: {
-          party_id: payment.party_id,
-          currency_code: payment.currency_code,
-        },
-      },
-    });
-
-    if (!currentAccount) {
-      currentAccount = await prisma.current_accounts.create({
-        data: {
-          party_id: payment.party_id,
-          party_type: payment.party_type ?? 'CUSTOMER',
-          currency_code: payment.currency_code,
-          balance: 0,
-          created_by: userId,
-        },
-      });
-    }
-
-    const currentBalance = currentAccount.balance.toNumber();
-    // ADVANCE: balance sube (proveedor te debe mercadería)
-    // PAYMENT/COLLECTION: balance baja (disminuye deuda)
     const type = entryType ?? payment.type;
-    const isDebit = type === 'PAYMENT' || type === 'COLLECTION';
-    const amount = payment.amount.toNumber();
-    const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
 
-    await prisma.current_account_entries.create({
-      data: {
-        current_account_id: currentAccount.id,
-        type: type as any,
-        amount: payment.amount,
+    await this.currentAccountsService.addEntry(
+      {
+        party_id: payment.party_id,
+        party_type: payment.party_type ?? 'CUSTOMER',
         currency_code: payment.currency_code,
-        exchange_rate: payment.exchange_rate,
-        balance_before: currentBalance,
-        balance_after: balanceAfter,
+        type,
+        amount: payment.amount.toNumber(),
+        exchange_rate: payment.exchange_rate ? Number(payment.exchange_rate) : undefined,
+        rate_type: payment.rate_type ?? undefined,
         description: payment.description ?? `Pago #${payment.number}`,
         reference_type: 'payment',
         reference_id: payment.id,
         payment_id: payment.id,
-        date: payment.date,
-        created_by: userId,
+        date: payment.date instanceof Date ? payment.date.toISOString() : payment.date,
       },
-    });
-
-    await prisma.current_accounts.update({
-      where: { id: currentAccount.id },
-      data: { balance: balanceAfter, updated_at: new Date() },
-    });
+      userId,
+    );
   }
 
   private async reverseSideEffects(payment: any, userId: string, referenceType: string) {
@@ -550,6 +555,8 @@ export class PaymentsService {
             amount: payment.amount,
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
+            rate_type: payment.rate_type,
+            converted_amount: payment.converted_amount,
             balance_before: currentBalance,
             balance_after: balanceAfter,
             description: `Reversión de pago #${payment.number}`,
@@ -587,6 +594,8 @@ export class PaymentsService {
             amount: payment.amount,
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
+            rate_type: payment.rate_type,
+            converted_amount: payment.converted_amount,
             balance_before: currentBankBalance,
             balance_after: bankBalanceAfter,
             description: `Reversión de pago #${payment.number}`,
@@ -606,54 +615,31 @@ export class PaymentsService {
     // Revert ALL current account entries for this payment
     // (could be multiple: the initial ADVANCE/PAYMENT + entries from applyAdvance)
     if (payment.party_id) {
-      const currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: payment.party_id,
-            currency_code: payment.currency_code,
-          },
-        },
+      // Find all entries for this payment
+      const entries = await this.prisma.current_account_entries.findMany({
+        where: { payment_id: payment.id },
+        orderBy: { created_at: 'asc' },
       });
 
-      if (currentAccount) {
-        // Find all entries for this payment
-        const entries = await this.prisma.current_account_entries.findMany({
-          where: { payment_id: payment.id },
-          orderBy: { created_at: 'asc' },
-        });
-
-        let balance = currentAccount.balance.toNumber();
-        for (const entry of entries) {
-          // Reverse each entry: flip the direction
-          const wasDebit = entry.type === 'PAYMENT' || entry.type === 'COLLECTION';
-          const amount = entry.amount.toNumber();
-          const reversedBalance = wasDebit ? balance + amount : balance - amount;
-
-          await this.prisma.current_account_entries.create({
-            data: {
-              current_account_id: currentAccount.id,
-              type: entry.type as any,
-              amount: entry.amount,
-              currency_code: payment.currency_code,
-              exchange_rate: payment.exchange_rate,
-              balance_before: balance,
-              balance_after: reversedBalance,
-              description: `Reversión de pago #${payment.number}`,
-              reference_type: referenceType,
-              reference_id: payment.id,
-              payment_id: payment.id,
-              date: new Date(),
-              created_by: userId,
-            },
-          });
-
-          balance = reversedBalance;
-        }
-
-        await this.prisma.current_accounts.update({
-          where: { id: currentAccount.id },
-          data: { balance: balance, updated_at: new Date() },
-        });
+      // Reverse each entry using CurrentAccountsService
+      for (const entry of entries) {
+        await this.currentAccountsService.addEntry(
+          {
+            party_id: payment.party_id,
+            party_type: payment.party_type ?? 'CUSTOMER',
+            currency_code: entry.currency_code,
+            type: entry.type as any,
+            amount: entry.amount.toNumber(),
+            exchange_rate: entry.exchange_rate ? Number(entry.exchange_rate) : undefined,
+            rate_type: entry.rate_type ?? undefined,
+            description: `Reversión de pago #${payment.number}`,
+            reference_type: referenceType,
+            reference_id: payment.id,
+            payment_id: payment.id,
+            date: new Date().toISOString(),
+          },
+          userId,
+        );
       }
     }
   }
@@ -686,11 +672,7 @@ export class PaymentsService {
     if (document.party_id !== payment.party_id) {
       throw new BadRequestException('El documento no pertenece al mismo tercero del pago');
     }
-    if (document.currency_code !== payment.currency_code) {
-      throw new BadRequestException(
-        `La moneda del documento (${document.currency_code}) no coincide con la del anticipo (${payment.currency_code})`,
-      );
-    }
+    // Cross-currency is now allowed: advance in USD can be applied to invoice in ARS
 
     return this.prisma.$transaction(async (tx) => {
       // Validar saldo disponible DENTRO de la transacción (evita race condition)
@@ -753,78 +735,25 @@ export class PaymentsService {
         },
       });
 
-      // Crear entradas en cuenta corriente:
-      // INVOICE: registra la deuda con el proveedor
-      // PAYMENT: registra que el anticipo cubre esa deuda
+      // Crear entrada en cuenta corriente usando CurrentAccountsService
       if (payment.party_id) {
-        // Buscar la cuenta corriente del proveedor
-        let currentAccount = await tx.current_accounts.findUnique({
-          where: {
-            party_id_currency_code: {
-              party_id: payment.party_id,
-              currency_code: payment.currency_code,
-            },
-          },
-        });
-
-        if (!currentAccount) {
-          currentAccount = await tx.current_accounts.create({
-            data: {
-              party_id: payment.party_id,
-              party_type: payment.party_type ?? 'SUPPLIER',
-              currency_code: payment.currency_code,
-              balance: 0,
-              created_by: userId,
-            },
-          });
-        }
-
-        let balance = currentAccount.balance.toNumber();
-        const applyAmount = dto.amount;
-
-        // Entry 1: INVOICE — increase debt (balance decreases for SUPPLIER)
-        const invoiceAfter = balance - applyAmount;
-        await tx.current_account_entries.create({
-          data: {
-            current_account_id: currentAccount.id,
-            type: 'INVOICE' as any,
-            amount: applyAmount,
+        await this.currentAccountsService.addEntry(
+          {
+            party_id: payment.party_id,
+            party_type: payment.party_type ?? 'SUPPLIER',
             currency_code: payment.currency_code,
-            balance_before: balance,
-            balance_after: invoiceAfter,
-            description: `Factura asociada a anticipo #${payment.number}`,
-            reference_type: 'document',
-            reference_id: dto.document_id,
-            payment_id: paymentId,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-
-        // Entry 2: PAYMENT — decrease debt (balance increases for SUPPLIER)
-        const paymentAfter = invoiceAfter + applyAmount;
-        await tx.current_account_entries.create({
-          data: {
-            current_account_id: currentAccount.id,
-            type: 'PAYMENT' as any,
-            amount: applyAmount,
-            currency_code: payment.currency_code,
-            balance_before: invoiceAfter,
-            balance_after: paymentAfter,
+            type: 'PAYMENT',
+            amount: dto.amount,
+            exchange_rate: payment.exchange_rate ? Number(payment.exchange_rate) : undefined,
+            rate_type: payment.rate_type ?? undefined,
             description: `Anticipo #${payment.number} aplicado a factura`,
             reference_type: 'payment',
             reference_id: paymentId,
             payment_id: paymentId,
-            date: new Date(),
-            created_by: userId,
+            date: new Date().toISOString(),
           },
-        });
-
-        // Update account balance
-        await tx.current_accounts.update({
-          where: { id: currentAccount.id },
-          data: { balance: paymentAfter, updated_at: new Date() },
-        });
+          userId,
+        );
       }
 
       // Retornar pago actualizado

@@ -1,22 +1,22 @@
 model bank_concepts {
-  id                  String              @id @default(uuid()) @db.Uuid
-  code                String              @unique @db.VarChar(30)
-  name                String              @db.VarChar(100)
-  description         String?             @db.VarChar(255)
-  concept_type        String              @db.VarChar(30)
-  accounting_account  String?             @db.VarChar(50)
-  calculates_iva      Boolean             @default(false)
-  iva_rate            Decimal?            @db.Decimal(6, 3)
-  generates_credit    Boolean             @default(false)
-  impacts_iva_book    Boolean             @default(false)
-  default_percentage  Decimal?            @db.Decimal(6, 3)
-  is_active           Boolean             @default(true)
-  created_at          DateTime            @default(now()) @db.Timestamp(6)
-  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
-  deleted_at          DateTime?
-  created_by          String?             @db.Uuid
-  updated_by          String?             @db.Uuid
-  deleted_by          String?             @db.Uuid
+  id                 String    @id @default(uuid()) @db.Uuid
+  code               String    @unique @db.VarChar(30)
+  name               String    @db.VarChar(100)
+  description        String?   @db.VarChar(255)
+  concept_type       String    @db.VarChar(30)
+  accounting_account String?   @db.VarChar(50)
+  calculates_iva     Boolean   @default(false)
+  iva_rate           Decimal?  @db.Decimal(6, 3)
+  generates_credit   Boolean   @default(false)
+  impacts_iva_book   Boolean   @default(false)
+  default_percentage Decimal?  @db.Decimal(6, 3)
+  is_active          Boolean   @default(true)
+  created_at         DateTime  @default(now()) @db.Timestamp(6)
+  updated_at         DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?   @db.Uuid
+  updated_by         String?   @db.Uuid
+  deleted_by         String?   @db.Uuid
 
   @@schema("tenant")
 }

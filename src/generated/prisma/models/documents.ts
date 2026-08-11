@@ -34,7 +34,14 @@ export type DocumentsAvgAggregateOutputType = {
   total_taxes: runtime.Decimal | null
   total: runtime.Decimal | null
   paid_amount: runtime.Decimal | null
+  exchange_rate: runtime.Decimal | null
   taxable_base: runtime.Decimal | null
+  converted_subtotal: runtime.Decimal | null
+  converted_exempt_amount: runtime.Decimal | null
+  converted_total_taxes: runtime.Decimal | null
+  converted_total: runtime.Decimal | null
+  converted_taxable_base: runtime.Decimal | null
+  converted_paid_amount: runtime.Decimal | null
 }
 
 export type DocumentsSumAggregateOutputType = {
@@ -45,7 +52,14 @@ export type DocumentsSumAggregateOutputType = {
   total_taxes: runtime.Decimal | null
   total: runtime.Decimal | null
   paid_amount: runtime.Decimal | null
+  exchange_rate: runtime.Decimal | null
   taxable_base: runtime.Decimal | null
+  converted_subtotal: runtime.Decimal | null
+  converted_exempt_amount: runtime.Decimal | null
+  converted_total_taxes: runtime.Decimal | null
+  converted_total: runtime.Decimal | null
+  converted_taxable_base: runtime.Decimal | null
+  converted_paid_amount: runtime.Decimal | null
 }
 
 export type DocumentsMinAggregateOutputType = {
@@ -64,7 +78,15 @@ export type DocumentsMinAggregateOutputType = {
   descrip: string | null
   ref: string | null
   currency_code: string | null
+  exchange_rate: runtime.Decimal | null
+  rate_type: $Enums.CurrencyRateType | null
   taxable_base: runtime.Decimal | null
+  converted_subtotal: runtime.Decimal | null
+  converted_exempt_amount: runtime.Decimal | null
+  converted_total_taxes: runtime.Decimal | null
+  converted_total: runtime.Decimal | null
+  converted_taxable_base: runtime.Decimal | null
+  converted_paid_amount: runtime.Decimal | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -92,7 +114,15 @@ export type DocumentsMaxAggregateOutputType = {
   descrip: string | null
   ref: string | null
   currency_code: string | null
+  exchange_rate: runtime.Decimal | null
+  rate_type: $Enums.CurrencyRateType | null
   taxable_base: runtime.Decimal | null
+  converted_subtotal: runtime.Decimal | null
+  converted_exempt_amount: runtime.Decimal | null
+  converted_total_taxes: runtime.Decimal | null
+  converted_total: runtime.Decimal | null
+  converted_taxable_base: runtime.Decimal | null
+  converted_paid_amount: runtime.Decimal | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -120,7 +150,15 @@ export type DocumentsCountAggregateOutputType = {
   descrip: number
   ref: number
   currency_code: number
+  exchange_rate: number
+  rate_type: number
   taxable_base: number
+  converted_subtotal: number
+  converted_exempt_amount: number
+  converted_total_taxes: number
+  converted_total: number
+  converted_taxable_base: number
+  converted_paid_amount: number
   custom_fields: number
   validity_date: number
   delivery_date: number
@@ -143,7 +181,14 @@ export type DocumentsAvgAggregateInputType = {
   total_taxes?: true
   total?: true
   paid_amount?: true
+  exchange_rate?: true
   taxable_base?: true
+  converted_subtotal?: true
+  converted_exempt_amount?: true
+  converted_total_taxes?: true
+  converted_total?: true
+  converted_taxable_base?: true
+  converted_paid_amount?: true
 }
 
 export type DocumentsSumAggregateInputType = {
@@ -154,7 +199,14 @@ export type DocumentsSumAggregateInputType = {
   total_taxes?: true
   total?: true
   paid_amount?: true
+  exchange_rate?: true
   taxable_base?: true
+  converted_subtotal?: true
+  converted_exempt_amount?: true
+  converted_total_taxes?: true
+  converted_total?: true
+  converted_taxable_base?: true
+  converted_paid_amount?: true
 }
 
 export type DocumentsMinAggregateInputType = {
@@ -173,7 +225,15 @@ export type DocumentsMinAggregateInputType = {
   descrip?: true
   ref?: true
   currency_code?: true
+  exchange_rate?: true
+  rate_type?: true
   taxable_base?: true
+  converted_subtotal?: true
+  converted_exempt_amount?: true
+  converted_total_taxes?: true
+  converted_total?: true
+  converted_taxable_base?: true
+  converted_paid_amount?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -201,7 +261,15 @@ export type DocumentsMaxAggregateInputType = {
   descrip?: true
   ref?: true
   currency_code?: true
+  exchange_rate?: true
+  rate_type?: true
   taxable_base?: true
+  converted_subtotal?: true
+  converted_exempt_amount?: true
+  converted_total_taxes?: true
+  converted_total?: true
+  converted_taxable_base?: true
+  converted_paid_amount?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -229,7 +297,15 @@ export type DocumentsCountAggregateInputType = {
   descrip?: true
   ref?: true
   currency_code?: true
+  exchange_rate?: true
+  rate_type?: true
   taxable_base?: true
+  converted_subtotal?: true
+  converted_exempt_amount?: true
+  converted_total_taxes?: true
+  converted_total?: true
+  converted_taxable_base?: true
+  converted_paid_amount?: true
   custom_fields?: true
   validity_date?: true
   delivery_date?: true
@@ -345,7 +421,15 @@ export type DocumentsGroupByOutputType = {
   descrip: string | null
   ref: string | null
   currency_code: string | null
+  exchange_rate: runtime.Decimal | null
+  rate_type: $Enums.CurrencyRateType | null
   taxable_base: runtime.Decimal | null
+  converted_subtotal: runtime.Decimal | null
+  converted_exempt_amount: runtime.Decimal | null
+  converted_total_taxes: runtime.Decimal | null
+  converted_total: runtime.Decimal | null
+  converted_taxable_base: runtime.Decimal | null
+  converted_paid_amount: runtime.Decimal | null
   custom_fields: runtime.JsonValue | null
   validity_date: Date | null
   delivery_date: Date | null
@@ -397,7 +481,15 @@ export type documentsWhereInput = {
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
+  exchange_rate?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"documents"> | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableFilter<"documents">
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -435,7 +527,15 @@ export type documentsOrderByWithRelationInput = {
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
+  rate_type?: Prisma.SortOrderInput | Prisma.SortOrder
   taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_total?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
   validity_date?: Prisma.SortOrderInput | Prisma.SortOrder
   delivery_date?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -477,7 +577,15 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
+  exchange_rate?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"documents"> | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableFilter<"documents">
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -515,7 +623,15 @@ export type documentsOrderByWithAggregationInput = {
   descrip?: Prisma.SortOrderInput | Prisma.SortOrder
   ref?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
+  rate_type?: Prisma.SortOrderInput | Prisma.SortOrder
   taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_total?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
   validity_date?: Prisma.SortOrderInput | Prisma.SortOrder
   delivery_date?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -552,7 +668,15 @@ export type documentsScalarWhereWithAggregatesInput = {
   descrip?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   ref?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableWithAggregatesFilter<"documents"> | string | null
+  exchange_rate?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableWithAggregatesFilter<"documents"> | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableWithAggregatesFilter<"documents">
   validity_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
@@ -578,7 +702,15 @@ export type documentsCreateInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -616,7 +748,15 @@ export type documentsUncheckedCreateInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -648,7 +788,15 @@ export type documentsUpdateInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686,7 +834,15 @@ export type documentsUncheckedUpdateInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -721,7 +877,15 @@ export type documentsCreateManyInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -747,7 +911,15 @@ export type documentsUpdateManyMutationInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -776,7 +948,15 @@ export type documentsUncheckedUpdateManyInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -830,7 +1010,15 @@ export type documentsCountOrderByAggregateInput = {
   descrip?: Prisma.SortOrder
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  rate_type?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrder
+  converted_total?: Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrder
   custom_fields?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
@@ -851,7 +1039,14 @@ export type documentsAvgOrderByAggregateInput = {
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paid_amount?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrder
+  converted_total?: Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrder
 }
 
 export type documentsMaxOrderByAggregateInput = {
@@ -870,7 +1065,15 @@ export type documentsMaxOrderByAggregateInput = {
   descrip?: Prisma.SortOrder
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  rate_type?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrder
+  converted_total?: Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -898,7 +1101,15 @@ export type documentsMinOrderByAggregateInput = {
   descrip?: Prisma.SortOrder
   ref?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  rate_type?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrder
+  converted_total?: Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -918,7 +1129,14 @@ export type documentsSumOrderByAggregateInput = {
   total_taxes?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paid_amount?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
   taxable_base?: Prisma.SortOrder
+  converted_subtotal?: Prisma.SortOrder
+  converted_exempt_amount?: Prisma.SortOrder
+  converted_total_taxes?: Prisma.SortOrder
+  converted_total?: Prisma.SortOrder
+  converted_taxable_base?: Prisma.SortOrder
+  converted_paid_amount?: Prisma.SortOrder
 }
 
 export type documentsCreateNestedOneWithoutDocument_itemsInput = {
@@ -1146,7 +1364,15 @@ export type documentsCreateWithoutDocument_itemsInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1183,7 +1409,15 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1230,7 +1464,15 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1267,7 +1509,15 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1298,7 +1548,15 @@ export type documentsCreateWithoutDocument_taxesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1335,7 +1593,15 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1382,7 +1648,15 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1419,7 +1693,15 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1450,7 +1732,15 @@ export type documentsCreateWithoutDocument_typesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1486,7 +1776,15 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1550,7 +1848,15 @@ export type documentsScalarWhereInput = {
   descrip?: Prisma.StringNullableFilter<"documents"> | string | null
   ref?: Prisma.StringNullableFilter<"documents"> | string | null
   currency_code?: Prisma.StringNullableFilter<"documents"> | string | null
+  exchange_rate?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"documents"> | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableFilter<"documents">
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -1576,7 +1882,15 @@ export type documentsCreateWithoutChild_documentsInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1613,7 +1927,15 @@ export type documentsUncheckedCreateWithoutChild_documentsInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1649,7 +1971,15 @@ export type documentsCreateWithoutParent_documentInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1685,7 +2015,15 @@ export type documentsUncheckedCreateWithoutParent_documentInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1738,7 +2076,15 @@ export type documentsUpdateWithoutChild_documentsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1775,7 +2121,15 @@ export type documentsUncheckedUpdateWithoutChild_documentsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1822,7 +2176,15 @@ export type documentsCreateWithoutPresupuesto_docInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1859,7 +2221,15 @@ export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -1906,7 +2276,15 @@ export type documentsUpdateWithoutPresupuesto_docInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1943,7 +2321,15 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1974,7 +2360,15 @@ export type documentsCreateWithoutOrden_venta_docInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2011,7 +2405,15 @@ export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2058,7 +2460,15 @@ export type documentsUpdateWithoutOrden_venta_docInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2095,7 +2505,15 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2126,7 +2544,15 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2162,7 +2588,15 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2220,7 +2654,15 @@ export type documentsCreateWithoutPayment_documentsInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2257,7 +2699,15 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2304,7 +2754,15 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2341,7 +2799,15 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2374,7 +2840,15 @@ export type documentsCreateManyDocument_typesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2400,7 +2874,15 @@ export type documentsUpdateWithoutDocument_typesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2436,7 +2918,15 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2470,7 +2960,15 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2498,7 +2996,15 @@ export type documentsCreateManyParent_documentInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2524,7 +3030,15 @@ export type documentsUpdateWithoutParent_documentInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2560,7 +3074,15 @@ export type documentsUncheckedUpdateWithoutParent_documentInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2594,7 +3116,15 @@ export type documentsUncheckedUpdateManyWithoutParent_documentInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2622,7 +3152,15 @@ export type documentsCreateManyBusiness_partiesInput = {
   descrip?: string | null
   ref?: string | null
   currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
   taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
@@ -2648,7 +3186,15 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2684,7 +3230,15 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2718,7 +3272,15 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
   taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2805,7 +3367,15 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
   taxable_base?: boolean
+  converted_subtotal?: boolean
+  converted_exempt_amount?: boolean
+  converted_total_taxes?: boolean
+  converted_total?: boolean
+  converted_taxable_base?: boolean
+  converted_paid_amount?: boolean
   custom_fields?: boolean
   validity_date?: boolean
   delivery_date?: boolean
@@ -2844,7 +3414,15 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
   taxable_base?: boolean
+  converted_subtotal?: boolean
+  converted_exempt_amount?: boolean
+  converted_total_taxes?: boolean
+  converted_total?: boolean
+  converted_taxable_base?: boolean
+  converted_paid_amount?: boolean
   custom_fields?: boolean
   validity_date?: boolean
   delivery_date?: boolean
@@ -2876,7 +3454,15 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
   taxable_base?: boolean
+  converted_subtotal?: boolean
+  converted_exempt_amount?: boolean
+  converted_total_taxes?: boolean
+  converted_total?: boolean
+  converted_taxable_base?: boolean
+  converted_paid_amount?: boolean
   custom_fields?: boolean
   validity_date?: boolean
   delivery_date?: boolean
@@ -2908,7 +3494,15 @@ export type documentsSelectScalar = {
   descrip?: boolean
   ref?: boolean
   currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
   taxable_base?: boolean
+  converted_subtotal?: boolean
+  converted_exempt_amount?: boolean
+  converted_total_taxes?: boolean
+  converted_total?: boolean
+  converted_taxable_base?: boolean
+  converted_paid_amount?: boolean
   custom_fields?: boolean
   validity_date?: boolean
   delivery_date?: boolean
@@ -2921,7 +3515,7 @@ export type documentsSelectScalar = {
   source?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "parent_document_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "taxable_base" | "custom_fields" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "party_id" | "parent_document_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -2974,7 +3568,15 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     descrip: string | null
     ref: string | null
     currency_code: string | null
+    exchange_rate: runtime.Decimal | null
+    rate_type: $Enums.CurrencyRateType | null
     taxable_base: runtime.Decimal | null
+    converted_subtotal: runtime.Decimal | null
+    converted_exempt_amount: runtime.Decimal | null
+    converted_total_taxes: runtime.Decimal | null
+    converted_total: runtime.Decimal | null
+    converted_taxable_base: runtime.Decimal | null
+    converted_paid_amount: runtime.Decimal | null
     custom_fields: runtime.JsonValue | null
     validity_date: Date | null
     delivery_date: Date | null
@@ -3432,7 +4034,15 @@ export interface documentsFieldRefs {
   readonly descrip: Prisma.FieldRef<"documents", 'String'>
   readonly ref: Prisma.FieldRef<"documents", 'String'>
   readonly currency_code: Prisma.FieldRef<"documents", 'String'>
+  readonly exchange_rate: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly rate_type: Prisma.FieldRef<"documents", 'CurrencyRateType'>
   readonly taxable_base: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly converted_subtotal: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly converted_exempt_amount: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly converted_total_taxes: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly converted_total: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly converted_taxable_base: Prisma.FieldRef<"documents", 'Decimal'>
+  readonly converted_paid_amount: Prisma.FieldRef<"documents", 'Decimal'>
   readonly custom_fields: Prisma.FieldRef<"documents", 'Json'>
   readonly validity_date: Prisma.FieldRef<"documents", 'DateTime'>
   readonly delivery_date: Prisma.FieldRef<"documents", 'DateTime'>

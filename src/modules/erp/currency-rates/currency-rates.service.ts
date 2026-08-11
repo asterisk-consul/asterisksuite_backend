@@ -64,6 +64,10 @@ export class CurrencyRatesService {
   // ─────────────────────────────────────────────
   async findAll() {
     return this.prisma.currency_rates.findMany({
+      where: {
+        deleted_at: null,
+        active: true,
+      },
       include: {
         from_currency: true,
         to_currency: true,
@@ -78,8 +82,8 @@ export class CurrencyRatesService {
   // FIND ONE
   // ─────────────────────────────────────────────
   async findOne(id: string) {
-    const rate = await this.prisma.currency_rates.findUnique({
-      where: { id },
+    const rate = await this.prisma.currency_rates.findFirst({
+      where: { id, deleted_at: null },
       include: {
         from_currency: true,
         to_currency: true,
@@ -126,13 +130,17 @@ export class CurrencyRatesService {
   }
 
   // ─────────────────────────────────────────────
-  // DELETE
+  // DELETE (soft delete)
   // ─────────────────────────────────────────────
   async remove(id: string) {
     await this.findOne(id);
 
-    return this.prisma.currency_rates.delete({
+    return this.prisma.currency_rates.update({
       where: { id },
+      data: {
+        active: false,
+        deleted_at: new Date(),
+      },
     });
   }
 
@@ -149,6 +157,8 @@ export class CurrencyRatesService {
         from_currency_id: fromCurrencyId,
         to_currency_id: toCurrencyId,
         rate_type: rateType,
+        deleted_at: null,
+        active: true,
       },
       orderBy: {
         effective_date: 'desc',

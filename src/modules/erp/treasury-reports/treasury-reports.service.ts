@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 
 @Injectable()
 export class TreasuryReportsService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly conversionService: CurrencyConversionService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -271,6 +275,8 @@ export class TreasuryReportsService {
       if (dateTo) where.date.lte = new Date(dateTo);
     }
 
+    const baseCurrency = await this.conversionService.getBaseCurrency();
+
     const documents = await this.prisma.documents.findMany({
       where,
       include: {
@@ -289,26 +295,32 @@ export class TreasuryReportsService {
       orderBy: { date: 'asc' },
     });
 
-    return documents.map(doc => ({
-      id: doc.id,
-      date: doc.date,
-      number: doc.number,
-      type_code: doc.document_types?.code,
-      type_description: doc.document_types?.description,
-      direction: doc.document_types?.direction,
-      party_name: doc.business_parties?.name || '—',
-      party_tax_id: doc.business_parties?.tax_id || '—',
-      subtotal: Number(doc.subtotal),
-      total_taxes: Number(doc.total_taxes),
-      total: Number(doc.total),
-      taxable_base: Number(doc.taxable_base || doc.subtotal),
-      taxes: doc.document_taxes.map(t => ({
-        name: t.taxes?.name,
-        code: t.taxes?.code,
-        rate: Number(t.tax_rate),
-        amount: Number(t.tax_amount)
-      }))
-    }));
+    return documents.map(doc => {
+      const isForeign = doc.currency_code && doc.currency_code.toUpperCase() !== baseCurrency.code.toUpperCase();
+
+      return {
+        id: doc.id,
+        date: doc.date,
+        number: doc.number,
+        type_code: doc.document_types?.code,
+        type_description: doc.document_types?.description,
+        direction: doc.document_types?.direction,
+        party_name: doc.business_parties?.name || '—',
+        party_tax_id: doc.business_parties?.tax_id || '—',
+        currency_code: doc.currency_code,
+        exchange_rate: Number(doc.exchange_rate ?? 1),
+        subtotal: isForeign ? Number(doc.converted_subtotal ?? doc.subtotal) : Number(doc.subtotal),
+        total_taxes: isForeign ? Number(doc.converted_total_taxes ?? doc.total_taxes) : Number(doc.total_taxes),
+        total: isForeign ? Number(doc.converted_total ?? doc.total) : Number(doc.total),
+        taxable_base: isForeign ? Number(doc.converted_taxable_base ?? doc.taxable_base ?? doc.subtotal) : Number(doc.taxable_base || doc.subtotal),
+        taxes: doc.document_taxes.map(t => ({
+          name: t.taxes?.name,
+          code: t.taxes?.code,
+          rate: Number(t.tax_rate),
+          amount: isForeign ? Number(t.converted_tax_amount ?? t.tax_amount) : Number(t.tax_amount)
+        }))
+      };
+    });
   }
 
   async regulatoryPayments(dateFrom?: string, dateTo?: string) {

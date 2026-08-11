@@ -63,8 +63,12 @@ export class DocumentsSalesController {
 
   @Get('pending')
   // @RequirePermissions('documents.read')
-  findPending(@Query('party_id') partyId?: string) {
-    return this.service.findPending(partyId);
+  findPending(
+    @Query('party_id') partyId?: string,
+    @Query('categories') categories?: string,
+  ) {
+    const cats = categories ? categories.split(',') : undefined
+    return this.service.findPending(partyId, cats);
   }
 
   @Get(':id')

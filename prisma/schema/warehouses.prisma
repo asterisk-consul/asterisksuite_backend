@@ -41,7 +41,7 @@ model warehouse_stock_movements {
   @@index([product_id], map: "idx_stock_movements_product")
   @@index([reference_type, reference_id], map: "idx_stock_movements_ref")
   @@index([warehouse_id], map: "idx_stock_movements_warehouse")
-   @@schema("tenant")
+  @@schema("tenant")
 }
 
 model warehouses {
@@ -63,5 +63,6 @@ model warehouses {
   warehouse_stock                                  warehouse_stock[]
   warehouse_stock_movements                        warehouse_stock_movements[]
   locations                                        locations?                  @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    @@schema("tenant")
+
+  @@schema("tenant")
 }

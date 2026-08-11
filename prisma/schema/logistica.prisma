@@ -7,7 +7,8 @@ model cargo_transfer_items {
   delivery_notes   delivery_notes? @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   pallets          pallets?        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   cargo_transfers  cargo_transfers @relation(fields: [transfer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model cargo_transfers {
@@ -23,7 +24,8 @@ model cargo_transfers {
   locations                                 locations?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                                     users?                 @relation(fields: [performed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips_cargo_transfers_to_trip_idTotrips   trips?                 @relation("cargo_transfers_to_trip_idTotrips", fields: [to_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model delivery_notes {
@@ -47,7 +49,8 @@ model delivery_notes {
   trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
   picking_orders       picking_orders[]
   trip_cargo           trip_cargo[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model drivers {
@@ -65,7 +68,8 @@ model drivers {
   deleted_by          String?                @db.Uuid
   driverDocuments     documents_driver[]
   vehicleCombinations vehicle_combinations[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model picking_items {
@@ -77,7 +81,8 @@ model picking_items {
   picking_orders    picking_orders    @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   products          products          @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_sources   picking_sources[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model picking_orders {
@@ -101,7 +106,8 @@ model picking_orders {
   trips             trips?            @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses        warehouses        @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_results   picking_results[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model picking_results {
@@ -110,7 +116,8 @@ model picking_results {
   pallet_id        String         @db.Uuid
   pallets          pallets        @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_orders   picking_orders @relation(fields: [picking_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model picking_sources {
@@ -120,7 +127,8 @@ model picking_sources {
   quantity        Decimal       @db.Decimal(12, 3)
   pallets         pallets       @relation(fields: [pallet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_items   picking_items @relation(fields: [picking_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model trip_cargo {
@@ -136,7 +144,7 @@ model trip_cargo {
 
   @@index([pallet_id], map: "idx_trip_cargo_pallet")
   @@index([trip_id], map: "idx_trip_cargo_trip")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model trip_temperature_logs {
@@ -147,7 +155,8 @@ model trip_temperature_logs {
   recorded_by String?  @db.Uuid
   users       users?   @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips       trips    @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model dispatch_orders {
@@ -177,7 +186,7 @@ model dispatch_orders {
   picking_orders          picking_orders[]
   tripStopOrders          trip_stop_orders[]
 
-  @@index([status], map: "idx_dispatch_orders_status")  
+  @@index([status], map: "idx_dispatch_orders_status")
   @@schema("tenant")
 }
 
@@ -217,7 +226,7 @@ model trips {
 
   @@index([status], map: "idx_trips_status")
   @@index([vehicle_combination_id], map: "idx_trips_vehicle_combination_id")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model trip_stops {
@@ -237,7 +246,7 @@ model trip_stops {
   trip        trips              @relation(fields: [trip_id], references: [id], onDelete: Cascade)
 
   @@index([trip_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model trip_stop_orders {
@@ -256,7 +265,7 @@ model trip_stop_orders {
 
   @@index([trip_stop_id])
   @@index([dispatch_order_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model corridors {
@@ -279,7 +288,8 @@ model corridors {
   destination_location    locations         @relation("corridor_destination", fields: [destination_location_id], references: [id])
   origin_location         locations         @relation("corridor_origin", fields: [origin_location_id], references: [id])
   dispatchOrders          dispatch_orders[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model corridor_stops {
@@ -300,7 +310,7 @@ model corridor_stops {
   location          locations @relation(fields: [location_id], references: [id])
 
   @@unique([corridor_id, stop_order])
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model vehicles {
@@ -323,7 +333,8 @@ model vehicles {
   vehicleDocuments             documents_vehicle[]
   vehicle_combinations_tractor vehicle_combinations[] @relation("tractor_vehicle")
   vehicle_combinations_trailer vehicle_combinations[] @relation("trailer_vehicle")
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model vehicle_combinations {
@@ -348,7 +359,7 @@ model vehicle_combinations {
 
   @@index([tractor_id], map: "idx_vehicle_combinations_tractor")
   @@index([trailer_id], map: "idx_vehicle_combinations_trailer")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 ///****-----
@@ -369,7 +380,7 @@ model transport_document_types {
   documents_vehicle documents_vehicle[]
 
   @@index([entity], map: "idx_transport_document_types_entity")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model documents_vehicle {
@@ -388,7 +399,7 @@ model documents_vehicle {
 
   @@unique([vehicle_id, document_type_id], map: "unique_vehicle_doc")
   @@index([vehicle_id], map: "idx_documents_vehicle_vehicle")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 model documents_driver {
@@ -407,7 +418,7 @@ model documents_driver {
 
   @@unique([driver_id, document_type_id], map: "unique_driver_doc")
   @@index([driver_id], map: "idx_documents_driver_driver")
-    @@schema("tenant")
+  @@schema("tenant")
 }
 
 //------
@@ -427,21 +438,27 @@ model transfer_rates {
   deleted_by     String?          @db.Uuid
   dispatch_rates dispatch_rates[]
   products       products[]
-    @@schema("tenant")
+
+  @@schema("tenant")
 }
 
 model dispatch_rates {
-  id              String          @id @default(uuid()) @db.Uuid
-  dispatch_id     String          @db.Uuid
-  rate_id         String          @db.Uuid
-  value           Decimal         @db.Decimal(12, 2)
-  created_at      DateTime        @default(now()) @db.Timestamp(6)
-  updated_at      DateTime?       @updatedAt @db.Timestamp(6)
-  deleted_at      DateTime?
-  created_by      String?         @db.Uuid
-  updated_by      String?         @db.Uuid
-  deleted_by      String?         @db.Uuid
-  dispatch_orders dispatch_orders @relation(fields: [dispatch_id], references: [id], onDelete: Cascade)
-  transfer_rates  transfer_rates  @relation(fields: [rate_id], references: [id])
-    @@schema("tenant")
+  id               String            @id @default(uuid()) @db.Uuid
+  dispatch_id      String            @db.Uuid
+  rate_id          String            @db.Uuid
+  value            Decimal           @db.Decimal(12, 2)
+  currency_code    String?           @db.VarChar(10)
+  exchange_rate    Decimal?          @db.Decimal(18, 6)
+  rate_type        CurrencyRateType?
+  converted_amount Decimal?          @db.Decimal(18, 2)
+  created_at       DateTime          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at       DateTime?
+  created_by       String?           @db.Uuid
+  updated_by       String?           @db.Uuid
+  deleted_by       String?           @db.Uuid
+  dispatch_orders  dispatch_orders   @relation(fields: [dispatch_id], references: [id], onDelete: Cascade)
+  transfer_rates   transfer_rates    @relation(fields: [rate_id], references: [id])
+
+  @@schema("tenant")
 }

@@ -1,23 +1,24 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
+import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 
 @Injectable()
 export class CurrentAccountsService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private conversionService: CurrencyConversionService,
+  ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
   }
 
   async addEntry(dto: CreateCurrentAccountEntryDto, userId: string) {
-    // Buscar o crear cuenta corriente
+    const baseCurrency = await this.conversionService.getBaseCurrency();
+
+    // Always find/create account by party_id only (single account per party)
     let account = await this.prisma.current_accounts.findUnique({
-      where: {
-        party_id_currency_code: {
-          party_id: dto.party_id,
-          currency_code: dto.currency_code,
-        },
-      },
+      where: { party_id: dto.party_id },
     });
 
     if (!account) {
@@ -25,24 +26,60 @@ export class CurrentAccountsService {
         data: {
           party_id: dto.party_id,
           party_type: dto.party_type,
-          currency_code: dto.currency_code,
           balance: 0,
           created_by: userId,
         },
       });
     }
 
+    const isBaseCurrency = dto.currency_code.toUpperCase() === baseCurrency.code.toUpperCase();
+
+    // ─── Calculate exchange rate and converted amount ─────────
+    let exchangeRate = dto.exchange_rate ?? null;
+    let rateType = (dto.rate_type as any) ?? null;
+    let convertedAmount: number | null = null;
+
+    if (isBaseCurrency) {
+      // Base currency: converted_amount = amount (same currency)
+      convertedAmount = dto.amount;
+    } else {
+      // Non-base currency: resolve rate and convert
+      if (!exchangeRate) {
+        try {
+          const resolved = await this.conversionService.resolveRate(
+            dto.currency_code,
+            baseCurrency.code,
+            dto.date ? new Date(dto.date) : new Date(),
+            rateType,
+          );
+          exchangeRate = resolved.rate;
+          rateType = resolved.rateType;
+        } catch {
+          // If rate not found, leave as null
+        }
+      }
+      if (exchangeRate) {
+        convertedAmount = this.conversionService.convertAmount(dto.amount, exchangeRate);
+      }
+    }
+
+    // ─── Calculate balance change in base currency ────────────
+    // balanceAfter = balance + (isDebit ? -convertedAmount : +convertedAmount)
     const currentBalance = account.balance.toNumber();
     const isDebit = this.resolveIsDebit(dto.type, dto.party_type);
-    const balanceAfter = isDebit ? currentBalance - dto.amount : currentBalance + dto.amount;
+    const balanceChange = convertedAmount ?? dto.amount;
+    const balanceAfter = isDebit ? currentBalance - balanceChange : currentBalance + balanceChange;
 
+    // ─── Create entry ─────────────────────────────────────────
     const entry = await this.prisma.current_account_entries.create({
       data: {
         current_account_id: account.id,
         type: dto.type as any,
         amount: dto.amount,
         currency_code: dto.currency_code,
-        exchange_rate: dto.exchange_rate,
+        exchange_rate: exchangeRate,
+        rate_type: rateType,
+        converted_amount: convertedAmount,
         balance_before: currentBalance,
         balance_after: balanceAfter,
         description: dto.description,
@@ -54,16 +91,20 @@ export class CurrentAccountsService {
       },
     });
 
-    // Actualizar saldo
+    // ─── Update account balance (always in base currency) ─────
     await this.prisma.current_accounts.update({
       where: { id: account.id },
-      data: { balance: balanceAfter, updated_at: new Date() },
+      data: {
+        balance: balanceAfter,
+        updated_at: new Date(),
+      },
     });
 
     return entry;
   }
 
   async findByParty(partyId: string) {
+    // Return single account per party (always base currency)
     return this.prisma.current_accounts.findMany({
       where: { party_id: partyId, deleted_at: null },
       include: {
@@ -72,13 +113,9 @@ export class CurrentAccountsService {
     });
   }
 
-  async getEntries(partyId: string, currencyCode?: string) {
+  async getEntries(partyId: string) {
     const account = await this.prisma.current_accounts.findFirst({
-      where: {
-        party_id: partyId,
-        ...(currencyCode ? { currency_code: currencyCode } : {}),
-        deleted_at: null,
-      },
+      where: { party_id: partyId, deleted_at: null },
     });
 
     if (!account) return [];
@@ -104,14 +141,9 @@ export class CurrentAccountsService {
     }));
   }
 
-  async getStatement(partyId: string, currencyCode: string) {
+  async getStatement(partyId: string) {
     const account = await this.prisma.current_accounts.findUnique({
-      where: {
-        party_id_currency_code: {
-          party_id: partyId,
-          currency_code: currencyCode,
-        },
-      },
+      where: { party_id: partyId },
       include: {
         party: { select: { id: true, name: true } },
         entries: { orderBy: { date: 'asc' } },
@@ -142,19 +174,16 @@ export class CurrentAccountsService {
     };
   }
 
-  async getBalance(partyId: string, currencyCode: string) {
+  async getBalance(partyId: string) {
     const account = await this.prisma.current_accounts.findUnique({
-      where: {
-        party_id_currency_code: {
-          party_id: partyId,
-          currency_code: currencyCode,
-        },
-      },
+      where: { party_id: partyId },
     });
+
+    const baseCurrency = await this.conversionService.getBaseCurrency();
 
     return {
       party_id: partyId,
-      currency_code: currencyCode,
+      currency_code: baseCurrency.code,
       balance: account?.balance ?? 0,
     };
   }
@@ -172,15 +201,13 @@ export class CurrentAccountsService {
     });
   }
 
-  async findAll(filters?: { party_type?: string; currency_code?: string; balance_filter?: string }) {
+  async findAll(filters?: { party_type?: string; balance_filter?: string }) {
     const where: any = { deleted_at: null };
 
     if (filters?.party_type) {
-      // Soportar múltiples party_types separados por coma
       const types = filters.party_type.split(',').map(t => t.trim()).filter(Boolean);
       where.party_type = types.length === 1 ? types[0] : { in: types };
     }
-    if (filters?.currency_code) where.currency_code = filters.currency_code;
 
     if (filters?.balance_filter === 'positive') where.balance = { gt: 0 };
     else if (filters?.balance_filter === 'negative') where.balance = { lt: 0 };
@@ -196,27 +223,10 @@ export class CurrentAccountsService {
   }
 
   private resolveIsDebit(type: string, partyType: string): boolean {
-    // isDebit = true → balance DISMINUYE (convención del backend)
-    // isDebit = false → balance AUMENTA
-    //
-    // CUSTOMER (ventas - a cobrar):
-    //   INVOICE     → balance sube (me deben)     → isDebit = false
-    //   DEBIT_NOTE  → balance sube (aumenta deuda) → isDebit = false
-    //   CREDIT_NOTE → balance baja (disminuye deuda) → isDebit = true
-    //   PAYMENT     → balance baja (pagaron)       → isDebit = true
-    //   COLLECTION  → balance baja (cobrado)       → isDebit = true
-    //
-    // SUPPLIER (compras - a pagar):
-    //   INVOICE     → balance baja (les debo más)  → isDebit = true
-    //   DEBIT_NOTE  → balance baja (aumenta deuda) → isDebit = true
-    //   CREDIT_NOTE → balance sube (disminuye deuda) → isDebit = false
-    //   PAYMENT     → balance sube (les pagué)      → isDebit = false
-
+    if (type === 'OPENING_BALANCE') return false
     if (partyType === 'CUSTOMER') {
-      return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION'].includes(type)
+      return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION'].includes(type);
     }
-    // SUPPLIER
-    // ADVANCE: balance baja (pagué anticipadamente, disminuye lo que me deben)
-    return ['INVOICE', 'DEBIT_NOTE', 'LOAN', 'CHECK_ISSUED', 'TRANSFER', 'DEBIT', 'ADVANCE'].includes(type)
+    return ['CREDIT_NOTE', 'PAYMENT', 'ADVANCE'].includes(type);
   }
 }

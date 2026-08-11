@@ -222,7 +222,8 @@ export const AccountEntryType = {
   CREDIT_NOTE: 'CREDIT_NOTE',
   DEBIT_NOTE: 'DEBIT_NOTE',
   DEBIT: 'DEBIT',
-  CREDIT: 'CREDIT'
+  CREDIT: 'CREDIT',
+  OPENING_BALANCE: 'OPENING_BALANCE'
 } as const
 
 export type AccountEntryType = (typeof AccountEntryType)[keyof typeof AccountEntryType]

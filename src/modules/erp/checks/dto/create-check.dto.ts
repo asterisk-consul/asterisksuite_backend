@@ -1,4 +1,4 @@
-import { IsBoolean, IsDateString, IsIn, IsNotEmpty, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateCheckDto {
   @IsOptional()
@@ -46,6 +46,18 @@ export class CreateCheckDto {
   @IsNotEmpty()
   @IsString()
   currency_code!: string;
+
+  @IsOptional()
+  @IsNumber()
+  exchange_rate?: number;
+
+  @IsOptional()
+  @IsString()
+  rate_type?: string;
+
+  @IsOptional()
+  @IsNumber()
+  converted_amount?: number;
 
   @IsNotEmpty()
   @IsDateString()

@@ -13,5 +13,5 @@ model product_structure_versions {
 
   @@unique([product_id, version])
   @@index([product_id])
-    @@schema("tenant")
+  @@schema("tenant")
 }

@@ -1,12 +1,16 @@
 // documents-types.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { CreateDocumentsTypeDto } from './dto/create-documents-type.dto';
 import { UpdateDocumentsTypeDto } from './dto/update-documents-type.dto';
 
 @Injectable()
 export class DocumentsTypesService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly fiscalValidation: FiscalValidationService,
+  ) {}
 
   // Getter privado para reutilizar en todos los métodos
   private get prisma() {
@@ -36,7 +40,7 @@ export class DocumentsTypesService {
     }
 
     if (issuerCondition) {
-      const validLetters = this.getValidLetterTypes(issuerCondition)
+      const validLetters = this.fiscalValidation.getValidLetterTypes(issuerCondition)
       if (validLetters.length > 0) {
         where.OR = [
           { letter_type: { in: validLetters } },
@@ -59,15 +63,6 @@ export class DocumentsTypesService {
         },
       },
     });
-  }
-
-  private getValidLetterTypes(issuerCondition: string): string[] {
-    const map: Record<string, string[]> = {
-      'RESPONSABLE_INSCRIPTO': ['A', 'B'],
-      'MONOTRIBUTO': ['C'],
-      'EXENTO': ['C'],
-    }
-    return map[issuerCondition] ?? []
   }
 
   async findOne(id: string) {

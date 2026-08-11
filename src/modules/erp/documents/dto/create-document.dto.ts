@@ -71,6 +71,15 @@ export class CreateDocumentDto {
   @IsOptional()
   currency_code!: string;
 
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  exchange_rate?: number;
+
+  @IsString()
+  @IsOptional()
+  rate_type?: string;
+
   @IsString()
   @IsOptional()
   ref?: string;
@@ -98,7 +107,8 @@ export class CreateDocumentDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentItemDto)
-  items!: CreateDocumentItemDto[];
+  @IsOptional()
+  items?: CreateDocumentItemDto[];
 
   @IsArray()
   @ValidateNested({ each: true })

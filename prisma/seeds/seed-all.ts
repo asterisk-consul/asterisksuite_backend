@@ -277,6 +277,14 @@ VALUES
   (gen_random_uuid(), 'REM-T', 'Remito de Traslado', 1, 'REMITO', null, null, false, false, true, false, false, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category;
+
+-- Saldos iniciales
+INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, active)
+VALUES
+  (gen_random_uuid(), 'SI-C', 'Saldo Inicial (Cliente)', 1, 'OPENING_BALANCE', null, null, false, false, false, true, false, true),
+  (gen_random_uuid(), 'SI-P', 'Saldo Inicial (Proveedor)', -1, 'OPENING_BALANCE', null, null, false, false, false, true, false, true)
+ON CONFLICT (code) DO UPDATE SET
+  description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category;
 `
 
 const SQL_DOCUMENT_TYPE_TAXES = `

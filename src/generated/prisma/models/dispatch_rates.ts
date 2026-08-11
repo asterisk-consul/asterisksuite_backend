@@ -28,10 +28,14 @@ export type AggregateDispatch_rates = {
 
 export type Dispatch_ratesAvgAggregateOutputType = {
   value: runtime.Decimal | null
+  exchange_rate: runtime.Decimal | null
+  converted_amount: runtime.Decimal | null
 }
 
 export type Dispatch_ratesSumAggregateOutputType = {
   value: runtime.Decimal | null
+  exchange_rate: runtime.Decimal | null
+  converted_amount: runtime.Decimal | null
 }
 
 export type Dispatch_ratesMinAggregateOutputType = {
@@ -39,6 +43,10 @@ export type Dispatch_ratesMinAggregateOutputType = {
   dispatch_id: string | null
   rate_id: string | null
   value: runtime.Decimal | null
+  currency_code: string | null
+  exchange_rate: runtime.Decimal | null
+  rate_type: $Enums.CurrencyRateType | null
+  converted_amount: runtime.Decimal | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -52,6 +60,10 @@ export type Dispatch_ratesMaxAggregateOutputType = {
   dispatch_id: string | null
   rate_id: string | null
   value: runtime.Decimal | null
+  currency_code: string | null
+  exchange_rate: runtime.Decimal | null
+  rate_type: $Enums.CurrencyRateType | null
+  converted_amount: runtime.Decimal | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -65,6 +77,10 @@ export type Dispatch_ratesCountAggregateOutputType = {
   dispatch_id: number
   rate_id: number
   value: number
+  currency_code: number
+  exchange_rate: number
+  rate_type: number
+  converted_amount: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -77,10 +93,14 @@ export type Dispatch_ratesCountAggregateOutputType = {
 
 export type Dispatch_ratesAvgAggregateInputType = {
   value?: true
+  exchange_rate?: true
+  converted_amount?: true
 }
 
 export type Dispatch_ratesSumAggregateInputType = {
   value?: true
+  exchange_rate?: true
+  converted_amount?: true
 }
 
 export type Dispatch_ratesMinAggregateInputType = {
@@ -88,6 +108,10 @@ export type Dispatch_ratesMinAggregateInputType = {
   dispatch_id?: true
   rate_id?: true
   value?: true
+  currency_code?: true
+  exchange_rate?: true
+  rate_type?: true
+  converted_amount?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -101,6 +125,10 @@ export type Dispatch_ratesMaxAggregateInputType = {
   dispatch_id?: true
   rate_id?: true
   value?: true
+  currency_code?: true
+  exchange_rate?: true
+  rate_type?: true
+  converted_amount?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -114,6 +142,10 @@ export type Dispatch_ratesCountAggregateInputType = {
   dispatch_id?: true
   rate_id?: true
   value?: true
+  currency_code?: true
+  exchange_rate?: true
+  rate_type?: true
+  converted_amount?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -214,6 +246,10 @@ export type Dispatch_ratesGroupByOutputType = {
   dispatch_id: string
   rate_id: string
   value: runtime.Decimal
+  currency_code: string | null
+  exchange_rate: runtime.Decimal | null
+  rate_type: $Enums.CurrencyRateType | null
+  converted_amount: runtime.Decimal | null
   created_at: Date
   updated_at: Date | null
   deleted_at: Date | null
@@ -250,6 +286,10 @@ export type dispatch_ratesWhereInput = {
   dispatch_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   rate_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.StringNullableFilter<"dispatch_rates"> | string | null
+  exchange_rate?: Prisma.DecimalNullableFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"dispatch_rates"> | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.DecimalNullableFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
@@ -265,6 +305,10 @@ export type dispatch_ratesOrderByWithRelationInput = {
   dispatch_id?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
+  rate_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -283,6 +327,10 @@ export type dispatch_ratesWhereUniqueInput = Prisma.AtLeast<{
   dispatch_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   rate_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.StringNullableFilter<"dispatch_rates"> | string | null
+  exchange_rate?: Prisma.DecimalNullableFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"dispatch_rates"> | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.DecimalNullableFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
@@ -298,6 +346,10 @@ export type dispatch_ratesOrderByWithAggregationInput = {
   dispatch_id?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
+  rate_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  converted_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -319,6 +371,10 @@ export type dispatch_ratesScalarWhereWithAggregatesInput = {
   dispatch_id?: Prisma.UuidWithAggregatesFilter<"dispatch_rates"> | string
   rate_id?: Prisma.UuidWithAggregatesFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalWithAggregatesFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.StringNullableWithAggregatesFilter<"dispatch_rates"> | string | null
+  exchange_rate?: Prisma.DecimalNullableWithAggregatesFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableWithAggregatesFilter<"dispatch_rates"> | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.DecimalNullableWithAggregatesFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"dispatch_rates"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"dispatch_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"dispatch_rates"> | Date | string | null
@@ -330,6 +386,10 @@ export type dispatch_ratesScalarWhereWithAggregatesInput = {
 export type dispatch_ratesCreateInput = {
   id?: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -345,6 +405,10 @@ export type dispatch_ratesUncheckedCreateInput = {
   dispatch_id: string
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -356,6 +420,10 @@ export type dispatch_ratesUncheckedCreateInput = {
 export type dispatch_ratesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -371,6 +439,10 @@ export type dispatch_ratesUncheckedUpdateInput = {
   dispatch_id?: Prisma.StringFieldUpdateOperationsInput | string
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -384,6 +456,10 @@ export type dispatch_ratesCreateManyInput = {
   dispatch_id: string
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -395,6 +471,10 @@ export type dispatch_ratesCreateManyInput = {
 export type dispatch_ratesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -408,6 +488,10 @@ export type dispatch_ratesUncheckedUpdateManyInput = {
   dispatch_id?: Prisma.StringFieldUpdateOperationsInput | string
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431,6 +515,10 @@ export type dispatch_ratesCountOrderByAggregateInput = {
   dispatch_id?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  currency_code?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  rate_type?: Prisma.SortOrder
+  converted_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -441,6 +529,8 @@ export type dispatch_ratesCountOrderByAggregateInput = {
 
 export type dispatch_ratesAvgOrderByAggregateInput = {
   value?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  converted_amount?: Prisma.SortOrder
 }
 
 export type dispatch_ratesMaxOrderByAggregateInput = {
@@ -448,6 +538,10 @@ export type dispatch_ratesMaxOrderByAggregateInput = {
   dispatch_id?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  currency_code?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  rate_type?: Prisma.SortOrder
+  converted_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -461,6 +555,10 @@ export type dispatch_ratesMinOrderByAggregateInput = {
   dispatch_id?: Prisma.SortOrder
   rate_id?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  currency_code?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  rate_type?: Prisma.SortOrder
+  converted_amount?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -471,6 +569,8 @@ export type dispatch_ratesMinOrderByAggregateInput = {
 
 export type dispatch_ratesSumOrderByAggregateInput = {
   value?: Prisma.SortOrder
+  exchange_rate?: Prisma.SortOrder
+  converted_amount?: Prisma.SortOrder
 }
 
 export type dispatch_ratesCreateNestedManyWithoutDispatch_ordersInput = {
@@ -560,6 +660,10 @@ export type dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesNestedInput = 
 export type dispatch_ratesCreateWithoutDispatch_ordersInput = {
   id?: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -573,6 +677,10 @@ export type dispatch_ratesUncheckedCreateWithoutDispatch_ordersInput = {
   id?: string
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -615,6 +723,10 @@ export type dispatch_ratesScalarWhereInput = {
   dispatch_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   rate_id?: Prisma.UuidFilter<"dispatch_rates"> | string
   value?: Prisma.DecimalFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.StringNullableFilter<"dispatch_rates"> | string | null
+  exchange_rate?: Prisma.DecimalNullableFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"dispatch_rates"> | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.DecimalNullableFilter<"dispatch_rates"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFilter<"dispatch_rates"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"dispatch_rates"> | Date | string | null
@@ -626,6 +738,10 @@ export type dispatch_ratesScalarWhereInput = {
 export type dispatch_ratesCreateWithoutTransfer_ratesInput = {
   id?: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -639,6 +755,10 @@ export type dispatch_ratesUncheckedCreateWithoutTransfer_ratesInput = {
   id?: string
   dispatch_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -677,6 +797,10 @@ export type dispatch_ratesCreateManyDispatch_ordersInput = {
   id?: string
   rate_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -688,6 +812,10 @@ export type dispatch_ratesCreateManyDispatch_ordersInput = {
 export type dispatch_ratesUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -701,6 +829,10 @@ export type dispatch_ratesUncheckedUpdateWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -713,6 +845,10 @@ export type dispatch_ratesUncheckedUpdateManyWithoutDispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rate_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -725,6 +861,10 @@ export type dispatch_ratesCreateManyTransfer_ratesInput = {
   id?: string
   dispatch_id: string
   value: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  converted_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -736,6 +876,10 @@ export type dispatch_ratesCreateManyTransfer_ratesInput = {
 export type dispatch_ratesUpdateWithoutTransfer_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -749,6 +893,10 @@ export type dispatch_ratesUncheckedUpdateWithoutTransfer_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dispatch_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -761,6 +909,10 @@ export type dispatch_ratesUncheckedUpdateManyWithoutTransfer_ratesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dispatch_id?: Prisma.StringFieldUpdateOperationsInput | string
   value?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  converted_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -776,6 +928,10 @@ export type dispatch_ratesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   dispatch_id?: boolean
   rate_id?: boolean
   value?: boolean
+  currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
+  converted_amount?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -791,6 +947,10 @@ export type dispatch_ratesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   dispatch_id?: boolean
   rate_id?: boolean
   value?: boolean
+  currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
+  converted_amount?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -806,6 +966,10 @@ export type dispatch_ratesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   dispatch_id?: boolean
   rate_id?: boolean
   value?: boolean
+  currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
+  converted_amount?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -821,6 +985,10 @@ export type dispatch_ratesSelectScalar = {
   dispatch_id?: boolean
   rate_id?: boolean
   value?: boolean
+  currency_code?: boolean
+  exchange_rate?: boolean
+  rate_type?: boolean
+  converted_amount?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -829,7 +997,7 @@ export type dispatch_ratesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type dispatch_ratesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dispatch_id" | "rate_id" | "value" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["dispatch_rates"]>
+export type dispatch_ratesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dispatch_id" | "rate_id" | "value" | "currency_code" | "exchange_rate" | "rate_type" | "converted_amount" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["dispatch_rates"]>
 export type dispatch_ratesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dispatch_orders?: boolean | Prisma.dispatch_ordersDefaultArgs<ExtArgs>
   transfer_rates?: boolean | Prisma.transfer_ratesDefaultArgs<ExtArgs>
@@ -854,6 +1022,10 @@ export type $dispatch_ratesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     dispatch_id: string
     rate_id: string
     value: runtime.Decimal
+    currency_code: string | null
+    exchange_rate: runtime.Decimal | null
+    rate_type: $Enums.CurrencyRateType | null
+    converted_amount: runtime.Decimal | null
     created_at: Date
     updated_at: Date | null
     deleted_at: Date | null
@@ -1289,6 +1461,10 @@ export interface dispatch_ratesFieldRefs {
   readonly dispatch_id: Prisma.FieldRef<"dispatch_rates", 'String'>
   readonly rate_id: Prisma.FieldRef<"dispatch_rates", 'String'>
   readonly value: Prisma.FieldRef<"dispatch_rates", 'Decimal'>
+  readonly currency_code: Prisma.FieldRef<"dispatch_rates", 'String'>
+  readonly exchange_rate: Prisma.FieldRef<"dispatch_rates", 'Decimal'>
+  readonly rate_type: Prisma.FieldRef<"dispatch_rates", 'CurrencyRateType'>
+  readonly converted_amount: Prisma.FieldRef<"dispatch_rates", 'Decimal'>
   readonly created_at: Prisma.FieldRef<"dispatch_rates", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"dispatch_rates", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"dispatch_rates", 'DateTime'>

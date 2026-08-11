@@ -16,6 +16,10 @@ import { TaxResolutionService } from '../tax-engine/services/tax-resolution.serv
 
 import { TaxCalculationService } from '../tax-engine/services/tax-calculation.service';
 
+import { CurrencyConversionService } from '../currencies/currency-conversion.service';
+
+import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
+
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
 import { ItemInput } from '../documents-sales/interfaces/item-input.interface';
@@ -43,6 +47,10 @@ export class DocumentsPurchasesService {
     private readonly taxResolution: TaxResolutionService,
 
     private readonly taxCalculation: TaxCalculationService,
+
+    private readonly conversionService: CurrencyConversionService,
+
+    private readonly fiscalValidation: FiscalValidationService,
   ) {}
 
   private get prisma() {
@@ -53,6 +61,7 @@ export class DocumentsPurchasesService {
   // CREATE
   // ─────────────────────────────────────────────
   async create(dto: CreateDocumentDto) {
+    const dtoItems = dto.items ?? []
     const docType = await this.prisma.document_types.findUnique({
       where: {
         id: dto.document_type_id,
@@ -67,62 +76,26 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
-    // ─── Validar compatibilidad proveedor ↔ comprobante ──────────
-    if (dto.party_id && docType.letter_type) {
-      const partner = await this.prisma.business_parties.findUnique({
-        where: { id: dto.party_id },
-        select: { vat_condition: true },
-      })
-
-      if (partner?.vat_condition) {
-        const validLetters = this.getValidLetterTypes(partner.vat_condition)
-        if (validLetters.length > 0 && !validLetters.includes(docType.letter_type)) {
-          throw new BadRequestException(
-            `El comprobante "${docType.code}" (letter_type: ${docType.letter_type}) ` +
-            `no es válido para un proveedor "${partner.vat_condition}". ` +
-            `Use comprobantes con letter_type: ${validLetters.join(', ')}`
-          )
-        }
-      }
-    }
+    // ─── Validar contexto fiscal (proveedor emisor × empresa receptor) ──
+    const fiscalCtx = await this.fiscalValidation.resolveFiscalContext({
+      direction: 'PURCHASE',
+      partyId: dto.party_id,
+      documentLetterType: docType.letter_type ?? undefined,
+    })
 
     // ─── Tax Engine: resolver impuestos ──────────────────────────
 
-    const company = await this.db.getDefaultClient().companies.findUnique({
-      where: { id: getCurrentCompanyId() ?? '' },
-      select: { vat_condition: true },
-    })
-
-    // ─── Validar compatibilidad emisor × receptor → letter_type ──
-    // En compras: emisor = PROVEEDOR (partner), receptor = EMPRESA (company)
-    if (company?.vat_condition && dto.party_id && docType.letter_type) {
-      const partner = await this.prisma.business_parties.findUnique({
-        where: { id: dto.party_id },
-        select: { vat_condition: true },
-      })
-
-      if (partner?.vat_condition) {
-        const expectedLetter = this.getExpectedLetterType(partner.vat_condition, company.vat_condition)
-        if (expectedLetter && docType.letter_type !== expectedLetter) {
-          throw new BadRequestException(
-            `Para emisor "${partner.vat_condition}" (proveedor) y receptor "${company.vat_condition}" (empresa), ` +
-            `el comprobante debe ser letra ${expectedLetter} (usó letra ${docType.letter_type}).`
-          )
-        }
-      }
-    }
-
     const taxContext: TaxContext = {
       issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
-      issuerVatCondition: company?.vat_condition ?? undefined,
+      issuerVatCondition: fiscalCtx.issuerVatCondition || undefined,
       partnerId: dto.party_id ?? undefined,
-      partnerVatCondition: undefined,
+      partnerVatCondition: fiscalCtx.partnerVatCondition || undefined,
       documentTypeId: dto.document_type_id,
       documentLetterType: docType.letter_type ?? undefined,
       currency: dto.currency_code ?? 'ARS',
       date: dto.date,
       operationType: 'PURCHASE',
-      items: dto.items.map(i => ({
+      items: dtoItems.map(i => ({
         productId: i.product_id,
         quantity: Number(i.quantity),
         unitPrice: Number(i.unit_price),
@@ -134,15 +107,42 @@ export class DocumentsPurchasesService {
 
     console.log('[PurchasesService] Tax Engine result:', JSON.stringify(calculation.document, null, 2))
 
+    // ─── Resolver exchange rate ──────────────────────────────────
+    const currencyCode = dto.currency_code ?? 'ARS'
+    const baseCurrency = await this.conversionService.getBaseCurrency()
+    const isBase = currencyCode.toUpperCase() === baseCurrency.code.toUpperCase()
+
+    let exchangeRate = dto.exchange_rate ?? 1
+    let rateType = (dto.rate_type as any) ?? null
+
+    if (docType.letter_type && ['A', 'B', 'C'].includes(docType.letter_type)) {
+      rateType = 'OFFICIAL'
+    }
+
+    if (!isBase && !dto.exchange_rate) {
+      try {
+        const resolved = await this.conversionService.resolveRate(
+          currencyCode,
+          baseCurrency.code,
+          new Date(dto.date),
+          rateType,
+        )
+        exchangeRate = resolved.rate
+        rateType = resolved.rateType
+      } catch {
+        exchangeRate = 1
+      }
+    }
+
     // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
     const items: ItemInput[] = calculation.document.items.map((item, idx) => ({
       product_id: item.productId ?? null,
       quantity: item.quantity,
-      currency: dto.currency_code ?? 'ARS',
-      exchange_rate: 1,
+      currency: currencyCode,
+      exchange_rate: exchangeRate,
       original_unit_price: item.unitPrice,
       unit_price: item.unitPrice,
-      converted_unit_price: item.unitPrice,
+      converted_unit_price: isBase ? null : this.conversionService.convertAmount(item.unitPrice, exchangeRate),
       price: item.total,
       total: item.total,
       exempt_amount: item.exemptAmount,
@@ -152,6 +152,7 @@ export class DocumentsPurchasesService {
         tax_id: t.tax_id,
         tax_rate: t.rate,
         tax_amount: t.amount,
+        converted_tax_amount: isBase ? null : this.conversionService.convertAmount(t.amount, exchangeRate),
         calculation_level: 'line' as const,
         is_included_in_price: t.isIncludedInPrice,
       })),
@@ -170,6 +171,16 @@ export class DocumentsPurchasesService {
         taxable_base: t.taxableBase,
         tax_amount: t.amount,
       })),
+    }
+
+    // ─── OPENING_BALANCE: usar dto.total directamente ────────────
+    if (docType.category === 'OPENING_BALANCE' && dto.total) {
+      totals.subtotal = dto.subtotal ?? dto.total
+      totals.total = dto.total
+      totals.exempt_amount = dto.total
+      totals.taxable_base = 0
+      totals.total_taxes = 0
+      totals.documentTaxes = []
     }
 
     let createdId = '';
@@ -195,7 +206,11 @@ export class DocumentsPurchasesService {
 
           status: STATUS_DRAFT,
 
-          currency_code: dto.currency_code,
+          currency_code: currencyCode,
+
+          exchange_rate: exchangeRate,
+
+          rate_type: rateType,
 
           subtotal: totals.subtotal,
 
@@ -210,6 +225,12 @@ export class DocumentsPurchasesService {
           descrip: dto.descrip ?? null,
 
           ref: dto.ref ?? null,
+
+          ...(!isBase ? await this.conversionService.convertDocumentFields(
+            currencyCode, exchangeRate, rateType,
+            { subtotal: totals.subtotal, exempt_amount: totals.exempt_amount, taxable_base: totals.taxable_base, total_taxes: totals.total_taxes, total: totals.total },
+            new Date(dto.date),
+          ) : {}),
         },
       });
 
@@ -235,6 +256,10 @@ export class DocumentsPurchasesService {
             taxable_base: t.taxable_base,
 
             tax_amount: t.tax_amount,
+
+            converted_taxable_base: isBase ? null : this.conversionService.convertAmount(t.taxable_base, exchangeRate),
+
+            converted_tax_amount: isBase ? null : this.conversionService.convertAmount(t.tax_amount, exchangeRate),
           })),
         });
       }
@@ -269,6 +294,14 @@ export class DocumentsPurchasesService {
 
     let totals: any = null;
 
+    // ─── Resolver exchange rate for update ────────────────────
+    const updateCurrencyCode = dto.currency_code ?? doc.currency_code ?? 'ARS'
+    const updateBaseCurrency = await this.conversionService.getBaseCurrency()
+    const updateIsBase = updateCurrencyCode.toUpperCase() === updateBaseCurrency.code.toUpperCase()
+
+    let updateExchangeRate = dto.exchange_rate ?? Number(doc.exchange_rate) ?? 1
+    let updateRateType = (dto.rate_type as any) ?? doc.rate_type ?? null
+
     if (dto.items?.length) {
       if (!dto.currency_code) {
         throw new BadRequestException('currency_code es requerido');
@@ -278,16 +311,18 @@ export class DocumentsPurchasesService {
         where: { id: doc.document_type_id },
       });
 
-      const company = await this.db.getDefaultClient().companies.findUnique({
-        where: { id: getCurrentCompanyId() ?? '' },
-        select: { vat_condition: true },
+      const partnerId = dto.party_id ?? doc.party_id
+      const fiscalCtx = await this.fiscalValidation.resolveFiscalContext({
+        direction: 'PURCHASE',
+        partyId: partnerId,
+        documentLetterType: docType?.letter_type ?? undefined,
       })
 
       const taxContext: TaxContext = {
         issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
-        issuerVatCondition: company?.vat_condition ?? undefined,
-        partnerId: dto.party_id ?? doc.party_id ?? undefined,
-        partnerVatCondition: undefined,
+        issuerVatCondition: fiscalCtx.issuerVatCondition || undefined,
+        partnerId: partnerId ?? undefined,
+        partnerVatCondition: fiscalCtx.partnerVatCondition || undefined,
         documentTypeId: doc.document_type_id,
         documentLetterType: docType?.letter_type ?? undefined,
         currency: dto.currency_code,
@@ -306,11 +341,11 @@ export class DocumentsPurchasesService {
       items = calculation.document.items.map((item) => ({
         product_id: item.productId ?? null,
         quantity: item.quantity,
-        currency: dto.currency_code ?? 'ARS',
-        exchange_rate: 1,
+        currency: updateCurrencyCode,
+        exchange_rate: updateExchangeRate,
         original_unit_price: item.unitPrice,
         unit_price: item.unitPrice,
-        converted_unit_price: item.unitPrice,
+        converted_unit_price: updateIsBase ? null : this.conversionService.convertAmount(item.unitPrice, updateExchangeRate),
         price: item.total,
         total: item.total,
         exempt_amount: item.exemptAmount,
@@ -320,6 +355,7 @@ export class DocumentsPurchasesService {
           tax_id: t.tax_id,
           tax_rate: t.rate,
           tax_amount: t.amount,
+          converted_tax_amount: updateIsBase ? null : this.conversionService.convertAmount(t.amount, updateExchangeRate),
           calculation_level: 'line' as const,
           is_included_in_price: t.isIncludedInPrice,
         })),
@@ -382,6 +418,10 @@ export class DocumentsPurchasesService {
               taxable_base: t.taxable_base,
 
               tax_amount: t.tax_amount,
+
+              converted_taxable_base: updateIsBase ? null : this.conversionService.convertAmount(t.taxable_base, updateExchangeRate),
+
+              converted_tax_amount: updateIsBase ? null : this.conversionService.convertAmount(t.tax_amount, updateExchangeRate),
             })),
           });
         }
@@ -399,7 +439,11 @@ export class DocumentsPurchasesService {
 
           status: dto.status ?? doc.status,
 
-          currency_code: dto.currency_code ?? doc.currency_code,
+          currency_code: updateCurrencyCode,
+
+          exchange_rate: updateExchangeRate,
+
+          rate_type: updateRateType,
 
           subtotal: totals?.subtotal ?? Number(doc.subtotal),
 
@@ -416,6 +460,12 @@ export class DocumentsPurchasesService {
           ref: dto.ref ?? doc.ref,
 
           updated_at: new Date(),
+
+          ...(!updateIsBase && totals ? await this.conversionService.convertDocumentFields(
+            updateCurrencyCode, updateExchangeRate, updateRateType,
+            { subtotal: totals.subtotal, exempt_amount: totals.exempt_amount, taxable_base: totals.taxable_base, total_taxes: totals.total_taxes, total: totals.total },
+            new Date(dto.date ?? doc.date),
+          ) : {}),
         },
       });
     });
@@ -572,18 +622,21 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // FIND PENDING (saldo pendiente de pago)
   // ─────────────────────────────────────────────
-  async findPending(partyId?: string) {
+  async findPending(partyId?: string, categories?: string[]) {
+    const cats = categories ?? ['INVOICE']
+
     const docs = await this.prisma.documents.findMany({
       where: {
         document_types: {
           direction: -1,
+          category: { in: cats },
         },
         status: 2,
         deleted_at: null,
         ...(partyId ? { party_id: partyId } : {}),
       },
       include: {
-        document_types: { select: { code: true, description: true, direction: true } },
+        document_types: { select: { code: true, description: true, direction: true, category: true } },
         business_parties: { select: { id: true, name: true, type: true } },
       },
       orderBy: { date: 'asc' },
@@ -602,11 +655,15 @@ export class DocumentsPurchasesService {
           paid_amount: paid,
           pending_amount: pending,
           currency_code: d.currency_code,
+          exchange_rate: d.exchange_rate ? Number(d.exchange_rate) : null,
+          rate_type: d.rate_type ?? null,
+          converted_total: d.converted_total ? Number(d.converted_total) : null,
           party_id: d.party_id,
           party_name: d.business_parties?.name ?? null,
           party_type: d.business_parties?.type ?? null,
           document_type_code: d.document_types?.code ?? null,
           document_type_description: d.document_types?.description ?? null,
+          document_type_category: d.document_types?.category ?? null,
         };
       })
       .filter((d) => d.pending_amount > 0.01);
@@ -917,7 +974,9 @@ export class DocumentsPurchasesService {
         throw new BadRequestException('El documento ya está confirmado');
       }
 
-      if (!doc.document_items.length) {
+      const category = doc.document_types?.category;
+
+      if (!doc.document_items.length && category !== 'OPENING_BALANCE') {
         throw new BadRequestException('El documento no tiene ítems');
       }
 
@@ -940,9 +999,9 @@ export class DocumentsPurchasesService {
         const docTotal = doc.total.toNumber();
 
         // Determinar tipo de entrada según la categoría del documento
-        const category = doc.document_types?.category;
         const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
                         : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
+                        : category === 'OPENING_BALANCE' ? 'OPENING_BALANCE'
                         : 'INVOICE';
 
         // Descripción usando el nombre real del tipo de documento
@@ -959,6 +1018,8 @@ export class DocumentsPurchasesService {
             currency_code: doc.currency_code,
             type: entryType,
             amount: docTotal,
+            exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
+            rate_type: doc.rate_type ?? undefined,
             description,
             reference_type: 'document',
             reference_id: doc.id,
@@ -1029,6 +1090,8 @@ export class DocumentsPurchasesService {
             currency_code: doc.currency_code,
             type: 'CREDIT_NOTE',
             amount: docTotal,
+            exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
+            rate_type: doc.rate_type ?? undefined,
             description,
             reference_type: 'document_reversal',
             reference_id: doc.id,
@@ -1134,23 +1197,5 @@ export class DocumentsPurchasesService {
     });
 
     return trips.map((t) => t.id);
-  }
-
-  private getValidLetterTypes(issuerCondition: string): string[] {
-    const map: Record<string, string[]> = {
-      'RESPONSABLE_INSCRIPTO': ['A', 'B'],
-      'MONOTRIBUTO': ['C'],
-      'EXENTO': ['C'],
-    }
-    return map[issuerCondition] ?? []
-  }
-
-  private getExpectedLetterType(issuer: string, partner: string): string | null {
-    const issuerNorm = issuer.toUpperCase()
-    if (issuerNorm === 'MONOTRIBUTO' || issuerNorm === 'EXENTO') return 'C'
-
-    const partnerNorm = partner.toUpperCase()
-    if (partnerNorm === 'RI' || partnerNorm === 'RESPONSABLE_INSCRIPTO') return 'A'
-    return 'B'
   }
 }

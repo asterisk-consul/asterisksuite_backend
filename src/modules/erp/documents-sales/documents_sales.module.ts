@@ -8,9 +8,11 @@ import { DocumentsSalesItemsService } from './documents-sales-items.service';
 import { DocumentsSalesTotalsService } from './documents-sales-totals.service';
 import { CurrentAccountsModule } from '../current-accounts/current-accounts.module';
 import { TaxEngineModule } from '../tax-engine/tax-engine.module';
+import { CurrenciesModule } from '../currencies/currencies.module';
+import { CommonErpModule } from '@/common/common-erp.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule],
+  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule],
   controllers: [DocumentsSalesController],
   providers: [
     DocumentsSalesService,

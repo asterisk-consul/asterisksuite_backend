@@ -19,5 +19,5 @@ model accounts {
 
   @@unique([code])
   @@index([parent_id])
-   @@schema("tenant")
+  @@schema("tenant")
 }
