@@ -34,6 +34,9 @@ export class CreateDocumentsTypeDto {
   affects_tax_book!: boolean;
 
   @IsBoolean()
+  affects_payment!: boolean;
+
+  @IsBoolean()
   active!: boolean;
 
   @IsOptional()

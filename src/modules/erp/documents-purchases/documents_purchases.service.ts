@@ -622,14 +622,12 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // FIND PENDING (saldo pendiente de pago)
   // ─────────────────────────────────────────────
-  async findPending(partyId?: string, categories?: string[]) {
-    const cats = categories ?? ['INVOICE']
-
+  async findPending(partyId?: string) {
     const docs = await this.prisma.documents.findMany({
       where: {
         document_types: {
           direction: -1,
-          category: { in: cats },
+          affects_payment: true,
         },
         status: 2,
         deleted_at: null,

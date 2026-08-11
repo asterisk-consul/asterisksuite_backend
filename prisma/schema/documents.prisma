@@ -101,6 +101,7 @@ model document_types {
   affects_stock        Boolean               @default(false)
   affects_accounting   Boolean               @default(false)
   affects_tax_book     Boolean               @default(false)
+  affects_payment      Boolean               @default(false)
   active               Boolean               @default(true)
   category             String?               @db.VarChar(30) // INVOICE, CREDIT_NOTE, DEBIT_NOTE, ORDER, QUOTE
   letter_type          String?               @db.VarChar(5) // A, B, C, X

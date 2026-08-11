@@ -21,10 +21,8 @@ export class DocumentsPurchasesController {
   // @RequirePermissions('documents-purchases.read')
   findPending(
     @Query('party_id') partyId?: string,
-    @Query('categories') categories?: string,
   ) {
-    const cats = categories ? categories.split(',') : undefined
-    return this.service.findPending(partyId, cats);
+    return this.service.findPending(partyId);
   }
 
   // @RequirePermissions('documents-purchases.read')

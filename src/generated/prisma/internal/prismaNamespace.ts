@@ -8983,6 +8983,7 @@ export const Document_typesScalarFieldEnum = {
   affects_stock: 'affects_stock',
   affects_accounting: 'affects_accounting',
   affects_tax_book: 'affects_tax_book',
+  affects_payment: 'affects_payment',
   active: 'active',
   category: 'category',
   letter_type: 'letter_type',

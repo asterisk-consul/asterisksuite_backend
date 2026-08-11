@@ -48,6 +48,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
+    affects_payment: true,
   },
   {
     code: 'FB-A',
@@ -61,6 +62,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
+    affects_payment: true,
   },
   {
     code: 'FC-A',
@@ -74,6 +76,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
+    affects_payment: true,
   },
   {
     code: 'FX-A',
@@ -87,6 +90,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: false,
+    affects_payment: true,
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -190,6 +194,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
+    affects_payment: true,
   },
   {
     code: 'FB-C',
@@ -203,6 +208,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
+    affects_payment: true,
   },
   {
     code: 'FC-C',
@@ -216,6 +222,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: true,
+    affects_payment: true,
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -479,6 +486,7 @@ async function main() {
         affects_stock: docType.affects_stock,
         affects_accounting: docType.affects_accounting,
         affects_tax_book: docType.affects_tax_book,
+        affects_payment: docType.affects_payment ?? false,
       },
       create: {
         code: docType.code,
@@ -492,6 +500,7 @@ async function main() {
         affects_stock: docType.affects_stock,
         affects_accounting: docType.affects_accounting,
         affects_tax_book: docType.affects_tax_book,
+        affects_payment: docType.affects_payment ?? false,
         active: true,
       },
     });
