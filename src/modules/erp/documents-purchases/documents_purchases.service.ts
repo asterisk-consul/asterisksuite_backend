@@ -609,6 +609,11 @@ export class DocumentsPurchasesService {
             taxes: true,
           },
         },
+
+        payment_documents: {
+          where: { deleted_at: null },
+          select: { id: true, amount_applied: true },
+        },
       },
     });
 

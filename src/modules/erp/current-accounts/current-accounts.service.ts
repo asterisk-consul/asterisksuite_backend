@@ -86,7 +86,15 @@ export class CurrentAccountsService {
         reference_type: dto.reference_type,
         reference_id: dto.reference_id,
         payment_id: dto.payment_id,
-        date: dto.date ? new Date(dto.date) : new Date(),
+        date: (() => {
+          if (dto.date) {
+            const dateStr = dto.date.includes('T') ? dto.date.split('T')[0] : dto.date
+            const now = new Date()
+            const [y, m, d] = dateStr.split('-').map(Number)
+            return new Date(y, m - 1, d, now.getHours(), now.getMinutes(), now.getSeconds())
+          }
+          return new Date()
+        })(),
         created_by: userId,
       },
     });

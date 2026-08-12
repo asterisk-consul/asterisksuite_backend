@@ -2,6 +2,11 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+
+function parseLocalDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return new Date(y, m - 1, d)
+}
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
 
@@ -51,7 +56,7 @@ export class PaymentsService {
             const resolved = await this.conversionService.resolveRate(
               dto.currency_code,
               baseCurrency.code,
-              new Date(dto.date),
+              parseLocalDate(dto.date),
               rateType,
             )
             exchangeRate = resolved.rate
@@ -70,7 +75,7 @@ export class PaymentsService {
           number: nextNumber,
           type: dto.type as any,
           payment_mode: (dto.payment_mode as any) ?? 'NORMAL',
-          date: new Date(dto.date),
+          date: parseLocalDate(dto.date),
           party_id: dto.party_id,
           party_type: dto.party_type,
           payment_method: dto.payment_method as any,
@@ -347,7 +352,7 @@ export class PaymentsService {
       updated_by: userId,
     };
 
-    if (dto.date) data.date = new Date(dto.date);
+    if (dto.date) data.date = parseLocalDate(dto.date);
     if (dto.party_id) data.party_id = dto.party_id;
     if (dto.party_type) data.party_type = dto.party_type;
     if (dto.payment_method) data.payment_method = dto.payment_method;

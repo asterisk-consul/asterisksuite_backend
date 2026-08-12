@@ -783,6 +783,11 @@ export class DocumentsSalesService {
 
         presupuesto_doc: true,
         orden_venta_doc: true,
+
+        payment_documents: {
+          where: { deleted_at: null },
+          select: { id: true, amount_applied: true },
+        },
       },
     });
 
