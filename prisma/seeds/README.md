@@ -4,7 +4,7 @@ Script unificado que ejecuta todos los seeds necesarios para un tenant existente
 
 ## Qué hace
 
-Semilla la base de datos de un tenant con todos los datos impositivos, documentales y contables necesarios para operar el ERP. Ejecuta 8 pasos en orden:
+Semilla la base de datos de un tenant con todos los datos impositivos, documentales, contables y de seguridad necesarios para operar el ERP. Ejecuta 11 pasos en orden:
 
 1. **Impuestos** — IVA, percepciones, retenciones e impuestos internos
 2. **Categorías fiscales** — GRAV_21, GRAV_105, GRAV_27, EXENTO, NO_GRAV
@@ -12,8 +12,11 @@ Semilla la base de datos de un tenant con todos los datos impositivos, documenta
 4. **Productos sin categoría** — asigna GRAV_21 por defecto a productos que no tengan categoría fiscal
 5. **Tipos de documento** — facturas, notas de crédito/débito, órdenes, presupuestos, recibos, remitos
 6. **Document types ↔ impuestos** — asocia IVA a tipos de documento (venta y compra)
-7. **Conceptos bancarios** — 13 conceptos (comisiones, impuestos, gastos, intereses, ajustes)
-8. **Plan de cuentas** — ejecuta `accounts.seed.ts` para generar el plan contable argentino completo
+7. **Secuencias de documentos** — secuencias por letra (Ventas A/B/C, Compras A/B/C)
+8. **Vincular document_types ↔ secuencias** — asocia tipos con su secuencia por letra
+9. **Conceptos bancarios** — comisiones, impuestos, gastos, intereses y ajustes bancarios
+10. **Plan de cuentas** — ejecuta `accounts.seed.ts` para generar el plan contable argentino completo
+11. **RBAC** — ejecuta `rbac.seed.ts` para crear permisos y 4 roles por defecto (admin, manager, user, viewer)
 
 ## Prerrequisitos
 
@@ -102,6 +105,17 @@ El nombre del tenant se usa para construir el nombre de la base de datos: `{tena
 | REM-C | Compra | REMITO | — | No |
 | REM-T | Venta | REMITO | — | No |
 
+### Secuencias de documentos
+
+| Nombre | POS | Prefijo | Automática |
+|--------|-----|---------|------------|
+| Ventas A | 0001 | A | Sí |
+| Ventas B | 0001 | B | Sí |
+| Ventas C | 0001 | C | Sí |
+| Compras A | 0002 | A | Sí |
+| Compras B | 0002 | B | Sí |
+| Compras C | 0002 | C | Sí |
+
 ### Conceptos bancarios (13 registros)
 
 | Código | Nombre | Tipo | Cuenta |
@@ -120,6 +134,17 @@ El nombre del tenant se usa para construir el nombre de la base de datos: `{tena
 | INTERES_CAP | Interés capitalizable | INTEREST | 6204 |
 | AJUSTE_BCRA | Ajuste BCRA | ADJUSTMENT | 6205 |
 | DIF_CAMBIO | Diferencia de cambio | ADJUSTMENT | 6205 |
+
+### RBAC
+
+Se ejecuta `rbac.seed.ts` que crea:
+
+- **~130 permisos** organizados por módulo (access-control, products, documents, currencies, taxes, accounts, units, categories, warehouses, trips, companies, cash_boxes, bank_accounts, payments, drivers, vehicles, picking, stock, etc.)
+- **4 roles** con permisos crecientes:
+  - `admin` — acceso total
+  - `manager` — acceso a módulos de negocio sin administración de roles/usuarios
+  - `user` — lectura y escritura básica
+  - `viewer` — solo lectura (permisos `*.read`)
 
 ### Plan de cuentas
 
@@ -176,4 +201,12 @@ Si el plan de cuentas reporta un error (se muestra como advertencia, no fatal):
 ```bash
 # Ejecutar directamente para ver el error completo
 npx tsx prisma/seeds/accounts.seed.ts <tenant>
+```
+
+### RBAC falla
+
+Si el RBAC reporta un error (se muestra como advertencia, no fatal):
+```bash
+# Ejecutar directamente para ver el error completo
+npx tsx prisma/seeds/rbac.seed.ts <tenant>
 ```

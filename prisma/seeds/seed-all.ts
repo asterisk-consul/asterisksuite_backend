@@ -457,6 +457,18 @@ async function main() {
     console.log('  ⚠️  Plan de cuentas — error (puede que ya exista)')
   }
 
+  // 11. RBAC — permisos y roles (TypeScript seed)
+  console.log('  📄 RBAC (permisos y roles)...')
+  try {
+    execSync(`npx tsx prisma/seeds/rbac.seed.ts ${tenant}`, {
+      stdio: 'inherit',
+      timeout: 60000,
+    })
+    console.log('  ✅ RBAC — OK')
+  } catch (e) {
+    console.log('  ⚠️  RBAC — error (puede que ya exista)')
+  }
+
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
   console.log(`\n🎉 Seed completado para "${tenant}" en ${elapsed}s`)
   console.log(`   DB: ${tenantDb}`)
@@ -465,7 +477,8 @@ async function main() {
   console.log(`   Documentos: 14 tipos (venta + compra + órdenes + recibos + remitos)`)
   console.log(`   Secuencias: 4 (Ventas A/B/C + General) POS 0001`)
   console.log(`   Bancos: 13 conceptos`)
-  console.log(`   Contabilidad: plan de cuentas argentino\n`)
+  console.log(`   Contabilidad: plan de cuentas argentino`)
+  console.log(`   RBAC: permisos + 4 roles (admin, manager, user, viewer)\n`)
 }
 
 main().catch((e) => {
