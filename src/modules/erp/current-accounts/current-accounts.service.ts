@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 @Injectable()
 export class CurrentAccountsService {
@@ -49,7 +50,7 @@ export class CurrentAccountsService {
           const resolved = await this.conversionService.resolveRate(
             dto.currency_code,
             baseCurrency.code,
-            dto.date ? new Date(dto.date) : new Date(),
+            dto.date ? parseLocalDateTime(dto.date) : new Date(),
             rateType,
           );
           exchangeRate = resolved.rate;
@@ -86,18 +87,12 @@ export class CurrentAccountsService {
         reference_type: dto.reference_type,
         reference_id: dto.reference_id,
         payment_id: dto.payment_id,
-        date: (() => {
-          if (dto.date) {
-            const dateStr = dto.date.includes('T') ? dto.date.split('T')[0] : dto.date
-            const now = new Date()
-            const [y, m, d] = dateStr.split('-').map(Number)
-            return new Date(y, m - 1, d, now.getHours(), now.getMinutes(), now.getSeconds())
-          }
-          return new Date()
-        })(),
+        date: parseLocalDateTime(dto.date),
         created_by: userId,
       },
     });
+
+    console.log('[CC] addEntry dto.date:', dto.date, '→ parsed:', entry.date?.toISOString?.() ?? entry.date)
 
     // ─── Update account balance (always in base currency) ─────
     await this.prisma.current_accounts.update({
@@ -121,7 +116,7 @@ export class CurrentAccountsService {
     });
   }
 
-  async getEntries(partyId: string) {
+  async getEntries(partyId: string, userId?: string) {
     const account = await this.prisma.current_accounts.findFirst({
       where: { party_id: partyId, deleted_at: null },
     });
@@ -129,8 +124,12 @@ export class CurrentAccountsService {
     if (!account) return [];
 
     const entries = await this.prisma.current_account_entries.findMany({
-      where: { current_account_id: account.id, deleted_at: null },
-      orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
+      where: {
+        current_account_id: account.id,
+        deleted_at: null,
+        ...(userId ? { created_by: userId } : {}),
+      },
+      orderBy: [{ created_at: 'desc' }],
     });
 
     const userIds = [...new Set(entries.map((e) => e.created_by).filter(Boolean))] as string[];
@@ -149,12 +148,15 @@ export class CurrentAccountsService {
     }));
   }
 
-  async getStatement(partyId: string) {
+  async getStatement(partyId: string, userId?: string) {
     const account = await this.prisma.current_accounts.findUnique({
       where: { party_id: partyId },
       include: {
         party: { select: { id: true, name: true } },
-        entries: { orderBy: { date: 'asc' } },
+        entries: {
+          where: userId ? { created_by: userId } : undefined,
+          orderBy: { created_at: 'asc' },
+        },
       },
     });
 

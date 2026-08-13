@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCashBoxMovementDto } from './dto/create-cash-box-movement.dto';
 import { UpdateCashBoxMovementDto } from './dto/update-cash-box-movement.dto';
 import { FilterCashBoxMovementDto } from './dto/filter-cash-box-movement.dto';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 @Injectable()
 export class CashBoxMovementsService {
@@ -64,7 +65,7 @@ export class CashBoxMovementsService {
         reference_id: dto.reference_id,
         payment_id: dto.payment_id,
         bank_account_id: dto.bank_account_id,
-        date: dto.date ? new Date(dto.date) : new Date(),
+        date: dto.date ? parseLocalDateTime(dto.date) : new Date(),
         created_by: userId,
       },
     });

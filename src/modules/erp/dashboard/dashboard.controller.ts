@@ -39,4 +39,9 @@ export class DashboardController {
   getDashboardData() {
     return this.dashboardService.getDashboardData();
   }
+
+  @Get('personal')
+  getPersonalData(@CurrentUser() user: AuthUser) {
+    return this.dashboardService.getPersonalData(user.id);
+  }
 }

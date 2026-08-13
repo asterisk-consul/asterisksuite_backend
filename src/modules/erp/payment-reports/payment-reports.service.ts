@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { QueryPaymentReportDto } from './dto/query-payment-report.dto';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 @Injectable()
 export class PaymentReportsService {
@@ -15,8 +16,8 @@ export class PaymentReportsService {
   }
 
   async findByUser(dto: QueryPaymentReportDto) {
-    const startDate = dto.date_from ? new Date(dto.date_from) : new Date(new Date().setHours(0, 0, 0, 0));
-    const endDate = dto.date_to ? new Date(dto.date_to + 'T23:59:59.999Z') : new Date(new Date().setHours(23, 59, 59, 999));
+    const startDate = dto.date_from ? parseLocalDateTime(dto.date_from) : new Date(new Date().setHours(0, 0, 0, 0));
+    const endDate = dto.date_to ? parseLocalDateTime(dto.date_to + 'T23:59:59.999') : new Date(new Date().setHours(23, 59, 59, 999));
 
     const where: any = {
       deleted_at: null,
@@ -106,7 +107,7 @@ export class PaymentReportsService {
       throw new Error('cash_box_id es requerido');
     }
 
-    const date = dto.date ? new Date(dto.date) : new Date();
+    const date = dto.date ? parseLocalDateTime(dto.date) : new Date();
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 
@@ -203,7 +204,7 @@ export class PaymentReportsService {
       throw new Error('bank_account_id es requerido');
     }
 
-    const date = dto.date ? new Date(dto.date) : new Date();
+    const date = dto.date ? parseLocalDateTime(dto.date) : new Date();
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 
@@ -270,7 +271,7 @@ export class PaymentReportsService {
   }
 
   async dailySummary(dto: QueryPaymentReportDto) {
-    const date = dto.date ? new Date(dto.date) : new Date();
+    const date = dto.date ? parseLocalDateTime(dto.date) : new Date();
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 

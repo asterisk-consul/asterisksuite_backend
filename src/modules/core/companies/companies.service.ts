@@ -93,6 +93,28 @@ export class CompaniesService {
     { code: 'trips.update', description: 'Editar viajes' },
     { code: 'trips.delete', description: 'Eliminar viajes' },
 
+    // Logística - Picking
+    { code: 'picking.read', description: 'Ver picking' },
+    { code: 'picking.create', description: 'Crear órdenes de picking' },
+    { code: 'picking.execute', description: 'Ejecutar picking' },
+    { code: 'picking.transfer', description: 'Transferir pallets' },
+
+    // Tesorería - Cuentas Bancarias
+    { code: 'bank_accounts.read', description: 'Ver cuentas bancarias' },
+    { code: 'bank_accounts.create', description: 'Crear cuentas bancarias' },
+    { code: 'bank_accounts.update', description: 'Editar cuentas bancarias' },
+    { code: 'bank_accounts.delete', description: 'Eliminar cuentas bancarias' },
+
+    // Tesorería - Pagos
+    { code: 'payments.read', description: 'Ver pagos' },
+    { code: 'payments.create', description: 'Crear pagos' },
+    { code: 'payments.update', description: 'Editar pagos' },
+    { code: 'payments.delete', description: 'Eliminar pagos' },
+    { code: 'payments.confirm', description: 'Confirmar pagos' },
+    { code: 'payments.mark_as_paid', description: 'Marcar pagos como pagados' },
+    { code: 'payments.reverse', description: 'Anular pagos' },
+    { code: 'payments.reject', description: 'Rechazar pagos' },
+
     // Core - Companies
     { code: 'companies.read', description: 'Ver empresas' },
     { code: 'companies.create', description: 'Crear empresas' },

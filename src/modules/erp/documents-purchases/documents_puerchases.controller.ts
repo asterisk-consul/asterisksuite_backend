@@ -27,8 +27,8 @@ export class DocumentsPurchasesController {
 
   // @RequirePermissions('documents-purchases.read')
   @Get()
-  findAll(@Query('documentTypeId') documentTypeId?: string, @Query('status') status?: string) {
-    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined);
+  findAll(@Query('documentTypeId') documentTypeId?: string, @Query('status') status?: string, @Query('category') category?: string, @Query('direction') direction?: string) {
+    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined, category, direction !== undefined ? Number(direction) : undefined);
   }
 
   // @RequirePermissions('documents-purchases.read')

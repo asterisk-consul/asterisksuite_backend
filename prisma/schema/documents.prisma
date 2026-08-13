@@ -180,6 +180,7 @@ model documents {
   child_documents         documents[]            @relation("DocumentChain")
   presupuesto_doc         presupuesto_documents?
   orden_venta_doc         orden_venta_documents?
+  orden_compra_doc        orden_compra_documents?
 
   @@unique([document_type_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
@@ -221,6 +222,29 @@ model orden_venta_documents {
   transport_provider      String?   @db.VarChar(100)
   confirmed_delivery_date DateTime? @db.Date
   seller_id               String?   @db.Uuid
+  created_at              DateTime  @default(now()) @db.Timestamp(6)
+  updated_at              DateTime? @updatedAt @db.Timestamp(6)
+
+  document documents @relation(fields: [document_id], references: [id], onDelete: Cascade)
+
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// EXTENSIÓN: Orden de Compra
+// ══════════════════════════════════════════════════════════
+model orden_compra_documents {
+  id                      String    @id @default(uuid()) @db.Uuid
+  document_id             String    @unique @db.Uuid
+  priority                String?   @db.VarChar(20)
+  delivery_address        String?   @db.VarChar(300)
+  delivery_contact        String?   @db.VarChar(100)
+  delivery_phone          String?   @db.VarChar(30)
+  delivery_time           String?   @db.VarChar(100)
+  delivery_instructions   String?   @db.Text
+  transport_provider      String?   @db.VarChar(100)
+  confirmed_delivery_date DateTime? @db.Date
+  buyer_id                String?   @db.Uuid
   created_at              DateTime  @default(now()) @db.Timestamp(6)
   updated_at              DateTime? @updatedAt @db.Timestamp(6)
 

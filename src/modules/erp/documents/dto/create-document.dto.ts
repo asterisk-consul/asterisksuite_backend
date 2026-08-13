@@ -177,4 +177,13 @@ export class CreateDocumentDto {
   @IsOptional()
   @IsUUID()
   seller_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  buyer_id?: string;
+
+  // ─── Parent document (OV/OC) ──────────────────────
+  @IsOptional()
+  @IsUUID()
+  parent_document_id?: string;
 }

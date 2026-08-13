@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
 import * as XLSX from 'xlsx';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { PaymentsService } from './payments.service';
@@ -17,7 +18,7 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post()
-  // @RequirePermissions('treasury.payments.create')
+  @RequirePermissions('treasury.payments.create')
   create(@Body() dto: CreatePaymentDto, @CurrentUser() user: AuthUser) {
     console.log('[payments-controller] create called, dto:', JSON.stringify(dto, null, 2))
     console.log('[payments-controller] user.id:', user.id)
@@ -25,7 +26,7 @@ export class PaymentsController {
   }
 
   @Get()
-  // @RequirePermissions('treasury.payments.read')
+  @RequirePermissions('treasury.payments.read')
   findAll(
     @Req() req: Request,
     @CurrentUser() user: AuthUser,
@@ -45,37 +46,37 @@ export class PaymentsController {
   }
 
   @Get(':id')
-  // @RequirePermissions('treasury.payments.read')
+  @RequirePermissions('treasury.payments.read')
   findOne(@Param('id') id: string) {
     return this.paymentsService.findOne(id);
   }
 
   @Patch(':id')
-  // @RequirePermissions('treasury.payments.update')
+  @RequirePermissions('treasury.payments.update')
   update(@Param('id') id: string, @Body() dto: UpdatePaymentDto, @CurrentUser() user: AuthUser) {
     return this.paymentsService.update(id, dto, user.id);
   }
 
   @Post(':id/confirm')
-  // @RequirePermissions('treasury.payments.confirm')
+  @RequirePermissions('treasury.payments.confirm')
   confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.confirm(id, user.id);
   }
 
   @Post(':id/pay')
-  // @RequirePermissions('treasury.payments.update')
+  @RequirePermissions('treasury.payments.mark_as_paid')
   markAsPaid(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.markAsPaid(id, user.id);
   }
 
   @Post(':id/reject')
-  // @RequirePermissions('treasury.payments.reverse')
+  @RequirePermissions('treasury.payments.reject')
   reject(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.reject(id, user.id);
   }
 
   @Post(':id/reverse')
-  // @RequirePermissions('treasury.payments.reverse')
+  @RequirePermissions('treasury.payments.reverse')
   reverse(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.reverse(id, user.id);
   }

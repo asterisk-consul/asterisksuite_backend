@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-// import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { CashBoxAccessGuard } from '@/common/guards/cash-box-access.guard';
@@ -20,13 +20,13 @@ export class CashBoxesController {
 
   @Post()
   @UseGuards(CashBoxAccessGuard)
-  // @RequirePermissions('treasury.cash_boxes.create')
+  @RequirePermissions('treasury.cash_boxes.create')
   create(@Body() dto: CreateCashBoxDto, @CurrentUser() user: AuthUser) {
     return this.cashBoxesService.create(dto, user.id);
   }
 
   @Get()
-  // @RequirePermissions('treasury.cash_boxes.read')
+  @RequirePermissions('treasury.cash_boxes.read')
   findAll(@Req() req: Request, @CurrentUser() user: AuthUser) {
     const companyRole = req['companyUserRole'] as string | undefined;
     return this.cashBoxesService.findAll(
@@ -35,27 +35,27 @@ export class CashBoxesController {
   }
 
   @Get('main')
-  // @RequirePermissions('treasury.cash_boxes.read')
+  @RequirePermissions('treasury.cash_boxes.read')
   findMain() {
     return this.cashBoxesService.findMain();
   }
 
   @Get(':id')
-  // @RequirePermissions('treasury.cash_boxes.read')
+  @RequirePermissions('treasury.cash_boxes.read')
   findOne(@Param('id') id: string) {
     return this.cashBoxesService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(CashBoxAccessGuard)
-  // @RequirePermissions('treasury.cash_boxes.update')
+  @RequirePermissions('treasury.cash_boxes.update')
   update(@Param('id') id: string, @Body() dto: UpdateCashBoxDto, @CurrentUser() user: AuthUser) {
     return this.cashBoxesService.update(id, dto, user.id);
   }
 
   @Delete(':id')
   @UseGuards(CashBoxAccessGuard)
-  // @RequirePermissions('treasury.cash_boxes.delete')
+  @RequirePermissions('treasury.cash_boxes.delete')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.cashBoxesService.remove(id, user.id);
   }
@@ -89,40 +89,40 @@ export class CashBoxesController {
   // ═══════════════════════════════════════════
 
   @Get(':id/balances')
-  // @RequirePermissions('treasury.cash_boxes.read')
+  @RequirePermissions('treasury.cash_boxes.read')
   getBalances(@Param('id') id: string) {
     return this.cashBoxesService.getBalances(id);
   }
 
   @Post(':id/open')
   @UseGuards(CashBoxAccessGuard)
-  // @RequirePermissions('treasury.cash_boxes.open')
+  @RequirePermissions('treasury.cash_boxes.open')
   openSession(@Param('id') id: string, @Body() dto: OpenSessionDto, @CurrentUser() user: AuthUser) {
     return this.cashBoxesService.openSession(id, dto, user.id);
   }
 
   @Post(':id/close')
   @UseGuards(CashBoxAccessGuard, CashBoxSessionGuard)
-  // @RequirePermissions('treasury.cash_boxes.close')
+  @RequirePermissions('treasury.cash_boxes.close')
   closeSession(@Param('id') id: string, @Body() dto: CloseSessionDto, @CurrentUser() user: AuthUser) {
     return this.cashBoxesService.closeSession(id, dto, user.id);
   }
 
   @Post(':id/force-close')
   @UseGuards(CashBoxAccessGuard, CashBoxSessionGuard)
-  // @RequirePermissions('treasury.cash_boxes.force_close')
+  @RequirePermissions('treasury.cash_boxes.force_close')
   forceCloseSession(@Param('id') id: string, @Body() dto: ForceCloseSessionDto, @CurrentUser() user: AuthUser) {
     return this.cashBoxesService.forceCloseSession(id, dto, user.id);
   }
 
   @Get(':id/session')
-  // @RequirePermissions('treasury.cash_boxes.read')
+  @RequirePermissions('treasury.cash_boxes.read')
   getCurrentSession(@Param('id') id: string) {
     return this.cashBoxesService.getCurrentSession(id);
   }
 
   @Get(':id/sessions')
-  // @RequirePermissions('treasury.cash_boxes.read')
+  @RequirePermissions('treasury.cash_boxes.read')
   getSessionHistory(@Param('id') id: string) {
     return this.cashBoxesService.getSessionHistory(id);
   }

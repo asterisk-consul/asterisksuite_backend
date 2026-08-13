@@ -3,6 +3,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 
@@ -76,6 +77,29 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
+    // ─── Validar parent_document_id (NC/ND → Factura) ───────────
+    if (dto.parent_document_id) {
+      const parentDoc = await this.prisma.documents.findUnique({
+        where: { id: dto.parent_document_id },
+        include: { document_types: { select: { category: true, direction: true } } },
+      })
+      if (!parentDoc) {
+        throw new BadRequestException('El documento referenciado no existe')
+      }
+      if (parentDoc.status !== STATUS_CONFIRMED) {
+        throw new BadRequestException('El documento referenciado debe estar confirmado')
+      }
+      if (parentDoc.document_types?.category !== 'INVOICE') {
+        throw new BadRequestException('Solo se puede referenciar una factura')
+      }
+      if (parentDoc.document_types?.direction !== docType.direction) {
+        throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante')
+      }
+      if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
+        throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada')
+      }
+    }
+
     // ─── Validar contexto fiscal (proveedor emisor × empresa receptor) ──
     const fiscalCtx = await this.fiscalValidation.resolveFiscalContext({
       direction: 'PURCHASE',
@@ -124,7 +148,7 @@ export class DocumentsPurchasesService {
         const resolved = await this.conversionService.resolveRate(
           currencyCode,
           baseCurrency.code,
-          new Date(dto.date),
+          parseLocalDateTime(dto.date),
           rateType,
         )
         exchangeRate = resolved.rate
@@ -202,7 +226,7 @@ export class DocumentsPurchasesService {
 
           number,
 
-          date: new Date(dto.date),
+          date: parseLocalDateTime(dto.date),
 
           status: STATUS_DRAFT,
 
@@ -226,15 +250,35 @@ export class DocumentsPurchasesService {
 
           ref: dto.ref ?? null,
 
+          parent_document_id: dto.parent_document_id ?? null,
+
           ...(!isBase ? await this.conversionService.convertDocumentFields(
             currencyCode, exchangeRate, rateType,
             { subtotal: totals.subtotal, exempt_amount: totals.exempt_amount, taxable_base: totals.taxable_base, total_taxes: totals.total_taxes, total: totals.total },
-            new Date(dto.date),
+            parseLocalDateTime(dto.date),
           ) : {}),
         },
       });
 
       createdId = document.id;
+
+      // ─── Crear extensión según categoría ────────────────────────
+      if (docType.category === 'ORDER') {
+        await tx.orden_compra_documents.create({
+          data: {
+            document_id: document.id,
+            priority: dto.priority ?? null,
+            delivery_address: dto.delivery_address ?? null,
+            delivery_contact: dto.delivery_contact ?? null,
+            delivery_phone: dto.delivery_phone ?? null,
+            delivery_time: dto.delivery_time ?? null,
+            delivery_instructions: dto.delivery_instructions ?? null,
+            transport_provider: dto.transport_provider ?? null,
+            confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
+            buyer_id: dto.buyer_id ?? null,
+          },
+        });
+      }
 
       await this.persistItems(
         document.id,
@@ -435,7 +479,7 @@ export class DocumentsPurchasesService {
         data: {
           party_id: dto.party_id ?? doc.party_id,
 
-          date: dto.date ? new Date(dto.date) : doc.date,
+          date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
 
           status: dto.status ?? doc.status,
 
@@ -464,11 +508,41 @@ export class DocumentsPurchasesService {
           ...(!updateIsBase && totals ? await this.conversionService.convertDocumentFields(
             updateCurrencyCode, updateExchangeRate, updateRateType,
             { subtotal: totals.subtotal, exempt_amount: totals.exempt_amount, taxable_base: totals.taxable_base, total_taxes: totals.total_taxes, total: totals.total },
-            new Date(dto.date ?? doc.date),
+            parseLocalDateTime(dto.date ?? doc.date),
           ) : {}),
         },
       });
     });
+
+    // ─── Upsert extensión ORDER ──────────────────────────────────
+    if (doc.document_types?.category === 'ORDER') {
+      await this.prisma.orden_compra_documents.upsert({
+        where: { document_id: id },
+        create: {
+          document_id: id,
+          priority: dto.priority ?? null,
+          delivery_address: dto.delivery_address ?? null,
+          delivery_contact: dto.delivery_contact ?? null,
+          delivery_phone: dto.delivery_phone ?? null,
+          delivery_time: dto.delivery_time ?? null,
+          delivery_instructions: dto.delivery_instructions ?? null,
+          transport_provider: dto.transport_provider ?? null,
+          confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
+          buyer_id: dto.buyer_id ?? null,
+        },
+        update: {
+          ...(dto.priority !== undefined ? { priority: dto.priority } : {}),
+          ...(dto.delivery_address !== undefined ? { delivery_address: dto.delivery_address } : {}),
+          ...(dto.delivery_contact !== undefined ? { delivery_contact: dto.delivery_contact } : {}),
+          ...(dto.delivery_phone !== undefined ? { delivery_phone: dto.delivery_phone } : {}),
+          ...(dto.delivery_time !== undefined ? { delivery_time: dto.delivery_time } : {}),
+          ...(dto.delivery_instructions !== undefined ? { delivery_instructions: dto.delivery_instructions } : {}),
+          ...(dto.transport_provider !== undefined ? { transport_provider: dto.transport_provider } : {}),
+          ...(dto.confirmed_delivery_date !== undefined ? { confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null } : {}),
+          ...(dto.buyer_id !== undefined ? { buyer_id: dto.buyer_id } : {}),
+        },
+      });
+    }
 
     return this.findOne(id);
   }
@@ -529,12 +603,17 @@ export class DocumentsPurchasesService {
     documentTypeId?: string,
 
     status?: number,
+
+    category?: string,
+
+    direction?: number,
   ) {
     return this.prisma.documents.findMany({
       where: {
         document_types: {
-          direction: -1,
+          direction: direction ?? -1,
           category: { not: 'VALE' },
+          ...(category ? { category } : {}),
         },
 
         ...(documentTypeId
@@ -609,6 +688,30 @@ export class DocumentsPurchasesService {
             taxes: true,
           },
         },
+
+        parent_document: {
+          select: {
+            id: true,
+            number: true,
+            descrip: true,
+            status: true,
+            document_types: { select: { code: true, description: true, category: true } },
+          },
+        },
+
+        child_documents: {
+          select: {
+            id: true,
+            number: true,
+            descrip: true,
+            status: true,
+            total: true,
+            document_types: { select: { code: true, description: true, category: true } },
+          },
+          orderBy: { created_at: 'asc' },
+        },
+
+        orden_compra_doc: true,
 
         payment_documents: {
           where: { deleted_at: null },

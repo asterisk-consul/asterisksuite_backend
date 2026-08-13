@@ -2,11 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
-
-function parseLocalDate(dateStr: string): Date {
-  const [y, m, d] = dateStr.split('-').map(Number)
-  return new Date(y, m - 1, d)
-}
+import { parseLocalDateTime } from '@/common/utils/dates';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
 
@@ -56,7 +52,7 @@ export class PaymentsService {
             const resolved = await this.conversionService.resolveRate(
               dto.currency_code,
               baseCurrency.code,
-              parseLocalDate(dto.date),
+              parseLocalDateTime(dto.date),
               rateType,
             )
             exchangeRate = resolved.rate
@@ -70,12 +66,13 @@ export class PaymentsService {
     }
 
     try {
+      console.log('[payments] create dto.date:', dto.date, '→ parsed:', parseLocalDateTime(dto.date).toISOString())
       const payment = await this.prisma.payments.create({
         data: {
           number: nextNumber,
           type: dto.type as any,
           payment_mode: (dto.payment_mode as any) ?? 'NORMAL',
-          date: parseLocalDate(dto.date),
+          date: parseLocalDateTime(dto.date),
           party_id: dto.party_id,
           party_type: dto.party_type,
           payment_method: dto.payment_method as any,
@@ -352,7 +349,7 @@ export class PaymentsService {
       updated_by: userId,
     };
 
-    if (dto.date) data.date = parseLocalDate(dto.date);
+    if (dto.date) data.date = parseLocalDateTime(dto.date);
     if (dto.party_id) data.party_id = dto.party_id;
     if (dto.party_type) data.party_type = dto.party_type;
     if (dto.payment_method) data.payment_method = dto.payment_method;
@@ -512,7 +509,7 @@ export class PaymentsService {
         reference_type: 'payment',
         reference_id: payment.id,
         payment_id: payment.id,
-        date: payment.date instanceof Date ? payment.date.toISOString() : payment.date,
+        date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
       },
       userId,
     );

@@ -140,6 +140,11 @@ export type presupuesto_documents = Prisma.presupuesto_documentsModel
  */
 export type orden_venta_documents = Prisma.orden_venta_documentsModel
 /**
+ * Model orden_compra_documents
+ * 
+ */
+export type orden_compra_documents = Prisma.orden_compra_documentsModel
+/**
  * Model employees
  * 
  */

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 @Injectable()
 export class HrService {
@@ -40,7 +41,7 @@ export class HrService {
         type: dto.type as any,
         amount: dto.amount,
         currency_code: dto.currency_code,
-        date: new Date(dto.date),
+        date: parseLocalDateTime(dto.date),
         description: dto.description,
         status: 'DRAFT',
         created_by: userId,

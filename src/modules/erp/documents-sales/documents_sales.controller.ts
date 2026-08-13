@@ -57,8 +57,14 @@ export class DocumentsSalesController {
     @Query('documentTypeId') documentTypeId?: string,
     @Query('status') status?: string,
     @Query('category') category?: string,
+    @Query('direction') direction?: string,
   ) {
-    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined, category);
+    return this.service.findAll(
+      documentTypeId,
+      status !== undefined ? Number(status) : undefined,
+      category,
+      direction !== undefined ? Number(direction) : undefined,
+    );
   }
 
   @Get('pending')

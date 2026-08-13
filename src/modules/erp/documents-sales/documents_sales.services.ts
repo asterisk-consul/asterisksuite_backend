@@ -3,6 +3,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 
@@ -81,6 +82,29 @@ export class DocumentsSalesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
+    // ─── Validar parent_document_id (NC/ND → Factura) ───────────
+    if (dto.parent_document_id) {
+      const parentDoc = await this.prisma.documents.findUnique({
+        where: { id: dto.parent_document_id },
+        include: { document_types: { select: { category: true, direction: true } } },
+      })
+      if (!parentDoc) {
+        throw new BadRequestException('El documento referenciado no existe')
+      }
+      if (parentDoc.status !== STATUS_CONFIRMED) {
+        throw new BadRequestException('El documento referenciado debe estar confirmado')
+      }
+      if (parentDoc.document_types?.category !== 'INVOICE') {
+        throw new BadRequestException('Solo se puede referenciar una factura')
+      }
+      if (parentDoc.document_types?.direction !== docType.direction) {
+        throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante')
+      }
+      if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
+        throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada')
+      }
+    }
+
     // ─── Validar contexto fiscal (emisor × receptor) ───────────
     const fiscalCtx = await this.fiscalValidation.resolveFiscalContext({
       direction: 'SALE',
@@ -131,7 +155,7 @@ export class DocumentsSalesService {
         const resolved = await this.conversionService.resolveRate(
           currencyCode,
           baseCurrency.code,
-          new Date(dto.date),
+          parseLocalDateTime(dto.date),
           rateType,
         )
         exchangeRate = resolved.rate
@@ -215,7 +239,7 @@ export class DocumentsSalesService {
 
           number,
 
-          date: new Date(dto.date),
+          date: parseLocalDateTime(dto.date),
 
           status: STATUS_DRAFT,
 
@@ -239,6 +263,8 @@ export class DocumentsSalesService {
 
           ref: dto.ref ?? null,
 
+          parent_document_id: dto.parent_document_id ?? null,
+
           validity_date: dto.validity_date ? new Date(dto.validity_date) : null,
 
           ...(!isBase ? await this.conversionService.convertDocumentFields(
@@ -252,7 +278,7 @@ export class DocumentsSalesService {
               total: Number(totals.total),
               taxable_base: Number(totals.taxable_base),
             },
-            new Date(dto.date),
+            parseLocalDateTime(dto.date),
           ) : {}),
         },
       });
@@ -403,7 +429,7 @@ export class DocumentsSalesService {
           const resolved = await this.conversionService.resolveRate(
             updateCurrencyCode,
             updateBaseCurrency.code,
-            new Date(dto.date ?? doc.date),
+            parseLocalDateTime(dto.date ?? doc.date),
             updateRateType,
           )
           updateExchangeRate = resolved.rate
@@ -517,7 +543,7 @@ export class DocumentsSalesService {
         data: {
           party_id: dto.party_id ?? doc.party_id,
 
-          date: dto.date ? new Date(dto.date) : doc.date,
+          date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
 
           status: dto.status ?? doc.status,
 
@@ -554,7 +580,7 @@ export class DocumentsSalesService {
               total: Number(totals.total),
               taxable_base: Number(totals.taxable_base),
             },
-            new Date(dto.date ?? doc.date),
+            parseLocalDateTime(dto.date ?? doc.date),
           ) : {}),
         },
       });
@@ -629,11 +655,13 @@ export class DocumentsSalesService {
     status?: number,
 
     category?: string,
+
+    direction?: number,
   ) {
     return this.prisma.documents.findMany({
       where: {
         document_types: {
-          direction: 1,
+          direction: direction ?? 1,
 
           ...(category ? { category } : {}),
         },

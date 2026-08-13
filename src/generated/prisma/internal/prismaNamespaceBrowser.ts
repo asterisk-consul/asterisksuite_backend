@@ -71,6 +71,7 @@ export const ModelName = {
   documents: 'documents',
   presupuesto_documents: 'presupuesto_documents',
   orden_venta_documents: 'orden_venta_documents',
+  orden_compra_documents: 'orden_compra_documents',
   employees: 'employees',
   partners: 'partners',
   product_structure_versions: 'product_structure_versions',
@@ -573,6 +574,25 @@ export const Orden_venta_documentsScalarFieldEnum = {
 } as const
 
 export type Orden_venta_documentsScalarFieldEnum = (typeof Orden_venta_documentsScalarFieldEnum)[keyof typeof Orden_venta_documentsScalarFieldEnum]
+
+
+export const Orden_compra_documentsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  priority: 'priority',
+  delivery_address: 'delivery_address',
+  delivery_contact: 'delivery_contact',
+  delivery_phone: 'delivery_phone',
+  delivery_time: 'delivery_time',
+  delivery_instructions: 'delivery_instructions',
+  transport_provider: 'transport_provider',
+  confirmed_delivery_date: 'confirmed_delivery_date',
+  buyer_id: 'buyer_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Orden_compra_documentsScalarFieldEnum = (typeof Orden_compra_documentsScalarFieldEnum)[keyof typeof Orden_compra_documentsScalarFieldEnum]
 
 
 export const EmployeesScalarFieldEnum = {
