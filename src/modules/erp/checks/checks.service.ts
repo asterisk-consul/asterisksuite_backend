@@ -67,12 +67,7 @@ export class ChecksService {
     // Impactar cuenta corriente
     if (dto.party_id) {
       let currentAccount = await this.prisma.current_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: dto.party_id,
-            currency_code: dto.currency_code,
-          },
-        },
+        where: { party_id: dto.party_id },
       });
 
       if (!currentAccount) {
@@ -80,7 +75,6 @@ export class ChecksService {
           data: {
             party_id: dto.party_id,
             party_type: dto.party_type ?? (dto.is_own ? 'SUPPLIER' : 'CUSTOMER'),
-            currency_code: dto.currency_code,
             balance: 0,
             created_by: userId,
           },

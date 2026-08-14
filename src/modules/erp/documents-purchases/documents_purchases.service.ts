@@ -77,7 +77,7 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
-    // ─── Validar parent_document_id (NC/ND → Factura) ───────────
+    // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
         where: { id: dto.parent_document_id },
@@ -86,11 +86,19 @@ export class DocumentsPurchasesService {
       if (!parentDoc) {
         throw new BadRequestException('El documento referenciado no existe')
       }
-      if (parentDoc.status !== STATUS_CONFIRMED) {
-        throw new BadRequestException('El documento referenciado debe estar confirmado')
+      if (parentDoc.status < 1) {
+        throw new BadRequestException('El documento referenciado debe estar aprobado')
       }
-      if (parentDoc.document_types?.category !== 'INVOICE') {
+      const parentCategory = parentDoc.document_types?.category
+      const newCategory = docType.category
+      const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(newCategory)
+      const isInvoice = newCategory === 'INVOICE'
+
+      if (isNcNd && parentCategory !== 'INVOICE') {
         throw new BadRequestException('Solo se puede referenciar una factura')
+      }
+      if (isInvoice && !['ORDER', 'REMITO', 'INVOICE'].includes(parentCategory)) {
+        throw new BadRequestException('El documento referenciado debe ser una orden de compra, remito o factura')
       }
       if (parentDoc.document_types?.direction !== docType.direction) {
         throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante')
@@ -612,7 +620,6 @@ export class DocumentsPurchasesService {
       where: {
         document_types: {
           direction: direction ?? -1,
-          category: { not: 'VALE' },
           ...(category ? { category } : {}),
         },
 

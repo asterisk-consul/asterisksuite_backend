@@ -114,6 +114,7 @@ export class EmployeesService {
         hire_date: dto.hire_date ? new Date(dto.hire_date) : undefined,
         salary: dto.salary,
         currency_code: dto.currency_code ?? 'USD',
+        default_commission_rate: dto.default_commission_rate ?? null,
         is_active: dto.is_active ?? true,
         created_by: userId,
       },

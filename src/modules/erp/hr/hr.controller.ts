@@ -60,4 +60,24 @@ export class HrController {
   getHrBalance(@Param('partyId') partyId: string, @Param('currencyCode') currencyCode: string) {
     return this.service.getHrBalance(partyId, currencyCode);
   }
+
+  // ══════════════════════════════════════════════════════════
+  // REPORTE DE COMISIONES
+  // ══════════════════════════════════════════════════════════
+
+  @Get('commissions')
+  getCommissionsReport(
+    @Query('month') month: string,
+    @Query('seller_id') sellerId?: string,
+  ) {
+    return this.service.getCommissionsReport(month, sellerId);
+  }
+
+  @Post('commissions/vale')
+  generateCommissionVale(
+    @Body() body: { seller_id: string; month: string },
+    @Request() req: any,
+  ) {
+    return this.service.generateCommissionVale(body.seller_id, body.month, req.user.id);
+  }
 }

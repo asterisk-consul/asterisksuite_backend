@@ -295,6 +295,14 @@ VALUES
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   affects_payment = EXCLUDED.affects_payment;
+
+-- Vales RRHH
+INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
+VALUES
+  (gen_random_uuid(), 'VALE', 'Recibo de Sueldo / Vale RRHH', -1, 'VALE', null, null, false, false, false, true, false, true, true)
+ON CONFLICT (code) DO UPDATE SET
+  description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
+  affects_payment = EXCLUDED.affects_payment;
 `
 
 const SQL_DOCUMENT_TYPE_TAXES = `

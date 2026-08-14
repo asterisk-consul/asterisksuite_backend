@@ -176,6 +176,33 @@ export class PaymentsService {
             updated_by: userId,
           },
         });
+
+        // If document is a VALE, mark the hr_vale as PAID
+        const doc = await tx.documents.findUnique({
+          where: { id: pd.document_id },
+          include: { document_types: { select: { category: true } } },
+        });
+        if (doc?.document_types?.category === 'VALE' && payment.party_id) {
+          // Extract vale number from description "Vale #N"
+          const match = doc.descrip?.match(/Vale #(\d+)/);
+          if (match) {
+            const valeNumber = parseInt(match[1], 10);
+            await tx.hr_vales.updateMany({
+              where: {
+                party_id: payment.party_id,
+                number: valeNumber,
+                status: 'CONFIRMED',
+                deleted_at: null,
+              },
+              data: {
+                status: 'PAID',
+                paid_at: new Date(),
+                updated_at: new Date(),
+                updated_by: userId,
+              },
+            });
+          }
+        }
       }
 
       // Create cash box movement

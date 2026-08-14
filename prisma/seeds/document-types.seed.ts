@@ -443,6 +443,20 @@ const documentTypes = [
     affects_accounting: true,
     affects_tax_book: false,
   },
+  {
+    code: 'VALE',
+    description: 'Recibo de Sueldo / Vale RRHH',
+    direction: -1,
+    category: 'VALE',
+    letter_type: null,
+    afip_code: null,
+    requires_cae: false,
+    is_electronic: false,
+    affects_stock: false,
+    affects_accounting: true,
+    affects_tax_book: false,
+    affects_payment: true,
+  },
 ];
 
 // Secuencias por defecto para los nuevos tipos
@@ -466,6 +480,7 @@ const sequences = [
   { name: 'Notas de Débito A', point_of_sale: '0001', prefix: 'NDA', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'A' },
   { name: 'Notas de Débito B', point_of_sale: '0001', prefix: 'NDB', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'B' },
   { name: 'Recibos', point_of_sale: '0001', prefix: 'REC', forCategory: 'RECEIPT' },
+  { name: 'VALES', point_of_sale: '0003', prefix: 'V', forCategory: 'VALE' },
 ];
 
 async function main() {

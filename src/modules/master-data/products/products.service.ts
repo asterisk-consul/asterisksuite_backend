@@ -28,7 +28,7 @@ export class ProductsService {
       });
 
       if (existing) {
-        throw new ConflictException(`Ya existe un producto con SKU ${data.sku}`);
+        throw new ConflictException(`Producto duplicado: ya existe un producto con SKU ${data.sku}`);
       }
     }
 
@@ -351,7 +351,7 @@ export class ProductsService {
       });
 
       if (existing) {
-        throw new ConflictException(`Ya existe otro producto con SKU ${data.sku}`);
+        throw new ConflictException(`Producto duplicado: ya existe otro producto con SKU ${data.sku}`);
       }
     }
 

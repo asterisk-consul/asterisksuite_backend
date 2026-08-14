@@ -13,9 +13,10 @@ model employees {
   position        String?   @db.VarChar(100)
   department      String?   @db.VarChar(100)
   hire_date       DateTime? @db.Date
-  salary          Decimal?  @db.Decimal(15, 2)
-  currency_code   String    @db.VarChar(10)
-  is_active       Boolean   @default(true)
+  salary               Decimal?  @db.Decimal(15, 2)
+  currency_code         String    @db.VarChar(10)
+  default_commission_rate Decimal? @db.Decimal(5, 2)
+  is_active             Boolean   @default(true)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -24,9 +25,10 @@ model employees {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  party      business_parties?    @relation(fields: [party_id], references: [id])
-  cash_boxes cash_boxes[]
-  movements  cash_box_movements[]
+  party          business_parties?    @relation(fields: [party_id], references: [id])
+  cash_boxes     cash_boxes[]
+  movements      cash_box_movements[]
+  sales_ordenes  orden_venta_documents[]
 
   @@index([party_id])
   @@schema("tenant")

@@ -179,6 +179,9 @@ export class CreateDocumentDto {
   seller_id?: string;
 
   @IsOptional()
+  commission_rate?: number;
+
+  @IsOptional()
   @IsUUID()
   buyer_id?: string;
 

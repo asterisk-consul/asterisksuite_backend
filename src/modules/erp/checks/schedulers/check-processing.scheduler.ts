@@ -118,12 +118,7 @@ export class CheckProcessingScheduler {
 
           if (payment?.party_id) {
             const currentAccount = await prisma.current_accounts.findUnique({
-              where: {
-                party_id_currency_code: {
-                  party_id: payment.party_id,
-                  currency_code: check.currency_code,
-                },
-              },
+              where: { party_id: payment.party_id },
             });
 
             if (currentAccount) {

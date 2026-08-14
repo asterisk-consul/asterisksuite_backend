@@ -251,6 +251,18 @@ export class UsersController {
     return this.rolesService.assignRoles(userId, body.roleIds);
   }
 
+  @Get('me/permissions')
+  async myPermissions(@CurrentUser() user: AuthUser) {
+    const context = await this.contextBuilder.build(user.id);
+
+    return {
+      userId: user.id,
+      roles: context.roles,
+      permissions: Array.from(context.permissions),
+      overrides: Array.from(context.overrides.entries()),
+    };
+  }
+
   @Get(':userId/permissions')
   @RequirePermissions('users.read_permissions')
   async getEffectivePermissions(@Param('userId') userId: string) {
@@ -258,18 +270,6 @@ export class UsersController {
 
     return {
       userId,
-      roles: context.roles,
-      permissions: Array.from(context.permissions),
-      overrides: Array.from(context.overrides.entries()),
-    };
-  }
-
-  @Get('me/permissions')
-  async myPermissions(@CurrentUser() user: AuthUser) {
-    const context = await this.contextBuilder.build(user.id);
-
-    return {
-      userId: user.id,
       roles: context.roles,
       permissions: Array.from(context.permissions),
       overrides: Array.from(context.overrides.entries()),

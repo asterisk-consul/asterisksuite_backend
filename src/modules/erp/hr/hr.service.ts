@@ -69,6 +69,13 @@ export class HrService {
       where,
       include: {
         party: { select: { id: true, name: true, tax_id: true } },
+        commission_details: {
+          include: {
+            document: {
+              select: { id: true, number: true, date: true },
+            },
+          },
+        },
       },
       orderBy: { date: 'desc' },
     });
@@ -94,6 +101,13 @@ export class HrService {
       where: { id },
       include: {
         party: { select: { id: true, name: true, tax_id: true } },
+        commission_details: {
+          include: {
+            document: {
+              select: { id: true, number: true, date: true },
+            },
+          },
+        },
       },
     });
 
@@ -308,14 +322,9 @@ export class HrService {
   // ══════════════════════════════════════════════════════════
 
   private async createCurrentAccountEntry(vale: any, documentId: string, userId: string) {
-    // Buscar o crear cuenta corriente
+    // Buscar o crear cuenta corriente (una por party, sin currency_code)
     let account = await this.prisma.current_accounts.findUnique({
-      where: {
-        party_id_currency_code: {
-          party_id: vale.party_id,
-          currency_code: vale.currency_code,
-        },
-      },
+      where: { party_id: vale.party_id },
     });
 
     if (!account) {
@@ -323,7 +332,6 @@ export class HrService {
         data: {
           party_id: vale.party_id,
           party_type: vale.party_type,
-          currency_code: vale.currency_code,
           balance: 0,
           created_by: userId,
         },
@@ -340,7 +348,7 @@ export class HrService {
     await this.prisma.current_account_entries.create({
       data: {
         current_account_id: account.id,
-        type: 'SUELDO',
+        type: isDebit ? 'COLLECTION' : 'PAYMENT',
         amount,
         currency_code: vale.currency_code,
         balance_before: currentBalance,
@@ -485,5 +493,221 @@ export class HrService {
     });
 
     return { balance: account?.balance ?? 0 };
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // REPORTE DE COMISIONES
+  // ══════════════════════════════════════════════════════════
+
+  async getCommissionsReport(month: string, sellerId?: string) {
+    // month format: "YYYY-MM"
+    const [year, monthNum] = month.split('-').map(Number);
+    const startDate = new Date(year, monthNum - 1, 1);
+    const endDate = new Date(year, monthNum, 0, 23, 59, 59, 999);
+
+    // Find OV documents with commission, not settled, and with associated invoice
+    const ordenes = await this.prisma.orden_venta_documents.findMany({
+      where: {
+        seller_id: sellerId ? sellerId : { not: null },
+        commission_rate: { not: null },
+        commission_settled_at: null,
+        document: {
+          date: { gte: startDate, lte: endDate },
+          deleted_at: null,
+          child_documents: {
+            some: {
+              deleted_at: null,
+              status: { in: [1, 2] },
+              document_types: { category: 'INVOICE' },
+            },
+          },
+        },
+      },
+      include: {
+        seller: {
+          select: { id: true, first_name: true, last_name: true, party_id: true },
+        },
+        document: {
+          select: { id: true, number: true, subtotal: true, date: true, currency_code: true },
+        },
+      },
+      orderBy: { document: { date: 'asc' } },
+    });
+
+    // Group by seller
+    const sellerMap = new Map<string, {
+      seller_id: string;
+      seller_name: string;
+      party_id: string | null;
+      total_ventas: number;
+      total_comisiones: number;
+      cantidad_ov: number;
+      items: {
+        document_id: string;
+        ov_number: number;
+        subtotal: number;
+        commission_rate: number;
+        commission_amount: number;
+        date: Date;
+      }[];
+    }>();
+
+    for (const ov of ordenes) {
+      const key = ov.seller_id!;
+      if (!sellerMap.has(key)) {
+        const seller = ov.seller!;
+        sellerMap.set(key, {
+          seller_id: key,
+          seller_name: `${seller.first_name} ${seller.last_name}`,
+          party_id: seller.party_id,
+          total_ventas: 0,
+          total_comisiones: 0,
+          cantidad_ov: 0,
+          items: [],
+        });
+      }
+
+      const entry = sellerMap.get(key)!;
+      const subtotal = Number(ov.document.subtotal);
+      const rate = Number(ov.commission_rate);
+      const amount = subtotal * rate / 100;
+
+      entry.total_ventas += subtotal;
+      entry.total_comisiones += amount;
+      entry.cantidad_ov += 1;
+      entry.items.push({
+        document_id: ov.document_id,
+        ov_number: ov.document.number,
+        subtotal,
+        commission_rate: rate,
+        commission_amount: amount,
+        date: ov.document.date,
+      });
+    }
+
+    return {
+      month,
+      sellers: Array.from(sellerMap.values()),
+      total_ventas: Array.from(sellerMap.values()).reduce((s, v) => s + v.total_ventas, 0),
+      total_comisiones: Array.from(sellerMap.values()).reduce((s, v) => s + v.total_comisiones, 0),
+      cantidad_ov: Array.from(sellerMap.values()).reduce((s, v) => s + v.cantidad_ov, 0),
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // GENERAR VALE EXTRAS POR COMISIONES
+  // ══════════════════════════════════════════════════════════
+
+  async generateCommissionVale(sellerId: string, month: string, userId: string) {
+    const [year, monthNum] = month.split('-').map(Number);
+    const startDate = new Date(year, monthNum - 1, 1);
+    const endDate = new Date(year, monthNum, 0, 23, 59, 59, 999);
+
+    // Find unsettled OV for this seller in this month with associated invoice
+    const ordenes = await this.prisma.orden_venta_documents.findMany({
+      where: {
+        seller_id: sellerId,
+        commission_rate: { not: null },
+        commission_settled_at: null,
+        document: {
+          date: { gte: startDate, lte: endDate },
+          deleted_at: null,
+          child_documents: {
+            some: {
+              deleted_at: null,
+              status: { in: [1, 2] },
+              document_types: { category: 'INVOICE' },
+            },
+          },
+        },
+      },
+      include: {
+        seller: {
+          select: { id: true, first_name: true, last_name: true, party_id: true },
+        },
+        document: {
+          select: { id: true, number: true, subtotal: true, date: true, currency_code: true },
+        },
+      },
+    });
+
+    if (!ordenes.length) {
+      throw new BadRequestException('No hay comisiones pendientes para este vendedor en este mes');
+    }
+
+    const seller = ordenes[0].seller!;
+    const partyId = seller.party_id;
+
+    if (!partyId) {
+      throw new BadRequestException('El vendedor no tiene una party asociada');
+    }
+
+    // Calculate total
+    let totalCommission = 0;
+    for (const ov of ordenes) {
+      const subtotal = Number(ov.document.subtotal);
+      const rate = Number(ov.commission_rate);
+      totalCommission += subtotal * rate / 100;
+    }
+
+    // Create vale
+    const lastVale = await this.prisma.hr_vales.findFirst({
+      where: { party_id: partyId },
+      orderBy: { number: 'desc' },
+    });
+    const valeNumber = (lastVale?.number ?? 0) + 1;
+
+    const [yearStr, monthStr] = month.split('-');
+    const valeDate = new Date(parseInt(yearStr), parseInt(monthStr) - 1, 1);
+
+    const vale = await this.prisma.hr_vales.create({
+      data: {
+        number: valeNumber,
+        party_id: partyId,
+        party_type: 'EMPLOYEE',
+        type: 'EXTRAS',
+        amount: totalCommission,
+        currency_code: ordenes[0].document.currency_code ?? 'ARS',
+        date: valeDate,
+        description: `Comisiones ${month} - ${seller.first_name} ${seller.last_name}`,
+        status: 'DRAFT',
+        created_by: userId,
+      },
+      include: {
+        party: { select: { id: true, name: true, tax_id: true } },
+      },
+    });
+
+    // Create commission detail lines
+    for (const ov of ordenes) {
+      const subtotal = Number(ov.document.subtotal);
+      const rate = Number(ov.commission_rate);
+      const amount = subtotal * rate / 100;
+
+      await this.prisma.hr_vale_commission_details.create({
+        data: {
+          hr_vale_id: vale.id,
+          document_id: ov.document_id,
+          seller_id: sellerId,
+          subtotal,
+          commission_rate: rate,
+          commission_amount: amount,
+          date: ov.document.date,
+        },
+      });
+
+      // Mark OV as settled
+      await this.prisma.orden_venta_documents.update({
+        where: { document_id: ov.document_id },
+        data: {
+          commission_settled_at: new Date(),
+          commission_vale_id: vale.id,
+        },
+      });
+    }
+
+    this.logger.log(`Vale EXTRAS #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`);
+
+    return vale;
   }
 }

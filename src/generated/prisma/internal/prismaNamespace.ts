@@ -413,6 +413,7 @@ export const ModelName = {
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
+  hr_vale_commission_details: 'hr_vale_commission_details',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -510,7 +511,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2657,6 +2658,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.hr_valesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Hr_valesCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_vale_commission_details: {
+      payload: Prisma.$hr_vale_commission_detailsPayload<ExtArgs>
+      fields: Prisma.hr_vale_commission_detailsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_vale_commission_detailsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_vale_commission_detailsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_vale_commission_detailsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_vale_commission_detailsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>
+        }
+        findMany: {
+          args: Prisma.hr_vale_commission_detailsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>[]
+        }
+        create: {
+          args: Prisma.hr_vale_commission_detailsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>
+        }
+        createMany: {
+          args: Prisma.hr_vale_commission_detailsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_vale_commission_detailsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_vale_commission_detailsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>
+        }
+        update: {
+          args: Prisma.hr_vale_commission_detailsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_vale_commission_detailsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_vale_commission_detailsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_vale_commission_detailsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_vale_commission_detailsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_commission_detailsPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_vale_commission_detailsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_vale_commission_details>
+        }
+        groupBy: {
+          args: Prisma.hr_vale_commission_detailsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_vale_commission_detailsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_vale_commission_detailsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_vale_commission_detailsCountAggregateOutputType> | number
         }
       }
     }
@@ -9156,6 +9231,9 @@ export const Orden_venta_documentsScalarFieldEnum = {
   transport_provider: 'transport_provider',
   confirmed_delivery_date: 'confirmed_delivery_date',
   seller_id: 'seller_id',
+  commission_rate: 'commission_rate',
+  commission_settled_at: 'commission_settled_at',
+  commission_vale_id: 'commission_vale_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -9195,6 +9273,7 @@ export const EmployeesScalarFieldEnum = {
   hire_date: 'hire_date',
   salary: 'salary',
   currency_code: 'currency_code',
+  default_commission_rate: 'default_commission_rate',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -9348,6 +9427,21 @@ export const Hr_valesScalarFieldEnum = {
 } as const
 
 export type Hr_valesScalarFieldEnum = (typeof Hr_valesScalarFieldEnum)[keyof typeof Hr_valesScalarFieldEnum]
+
+
+export const Hr_vale_commission_detailsScalarFieldEnum = {
+  id: 'id',
+  hr_vale_id: 'hr_vale_id',
+  document_id: 'document_id',
+  seller_id: 'seller_id',
+  subtotal: 'subtotal',
+  commission_rate: 'commission_rate',
+  commission_amount: 'commission_amount',
+  date: 'date',
+  created_at: 'created_at'
+} as const
+
+export type Hr_vale_commission_detailsScalarFieldEnum = (typeof Hr_vale_commission_detailsScalarFieldEnum)[keyof typeof Hr_vale_commission_detailsScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {
@@ -11687,6 +11781,7 @@ export type GlobalOmitConfig = {
   hr_accounts?: Prisma.hr_accountsOmit
   hr_account_entries?: Prisma.hr_account_entriesOmit
   hr_vales?: Prisma.hr_valesOmit
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsOmit
   cargo_transfer_items?: Prisma.cargo_transfer_itemsOmit
   cargo_transfers?: Prisma.cargo_transfersOmit
   delivery_notes?: Prisma.delivery_notesOmit

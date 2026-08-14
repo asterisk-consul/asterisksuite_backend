@@ -124,9 +124,8 @@ export function getValidTransitions(category: string | null | undefined, current
       1: [2, 8],        // Aprobada → En Preparación, Cancelada
       2: [3, 8],        // En Preparación → Lista Despacho, Cancelada
       3: [4, 5],        // Lista Despacho → Parcial Entregada, Entregada
-      4: [5, 6],        // Parcial Entregada → Entregada, Facturada
-      5: [6, 7],        // Entregada → Facturada, Cerrada
-      6: [7],           // Facturada → Cerrada
+      4: [5],           // Parcial Entregada → Entregada
+      5: [7],           // Entregada → Cerrada
     },
     REMITO: {
       0: [1, 3],        // Borrador → En Tránsito, Cancelado

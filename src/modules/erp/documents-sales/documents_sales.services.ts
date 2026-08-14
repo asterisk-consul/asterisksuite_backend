@@ -82,7 +82,7 @@ export class DocumentsSalesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
-    // ─── Validar parent_document_id (NC/ND → Factura) ───────────
+    // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
         where: { id: dto.parent_document_id },
@@ -91,11 +91,19 @@ export class DocumentsSalesService {
       if (!parentDoc) {
         throw new BadRequestException('El documento referenciado no existe')
       }
-      if (parentDoc.status !== STATUS_CONFIRMED) {
-        throw new BadRequestException('El documento referenciado debe estar confirmado')
+      if (parentDoc.status < 1) {
+        throw new BadRequestException('El documento referenciado debe estar aprobado')
       }
-      if (parentDoc.document_types?.category !== 'INVOICE') {
+      const parentCategory = parentDoc.document_types?.category
+      const newCategory = docType.category
+      const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(newCategory)
+      const isInvoice = newCategory === 'INVOICE'
+
+      if (isNcNd && parentCategory !== 'INVOICE') {
         throw new BadRequestException('Solo se puede referenciar una factura')
+      }
+      if (isInvoice && !['ORDER', 'REMITO', 'INVOICE'].includes(parentCategory)) {
+        throw new BadRequestException('El documento referenciado debe ser una orden de venta, remito o factura')
       }
       if (parentDoc.document_types?.direction !== docType.direction) {
         throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante')
@@ -313,6 +321,7 @@ export class DocumentsSalesService {
             transport_provider: dto.transport_provider ?? null,
             confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
             seller_id: dto.seller_id ?? null,
+            commission_rate: dto.commission_rate ?? null,
           },
         });
       }
@@ -343,6 +352,59 @@ export class DocumentsSalesService {
             converted_tax_amount: isBase ? null : this.conversionService.convertAmount(t.tax_amount, exchangeRate),
           })),
         });
+      }
+
+      // ─── Tracking: INVOICE referencing ORDER → update quantity_invoiced + status ───
+      if (docType.category === 'INVOICE' && dto.parent_document_id) {
+        const parentCategory = (await tx.document_types.findFirst({
+          where: { id: dto.document_type_id },
+          select: { category: true },
+        }))?.category
+
+        if (parentCategory === 'ORDER') {
+          const parentItems = await tx.document_items.findMany({
+            where: { document_id: dto.parent_document_id },
+          })
+
+          // Match invoice items to parent items by product_id, consuming remaining quantity
+          const invoiceItems = await tx.document_items.findMany({
+            where: { document_id: document.id },
+          })
+
+          const parentItemMap = new Map<string, { remaining: number; item: any }>()
+          for (const pi of parentItems) {
+            const alreadyInvoiced = Number(pi.quantity_invoiced ?? 0)
+            const remaining = Number(pi.quantity) - alreadyInvoiced
+            if (remaining > 0) {
+              const key = pi.product_id ?? `idx-${pi.id}`
+              const existing = parentItemMap.get(key)
+              if (existing) {
+                existing.remaining += remaining
+              } else {
+                parentItemMap.set(key, { remaining, item: pi })
+              }
+            }
+          }
+
+          let allFullyInvoiced = parentItems.length > 0
+
+          for (const invoiceItem of invoiceItems) {
+            const key = invoiceItem.product_id ?? `idx-${invoiceItem.id}`
+            const match = parentItemMap.get(key)
+            if (match && match.remaining > 0) {
+              const consume = Math.min(Number(invoiceItem.quantity), match.remaining)
+              const newInvoiced = Number(match.item.quantity_invoiced ?? 0) + consume
+              await tx.document_items.update({
+                where: { id: match.item.id },
+                data: { quantity_invoiced: newInvoiced },
+              })
+              match.remaining -= consume
+              if (match.remaining <= 0) parentItemMap.delete(key)
+            }
+          }
+
+          // Facturación se deriva de child_documents, no de status
+        }
       }
     });
 
@@ -584,6 +646,32 @@ export class DocumentsSalesService {
           ) : {}),
         },
       });
+
+      // ─── Update OV extension if applicable ─────────────
+      const existingExtension = await tx.orden_venta_documents.findUnique({
+        where: { document_id: id },
+      });
+
+      if (existingExtension) {
+        await tx.orden_venta_documents.update({
+          where: { document_id: id },
+          data: {
+            priority: dto.priority ?? existingExtension.priority,
+            delivery_address: dto.delivery_address ?? existingExtension.delivery_address,
+            delivery_contact: dto.delivery_contact ?? existingExtension.delivery_contact,
+            delivery_phone: dto.delivery_phone ?? existingExtension.delivery_phone,
+            delivery_time: dto.delivery_time ?? existingExtension.delivery_time,
+            delivery_instructions: dto.delivery_instructions ?? existingExtension.delivery_instructions,
+            transport_provider: dto.transport_provider ?? existingExtension.transport_provider,
+            confirmed_delivery_date: dto.confirmed_delivery_date
+              ? new Date(dto.confirmed_delivery_date)
+              : existingExtension.confirmed_delivery_date,
+            seller_id: dto.seller_id ?? existingExtension.seller_id,
+            commission_rate: dto.commission_rate ?? existingExtension.commission_rate,
+            updated_at: new Date(),
+          },
+        });
+      }
     });
 
     return this.findOne(id);
@@ -810,7 +898,19 @@ export class DocumentsSalesService {
         },
 
         presupuesto_doc: true,
-        orden_venta_doc: true,
+        orden_venta_doc: {
+          include: {
+            seller: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                party_id: true,
+                user_id: true,
+              },
+            },
+          },
+        },
 
         payment_documents: {
           where: { deleted_at: null },
@@ -1751,9 +1851,7 @@ export class DocumentsSalesService {
       // Verificar si todos los items fueron facturados
       const allItems = await tx.document_items.findMany({ where: { document_id: id } });
       const allInvoiced = allItems.every(i => Number(i.quantity_invoiced ?? 0) >= Number(i.quantity));
-      if (allInvoiced) {
-        await tx.documents.update({ where: { id }, data: { status: 6 } }); // FACTURADA
-      }
+      // Facturación se deriva de child_documents, no de status
     });
 
     return this.findOne(createdId);

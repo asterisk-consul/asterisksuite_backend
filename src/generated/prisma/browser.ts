@@ -163,6 +163,11 @@ export type hr_account_entries = Prisma.hr_account_entriesModel
  */
 export type hr_vales = Prisma.hr_valesModel
 /**
+ * Model hr_vale_commission_details
+ * 
+ */
+export type hr_vale_commission_details = Prisma.hr_vale_commission_detailsModel
+/**
  * Model cargo_transfer_items
  * 
  */

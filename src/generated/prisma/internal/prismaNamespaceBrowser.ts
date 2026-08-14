@@ -80,6 +80,7 @@ export const ModelName = {
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
+  hr_vale_commission_details: 'hr_vale_commission_details',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -569,6 +570,9 @@ export const Orden_venta_documentsScalarFieldEnum = {
   transport_provider: 'transport_provider',
   confirmed_delivery_date: 'confirmed_delivery_date',
   seller_id: 'seller_id',
+  commission_rate: 'commission_rate',
+  commission_settled_at: 'commission_settled_at',
+  commission_vale_id: 'commission_vale_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -608,6 +612,7 @@ export const EmployeesScalarFieldEnum = {
   hire_date: 'hire_date',
   salary: 'salary',
   currency_code: 'currency_code',
+  default_commission_rate: 'default_commission_rate',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -761,6 +766,21 @@ export const Hr_valesScalarFieldEnum = {
 } as const
 
 export type Hr_valesScalarFieldEnum = (typeof Hr_valesScalarFieldEnum)[keyof typeof Hr_valesScalarFieldEnum]
+
+
+export const Hr_vale_commission_detailsScalarFieldEnum = {
+  id: 'id',
+  hr_vale_id: 'hr_vale_id',
+  document_id: 'document_id',
+  seller_id: 'seller_id',
+  subtotal: 'subtotal',
+  commission_rate: 'commission_rate',
+  commission_amount: 'commission_amount',
+  date: 'date',
+  created_at: 'created_at'
+} as const
+
+export type Hr_vale_commission_detailsScalarFieldEnum = (typeof Hr_vale_commission_detailsScalarFieldEnum)[keyof typeof Hr_vale_commission_detailsScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {

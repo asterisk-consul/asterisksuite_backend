@@ -121,6 +121,22 @@ export class CompaniesService {
     { code: 'companies.update', description: 'Editar empresas' },
     { code: 'companies.delete', description: 'Eliminar empresas' },
 
+    // ERP - Sales
+    { code: 'sales.read', description: 'Ver ventas' },
+    { code: 'sales.create', description: 'Crear ventas' },
+    { code: 'sales.update', description: 'Editar ventas' },
+    { code: 'sales.delete', description: 'Eliminar ventas' },
+    { code: 'sales.confirm', description: 'Confirmar ventas' },
+    { code: 'sales.cancel', description: 'Cancelar ventas' },
+
+    // ERP - Purchases
+    { code: 'purchases.read', description: 'Ver compras' },
+    { code: 'purchases.create', description: 'Crear compras' },
+    { code: 'purchases.update', description: 'Editar compras' },
+    { code: 'purchases.delete', description: 'Eliminar compras' },
+    { code: 'purchases.confirm', description: 'Confirmar compras' },
+    { code: 'purchases.cancel', description: 'Cancelar compras' },
+
     // ═════════════════════════════════════════════════════════════
     // MÓDULOS PENDIENTES — agregar aquí al descomentar en seed
     // ═════════════════════════════════════════════════════════════
@@ -321,7 +337,7 @@ export class CompaniesService {
       { code: 'REC', description: 'Recibo de Pago', direction: 1, category: 'RECEIPT', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false },
 
       // VALES RRHH
-      { code: 'VALE', description: 'Recibo de Sueldo / Vale RRHH', direction: -1, category: 'VALE', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false },
+      { code: 'VALE', description: 'Recibo de Sueldo / Vale RRHH', direction: -1, category: 'VALE', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false, affects_payment: true },
 
       // REMITOS
       { code: 'REM-V', description: 'Remito de Venta', direction: 1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },

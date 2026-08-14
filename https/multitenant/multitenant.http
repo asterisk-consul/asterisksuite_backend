@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3008/api
 
 ########################################################
 
@@ -10,6 +10,7 @@
 
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
+tenant: dev
 
 {
 "name": "Administrador Dyfma",
@@ -24,9 +25,10 @@ Content-Type: application/json
 
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+x-tenant: dev
 
 {
-"email": "admindyfma@test.com",
+"email": "camidev@mail.com",
 "password": "123456"
 }
 
@@ -45,11 +47,12 @@ Content-Type: application/json
 POST {{baseUrl}}/companies
 Authorization: Bearer {{tokenA}}
 Content-Type: application/json
+x-tenant: dev
 
 {
-"name": "Dyfma",
-"subdomain": "dyfma",
-"schemaName": "dyfma"
+"name": "AsteriskConsul",
+"subdomain": "asteriskconsul",
+"schemaName": "asteriskconsul"
 }
 
 ########################################################
@@ -60,15 +63,10 @@ Content-Type: application/json
 
 # @name createProductA
 
-POST {{baseUrl}}/master-data/products
+GET {{baseUrl}}/access-control/users/me/permissions
 Authorization: Bearer {{tokenA}}
 x-tenant: dev
-Content-Type: application/json
 
-{
-"name": "Producto Empresa A",
-"active": true
-}
 
 ########################################################
 

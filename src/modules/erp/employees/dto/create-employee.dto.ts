@@ -124,6 +124,10 @@ export class CreateEmployeeDto {
   @IsBoolean()
   is_active?: boolean;
 
+  @IsOptional()
+  @IsNumber()
+  default_commission_rate?: number;
+
   // ─── Business party fields (for auto-creation) ─
   @IsOptional()
   @IsString()
