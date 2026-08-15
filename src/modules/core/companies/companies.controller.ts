@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -16,14 +17,17 @@ import { UpdateCompanyUserDto, ChangeUserPasswordDto } from './dto/update-compan
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
 
 @Controller('companies')
 @UseGuards(JwtAuthGuard)
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
-  // @RequirePermissions('companies.create')
+  @Get('check-subdomain')
+  checkSubdomain(@Query('subdomain') subdomain: string) {
+    return this.companiesService.checkSubdomain(subdomain);
+  }
+
   @Post()
   create(@CurrentUser('id') userId: string, @Body() dto: CreateCompanyDto) {
     return this.companiesService.create(dto, userId);

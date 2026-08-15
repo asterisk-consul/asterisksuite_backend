@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { Injectable, NotFoundException, ForbiddenException, ConflictException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, ConflictException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -8,6 +8,14 @@ import { Pool, Client } from 'pg';
 import * as bcrypt from 'bcrypt';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@/generated/prisma/client';
+import {
+  RBAC_PERMISSIONS,
+  RBAC_ROLES,
+  SQL_DOCUMENT_TYPES,
+  SQL_DOCUMENT_SEQUENCES,
+  SQL_LINK_SEQUENCES,
+  executeSeedSql,
+} from '../../../../prisma/seeds/seed-sql';
 
 @Injectable()
 export class CompaniesService {
@@ -18,203 +26,6 @@ export class CompaniesService {
   private get prisma() {
     return this.db.getDefaultClient();
   }
-
-  // ─── Default RBAC seed data ────────────────────────────────────
-  // NOTA: Estos permisos se crean automáticamente al crear una empresa.
-  // Para agregar permisos de nuevos módulos, descomentar en rbac.seed.ts
-  // y agregarlos aquí en el mismo orden.
-
-  private readonly defaultPermissions = [
-    // Access Control
-    { code: 'roles.read', description: 'Ver roles' },
-    { code: 'roles.create', description: 'Crear roles' },
-    { code: 'roles.update', description: 'Editar roles' },
-    { code: 'roles.delete', description: 'Eliminar roles' },
-    { code: 'roles.manage_permissions', description: 'Asignar permisos a roles' },
-    { code: 'roles.test', description: 'Probar permisos de usuarios' },
-    { code: 'permissions.read', description: 'Ver catálogo de permisos' },
-    { code: 'users.read_roles', description: 'Ver roles de un usuario' },
-    { code: 'users.assign_roles', description: 'Asignar roles a usuarios' },
-    { code: 'users.read_permissions', description: 'Ver permisos efectivos de un usuario' },
-
-    // Master Data - Products
-    { code: 'products.read', description: 'Ver productos' },
-    { code: 'products.create', description: 'Crear productos' },
-    { code: 'products.update', description: 'Editar productos' },
-    { code: 'products.delete', description: 'Eliminar productos' },
-
-    // ERP - Documents
-    { code: 'documents.read', description: 'Ver documentos' },
-    { code: 'documents.create', description: 'Crear documentos' },
-    { code: 'documents.update', description: 'Editar documentos' },
-    { code: 'documents.delete', description: 'Eliminar documentos' },
-    { code: 'documents.confirm', description: 'Confirmar documentos' },
-    { code: 'documents.cancel', description: 'Cancelar documentos' },
-
-    // ERP - Currencies
-    { code: 'currencies.read', description: 'Ver monedas' },
-    { code: 'currencies.create', description: 'Crear monedas' },
-    { code: 'currencies.update', description: 'Editar monedas' },
-    { code: 'currencies.delete', description: 'Eliminar monedas' },
-
-    // ERP - Taxes
-    { code: 'taxes.read', description: 'Ver impuestos' },
-    { code: 'taxes.create', description: 'Crear impuestos' },
-    { code: 'taxes.update', description: 'Editar impuestos' },
-    { code: 'taxes.delete', description: 'Eliminar impuestos' },
-
-    // ERP - Accounts
-    { code: 'accounts.read', description: 'Ver cuentas contables' },
-    { code: 'accounts.create', description: 'Crear cuentas contables' },
-    { code: 'accounts.update', description: 'Editar cuentas contables' },
-    { code: 'accounts.delete', description: 'Eliminar cuentas contables' },
-
-    // Inventory - Units
-    { code: 'units.read', description: 'Ver unidades de medida' },
-    { code: 'units.create', description: 'Crear unidades de medida' },
-    { code: 'units.update', description: 'Editar unidades de medida' },
-    { code: 'units.delete', description: 'Eliminar unidades de medida' },
-
-    // Inventory - Categories
-    { code: 'categories.read', description: 'Ver categorías' },
-    { code: 'categories.create', description: 'Crear categorías' },
-    { code: 'categories.update', description: 'Editar categorías' },
-    { code: 'categories.delete', description: 'Eliminar categorías' },
-
-    // Logística - Warehouses
-    { code: 'warehouses.read', description: 'Ver almacenes' },
-    { code: 'warehouses.create', description: 'Crear almacenes' },
-    { code: 'warehouses.update', description: 'Editar almacenes' },
-    { code: 'warehouses.delete', description: 'Eliminar almacenes' },
-
-    // Logística - Trips
-    { code: 'trips.read', description: 'Ver viajes' },
-    { code: 'trips.create', description: 'Crear viajes' },
-    { code: 'trips.update', description: 'Editar viajes' },
-    { code: 'trips.delete', description: 'Eliminar viajes' },
-
-    // Logística - Picking
-    { code: 'picking.read', description: 'Ver picking' },
-    { code: 'picking.create', description: 'Crear órdenes de picking' },
-    { code: 'picking.execute', description: 'Ejecutar picking' },
-    { code: 'picking.transfer', description: 'Transferir pallets' },
-
-    // Tesorería - Cuentas Bancarias
-    { code: 'bank_accounts.read', description: 'Ver cuentas bancarias' },
-    { code: 'bank_accounts.create', description: 'Crear cuentas bancarias' },
-    { code: 'bank_accounts.update', description: 'Editar cuentas bancarias' },
-    { code: 'bank_accounts.delete', description: 'Eliminar cuentas bancarias' },
-
-    // Tesorería - Pagos
-    { code: 'payments.read', description: 'Ver pagos' },
-    { code: 'payments.create', description: 'Crear pagos' },
-    { code: 'payments.update', description: 'Editar pagos' },
-    { code: 'payments.delete', description: 'Eliminar pagos' },
-    { code: 'payments.confirm', description: 'Confirmar pagos' },
-    { code: 'payments.mark_as_paid', description: 'Marcar pagos como pagados' },
-    { code: 'payments.reverse', description: 'Anular pagos' },
-    { code: 'payments.reject', description: 'Rechazar pagos' },
-
-    // Core - Companies
-    { code: 'companies.read', description: 'Ver empresas' },
-    { code: 'companies.create', description: 'Crear empresas' },
-    { code: 'companies.update', description: 'Editar empresas' },
-    { code: 'companies.delete', description: 'Eliminar empresas' },
-
-    // ERP - Sales
-    { code: 'sales.read', description: 'Ver ventas' },
-    { code: 'sales.create', description: 'Crear ventas' },
-    { code: 'sales.update', description: 'Editar ventas' },
-    { code: 'sales.delete', description: 'Eliminar ventas' },
-    { code: 'sales.confirm', description: 'Confirmar ventas' },
-    { code: 'sales.cancel', description: 'Cancelar ventas' },
-
-    // ERP - Purchases
-    { code: 'purchases.read', description: 'Ver compras' },
-    { code: 'purchases.create', description: 'Crear compras' },
-    { code: 'purchases.update', description: 'Editar compras' },
-    { code: 'purchases.delete', description: 'Eliminar compras' },
-    { code: 'purchases.confirm', description: 'Confirmar compras' },
-    { code: 'purchases.cancel', description: 'Cancelar compras' },
-
-    // ═════════════════════════════════════════════════════════════
-    // MÓDULOS PENDIENTES — agregar aquí al descomentar en seed
-    // ═════════════════════════════════════════════════════════════
-    // currency_rates.read, currency_rates.create, currency_rates.update, currency_rates.delete
-    // document_types.read, document_types.create, document_types.update, document_types.delete
-    // purchases.read, purchases.create, purchases.update, purchases.delete, purchases.confirm, purchases.cancel
-    // sales_reports.read
-    // pricing.read, pricing.create, pricing.update, pricing.delete
-    // exchange.read, exchange.sync
-    // business_parties.read, business_parties.create, business_parties.update, business_parties.delete
-    // contacts.read, contacts.create, contacts.update, contacts.delete
-    // locations.read, locations.create, locations.update, locations.delete
-    // product_variants.read, product_variants.create, product_variants.update, product_variants.delete
-    // product_components.read, product_components.create, product_components.update, product_components.delete
-    // attributes.read, attributes.create, attributes.update, attributes.delete
-    // product_attribute_values.read, product_attribute_values.create, product_attribute_values.update, product_attribute_values.delete
-    // product_categories.read, product_categories.create, product_categories.delete
-    // tags.read, tags.create, tags.update, tags.delete
-    // product_tags.read, product_tags.create, product_tags.delete
-    // engineering.read, engineering.create, engineering.update, engineering.delete
-    // cost_templates.read, cost_templates.create, cost_templates.update, cost_templates.delete
-    // cost_components.read, cost_components.create, cost_components.update, cost_components.delete
-    // document_sequences.read, document_sequences.create
-    // drivers.read, drivers.create, drivers.update, drivers.delete
-    // vehicles.read, vehicles.create, vehicles.update, vehicles.delete
-    // vehicle_combinations.read, vehicle_combinations.create, vehicle_combinations.update, vehicle_combinations.delete
-    // corridors.read, corridors.create, corridors.update, corridors.delete
-    // transfer_rates.read, transfer_rates.create, transfer_rates.update, transfer_rates.delete
-    // dispatch_orders.read, dispatch_orders.create, dispatch_orders.update, dispatch_orders.delete
-    // delivery_notes.read, delivery_notes.create, delivery_notes.update, delivery_notes.confirm, delivery_notes.delete
-    // transport_document_types.read, transport_document_types.create, transport_document_types.update, transport_document_types.delete
-    // pallets.read, pallets.create, pallets.update, pallets.delete
-    // picking.read, picking.create, picking.execute, picking.transfer
-    // stock.read, stock.movements, stock.create
-    // media.read, media.upload
-    // trash.read, trash.restore, trash.delete
-    // data_import.execute
-  ];
-
-  private readonly defaultRoles = [
-    {
-      code: 'admin',
-      name: 'Administrador',
-      description: 'Acceso total al sistema',
-      is_system: true,
-      permissionCodes: this.defaultPermissions.map((p) => p.code),
-    },
-    {
-      code: 'manager',
-      name: 'Gerente',
-      description: 'Acceso a módulos de negocio sin administración de roles',
-      is_system: true,
-      permissionCodes: this.defaultPermissions
-        .filter((p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.'))
-        .map((p) => p.code),
-    },
-    {
-      code: 'user',
-      name: 'Usuario',
-      description: 'Lectura y escritura básica',
-      is_system: true,
-      permissionCodes: [
-        'products.read', 'products.create', 'products.update',
-        'documents.read', 'documents.create', 'documents.update',
-        'currencies.read', 'taxes.read', 'accounts.read',
-        'units.read', 'units.create', 'units.update',
-        'categories.read', 'categories.create', 'categories.update',
-        'warehouses.read', 'trips.read', 'companies.read',
-      ],
-    },
-    {
-      code: 'viewer',
-      name: 'Observador',
-      description: 'Solo lectura',
-      is_system: true,
-      permissionCodes: this.defaultPermissions.filter((p) => p.code.endsWith('.read')).map((p) => p.code),
-    },
-  ];
 
   // ─── Tenant client helper ──────────────────────────────────────
 
@@ -233,21 +44,22 @@ export class CompaniesService {
   // ─── RBAC seed for new tenant ──────────────────────────────────
 
   private async seedRbacForTenant(tenantDb: string): Promise<void> {
+    const connectionString = `${process.env.DATABASE_URL_BASE}${tenantDb}`;
     const { client: prisma, pool } = this.createTenantPrismaClient(tenantDb);
 
     try {
-      // 1. Create permissions
-      for (const perm of this.defaultPermissions) {
+      // 1. RBAC — Permissions (Prisma upserts)
+      for (const perm of RBAC_PERMISSIONS) {
         await prisma.permissions.upsert({
           where: { code: perm.code },
           update: { description: perm.description, active: true },
           create: { code: perm.code, description: perm.description },
         });
       }
-      this.logger.log(`Tenant "${tenantDb}": ${this.defaultPermissions.length} permisos creados`);
+      this.logger.log(`Tenant "${tenantDb}": ${RBAC_PERMISSIONS.length} permisos creados`);
 
-      // 2. Create roles and assign permissions
-      for (const role of this.defaultRoles) {
+      // 2. RBAC — Roles and assign permissions
+      for (const role of RBAC_ROLES) {
         const created = await prisma.business_roles.upsert({
           where: { code: role.code },
           update: { name: role.name, description: role.description, is_system: role.is_system },
@@ -259,17 +71,14 @@ export class CompaniesService {
           },
         });
 
-        // Clean existing permissions for this role
         await prisma.business_role_permissions.deleteMany({
           where: { role_id: created.id },
         });
 
-        // Get permissions by code
         const perms = await prisma.permissions.findMany({
           where: { code: { in: role.permissionCodes }, active: true },
         });
 
-        // Assign permissions
         if (perms.length) {
           await prisma.business_role_permissions.createMany({
             data: perms.map((p) => ({
@@ -282,164 +91,15 @@ export class CompaniesService {
         this.logger.log(`Tenant "${tenantDb}": Rol "${role.name}" → ${perms.length} permisos`);
       }
 
-      // 3. Create default document types
-      await this.seedDocumentTypesForTenant(prisma);
-
-      // 4. Create document sequences and link to types
-      await this.seedDocumentSequencesForTenant(prisma);
+      // 3. Document types, sequences, and links (SQL from seed-sql.ts)
+      await executeSeedSql(connectionString, SQL_DOCUMENT_TYPES);
+      await executeSeedSql(connectionString, SQL_DOCUMENT_SEQUENCES);
+      await executeSeedSql(connectionString, SQL_LINK_SEQUENCES);
+      this.logger.log(`Tenant "${tenantDb}": Document types + sequences seed OK`);
     } finally {
       await prisma.$disconnect();
       await pool.end();
     }
-  }
-
-  // ─── Document Types seed for new tenant ──────────────────────────
-
-  private async seedDocumentTypesForTenant(prisma: any): Promise<void> {
-    const documentTypes = [
-      // FACTURAS DE VENTA
-      { code: 'FA-A', description: 'Factura A - Responsable Inscripto', direction: 1, category: 'INVOICE', letter_type: 'A', afip_code: '01', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'FB-A', description: 'Factura B - Consumidor Final', direction: 1, category: 'INVOICE', letter_type: 'B', afip_code: '06', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'FC-A', description: 'Factura C - Exento', direction: 1, category: 'INVOICE', letter_type: 'C', afip_code: '11', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'FX-A', description: 'Factura X - Comprobante interno', direction: 1, category: 'INVOICE', letter_type: 'X', afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: false },
-
-      // NOTAS DE CRÉDITO VENTA
-      { code: 'NCA', description: 'Nota de Crédito A', direction: 1, category: 'CREDIT_NOTE', letter_type: 'A', afip_code: '128', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'NCB', description: 'Nota de Crédito B', direction: 1, category: 'CREDIT_NOTE', letter_type: 'B', afip_code: '132', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'NCC-A', description: 'Nota de Crédito C (Venta)', direction: 1, category: 'CREDIT_NOTE', letter_type: 'C', afip_code: '203', requires_cae: true, is_electronic: true, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-
-      // NOTAS DE DÉBITO VENTA
-      { code: 'NDA', description: 'Nota de Débito A', direction: 1, category: 'DEBIT_NOTE', letter_type: 'A', afip_code: '135', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
-      { code: 'NDB', description: 'Nota de Débito B', direction: 1, category: 'DEBIT_NOTE', letter_type: 'B', afip_code: '139', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
-      { code: 'NDC-A', description: 'Nota de Débito C (Venta)', direction: 1, category: 'DEBIT_NOTE', letter_type: 'C', afip_code: '213', requires_cae: true, is_electronic: true, affects_stock: false, affects_accounting: true, affects_tax_book: true },
-
-      // FACTURAS DE COMPRA
-      { code: 'FA-C', description: 'Factura A Compra - Proveedor RI', direction: -1, category: 'INVOICE', letter_type: 'A', afip_code: '01', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'FB-C', description: 'Factura B Compra - Proveedor CF', direction: -1, category: 'INVOICE', letter_type: 'B', afip_code: '06', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'FC-C', description: 'Factura C Compra - Proveedor Exento', direction: -1, category: 'INVOICE', letter_type: 'C', afip_code: '11', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-
-      // NOTAS DE COMPRA
-      { code: 'NCA-C', description: 'Nota de Crédito Compra A', direction: -1, category: 'CREDIT_NOTE', letter_type: 'A', afip_code: '128', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'NCB-C', description: 'Nota de Crédito B Compra', direction: -1, category: 'CREDIT_NOTE', letter_type: 'B', afip_code: '132', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'NCC-C', description: 'Nota de Crédito C Compra', direction: -1, category: 'CREDIT_NOTE', letter_type: 'C', afip_code: '203', requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: true, affects_tax_book: true },
-      { code: 'NDA-C', description: 'Nota de Débito Compra A', direction: -1, category: 'DEBIT_NOTE', letter_type: 'A', afip_code: '135', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
-      { code: 'NDB-C', description: 'Nota de Débito B Compra', direction: -1, category: 'DEBIT_NOTE', letter_type: 'B', afip_code: '139', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
-      { code: 'NDC-C', description: 'Nota de Débito C Compra', direction: -1, category: 'DEBIT_NOTE', letter_type: 'C', afip_code: '213', requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: true },
-
-      // ÓRDENES
-      { code: 'OV', description: 'Orden de Venta', direction: 1, category: 'ORDER', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
-      { code: 'OC', description: 'Orden de Compra', direction: -1, category: 'ORDER', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
-
-      // PRESUPUESTOS
-      { code: 'PRES', description: 'Presupuesto', direction: 1, category: 'QUOTE', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: false, affects_tax_book: false },
-
-      // RECIBOS
-      { code: 'REC', description: 'Recibo de Pago', direction: 1, category: 'RECEIPT', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false },
-
-      // VALES RRHH
-      { code: 'VALE', description: 'Recibo de Sueldo / Vale RRHH', direction: -1, category: 'VALE', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: false, affects_accounting: true, affects_tax_book: false, affects_payment: true },
-
-      // REMITOS
-      { code: 'REM-V', description: 'Remito de Venta', direction: 1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
-      { code: 'REM-C', description: 'Remito de Compra', direction: -1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
-      { code: 'REM-T', description: 'Remito de Traslado', direction: 1, category: 'REMITO', letter_type: null, afip_code: null, requires_cae: false, is_electronic: false, affects_stock: true, affects_accounting: false, affects_tax_book: false },
-    ];
-
-    for (const dt of documentTypes) {
-      await prisma.document_types.upsert({
-        where: { code: dt.code },
-        update: {
-          description: dt.description,
-          direction: dt.direction,
-          category: dt.category,
-          letter_type: dt.letter_type,
-          afip_code: dt.afip_code,
-          requires_cae: dt.requires_cae,
-          is_electronic: dt.is_electronic,
-          affects_stock: dt.affects_stock,
-          affects_accounting: dt.affects_accounting,
-          affects_tax_book: dt.affects_tax_book,
-        },
-        create: {
-          code: dt.code,
-          description: dt.description,
-          direction: dt.direction,
-          category: dt.category,
-          letter_type: dt.letter_type,
-          afip_code: dt.afip_code,
-          requires_cae: dt.requires_cae,
-          is_electronic: dt.is_electronic,
-          affects_stock: dt.affects_stock,
-          affects_accounting: dt.affects_accounting,
-          affects_tax_book: dt.affects_tax_book,
-          active: true,
-        },
-      });
-    }
-
-    this.logger.log(`Tenant: ${documentTypes.length} tipos de documento creados`);
-  }
-
-  // ─── Document Sequences seed for new tenant ──────────────────────
-
-  private async seedDocumentSequencesForTenant(prisma: any): Promise<void> {
-    // Crear secuencias por letra (3 ventas + 3 compras + VALES)
-    const sequences = [
-      { name: 'Ventas A', point_of_sale: '0001', prefix: 'A' },
-      { name: 'Ventas B', point_of_sale: '0001', prefix: 'B' },
-      { name: 'Ventas C', point_of_sale: '0001', prefix: 'C' },
-      { name: 'Compras A', point_of_sale: '0002', prefix: 'A' },
-      { name: 'Compras B', point_of_sale: '0002', prefix: 'B' },
-      { name: 'Compras C', point_of_sale: '0002', prefix: 'C' },
-      { name: 'VALES', point_of_sale: '0003', prefix: 'V' },
-    ];
-
-    const createdSequences: Record<string, string> = {};
-
-    for (const seq of sequences) {
-      const existing = await prisma.document_sequences.findUnique({
-        where: { point_of_sale_prefix: { point_of_sale: seq.point_of_sale, prefix: seq.prefix } },
-      });
-
-      if (existing) {
-        createdSequences[seq.name] = existing.id;
-      } else {
-        const created = await prisma.document_sequences.create({
-          data: {
-            name: seq.name,
-            automatic: true,
-            point_of_sale: seq.point_of_sale,
-            current_number: 0,
-            prefix: seq.prefix,
-            active: true,
-          },
-        });
-        createdSequences[seq.name] = created.id;
-      }
-    }
-
-    // Vincular document_types con secuencias por letra
-    const linkMap: Record<string, string[]> = {
-      'Ventas A': ['FA-A', 'NCA', 'NDA', 'NCC-A', 'NDC-A'],
-      'Ventas B': ['FB-A', 'NCB', 'NDB'],
-      'Ventas C': ['FC-A', 'NCC-A', 'NDC-A'],
-      'Compras A': ['FA-C', 'NCA-C', 'NDA-C'],
-      'Compras B': ['FB-C', 'NCB-C', 'NDB-C'],
-      'Compras C': ['FC-C', 'NCC-C', 'NDC-C'],
-      'VALES': ['VALE'],
-    };
-
-    for (const [seqName, codes] of Object.entries(linkMap)) {
-      const seqId = createdSequences[seqName];
-      if (!seqId) continue;
-
-      await prisma.document_types.updateMany({
-        where: { code: { in: codes } },
-        data: { document_sequence_id: seqId },
-      });
-    }
-
-    this.logger.log(`Tenant: ${sequences.length} secuencias de documentos creadas y vinculadas`);
   }
 
   // ─── Assign admin role to creator ──────────────────────────────
@@ -500,11 +160,29 @@ export class CompaniesService {
     return membership;
   }
 
+  async checkSubdomain(subdomain: string) {
+    const slug = subdomain?.toLowerCase().trim();
+    if (!slug || slug.length < 3) {
+      return { available: false, message: 'Mínimo 3 caracteres' };
+    }
+    const existing = await this.prisma.companies.findFirst({
+      where: { subdomain: slug, deleted_at: null },
+    });
+    return { available: !existing };
+  }
+
   async create(createCompanyDto: CreateCompanyDto, userId: string) {
-    console.log(userId);
     const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
     const tenantDb = `${subdomain}_db`;
     const tenantDbUrl = `${process.env.DATABASE_URL_BASE}${tenantDb}`;
+
+    // Check company limit: max 3 per user as OWNER
+    const ownerCount = await this.prisma.company_users.count({
+      where: { user_id: userId, role: 'OWNER' },
+    });
+    if (ownerCount >= 3) {
+      throw new BadRequestException('Máximo 3 empresas por usuario');
+    }
 
     const existingCompany = await this.prisma.companies.findFirst({
       where: { subdomain, deleted_at: null },
@@ -568,14 +246,10 @@ export class CompaniesService {
       throw new ConflictException(`Error al crear la empresa: ${error.message}`);
     }
 
-    console.log('SERVICE userId:', userId, typeof userId);
-
     const user = await this.prisma.users.findUnique({
       where: { id: userId },
       select: { id: true },
     });
-
-    console.log('USER found:', user);
 
     if (!user) {
       throw new ConflictException('El usuario autenticado no existe en la base de datos');
@@ -594,8 +268,6 @@ export class CompaniesService {
       },
     });
 
-    console.log('COMPANY created:', company.id);
-
     const cu = await this.prisma.company_users.create({
       data: {
         company_id: company.id,
@@ -603,8 +275,6 @@ export class CompaniesService {
         role: 'OWNER',
       },
     });
-
-    console.log('COMPANY_USER created:', cu);
 
     // ── Seed RBAC defaults into tenant DB ──────────────────────
     await this.seedRbacForTenant(tenantDb);
