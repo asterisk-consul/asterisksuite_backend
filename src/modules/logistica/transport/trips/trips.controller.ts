@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
@@ -29,8 +30,12 @@ export class TripsController {
 
   // @RequirePermissions('trips.update')
   @Patch(':id/status/:status')
-  updateStatus(@Param('id') id: string, @Param('status') status: TripStatus) {
-    return this.service.updateStatus(id, status);
+  updateStatus(
+    @Param('id') id: string,
+    @Param('status') status: TripStatus,
+    @Query('generate') generate?: string,
+  ) {
+    return this.service.updateStatus(id, status, generate === 'true');
   }
 
   // @RequirePermissions('trips.delete')

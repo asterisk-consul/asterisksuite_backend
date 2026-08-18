@@ -215,7 +215,7 @@ export class TripsService {
     return this.findOne(id);
   }
 
-  async updateStatus(id: string, status: TripStatus) {
+  async updateStatus(id: string, status: TripStatus, generate = false) {
     await this.findOne(id);
 
     const trip = await this.prisma.trips.update({
@@ -223,8 +223,8 @@ export class TripsService {
       data: { status },
     });
 
-    // 🔥 Hook: cuando el viaje pasa a COMPLETED generar borradores de factura
-    if (status === TripStatus.COMPLETED) {
+    // 🔥 Hook: solo genera factura si el caller lo pide explícitamente
+    if (status === TripStatus.COMPLETED && generate) {
       await this.documentsSalesService.generateDraftsFromTrip(id);
     }
 
