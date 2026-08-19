@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } f
 import { DocumentsPurchasesService } from './documents_purchases.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
+import { ConfirmPurchaseDto } from './dto/confirm-purchase.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
@@ -45,8 +46,8 @@ export class DocumentsPurchasesController {
 
   // @RequirePermissions('documents-purchases.confirm')
   @Patch(':id/confirm')
-  confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.service.confirm(id, user.id);
+  confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Query() query?: ConfirmPurchaseDto) {
+    return this.service.confirm(id, user.id, query);
   }
 
   // @RequirePermissions('documents-purchases.cancel')

@@ -1079,7 +1079,9 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string) {
+  async confirm(id: string, userId: string, options?: { updateProductPrices?: boolean | string }) {
+    const updateProductPrices = options?.updateProductPrices === true || options?.updateProductPrices === 'true';
+    console.log('[confirm-purchases] options:', JSON.stringify(options), '→ updateProductPrices:', updateProductPrices);
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
@@ -1102,22 +1104,15 @@ export class DocumentsPurchasesService {
       });
 
       // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
-      console.log('[confirm-purchases] doc.party_id:', doc.party_id)
-      console.log('[confirm-purchases] doc.document_types:', doc.document_types)
-      console.log('[confirm-purchases] affects_accounting:', doc.document_types?.affects_accounting)
-      console.log('[confirm-purchases] direction:', doc.document_types?.direction)
-
       if (doc.party_id && doc.document_types?.affects_accounting) {
         const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
         const docTotal = doc.total.toNumber();
 
-        // Determinar tipo de entrada según la categoría del documento
         const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
                         : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
                         : category === 'OPENING_BALANCE' ? 'OPENING_BALANCE'
                         : 'INVOICE';
 
-        // Descripción usando el nombre real del tipo de documento
         const docTypeName = doc.document_types?.description ?? 'Documento';
         const docRef = doc.descrip;
         const description = docRef
@@ -1141,8 +1136,138 @@ export class DocumentsPurchasesService {
         );
       }
 
+      // ─── Sync product prices from purchase invoice ───
+      if (updateProductPrices) {
+        await this.syncProductPricesFromPurchase(tx, doc);
+      }
+
       return tx.documents.findUnique({ where: { id } });
     });
+  }
+
+  /**
+   * Sync product prices/costs from purchase invoice items.
+   * - FINISHED_PRODUCT / SERVICE → product_price
+   * - RAW_MATERIAL (with variants) → product_variant_costs
+   * - RAW_MATERIAL (without variants) → products.current_cost
+   */
+  private async syncProductPricesFromPurchase(tx: any, doc: any) {
+    console.log('[syncProductPrices] INICIO - updateProductPrices=true');
+    console.log('[syncProductPrices] doc.currency_code:', doc.currency_code);
+    console.log('[syncProductPrices] items count:', doc.document_items?.length);
+
+    const currencies = await tx.currencies.findMany({
+      where: { deleted_at: null },
+      select: { id: true, code: true },
+    });
+    const currencyMap = Object.fromEntries(currencies.map((c: any) => [c.code, c.id]));
+    console.log('[syncProductPrices] currencies:', Object.keys(currencyMap));
+
+    for (const item of doc.document_items) {
+      console.log('[syncProductPrices] ─── item ───');
+      console.log('[syncProductPrices] item.product_id:', item.product_id);
+      console.log('[syncProductPrices] item.unit_price:', item.unit_price);
+      console.log('[syncProductPrices] item.currency_code:', item.currency_code);
+
+      if (!item.product_id) {
+        console.log('[syncProductPrices] SKIP: no product_id');
+        continue;
+      }
+
+      const product = await tx.products.findUnique({
+        where: { id: item.product_id },
+        select: { id: true, product_type: true, price_enabled: true, current_cost: true },
+      });
+
+      console.log('[syncProductPrices] product:', product?.id, product?.product_type);
+
+      if (!product) {
+        console.log('[syncProductPrices] SKIP: product not found');
+        continue;
+      }
+
+      const currencyId = currencyMap[item.currency_code ?? doc.currency_code];
+      console.log('[syncProductPrices] currencyId resolved:', currencyId);
+
+      if (!currencyId) {
+        console.log('[syncProductPrices] SKIP: no currencyId');
+        continue;
+      }
+
+      const itemPrice = Number(item.unit_price);
+      console.log('[syncProductPrices] itemPrice:', itemPrice);
+
+      if (product.product_type === 'FINISHED_PRODUCT' || product.product_type === 'SERVICE') {
+        const existing = await tx.product_price.findUnique({
+          where: { product_id_currency_id: { product_id: item.product_id, currency_id: currencyId } },
+        });
+        console.log('[syncProductPrices] existing price:', existing?.id, existing?.price?.toString());
+
+        if (!existing) {
+          console.log('[syncProductPrices] CREANDO precio nuevo');
+          await tx.product_price.create({
+            data: {
+              product_id: item.product_id,
+              currency_id: currencyId,
+              price: itemPrice,
+              exemption_rate: 0,
+            },
+          });
+        } else if (Number(existing.price) !== itemPrice) {
+          console.log('[syncProductPrices] ACTUALIZANDO precio:', existing.price?.toString(), '->', itemPrice);
+          await tx.product_price.update({
+            where: { id: existing.id },
+            data: { price: itemPrice, updated_at: new Date() },
+          });
+        } else {
+          console.log('[syncProductPrices] SKIP: precio ya es igual');
+        }
+      } else if (product.product_type === 'RAW_MATERIAL') {
+        console.log('[syncProductPrices] procesando RAW_MATERIAL');
+        const variants = await tx.product_variants.findMany({
+          where: { product_id: item.product_id, deleted_at: null },
+          select: { id: true },
+        });
+        console.log('[syncProductPrices] variants:', variants.length);
+
+        if (variants.length > 0) {
+          const variantId = variants[0].id;
+          const existingCost = await tx.product_variant_costs.findFirst({
+            where: { variant_id: variantId, currency_id: currencyId, deleted_at: null },
+          });
+
+          if (!existingCost) {
+            console.log('[syncProductPrices] CREANDO variant cost');
+            await tx.product_variant_costs.create({
+              data: {
+                variant_id: variantId,
+                currency_id: currencyId,
+                cost: itemPrice,
+                source: 'PURCHASE',
+              },
+            });
+          } else if (Number(existingCost.cost) !== itemPrice) {
+            console.log('[syncProductPrices] ACTUALIZANDO variant cost');
+            await tx.product_variant_costs.update({
+              where: { id: existingCost.id },
+              data: { cost: itemPrice, updated_at: new Date() },
+            });
+          }
+        } else {
+          const currentCost = product.current_cost ? Number(product.current_cost) : null;
+          if (currentCost === null || currentCost !== itemPrice) {
+            console.log('[syncProductPrices] ACTUALIZANDO current_cost');
+            await tx.products.update({
+              where: { id: item.product_id },
+              data: { current_cost: itemPrice, updated_at: new Date() },
+            });
+          }
+        }
+      } else {
+        console.log('[syncProductPrices] SKIP: tipo no soportado:', product.product_type);
+      }
+    }
+    console.log('[syncProductPrices] FIN');
   }
 
   // ─────────────────────────────────────────────
