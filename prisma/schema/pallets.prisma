@@ -23,7 +23,6 @@ model pallets {
   deleted_by           String?                @db.Uuid
   cargo_transfer_items cargo_transfer_items[]
   pallet_items         pallet_items[]
-  users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses           warehouses?            @relation(fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   picking_results      picking_results[]
   picking_sources      picking_sources[]

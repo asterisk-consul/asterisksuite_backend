@@ -216,7 +216,6 @@ export type trip_temperature_logsWhereInput = {
   temperature?: Prisma.DecimalFilter<"trip_temperature_logs"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Prisma.DateTimeFilter<"trip_temperature_logs"> | Date | string
   recorded_by?: Prisma.UuidNullableFilter<"trip_temperature_logs"> | string | null
-  users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   trips?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>
 }
 
@@ -226,7 +225,6 @@ export type trip_temperature_logsOrderByWithRelationInput = {
   temperature?: Prisma.SortOrder
   recorded_at?: Prisma.SortOrder
   recorded_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  users?: Prisma.usersOrderByWithRelationInput
   trips?: Prisma.tripsOrderByWithRelationInput
 }
 
@@ -239,7 +237,6 @@ export type trip_temperature_logsWhereUniqueInput = Prisma.AtLeast<{
   temperature?: Prisma.DecimalFilter<"trip_temperature_logs"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Prisma.DateTimeFilter<"trip_temperature_logs"> | Date | string
   recorded_by?: Prisma.UuidNullableFilter<"trip_temperature_logs"> | string | null
-  users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   trips?: Prisma.XOR<Prisma.TripsScalarRelationFilter, Prisma.tripsWhereInput>
 }, "id">
 
@@ -271,7 +268,7 @@ export type trip_temperature_logsCreateInput = {
   id?: string
   temperature: runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Date | string
-  users?: Prisma.usersCreateNestedOneWithoutTrip_temperature_logsInput
+  recorded_by?: string | null
   trips: Prisma.tripsCreateNestedOneWithoutTrip_temperature_logsInput
 }
 
@@ -287,7 +284,7 @@ export type trip_temperature_logsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   temperature?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.usersUpdateOneWithoutTrip_temperature_logsNestedInput
+  recorded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trips?: Prisma.tripsUpdateOneRequiredWithoutTrip_temperature_logsNestedInput
 }
 
@@ -311,6 +308,7 @@ export type trip_temperature_logsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   temperature?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recorded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type trip_temperature_logsUncheckedUpdateManyInput = {
@@ -405,53 +403,11 @@ export type trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput = {
   deleteMany?: Prisma.trip_temperature_logsScalarWhereInput | Prisma.trip_temperature_logsScalarWhereInput[]
 }
 
-export type trip_temperature_logsCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.trip_temperature_logsCreateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput> | Prisma.trip_temperature_logsCreateWithoutUsersInput[] | Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput | Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.trip_temperature_logsCreateManyUsersInputEnvelope
-  connect?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-}
-
-export type trip_temperature_logsUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.trip_temperature_logsCreateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput> | Prisma.trip_temperature_logsCreateWithoutUsersInput[] | Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput | Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.trip_temperature_logsCreateManyUsersInputEnvelope
-  connect?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-}
-
-export type trip_temperature_logsUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.trip_temperature_logsCreateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput> | Prisma.trip_temperature_logsCreateWithoutUsersInput[] | Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput | Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.trip_temperature_logsUpsertWithWhereUniqueWithoutUsersInput | Prisma.trip_temperature_logsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.trip_temperature_logsCreateManyUsersInputEnvelope
-  set?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  disconnect?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  delete?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  connect?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  update?: Prisma.trip_temperature_logsUpdateWithWhereUniqueWithoutUsersInput | Prisma.trip_temperature_logsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.trip_temperature_logsUpdateManyWithWhereWithoutUsersInput | Prisma.trip_temperature_logsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.trip_temperature_logsScalarWhereInput | Prisma.trip_temperature_logsScalarWhereInput[]
-}
-
-export type trip_temperature_logsUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.trip_temperature_logsCreateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput> | Prisma.trip_temperature_logsCreateWithoutUsersInput[] | Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput | Prisma.trip_temperature_logsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.trip_temperature_logsUpsertWithWhereUniqueWithoutUsersInput | Prisma.trip_temperature_logsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.trip_temperature_logsCreateManyUsersInputEnvelope
-  set?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  disconnect?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  delete?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  connect?: Prisma.trip_temperature_logsWhereUniqueInput | Prisma.trip_temperature_logsWhereUniqueInput[]
-  update?: Prisma.trip_temperature_logsUpdateWithWhereUniqueWithoutUsersInput | Prisma.trip_temperature_logsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.trip_temperature_logsUpdateManyWithWhereWithoutUsersInput | Prisma.trip_temperature_logsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.trip_temperature_logsScalarWhereInput | Prisma.trip_temperature_logsScalarWhereInput[]
-}
-
 export type trip_temperature_logsCreateWithoutTripsInput = {
   id?: string
   temperature: runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Date | string
-  users?: Prisma.usersCreateNestedOneWithoutTrip_temperature_logsInput
+  recorded_by?: string | null
 }
 
 export type trip_temperature_logsUncheckedCreateWithoutTripsInput = {
@@ -498,46 +454,6 @@ export type trip_temperature_logsScalarWhereInput = {
   recorded_by?: Prisma.UuidNullableFilter<"trip_temperature_logs"> | string | null
 }
 
-export type trip_temperature_logsCreateWithoutUsersInput = {
-  id?: string
-  temperature: runtime.Decimal | runtime.DecimalJsLike | number | string
-  recorded_at?: Date | string
-  trips: Prisma.tripsCreateNestedOneWithoutTrip_temperature_logsInput
-}
-
-export type trip_temperature_logsUncheckedCreateWithoutUsersInput = {
-  id?: string
-  trip_id: string
-  temperature: runtime.Decimal | runtime.DecimalJsLike | number | string
-  recorded_at?: Date | string
-}
-
-export type trip_temperature_logsCreateOrConnectWithoutUsersInput = {
-  where: Prisma.trip_temperature_logsWhereUniqueInput
-  create: Prisma.XOR<Prisma.trip_temperature_logsCreateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput>
-}
-
-export type trip_temperature_logsCreateManyUsersInputEnvelope = {
-  data: Prisma.trip_temperature_logsCreateManyUsersInput | Prisma.trip_temperature_logsCreateManyUsersInput[]
-  skipDuplicates?: boolean
-}
-
-export type trip_temperature_logsUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.trip_temperature_logsWhereUniqueInput
-  update: Prisma.XOR<Prisma.trip_temperature_logsUpdateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.trip_temperature_logsCreateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedCreateWithoutUsersInput>
-}
-
-export type trip_temperature_logsUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.trip_temperature_logsWhereUniqueInput
-  data: Prisma.XOR<Prisma.trip_temperature_logsUpdateWithoutUsersInput, Prisma.trip_temperature_logsUncheckedUpdateWithoutUsersInput>
-}
-
-export type trip_temperature_logsUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.trip_temperature_logsScalarWhereInput
-  data: Prisma.XOR<Prisma.trip_temperature_logsUpdateManyMutationInput, Prisma.trip_temperature_logsUncheckedUpdateManyWithoutUsersInput>
-}
-
 export type trip_temperature_logsCreateManyTripsInput = {
   id?: string
   temperature: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -549,7 +465,7 @@ export type trip_temperature_logsUpdateWithoutTripsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   temperature?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   recorded_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.usersUpdateOneWithoutTrip_temperature_logsNestedInput
+  recorded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type trip_temperature_logsUncheckedUpdateWithoutTripsInput = {
@@ -566,34 +482,6 @@ export type trip_temperature_logsUncheckedUpdateManyWithoutTripsInput = {
   recorded_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type trip_temperature_logsCreateManyUsersInput = {
-  id?: string
-  trip_id: string
-  temperature: runtime.Decimal | runtime.DecimalJsLike | number | string
-  recorded_at?: Date | string
-}
-
-export type trip_temperature_logsUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  temperature?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  recorded_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trips?: Prisma.tripsUpdateOneRequiredWithoutTrip_temperature_logsNestedInput
-}
-
-export type trip_temperature_logsUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  trip_id?: Prisma.StringFieldUpdateOperationsInput | string
-  temperature?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  recorded_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type trip_temperature_logsUncheckedUpdateManyWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  trip_id?: Prisma.StringFieldUpdateOperationsInput | string
-  temperature?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  recorded_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 
 
 export type trip_temperature_logsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -602,7 +490,6 @@ export type trip_temperature_logsSelect<ExtArgs extends runtime.Types.Extensions
   temperature?: boolean
   recorded_at?: boolean
   recorded_by?: boolean
-  users?: boolean | Prisma.trip_temperature_logs$usersArgs<ExtArgs>
   trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_temperature_logs"]>
 
@@ -612,7 +499,6 @@ export type trip_temperature_logsSelectCreateManyAndReturn<ExtArgs extends runti
   temperature?: boolean
   recorded_at?: boolean
   recorded_by?: boolean
-  users?: boolean | Prisma.trip_temperature_logs$usersArgs<ExtArgs>
   trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_temperature_logs"]>
 
@@ -622,7 +508,6 @@ export type trip_temperature_logsSelectUpdateManyAndReturn<ExtArgs extends runti
   temperature?: boolean
   recorded_at?: boolean
   recorded_by?: boolean
-  users?: boolean | Prisma.trip_temperature_logs$usersArgs<ExtArgs>
   trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trip_temperature_logs"]>
 
@@ -636,22 +521,18 @@ export type trip_temperature_logsSelectScalar = {
 
 export type trip_temperature_logsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trip_id" | "temperature" | "recorded_at" | "recorded_by", ExtArgs["result"]["trip_temperature_logs"]>
 export type trip_temperature_logsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.trip_temperature_logs$usersArgs<ExtArgs>
   trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }
 export type trip_temperature_logsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.trip_temperature_logs$usersArgs<ExtArgs>
   trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }
 export type trip_temperature_logsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.trip_temperature_logs$usersArgs<ExtArgs>
   trips?: boolean | Prisma.tripsDefaultArgs<ExtArgs>
 }
 
 export type $trip_temperature_logsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "trip_temperature_logs"
   objects: {
-    users: Prisma.$usersPayload<ExtArgs> | null
     trips: Prisma.$tripsPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1054,7 +935,6 @@ readonly fields: trip_temperature_logsFieldRefs;
  */
 export interface Prisma__trip_temperature_logsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  users<T extends Prisma.trip_temperature_logs$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trip_temperature_logs$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   trips<T extends Prisma.tripsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tripsDefaultArgs<ExtArgs>>): Prisma.Prisma__tripsClient<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1488,25 +1368,6 @@ export type trip_temperature_logsDeleteManyArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many trip_temperature_logs to delete.
    */
   limit?: number
-}
-
-/**
- * trip_temperature_logs.users
- */
-export type trip_temperature_logs$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the users
-   */
-  select?: Prisma.usersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the users
-   */
-  omit?: Prisma.usersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.usersInclude<ExtArgs> | null
-  where?: Prisma.usersWhereInput
 }
 
 /**

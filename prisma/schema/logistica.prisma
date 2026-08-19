@@ -22,7 +22,6 @@ model cargo_transfers {
   cargo_transfer_items                      cargo_transfer_items[]
   trips_cargo_transfers_from_trip_idTotrips trips?                 @relation("cargo_transfers_from_trip_idTotrips", fields: [from_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   locations                                 locations?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users                                     users?                 @relation(fields: [performed_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips_cargo_transfers_to_trip_idTotrips   trips?                 @relation("cargo_transfers_to_trip_idTotrips", fields: [to_trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("tenant")
@@ -43,7 +42,6 @@ model delivery_notes {
   deleted_by           String?                @db.Uuid
   dispatch_order_id    String?                @db.Uuid
   cargo_transfer_items cargo_transfer_items[]
-  users                users?                 @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   dispatch_orders      dispatch_orders?       @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   business_parties     business_parties?      @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips                trips?                 @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_notes_trip")
@@ -100,7 +98,6 @@ model picking_orders {
   deleted_by        String?           @db.Uuid
   dispatch_order_id String?           @db.Uuid
   picking_items     picking_items[]
-  users             users?            @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   delivery_notes    delivery_notes?   @relation(fields: [delivery_note_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   dispatch_orders   dispatch_orders?  @relation(fields: [dispatch_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips             trips?            @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -153,7 +150,6 @@ model trip_temperature_logs {
   temperature Decimal  @db.Decimal(5, 2)
   recorded_at DateTime @default(now()) @db.Timestamp(6)
   recorded_by String?  @db.Uuid
-  users       users?   @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trips       trips    @relation(fields: [trip_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("tenant")
@@ -178,7 +174,6 @@ model dispatch_orders {
   deleted_by              String?            @db.Uuid
   delivery_notes          delivery_notes[]
   corridors               corridors?         @relation(fields: [corridor_id], references: [id])
-  users                   users?             @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   customers               business_parties?  @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   destination_location    locations?         @relation("dispatch_destination_location", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   origin_location         locations?         @relation("dispatch_origin_location", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -217,7 +212,6 @@ model trips {
   trip_cargo                                            trip_cargo[]
   trip_stops                                            trip_stops[]
   trip_temperature_logs                                 trip_temperature_logs[]
-  users                                                 users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   locations_trips_destination_location_idTolocations    locations?              @relation("trips_destination_location_idTolocations", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   warehouses_trips_destination_warehouse_idTowarehouses warehouses?             @relation("trips_destination_warehouse_idTowarehouses", fields: [destination_warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   locations_trips_origin_location_idTolocations         locations?              @relation("trips_origin_location_idTolocations", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -350,10 +344,9 @@ model vehicle_combinations {
   deleted_at  DateTime?
   created_by  String?   @db.Uuid
   updated_by  String?   @db.Uuid
-  deleted_by  String?   @db.Uuid
+  deleted_by   String?   @db.Uuid
   trips       trips[]
   drivers     drivers?  @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_comb_driver")
-  users       users?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   tractor     vehicles  @relation("tractor_vehicle", fields: [tractor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trailer     vehicles? @relation("trailer_vehicle", fields: [trailer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 

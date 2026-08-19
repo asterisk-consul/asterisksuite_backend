@@ -10,6 +10,7 @@
  * Datos importados de seed-sql.ts (fuente única de verdad)
  */
 
+import 'dotenv/config'
 import { execSync } from 'child_process'
 import { Pool } from 'pg'
 import {

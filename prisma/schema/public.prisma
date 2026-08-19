@@ -66,16 +66,7 @@ model users {
   created_by                String?                     @db.Uuid
   updated_by                String?                     @db.Uuid
   deleted_by                String?                     @db.Uuid
-  cargo_transfers           cargo_transfers[]
-  delivery_notes            delivery_notes[]
-  dispatch_orders           dispatch_orders[]
-  pallets                   pallets[]
-  picking_orders            picking_orders[]
   refreshTokens             refresh_tokens[]
-  trip_temperature_logs     trip_temperature_logs[]
-  trips                     trips[]
-  vehicle_combinations      vehicle_combinations[]
-  warehouse_stock_movements warehouse_stock_movements[]
   companyUsers              company_users[]
 
   @@schema("public")
