@@ -53,6 +53,7 @@ model products {
   needs_cost_recalculation Boolean           @default(false)
   last_cost_calculated_at  DateTime?
   cost_template_id         String?           @db.Uuid
+  unit_id                  String?           @db.Uuid
 
   // RELACIONES 
   product_variants          product_variants[]
@@ -80,6 +81,7 @@ model products {
   productCostBreakdowns     product_cost_breakdowns[]
   cost_template             cost_templates?              @relation(fields: [cost_template_id], references: [id])
   productStructureVersions  product_structure_versions[]
+  unit                      units?                       @relation(fields: [unit_id], references: [id])
 
   @@schema("tenant")
 }
@@ -97,6 +99,8 @@ model units {
   updated_by         String?              @db.Uuid
   deleted_by         String?              @db.Uuid
   product_components product_components[]
+  products           products[]
+  warehouses         warehouses[]
 
   @@schema("tenant")
 }

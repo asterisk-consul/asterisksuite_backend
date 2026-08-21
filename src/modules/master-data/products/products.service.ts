@@ -129,6 +129,7 @@ export class ProductsService {
         // ─────────────
 
         tax_category: true,
+        unit: true,
 
         // ─────────────
         // VARIANTES (solo IDs para saber si tiene)
@@ -280,6 +281,7 @@ export class ProductsService {
         // ─────────────
 
         tax_category: true,
+        unit: true,
 
         // ─────────────
         // HIJOS — registros donde este producto es el PADRE

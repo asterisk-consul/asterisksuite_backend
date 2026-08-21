@@ -126,15 +126,15 @@ model hr_vales {
 // ══════════════════════════════════════════════════════════
 
 model hr_vale_commission_details {
-  id                 String   @id @default(uuid()) @db.Uuid
-  hr_vale_id         String   @db.Uuid
-  document_id        String   @unique @db.Uuid
-  seller_id          String?  @db.Uuid
-  subtotal           Decimal  @db.Decimal(15, 2)
-  commission_rate    Decimal  @db.Decimal(5, 2)
-  commission_amount  Decimal  @db.Decimal(15, 2)
-  date               DateTime @db.Date
-  created_at         DateTime @default(now()) @db.Timestamp(6)
+  id                String   @id @default(uuid()) @db.Uuid
+  hr_vale_id        String   @db.Uuid
+  document_id       String   @unique @db.Uuid
+  seller_id         String?  @db.Uuid
+  subtotal          Decimal  @db.Decimal(15, 2)
+  commission_rate   Decimal  @db.Decimal(5, 2)
+  commission_amount Decimal  @db.Decimal(15, 2)
+  date              DateTime @db.Date
+  created_at        DateTime @default(now()) @db.Timestamp(6)
 
   hr_vale  hr_vales  @relation(fields: [hr_vale_id], references: [id], onDelete: Cascade)
   document documents @relation(fields: [document_id], references: [id], onDelete: NoAction)

@@ -92,4 +92,8 @@ export class CreateProductDto {
   @IsOptional()
   @IsEnum(ProductCostSource)
   cost_source?: ProductCostSource;
+
+  @IsOptional()
+  @IsUUID()
+  unit_id?: string;
 }

@@ -46,6 +46,7 @@ model warehouse_stock_movements {
 model warehouses {
   id                                               String                      @id @default(uuid()) @db.Uuid
   location_id                                      String?                     @db.Uuid
+  unit_id                                          String?                     @db.Uuid
   name                                             String                      @db.VarChar(255)
   code                                             String?                     @unique @db.VarChar(50)
   active                                           Boolean                     @default(true)
@@ -62,6 +63,7 @@ model warehouses {
   warehouse_stock                                  warehouse_stock[]
   warehouse_stock_movements                        warehouse_stock_movements[]
   locations                                        locations?                  @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  units                                            units?                      @relation(fields: [unit_id], references: [id])
 
   @@schema("tenant")
 }

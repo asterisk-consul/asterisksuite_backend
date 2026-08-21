@@ -19,6 +19,7 @@ export class WarehousesService {
         name: data.name,
         code: data.code,
         location_id: data.locationId,
+        unit_id: data.unitId,
         active: data.active ?? true,
       },
     });
@@ -28,6 +29,7 @@ export class WarehousesService {
     return this.prisma.warehouses.findMany({
       include: {
         locations: true,
+        units: true,
       },
       orderBy: {
         created_at: 'desc',
@@ -40,6 +42,7 @@ export class WarehousesService {
       where: { id },
       include: {
         locations: true,
+        units: true,
         warehouse_stock: true,
       },
     });
@@ -60,10 +63,12 @@ export class WarehousesService {
         name: data.name,
         code: data.code,
         location_id: data.locationId,
+        unit_id: data.unitId,
         active: data.active,
       }),
       include: {
         locations: true,
+        units: true,
       },
     });
   }

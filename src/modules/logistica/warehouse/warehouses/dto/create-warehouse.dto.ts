@@ -21,6 +21,10 @@ export class CreateWarehouseDto {
   locationId?: string;
 
   @IsOptional()
+  @IsUUID()
+  unitId?: string;
+
+  @IsOptional()
   @IsBoolean()
   active?: boolean;
 }

@@ -9080,6 +9080,7 @@ export const Document_itemsScalarFieldEnum = {
   id: 'id',
   document_id: 'document_id',
   product_id: 'product_id',
+  variant_id: 'variant_id',
   quantity: 'quantity',
   price: 'price',
   unit_price: 'unit_price',
@@ -10030,6 +10031,7 @@ export const ProductsScalarFieldEnum = {
   needs_cost_recalculation: 'needs_cost_recalculation',
   last_cost_calculated_at: 'last_cost_calculated_at',
   cost_template_id: 'cost_template_id',
+  unit_id: 'unit_id',
   current_cost: 'current_cost'
 } as const
 
@@ -10981,6 +10983,7 @@ export type Warehouse_stock_movementsScalarFieldEnum = (typeof Warehouse_stock_m
 export const WarehousesScalarFieldEnum = {
   id: 'id',
   location_id: 'location_id',
+  unit_id: 'unit_id',
   name: 'name',
   code: 'code',
   active: 'active',
