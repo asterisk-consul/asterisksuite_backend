@@ -161,6 +161,10 @@ export class CostingService {
     currencyId: string,
     mode: 'materials' | 'assemblies' | 'full' = 'materials',
   ): Promise<CostParetoResult> {
+    if (!currencyId) {
+      throw new NotFoundException('Se requiere una moneda para el análisis Pareto');
+    }
+
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
       include: {

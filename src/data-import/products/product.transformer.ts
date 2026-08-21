@@ -6,7 +6,7 @@ export class ProductTransformer implements Transformer<ParsedProduct, ParsedProd
     // Validate and normalize product types
     const validTypes = ['RAW_MATERIAL', 'FINISHED_PRODUCT', 'SEMI_FINISHED', 'SERVICE', 'RATES'];
     const validCostSources = ['MANUAL', 'PURCHASE', 'ENGINEERING', 'BOM', 'RATE'];
-    const validCalcTypes = ['UNIT', 'SURFASE', 'VOLUME', 'LINEAR'];
+    const validCalcTypes = ['UNIT', 'SURFACE', 'VOLUME', 'LINEAR'];
 
     return products.map(product => ({
       ...product,

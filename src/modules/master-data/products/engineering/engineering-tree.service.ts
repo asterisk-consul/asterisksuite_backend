@@ -20,12 +20,38 @@ export class EngineeringTreeService {
         child_variant: true,
         units: true,
       },
-      orderBy: { order: 'asc' }, // ← respeta el orden guardado
+      orderBy: { order: 'asc' },
     });
+
+    // Resolve variant costs for each component
+    const variantIds = components
+      .filter(c => c.child_variant_id)
+      .map(c => c.child_variant_id!);
+
+    const variantCosts = variantIds.length > 0
+      ? await this.prisma.product_variant_costs.findMany({
+          where: {
+            variant_id: { in: variantIds },
+            deleted_at: null,
+          },
+          include: { currency: true },
+        })
+      : [];
+
+    // Group costs by variant_id
+    const costsByVariant = new Map<string, any[]>();
+    for (const cost of variantCosts) {
+      const existing = costsByVariant.get(cost.variant_id) || [];
+      existing.push(cost);
+      costsByVariant.set(cost.variant_id, existing);
+    }
 
     return Promise.all(
       components.map(async (component) => ({
         ...component,
+        productVariantCosts: component.child_variant_id
+          ? (costsByVariant.get(component.child_variant_id) || [])
+          : [],
         level,
         children: await this.buildTree(component.child_product_id, level + 1),
       })),

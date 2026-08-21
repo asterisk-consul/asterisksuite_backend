@@ -30,7 +30,7 @@ export class CostingCalculatorService {
   // ─── Cálculo base de material (sin cambios) ───────────────────────────────
 
   calculateMaterialCost(breakdown: CostBreakdownItem[]): number {
-    return round2(this.flatten(breakdown).reduce((acc, i) => acc + i.total_cost, 0));
+    return round2(breakdown.reduce((acc, i) => acc + i.total_cost, 0));
   }
 
   calculateEngineeringCost(breakdown: CostBreakdownItem[]): number {

@@ -2,7 +2,7 @@ model product_costs {
   id                  String                    @id @default(uuid()) @db.Uuid
   product_id          String                    @db.Uuid
   currency_id         String                    @db.Uuid
-  cost_source         ProductCostSource         @default(BOM)
+  cost_source         ProductCostSource         @default(MANUAL)
   material_cost       Decimal                   @default(0) @db.Decimal(15, 2)
   labor_cost          Decimal                   @default(0) @db.Decimal(15, 2)
   overhead_cost       Decimal                   @default(0) @db.Decimal(15, 2)

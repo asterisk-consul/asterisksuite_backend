@@ -15,6 +15,7 @@ import { BankConceptsModule } from './bank-concepts/bank-concepts.module';
 import { PricingEngineModule } from './pricing/pricing-engine.module';
 import { ExchangeModule } from './pricing/exchange/exchange.module';
 import { ProductPricingModule } from './pricing/product-pricing/product-pricing.module';
+import { VariantPricesModule } from './pricing/variant-prices/variant-prices.module';
 import { PurchasesModule } from './purchase/purchases.module';
 import { RatePriceModule } from './services/rate-price.module';
 import { TaxesModule } from './taxes/taxes.module';
@@ -47,6 +48,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     PricingEngineModule,
     ExchangeModule,
     ProductPricingModule,
+    VariantPricesModule,
     PurchasesModule,
     RatePriceModule,
     TaxesModule,
@@ -77,6 +79,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     PricingEngineModule,
     ExchangeModule,
     ProductPricingModule,
+    VariantPricesModule,
     PurchasesModule,
     RatePriceModule,
     TaxesModule,

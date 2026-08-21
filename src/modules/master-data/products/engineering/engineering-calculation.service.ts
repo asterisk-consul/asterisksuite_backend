@@ -72,6 +72,21 @@ export class EngineeringCalculationService {
   }
 
   // ─────────────────────────────────────────────
+  // RESOLVER COSTO UNITARIO DESDE CUALQUIER FUENTE
+  // ─────────────────────────────────────────────
+
+  private resolveUnitCost(component: any): number {
+    // 1. Si tiene variante con costo en productVariantCosts → usar ese
+    if (component.child_variant_id && component.productVariantCosts?.length > 0) {
+      const variantCost = component.productVariantCosts[0];
+      return Number(variantCost.cost ?? 0);
+    }
+
+    // 2. Si no tiene variante → usar child_product.current_cost
+    return Number(component.child_product?.current_cost ?? 0);
+  }
+
+  // ─────────────────────────────────────────────
   // DISPATCH POR TIPO
   // ─────────────────────────────────────────────
 
@@ -112,7 +127,7 @@ export class EngineeringCalculationService {
   // ─────────────────────────────────────────────
 
   private calculateUnitComponent(component: any): EngineeringCalculatedComponent {
-    const unitCost = Number(component.child_product?.current_cost ?? 0);
+    const unitCost = this.resolveUnitCost(component);
     const quantity = Number(component.quantity);
     const ownMaterialCost = quantity * unitCost;
 
@@ -149,7 +164,7 @@ export class EngineeringCalculationService {
     const finalWeightKg = rawWeightKg * (1 + wastePercentage / 100);
 
     // current_cost en materiales de tipo SURFACE se espera en $/kg
-    const unitCost = Number(component.child_product?.current_cost ?? 0);
+    const unitCost = this.resolveUnitCost(component);
     const ownMaterialCost = finalWeightKg * unitCost;
 
     return {
@@ -182,7 +197,7 @@ export class EngineeringCalculationService {
     const finalWeightKg = finalLength * weightPerMeterKg;
 
     // current_cost en $/metro
-    const unitCost = Number(component.child_product?.current_cost ?? 0);
+    const unitCost = this.resolveUnitCost(component);
     const ownMaterialCost = finalLength * unitCost;
 
     return {
@@ -216,7 +231,7 @@ export class EngineeringCalculationService {
     const finalVolume = volumeM3 * (1 + wastePercentage / 100);
 
     // current_cost en $/m3
-    const unitCost = Number(component.child_product?.current_cost ?? 0);
+    const unitCost = this.resolveUnitCost(component);
     const ownMaterialCost = finalVolume * unitCost;
 
     return {

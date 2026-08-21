@@ -15,6 +15,8 @@ export interface TaxInput {
 export interface ItemInput {
   product_id: string | null;
 
+  variant_id?: string | null;
+
   quantity: number;
 
   currency: string;

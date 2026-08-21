@@ -129,6 +129,15 @@ export class ProductsService {
         // ─────────────
 
         tax_category: true,
+
+        // ─────────────
+        // VARIANTES (solo IDs para saber si tiene)
+        // ─────────────
+
+        product_variants: {
+          select: { id: true },
+          where: { deleted_at: null },
+        },
       },
     });
   }

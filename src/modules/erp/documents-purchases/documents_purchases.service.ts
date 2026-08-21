@@ -572,6 +572,8 @@ export class DocumentsPurchasesService {
 
           product_id: item.product_id ?? null,
 
+          variant_id: item.variant_id ?? null,
+
           quantity: item.quantity,
 
           unit_price: item.unit_price,
@@ -1224,20 +1226,28 @@ export class DocumentsPurchasesService {
         }
       } else if (product.product_type === 'RAW_MATERIAL') {
         console.log('[syncProductPrices] procesando RAW_MATERIAL');
-        const variants = await tx.product_variants.findMany({
-          where: { product_id: item.product_id, deleted_at: null },
-          select: { id: true },
-        });
-        console.log('[syncProductPrices] variants:', variants.length);
 
-        if (variants.length > 0) {
-          const variantId = variants[0].id;
+        let variantId = item.variant_id;
+
+        if (!variantId) {
+          const variants = await tx.product_variants.findMany({
+            where: { product_id: item.product_id, deleted_at: null },
+            select: { id: true },
+          });
+          console.log('[syncProductPrices] variants:', variants.length);
+
+          if (variants.length > 0) {
+            variantId = variants[0].id;
+          }
+        }
+
+        if (variantId) {
           const existingCost = await tx.product_variant_costs.findFirst({
             where: { variant_id: variantId, currency_id: currencyId, deleted_at: null },
           });
 
           if (!existingCost) {
-            console.log('[syncProductPrices] CREANDO variant cost');
+            console.log('[syncProductPrices] CREANDO variant cost para variante:', variantId);
             await tx.product_variant_costs.create({
               data: {
                 variant_id: variantId,
@@ -1247,7 +1257,7 @@ export class DocumentsPurchasesService {
               },
             });
           } else if (Number(existingCost.cost) !== itemPrice) {
-            console.log('[syncProductPrices] ACTUALIZANDO variant cost');
+            console.log('[syncProductPrices] ACTUALIZANDO variant cost:', existingCost.cost?.toString(), '->', itemPrice);
             await tx.product_variant_costs.update({
               where: { id: existingCost.id },
               data: { cost: itemPrice, updated_at: new Date() },

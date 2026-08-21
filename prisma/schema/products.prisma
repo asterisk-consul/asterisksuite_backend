@@ -49,7 +49,7 @@ model products {
   created_by               String?           @db.Uuid
   updated_by               String?           @db.Uuid
   deleted_by               String?           @db.Uuid
-  cost_source              ProductCostSource @default(BOM)
+  cost_source              ProductCostSource @default(MANUAL)
   needs_cost_recalculation Boolean           @default(false)
   last_cost_calculated_at  DateTime?
   cost_template_id         String?           @db.Uuid
@@ -124,6 +124,7 @@ model product_variants {
   productCostBreakdowns    product_cost_breakdowns[]
   productVariantPrices     product_variant_prices[]
   productVariantCosts      product_variant_costs[]
+  document_items           document_items[]
 
   @@index([product_id])
   @@schema("tenant")

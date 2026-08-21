@@ -10,6 +10,7 @@ import {
 
 // import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { VariantCostsService } from './variant-costs.service';
+import { AuditService } from '@/modules/erp/audit/audit.service';
 
 import { CreateVariantCostDto } from './dto/create-variant-cost.dto';
 
@@ -17,7 +18,10 @@ import { UpdateVariantCostDto } from './dto/update-variant-cost.dto';
 
 @Controller('erp/variant-costs')
 export class VariantCostsController {
-  constructor(private readonly service: VariantCostsService) {}
+  constructor(
+    private readonly service: VariantCostsService,
+    private readonly auditService: AuditService,
+  ) {}
 
   // @RequirePermissions('variant_costs.create')
   @Post()
@@ -47,5 +51,10 @@ export class VariantCostsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id);
+  }
+
+  @Get(':id/history')
+  async getHistory(@Param('id') id: string) {
+    return this.auditService.findByRecord('product_variant_costs', id);
   }
 }

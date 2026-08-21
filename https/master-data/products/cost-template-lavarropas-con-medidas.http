@@ -9,6 +9,7 @@
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+x-tenant: dev
 
 {
   "email": "admin@mail.com",
@@ -220,20 +221,23 @@ Content-Type: application/json
 ###########################################################
 
 ### Tree sillon
-GET {{baseUrl}}/erp/engineering/tree/eaeee3d2-017a-44ad-aeee-f57d5294e541
+GET {{baseUrl}}/erp/engineering/tree/c7aafa88-cafd-40f4-bb86-c4e843db18af
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ### Tree
 GET {{baseUrl}}/erp/engineering/tree/{{cabinetId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###########################################################
 # CALCULAR INGENIERÍA
 ###########################################################
 
 ### Engineering calculate
-POST {{baseUrl}}/erp/engineering/calculate/{{cabinetId}}
+POST {{baseUrl}}/erp/engineering/calculate/c7aafa88-cafd-40f4-bb86-c4e843db18af
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###########################################################
 # TEMPLATE COSTOS
@@ -322,10 +326,6 @@ Content-Type: application/json
     {
       "cost_component_id": "{{laborComponentId}}",
       "order": 2
-    },
-    {
-      "cost_component_id": "{{overheadComponentId}}",
-      "order": 3
     }
   ]
 }
@@ -340,8 +340,9 @@ Content-Type: application/json
 
 
 ### Assign template
-POST {{baseUrl}}/cost-templates/{{templateId}}/products/{{cabinetId}}
+POST {{baseUrl}}/cost-templates/2d1bb01c-20b5-4a8b-b409-747051f46ddf/products/c7aafa88-cafd-40f4-bb86-c4e843db18af
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 ###########################################################
 # CALCULAR COSTO FINAL
@@ -351,10 +352,11 @@ Authorization: Bearer {{accessToken}}
 POST {{baseUrl}}/products/costing/calculate
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+x-tenant: dev
 
 {
-  "product_id": "{{cabinetId}}",
-  "currency_id": "{{usdCurrencyId}}",
+  "product_id": "c7aafa88-cafd-40f4-bb86-c4e843db18af",
+  "currency_id": "dd68f385-3e16-4d30-b601-0b84e51cfff2",
   "save_snapshot": true
 }
 
