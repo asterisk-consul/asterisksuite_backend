@@ -415,6 +415,21 @@ export type product_variant_prices = Prisma.product_variant_pricesModel
  */
 export type product_variant_costs = Prisma.product_variant_costsModel
 /**
+ * Model product_suppliers
+ * 
+ */
+export type product_suppliers = Prisma.product_suppliersModel
+/**
+ * Model price_lists
+ * 
+ */
+export type price_lists = Prisma.price_listsModel
+/**
+ * Model product_list_prices
+ * 
+ */
+export type product_list_prices = Prisma.product_list_pricesModel
+/**
  * Model companies
  * 
  */

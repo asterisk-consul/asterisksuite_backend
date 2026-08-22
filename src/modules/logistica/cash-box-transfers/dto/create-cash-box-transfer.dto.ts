@@ -29,6 +29,14 @@ export class CreateCashBoxTransferDto {
 
   @IsString()
   @IsOptional()
+  rate_type?: string;
+
+  @IsNumber()
+  @IsOptional()
+  converted_amount?: number;
+
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @IsString()

@@ -28,6 +28,7 @@ model business_parties {
   current_accounts    current_accounts[]
   hr_accounts         hr_accounts[]
   hr_vales            hr_vales[]
+  product_suppliers   product_suppliers[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
   @@schema("tenant")

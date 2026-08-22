@@ -42,6 +42,8 @@ export class CashBoxTransfersService {
         amount: dto.amount,
         currency_code: dto.currency_code,
         exchange_rate: dto.exchange_rate,
+        rate_type: dto.rate_type,
+        converted_amount: dto.converted_amount,
         description: dto.description,
         reference: dto.reference,
         transfer_type: dto.transfer_type,
@@ -145,10 +147,28 @@ export class CashBoxTransfersService {
     if (filters?.dest_id) where.dest_id = filters.dest_id;
     if (filters?.status) where.status = filters.status;
 
-    return this.prisma.cash_box_transfers.findMany({
+    const transfers = await this.prisma.cash_box_transfers.findMany({
       where,
       orderBy: { created_at: 'desc' },
     });
+
+    // Resolver creadores desde public.users
+    const creatorIds = [...new Set(transfers.map(t => t.created_by).filter(Boolean))] as string[];
+    let creatorsMap = new Map<string, { id: string; name: string | null; email: string | null }>();
+
+    if (creatorIds.length > 0) {
+      const publicPrisma = this.db.getDefaultClient();
+      const creators = await publicPrisma.users.findMany({
+        where: { id: { in: creatorIds } },
+        select: { id: true, name: true, email: true },
+      });
+      creatorsMap = new Map(creators.map(c => [c.id, c]));
+    }
+
+    return transfers.map(t => ({
+      ...t,
+      creator: t.created_by ? creatorsMap.get(t.created_by) ?? null : null,
+    }));
   }
 
   async findOne(id: string) {
@@ -156,7 +176,18 @@ export class CashBoxTransfersService {
       where: { id, deleted_at: null },
     });
     if (!transfer) throw new NotFoundException('Transferencia no encontrada');
-    return transfer;
+
+    // Resolver creador desde public.users
+    let creator = null;
+    if (transfer.created_by) {
+      const publicPrisma = this.db.getDefaultClient();
+      creator = await publicPrisma.users.findUnique({
+        where: { id: transfer.created_by },
+        select: { id: true, name: true, email: true },
+      });
+    }
+
+    return { ...transfer, creator };
   }
 
   async cancel(id: string, userId: string) {

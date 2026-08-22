@@ -126,6 +126,9 @@ export const ModelName = {
   product_attribute_values: 'product_attribute_values',
   product_variant_prices: 'product_variant_prices',
   product_variant_costs: 'product_variant_costs',
+  product_suppliers: 'product_suppliers',
+  price_lists: 'price_lists',
+  product_list_prices: 'product_list_prices',
   companies: 'companies',
   refresh_tokens: 'refresh_tokens',
   audit_logs_public: 'audit_logs_public',
@@ -1326,6 +1329,8 @@ export const Product_priceScalarFieldEnum = {
   product_id: 'product_id',
   currency_id: 'currency_id',
   price: 'price',
+  sale_price: 'sale_price',
+  margin_percentage: 'margin_percentage',
   exemption_rate: 'exemption_rate',
   active: 'active',
   created_at: 'created_at',
@@ -1570,6 +1575,63 @@ export const Product_variant_costsScalarFieldEnum = {
 } as const
 
 export type Product_variant_costsScalarFieldEnum = (typeof Product_variant_costsScalarFieldEnum)[keyof typeof Product_variant_costsScalarFieldEnum]
+
+
+export const Product_suppliersScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  supplier_id: 'supplier_id',
+  purchase_price: 'purchase_price',
+  currency_id: 'currency_id',
+  lead_time_days: 'lead_time_days',
+  min_order_quantity: 'min_order_quantity',
+  is_primary: 'is_primary',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Product_suppliersScalarFieldEnum = (typeof Product_suppliersScalarFieldEnum)[keyof typeof Product_suppliersScalarFieldEnum]
+
+
+export const Price_listsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  currency_id: 'currency_id',
+  description: 'description',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Price_listsScalarFieldEnum = (typeof Price_listsScalarFieldEnum)[keyof typeof Price_listsScalarFieldEnum]
+
+
+export const Product_list_pricesScalarFieldEnum = {
+  id: 'id',
+  price_list_id: 'price_list_id',
+  product_id: 'product_id',
+  price: 'price',
+  margin_percentage: 'margin_percentage',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Product_list_pricesScalarFieldEnum = (typeof Product_list_pricesScalarFieldEnum)[keyof typeof Product_list_pricesScalarFieldEnum]
 
 
 export const CompaniesScalarFieldEnum = {

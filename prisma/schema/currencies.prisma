@@ -17,6 +17,8 @@ model currencies {
   productCosts         product_costs[]
   productVariantPrices product_variant_prices[]
   productVariantCosts  product_variant_costs[]
+  productSuppliers     product_suppliers[]
+  priceLists           price_lists[]
 
   @@schema("tenant")
 }

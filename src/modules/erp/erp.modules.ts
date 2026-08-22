@@ -32,6 +32,9 @@ import { TreasuryReportsModule } from './treasury-reports/treasury-reports.modul
 import { HrModule } from './hr/hr.module';
 import { TaxEngineModule } from './tax-engine/tax-engine.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { ProductSuppliersModule } from './pricing/product-suppliers/product-suppliers.module';
+import { PriceListsModule } from './pricing/price-lists/price-lists.module';
+import { ListPricesModule } from './pricing/list-prices/list-prices.module';
 
 @Module({
   imports: [
@@ -64,6 +67,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
     HrModule,
     TaxEngineModule,
     DashboardModule,
+    ProductSuppliersModule,
+    PriceListsModule,
+    ListPricesModule,
   ],
   exports: [
     AccountsModule,
@@ -95,6 +101,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
     HrModule,
     TaxEngineModule,
     DashboardModule,
+    ProductSuppliersModule,
+    PriceListsModule,
+    ListPricesModule,
   ],
 })
 export class ErpModulesModule {}
