@@ -63,7 +63,7 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CREATE
   // ─────────────────────────────────────────────
-  async create(dto: CreateDocumentDto) {
+  async create(dto: CreateDocumentDto, userId?: string) {
     console.log('[SalesService] create() called with dto:', JSON.stringify(dto, null, 2))
 
     const dtoItems = dto.items ?? []
@@ -274,6 +274,8 @@ export class DocumentsSalesService {
           parent_document_id: dto.parent_document_id ?? null,
 
           validity_date: dto.validity_date ? new Date(dto.validity_date) : null,
+
+          created_by: userId ?? null,
 
           ...(!isBase ? await this.conversionService.convertDocumentFields(
             currencyCode,
@@ -745,6 +747,8 @@ export class DocumentsSalesService {
     category?: string,
 
     direction?: number,
+
+    userId?: string,
   ) {
     return this.prisma.documents.findMany({
       where: {
@@ -761,6 +765,8 @@ export class DocumentsSalesService {
           : {}),
 
         ...(status !== undefined ? { status } : {}),
+
+        ...(userId ? { created_by: userId } : {}),
       },
 
       include: {

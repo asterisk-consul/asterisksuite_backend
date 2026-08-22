@@ -57,6 +57,7 @@ export class HrService {
     party_type?: string;
     status?: string;
     type?: string;
+    user_id?: string;
   }) {
     const where: any = { deleted_at: null };
 
@@ -64,6 +65,7 @@ export class HrService {
     if (params?.party_type) where.party_type = params.party_type;
     if (params?.status) where.status = params.status;
     if (params?.type) where.type = params.type;
+    if (params?.user_id) where.created_by = params.user_id;
 
     const vales = await this.prisma.hr_vales.findMany({
       where,

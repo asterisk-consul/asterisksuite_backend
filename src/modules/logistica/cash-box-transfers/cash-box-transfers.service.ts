@@ -139,13 +139,14 @@ export class CashBoxTransfersService {
     });
   }
 
-  async findAll(filters?: { source_type?: string; source_id?: string; dest_type?: string; dest_id?: string; status?: string }) {
+  async findAll(filters?: { source_type?: string; source_id?: string; dest_type?: string; dest_id?: string; status?: string; user_id?: string }) {
     const where: Record<string, any> = { deleted_at: null };
     if (filters?.source_type) where.source_type = filters.source_type;
     if (filters?.source_id) where.source_id = filters.source_id;
     if (filters?.dest_type) where.dest_type = filters.dest_type;
     if (filters?.dest_id) where.dest_id = filters.dest_id;
     if (filters?.status) where.status = filters.status;
+    if (filters?.user_id) where.created_by = filters.user_id;
 
     const transfers = await this.prisma.cash_box_transfers.findMany({
       where,

@@ -61,7 +61,7 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CREATE
   // ─────────────────────────────────────────────
-  async create(dto: CreateDocumentDto) {
+  async create(dto: CreateDocumentDto, userId?: string) {
     const dtoItems = dto.items ?? []
     const docType = await this.prisma.document_types.findUnique({
       where: {
@@ -259,6 +259,8 @@ export class DocumentsPurchasesService {
           ref: dto.ref ?? null,
 
           parent_document_id: dto.parent_document_id ?? null,
+
+          created_by: userId ?? null,
 
           ...(!isBase ? await this.conversionService.convertDocumentFields(
             currencyCode, exchangeRate, rateType,
@@ -617,6 +619,8 @@ export class DocumentsPurchasesService {
     category?: string,
 
     direction?: number,
+
+    userId?: string,
   ) {
     return this.prisma.documents.findMany({
       where: {
@@ -632,6 +636,8 @@ export class DocumentsPurchasesService {
           : {}),
 
         ...(status !== undefined ? { status } : {}),
+
+        ...(userId ? { created_by: userId } : {}),
       },
 
       include: {

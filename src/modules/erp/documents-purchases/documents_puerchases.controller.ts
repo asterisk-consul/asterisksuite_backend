@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { DocumentsPurchasesService } from './documents_purchases.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
@@ -14,8 +15,8 @@ export class DocumentsPurchasesController {
 
   // @RequirePermissions('documents-purchases.create')
   @Post()
-  create(@Body() dto: CreateDocumentDto) {
-    return this.service.create(dto);
+  create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser) {
+    return this.service.create(dto, user.id);
   }
 
   @Get('pending')
@@ -28,8 +29,22 @@ export class DocumentsPurchasesController {
 
   // @RequirePermissions('documents-purchases.read')
   @Get()
-  findAll(@Query('documentTypeId') documentTypeId?: string, @Query('status') status?: string, @Query('category') category?: string, @Query('direction') direction?: string) {
-    return this.service.findAll(documentTypeId, status !== undefined ? Number(status) : undefined, category, direction !== undefined ? Number(direction) : undefined);
+  findAll(
+    @Req() req: Request,
+    @CurrentUser() user: AuthUser,
+    @Query('documentTypeId') documentTypeId?: string,
+    @Query('status') status?: string,
+    @Query('category') category?: string,
+    @Query('direction') direction?: string,
+  ) {
+    const companyRole = req['companyUserRole'] as string | undefined;
+    return this.service.findAll(
+      documentTypeId,
+      status !== undefined ? Number(status) : undefined,
+      category,
+      direction !== undefined ? Number(direction) : undefined,
+      companyRole === 'USER' ? user.id : undefined,
+    );
   }
 
   // @RequirePermissions('documents-purchases.read')

@@ -10,15 +10,16 @@ import { CurrentAccountsModule } from '../current-accounts/current-accounts.modu
 import { TaxEngineModule } from '../tax-engine/tax-engine.module';
 import { CurrenciesModule } from '../currencies/currencies.module';
 import { CommonErpModule } from '@/common/common-erp.module';
+import { MySalesModule } from './my-sales/my-sales.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule],
+  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule],
   controllers: [DocumentsSalesController],
   providers: [
     DocumentsSalesService,
     DocumentsSalesItemsService,
     DocumentsSalesTotalsService,
   ],
-  exports: [DocumentsSalesService],
+  exports: [DocumentsSalesService, MySalesModule],
 })
 export class DocumentsSalesModule {}

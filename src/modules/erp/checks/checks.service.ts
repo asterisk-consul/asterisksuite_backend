@@ -159,6 +159,7 @@ export class ChecksService {
     is_own?: boolean;
     bank_name?: string;
     due_before?: string;
+    user_id?: string;
   }) {
     const where: Record<string, any> = { deleted_at: null };
 
@@ -168,6 +169,7 @@ export class ChecksService {
     if (filters?.due_before) {
       where.due_date = { lte: new Date(filters.due_before) };
     }
+    if (filters?.user_id) where.created_by = filters.user_id;
 
     return this.prisma.checks.findMany({
       where,

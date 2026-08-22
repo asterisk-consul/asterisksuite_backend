@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, Request, Req } from '@nestjs/common';
+import type { Request as ExpressRequest } from 'express';
 import { HrService } from './hr.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 
 @UseGuards(JwtAuthGuard)
 @Controller('hr')
@@ -19,12 +22,21 @@ export class HrController {
 
   @Get('vales')
   findAllVales(
+    @Req() req: ExpressRequest,
+    @CurrentUser() user: AuthUser,
     @Query('party_id') partyId?: string,
     @Query('party_type') partyType?: string,
     @Query('status') status?: string,
     @Query('type') type?: string,
   ) {
-    return this.service.findAllVales({ party_id: partyId, party_type: partyType, status, type });
+    const companyRole = req['companyUserRole'] as string | undefined;
+    return this.service.findAllVales({
+      party_id: partyId,
+      party_type: partyType,
+      status,
+      type,
+      user_id: companyRole === 'USER' ? user.id : undefined,
+    });
   }
 
   @Get('vales/:id')

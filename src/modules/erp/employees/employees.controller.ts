@@ -26,6 +26,12 @@ export class EmployeesController {
   }
 
   // @RequirePermissions('employees.read')
+  @Get('me')
+  findMe(@CurrentUser() user: AuthUser) {
+    return this.employeesService.findByUserId(user.id);
+  }
+
+  // @RequirePermissions('employees.read')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.employeesService.findOne(id);

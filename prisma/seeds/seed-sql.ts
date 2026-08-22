@@ -316,6 +316,31 @@ export const RBAC_PERMISSIONS = [
 
   // ─── Data Import ──────────────────────────────────────────
   { code: 'data_import.execute', description: 'Ejecutar importaciones' },
+
+  // ─── ERP - HR (Employees, Partners, Vales) ───────────────
+  { code: 'employees.read', description: 'Ver empleados' },
+  { code: 'employees.create', description: 'Crear empleados' },
+  { code: 'employees.update', description: 'Editar empleados' },
+  { code: 'employees.delete', description: 'Eliminar empleados' },
+  { code: 'partners.read', description: 'Ver socios' },
+  { code: 'partners.create', description: 'Crear socios' },
+  { code: 'partners.update', description: 'Editar socios' },
+  { code: 'partners.delete', description: 'Eliminar socios' },
+  { code: 'vales.read', description: 'Ver vales' },
+  { code: 'vales.create', description: 'Crear vales' },
+  { code: 'vales.update', description: 'Editar vales' },
+  { code: 'vales.delete', description: 'Eliminar vales' },
+  { code: 'vales.approve', description: 'Aprobar vales' },
+  { code: 'vales.reject', description: 'Rechazar vales' },
+
+  // ─── ERP - Checks ─────────────────────────────────────────
+  { code: 'checks.read', description: 'Ver cheques' },
+  { code: 'checks.create', description: 'Crear cheques' },
+  { code: 'checks.update', description: 'Editar cheques' },
+  { code: 'checks.delete', description: 'Eliminar cheques' },
+  { code: 'checks.deposit', description: 'Depositar cheques' },
+  { code: 'checks.endorse', description: 'Endosar cheques' },
+  { code: 'checks.reject', description: 'Rechazar cheques' },
 ]
 
 // ════════════════════════════════════════════════════════════════

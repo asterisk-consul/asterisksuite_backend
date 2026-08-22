@@ -115,6 +115,7 @@ export class EmployeesService {
         salary: dto.salary,
         currency_code: dto.currency_code ?? 'USD',
         default_commission_rate: dto.default_commission_rate ?? null,
+        is_salesperson: dto.is_salesperson ?? false,
         is_active: dto.is_active ?? true,
         created_by: userId,
       },
@@ -180,6 +181,22 @@ export class EmployeesService {
     }
 
     return { ...employee, user };
+  }
+
+  async findByUserId(userId: string) {
+    const employee = await this.prisma.employees.findFirst({
+      where: { user_id: userId, deleted_at: null },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        is_salesperson: true,
+        default_commission_rate: true,
+        position: true,
+        department: true,
+      },
+    });
+    return employee ?? null;
   }
 
   async update(id: string, dto: UpdateEmployeeDto, userId: string) {

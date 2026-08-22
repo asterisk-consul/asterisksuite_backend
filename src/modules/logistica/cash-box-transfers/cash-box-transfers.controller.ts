@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -22,13 +23,23 @@ export class CashBoxTransfersController {
   @Get()
   @RequirePermissions('treasury.cash_box_transfers.read')
   findAll(
+    @Req() req: Request,
+    @CurrentUser() user: AuthUser,
     @Query('source_type') sourceType?: string,
     @Query('source_id') sourceId?: string,
     @Query('dest_type') destType?: string,
     @Query('dest_id') destId?: string,
     @Query('status') status?: string,
   ) {
-    return this.transfersService.findAll({ source_type: sourceType, source_id: sourceId, dest_type: destType, dest_id: destId, status });
+    const companyRole = req['companyUserRole'] as string | undefined;
+    return this.transfersService.findAll({
+      source_type: sourceType,
+      source_id: sourceId,
+      dest_type: destType,
+      dest_id: destId,
+      status,
+      user_id: companyRole === 'USER' ? user.id : undefined,
+    });
   }
 
   @Get(':id')

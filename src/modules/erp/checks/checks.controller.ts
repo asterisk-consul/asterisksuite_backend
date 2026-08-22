@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 // import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -27,16 +28,20 @@ export class ChecksController {
   @Get()
   // @RequirePermissions('treasury.checks.read')
   findAll(
+    @Req() req: Request,
+    @CurrentUser() user: AuthUser,
     @Query('status') status?: string,
     @Query('is_own') isOwn?: string,
     @Query('bank_name') bankName?: string,
     @Query('due_before') dueBefore?: string,
   ) {
+    const companyRole = req['companyUserRole'] as string | undefined;
     return this.checksService.findAll({
       status,
       is_own: isOwn !== undefined ? isOwn === 'true' : undefined,
       bank_name: bankName,
       due_before: dueBefore,
+      user_id: companyRole === 'USER' ? user.id : undefined,
     });
   }
 

@@ -9500,6 +9500,7 @@ export const EmployeesScalarFieldEnum = {
   salary: 'salary',
   currency_code: 'currency_code',
   default_commission_rate: 'default_commission_rate',
+  is_salesperson: 'is_salesperson',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at',
