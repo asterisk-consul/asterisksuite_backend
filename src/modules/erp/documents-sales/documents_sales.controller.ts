@@ -6,6 +6,7 @@ import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('documents/sales')
@@ -47,13 +48,13 @@ export class DocumentsSalesController {
   }
 
   @Post()
-  // @RequirePermissions('documents.create')
+  @RequirePermissions('documents.create')
   create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser) {
     return this.service.create(dto, user.id);
   }
 
   @Get()
-  // @RequirePermissions('documents.read')
+  @RequirePermissions('documents.read')
   findAll(
     @Req() req: Request,
     @CurrentUser() user: AuthUser,
@@ -73,7 +74,7 @@ export class DocumentsSalesController {
   }
 
   @Get('pending')
-  // @RequirePermissions('documents.read')
+  @RequirePermissions('documents.read')
   findPending(
     @Query('party_id') partyId?: string,
   ) {
@@ -81,43 +82,43 @@ export class DocumentsSalesController {
   }
 
   @Get(':id')
-  // @RequirePermissions('documents.read')
+  @RequirePermissions('documents.read')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
 
   @Patch(':id')
-  // @RequirePermissions('documents.update')
+  @RequirePermissions('documents.update')
   update(@Param('id') id: string, @Body() dto: UpdateDocumentDto) {
     return this.service.update(id, dto);
   }
 
   @Patch(':id/confirm')
-  // @RequirePermissions('documents.confirm')
+  @RequirePermissions('documents.confirm')
   confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.service.confirm(id, user.id);
   }
 
   @Patch(':id/cancel')
-  // @RequirePermissions('documents.cancel')
+  @RequirePermissions('documents.cancel')
   cancel(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.service.cancel(id, user.id);
   }
 
   @Patch(':id/accept')
-  // @RequirePermissions('documents.update')
+  @RequirePermissions('documents.update')
   accept(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.service.accept(id, user.id);
   }
 
   @Patch(':id/deliver')
-  // @RequirePermissions('documents.update')
+  @RequirePermissions('documents.update')
   deliver(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.service.deliver(id, user.id);
   }
 
   @Patch(':id/partial-deliver')
-  // @RequirePermissions('documents.update')
+  @RequirePermissions('documents.update')
   partialDeliver(
     @Param('id') id: string,
     @Body() body: { items: { document_item_id: string; quantity: number }[] },
@@ -127,7 +128,7 @@ export class DocumentsSalesController {
   }
 
   @Patch(':id/partial-invoice')
-  // @RequirePermissions('documents.update')
+  @RequirePermissions('documents.update')
   partialInvoice(
     @Param('id') id: string,
     @Body() body: { items: { document_item_id: string; quantity: number }[] },
@@ -137,7 +138,7 @@ export class DocumentsSalesController {
   }
 
   @Patch(':id/status')
-  // @RequirePermissions('documents.update')
+  @RequirePermissions('documents.update')
   changeStatus(
     @Param('id') id: string,
     @Body() body: { status: number },
@@ -147,7 +148,7 @@ export class DocumentsSalesController {
   }
 
   @Delete(':id')
-  // @RequirePermissions('documents.delete')
+  @RequirePermissions('documents.delete')
   remove(@Param('id') id: string) {
     return this.service.remove(id);
   }

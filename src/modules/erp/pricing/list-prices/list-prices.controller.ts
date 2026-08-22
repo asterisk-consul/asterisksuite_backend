@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { ListPricesService } from './list-prices.service';
 import { CreateListPriceDto, UpdateListPriceDto } from './dto/list-price.dto';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('pricing/list-prices')

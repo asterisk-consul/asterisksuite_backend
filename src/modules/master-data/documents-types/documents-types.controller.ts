@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-// import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { DocumentsTypesService } from './documents-types.service';
 import { CreateDocumentsTypeDto } from './dto/create-documents-type.dto';
 import { UpdateDocumentsTypeDto } from './dto/update-documents-type.dto';
@@ -19,13 +19,13 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 export class DocumentsTypesController {
   constructor(private readonly documentsTypesService: DocumentsTypesService) {}
 
-  // @RequirePermissions('document_types.create')
+  @RequirePermissions('document_types.create')
   @Post()
   create(@Body() createDocumentsTypeDto: CreateDocumentsTypeDto) {
     return this.documentsTypesService.create(createDocumentsTypeDto);
   }
 
-  // @RequirePermissions('document_types.read')
+  @RequirePermissions('document_types.read')
   @Get()
   findAll(
     @Query('company_id') companyId: string,
@@ -39,7 +39,7 @@ export class DocumentsTypesController {
     );
   }
 
-  // @RequirePermissions('document_types.update')
+  @RequirePermissions('document_types.update')
   @Patch(':id')
   update(
     @Param('id') id: string,

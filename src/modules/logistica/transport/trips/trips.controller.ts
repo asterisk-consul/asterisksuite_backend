@@ -12,9 +12,9 @@ import {
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { TripStatus } from '@/generated/prisma/enums';
-// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('trips')
 @UseGuards(JwtAuthGuard)
@@ -22,13 +22,13 @@ export class TripsController {
   constructor(private readonly service: TripsService) {}
 
   // ✅ Específicas primero
-  // @RequirePermissions('trips.read')
+  @RequirePermissions('trips.read')
   @Get('detail/:id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
 
-  // @RequirePermissions('trips.update')
+  @RequirePermissions('trips.update')
   @Patch(':id/status/:status')
   updateStatus(
     @Param('id') id: string,
@@ -38,7 +38,7 @@ export class TripsController {
     return this.service.updateStatus(id, status, generate === 'true');
   }
 
-  // @RequirePermissions('trips.delete')
+  @RequirePermissions('trips.delete')
   @Delete(':id/orders/:dispatchOrderId')
   removeOrderFromTrip(
     @Param('id') tripId: string,
@@ -48,31 +48,31 @@ export class TripsController {
   }
 
   // ⚠️ Genéricas después
-  // @RequirePermissions('trips.read')
+  @RequirePermissions('trips.read')
   @Get()
   findAll() {
     return this.service.findAll();
   }
 
-  // @RequirePermissions('trips.update')
+  @RequirePermissions('trips.update')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateTripDto) {
     return this.service.update(id, dto);
   }
 
-  // @RequirePermissions('trips.delete')
+  @RequirePermissions('trips.delete')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id);
   }
 
-  // @RequirePermissions('trips.create')
+  @RequirePermissions('trips.create')
   @Post(':id/assign-orders')
   assignOrders(@Param('id') id: string, @Body() dto: any) {
     return this.service.assignOrders(id, dto);
   }
 
-  // @RequirePermissions('trips.create')
+  @RequirePermissions('trips.create')
   @Post()
   create(@Body() dto: CreateTripDto) {
     return this.service.create(dto);

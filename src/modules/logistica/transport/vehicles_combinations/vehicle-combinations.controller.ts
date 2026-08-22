@@ -13,10 +13,10 @@ import {
 import { VehicleCombinationsService } from './vehicle-combinations.service';
 import { CreateVehicleCombinationDto } from './dto/create-vehicle-combination.dto';
 import { UpdateVehicleCombinationDto } from './dto/update-vehicle-combination.dto';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
-// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('vehicle-combinations')
 @UseGuards(JwtAuthGuard)
@@ -27,7 +27,7 @@ export class VehicleCombinationsController {
   // CREATE
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.create')
+  @RequirePermissions('vehicle_combinations.create')
   @Post()
   create(@Body() dto: CreateVehicleCombinationDto) {
     return this.service.create(dto);
@@ -37,13 +37,13 @@ export class VehicleCombinationsController {
   // LISTAR TODAS
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.read')
+  @RequirePermissions('vehicle_combinations.read')
   @Get()
   findAll() {
     return this.service.findAll();
   }
 
-  // @RequirePermissions('vehicle_combinations.read')
+  @RequirePermissions('vehicle_combinations.read')
   @Get('available')
   findAvailable(@Query('date') date: string) {
     return this.service.findAvailable(date);
@@ -53,7 +53,7 @@ export class VehicleCombinationsController {
   // LISTAR ACTIVAS
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.read')
+  @RequirePermissions('vehicle_combinations.read')
   @Get('active')
   findActive() {
     return this.service.findActive();
@@ -63,7 +63,7 @@ export class VehicleCombinationsController {
   // HISTORIAL POR VEHICULO
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.read')
+  @RequirePermissions('vehicle_combinations.read')
   @Get('vehicle/:vehicle_id')
   findByVehicle(@Param('vehicle_id') vehicle_id: string) {
     return this.service.findByVehicle(vehicle_id);
@@ -73,7 +73,7 @@ export class VehicleCombinationsController {
   // BUSCAR UNA
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.read')
+  @RequirePermissions('vehicle_combinations.read')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
@@ -83,7 +83,7 @@ export class VehicleCombinationsController {
   // FINALIZAR COMBINACION
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.update')
+  @RequirePermissions('vehicle_combinations.update')
   @Patch(':id/finish')
   finish(@Param('id') id: string) {
     return this.service.finish(id);
@@ -93,7 +93,7 @@ export class VehicleCombinationsController {
   // ACTIVAR COMBINACION
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.update')
+  @RequirePermissions('vehicle_combinations.update')
   @Patch(':id/activate')
   activate(@Param('id') id: string) {
     return this.service.activate(id);
@@ -103,7 +103,7 @@ export class VehicleCombinationsController {
   // UPDATE
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.update')
+  @RequirePermissions('vehicle_combinations.update')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateVehicleCombinationDto) {
     return this.service.update(id, dto);
@@ -113,7 +113,7 @@ export class VehicleCombinationsController {
   // DELETE
   // --------------------------------------------------
 
-  // @RequirePermissions('vehicle_combinations.delete')
+  @RequirePermissions('vehicle_combinations.delete')
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.service.remove(id, user.id);

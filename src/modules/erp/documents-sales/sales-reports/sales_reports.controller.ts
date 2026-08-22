@@ -10,14 +10,14 @@ import {
 import { QuerySalesDto } from './dto/query-sales.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { GlobalSalesDocumentsResponseDto } from './dto/global-sales-documents';
-// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('sales-reports')
 @UseGuards(JwtAuthGuard)
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
-  // @RequirePermissions('sales-reports.read')
+  @RequirePermissions('sales-reports.read')
   @Get('summary')
   getSalesSummary(
     @Query() query: QuerySalesDto,
@@ -25,7 +25,7 @@ export class SalesController {
     return this.salesService.getSalesSummary(query);
   }
 
-  // @RequirePermissions('sales-reports.read')
+  @RequirePermissions('sales-reports.read')
   @Get('products/:id')
   getProductPurchaseDetail(
     @Param('id') id: string,
@@ -34,7 +34,7 @@ export class SalesController {
     return this.salesService.getProductSalesDetail(id, query);
   }
 
-  // @RequirePermissions('sales-reports.read')
+  @RequirePermissions('sales-reports.read')
   @Get('movements')
   getSalesMovements(
     @Query() query: QuerySalesDto,
@@ -42,7 +42,7 @@ export class SalesController {
     return this.salesService.getSalesMovements(query);
   }
 
-  // @RequirePermissions('sales-reports.read')
+  @RequirePermissions('sales-reports.read')
   @Get('sales-documents')
   getPurchaseDocuments(
     @Query() query: QuerySalesDto,
@@ -50,7 +50,7 @@ export class SalesController {
     return this.salesService.getSalesDocuments(query);
   }
 
-  // @RequirePermissions('sales-reports.read')
+  @RequirePermissions('sales-reports.read')
   @Get('products')
   getAvailableProducts(): Promise<AvailableProductSalesResponseDto[]> {
     return this.salesService.getAvailableProducts();

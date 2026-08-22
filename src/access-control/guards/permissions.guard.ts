@@ -38,16 +38,10 @@ export class PermissionsGuard implements CanActivate {
 
     const user: AuthUser = request.user;
 
-    // console.log('USER PARSED:', user);
-
-    if (!user) {
-      // console.log('USER IS UNDEFINED -> JwtAuthGuard issue');
-      throw new UnauthorizedException('Usuario no autenticado');
-    }
-
-    if (!user.id) {
-      // console.log('USER HAS NO ID');
-      throw new UnauthorizedException('Usuario inválido');
+    // Si no hay user (JwtAuthGuard aún no corrió a nivel controller), dejar pasar
+    // El controller-level JwtAuthGuard se encargará de la autenticación
+    if (!user || !user.id) {
+      return true;
     }
 
     // OWNER bypass

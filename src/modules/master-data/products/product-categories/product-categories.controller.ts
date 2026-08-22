@@ -8,12 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-// import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { ProductCategoriesService } from './product-categories.service';
 
 import { AssignProductCategoryDto } from './dto/assign-product-category.dto';
 import { BulkAssignProductCategoriesDto } from './dto/bulk-assign-product-categories.dto';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('product-categories')
@@ -22,25 +22,25 @@ export class ProductCategoriesController {
     private readonly productCategoriesService: ProductCategoriesService,
   ) {}
 
-  // @RequirePermissions('product_categories.create')
+  @RequirePermissions('product_categories.create')
   @Post()
   assign(@Body() dto: AssignProductCategoryDto) {
     return this.productCategoriesService.assign(dto);
   }
 
-  // @RequirePermissions('product_categories.create')
+  @RequirePermissions('product_categories.create')
   @Post('bulk')
   bulkAssign(@Body() dto: BulkAssignProductCategoriesDto) {
     return this.productCategoriesService.bulkAssign(dto);
   }
 
-  // @RequirePermissions('product_categories.read')
+  @RequirePermissions('product_categories.read')
   @Get('product/:productId')
   getProductCategories(@Param('productId') productId: string) {
     return this.productCategoriesService.getProductCategories(productId);
   }
 
-  // @RequirePermissions('product_categories.delete')
+  @RequirePermissions('product_categories.delete')
   @Delete(':productId/:categoryId')
   remove(
     @Param('productId') productId: string,

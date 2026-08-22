@@ -6,56 +6,56 @@ import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { LinkUserDto } from './dto/link-user.dto';
-// import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
-  // @RequirePermissions('employees.create')
+  @RequirePermissions('employees.create')
   @Post()
   create(@Body() dto: CreateEmployeeDto, @CurrentUser() user: AuthUser) {
     return this.employeesService.create(dto, user.id);
   }
 
-  // @RequirePermissions('employees.read')
+  @RequirePermissions('employees.read')
   @Get()
   findAll() {
     return this.employeesService.findAll();
   }
 
-  // @RequirePermissions('employees.read')
+  @RequirePermissions('employees.read')
   @Get('me')
   findMe(@CurrentUser() user: AuthUser) {
     return this.employeesService.findByUserId(user.id);
   }
 
-  // @RequirePermissions('employees.read')
+  @RequirePermissions('employees.read')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.employeesService.findOne(id);
   }
 
-  // @RequirePermissions('employees.update')
+  @RequirePermissions('employees.update')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateEmployeeDto, @CurrentUser() user: AuthUser) {
     return this.employeesService.update(id, dto, user.id);
   }
 
-  // @RequirePermissions('employees.update')
+  @RequirePermissions('employees.update')
   @Patch(':id/link-user')
   linkUser(@Param('id') id: string, @Body() dto: LinkUserDto) {
     return this.employeesService.linkUser(id, dto.user_id);
   }
 
-  // @RequirePermissions('employees.update')
+  @RequirePermissions('employees.update')
   @Patch(':id/unlink-user')
   unlinkUser(@Param('id') id: string) {
     return this.employeesService.unlinkUser(id);
   }
 
-  // @RequirePermissions('employees.delete')
+  @RequirePermissions('employees.delete')
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.employeesService.remove(id, user.id);

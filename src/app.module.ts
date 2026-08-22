@@ -9,6 +9,8 @@ import { ModulesModule } from './modules/modules.module';
 import { AccessControlModule } from './access-control/access-control.module';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { TenantAccessGuard } from './common/guards/tenant-access.guard';
+import { PermissionsGuard } from './access-control/guards/permissions.guard';
+import { CombinedGuard } from './common/guards/combined.guard';
 
 @Module({
   imports: [
@@ -21,9 +23,11 @@ import { TenantAccessGuard } from './common/guards/tenant-access.guard';
     ModulesModule,
   ],
   providers: [
+    TenantAccessGuard,
+    PermissionsGuard,
     {
       provide: 'APP_GUARD',
-      useClass: TenantAccessGuard,
+      useClass: CombinedGuard,
     },
   ],
 })

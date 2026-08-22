@@ -4,11 +4,11 @@ import {
   ReporteChoferesQueryDto,
   ReporteChoferesResponseDto,
 } from './dto/dispatch_rates_drivers';
-// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // descomenta si usás guards
-// import { RequirePermissions } from 'src/access-control/decorators/require-permissions.decorator';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('reportes/choferes')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ReporteChoferesController {
   constructor(
     private readonly reporteChoferesService: ReporteChoferesService,
@@ -27,7 +27,7 @@ export class ReporteChoferesController {
    *  - page        : number (default 1)
    *  - limit       : number (default 50, máx 500)
    */
-  // @RequirePermissions('dispatch_reports.read')
+  @RequirePermissions('dispatch_reports.read')
   @Get()
   findAll(
     @Query() query: ReporteChoferesQueryDto,

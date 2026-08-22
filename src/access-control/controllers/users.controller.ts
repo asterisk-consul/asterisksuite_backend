@@ -3,11 +3,11 @@ import { Controller, Get, Post, Param, Put, Body, Query, UseGuards, BadRequestEx
 import { RolesService } from '../services/roles.service';
 import { PermissionContextBuilder } from '../authorization/permission-context.builder';
 
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import type { AuthUser } from 'src/auth/types/auth-user.interface';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { PrismaService } from '@/prisma/prisma.service';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import * as bcrypt from 'bcrypt';

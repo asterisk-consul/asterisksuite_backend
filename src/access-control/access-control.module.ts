@@ -22,7 +22,7 @@ import { PermissionsGuard } from './guards/permissions.guard';
     AuthorizationService,
     PermissionContextBuilder,
     PermissionsGuard,
-    // { provide: APP_GUARD, useClass: PermissionsGuard },  // ← COMENTADO: activar cuando se habilite RBAC global
+    // { provide: APP_GUARD, useClass: PermissionsGuard },  // ← Usar CombinedGuard en AppModule
   ],
   exports: [AuthorizationService, PermissionContextBuilder, PermissionsGuard],
 })
