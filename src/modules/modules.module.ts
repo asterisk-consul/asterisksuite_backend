@@ -6,6 +6,7 @@ import { ErpModulesModule } from './erp/erp.modules';
 import { TesoreriaModule } from './erp/tesoreria/tesoreria.module';
 import { TrashModule } from './trash/trash.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { InternationalOperationsModule } from './international-operations/international-operations.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { InventoryModule } from './inventory/inventory.module';
     TesoreriaModule,
     TrashModule,
     InventoryModule,
+    InternationalOperationsModule,
   ],
   exports: [
     CoreModule,
@@ -25,6 +27,7 @@ import { InventoryModule } from './inventory/inventory.module';
     TesoreriaModule,
     TrashModule,
     InventoryModule,
+    InternationalOperationsModule,
   ],
 })
 export class ModulesModule {}

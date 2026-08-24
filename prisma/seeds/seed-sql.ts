@@ -341,6 +341,12 @@ export const RBAC_PERMISSIONS = [
   { code: 'checks.deposit', description: 'Depositar cheques' },
   { code: 'checks.endorse', description: 'Endosar cheques' },
   { code: 'checks.reject', description: 'Rechazar cheques' },
+
+  // ─── International Operations ─────────────────────────────
+  { code: 'international_operations.read', description: 'Ver operaciones internacionales' },
+  { code: 'international_operations.create', description: 'Crear operaciones internacionales' },
+  { code: 'international_operations.update', description: 'Editar operaciones internacionales' },
+  { code: 'international_operations.delete', description: 'Eliminar operaciones internacionales' },
 ]
 
 // ════════════════════════════════════════════════════════════════
@@ -385,6 +391,7 @@ export const RBAC_ROLES = [
       'product_variants.read', 'product_components.read',
       'attributes.read', 'tags.read',
       'drivers.read', 'vehicles.read', 'vehicle_combinations.read',
+      'international_operations.read', 'international_operations.create', 'international_operations.update',
     ],
   },
   {
@@ -705,7 +712,8 @@ VALUES
   (gen_random_uuid(), 'Ventas C', true, '0001', 0, 'C', true),
   (gen_random_uuid(), 'Compras A', true, '0002', 0, 'A', true),
   (gen_random_uuid(), 'Compras B', true, '0002', 0, 'B', true),
-  (gen_random_uuid(), 'Compras C', true, '0002', 0, 'C', true)
+  (gen_random_uuid(), 'Compras C', true, '0002', 0, 'C', true),
+  (gen_random_uuid(), 'Operaciones Internacionales', true, '0003', 0, 'IMP', true)
 ON CONFLICT DO NOTHING;
 `
 

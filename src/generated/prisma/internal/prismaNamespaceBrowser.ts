@@ -81,6 +81,11 @@ export const ModelName = {
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
   hr_vale_commission_details: 'hr_vale_commission_details',
+  international_operations: 'international_operations',
+  international_containers: 'international_containers',
+  container_events: 'container_events',
+  international_operation_documents: 'international_operation_documents',
+  international_operation_payments: 'international_operation_payments',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -596,6 +601,7 @@ export const Orden_compra_documentsScalarFieldEnum = {
   transport_provider: 'transport_provider',
   confirmed_delivery_date: 'confirmed_delivery_date',
   buyer_id: 'buyer_id',
+  international_operation_id: 'international_operation_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -786,6 +792,105 @@ export const Hr_vale_commission_detailsScalarFieldEnum = {
 } as const
 
 export type Hr_vale_commission_detailsScalarFieldEnum = (typeof Hr_vale_commission_detailsScalarFieldEnum)[keyof typeof Hr_vale_commission_detailsScalarFieldEnum]
+
+
+export const International_operationsScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  name: 'name',
+  operation_type: 'operation_type',
+  transport_type: 'transport_type',
+  status: 'status',
+  primary_supplier_id: 'primary_supplier_id',
+  origin_country: 'origin_country',
+  origin_location: 'origin_location',
+  origin_location_id: 'origin_location_id',
+  destination_country: 'destination_country',
+  destination_location: 'destination_location',
+  destination_location_id: 'destination_location_id',
+  estimated_departure_date: 'estimated_departure_date',
+  actual_departure_date: 'actual_departure_date',
+  estimated_arrival_date: 'estimated_arrival_date',
+  actual_arrival_date: 'actual_arrival_date',
+  currency_code: 'currency_code',
+  incoterm: 'incoterm',
+  responsible_user_id: 'responsible_user_id',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type International_operationsScalarFieldEnum = (typeof International_operationsScalarFieldEnum)[keyof typeof International_operationsScalarFieldEnum]
+
+
+export const International_containersScalarFieldEnum = {
+  id: 'id',
+  operation_id: 'operation_id',
+  container_number: 'container_number',
+  container_type: 'container_type',
+  seal_number: 'seal_number',
+  booking_number: 'booking_number',
+  bill_of_lading: 'bill_of_lading',
+  vessel_name: 'vessel_name',
+  voyage_number: 'voyage_number',
+  origin_port: 'origin_port',
+  origin_port_id: 'origin_port_id',
+  destination_port: 'destination_port',
+  destination_port_id: 'destination_port_id',
+  estimated_departure_date: 'estimated_departure_date',
+  actual_departure_date: 'actual_departure_date',
+  estimated_arrival_date: 'estimated_arrival_date',
+  actual_arrival_date: 'actual_arrival_date',
+  status: 'status',
+  weight: 'weight',
+  volume: 'volume',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type International_containersScalarFieldEnum = (typeof International_containersScalarFieldEnum)[keyof typeof International_containersScalarFieldEnum]
+
+
+export const Container_eventsScalarFieldEnum = {
+  id: 'id',
+  container_id: 'container_id',
+  event_type: 'event_type',
+  event_date: 'event_date',
+  location_text: 'location_text',
+  description: 'description',
+  estimated: 'estimated',
+  created_by: 'created_by',
+  created_at: 'created_at'
+} as const
+
+export type Container_eventsScalarFieldEnum = (typeof Container_eventsScalarFieldEnum)[keyof typeof Container_eventsScalarFieldEnum]
+
+
+export const International_operation_documentsScalarFieldEnum = {
+  operation_id: 'operation_id',
+  document_id: 'document_id',
+  created_at: 'created_at'
+} as const
+
+export type International_operation_documentsScalarFieldEnum = (typeof International_operation_documentsScalarFieldEnum)[keyof typeof International_operation_documentsScalarFieldEnum]
+
+
+export const International_operation_paymentsScalarFieldEnum = {
+  operation_id: 'operation_id',
+  payment_id: 'payment_id',
+  created_at: 'created_at'
+} as const
+
+export type International_operation_paymentsScalarFieldEnum = (typeof International_operation_paymentsScalarFieldEnum)[keyof typeof International_operation_paymentsScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {

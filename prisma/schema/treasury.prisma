@@ -331,6 +331,7 @@ model payments {
   account_entries          current_account_entries[]
   bank_account_movements   bank_account_movements[]
   cash_box_movements       cash_box_movements[]
+  international_operation_payments international_operation_payments[]
 
   @@unique([number])
   @@index([party_id])

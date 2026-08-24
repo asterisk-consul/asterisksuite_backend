@@ -366,6 +366,100 @@ export const HrAccountEntryType = {
 export type HrAccountEntryType = (typeof HrAccountEntryType)[keyof typeof HrAccountEntryType]
 
 
+export const OperationType = {
+  IMPORT: 'IMPORT',
+  EXPORT: 'EXPORT',
+  OTHER: 'OTHER'
+} as const
+
+export type OperationType = (typeof OperationType)[keyof typeof OperationType]
+
+
+export const TransportType = {
+  MARITIME: 'MARITIME',
+  AIR: 'AIR',
+  LAND: 'LAND',
+  MULTIMODAL: 'MULTIMODAL',
+  OTHER: 'OTHER'
+} as const
+
+export type TransportType = (typeof TransportType)[keyof typeof TransportType]
+
+
+export const OperationStatus = {
+  PLANNED: 'PLANNED',
+  IN_PREPARATION: 'IN_PREPARATION',
+  SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  ARRIVED: 'ARRIVED',
+  CUSTOMS: 'CUSTOMS',
+  RELEASED: 'RELEASED',
+  DELIVERED: 'DELIVERED',
+  CLOSED: 'CLOSED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type OperationStatus = (typeof OperationStatus)[keyof typeof OperationStatus]
+
+
+export const ContainerType = {
+  TWENTY_DV: 'TWENTY_DV',
+  FORTY_DV: 'FORTY_DV',
+  FORTY_HC: 'FORTY_HC',
+  FORTY_FIVE_HC: 'FORTY_FIVE_HC',
+  OTHER: 'OTHER'
+} as const
+
+export type ContainerType = (typeof ContainerType)[keyof typeof ContainerType]
+
+
+export const ContainerStatus = {
+  PREPARING: 'PREPARING',
+  LOADED: 'LOADED',
+  SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  ARRIVED: 'ARRIVED',
+  CUSTOMS: 'CUSTOMS',
+  RELEASED: 'RELEASED',
+  DELIVERED: 'DELIVERED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type ContainerStatus = (typeof ContainerStatus)[keyof typeof ContainerStatus]
+
+
+export const ContainerEventType = {
+  LOADED_AT_ORIGIN: 'LOADED_AT_ORIGIN',
+  DEPARTED_ORIGIN: 'DEPARTED_ORIGIN',
+  SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  ARRIVED_AT_PORT: 'ARRIVED_AT_PORT',
+  CUSTOMS: 'CUSTOMS',
+  RELEASED: 'RELEASED',
+  INLAND_TRANSPORT: 'INLAND_TRANSPORT',
+  ARRIVED_AT_WAREHOUSE: 'ARRIVED_AT_WAREHOUSE',
+  DELIVERED: 'DELIVERED'
+} as const
+
+export type ContainerEventType = (typeof ContainerEventType)[keyof typeof ContainerEventType]
+
+
+export const Incoterm = {
+  EXW: 'EXW',
+  FCA: 'FCA',
+  FOB: 'FOB',
+  CFR: 'CFR',
+  CIF: 'CIF',
+  CPT: 'CPT',
+  CIP: 'CIP',
+  DAP: 'DAP',
+  DPU: 'DPU',
+  DDP: 'DDP'
+} as const
+
+export type Incoterm = (typeof Incoterm)[keyof typeof Incoterm]
+
+
 export const CompanyRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',

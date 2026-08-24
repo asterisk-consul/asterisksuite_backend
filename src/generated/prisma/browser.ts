@@ -168,6 +168,31 @@ export type hr_vales = Prisma.hr_valesModel
  */
 export type hr_vale_commission_details = Prisma.hr_vale_commission_detailsModel
 /**
+ * Model international_operations
+ * 
+ */
+export type international_operations = Prisma.international_operationsModel
+/**
+ * Model international_containers
+ * 
+ */
+export type international_containers = Prisma.international_containersModel
+/**
+ * Model container_events
+ * 
+ */
+export type container_events = Prisma.container_eventsModel
+/**
+ * Model international_operation_documents
+ * 
+ */
+export type international_operation_documents = Prisma.international_operation_documentsModel
+/**
+ * Model international_operation_payments
+ * 
+ */
+export type international_operation_payments = Prisma.international_operation_paymentsModel
+/**
  * Model cargo_transfer_items
  * 
  */

@@ -24,6 +24,10 @@ model locations {
   trips_trips_destination_location_idTolocations trips[]           @relation("trips_destination_location_idTolocations")
   trips_trips_origin_location_idTolocations      trips[]           @relation("trips_origin_location_idTolocations")
   warehouses                                     warehouses[]
+  io_origin_locations                            international_operations[] @relation("io_origin_location")
+  io_destination_locations                       international_operations[] @relation("io_destination_location")
+  ic_origin_ports                                international_containers[] @relation("ic_origin_port")
+  ic_destination_ports                           international_containers[] @relation("ic_destination_port")
 
   @@schema("tenant")
 }

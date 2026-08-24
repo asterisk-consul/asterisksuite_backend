@@ -481,6 +481,7 @@ const sequences = [
   { name: 'Notas de Débito B', point_of_sale: '0001', prefix: 'NDB', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'B' },
   { name: 'Recibos', point_of_sale: '0001', prefix: 'REC', forCategory: 'RECEIPT' },
   { name: 'VALES', point_of_sale: '0003', prefix: 'V', forCategory: 'VALE' },
+  { name: 'Operaciones Internacionales', point_of_sale: '0003', prefix: 'IMP', forCategory: null },
 ];
 
 async function main() {

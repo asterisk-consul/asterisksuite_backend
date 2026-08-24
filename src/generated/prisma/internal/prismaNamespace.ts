@@ -414,6 +414,11 @@ export const ModelName = {
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
   hr_vale_commission_details: 'hr_vale_commission_details',
+  international_operations: 'international_operations',
+  international_containers: 'international_containers',
+  container_events: 'container_events',
+  international_operation_documents: 'international_operation_documents',
+  international_operation_payments: 'international_operation_payments',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -514,7 +519,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2735,6 +2740,376 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.hr_vale_commission_detailsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Hr_vale_commission_detailsCountAggregateOutputType> | number
+        }
+      }
+    }
+    international_operations: {
+      payload: Prisma.$international_operationsPayload<ExtArgs>
+      fields: Prisma.international_operationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.international_operationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.international_operationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>
+        }
+        findFirst: {
+          args: Prisma.international_operationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.international_operationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>
+        }
+        findMany: {
+          args: Prisma.international_operationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>[]
+        }
+        create: {
+          args: Prisma.international_operationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>
+        }
+        createMany: {
+          args: Prisma.international_operationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.international_operationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>[]
+        }
+        delete: {
+          args: Prisma.international_operationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>
+        }
+        update: {
+          args: Prisma.international_operationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.international_operationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.international_operationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.international_operationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.international_operationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operationsPayload>
+        }
+        aggregate: {
+          args: Prisma.International_operationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInternational_operations>
+        }
+        groupBy: {
+          args: Prisma.international_operationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.international_operationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    international_containers: {
+      payload: Prisma.$international_containersPayload<ExtArgs>
+      fields: Prisma.international_containersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.international_containersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.international_containersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>
+        }
+        findFirst: {
+          args: Prisma.international_containersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.international_containersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>
+        }
+        findMany: {
+          args: Prisma.international_containersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>[]
+        }
+        create: {
+          args: Prisma.international_containersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>
+        }
+        createMany: {
+          args: Prisma.international_containersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.international_containersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>[]
+        }
+        delete: {
+          args: Prisma.international_containersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>
+        }
+        update: {
+          args: Prisma.international_containersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>
+        }
+        deleteMany: {
+          args: Prisma.international_containersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.international_containersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.international_containersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>[]
+        }
+        upsert: {
+          args: Prisma.international_containersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_containersPayload>
+        }
+        aggregate: {
+          args: Prisma.International_containersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInternational_containers>
+        }
+        groupBy: {
+          args: Prisma.international_containersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_containersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.international_containersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_containersCountAggregateOutputType> | number
+        }
+      }
+    }
+    container_events: {
+      payload: Prisma.$container_eventsPayload<ExtArgs>
+      fields: Prisma.container_eventsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.container_eventsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.container_eventsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>
+        }
+        findFirst: {
+          args: Prisma.container_eventsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.container_eventsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>
+        }
+        findMany: {
+          args: Prisma.container_eventsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>[]
+        }
+        create: {
+          args: Prisma.container_eventsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>
+        }
+        createMany: {
+          args: Prisma.container_eventsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.container_eventsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>[]
+        }
+        delete: {
+          args: Prisma.container_eventsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>
+        }
+        update: {
+          args: Prisma.container_eventsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>
+        }
+        deleteMany: {
+          args: Prisma.container_eventsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.container_eventsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.container_eventsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>[]
+        }
+        upsert: {
+          args: Prisma.container_eventsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$container_eventsPayload>
+        }
+        aggregate: {
+          args: Prisma.Container_eventsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContainer_events>
+        }
+        groupBy: {
+          args: Prisma.container_eventsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Container_eventsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.container_eventsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Container_eventsCountAggregateOutputType> | number
+        }
+      }
+    }
+    international_operation_documents: {
+      payload: Prisma.$international_operation_documentsPayload<ExtArgs>
+      fields: Prisma.international_operation_documentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.international_operation_documentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.international_operation_documentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>
+        }
+        findFirst: {
+          args: Prisma.international_operation_documentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.international_operation_documentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>
+        }
+        findMany: {
+          args: Prisma.international_operation_documentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>[]
+        }
+        create: {
+          args: Prisma.international_operation_documentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>
+        }
+        createMany: {
+          args: Prisma.international_operation_documentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.international_operation_documentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>[]
+        }
+        delete: {
+          args: Prisma.international_operation_documentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>
+        }
+        update: {
+          args: Prisma.international_operation_documentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.international_operation_documentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.international_operation_documentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.international_operation_documentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.international_operation_documentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_documentsPayload>
+        }
+        aggregate: {
+          args: Prisma.International_operation_documentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInternational_operation_documents>
+        }
+        groupBy: {
+          args: Prisma.international_operation_documentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_documentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.international_operation_documentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_documentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    international_operation_payments: {
+      payload: Prisma.$international_operation_paymentsPayload<ExtArgs>
+      fields: Prisma.international_operation_paymentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.international_operation_paymentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.international_operation_paymentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>
+        }
+        findFirst: {
+          args: Prisma.international_operation_paymentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.international_operation_paymentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>
+        }
+        findMany: {
+          args: Prisma.international_operation_paymentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>[]
+        }
+        create: {
+          args: Prisma.international_operation_paymentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>
+        }
+        createMany: {
+          args: Prisma.international_operation_paymentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.international_operation_paymentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>[]
+        }
+        delete: {
+          args: Prisma.international_operation_paymentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>
+        }
+        update: {
+          args: Prisma.international_operation_paymentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.international_operation_paymentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.international_operation_paymentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.international_operation_paymentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.international_operation_paymentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_paymentsPayload>
+        }
+        aggregate: {
+          args: Prisma.International_operation_paymentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInternational_operation_payments>
+        }
+        groupBy: {
+          args: Prisma.international_operation_paymentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_paymentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.international_operation_paymentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_paymentsCountAggregateOutputType> | number
         }
       }
     }
@@ -9479,6 +9854,7 @@ export const Orden_compra_documentsScalarFieldEnum = {
   transport_provider: 'transport_provider',
   confirmed_delivery_date: 'confirmed_delivery_date',
   buyer_id: 'buyer_id',
+  international_operation_id: 'international_operation_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -9669,6 +10045,105 @@ export const Hr_vale_commission_detailsScalarFieldEnum = {
 } as const
 
 export type Hr_vale_commission_detailsScalarFieldEnum = (typeof Hr_vale_commission_detailsScalarFieldEnum)[keyof typeof Hr_vale_commission_detailsScalarFieldEnum]
+
+
+export const International_operationsScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  name: 'name',
+  operation_type: 'operation_type',
+  transport_type: 'transport_type',
+  status: 'status',
+  primary_supplier_id: 'primary_supplier_id',
+  origin_country: 'origin_country',
+  origin_location: 'origin_location',
+  origin_location_id: 'origin_location_id',
+  destination_country: 'destination_country',
+  destination_location: 'destination_location',
+  destination_location_id: 'destination_location_id',
+  estimated_departure_date: 'estimated_departure_date',
+  actual_departure_date: 'actual_departure_date',
+  estimated_arrival_date: 'estimated_arrival_date',
+  actual_arrival_date: 'actual_arrival_date',
+  currency_code: 'currency_code',
+  incoterm: 'incoterm',
+  responsible_user_id: 'responsible_user_id',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type International_operationsScalarFieldEnum = (typeof International_operationsScalarFieldEnum)[keyof typeof International_operationsScalarFieldEnum]
+
+
+export const International_containersScalarFieldEnum = {
+  id: 'id',
+  operation_id: 'operation_id',
+  container_number: 'container_number',
+  container_type: 'container_type',
+  seal_number: 'seal_number',
+  booking_number: 'booking_number',
+  bill_of_lading: 'bill_of_lading',
+  vessel_name: 'vessel_name',
+  voyage_number: 'voyage_number',
+  origin_port: 'origin_port',
+  origin_port_id: 'origin_port_id',
+  destination_port: 'destination_port',
+  destination_port_id: 'destination_port_id',
+  estimated_departure_date: 'estimated_departure_date',
+  actual_departure_date: 'actual_departure_date',
+  estimated_arrival_date: 'estimated_arrival_date',
+  actual_arrival_date: 'actual_arrival_date',
+  status: 'status',
+  weight: 'weight',
+  volume: 'volume',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type International_containersScalarFieldEnum = (typeof International_containersScalarFieldEnum)[keyof typeof International_containersScalarFieldEnum]
+
+
+export const Container_eventsScalarFieldEnum = {
+  id: 'id',
+  container_id: 'container_id',
+  event_type: 'event_type',
+  event_date: 'event_date',
+  location_text: 'location_text',
+  description: 'description',
+  estimated: 'estimated',
+  created_by: 'created_by',
+  created_at: 'created_at'
+} as const
+
+export type Container_eventsScalarFieldEnum = (typeof Container_eventsScalarFieldEnum)[keyof typeof Container_eventsScalarFieldEnum]
+
+
+export const International_operation_documentsScalarFieldEnum = {
+  operation_id: 'operation_id',
+  document_id: 'document_id',
+  created_at: 'created_at'
+} as const
+
+export type International_operation_documentsScalarFieldEnum = (typeof International_operation_documentsScalarFieldEnum)[keyof typeof International_operation_documentsScalarFieldEnum]
+
+
+export const International_operation_paymentsScalarFieldEnum = {
+  operation_id: 'operation_id',
+  payment_id: 'payment_id',
+  created_at: 'created_at'
+} as const
+
+export type International_operation_paymentsScalarFieldEnum = (typeof International_operation_paymentsScalarFieldEnum)[keyof typeof International_operation_paymentsScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {
@@ -11541,6 +12016,104 @@ export type ListEnumHrValeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'OperationType'
+ */
+export type EnumOperationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationType'>
+    
+
+
+/**
+ * Reference to a field of type 'OperationType[]'
+ */
+export type ListEnumOperationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TransportType'
+ */
+export type EnumTransportTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransportType'>
+    
+
+
+/**
+ * Reference to a field of type 'TransportType[]'
+ */
+export type ListEnumTransportTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransportType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OperationStatus'
+ */
+export type EnumOperationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OperationStatus[]'
+ */
+export type ListEnumOperationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OperationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Incoterm'
+ */
+export type EnumIncotermFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Incoterm'>
+    
+
+
+/**
+ * Reference to a field of type 'Incoterm[]'
+ */
+export type ListEnumIncotermFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Incoterm[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ContainerType'
+ */
+export type EnumContainerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerType'>
+    
+
+
+/**
+ * Reference to a field of type 'ContainerType[]'
+ */
+export type ListEnumContainerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ContainerStatus'
+ */
+export type EnumContainerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ContainerStatus[]'
+ */
+export type ListEnumContainerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ContainerEventType'
+ */
+export type EnumContainerEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerEventType'>
+    
+
+
+/**
+ * Reference to a field of type 'ContainerEventType[]'
+ */
+export type ListEnumContainerEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerEventType[]'>
+    
+
+
+/**
  * Reference to a field of type 'DispatchStatus'
  */
 export type EnumDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DispatchStatus'>
@@ -12070,6 +12643,11 @@ export type GlobalOmitConfig = {
   hr_account_entries?: Prisma.hr_account_entriesOmit
   hr_vales?: Prisma.hr_valesOmit
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsOmit
+  international_operations?: Prisma.international_operationsOmit
+  international_containers?: Prisma.international_containersOmit
+  container_events?: Prisma.container_eventsOmit
+  international_operation_documents?: Prisma.international_operation_documentsOmit
+  international_operation_payments?: Prisma.international_operation_paymentsOmit
   cargo_transfer_items?: Prisma.cargo_transfer_itemsOmit
   cargo_transfers?: Prisma.cargo_transfersOmit
   delivery_notes?: Prisma.delivery_notesOmit
