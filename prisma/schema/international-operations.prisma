@@ -89,6 +89,21 @@ enum Incoterm {
   @@schema("tenant")
 }
 
+enum InternationalExpenseType {
+  MERCHANDISE
+  INTERNATIONAL_FREIGHT
+  INSURANCE
+  CUSTOMS_BROKER
+  COMMERCIAL_AGENT
+  PORT_EXPENSE
+  STORAGE
+  LOCAL_TRANSPORT
+  CUSTOMS_DUTIES
+  OTHER
+
+  @@schema("tenant")
+}
+
 // ══════════════════════════════════════════════════════════
 // OPERACIONES INTERNACIONALES — Models
 // ══════════════════════════════════════════════════════════
@@ -165,10 +180,11 @@ model international_containers {
   updated_by               String?                  @db.Uuid
   deleted_by               String?                  @db.Uuid
 
-  operation international_operations @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  operation international_operations    @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   origin_port_loc      locations?                      @relation("ic_origin_port", fields: [origin_port_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   destination_port_loc locations?                      @relation("ic_destination_port", fields: [destination_port_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   events               container_events[]
+  container_documents  international_operation_documents[]
 
   @@index([operation_id], map: "idx_ic_operation")
   @@schema("tenant")
@@ -192,14 +208,20 @@ model container_events {
 }
 
 model international_operation_documents {
-  operation_id String   @db.Uuid
-  document_id  String   @db.Uuid
-  created_at   DateTime @default(now()) @db.Timestamp(6)
+  operation_id                  String                      @db.Uuid
+  document_id                   String                      @db.Uuid
+  expense_type                  InternationalExpenseType    @default(MERCHANDISE)
+  custom_expense_description    String?                     @db.VarChar(255)
+  container_id                  String?                     @db.Uuid
+  exchange_rate                 Decimal?                    @db.Decimal(18, 6)
+  created_at                    DateTime                    @default(now()) @db.Timestamp(6)
 
-  operation international_operations @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  document  documents                @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  operation international_operations    @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  document  documents                 @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  container international_containers? @relation(fields: [container_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   @@id([operation_id, document_id])
+  @@index([container_id], map: "idx_iod_container")
   @@schema("tenant")
 }
 

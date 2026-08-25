@@ -10131,6 +10131,10 @@ export type Container_eventsScalarFieldEnum = (typeof Container_eventsScalarFiel
 export const International_operation_documentsScalarFieldEnum = {
   operation_id: 'operation_id',
   document_id: 'document_id',
+  expense_type: 'expense_type',
+  custom_expense_description: 'custom_expense_description',
+  container_id: 'container_id',
+  exchange_rate: 'exchange_rate',
   created_at: 'created_at'
 } as const
 
@@ -12110,6 +12114,20 @@ export type EnumContainerEventTypeFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'ContainerEventType[]'
  */
 export type ListEnumContainerEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerEventType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InternationalExpenseType'
+ */
+export type EnumInternationalExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternationalExpenseType'>
+    
+
+
+/**
+ * Reference to a field of type 'InternationalExpenseType[]'
+ */
+export type ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternationalExpenseType[]'>
     
 
 

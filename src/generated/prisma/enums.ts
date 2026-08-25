@@ -460,6 +460,22 @@ export const Incoterm = {
 export type Incoterm = (typeof Incoterm)[keyof typeof Incoterm]
 
 
+export const InternationalExpenseType = {
+  MERCHANDISE: 'MERCHANDISE',
+  INTERNATIONAL_FREIGHT: 'INTERNATIONAL_FREIGHT',
+  INSURANCE: 'INSURANCE',
+  CUSTOMS_BROKER: 'CUSTOMS_BROKER',
+  COMMERCIAL_AGENT: 'COMMERCIAL_AGENT',
+  PORT_EXPENSE: 'PORT_EXPENSE',
+  STORAGE: 'STORAGE',
+  LOCAL_TRANSPORT: 'LOCAL_TRANSPORT',
+  CUSTOMS_DUTIES: 'CUSTOMS_DUTIES',
+  OTHER: 'OTHER'
+} as const
+
+export type InternationalExpenseType = (typeof InternationalExpenseType)[keyof typeof InternationalExpenseType]
+
+
 export const CompanyRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',

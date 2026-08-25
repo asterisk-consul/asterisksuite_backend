@@ -20,6 +20,7 @@ import { UpdateOperationStatusDto } from './dto/update-status.dto';
 import { CreateContainerDto } from './containers/dto/create-container.dto';
 import { UpdateContainerDto } from './containers/dto/update-container.dto';
 import { CreateEventDto } from './events/dto/create-event.dto';
+import { AssociateDocumentDto } from './dto/associate-document.dto';
 import { OperationStatus } from '@/generated/prisma/enums';
 
 @UseGuards(JwtAuthGuard)
@@ -87,8 +88,8 @@ export class InternationalOperationsController {
 
   @Post(':id/documents')
   @RequirePermissions('international_operations.update')
-  associateDocument(@Param('id') id: string, @Body('document_id') document_id: string) {
-    return this.operationsService.associateDocument(id, document_id);
+  associateDocument(@Param('id') id: string, @Body() dto: AssociateDocumentDto) {
+    return this.operationsService.associateDocument(id, dto.document_id, dto.expense_type, dto.container_id, dto.custom_expense_description, dto.exchange_rate);
   }
 
   @Delete(':id/documents/:docId')

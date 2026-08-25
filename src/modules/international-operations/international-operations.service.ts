@@ -3,7 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { DocumentSequencesService } from '@/modules/erp/document-sequences/document-sequences.service';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
-import { OperationStatus } from '@/generated/prisma/enums';
+import { OperationStatus, InternationalExpenseType } from '@/generated/prisma/enums';
 
 @Injectable()
 export class InternationalOperationsService {
@@ -126,6 +126,12 @@ export class InternationalOperationsService {
             document: {
               include: {
                 document_types: { select: { code: true, description: true, category: true } },
+                business_parties: { select: { id: true, name: true } },
+                payment_documents: {
+                  include: {
+                    payment: { select: { id: true, number: true, amount: true, currency_code: true, status: true, date: true, payment_method: true } },
+                  },
+                },
               },
             },
           },
@@ -274,20 +280,85 @@ export class InternationalOperationsService {
     const documentIds = operation.operation_documents.map((d) => d.document_id);
     const paymentIds = operation.operation_payments.map((p) => p.payment_id);
 
+    // Agrupar documentos por expense_type Y por moneda
+    const expenseGroups: Record<string, {
+      type: string;
+      label: string;
+      total: number;
+      paid: number;
+      documents: any[];
+    }> = {};
+
+    // Agrupar financial por moneda
+    const financialByCurrency: Record<string, {
+      currency: string;
+      total: number;
+      paid: number;
+      pending: number;
+    }> = {};
+
+    const expenseTypeLabels: Record<string, string> = {
+      MERCHANDISE: 'Mercadería',
+      INTERNATIONAL_FREIGHT: 'Flete Internacional',
+      INSURANCE: 'Seguro',
+      CUSTOMS_BROKER: 'Despachante',
+      COMMERCIAL_AGENT: 'Agente Comercial',
+      PORT_EXPENSE: 'Gastos Portuarios',
+      STORAGE: 'Almacenaje',
+      LOCAL_TRANSPORT: 'Transporte Interno',
+      CUSTOMS_DUTIES: 'Derechos de Aduana',
+      OTHER: 'Otros',
+    };
+
     let totalOriginal = 0;
     let totalBase = 0;
     let paidOriginal = 0;
     let paidBase = 0;
 
-    if (documentIds.length > 0) {
-      const docs = await this.prisma.documents.findMany({
-        where: { id: { in: documentIds }, deleted_at: null },
-        select: { total: true, converted_total: true, currency_code: true },
-      });
-      for (const doc of docs) {
-        totalOriginal += Number(doc.total);
-        totalBase += Number(doc.converted_total ?? doc.total);
+    for (const rel of operation.operation_documents) {
+      const doc = rel.document;
+      if (!doc) continue;
+
+      const docTotal = Number(doc.total ?? 0);
+      const docBase = Number(doc.converted_total ?? doc.total ?? 0);
+      const docPaid = doc.payment_documents?.reduce((sum: number, pd: any) => sum + Number(pd.amount_applied ?? 0), 0) ?? 0;
+      const docCurrency = doc.currency_code ?? 'USD';
+
+      totalOriginal += docTotal;
+      totalBase += docBase;
+      paidOriginal += docPaid;
+      paidBase += docPaid;
+
+      // Financial por moneda
+      if (!financialByCurrency[docCurrency]) {
+        financialByCurrency[docCurrency] = {
+          currency: docCurrency,
+          total: 0,
+          paid: 0,
+          pending: 0,
+        };
       }
+      financialByCurrency[docCurrency].total += docTotal;
+      financialByCurrency[docCurrency].paid += docPaid;
+      financialByCurrency[docCurrency].pending = financialByCurrency[docCurrency].total - financialByCurrency[docCurrency].paid;
+
+      const expenseType = rel.expense_type ?? 'MERCHANDISE';
+      if (!expenseGroups[expenseType]) {
+        expenseGroups[expenseType] = {
+          type: expenseType,
+          label: expenseTypeLabels[expenseType] ?? expenseType,
+          total: 0,
+          paid: 0,
+          documents: [],
+        };
+      }
+      expenseGroups[expenseType].total += docTotal;
+      expenseGroups[expenseType].paid += docPaid;
+      expenseGroups[expenseType].documents.push({
+        ...rel,
+        paid_amount: docPaid,
+        pending_amount: docTotal - docPaid,
+      });
     }
 
     if (paymentIds.length > 0) {
@@ -342,6 +413,21 @@ export class InternationalOperationsService {
         paid: { amount: paidOriginal, baseAmount: paidBase },
         pending: { amount: totalOriginal - paidOriginal, baseAmount: totalBase - paidBase },
       },
+      financialByCurrency: Object.values(financialByCurrency).map(f => ({
+        currency: f.currency,
+        total: f.total,
+        paid: f.paid,
+        pending: f.pending,
+      })),
+      expenseGroups: Object.values(expenseGroups).map(g => ({
+        type: g.type,
+        label: g.label,
+        total: g.total,
+        paid: g.paid,
+        pending: g.total - g.paid,
+        documentCount: g.documents.length,
+        documents: g.documents,
+      })),
       alerts: {
         etaApproaching,
         etaOverdue,
@@ -350,7 +436,7 @@ export class InternationalOperationsService {
     };
   }
 
-  async associateDocument(operationId: string, documentId: string) {
+  async associateDocument(operationId: string, documentId: string, expenseType?: InternationalExpenseType, containerId?: string, customExpenseDescription?: string, exchangeRate?: number) {
     await this.findOne(operationId);
 
     const doc = await this.prisma.documents.findFirst({
@@ -365,8 +451,24 @@ export class InternationalOperationsService {
       throw new BadRequestException('El documento ya está asociado a esta operación');
     }
 
+    if (containerId) {
+      const container = await this.prisma.international_containers.findFirst({
+        where: { id: containerId, operation_id: operationId, deleted_at: null },
+      });
+      if (!container) {
+        throw new BadRequestException('El contenedor no pertenece a esta operación');
+      }
+    }
+
     return this.prisma.international_operation_documents.create({
-      data: { operation_id: operationId, document_id: documentId },
+      data: {
+        operation_id: operationId,
+        document_id: documentId,
+        expense_type: expenseType ?? 'MERCHANDISE',
+        custom_expense_description: customExpenseDescription ?? null,
+        container_id: containerId ?? null,
+        exchange_rate: exchangeRate ?? null,
+      },
     });
   }
 
