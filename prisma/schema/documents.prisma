@@ -185,6 +185,8 @@ model documents {
   orden_compra_doc           orden_compra_documents?
   hr_vale_commission_details hr_vale_commission_details[]
   international_operation_docs international_operation_documents[]
+  maintenance_services maintenance_services[]
+  purchase_tires       tires[]
 
   @@unique([document_type_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")

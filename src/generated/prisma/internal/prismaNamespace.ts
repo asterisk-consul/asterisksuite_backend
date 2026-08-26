@@ -442,6 +442,18 @@ export const ModelName = {
   documents_driver: 'documents_driver',
   transfer_rates: 'transfer_rates',
   dispatch_rates: 'dispatch_rates',
+  maintenance_orders: 'maintenance_orders',
+  maintenance_tasks: 'maintenance_tasks',
+  maintenance_parts: 'maintenance_parts',
+  maintenance_labor: 'maintenance_labor',
+  maintenance_services: 'maintenance_services',
+  maintenance_status_history: 'maintenance_status_history',
+  tires: 'tires',
+  vehicle_tire_positions: 'vehicle_tire_positions',
+  tire_movements: 'tire_movements',
+  tire_position_history: 'tire_position_history',
+  maintenance_plans: 'maintenance_plans',
+  maintenance_plan_assets: 'maintenance_plan_assets',
   system_modules: 'system_modules',
   locations: 'locations',
   operation_taxes: 'operation_taxes',
@@ -519,7 +531,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4812,6 +4824,894 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.dispatch_ratesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Dispatch_ratesCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_orders: {
+      payload: Prisma.$maintenance_ordersPayload<ExtArgs>
+      fields: Prisma.maintenance_ordersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_ordersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_ordersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_ordersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_ordersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_ordersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_ordersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_ordersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_ordersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_ordersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>
+        }
+        update: {
+          args: Prisma.maintenance_ordersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_ordersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_ordersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_ordersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_ordersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_ordersPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_ordersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_orders>
+        }
+        groupBy: {
+          args: Prisma.maintenance_ordersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_ordersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_ordersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_ordersCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_tasks: {
+      payload: Prisma.$maintenance_tasksPayload<ExtArgs>
+      fields: Prisma.maintenance_tasksFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_tasksFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_tasksFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_tasksFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_tasksFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_tasksFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_tasksCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_tasksCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_tasksCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_tasksDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>
+        }
+        update: {
+          args: Prisma.maintenance_tasksUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_tasksDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_tasksUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_tasksUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_tasksUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_tasksPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_tasksAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_tasks>
+        }
+        groupBy: {
+          args: Prisma.maintenance_tasksGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_tasksGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_tasksCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_tasksCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_parts: {
+      payload: Prisma.$maintenance_partsPayload<ExtArgs>
+      fields: Prisma.maintenance_partsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_partsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_partsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_partsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_partsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_partsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_partsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_partsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_partsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_partsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>
+        }
+        update: {
+          args: Prisma.maintenance_partsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_partsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_partsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_partsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_partsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_partsPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_partsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_parts>
+        }
+        groupBy: {
+          args: Prisma.maintenance_partsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_partsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_partsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_partsCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_labor: {
+      payload: Prisma.$maintenance_laborPayload<ExtArgs>
+      fields: Prisma.maintenance_laborFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_laborFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_laborFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_laborFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_laborFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_laborFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_laborCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_laborCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_laborCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_laborDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>
+        }
+        update: {
+          args: Prisma.maintenance_laborUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_laborDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_laborUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_laborUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_laborUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_laborPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_laborAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_labor>
+        }
+        groupBy: {
+          args: Prisma.maintenance_laborGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_laborGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_laborCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_laborCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_services: {
+      payload: Prisma.$maintenance_servicesPayload<ExtArgs>
+      fields: Prisma.maintenance_servicesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_servicesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_servicesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_servicesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_servicesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_servicesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_servicesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_servicesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_servicesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_servicesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>
+        }
+        update: {
+          args: Prisma.maintenance_servicesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_servicesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_servicesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_servicesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_servicesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_servicesPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_servicesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_services>
+        }
+        groupBy: {
+          args: Prisma.maintenance_servicesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_servicesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_servicesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_servicesCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_status_history: {
+      payload: Prisma.$maintenance_status_historyPayload<ExtArgs>
+      fields: Prisma.maintenance_status_historyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_status_historyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_status_historyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_status_historyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_status_historyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_status_historyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_status_historyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_status_historyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_status_historyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_status_historyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>
+        }
+        update: {
+          args: Prisma.maintenance_status_historyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_status_historyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_status_historyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_status_historyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_status_historyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_status_historyPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_status_historyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_status_history>
+        }
+        groupBy: {
+          args: Prisma.maintenance_status_historyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_status_historyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_status_historyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_status_historyCountAggregateOutputType> | number
+        }
+      }
+    }
+    tires: {
+      payload: Prisma.$tiresPayload<ExtArgs>
+      fields: Prisma.tiresFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tiresFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tiresFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>
+        }
+        findFirst: {
+          args: Prisma.tiresFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tiresFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>
+        }
+        findMany: {
+          args: Prisma.tiresFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>[]
+        }
+        create: {
+          args: Prisma.tiresCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>
+        }
+        createMany: {
+          args: Prisma.tiresCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tiresCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>[]
+        }
+        delete: {
+          args: Prisma.tiresDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>
+        }
+        update: {
+          args: Prisma.tiresUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>
+        }
+        deleteMany: {
+          args: Prisma.tiresDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tiresUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tiresUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>[]
+        }
+        upsert: {
+          args: Prisma.tiresUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tiresPayload>
+        }
+        aggregate: {
+          args: Prisma.TiresAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTires>
+        }
+        groupBy: {
+          args: Prisma.tiresGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TiresGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tiresCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TiresCountAggregateOutputType> | number
+        }
+      }
+    }
+    vehicle_tire_positions: {
+      payload: Prisma.$vehicle_tire_positionsPayload<ExtArgs>
+      fields: Prisma.vehicle_tire_positionsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.vehicle_tire_positionsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.vehicle_tire_positionsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>
+        }
+        findFirst: {
+          args: Prisma.vehicle_tire_positionsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.vehicle_tire_positionsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>
+        }
+        findMany: {
+          args: Prisma.vehicle_tire_positionsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>[]
+        }
+        create: {
+          args: Prisma.vehicle_tire_positionsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>
+        }
+        createMany: {
+          args: Prisma.vehicle_tire_positionsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.vehicle_tire_positionsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>[]
+        }
+        delete: {
+          args: Prisma.vehicle_tire_positionsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>
+        }
+        update: {
+          args: Prisma.vehicle_tire_positionsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>
+        }
+        deleteMany: {
+          args: Prisma.vehicle_tire_positionsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.vehicle_tire_positionsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.vehicle_tire_positionsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>[]
+        }
+        upsert: {
+          args: Prisma.vehicle_tire_positionsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$vehicle_tire_positionsPayload>
+        }
+        aggregate: {
+          args: Prisma.Vehicle_tire_positionsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVehicle_tire_positions>
+        }
+        groupBy: {
+          args: Prisma.vehicle_tire_positionsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Vehicle_tire_positionsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.vehicle_tire_positionsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Vehicle_tire_positionsCountAggregateOutputType> | number
+        }
+      }
+    }
+    tire_movements: {
+      payload: Prisma.$tire_movementsPayload<ExtArgs>
+      fields: Prisma.tire_movementsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tire_movementsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tire_movementsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>
+        }
+        findFirst: {
+          args: Prisma.tire_movementsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tire_movementsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>
+        }
+        findMany: {
+          args: Prisma.tire_movementsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>[]
+        }
+        create: {
+          args: Prisma.tire_movementsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>
+        }
+        createMany: {
+          args: Prisma.tire_movementsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tire_movementsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>[]
+        }
+        delete: {
+          args: Prisma.tire_movementsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>
+        }
+        update: {
+          args: Prisma.tire_movementsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>
+        }
+        deleteMany: {
+          args: Prisma.tire_movementsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tire_movementsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tire_movementsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>[]
+        }
+        upsert: {
+          args: Prisma.tire_movementsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_movementsPayload>
+        }
+        aggregate: {
+          args: Prisma.Tire_movementsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTire_movements>
+        }
+        groupBy: {
+          args: Prisma.tire_movementsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tire_movementsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tire_movementsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tire_movementsCountAggregateOutputType> | number
+        }
+      }
+    }
+    tire_position_history: {
+      payload: Prisma.$tire_position_historyPayload<ExtArgs>
+      fields: Prisma.tire_position_historyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tire_position_historyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tire_position_historyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>
+        }
+        findFirst: {
+          args: Prisma.tire_position_historyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tire_position_historyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>
+        }
+        findMany: {
+          args: Prisma.tire_position_historyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>[]
+        }
+        create: {
+          args: Prisma.tire_position_historyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>
+        }
+        createMany: {
+          args: Prisma.tire_position_historyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tire_position_historyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>[]
+        }
+        delete: {
+          args: Prisma.tire_position_historyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>
+        }
+        update: {
+          args: Prisma.tire_position_historyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>
+        }
+        deleteMany: {
+          args: Prisma.tire_position_historyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tire_position_historyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tire_position_historyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>[]
+        }
+        upsert: {
+          args: Prisma.tire_position_historyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tire_position_historyPayload>
+        }
+        aggregate: {
+          args: Prisma.Tire_position_historyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTire_position_history>
+        }
+        groupBy: {
+          args: Prisma.tire_position_historyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tire_position_historyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tire_position_historyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tire_position_historyCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_plans: {
+      payload: Prisma.$maintenance_plansPayload<ExtArgs>
+      fields: Prisma.maintenance_plansFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_plansFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_plansFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_plansFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_plansFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_plansFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_plansCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_plansCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_plansCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_plansDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>
+        }
+        update: {
+          args: Prisma.maintenance_plansUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_plansDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_plansUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_plansUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_plansUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plansPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_plansAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_plans>
+        }
+        groupBy: {
+          args: Prisma.maintenance_plansGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_plansGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_plansCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_plansCountAggregateOutputType> | number
+        }
+      }
+    }
+    maintenance_plan_assets: {
+      payload: Prisma.$maintenance_plan_assetsPayload<ExtArgs>
+      fields: Prisma.maintenance_plan_assetsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.maintenance_plan_assetsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.maintenance_plan_assetsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>
+        }
+        findFirst: {
+          args: Prisma.maintenance_plan_assetsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.maintenance_plan_assetsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>
+        }
+        findMany: {
+          args: Prisma.maintenance_plan_assetsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>[]
+        }
+        create: {
+          args: Prisma.maintenance_plan_assetsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>
+        }
+        createMany: {
+          args: Prisma.maintenance_plan_assetsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.maintenance_plan_assetsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>[]
+        }
+        delete: {
+          args: Prisma.maintenance_plan_assetsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>
+        }
+        update: {
+          args: Prisma.maintenance_plan_assetsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>
+        }
+        deleteMany: {
+          args: Prisma.maintenance_plan_assetsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.maintenance_plan_assetsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.maintenance_plan_assetsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>[]
+        }
+        upsert: {
+          args: Prisma.maintenance_plan_assetsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$maintenance_plan_assetsPayload>
+        }
+        aggregate: {
+          args: Prisma.Maintenance_plan_assetsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenance_plan_assets>
+        }
+        groupBy: {
+          args: Prisma.maintenance_plan_assetsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_plan_assetsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.maintenance_plan_assetsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Maintenance_plan_assetsCountAggregateOutputType> | number
         }
       }
     }
@@ -10529,6 +11429,295 @@ export const Dispatch_ratesScalarFieldEnum = {
 export type Dispatch_ratesScalarFieldEnum = (typeof Dispatch_ratesScalarFieldEnum)[keyof typeof Dispatch_ratesScalarFieldEnum]
 
 
+export const Maintenance_ordersScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  number: 'number',
+  asset_type: 'asset_type',
+  asset_id: 'asset_id',
+  vehicle_id: 'vehicle_id',
+  tire_id: 'tire_id',
+  category: 'category',
+  maintenance_type: 'maintenance_type',
+  priority: 'priority',
+  status: 'status',
+  title: 'title',
+  description: 'description',
+  reported_problem: 'reported_problem',
+  diagnosis: 'diagnosis',
+  solution: 'solution',
+  reported_at: 'reported_at',
+  scheduled_at: 'scheduled_at',
+  started_at: 'started_at',
+  completed_at: 'completed_at',
+  odometer: 'odometer',
+  reported_by: 'reported_by',
+  assigned_to: 'assigned_to',
+  supplier_id: 'supplier_id',
+  estimated_cost: 'estimated_cost',
+  actual_cost: 'actual_cost',
+  parts_cost: 'parts_cost',
+  labor_cost: 'labor_cost',
+  services_cost: 'services_cost',
+  other_cost: 'other_cost',
+  vehicle_unavailable: 'vehicle_unavailable',
+  unavailable_from: 'unavailable_from',
+  unavailable_until: 'unavailable_until',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_ordersScalarFieldEnum = (typeof Maintenance_ordersScalarFieldEnum)[keyof typeof Maintenance_ordersScalarFieldEnum]
+
+
+export const Maintenance_tasksScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  description: 'description',
+  status: 'status',
+  assigned_to: 'assigned_to',
+  estimated_hours: 'estimated_hours',
+  actual_hours: 'actual_hours',
+  started_at: 'started_at',
+  completed_at: 'completed_at',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_tasksScalarFieldEnum = (typeof Maintenance_tasksScalarFieldEnum)[keyof typeof Maintenance_tasksScalarFieldEnum]
+
+
+export const Maintenance_partsScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  product_id: 'product_id',
+  warehouse_id: 'warehouse_id',
+  quantity: 'quantity',
+  unit_cost: 'unit_cost',
+  total_cost: 'total_cost',
+  stock_movement_id: 'stock_movement_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_partsScalarFieldEnum = (typeof Maintenance_partsScalarFieldEnum)[keyof typeof Maintenance_partsScalarFieldEnum]
+
+
+export const Maintenance_laborScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  employee_id: 'employee_id',
+  description: 'description',
+  hours: 'hours',
+  hourly_cost: 'hourly_cost',
+  total_cost: 'total_cost',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_laborScalarFieldEnum = (typeof Maintenance_laborScalarFieldEnum)[keyof typeof Maintenance_laborScalarFieldEnum]
+
+
+export const Maintenance_servicesScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  supplier_id: 'supplier_id',
+  description: 'description',
+  quantity: 'quantity',
+  unit_cost: 'unit_cost',
+  total_cost: 'total_cost',
+  document_id: 'document_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_servicesScalarFieldEnum = (typeof Maintenance_servicesScalarFieldEnum)[keyof typeof Maintenance_servicesScalarFieldEnum]
+
+
+export const Maintenance_status_historyScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  from_status: 'from_status',
+  to_status: 'to_status',
+  changed_by: 'changed_by',
+  changed_at: 'changed_at',
+  comment: 'comment'
+} as const
+
+export type Maintenance_status_historyScalarFieldEnum = (typeof Maintenance_status_historyScalarFieldEnum)[keyof typeof Maintenance_status_historyScalarFieldEnum]
+
+
+export const TiresScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  product_id: 'product_id',
+  serial_number: 'serial_number',
+  status: 'status',
+  purchase_document_id: 'purchase_document_id',
+  purchase_document_line_id: 'purchase_document_line_id',
+  purchase_date: 'purchase_date',
+  purchase_supplier_id: 'purchase_supplier_id',
+  purchase_unit_cost: 'purchase_unit_cost',
+  purchase_receipt_document_id: 'purchase_receipt_document_id',
+  purchase_order_id: 'purchase_order_id',
+  current_vehicle_id: 'current_vehicle_id',
+  current_position_id: 'current_position_id',
+  current_warehouse_id: 'current_warehouse_id',
+  current_tire_shop_id: 'current_tire_shop_id',
+  accumulated_km: 'accumulated_km',
+  days_in_use: 'days_in_use',
+  installation_count: 'installation_count',
+  vehicle_count: 'vehicle_count',
+  repair_count: 'repair_count',
+  retread_count: 'retread_count',
+  total_repair_cost: 'total_repair_cost',
+  total_retread_cost: 'total_retread_cost',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type TiresScalarFieldEnum = (typeof TiresScalarFieldEnum)[keyof typeof TiresScalarFieldEnum]
+
+
+export const Vehicle_tire_positionsScalarFieldEnum = {
+  id: 'id',
+  vehicle_id: 'vehicle_id',
+  position_number: 'position_number',
+  axle: 'axle',
+  side: 'side',
+  position_type: 'position_type',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Vehicle_tire_positionsScalarFieldEnum = (typeof Vehicle_tire_positionsScalarFieldEnum)[keyof typeof Vehicle_tire_positionsScalarFieldEnum]
+
+
+export const Tire_movementsScalarFieldEnum = {
+  id: 'id',
+  tire_id: 'tire_id',
+  movement_type: 'movement_type',
+  date: 'date',
+  vehicle_id: 'vehicle_id',
+  position_id: 'position_id',
+  odometer: 'odometer',
+  from_location_id: 'from_location_id',
+  to_location_id: 'to_location_id',
+  from_location_type: 'from_location_type',
+  to_location_type: 'to_location_type',
+  reason: 'reason',
+  notes: 'notes',
+  user_id: 'user_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tire_movementsScalarFieldEnum = (typeof Tire_movementsScalarFieldEnum)[keyof typeof Tire_movementsScalarFieldEnum]
+
+
+export const Tire_position_historyScalarFieldEnum = {
+  id: 'id',
+  tire_id: 'tire_id',
+  position_id: 'position_id',
+  vehicle_id: 'vehicle_id',
+  installed_at: 'installed_at',
+  installed_odometer: 'installed_odometer',
+  removed_at: 'removed_at',
+  removed_odometer: 'removed_odometer',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tire_position_historyScalarFieldEnum = (typeof Tire_position_historyScalarFieldEnum)[keyof typeof Tire_position_historyScalarFieldEnum]
+
+
+export const Maintenance_plansScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  description: 'description',
+  asset_type: 'asset_type',
+  vehicle_type: 'vehicle_type',
+  category: 'category',
+  maintenance_type: 'maintenance_type',
+  interval_type: 'interval_type',
+  interval_km: 'interval_km',
+  interval_days: 'interval_days',
+  interval_months: 'interval_months',
+  fixed_date: 'fixed_date',
+  priority: 'priority',
+  estimated_hours: 'estimated_hours',
+  estimated_cost: 'estimated_cost',
+  default_tasks: 'default_tasks',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_plansScalarFieldEnum = (typeof Maintenance_plansScalarFieldEnum)[keyof typeof Maintenance_plansScalarFieldEnum]
+
+
+export const Maintenance_plan_assetsScalarFieldEnum = {
+  id: 'id',
+  plan_id: 'plan_id',
+  asset_id: 'asset_id',
+  last_executed_at: 'last_executed_at',
+  last_executed_odometer: 'last_executed_odometer',
+  next_due_at: 'next_due_at',
+  next_due_odometer: 'next_due_odometer',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_plan_assetsScalarFieldEnum = (typeof Maintenance_plan_assetsScalarFieldEnum)[keyof typeof Maintenance_plan_assetsScalarFieldEnum]
+
+
 export const System_modulesScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -12160,6 +13349,160 @@ export type ListEnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'MaintenanceAssetType'
+ */
+export type EnumMaintenanceAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceAssetType'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceAssetType[]'
+ */
+export type ListEnumMaintenanceAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceAssetType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceCategory'
+ */
+export type EnumMaintenanceCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceCategory[]'
+ */
+export type ListEnumMaintenanceCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceType'
+ */
+export type EnumMaintenanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceType'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceType[]'
+ */
+export type ListEnumMaintenanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenancePriority'
+ */
+export type EnumMaintenancePriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenancePriority'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenancePriority[]'
+ */
+export type ListEnumMaintenancePriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenancePriority[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceStatus'
+ */
+export type EnumMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceStatus[]'
+ */
+export type ListEnumMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceTaskStatus'
+ */
+export type EnumMaintenanceTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceTaskStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceTaskStatus[]'
+ */
+export type ListEnumMaintenanceTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceTaskStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TireStatus'
+ */
+export type EnumTireStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TireStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TireStatus[]'
+ */
+export type ListEnumTireStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TireStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TirePositionSide'
+ */
+export type EnumTirePositionSideFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TirePositionSide'>
+    
+
+
+/**
+ * Reference to a field of type 'TirePositionSide[]'
+ */
+export type ListEnumTirePositionSideFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TirePositionSide[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TireMovementType'
+ */
+export type EnumTireMovementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TireMovementType'>
+    
+
+
+/**
+ * Reference to a field of type 'TireMovementType[]'
+ */
+export type ListEnumTireMovementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TireMovementType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TireLocationType'
+ */
+export type EnumTireLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TireLocationType'>
+    
+
+
+/**
+ * Reference to a field of type 'TireLocationType[]'
+ */
+export type ListEnumTireLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TireLocationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PlanIntervalType'
+ */
+export type EnumPlanIntervalTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanIntervalType'>
+    
+
+
+/**
+ * Reference to a field of type 'PlanIntervalType[]'
+ */
+export type ListEnumPlanIntervalTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanIntervalType[]'>
+    
+
+
+/**
  * Reference to a field of type 'PartyType'
  */
 export type EnumPartyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartyType'>
@@ -12689,6 +14032,18 @@ export type GlobalOmitConfig = {
   documents_driver?: Prisma.documents_driverOmit
   transfer_rates?: Prisma.transfer_ratesOmit
   dispatch_rates?: Prisma.dispatch_ratesOmit
+  maintenance_orders?: Prisma.maintenance_ordersOmit
+  maintenance_tasks?: Prisma.maintenance_tasksOmit
+  maintenance_parts?: Prisma.maintenance_partsOmit
+  maintenance_labor?: Prisma.maintenance_laborOmit
+  maintenance_services?: Prisma.maintenance_servicesOmit
+  maintenance_status_history?: Prisma.maintenance_status_historyOmit
+  tires?: Prisma.tiresOmit
+  vehicle_tire_positions?: Prisma.vehicle_tire_positionsOmit
+  tire_movements?: Prisma.tire_movementsOmit
+  tire_position_history?: Prisma.tire_position_historyOmit
+  maintenance_plans?: Prisma.maintenance_plansOmit
+  maintenance_plan_assets?: Prisma.maintenance_plan_assetsOmit
   system_modules?: Prisma.system_modulesOmit
   locations?: Prisma.locationsOmit
   operation_taxes?: Prisma.operation_taxesOmit

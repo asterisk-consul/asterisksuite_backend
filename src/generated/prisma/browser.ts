@@ -308,6 +308,66 @@ export type transfer_rates = Prisma.transfer_ratesModel
  */
 export type dispatch_rates = Prisma.dispatch_ratesModel
 /**
+ * Model maintenance_orders
+ * 
+ */
+export type maintenance_orders = Prisma.maintenance_ordersModel
+/**
+ * Model maintenance_tasks
+ * 
+ */
+export type maintenance_tasks = Prisma.maintenance_tasksModel
+/**
+ * Model maintenance_parts
+ * 
+ */
+export type maintenance_parts = Prisma.maintenance_partsModel
+/**
+ * Model maintenance_labor
+ * 
+ */
+export type maintenance_labor = Prisma.maintenance_laborModel
+/**
+ * Model maintenance_services
+ * 
+ */
+export type maintenance_services = Prisma.maintenance_servicesModel
+/**
+ * Model maintenance_status_history
+ * 
+ */
+export type maintenance_status_history = Prisma.maintenance_status_historyModel
+/**
+ * Model tires
+ * 
+ */
+export type tires = Prisma.tiresModel
+/**
+ * Model vehicle_tire_positions
+ * 
+ */
+export type vehicle_tire_positions = Prisma.vehicle_tire_positionsModel
+/**
+ * Model tire_movements
+ * 
+ */
+export type tire_movements = Prisma.tire_movementsModel
+/**
+ * Model tire_position_history
+ * 
+ */
+export type tire_position_history = Prisma.tire_position_historyModel
+/**
+ * Model maintenance_plans
+ * 
+ */
+export type maintenance_plans = Prisma.maintenance_plansModel
+/**
+ * Model maintenance_plan_assets
+ * 
+ */
+export type maintenance_plan_assets = Prisma.maintenance_plan_assetsModel
+/**
  * Model system_modules
  * 
  */

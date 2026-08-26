@@ -453,6 +453,8 @@ export type productsWhereInput = {
   product_costs?: Prisma.Product_costsListRelationFilter
   productCostBreakdowns?: Prisma.Product_cost_breakdownsListRelationFilter
   cost_template?: Prisma.XOR<Prisma.Cost_templatesNullableScalarRelationFilter, Prisma.cost_templatesWhereInput> | null
+  maintenance_parts?: Prisma.Maintenance_partsListRelationFilter
+  tires?: Prisma.TiresListRelationFilter
   productStructureVersions?: Prisma.Product_structure_versionsListRelationFilter
   unit?: Prisma.XOR<Prisma.UnitsNullableScalarRelationFilter, Prisma.unitsWhereInput> | null
   product_suppliers?: Prisma.Product_suppliersListRelationFilter
@@ -513,6 +515,8 @@ export type productsOrderByWithRelationInput = {
   product_costs?: Prisma.product_costsOrderByRelationAggregateInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsOrderByRelationAggregateInput
   cost_template?: Prisma.cost_templatesOrderByWithRelationInput
+  maintenance_parts?: Prisma.maintenance_partsOrderByRelationAggregateInput
+  tires?: Prisma.tiresOrderByRelationAggregateInput
   productStructureVersions?: Prisma.product_structure_versionsOrderByRelationAggregateInput
   unit?: Prisma.unitsOrderByWithRelationInput
   product_suppliers?: Prisma.product_suppliersOrderByRelationAggregateInput
@@ -576,6 +580,8 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   product_costs?: Prisma.Product_costsListRelationFilter
   productCostBreakdowns?: Prisma.Product_cost_breakdownsListRelationFilter
   cost_template?: Prisma.XOR<Prisma.Cost_templatesNullableScalarRelationFilter, Prisma.cost_templatesWhereInput> | null
+  maintenance_parts?: Prisma.Maintenance_partsListRelationFilter
+  tires?: Prisma.TiresListRelationFilter
   productStructureVersions?: Prisma.Product_structure_versionsListRelationFilter
   unit?: Prisma.XOR<Prisma.UnitsNullableScalarRelationFilter, Prisma.unitsWhereInput> | null
   product_suppliers?: Prisma.Product_suppliersListRelationFilter
@@ -707,6 +713,8 @@ export type productsCreateInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -761,6 +769,8 @@ export type productsUncheckedCreateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -813,6 +823,8 @@ export type productsUpdateInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -867,6 +879,8 @@ export type productsUncheckedUpdateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -1385,6 +1399,34 @@ export type productsUncheckedUpdateManyWithoutTransfer_rateNestedInput = {
   deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
 }
 
+export type productsCreateNestedOneWithoutMaintenance_partsInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutMaintenance_partsInput, Prisma.productsUncheckedCreateWithoutMaintenance_partsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutMaintenance_partsInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutMaintenance_partsNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutMaintenance_partsInput, Prisma.productsUncheckedCreateWithoutMaintenance_partsInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutMaintenance_partsInput
+  upsert?: Prisma.productsUpsertWithoutMaintenance_partsInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutMaintenance_partsInput, Prisma.productsUpdateWithoutMaintenance_partsInput>, Prisma.productsUncheckedUpdateWithoutMaintenance_partsInput>
+}
+
+export type productsCreateNestedOneWithoutTiresInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTiresInput, Prisma.productsUncheckedCreateWithoutTiresInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTiresInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutTiresNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutTiresInput, Prisma.productsUncheckedCreateWithoutTiresInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutTiresInput
+  upsert?: Prisma.productsUpsertWithoutTiresInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutTiresInput, Prisma.productsUpdateWithoutTiresInput>, Prisma.productsUncheckedUpdateWithoutTiresInput>
+}
+
 export type productsCreateNestedOneWithoutPallet_itemsInput = {
   create?: Prisma.XOR<Prisma.productsCreateWithoutPallet_itemsInput, Prisma.productsUncheckedCreateWithoutPallet_itemsInput>
   connectOrCreate?: Prisma.productsCreateOrConnectWithoutPallet_itemsInput
@@ -1711,6 +1753,8 @@ export type productsCreateWithoutIncome_accountInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -1764,6 +1808,8 @@ export type productsUncheckedCreateWithoutIncome_accountInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -1825,6 +1871,8 @@ export type productsCreateWithoutExpense_accountInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -1878,6 +1926,8 @@ export type productsUncheckedCreateWithoutExpense_accountInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -1939,6 +1989,8 @@ export type productsCreateWithoutInventory_accountInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -1992,6 +2044,8 @@ export type productsUncheckedCreateWithoutInventory_accountInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -2139,6 +2193,8 @@ export type productsCreateWithoutProduct_costsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -2192,6 +2248,8 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -2259,6 +2317,8 @@ export type productsUpdateWithoutProduct_costsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -2312,6 +2372,8 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -2363,6 +2425,8 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -2416,6 +2480,8 @@ export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -2483,6 +2549,8 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -2536,6 +2604,8 @@ export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -2587,6 +2657,8 @@ export type productsCreateWithoutCost_templateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -2640,6 +2712,8 @@ export type productsUncheckedCreateWithoutCost_templateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -2717,6 +2791,8 @@ export type productsCreateWithoutDocument_itemsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -2770,6 +2846,8 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -2837,6 +2915,8 @@ export type productsUpdateWithoutDocument_itemsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -2890,6 +2970,8 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -2942,6 +3024,8 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
@@ -2995,6 +3079,8 @@ export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
 }
@@ -3062,6 +3148,8 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
@@ -3115,6 +3203,8 @@ export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
 }
@@ -3165,6 +3255,8 @@ export type productsCreateWithoutPicking_itemsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -3218,6 +3310,8 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -3285,6 +3379,8 @@ export type productsUpdateWithoutPicking_itemsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -3338,6 +3434,8 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -3389,6 +3487,8 @@ export type productsCreateWithoutTransfer_rateInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -3442,6 +3542,8 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -3471,6 +3573,470 @@ export type productsUpdateWithWhereUniqueWithoutTransfer_rateInput = {
 export type productsUpdateManyWithWhereWithoutTransfer_rateInput = {
   where: Prisma.productsScalarWhereInput
   data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutTransfer_rateInput>
+}
+
+export type productsCreateWithoutMaintenance_partsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+  unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutMaintenance_partsInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  tax_category_id?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  unit_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutMaintenance_partsInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutMaintenance_partsInput, Prisma.productsUncheckedCreateWithoutMaintenance_partsInput>
+}
+
+export type productsUpsertWithoutMaintenance_partsInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutMaintenance_partsInput, Prisma.productsUncheckedUpdateWithoutMaintenance_partsInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutMaintenance_partsInput, Prisma.productsUncheckedCreateWithoutMaintenance_partsInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutMaintenance_partsInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutMaintenance_partsInput, Prisma.productsUncheckedUpdateWithoutMaintenance_partsInput>
+}
+
+export type productsUpdateWithoutMaintenance_partsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+  unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutMaintenance_partsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsCreateWithoutTiresInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+  unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutTiresInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  tax_category_id?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  unit_id?: string | null
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutTiresInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutTiresInput, Prisma.productsUncheckedCreateWithoutTiresInput>
+}
+
+export type productsUpsertWithoutTiresInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutTiresInput, Prisma.productsUncheckedUpdateWithoutTiresInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutTiresInput, Prisma.productsUncheckedCreateWithoutTiresInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutTiresInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutTiresInput, Prisma.productsUncheckedUpdateWithoutTiresInput>
+}
+
+export type productsUpdateWithoutTiresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+  unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutTiresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
 }
 
 export type productsCreateWithoutPallet_itemsInput = {
@@ -3519,6 +4085,8 @@ export type productsCreateWithoutPallet_itemsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -3572,6 +4140,8 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -3639,6 +4209,8 @@ export type productsUpdateWithoutPallet_itemsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -3692,6 +4264,8 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -3743,6 +4317,8 @@ export type productsCreateWithoutProduct_priceInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -3796,6 +4372,8 @@ export type productsUncheckedCreateWithoutProduct_priceInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -3863,6 +4441,8 @@ export type productsUpdateWithoutProduct_priceInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -3916,6 +4496,8 @@ export type productsUncheckedUpdateWithoutProduct_priceInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -3968,6 +4550,8 @@ export type productsCreateWithoutUnitInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
@@ -4020,6 +4604,8 @@ export type productsUncheckedCreateWithoutUnitInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -4097,6 +4683,8 @@ export type productsCreateWithoutProduct_variantsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -4150,6 +4738,8 @@ export type productsUncheckedCreateWithoutProduct_variantsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -4217,6 +4807,8 @@ export type productsUpdateWithoutProduct_variantsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -4270,6 +4862,8 @@ export type productsUncheckedUpdateWithoutProduct_variantsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -4321,6 +4915,8 @@ export type productsCreateWithoutParent_componentsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -4374,6 +4970,8 @@ export type productsUncheckedCreateWithoutParent_componentsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -4430,6 +5028,8 @@ export type productsCreateWithoutChild_componentsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -4483,6 +5083,8 @@ export type productsUncheckedCreateWithoutChild_componentsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -4550,6 +5152,8 @@ export type productsUpdateWithoutParent_componentsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -4603,6 +5207,8 @@ export type productsUncheckedUpdateWithoutParent_componentsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -4665,6 +5271,8 @@ export type productsUpdateWithoutChild_componentsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -4718,6 +5326,8 @@ export type productsUncheckedUpdateWithoutChild_componentsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -4769,6 +5379,8 @@ export type productsCreateWithoutProduct_categoriesInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -4822,6 +5434,8 @@ export type productsUncheckedCreateWithoutProduct_categoriesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -4889,6 +5503,8 @@ export type productsUpdateWithoutProduct_categoriesInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -4942,6 +5558,8 @@ export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -4993,6 +5611,8 @@ export type productsCreateWithoutProduct_tagsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -5046,6 +5666,8 @@ export type productsUncheckedCreateWithoutProduct_tagsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -5113,6 +5735,8 @@ export type productsUpdateWithoutProduct_tagsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -5166,6 +5790,8 @@ export type productsUncheckedUpdateWithoutProduct_tagsInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -5217,6 +5843,8 @@ export type productsCreateWithoutProduct_attribute_valuesInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -5270,6 +5898,8 @@ export type productsUncheckedCreateWithoutProduct_attribute_valuesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -5337,6 +5967,8 @@ export type productsUpdateWithoutProduct_attribute_valuesInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -5390,6 +6022,8 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -5442,6 +6076,8 @@ export type productsCreateWithoutProduct_suppliersInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
@@ -5495,6 +6131,8 @@ export type productsUncheckedCreateWithoutProduct_suppliersInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
 }
@@ -5562,6 +6200,8 @@ export type productsUpdateWithoutProduct_suppliersInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
@@ -5615,6 +6255,8 @@ export type productsUncheckedUpdateWithoutProduct_suppliersInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
 }
@@ -5666,6 +6308,8 @@ export type productsCreateWithoutProduct_list_pricesInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -5719,6 +6363,8 @@ export type productsUncheckedCreateWithoutProduct_list_pricesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
 }
@@ -5786,6 +6432,8 @@ export type productsUpdateWithoutProduct_list_pricesInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -5839,6 +6487,8 @@ export type productsUncheckedUpdateWithoutProduct_list_pricesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
 }
@@ -5889,6 +6539,8 @@ export type productsCreateWithoutTax_categoryInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -5942,6 +6594,8 @@ export type productsUncheckedCreateWithoutTax_categoryInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -6019,6 +6673,8 @@ export type productsCreateWithoutProduct_taxesInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -6072,6 +6728,8 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -6139,6 +6797,8 @@ export type productsUpdateWithoutProduct_taxesInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -6192,6 +6852,8 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -6243,6 +6905,8 @@ export type productsCreateWithoutWarehouse_stockInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -6296,6 +6960,8 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -6363,6 +7029,8 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -6416,6 +7084,8 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -6467,6 +7137,8 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
   unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
@@ -6520,6 +7192,8 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
   product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
@@ -6587,6 +7261,8 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -6640,6 +7316,8 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -6793,6 +7471,8 @@ export type productsUpdateWithoutIncome_accountInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -6846,6 +7526,8 @@ export type productsUncheckedUpdateWithoutIncome_accountInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -6931,6 +7613,8 @@ export type productsUpdateWithoutExpense_accountInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -6984,6 +7668,8 @@ export type productsUncheckedUpdateWithoutExpense_accountInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -7069,6 +7755,8 @@ export type productsUpdateWithoutInventory_accountInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -7122,6 +7810,8 @@ export type productsUncheckedUpdateWithoutInventory_accountInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -7241,6 +7931,8 @@ export type productsUpdateWithoutCost_templateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -7294,6 +7986,8 @@ export type productsUncheckedUpdateWithoutCost_templateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -7413,6 +8107,8 @@ export type productsUpdateWithoutTransfer_rateInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -7466,6 +8162,8 @@ export type productsUncheckedUpdateWithoutTransfer_rateInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -7586,6 +8284,8 @@ export type productsUpdateWithoutUnitInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
@@ -7638,6 +8338,8 @@ export type productsUncheckedUpdateWithoutUnitInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -7757,6 +8459,8 @@ export type productsUpdateWithoutTax_categoryInput = {
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
   unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
@@ -7810,6 +8514,8 @@ export type productsUncheckedUpdateWithoutTax_categoryInput = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
   productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
   product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
@@ -7870,6 +8576,8 @@ export type ProductsCountOutputType = {
   warehouse_stock_movements: number
   product_costs: number
   productCostBreakdowns: number
+  maintenance_parts: number
+  tires: number
   productStructureVersions: number
   product_suppliers: number
   product_list_prices: number
@@ -7891,6 +8599,8 @@ export type ProductsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   warehouse_stock_movements?: boolean | ProductsCountOutputTypeCountWarehouse_stock_movementsArgs
   product_costs?: boolean | ProductsCountOutputTypeCountProduct_costsArgs
   productCostBreakdowns?: boolean | ProductsCountOutputTypeCountProductCostBreakdownsArgs
+  maintenance_parts?: boolean | ProductsCountOutputTypeCountMaintenance_partsArgs
+  tires?: boolean | ProductsCountOutputTypeCountTiresArgs
   productStructureVersions?: boolean | ProductsCountOutputTypeCountProductStructureVersionsArgs
   product_suppliers?: boolean | ProductsCountOutputTypeCountProduct_suppliersArgs
   product_list_prices?: boolean | ProductsCountOutputTypeCountProduct_list_pricesArgs
@@ -8014,6 +8724,20 @@ export type ProductsCountOutputTypeCountProductCostBreakdownsArgs<ExtArgs extend
 /**
  * ProductsCountOutputType without action
  */
+export type ProductsCountOutputTypeCountMaintenance_partsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.maintenance_partsWhereInput
+}
+
+/**
+ * ProductsCountOutputType without action
+ */
+export type ProductsCountOutputTypeCountTiresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.tiresWhereInput
+}
+
+/**
+ * ProductsCountOutputType without action
+ */
 export type ProductsCountOutputTypeCountProductStructureVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.product_structure_versionsWhereInput
 }
@@ -8087,6 +8811,8 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   product_costs?: boolean | Prisma.products$product_costsArgs<ExtArgs>
   productCostBreakdowns?: boolean | Prisma.products$productCostBreakdownsArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
+  maintenance_parts?: boolean | Prisma.products$maintenance_partsArgs<ExtArgs>
+  tires?: boolean | Prisma.products$tiresArgs<ExtArgs>
   productStructureVersions?: boolean | Prisma.products$productStructureVersionsArgs<ExtArgs>
   unit?: boolean | Prisma.products$unitArgs<ExtArgs>
   product_suppliers?: boolean | Prisma.products$product_suppliersArgs<ExtArgs>
@@ -8236,6 +8962,8 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   product_costs?: boolean | Prisma.products$product_costsArgs<ExtArgs>
   productCostBreakdowns?: boolean | Prisma.products$productCostBreakdownsArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
+  maintenance_parts?: boolean | Prisma.products$maintenance_partsArgs<ExtArgs>
+  tires?: boolean | Prisma.products$tiresArgs<ExtArgs>
   productStructureVersions?: boolean | Prisma.products$productStructureVersionsArgs<ExtArgs>
   unit?: boolean | Prisma.products$unitArgs<ExtArgs>
   product_suppliers?: boolean | Prisma.products$product_suppliersArgs<ExtArgs>
@@ -8285,6 +9013,8 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     product_costs: Prisma.$product_costsPayload<ExtArgs>[]
     productCostBreakdowns: Prisma.$product_cost_breakdownsPayload<ExtArgs>[]
     cost_template: Prisma.$cost_templatesPayload<ExtArgs> | null
+    maintenance_parts: Prisma.$maintenance_partsPayload<ExtArgs>[]
+    tires: Prisma.$tiresPayload<ExtArgs>[]
     productStructureVersions: Prisma.$product_structure_versionsPayload<ExtArgs>[]
     unit: Prisma.$unitsPayload<ExtArgs> | null
     product_suppliers: Prisma.$product_suppliersPayload<ExtArgs>[]
@@ -8738,6 +9468,8 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
   product_costs<T extends Prisma.products$product_costsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_costsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_costsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productCostBreakdowns<T extends Prisma.products$productCostBreakdownsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$productCostBreakdownsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_cost_breakdownsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cost_template<T extends Prisma.products$cost_templateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$cost_templateArgs<ExtArgs>>): Prisma.Prisma__cost_templatesClient<runtime.Types.Result.GetResult<Prisma.$cost_templatesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  maintenance_parts<T extends Prisma.products$maintenance_partsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$maintenance_partsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$maintenance_partsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tires<T extends Prisma.products$tiresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$tiresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tiresPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productStructureVersions<T extends Prisma.products$productStructureVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$productStructureVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_structure_versionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   unit<T extends Prisma.products$unitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$unitArgs<ExtArgs>>): Prisma.Prisma__unitsClient<runtime.Types.Result.GetResult<Prisma.$unitsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   product_suppliers<T extends Prisma.products$product_suppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_suppliersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9675,6 +10407,54 @@ export type products$cost_templateArgs<ExtArgs extends runtime.Types.Extensions.
    */
   include?: Prisma.cost_templatesInclude<ExtArgs> | null
   where?: Prisma.cost_templatesWhereInput
+}
+
+/**
+ * products.maintenance_parts
+ */
+export type products$maintenance_partsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the maintenance_parts
+   */
+  select?: Prisma.maintenance_partsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the maintenance_parts
+   */
+  omit?: Prisma.maintenance_partsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.maintenance_partsInclude<ExtArgs> | null
+  where?: Prisma.maintenance_partsWhereInput
+  orderBy?: Prisma.maintenance_partsOrderByWithRelationInput | Prisma.maintenance_partsOrderByWithRelationInput[]
+  cursor?: Prisma.maintenance_partsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Maintenance_partsScalarFieldEnum | Prisma.Maintenance_partsScalarFieldEnum[]
+}
+
+/**
+ * products.tires
+ */
+export type products$tiresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tires
+   */
+  select?: Prisma.tiresSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tires
+   */
+  omit?: Prisma.tiresOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.tiresInclude<ExtArgs> | null
+  where?: Prisma.tiresWhereInput
+  orderBy?: Prisma.tiresOrderByWithRelationInput | Prisma.tiresOrderByWithRelationInput[]
+  cursor?: Prisma.tiresWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TiresScalarFieldEnum | Prisma.TiresScalarFieldEnum[]
 }
 
 /**

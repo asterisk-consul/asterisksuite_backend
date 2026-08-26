@@ -30,6 +30,9 @@ model business_parties {
   hr_vales            hr_vales[]
   product_suppliers   product_suppliers[]
   international_operations international_operations[]
+  maintenance_orders_as_supplier maintenance_orders[]
+  maintenance_services_as_supplier maintenance_services[]
+  tires_as_supplier   tires[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
   @@schema("tenant")

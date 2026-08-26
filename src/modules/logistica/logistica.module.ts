@@ -11,6 +11,7 @@ import { CashBoxesModule } from './cash-boxes/cash-boxes.module';
 import { CashBoxMovementsModule } from './cash-box-movements/cash-box-movements.module';
 import { CashBoxRenditionsModule } from './cash-box-renditions/cash-box-renditions.module';
 import { CashBoxTransfersModule } from './cash-box-transfers/cash-box-transfers.module';
+import { MaintenanceModule } from './maintenance/maintenance.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CashBoxTransfersModule } from './cash-box-transfers/cash-box-transfers.
     CashBoxMovementsModule,
     CashBoxRenditionsModule,
     CashBoxTransfersModule,
+    MaintenanceModule,
   ],
   exports: [
     MediaModule,
@@ -34,6 +36,7 @@ import { CashBoxTransfersModule } from './cash-box-transfers/cash-box-transfers.
     CashBoxMovementsModule,
     CashBoxRenditionsModule,
     CashBoxTransfersModule,
+    MaintenanceModule,
   ],
 })
 export class LogisticaModule {}

@@ -109,6 +109,18 @@ export const ModelName = {
   documents_driver: 'documents_driver',
   transfer_rates: 'transfer_rates',
   dispatch_rates: 'dispatch_rates',
+  maintenance_orders: 'maintenance_orders',
+  maintenance_tasks: 'maintenance_tasks',
+  maintenance_parts: 'maintenance_parts',
+  maintenance_labor: 'maintenance_labor',
+  maintenance_services: 'maintenance_services',
+  maintenance_status_history: 'maintenance_status_history',
+  tires: 'tires',
+  vehicle_tire_positions: 'vehicle_tire_positions',
+  tire_movements: 'tire_movements',
+  tire_position_history: 'tire_position_history',
+  maintenance_plans: 'maintenance_plans',
+  maintenance_plan_assets: 'maintenance_plan_assets',
   system_modules: 'system_modules',
   locations: 'locations',
   operation_taxes: 'operation_taxes',
@@ -1274,6 +1286,295 @@ export const Dispatch_ratesScalarFieldEnum = {
 } as const
 
 export type Dispatch_ratesScalarFieldEnum = (typeof Dispatch_ratesScalarFieldEnum)[keyof typeof Dispatch_ratesScalarFieldEnum]
+
+
+export const Maintenance_ordersScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  number: 'number',
+  asset_type: 'asset_type',
+  asset_id: 'asset_id',
+  vehicle_id: 'vehicle_id',
+  tire_id: 'tire_id',
+  category: 'category',
+  maintenance_type: 'maintenance_type',
+  priority: 'priority',
+  status: 'status',
+  title: 'title',
+  description: 'description',
+  reported_problem: 'reported_problem',
+  diagnosis: 'diagnosis',
+  solution: 'solution',
+  reported_at: 'reported_at',
+  scheduled_at: 'scheduled_at',
+  started_at: 'started_at',
+  completed_at: 'completed_at',
+  odometer: 'odometer',
+  reported_by: 'reported_by',
+  assigned_to: 'assigned_to',
+  supplier_id: 'supplier_id',
+  estimated_cost: 'estimated_cost',
+  actual_cost: 'actual_cost',
+  parts_cost: 'parts_cost',
+  labor_cost: 'labor_cost',
+  services_cost: 'services_cost',
+  other_cost: 'other_cost',
+  vehicle_unavailable: 'vehicle_unavailable',
+  unavailable_from: 'unavailable_from',
+  unavailable_until: 'unavailable_until',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_ordersScalarFieldEnum = (typeof Maintenance_ordersScalarFieldEnum)[keyof typeof Maintenance_ordersScalarFieldEnum]
+
+
+export const Maintenance_tasksScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  description: 'description',
+  status: 'status',
+  assigned_to: 'assigned_to',
+  estimated_hours: 'estimated_hours',
+  actual_hours: 'actual_hours',
+  started_at: 'started_at',
+  completed_at: 'completed_at',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_tasksScalarFieldEnum = (typeof Maintenance_tasksScalarFieldEnum)[keyof typeof Maintenance_tasksScalarFieldEnum]
+
+
+export const Maintenance_partsScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  product_id: 'product_id',
+  warehouse_id: 'warehouse_id',
+  quantity: 'quantity',
+  unit_cost: 'unit_cost',
+  total_cost: 'total_cost',
+  stock_movement_id: 'stock_movement_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_partsScalarFieldEnum = (typeof Maintenance_partsScalarFieldEnum)[keyof typeof Maintenance_partsScalarFieldEnum]
+
+
+export const Maintenance_laborScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  employee_id: 'employee_id',
+  description: 'description',
+  hours: 'hours',
+  hourly_cost: 'hourly_cost',
+  total_cost: 'total_cost',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_laborScalarFieldEnum = (typeof Maintenance_laborScalarFieldEnum)[keyof typeof Maintenance_laborScalarFieldEnum]
+
+
+export const Maintenance_servicesScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  supplier_id: 'supplier_id',
+  description: 'description',
+  quantity: 'quantity',
+  unit_cost: 'unit_cost',
+  total_cost: 'total_cost',
+  document_id: 'document_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_servicesScalarFieldEnum = (typeof Maintenance_servicesScalarFieldEnum)[keyof typeof Maintenance_servicesScalarFieldEnum]
+
+
+export const Maintenance_status_historyScalarFieldEnum = {
+  id: 'id',
+  maintenance_order_id: 'maintenance_order_id',
+  from_status: 'from_status',
+  to_status: 'to_status',
+  changed_by: 'changed_by',
+  changed_at: 'changed_at',
+  comment: 'comment'
+} as const
+
+export type Maintenance_status_historyScalarFieldEnum = (typeof Maintenance_status_historyScalarFieldEnum)[keyof typeof Maintenance_status_historyScalarFieldEnum]
+
+
+export const TiresScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  product_id: 'product_id',
+  serial_number: 'serial_number',
+  status: 'status',
+  purchase_document_id: 'purchase_document_id',
+  purchase_document_line_id: 'purchase_document_line_id',
+  purchase_date: 'purchase_date',
+  purchase_supplier_id: 'purchase_supplier_id',
+  purchase_unit_cost: 'purchase_unit_cost',
+  purchase_receipt_document_id: 'purchase_receipt_document_id',
+  purchase_order_id: 'purchase_order_id',
+  current_vehicle_id: 'current_vehicle_id',
+  current_position_id: 'current_position_id',
+  current_warehouse_id: 'current_warehouse_id',
+  current_tire_shop_id: 'current_tire_shop_id',
+  accumulated_km: 'accumulated_km',
+  days_in_use: 'days_in_use',
+  installation_count: 'installation_count',
+  vehicle_count: 'vehicle_count',
+  repair_count: 'repair_count',
+  retread_count: 'retread_count',
+  total_repair_cost: 'total_repair_cost',
+  total_retread_cost: 'total_retread_cost',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type TiresScalarFieldEnum = (typeof TiresScalarFieldEnum)[keyof typeof TiresScalarFieldEnum]
+
+
+export const Vehicle_tire_positionsScalarFieldEnum = {
+  id: 'id',
+  vehicle_id: 'vehicle_id',
+  position_number: 'position_number',
+  axle: 'axle',
+  side: 'side',
+  position_type: 'position_type',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Vehicle_tire_positionsScalarFieldEnum = (typeof Vehicle_tire_positionsScalarFieldEnum)[keyof typeof Vehicle_tire_positionsScalarFieldEnum]
+
+
+export const Tire_movementsScalarFieldEnum = {
+  id: 'id',
+  tire_id: 'tire_id',
+  movement_type: 'movement_type',
+  date: 'date',
+  vehicle_id: 'vehicle_id',
+  position_id: 'position_id',
+  odometer: 'odometer',
+  from_location_id: 'from_location_id',
+  to_location_id: 'to_location_id',
+  from_location_type: 'from_location_type',
+  to_location_type: 'to_location_type',
+  reason: 'reason',
+  notes: 'notes',
+  user_id: 'user_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tire_movementsScalarFieldEnum = (typeof Tire_movementsScalarFieldEnum)[keyof typeof Tire_movementsScalarFieldEnum]
+
+
+export const Tire_position_historyScalarFieldEnum = {
+  id: 'id',
+  tire_id: 'tire_id',
+  position_id: 'position_id',
+  vehicle_id: 'vehicle_id',
+  installed_at: 'installed_at',
+  installed_odometer: 'installed_odometer',
+  removed_at: 'removed_at',
+  removed_odometer: 'removed_odometer',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tire_position_historyScalarFieldEnum = (typeof Tire_position_historyScalarFieldEnum)[keyof typeof Tire_position_historyScalarFieldEnum]
+
+
+export const Maintenance_plansScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  name: 'name',
+  description: 'description',
+  asset_type: 'asset_type',
+  vehicle_type: 'vehicle_type',
+  category: 'category',
+  maintenance_type: 'maintenance_type',
+  interval_type: 'interval_type',
+  interval_km: 'interval_km',
+  interval_days: 'interval_days',
+  interval_months: 'interval_months',
+  fixed_date: 'fixed_date',
+  priority: 'priority',
+  estimated_hours: 'estimated_hours',
+  estimated_cost: 'estimated_cost',
+  default_tasks: 'default_tasks',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_plansScalarFieldEnum = (typeof Maintenance_plansScalarFieldEnum)[keyof typeof Maintenance_plansScalarFieldEnum]
+
+
+export const Maintenance_plan_assetsScalarFieldEnum = {
+  id: 'id',
+  plan_id: 'plan_id',
+  asset_id: 'asset_id',
+  last_executed_at: 'last_executed_at',
+  last_executed_odometer: 'last_executed_odometer',
+  next_due_at: 'next_due_at',
+  next_due_odometer: 'next_due_odometer',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Maintenance_plan_assetsScalarFieldEnum = (typeof Maintenance_plan_assetsScalarFieldEnum)[keyof typeof Maintenance_plan_assetsScalarFieldEnum]
 
 
 export const System_modulesScalarFieldEnum = {

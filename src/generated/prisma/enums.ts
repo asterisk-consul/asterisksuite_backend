@@ -476,6 +476,140 @@ export const InternationalExpenseType = {
 export type InternationalExpenseType = (typeof InternationalExpenseType)[keyof typeof InternationalExpenseType]
 
 
+export const MaintenanceAssetType = {
+  VEHICLE: 'VEHICLE',
+  TIRE: 'TIRE',
+  BATTERY: 'BATTERY',
+  ENGINE: 'ENGINE',
+  TRANSMISSION: 'TRANSMISSION',
+  DIFFERENTIAL: 'DIFFERENTIAL',
+  OTHER_COMPONENT: 'OTHER_COMPONENT'
+} as const
+
+export type MaintenanceAssetType = (typeof MaintenanceAssetType)[keyof typeof MaintenanceAssetType]
+
+
+export const MaintenancePriority = {
+  CRITICAL: 'CRITICAL',
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW'
+} as const
+
+export type MaintenancePriority = (typeof MaintenancePriority)[keyof typeof MaintenancePriority]
+
+
+export const MaintenanceStatus = {
+  PENDING: 'PENDING',
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_PARTS: 'WAITING_PARTS',
+  WAITING_SUPPLIER: 'WAITING_SUPPLIER',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type MaintenanceStatus = (typeof MaintenanceStatus)[keyof typeof MaintenanceStatus]
+
+
+export const MaintenanceType = {
+  CORRECTIVE: 'CORRECTIVE',
+  PREVENTIVE: 'PREVENTIVE',
+  PREDICTIVE: 'PREDICTIVE',
+  INSPECTION: 'INSPECTION',
+  SCHEDULED: 'SCHEDULED'
+} as const
+
+export type MaintenanceType = (typeof MaintenanceType)[keyof typeof MaintenanceType]
+
+
+export const MaintenanceCategory = {
+  ENGINE: 'ENGINE',
+  TRANSMISSION: 'TRANSMISSION',
+  BRAKES: 'BRAKES',
+  SUSPENSION: 'SUSPENSION',
+  STEERING: 'STEERING',
+  ELECTRICAL: 'ELECTRICAL',
+  COOLING: 'COOLING',
+  LUBRICATION: 'LUBRICATION',
+  TIRES: 'TIRES',
+  BODY: 'BODY',
+  LIGHTING: 'LIGHTING',
+  TRAILER: 'TRAILER',
+  OTHER: 'OTHER'
+} as const
+
+export type MaintenanceCategory = (typeof MaintenanceCategory)[keyof typeof MaintenanceCategory]
+
+
+export const MaintenanceTaskStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type MaintenanceTaskStatus = (typeof MaintenanceTaskStatus)[keyof typeof MaintenanceTaskStatus]
+
+
+export const TireMovementType = {
+  PURCHASE: 'PURCHASE',
+  RECEIPT: 'RECEIPT',
+  TRANSFER: 'TRANSFER',
+  INSTALLATION: 'INSTALLATION',
+  REMOVAL: 'REMOVAL',
+  ROTATION: 'ROTATION',
+  REPAIR: 'REPAIR',
+  RETREAD: 'RETREAD',
+  WAREHOUSE_ENTRY: 'WAREHOUSE_ENTRY',
+  WAREHOUSE_EXIT: 'WAREHOUSE_EXIT',
+  SCRAP: 'SCRAP',
+  SALE: 'SALE'
+} as const
+
+export type TireMovementType = (typeof TireMovementType)[keyof typeof TireMovementType]
+
+
+export const TirePositionSide = {
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT'
+} as const
+
+export type TirePositionSide = (typeof TirePositionSide)[keyof typeof TirePositionSide]
+
+
+export const PlanIntervalType = {
+  INTERVAL_KM: 'INTERVAL_KM',
+  INTERVAL_DAYS: 'INTERVAL_DAYS',
+  INTERVAL_MONTHS: 'INTERVAL_MONTHS',
+  FIXED_DATE: 'FIXED_DATE'
+} as const
+
+export type PlanIntervalType = (typeof PlanIntervalType)[keyof typeof PlanIntervalType]
+
+
+export const TireStatus = {
+  IN_STOCK: 'IN_STOCK',
+  INSTALLED: 'INSTALLED',
+  IN_REPAIR: 'IN_REPAIR',
+  SCRAPPED: 'SCRAPPED',
+  SOLD: 'SOLD'
+} as const
+
+export type TireStatus = (typeof TireStatus)[keyof typeof TireStatus]
+
+
+export const TireLocationType = {
+  WAREHOUSE: 'WAREHOUSE',
+  VEHICLE: 'VEHICLE',
+  TIRE_SHOP: 'TIRE_SHOP',
+  SCRAP: 'SCRAP',
+  CUSTOMER: 'CUSTOMER'
+} as const
+
+export type TireLocationType = (typeof TireLocationType)[keyof typeof TireLocationType]
+
+
 export const CompanyRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',

@@ -327,6 +327,11 @@ model vehicles {
   vehicleDocuments             documents_vehicle[]
   vehicle_combinations_tractor vehicle_combinations[] @relation("tractor_vehicle")
   vehicle_combinations_trailer vehicle_combinations[] @relation("trailer_vehicle")
+  maintenance_orders           maintenance_orders[]
+  tire_positions               vehicle_tire_positions[]
+  tire_movements               tire_movements[]
+  tire_position_history        tire_position_history[]
+  current_tires                tires[]                 @relation("current_tire_vehicle")
 
   @@schema("tenant")
 }

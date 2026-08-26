@@ -1,0 +1,561 @@
+// ════════════════════════════════════════════════════════════════════════════════
+// MÓDULO DE MANTENIMIENTO DE FLOTA
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ─── ENUMS ────────────────────────────────────────────────────────────────────
+
+enum MaintenanceAssetType {
+  VEHICLE
+  TIRE
+  BATTERY
+  ENGINE
+  TRANSMISSION
+  DIFFERENTIAL
+  OTHER_COMPONENT
+  @@schema("tenant")
+}
+
+enum MaintenancePriority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  @@schema("tenant")
+}
+
+enum MaintenanceStatus {
+  PENDING
+  SCHEDULED
+  IN_PROGRESS
+  WAITING_PARTS
+  WAITING_SUPPLIER
+  COMPLETED
+  CANCELLED
+  @@schema("tenant")
+}
+
+enum MaintenanceType {
+  CORRECTIVE
+  PREVENTIVE
+  PREDICTIVE
+  INSPECTION
+  SCHEDULED
+  @@schema("tenant")
+}
+
+enum MaintenanceCategory {
+  ENGINE
+  TRANSMISSION
+  BRAKES
+  SUSPENSION
+  STEERING
+  ELECTRICAL
+  COOLING
+  LUBRICATION
+  TIRES
+  BODY
+  LIGHTING
+  TRAILER
+  OTHER
+  @@schema("tenant")
+}
+
+enum MaintenanceTaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+  @@schema("tenant")
+}
+
+enum TireMovementType {
+  PURCHASE
+  RECEIPT
+  TRANSFER
+  INSTALLATION
+  REMOVAL
+  ROTATION
+  REPAIR
+  RETREAD
+  WAREHOUSE_ENTRY
+  WAREHOUSE_EXIT
+  SCRAP
+  SALE
+  @@schema("tenant")
+}
+
+enum TirePositionSide {
+  LEFT
+  RIGHT
+  @@schema("tenant")
+}
+
+enum PlanIntervalType {
+  INTERVAL_KM
+  INTERVAL_DAYS
+  INTERVAL_MONTHS
+  FIXED_DATE
+  @@schema("tenant")
+}
+
+enum TireStatus {
+  IN_STOCK
+  INSTALLED
+  IN_REPAIR
+  SCRAPPED
+  SOLD
+  @@schema("tenant")
+}
+
+enum TireLocationType {
+  WAREHOUSE
+  VEHICLE
+  TIRE_SHOP
+  SCRAP
+  CUSTOMER
+  @@schema("tenant")
+}
+
+// ─── ÓRDENES DE MANTENIMIENTO ────────────────────────────────────────────────
+
+model maintenance_orders {
+  id                 String              @id @default(uuid()) @db.Uuid
+  company_id         String              @db.Uuid
+  number             String              @unique @db.VarChar(50)
+  
+  asset_type         MaintenanceAssetType
+  asset_id           String              @db.Uuid
+  
+  vehicle_id         String?             @db.Uuid
+  tire_id            String?             @db.Uuid
+  
+  category           MaintenanceCategory
+  maintenance_type   MaintenanceType
+  
+  priority           MaintenancePriority @default(MEDIUM)
+  status             MaintenanceStatus   @default(PENDING)
+  
+  title              String              @db.VarChar(255)
+  description        String?             @db.Text
+  
+  reported_problem   String?             @db.Text
+  diagnosis          String?             @db.Text
+  solution           String?             @db.Text
+  
+  reported_at        DateTime            @default(now()) @db.Timestamp(6)
+  scheduled_at       DateTime?           @db.Timestamp(6)
+  started_at         DateTime?           @db.Timestamp(6)
+  completed_at       DateTime?           @db.Timestamp(6)
+  
+  odometer           Decimal?            @db.Decimal(12, 2)
+  
+  reported_by        String?             @db.Uuid
+  assigned_to        String?             @db.Uuid
+  
+  supplier_id        String?             @db.Uuid
+  
+  estimated_cost     Decimal?            @db.Decimal(15, 2)
+  actual_cost        Decimal?            @db.Decimal(15, 2)
+  parts_cost         Decimal?            @default(0) @db.Decimal(15, 2)
+  labor_cost         Decimal?            @default(0) @db.Decimal(15, 2)
+  services_cost      Decimal?            @default(0) @db.Decimal(15, 2)
+  other_cost         Decimal?            @default(0) @db.Decimal(15, 2)
+  
+  vehicle_unavailable Boolean            @default(false)
+  unavailable_from   DateTime?           @db.Timestamp(6)
+  unavailable_until  DateTime?           @db.Timestamp(6)
+  
+  notes              String?             @db.Text
+  
+  created_at         DateTime            @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?             @db.Uuid
+  updated_by         String?             @db.Uuid
+  deleted_by         String?             @db.Uuid
+  
+  tasks              maintenance_tasks[]
+  parts              maintenance_parts[]
+  labor              maintenance_labor[]
+  services           maintenance_services[]
+  status_history     maintenance_status_history[]
+  
+  vehicle            vehicles?           @relation(fields: [vehicle_id], references: [id], onDelete: SetNull)
+  tire               tires?              @relation(fields: [tire_id], references: [id], onDelete: SetNull)
+  supplier           business_parties?   @relation(fields: [supplier_id], references: [id], onDelete: SetNull)
+  
+  @@index([vehicle_id])
+  @@index([tire_id])
+  @@index([status])
+  @@index([priority])
+  @@index([asset_type, asset_id])
+  @@index([scheduled_at])
+  @@index([reported_at])
+  @@index([company_id])
+  @@schema("tenant")
+}
+
+model maintenance_tasks {
+  id                  String              @id @default(uuid()) @db.Uuid
+  maintenance_order_id String             @db.Uuid
+  
+  description         String              @db.Text
+  status              MaintenanceTaskStatus @default(PENDING)
+  
+  assigned_to         String?             @db.Uuid
+  
+  estimated_hours     Decimal?            @db.Decimal(6, 2)
+  actual_hours        Decimal?            @db.Decimal(6, 2)
+  
+  started_at          DateTime?           @db.Timestamp(6)
+  completed_at        DateTime?           @db.Timestamp(6)
+  
+  notes               String?             @db.Text
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  maintenance_order   maintenance_orders  @relation(fields: [maintenance_order_id], references: [id], onDelete: Cascade)
+  
+  @@index([maintenance_order_id])
+  @@index([status])
+  @@schema("tenant")
+}
+
+model maintenance_parts {
+  id                  String              @id @default(uuid()) @db.Uuid
+  maintenance_order_id String             @db.Uuid
+  
+  product_id          String              @db.Uuid
+  warehouse_id        String              @db.Uuid
+  
+  quantity            Decimal             @db.Decimal(12, 3)
+  unit_cost           Decimal             @db.Decimal(15, 2)
+  total_cost          Decimal             @db.Decimal(15, 2)
+  
+  stock_movement_id   String?             @db.Uuid
+  document_id         String?             @db.Uuid
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  maintenance_order   maintenance_orders  @relation(fields: [maintenance_order_id], references: [id], onDelete: Cascade)
+  product             products            @relation(fields: [product_id], references: [id], onDelete: Restrict)
+  warehouse           warehouses          @relation(fields: [warehouse_id], references: [id], onDelete: Restrict)
+  
+  @@index([maintenance_order_id])
+  @@index([product_id])
+  @@index([stock_movement_id])
+  @@schema("tenant")
+}
+
+model maintenance_labor {
+  id                  String              @id @default(uuid()) @db.Uuid
+  maintenance_order_id String             @db.Uuid
+  
+  employee_id         String?             @db.Uuid
+  supplier_id         String?             @db.Uuid
+  
+  description         String              @db.Text
+  hours               Decimal             @db.Decimal(6, 2)
+  hourly_cost         Decimal             @db.Decimal(15, 2)
+  total_cost          Decimal             @db.Decimal(15, 2)
+  
+  document_id         String?             @db.Uuid
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  maintenance_order   maintenance_orders  @relation(fields: [maintenance_order_id], references: [id], onDelete: Cascade)
+  employee            employees?          @relation(fields: [employee_id], references: [id], onDelete: Restrict)
+  
+  @@index([maintenance_order_id])
+  @@index([employee_id])
+  @@schema("tenant")
+}
+
+model maintenance_services {
+  id                  String              @id @default(uuid()) @db.Uuid
+  maintenance_order_id String             @db.Uuid
+  
+  supplier_id         String              @db.Uuid
+  description         String              @db.Text
+  quantity            Decimal             @db.Decimal(12, 3)
+  unit_cost           Decimal             @db.Decimal(15, 2)
+  total_cost          Decimal             @db.Decimal(15, 2)
+  
+  document_id         String?             @db.Uuid
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  maintenance_order   maintenance_orders  @relation(fields: [maintenance_order_id], references: [id], onDelete: Cascade)
+  supplier            business_parties    @relation(fields: [supplier_id], references: [id], onDelete: Restrict)
+  document            documents?          @relation(fields: [document_id], references: [id], onDelete: SetNull)
+  
+  @@index([maintenance_order_id])
+  @@index([supplier_id])
+  @@index([document_id])
+  @@schema("tenant")
+}
+
+model maintenance_status_history {
+  id                  String              @id @default(uuid()) @db.Uuid
+  maintenance_order_id String             @db.Uuid
+  
+  from_status         MaintenanceStatus?
+  to_status           MaintenanceStatus
+  
+  changed_by          String              @db.Uuid
+  changed_at          DateTime            @default(now()) @db.Timestamp(6)
+  comment             String?             @db.Text
+  
+  maintenance_order   maintenance_orders  @relation(fields: [maintenance_order_id], references: [id], onDelete: Cascade)
+  
+  @@index([maintenance_order_id])
+  @@index([changed_at])
+  @@schema("tenant")
+}
+
+// ─── CUBIERTAS (TIRES) ───────────────────────────────────────────────────────
+
+model tires {
+  id                  String              @id @default(uuid()) @db.Uuid
+  company_id          String              @db.Uuid
+  
+  product_id          String              @db.Uuid
+  serial_number       String              @unique @db.VarChar(50)
+  
+  status              TireStatus          @default(IN_STOCK)
+  
+  purchase_document_id        String?     @db.Uuid
+  purchase_document_line_id   String?     @db.Uuid
+  purchase_date               DateTime?   @db.Timestamp(6)
+  purchase_supplier_id        String?     @db.Uuid
+  purchase_unit_cost          Decimal?    @db.Decimal(15, 2)
+  purchase_receipt_document_id String?    @db.Uuid
+  purchase_order_id           String?     @db.Uuid
+  
+  current_vehicle_id   String?            @db.Uuid
+  current_position_id  String?            @db.Uuid
+  current_warehouse_id String?            @db.Uuid
+  current_tire_shop_id String?            @db.Uuid
+  
+  accumulated_km       Decimal?           @default(0) @db.Decimal(12, 2)
+  days_in_use          Int?               @default(0)
+  installation_count   Int?               @default(0)
+  vehicle_count        Int?               @default(0)
+  repair_count         Int?               @default(0)
+  retread_count        Int?               @default(0)
+  
+  total_repair_cost    Decimal?           @default(0) @db.Decimal(15, 2)
+  total_retread_cost   Decimal?           @default(0) @db.Decimal(15, 2)
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  movements           tire_movements[]
+  positions_history   tire_position_history[]
+  maintenance_orders  maintenance_orders[]
+  
+  product             products            @relation(fields: [product_id], references: [id], onDelete: Restrict)
+  current_vehicle     vehicles?           @relation("current_tire_vehicle", fields: [current_vehicle_id], references: [id], onDelete: SetNull)
+  current_position    vehicle_tire_positions? @relation(fields: [current_position_id], references: [id], onDelete: SetNull)
+  current_warehouse   warehouses?         @relation(fields: [current_warehouse_id], references: [id], onDelete: SetNull)
+  purchase_document   documents?          @relation(fields: [purchase_document_id], references: [id], onDelete: SetNull)
+  purchase_supplier   business_parties?   @relation(fields: [purchase_supplier_id], references: [id], onDelete: SetNull)
+  
+  @@index([product_id])
+  @@index([current_vehicle_id])
+  @@index([current_warehouse_id])
+  @@index([current_tire_shop_id])
+  @@index([status])
+  @@index([serial_number])
+  @@index([company_id])
+  @@schema("tenant")
+}
+
+model vehicle_tire_positions {
+  id                  String              @id @default(uuid()) @db.Uuid
+  vehicle_id          String              @db.Uuid
+  position_number     Int
+  axle                Int
+  side                TirePositionSide
+  position_type       String?             @db.VarChar(30)
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  vehicle             vehicles            @relation(fields: [vehicle_id], references: [id], onDelete: NoAction)
+  position_history    tire_position_history[]
+  current_tires       tires[]
+  movements           tire_movements[]
+  
+  @@unique([vehicle_id, position_number])
+  @@index([vehicle_id])
+  @@schema("tenant")
+}
+
+model tire_movements {
+  id                  String              @id @default(uuid()) @db.Uuid
+  tire_id             String              @db.Uuid
+  
+  movement_type       TireMovementType
+  date                DateTime            @default(now()) @db.Timestamp(6)
+  
+  vehicle_id          String?             @db.Uuid
+  position_id         String?             @db.Uuid
+  odometer            Decimal?            @db.Decimal(12, 2)
+  
+  from_location_id    String?             @db.Uuid
+  to_location_id      String?             @db.Uuid
+  from_location_type  TireLocationType?
+  to_location_type    TireLocationType?
+  
+  reason              String?             @db.Text
+  notes               String?             @db.Text
+  
+  user_id             String              @db.Uuid
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  tire                tires               @relation(fields: [tire_id], references: [id], onDelete: Cascade)
+  vehicle             vehicles?           @relation(fields: [vehicle_id], references: [id], onDelete: SetNull)
+  position            vehicle_tire_positions? @relation(fields: [position_id], references: [id], onDelete: SetNull)
+  
+  @@index([tire_id])
+  @@index([movement_type])
+  @@index([date])
+  @@index([vehicle_id])
+  @@schema("tenant")
+}
+
+model tire_position_history {
+  id                  String              @id @default(uuid()) @db.Uuid
+  tire_id             String              @db.Uuid
+  position_id         String              @db.Uuid
+  vehicle_id          String              @db.Uuid
+  
+  installed_at        DateTime            @default(now()) @db.Timestamp(6)
+  installed_odometer  Decimal?            @db.Decimal(12, 2)
+  removed_at          DateTime?
+  removed_odometer    Decimal?            @db.Decimal(12, 2)
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  tire                tires               @relation(fields: [tire_id], references: [id], onDelete: Cascade)
+  position            vehicle_tire_positions @relation(fields: [position_id], references: [id], onDelete: NoAction)
+  vehicle             vehicles            @relation(fields: [vehicle_id], references: [id], onDelete: NoAction)
+  
+  @@index([tire_id])
+  @@index([vehicle_id])
+  @@index([position_id])
+  @@index([installed_at])
+  @@schema("tenant")
+}
+
+// ─── PLANES DE MANTENIMIENTO PREVENTIVO ──────────────────────────────────────
+
+model maintenance_plans {
+  id                  String              @id @default(uuid()) @db.Uuid
+  company_id          String              @db.Uuid
+  
+  name                String              @db.VarChar(255)
+  description         String?             @db.Text
+  
+  asset_type          MaintenanceAssetType
+  vehicle_type        String?             @db.VarChar(30)
+  
+  category            MaintenanceCategory
+  maintenance_type    MaintenanceType     @default(PREVENTIVE)
+  
+  interval_type       PlanIntervalType
+  interval_km         Int?
+  interval_days       Int?
+  interval_months     Int?
+  fixed_date          DateTime?           @db.Timestamp(6)
+  
+  priority            MaintenancePriority @default(MEDIUM)
+  estimated_hours     Decimal?            @db.Decimal(6, 2)
+  estimated_cost      Decimal?            @db.Decimal(15, 2)
+  
+  default_tasks       Json?
+  
+  active              Boolean             @default(true)
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  assets              maintenance_plan_assets[]
+  
+  @@index([asset_type])
+  @@index([vehicle_type])
+  @@index([active])
+  @@index([company_id])
+  @@schema("tenant")
+}
+
+model maintenance_plan_assets {
+  id                  String              @id @default(uuid()) @db.Uuid
+  plan_id             String              @db.Uuid
+  asset_id            String              @db.Uuid
+  
+  last_executed_at    DateTime?
+  last_executed_odometer Decimal?         @db.Decimal(12, 2)
+  next_due_at         DateTime?
+  next_due_odometer   Decimal?            @db.Decimal(12, 2)
+  
+  created_at          DateTime            @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?           @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?             @db.Uuid
+  updated_by          String?             @db.Uuid
+  deleted_by          String?             @db.Uuid
+  
+  plan                maintenance_plans   @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  
+  @@unique([plan_id, asset_id])
+  @@index([plan_id])
+  @@index([asset_id])
+  @@index([next_due_at])
+  @@index([next_due_odometer])
+  @@schema("tenant")
+}

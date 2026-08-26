@@ -10,7 +10,8 @@ VALUES
   (gen_random_uuid(), 'Compras A', true, '0002', 0, 'A', true),
   (gen_random_uuid(), 'Compras B', true, '0002', 0, 'B', true),
   (gen_random_uuid(), 'Compras C', true, '0002', 0, 'C', true),
-  (gen_random_uuid(), 'Operaciones Internacionales', true, '0003', 0, 'IMP', true)
+  (gen_random_uuid(), 'Operaciones Internacionales', true, '0003', 0, 'IMP', true),
+  (gen_random_uuid(), 'MAINTENANCE_ORDER', true, '0000', 0, 'MO', true)
 ON CONFLICT DO NOTHING;
 
 -- FACTURAS DE VENTA

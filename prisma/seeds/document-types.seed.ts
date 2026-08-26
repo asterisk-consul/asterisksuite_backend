@@ -482,6 +482,7 @@ const sequences = [
   { name: 'Recibos', point_of_sale: '0001', prefix: 'REC', forCategory: 'RECEIPT' },
   { name: 'VALES', point_of_sale: '0003', prefix: 'V', forCategory: 'VALE' },
   { name: 'Operaciones Internacionales', point_of_sale: '0003', prefix: 'IMP', forCategory: null },
+  { name: 'MAINTENANCE_ORDER', point_of_sale: '0000', prefix: 'MO', forCategory: null },
 ];
 
 async function main() {

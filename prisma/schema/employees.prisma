@@ -30,6 +30,7 @@ model employees {
   cash_boxes    cash_boxes[]
   movements     cash_box_movements[]
   sales_ordenes orden_venta_documents[]
+  maintenance_labor maintenance_labor[]
 
   @@index([party_id])
   @@schema("tenant")

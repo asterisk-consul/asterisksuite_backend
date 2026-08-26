@@ -82,6 +82,8 @@ model products {
   product_costs             product_costs[]
   productCostBreakdowns     product_cost_breakdowns[]
   cost_template             cost_templates?              @relation(fields: [cost_template_id], references: [id])
+  maintenance_parts         maintenance_parts[]
+  tires                     tires[]
   productStructureVersions  product_structure_versions[]
   unit                      units?                       @relation(fields: [unit_id], references: [id])
   product_suppliers         product_suppliers[]

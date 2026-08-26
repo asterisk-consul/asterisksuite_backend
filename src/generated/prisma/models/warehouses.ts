@@ -244,6 +244,8 @@ export type warehousesWhereInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.TripsListRelationFilter
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  maintenance_parts?: Prisma.Maintenance_partsListRelationFilter
+  current_tires?: Prisma.TiresListRelationFilter
   locations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
   units?: Prisma.XOR<Prisma.UnitsNullableScalarRelationFilter, Prisma.unitsWhereInput> | null
 }
@@ -267,6 +269,8 @@ export type warehousesOrderByWithRelationInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsOrderByRelationAggregateInput
   warehouse_stock?: Prisma.warehouse_stockOrderByRelationAggregateInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
+  maintenance_parts?: Prisma.maintenance_partsOrderByRelationAggregateInput
+  current_tires?: Prisma.tiresOrderByRelationAggregateInput
   locations?: Prisma.locationsOrderByWithRelationInput
   units?: Prisma.unitsOrderByWithRelationInput
 }
@@ -293,6 +297,8 @@ export type warehousesWhereUniqueInput = Prisma.AtLeast<{
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.TripsListRelationFilter
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  maintenance_parts?: Prisma.Maintenance_partsListRelationFilter
+  current_tires?: Prisma.TiresListRelationFilter
   locations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
   units?: Prisma.XOR<Prisma.UnitsNullableScalarRelationFilter, Prisma.unitsWhereInput> | null
 }, "id" | "code">
@@ -350,6 +356,8 @@ export type warehousesCreateInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -373,6 +381,8 @@ export type warehousesUncheckedCreateInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesUpdateInput = {
@@ -392,6 +402,8 @@ export type warehousesUpdateInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -415,6 +427,8 @@ export type warehousesUncheckedUpdateInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesCreateManyInput = {
@@ -571,6 +585,36 @@ export type warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehouse
   update?: Prisma.XOR<Prisma.XOR<Prisma.warehousesUpdateToOneWithWhereWithoutTrips_trips_origin_warehouse_idTowarehousesInput, Prisma.warehousesUpdateWithoutTrips_trips_origin_warehouse_idTowarehousesInput>, Prisma.warehousesUncheckedUpdateWithoutTrips_trips_origin_warehouse_idTowarehousesInput>
 }
 
+export type warehousesCreateNestedOneWithoutMaintenance_partsInput = {
+  create?: Prisma.XOR<Prisma.warehousesCreateWithoutMaintenance_partsInput, Prisma.warehousesUncheckedCreateWithoutMaintenance_partsInput>
+  connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutMaintenance_partsInput
+  connect?: Prisma.warehousesWhereUniqueInput
+}
+
+export type warehousesUpdateOneRequiredWithoutMaintenance_partsNestedInput = {
+  create?: Prisma.XOR<Prisma.warehousesCreateWithoutMaintenance_partsInput, Prisma.warehousesUncheckedCreateWithoutMaintenance_partsInput>
+  connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutMaintenance_partsInput
+  upsert?: Prisma.warehousesUpsertWithoutMaintenance_partsInput
+  connect?: Prisma.warehousesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.warehousesUpdateToOneWithWhereWithoutMaintenance_partsInput, Prisma.warehousesUpdateWithoutMaintenance_partsInput>, Prisma.warehousesUncheckedUpdateWithoutMaintenance_partsInput>
+}
+
+export type warehousesCreateNestedOneWithoutCurrent_tiresInput = {
+  create?: Prisma.XOR<Prisma.warehousesCreateWithoutCurrent_tiresInput, Prisma.warehousesUncheckedCreateWithoutCurrent_tiresInput>
+  connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutCurrent_tiresInput
+  connect?: Prisma.warehousesWhereUniqueInput
+}
+
+export type warehousesUpdateOneWithoutCurrent_tiresNestedInput = {
+  create?: Prisma.XOR<Prisma.warehousesCreateWithoutCurrent_tiresInput, Prisma.warehousesUncheckedCreateWithoutCurrent_tiresInput>
+  connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutCurrent_tiresInput
+  upsert?: Prisma.warehousesUpsertWithoutCurrent_tiresInput
+  disconnect?: Prisma.warehousesWhereInput | boolean
+  delete?: Prisma.warehousesWhereInput | boolean
+  connect?: Prisma.warehousesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.warehousesUpdateToOneWithWhereWithoutCurrent_tiresInput, Prisma.warehousesUpdateWithoutCurrent_tiresInput>, Prisma.warehousesUncheckedUpdateWithoutCurrent_tiresInput>
+}
+
 export type warehousesCreateNestedManyWithoutLocationsInput = {
   create?: Prisma.XOR<Prisma.warehousesCreateWithoutLocationsInput, Prisma.warehousesUncheckedCreateWithoutLocationsInput> | Prisma.warehousesCreateWithoutLocationsInput[] | Prisma.warehousesUncheckedCreateWithoutLocationsInput[]
   connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutLocationsInput | Prisma.warehousesCreateOrConnectWithoutLocationsInput[]
@@ -715,6 +759,8 @@ export type warehousesCreateWithoutPicking_ordersInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -737,6 +783,8 @@ export type warehousesUncheckedCreateWithoutPicking_ordersInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutPicking_ordersInput = {
@@ -771,6 +819,8 @@ export type warehousesUpdateWithoutPicking_ordersInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -793,6 +843,8 @@ export type warehousesUncheckedUpdateWithoutPicking_ordersInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesCreateWithoutTrips_trips_destination_warehouse_idTowarehousesInput = {
@@ -811,6 +863,8 @@ export type warehousesCreateWithoutTrips_trips_destination_warehouse_idTowarehou
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -833,6 +887,8 @@ export type warehousesUncheckedCreateWithoutTrips_trips_destination_warehouse_id
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutTrips_trips_destination_warehouse_idTowarehousesInput = {
@@ -856,6 +912,8 @@ export type warehousesCreateWithoutTrips_trips_origin_warehouse_idTowarehousesIn
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -878,6 +936,8 @@ export type warehousesUncheckedCreateWithoutTrips_trips_origin_warehouse_idTowar
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutTrips_trips_origin_warehouse_idTowarehousesInput = {
@@ -912,6 +972,8 @@ export type warehousesUpdateWithoutTrips_trips_destination_warehouse_idTowarehou
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -934,6 +996,8 @@ export type warehousesUncheckedUpdateWithoutTrips_trips_destination_warehouse_id
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesUpsertWithoutTrips_trips_origin_warehouse_idTowarehousesInput = {
@@ -963,6 +1027,8 @@ export type warehousesUpdateWithoutTrips_trips_origin_warehouse_idTowarehousesIn
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -985,6 +1051,216 @@ export type warehousesUncheckedUpdateWithoutTrips_trips_origin_warehouse_idTowar
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
+}
+
+export type warehousesCreateWithoutMaintenance_partsInput = {
+  id?: string
+  name: string
+  code?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallets?: Prisma.palletsCreateNestedManyWithoutWarehousesInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutWarehousesInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
+  locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
+  units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
+}
+
+export type warehousesUncheckedCreateWithoutMaintenance_partsInput = {
+  id?: string
+  location_id?: string | null
+  unit_id?: string | null
+  name: string
+  code?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutWarehousesInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutWarehousesInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
+}
+
+export type warehousesCreateOrConnectWithoutMaintenance_partsInput = {
+  where: Prisma.warehousesWhereUniqueInput
+  create: Prisma.XOR<Prisma.warehousesCreateWithoutMaintenance_partsInput, Prisma.warehousesUncheckedCreateWithoutMaintenance_partsInput>
+}
+
+export type warehousesUpsertWithoutMaintenance_partsInput = {
+  update: Prisma.XOR<Prisma.warehousesUpdateWithoutMaintenance_partsInput, Prisma.warehousesUncheckedUpdateWithoutMaintenance_partsInput>
+  create: Prisma.XOR<Prisma.warehousesCreateWithoutMaintenance_partsInput, Prisma.warehousesUncheckedCreateWithoutMaintenance_partsInput>
+  where?: Prisma.warehousesWhereInput
+}
+
+export type warehousesUpdateToOneWithWhereWithoutMaintenance_partsInput = {
+  where?: Prisma.warehousesWhereInput
+  data: Prisma.XOR<Prisma.warehousesUpdateWithoutMaintenance_partsInput, Prisma.warehousesUncheckedUpdateWithoutMaintenance_partsInput>
+}
+
+export type warehousesUpdateWithoutMaintenance_partsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallets?: Prisma.palletsUpdateManyWithoutWarehousesNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutWarehousesNestedInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
+  locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
+  units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
+}
+
+export type warehousesUncheckedUpdateWithoutMaintenance_partsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallets?: Prisma.palletsUncheckedUpdateManyWithoutWarehousesNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutWarehousesNestedInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
+}
+
+export type warehousesCreateWithoutCurrent_tiresInput = {
+  id?: string
+  name: string
+  code?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallets?: Prisma.palletsCreateNestedManyWithoutWarehousesInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutWarehousesInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
+  units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
+}
+
+export type warehousesUncheckedCreateWithoutCurrent_tiresInput = {
+  id?: string
+  location_id?: string | null
+  unit_id?: string | null
+  name: string
+  code?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutWarehousesInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutWarehousesInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+}
+
+export type warehousesCreateOrConnectWithoutCurrent_tiresInput = {
+  where: Prisma.warehousesWhereUniqueInput
+  create: Prisma.XOR<Prisma.warehousesCreateWithoutCurrent_tiresInput, Prisma.warehousesUncheckedCreateWithoutCurrent_tiresInput>
+}
+
+export type warehousesUpsertWithoutCurrent_tiresInput = {
+  update: Prisma.XOR<Prisma.warehousesUpdateWithoutCurrent_tiresInput, Prisma.warehousesUncheckedUpdateWithoutCurrent_tiresInput>
+  create: Prisma.XOR<Prisma.warehousesCreateWithoutCurrent_tiresInput, Prisma.warehousesUncheckedCreateWithoutCurrent_tiresInput>
+  where?: Prisma.warehousesWhereInput
+}
+
+export type warehousesUpdateToOneWithWhereWithoutCurrent_tiresInput = {
+  where?: Prisma.warehousesWhereInput
+  data: Prisma.XOR<Prisma.warehousesUpdateWithoutCurrent_tiresInput, Prisma.warehousesUncheckedUpdateWithoutCurrent_tiresInput>
+}
+
+export type warehousesUpdateWithoutCurrent_tiresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallets?: Prisma.palletsUpdateManyWithoutWarehousesNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutWarehousesNestedInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
+  units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
+}
+
+export type warehousesUncheckedUpdateWithoutCurrent_tiresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallets?: Prisma.palletsUncheckedUpdateManyWithoutWarehousesNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutWarehousesNestedInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
 }
 
 export type warehousesCreateWithoutLocationsInput = {
@@ -1004,6 +1280,8 @@ export type warehousesCreateWithoutLocationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
 
@@ -1025,6 +1303,8 @@ export type warehousesUncheckedCreateWithoutLocationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutLocationsInput = {
@@ -1087,6 +1367,8 @@ export type warehousesCreateWithoutPalletsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -1109,6 +1391,8 @@ export type warehousesUncheckedCreateWithoutPalletsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutPalletsInput = {
@@ -1143,6 +1427,8 @@ export type warehousesUpdateWithoutPalletsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -1165,6 +1451,8 @@ export type warehousesUncheckedUpdateWithoutPalletsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesCreateWithoutUnitsInput = {
@@ -1184,6 +1472,8 @@ export type warehousesCreateWithoutUnitsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
 }
 
@@ -1205,6 +1495,8 @@ export type warehousesUncheckedCreateWithoutUnitsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutUnitsInput = {
@@ -1249,6 +1541,8 @@ export type warehousesCreateWithoutWarehouse_stockInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -1271,6 +1565,8 @@ export type warehousesUncheckedCreateWithoutWarehouse_stockInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutWarehouse_stockInput = {
@@ -1305,6 +1601,8 @@ export type warehousesUpdateWithoutWarehouse_stockInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -1327,6 +1625,8 @@ export type warehousesUncheckedUpdateWithoutWarehouse_stockInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesCreateWithoutWarehouse_stock_movementsInput = {
@@ -1345,6 +1645,8 @@ export type warehousesCreateWithoutWarehouse_stock_movementsInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
   locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
   units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
 }
@@ -1367,6 +1669,8 @@ export type warehousesUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
 }
 
 export type warehousesCreateOrConnectWithoutWarehouse_stock_movementsInput = {
@@ -1401,6 +1705,8 @@ export type warehousesUpdateWithoutWarehouse_stock_movementsInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
@@ -1423,6 +1729,8 @@ export type warehousesUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesCreateManyLocationsInput = {
@@ -1456,6 +1764,8 @@ export type warehousesUpdateWithoutLocationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
 }
 
@@ -1477,6 +1787,8 @@ export type warehousesUncheckedUpdateWithoutLocationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesUncheckedUpdateManyWithoutLocationsInput = {
@@ -1524,6 +1836,8 @@ export type warehousesUpdateWithoutUnitsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
   locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
 }
 
@@ -1545,6 +1859,8 @@ export type warehousesUncheckedUpdateWithoutUnitsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
 }
 
 export type warehousesUncheckedUpdateManyWithoutUnitsInput = {
@@ -1573,6 +1889,8 @@ export type WarehousesCountOutputType = {
   trips_trips_origin_warehouse_idTowarehouses: number
   warehouse_stock: number
   warehouse_stock_movements: number
+  maintenance_parts: number
+  current_tires: number
 }
 
 export type WarehousesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1582,6 +1900,8 @@ export type WarehousesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   trips_trips_origin_warehouse_idTowarehouses?: boolean | WarehousesCountOutputTypeCountTrips_trips_origin_warehouse_idTowarehousesArgs
   warehouse_stock?: boolean | WarehousesCountOutputTypeCountWarehouse_stockArgs
   warehouse_stock_movements?: boolean | WarehousesCountOutputTypeCountWarehouse_stock_movementsArgs
+  maintenance_parts?: boolean | WarehousesCountOutputTypeCountMaintenance_partsArgs
+  current_tires?: boolean | WarehousesCountOutputTypeCountCurrent_tiresArgs
 }
 
 /**
@@ -1636,6 +1956,20 @@ export type WarehousesCountOutputTypeCountWarehouse_stock_movementsArgs<ExtArgs 
   where?: Prisma.warehouse_stock_movementsWhereInput
 }
 
+/**
+ * WarehousesCountOutputType without action
+ */
+export type WarehousesCountOutputTypeCountMaintenance_partsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.maintenance_partsWhereInput
+}
+
+/**
+ * WarehousesCountOutputType without action
+ */
+export type WarehousesCountOutputTypeCountCurrent_tiresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.tiresWhereInput
+}
+
 
 export type warehousesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1656,6 +1990,8 @@ export type warehousesSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   trips_trips_origin_warehouse_idTowarehouses?: boolean | Prisma.warehouses$trips_trips_origin_warehouse_idTowarehousesArgs<ExtArgs>
   warehouse_stock?: boolean | Prisma.warehouses$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs>
+  maintenance_parts?: boolean | Prisma.warehouses$maintenance_partsArgs<ExtArgs>
+  current_tires?: boolean | Prisma.warehouses$current_tiresArgs<ExtArgs>
   locations?: boolean | Prisma.warehouses$locationsArgs<ExtArgs>
   units?: boolean | Prisma.warehouses$unitsArgs<ExtArgs>
   _count?: boolean | Prisma.WarehousesCountOutputTypeDefaultArgs<ExtArgs>
@@ -1718,6 +2054,8 @@ export type warehousesInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   trips_trips_origin_warehouse_idTowarehouses?: boolean | Prisma.warehouses$trips_trips_origin_warehouse_idTowarehousesArgs<ExtArgs>
   warehouse_stock?: boolean | Prisma.warehouses$warehouse_stockArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs>
+  maintenance_parts?: boolean | Prisma.warehouses$maintenance_partsArgs<ExtArgs>
+  current_tires?: boolean | Prisma.warehouses$current_tiresArgs<ExtArgs>
   locations?: boolean | Prisma.warehouses$locationsArgs<ExtArgs>
   units?: boolean | Prisma.warehouses$unitsArgs<ExtArgs>
   _count?: boolean | Prisma.WarehousesCountOutputTypeDefaultArgs<ExtArgs>
@@ -1740,6 +2078,8 @@ export type $warehousesPayload<ExtArgs extends runtime.Types.Extensions.Internal
     trips_trips_origin_warehouse_idTowarehouses: Prisma.$tripsPayload<ExtArgs>[]
     warehouse_stock: Prisma.$warehouse_stockPayload<ExtArgs>[]
     warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
+    maintenance_parts: Prisma.$maintenance_partsPayload<ExtArgs>[]
+    current_tires: Prisma.$tiresPayload<ExtArgs>[]
     locations: Prisma.$locationsPayload<ExtArgs> | null
     units: Prisma.$unitsPayload<ExtArgs> | null
   }
@@ -2156,6 +2496,8 @@ export interface Prisma__warehousesClient<T, Null = never, ExtArgs extends runti
   trips_trips_origin_warehouse_idTowarehouses<T extends Prisma.warehouses$trips_trips_origin_warehouse_idTowarehousesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$trips_trips_origin_warehouse_idTowarehousesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tripsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock<T extends Prisma.warehouses$warehouse_stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$warehouse_stockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock_movements<T extends Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  maintenance_parts<T extends Prisma.warehouses$maintenance_partsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$maintenance_partsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$maintenance_partsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  current_tires<T extends Prisma.warehouses$current_tiresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$current_tiresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tiresPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   locations<T extends Prisma.warehouses$locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$locationsArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   units<T extends Prisma.warehouses$unitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$unitsArgs<ExtArgs>>): Prisma.Prisma__unitsClient<runtime.Types.Result.GetResult<Prisma.$unitsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -2741,6 +3083,54 @@ export type warehouses$warehouse_stock_movementsArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
+}
+
+/**
+ * warehouses.maintenance_parts
+ */
+export type warehouses$maintenance_partsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the maintenance_parts
+   */
+  select?: Prisma.maintenance_partsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the maintenance_parts
+   */
+  omit?: Prisma.maintenance_partsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.maintenance_partsInclude<ExtArgs> | null
+  where?: Prisma.maintenance_partsWhereInput
+  orderBy?: Prisma.maintenance_partsOrderByWithRelationInput | Prisma.maintenance_partsOrderByWithRelationInput[]
+  cursor?: Prisma.maintenance_partsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Maintenance_partsScalarFieldEnum | Prisma.Maintenance_partsScalarFieldEnum[]
+}
+
+/**
+ * warehouses.current_tires
+ */
+export type warehouses$current_tiresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tires
+   */
+  select?: Prisma.tiresSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tires
+   */
+  omit?: Prisma.tiresOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.tiresInclude<ExtArgs> | null
+  where?: Prisma.tiresWhereInput
+  orderBy?: Prisma.tiresOrderByWithRelationInput | Prisma.tiresOrderByWithRelationInput[]
+  cursor?: Prisma.tiresWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TiresScalarFieldEnum | Prisma.TiresScalarFieldEnum[]
 }
 
 /**
