@@ -551,8 +551,8 @@ async function main() {
     }
   }
 
-  // 3. Vincular document_types ↔ sequences
-  console.log('\nLinking document_types ↔ sequences...');
+  // 3. Vincular document_types ↔ sequences via junction table
+  console.log('\nLinking document_types ↔ sequences via junction table...');
 
   for (const seq of sequences) {
     const sequence = await prisma.document_sequences.findFirst({
@@ -569,11 +569,18 @@ async function main() {
     const docTypes = await prisma.document_types.findMany({ where });
 
     for (const dt of docTypes) {
-      if (dt.document_sequence_id === sequence.id) continue;
+      const existingLink = await prisma.document_type_sequences.findFirst({
+        where: { document_type_id: dt.id, sequence_id: sequence.id },
+      });
 
-      await prisma.document_types.update({
-        where: { id: dt.id },
-        data: { document_sequence_id: sequence.id },
+      if (existingLink) continue;
+
+      await prisma.document_type_sequences.create({
+        data: {
+          document_type_id: dt.id,
+          sequence_id: sequence.id,
+          is_default: true,
+        },
       });
       console.log(`  ✓ ${dt.code} → ${seq.prefix}`);
     }

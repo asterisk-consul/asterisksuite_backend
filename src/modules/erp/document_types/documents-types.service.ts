@@ -18,17 +18,32 @@ export class DocumentsTypesService {
   }
 
   async create(dto: CreateDocumentsTypeDto) {
-    const { document_sequence_id, ...rest } = dto;
+    const { document_sequence_id, document_sequence_ids, ...rest } = dto;
 
-    return this.prisma.document_types.create({
-      data: {
-        ...rest,
-        ...(document_sequence_id && {
-          document_sequences: {
-            connect: { id: document_sequence_id },
+    const sequenceIds = [...new Set(document_sequence_ids ?? (document_sequence_id ? [document_sequence_id] : []))];
+
+    return this.prisma.$transaction(async (tx) => {
+      const docType = await tx.document_types.create({
+        data: rest,
+      });
+
+      if (sequenceIds.length > 0) {
+        await tx.document_type_sequences.createMany({
+          data: sequenceIds.map((sequenceId) => ({
+            document_type_id: docType.id,
+            sequence_id: sequenceId,
+          })),
+        });
+      }
+
+      return tx.document_types.findUnique({
+        where: { id: docType.id },
+        include: {
+          document_type_sequences: {
+            include: { document_sequences: true },
           },
-        }),
-      },
+        },
+      });
     });
   }
 
@@ -52,7 +67,9 @@ export class DocumentsTypesService {
     return this.prisma.document_types.findMany({
       where,
       include: {
-        document_sequences: true,
+        document_type_sequences: {
+          include: { document_sequences: true },
+        },
         document_type_taxes: { include: { taxes: true } },
         system_modules: {
           select: {
@@ -69,7 +86,9 @@ export class DocumentsTypesService {
     const documentType = await this.prisma.document_types.findUnique({
       where: { id },
       include: {
-        document_sequences: true,
+        document_type_sequences: {
+          include: { document_sequences: true },
+        },
       },
     });
 
@@ -89,9 +108,38 @@ export class DocumentsTypesService {
       throw new NotFoundException(`DocumentType with id ${id} not found`);
     }
 
-    return this.prisma.document_types.update({
-      where: { id },
-      data: dto,
+    const { document_sequence_ids, ...rest } = dto as any;
+
+    return this.prisma.$transaction(async (tx) => {
+      await tx.document_types.update({
+        where: { id },
+        data: rest,
+      });
+
+      if (document_sequence_ids !== undefined) {
+        await tx.document_type_sequences.deleteMany({
+          where: { document_type_id: id },
+        });
+
+        const uniqueIds = [...new Set(document_sequence_ids)];
+        if (uniqueIds.length > 0) {
+          await tx.document_type_sequences.createMany({
+            data: uniqueIds.map((sequenceId: string) => ({
+              document_type_id: id,
+              sequence_id: sequenceId,
+            })),
+          });
+        }
+      }
+
+      return tx.document_types.findUnique({
+        where: { id },
+        include: {
+          document_type_sequences: {
+            include: { document_sequences: true },
+          },
+        },
+      });
     });
   }
 }

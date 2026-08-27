@@ -570,6 +570,81 @@ export class SalesService {
   }
 
   // ---------------------------------------------------------------------------
+  // VENTAS POR PUNTO DE VENTA
+  // ---------------------------------------------------------------------------
+
+  async getByPointOfSale(query: QuerySalesDto) {
+    const whereCondition = this.buildWhereCondition(query);
+
+    const documents = await this.prisma.documents.findMany({
+      where: {
+        ...whereCondition,
+        document_types: {
+          active: true,
+          ...(whereCondition.document_types ?? {}),
+        },
+      },
+      include: {
+        document_types: {
+          include: { document_sequences: true },
+        },
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    const pvMap = new Map<string, {
+      point_of_sale: string;
+      count: number;
+      total: number;
+      docTypeCounts: Map<string, number>;
+    }>();
+
+    for (const doc of documents) {
+      const pv = doc.document_types?.document_sequences?.point_of_sale ?? 'S/PV';
+      const existing = pvMap.get(pv);
+
+      if (existing) {
+        existing.count += 1;
+        existing.total += Number(doc.total);
+
+        const docTypeCode = doc.document_types?.code ?? 'N/A';
+        const prev = existing.docTypeCounts.get(docTypeCode) ?? 0;
+        existing.docTypeCounts.set(docTypeCode, prev + 1);
+      } else {
+        const docTypeCounts = new Map<string, number>();
+        docTypeCounts.set(doc.document_types?.code ?? 'N/A', 1);
+        pvMap.set(pv, {
+          point_of_sale: pv,
+          count: 1,
+          total: Number(doc.total),
+          docTypeCounts,
+        });
+      }
+    }
+
+    const results = Array.from(pvMap.values())
+      .map((entry) => ({
+        point_of_sale: entry.point_of_sale,
+        count: entry.count,
+        total: entry.total,
+        byDocumentType: Array.from(entry.docTypeCounts.entries()).map(
+          ([code, cnt]) => ({ code, count: cnt }),
+        ),
+      }))
+      .sort((a, b) => a.point_of_sale.localeCompare(b.point_of_sale));
+
+    const grandTotal = results.reduce((sum, r) => sum + r.total, 0);
+    const totalCount = results.reduce((sum, r) => sum + r.count, 0);
+
+    return {
+      grandTotal,
+      totalCount,
+      totalPV: results.length,
+      data: results,
+    };
+  }
+
+  // ---------------------------------------------------------------------------
   // HELPERS PRIVADOS
   // ---------------------------------------------------------------------------
 

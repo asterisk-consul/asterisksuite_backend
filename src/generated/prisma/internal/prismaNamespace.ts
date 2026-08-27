@@ -396,6 +396,7 @@ export const ModelName = {
   currency_rates: 'currency_rates',
   dashboard_configs: 'dashboard_configs',
   document_sequences: 'document_sequences',
+  document_type_sequences: 'document_type_sequences',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
   document_taxes: 'document_taxes',
@@ -531,7 +532,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1420,6 +1421,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.document_sequencesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Document_sequencesCountAggregateOutputType> | number
+        }
+      }
+    }
+    document_type_sequences: {
+      payload: Prisma.$document_type_sequencesPayload<ExtArgs>
+      fields: Prisma.document_type_sequencesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.document_type_sequencesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.document_type_sequencesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>
+        }
+        findFirst: {
+          args: Prisma.document_type_sequencesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.document_type_sequencesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>
+        }
+        findMany: {
+          args: Prisma.document_type_sequencesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>[]
+        }
+        create: {
+          args: Prisma.document_type_sequencesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>
+        }
+        createMany: {
+          args: Prisma.document_type_sequencesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.document_type_sequencesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>[]
+        }
+        delete: {
+          args: Prisma.document_type_sequencesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>
+        }
+        update: {
+          args: Prisma.document_type_sequencesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>
+        }
+        deleteMany: {
+          args: Prisma.document_type_sequencesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.document_type_sequencesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.document_type_sequencesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>[]
+        }
+        upsert: {
+          args: Prisma.document_type_sequencesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$document_type_sequencesPayload>
+        }
+        aggregate: {
+          args: Prisma.Document_type_sequencesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument_type_sequences>
+        }
+        groupBy: {
+          args: Prisma.document_type_sequencesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_type_sequencesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.document_type_sequencesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Document_type_sequencesCountAggregateOutputType> | number
         }
       }
     }
@@ -10558,6 +10633,17 @@ export const Document_sequencesScalarFieldEnum = {
 export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
 
 
+export const Document_type_sequencesScalarFieldEnum = {
+  id: 'id',
+  document_type_id: 'document_type_id',
+  sequence_id: 'sequence_id',
+  is_default: 'is_default',
+  created_at: 'created_at'
+} as const
+
+export type Document_type_sequencesScalarFieldEnum = (typeof Document_type_sequencesScalarFieldEnum)[keyof typeof Document_type_sequencesScalarFieldEnum]
+
+
 export const Document_item_taxesScalarFieldEnum = {
   id: 'id',
   document_item_id: 'document_item_id',
@@ -10667,6 +10753,7 @@ export type Document_type_taxesScalarFieldEnum = (typeof Document_type_taxesScal
 export const DocumentsScalarFieldEnum = {
   id: 'id',
   document_type_id: 'document_type_id',
+  document_sequence_id: 'document_sequence_id',
   party_id: 'party_id',
   parent_document_id: 'parent_document_id',
   number: 'number',
@@ -11506,6 +11593,7 @@ export const Maintenance_partsScalarFieldEnum = {
   unit_cost: 'unit_cost',
   total_cost: 'total_cost',
   stock_movement_id: 'stock_movement_id',
+  document_id: 'document_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -11521,10 +11609,12 @@ export const Maintenance_laborScalarFieldEnum = {
   id: 'id',
   maintenance_order_id: 'maintenance_order_id',
   employee_id: 'employee_id',
+  supplier_id: 'supplier_id',
   description: 'description',
   hours: 'hours',
   hourly_cost: 'hourly_cost',
   total_cost: 'total_cost',
+  document_id: 'document_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -13986,6 +14076,7 @@ export type GlobalOmitConfig = {
   currency_rates?: Prisma.currency_ratesOmit
   dashboard_configs?: Prisma.dashboard_configsOmit
   document_sequences?: Prisma.document_sequencesOmit
+  document_type_sequences?: Prisma.document_type_sequencesOmit
   document_item_taxes?: Prisma.document_item_taxesOmit
   document_items?: Prisma.document_itemsOmit
   document_taxes?: Prisma.document_taxesOmit

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsInt, MaxLength } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsInt, MaxLength, IsArray, IsUUID } from 'class-validator';
 
 export class CreateDocumentSequenceDto {
   @IsString()
@@ -25,4 +25,9 @@ export class CreateDocumentSequenceDto {
   @IsOptional()
   @IsBoolean()
   automatic?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  document_type_ids?: string[];
 }

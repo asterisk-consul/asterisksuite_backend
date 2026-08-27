@@ -273,11 +273,13 @@ export class HrService {
 
     // Buscar sequence para numeración
     let nextNumber = 1;
+    let sequenceId: string | null = null;
     if (valeDocType.document_sequence_id) {
       const sequence = await this.prisma.document_sequences.findUnique({
         where: { id: valeDocType.document_sequence_id },
       });
       if (sequence) {
+        sequenceId = sequence.id;
         nextNumber = (sequence.current_number ?? 0) + 1;
         await this.prisma.document_sequences.update({
           where: { id: sequence.id },
@@ -299,6 +301,7 @@ export class HrService {
     const doc = await this.prisma.documents.create({
       data: {
         document_type_id: valeDocType.id,
+        document_sequence_id: sequenceId,
         number: nextNumber,
         party_id: vale.party_id,
         currency_code: vale.currency_code,

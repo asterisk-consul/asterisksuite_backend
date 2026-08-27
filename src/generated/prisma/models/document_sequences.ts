@@ -305,6 +305,8 @@ export type document_sequencesWhereInput = {
   updated_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
   document_types?: Prisma.Document_typesListRelationFilter
+  document_type_sequences?: Prisma.Document_type_sequencesListRelationFilter
+  documents?: Prisma.DocumentsListRelationFilter
 }
 
 export type document_sequencesOrderByWithRelationInput = {
@@ -324,6 +326,8 @@ export type document_sequencesOrderByWithRelationInput = {
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   document_types?: Prisma.document_typesOrderByRelationAggregateInput
+  document_type_sequences?: Prisma.document_type_sequencesOrderByRelationAggregateInput
+  documents?: Prisma.documentsOrderByRelationAggregateInput
 }
 
 export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
@@ -347,6 +351,8 @@ export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   updated_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"document_sequences"> | string | null
   document_types?: Prisma.Document_typesListRelationFilter
+  document_type_sequences?: Prisma.Document_type_sequencesListRelationFilter
+  documents?: Prisma.DocumentsListRelationFilter
 }, "id" | "point_of_sale_prefix">
 
 export type document_sequencesOrderByWithAggregationInput = {
@@ -410,6 +416,8 @@ export type document_sequencesCreateInput = {
   updated_by?: string | null
   deleted_by?: string | null
   document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
+  document_type_sequences?: Prisma.document_type_sequencesCreateNestedManyWithoutDocument_sequencesInput
+  documents?: Prisma.documentsCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUncheckedCreateInput = {
@@ -429,6 +437,8 @@ export type document_sequencesUncheckedCreateInput = {
   updated_by?: string | null
   deleted_by?: string | null
   document_types?: Prisma.document_typesUncheckedCreateNestedManyWithoutDocument_sequencesInput
+  document_type_sequences?: Prisma.document_type_sequencesUncheckedCreateNestedManyWithoutDocument_sequencesInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUpdateInput = {
@@ -448,6 +458,8 @@ export type document_sequencesUpdateInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
+  document_type_sequences?: Prisma.document_type_sequencesUpdateManyWithoutDocument_sequencesNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateInput = {
@@ -467,6 +479,8 @@ export type document_sequencesUncheckedUpdateInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_types?: Prisma.document_typesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+  document_type_sequences?: Prisma.document_type_sequencesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesCreateManyInput = {
@@ -594,6 +608,11 @@ export type document_sequencesSumOrderByAggregateInput = {
   current_number?: Prisma.SortOrder
 }
 
+export type Document_sequencesScalarRelationFilter = {
+  is?: Prisma.document_sequencesWhereInput
+  isNot?: Prisma.document_sequencesWhereInput
+}
+
 export type Document_sequencesNullableScalarRelationFilter = {
   is?: Prisma.document_sequencesWhereInput | null
   isNot?: Prisma.document_sequencesWhereInput | null
@@ -605,6 +624,20 @@ export type NullableIntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type document_sequencesCreateNestedOneWithoutDocument_type_sequencesInput = {
+  create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_type_sequencesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_type_sequencesInput>
+  connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocument_type_sequencesInput
+  connect?: Prisma.document_sequencesWhereUniqueInput
+}
+
+export type document_sequencesUpdateOneRequiredWithoutDocument_type_sequencesNestedInput = {
+  create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_type_sequencesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_type_sequencesInput>
+  connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocument_type_sequencesInput
+  upsert?: Prisma.document_sequencesUpsertWithoutDocument_type_sequencesInput
+  connect?: Prisma.document_sequencesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.document_sequencesUpdateToOneWithWhereWithoutDocument_type_sequencesInput, Prisma.document_sequencesUpdateWithoutDocument_type_sequencesInput>, Prisma.document_sequencesUncheckedUpdateWithoutDocument_type_sequencesInput>
 }
 
 export type document_sequencesCreateNestedOneWithoutDocument_typesInput = {
@@ -623,6 +656,118 @@ export type document_sequencesUpdateOneWithoutDocument_typesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.document_sequencesUpdateToOneWithWhereWithoutDocument_typesInput, Prisma.document_sequencesUpdateWithoutDocument_typesInput>, Prisma.document_sequencesUncheckedUpdateWithoutDocument_typesInput>
 }
 
+export type document_sequencesCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocumentsInput, Prisma.document_sequencesUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocumentsInput
+  connect?: Prisma.document_sequencesWhereUniqueInput
+}
+
+export type document_sequencesUpdateOneWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocumentsInput, Prisma.document_sequencesUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.document_sequencesCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.document_sequencesUpsertWithoutDocumentsInput
+  disconnect?: Prisma.document_sequencesWhereInput | boolean
+  delete?: Prisma.document_sequencesWhereInput | boolean
+  connect?: Prisma.document_sequencesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.document_sequencesUpdateToOneWithWhereWithoutDocumentsInput, Prisma.document_sequencesUpdateWithoutDocumentsInput>, Prisma.document_sequencesUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type document_sequencesCreateWithoutDocument_type_sequencesInput = {
+  id?: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
+  point_of_sale: string
+  current_number?: number
+  prefix?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
+  documents?: Prisma.documentsCreateNestedManyWithoutDocument_sequencesInput
+}
+
+export type document_sequencesUncheckedCreateWithoutDocument_type_sequencesInput = {
+  id?: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
+  point_of_sale: string
+  current_number?: number
+  prefix?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_types?: Prisma.document_typesUncheckedCreateNestedManyWithoutDocument_sequencesInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutDocument_sequencesInput
+}
+
+export type document_sequencesCreateOrConnectWithoutDocument_type_sequencesInput = {
+  where: Prisma.document_sequencesWhereUniqueInput
+  create: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_type_sequencesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_type_sequencesInput>
+}
+
+export type document_sequencesUpsertWithoutDocument_type_sequencesInput = {
+  update: Prisma.XOR<Prisma.document_sequencesUpdateWithoutDocument_type_sequencesInput, Prisma.document_sequencesUncheckedUpdateWithoutDocument_type_sequencesInput>
+  create: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocument_type_sequencesInput, Prisma.document_sequencesUncheckedCreateWithoutDocument_type_sequencesInput>
+  where?: Prisma.document_sequencesWhereInput
+}
+
+export type document_sequencesUpdateToOneWithWhereWithoutDocument_type_sequencesInput = {
+  where?: Prisma.document_sequencesWhereInput
+  data: Prisma.XOR<Prisma.document_sequencesUpdateWithoutDocument_type_sequencesInput, Prisma.document_sequencesUncheckedUpdateWithoutDocument_type_sequencesInput>
+}
+
+export type document_sequencesUpdateWithoutDocument_type_sequencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
+  current_number?: Prisma.IntFieldUpdateOperationsInput | number
+  prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutDocument_sequencesNestedInput
+}
+
+export type document_sequencesUncheckedUpdateWithoutDocument_type_sequencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
+  current_number?: Prisma.IntFieldUpdateOperationsInput | number
+  prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_types?: Prisma.document_typesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+}
+
 export type document_sequencesCreateWithoutDocument_typesInput = {
   id?: string
   name: string
@@ -639,6 +784,8 @@ export type document_sequencesCreateWithoutDocument_typesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  document_type_sequences?: Prisma.document_type_sequencesCreateNestedManyWithoutDocument_sequencesInput
+  documents?: Prisma.documentsCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
@@ -657,6 +804,8 @@ export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
   created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
+  document_type_sequences?: Prisma.document_type_sequencesUncheckedCreateNestedManyWithoutDocument_sequencesInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutDocument_sequencesInput
 }
 
 export type document_sequencesCreateOrConnectWithoutDocument_typesInput = {
@@ -691,6 +840,8 @@ export type document_sequencesUpdateWithoutDocument_typesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type_sequences?: Prisma.document_type_sequencesUpdateManyWithoutDocument_sequencesNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
@@ -709,6 +860,104 @@ export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type_sequences?: Prisma.document_type_sequencesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+}
+
+export type document_sequencesCreateWithoutDocumentsInput = {
+  id?: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
+  point_of_sale: string
+  current_number?: number
+  prefix?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_types?: Prisma.document_typesCreateNestedManyWithoutDocument_sequencesInput
+  document_type_sequences?: Prisma.document_type_sequencesCreateNestedManyWithoutDocument_sequencesInput
+}
+
+export type document_sequencesUncheckedCreateWithoutDocumentsInput = {
+  id?: string
+  name: string
+  automatic?: boolean
+  range_start?: number | null
+  range_end?: number | null
+  point_of_sale: string
+  current_number?: number
+  prefix?: string | null
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_types?: Prisma.document_typesUncheckedCreateNestedManyWithoutDocument_sequencesInput
+  document_type_sequences?: Prisma.document_type_sequencesUncheckedCreateNestedManyWithoutDocument_sequencesInput
+}
+
+export type document_sequencesCreateOrConnectWithoutDocumentsInput = {
+  where: Prisma.document_sequencesWhereUniqueInput
+  create: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocumentsInput, Prisma.document_sequencesUncheckedCreateWithoutDocumentsInput>
+}
+
+export type document_sequencesUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.document_sequencesUpdateWithoutDocumentsInput, Prisma.document_sequencesUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.document_sequencesCreateWithoutDocumentsInput, Prisma.document_sequencesUncheckedCreateWithoutDocumentsInput>
+  where?: Prisma.document_sequencesWhereInput
+}
+
+export type document_sequencesUpdateToOneWithWhereWithoutDocumentsInput = {
+  where?: Prisma.document_sequencesWhereInput
+  data: Prisma.XOR<Prisma.document_sequencesUpdateWithoutDocumentsInput, Prisma.document_sequencesUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type document_sequencesUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
+  current_number?: Prisma.IntFieldUpdateOperationsInput | number
+  prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_types?: Prisma.document_typesUpdateManyWithoutDocument_sequencesNestedInput
+  document_type_sequences?: Prisma.document_type_sequencesUpdateManyWithoutDocument_sequencesNestedInput
+}
+
+export type document_sequencesUncheckedUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  automatic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  range_start?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  range_end?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
+  current_number?: Prisma.IntFieldUpdateOperationsInput | number
+  prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_types?: Prisma.document_typesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
+  document_type_sequences?: Prisma.document_type_sequencesUncheckedUpdateManyWithoutDocument_sequencesNestedInput
 }
 
 
@@ -718,10 +967,14 @@ export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
 
 export type Document_sequencesCountOutputType = {
   document_types: number
+  document_type_sequences: number
+  documents: number
 }
 
 export type Document_sequencesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_types?: boolean | Document_sequencesCountOutputTypeCountDocument_typesArgs
+  document_type_sequences?: boolean | Document_sequencesCountOutputTypeCountDocument_type_sequencesArgs
+  documents?: boolean | Document_sequencesCountOutputTypeCountDocumentsArgs
 }
 
 /**
@@ -739,6 +992,20 @@ export type Document_sequencesCountOutputTypeDefaultArgs<ExtArgs extends runtime
  */
 export type Document_sequencesCountOutputTypeCountDocument_typesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.document_typesWhereInput
+}
+
+/**
+ * Document_sequencesCountOutputType without action
+ */
+export type Document_sequencesCountOutputTypeCountDocument_type_sequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_type_sequencesWhereInput
+}
+
+/**
+ * Document_sequencesCountOutputType without action
+ */
+export type Document_sequencesCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.documentsWhereInput
 }
 
 
@@ -759,6 +1026,8 @@ export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.In
   updated_by?: boolean
   deleted_by?: boolean
   document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
+  document_type_sequences?: boolean | Prisma.document_sequences$document_type_sequencesArgs<ExtArgs>
+  documents?: boolean | Prisma.document_sequences$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.Document_sequencesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_sequences"]>
 
@@ -819,6 +1088,8 @@ export type document_sequencesSelectScalar = {
 export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "automatic" | "range_start" | "range_end" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_sequences"]>
 export type document_sequencesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
+  document_type_sequences?: boolean | Prisma.document_sequences$document_type_sequencesArgs<ExtArgs>
+  documents?: boolean | Prisma.document_sequences$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.Document_sequencesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type document_sequencesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -828,6 +1099,8 @@ export type $document_sequencesPayload<ExtArgs extends runtime.Types.Extensions.
   name: "document_sequences"
   objects: {
     document_types: Prisma.$document_typesPayload<ExtArgs>[]
+    document_type_sequences: Prisma.$document_type_sequencesPayload<ExtArgs>[]
+    documents: Prisma.$documentsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1240,6 +1513,8 @@ readonly fields: document_sequencesFieldRefs;
 export interface Prisma__document_sequencesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   document_types<T extends Prisma.document_sequences$document_typesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_sequences$document_typesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_typesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  document_type_sequences<T extends Prisma.document_sequences$document_type_sequencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_sequences$document_type_sequencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_type_sequencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documents<T extends Prisma.document_sequences$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_sequences$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1698,6 +1973,54 @@ export type document_sequences$document_typesArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.Document_typesScalarFieldEnum | Prisma.Document_typesScalarFieldEnum[]
+}
+
+/**
+ * document_sequences.document_type_sequences
+ */
+export type document_sequences$document_type_sequencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the document_type_sequences
+   */
+  select?: Prisma.document_type_sequencesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the document_type_sequences
+   */
+  omit?: Prisma.document_type_sequencesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.document_type_sequencesInclude<ExtArgs> | null
+  where?: Prisma.document_type_sequencesWhereInput
+  orderBy?: Prisma.document_type_sequencesOrderByWithRelationInput | Prisma.document_type_sequencesOrderByWithRelationInput[]
+  cursor?: Prisma.document_type_sequencesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_type_sequencesScalarFieldEnum | Prisma.Document_type_sequencesScalarFieldEnum[]
+}
+
+/**
+ * document_sequences.documents
+ */
+export type document_sequences$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the documents
+   */
+  select?: Prisma.documentsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the documents
+   */
+  omit?: Prisma.documentsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.documentsInclude<ExtArgs> | null
+  where?: Prisma.documentsWhereInput
+  orderBy?: Prisma.documentsOrderByWithRelationInput | Prisma.documentsOrderByWithRelationInput[]
+  cursor?: Prisma.documentsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentsScalarFieldEnum | Prisma.DocumentsScalarFieldEnum[]
 }
 
 /**

@@ -13,6 +13,11 @@ export class CreateDocumentsTypeDto {
   @IsUUID()
   document_sequence_id?: string;
 
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  document_sequence_ids?: string[];
+
   @IsString()
   @MaxLength(20)
   code!: string;

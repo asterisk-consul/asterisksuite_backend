@@ -189,4 +189,9 @@ export class CreateDocumentDto {
   @IsOptional()
   @IsUUID()
   parent_document_id?: string;
+
+  // ─── Punto de venta (secuencia) ──────────────────────
+  @IsOptional()
+  @IsUUID()
+  document_sequence_id?: string;
 }

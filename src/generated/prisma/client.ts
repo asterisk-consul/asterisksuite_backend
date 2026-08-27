@@ -100,6 +100,11 @@ export type dashboard_configs = Prisma.dashboard_configsModel
  */
 export type document_sequences = Prisma.document_sequencesModel
 /**
+ * Model document_type_sequences
+ * 
+ */
+export type document_type_sequences = Prisma.document_type_sequencesModel
+/**
  * Model document_item_taxes
  * 
  */

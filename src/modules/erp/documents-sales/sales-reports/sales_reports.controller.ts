@@ -55,4 +55,12 @@ export class SalesController {
   getAvailableProducts(): Promise<AvailableProductSalesResponseDto[]> {
     return this.salesService.getAvailableProducts();
   }
+
+  @RequirePermissions('sales-reports.read')
+  @Get('by-point-of-sale')
+  getByPointOfSale(
+    @Query() query: QuerySalesDto,
+  ) {
+    return this.salesService.getByPointOfSale(query);
+  }
 }

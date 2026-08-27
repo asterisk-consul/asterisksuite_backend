@@ -61,6 +61,38 @@ export class DocumentsSalesService {
   }
 
   // ─────────────────────────────────────────────
+  // RESOLVE SEQUENCE (3-tier: user override > junction table > legacy FK)
+  // ─────────────────────────────────────────────
+  private async resolveSequence(
+    documentTypeId: string,
+    userOverrideId: string | null | undefined,
+    legacyFallbackId: string | null,
+    tx: any,
+  ): Promise<string | null> {
+    // 1. Override explícito del usuario
+    if (userOverrideId) {
+      const seq = await tx.document_sequences.findUnique({
+        where: { id: userOverrideId, active: true, deleted_at: null },
+      });
+      if (seq) return seq.id;
+
+      // An explicit choice must never be silently replaced by the sequence on
+      // document_types: that would number the document with a different PV.
+      throw new BadRequestException('La secuencia seleccionada no existe o no está activa');
+    }
+
+    // 2. Junction table: priorizar is_default, sino primera vinculada
+    const linked = await tx.document_type_sequences.findMany({
+      where: { document_type_id: documentTypeId },
+      orderBy: { is_default: 'desc' },
+    });
+    if (linked.length > 0) return linked[0].sequence_id;
+
+    // 3. Fallback: legacy FK en document_types
+    return legacyFallbackId ?? null;
+  }
+
+  // ─────────────────────────────────────────────
   // CREATE
   // ─────────────────────────────────────────────
   async create(dto: CreateDocumentDto, userId?: string) {
@@ -231,18 +263,23 @@ export class DocumentsSalesService {
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
+      const sequenceId = await this.resolveSequence(
+        dto.document_type_id,
+        dto.document_sequence_id,
+        docType.document_sequences?.id ?? null,
+        tx,
+      );
+
       const number = await this.getNextNumber(
         dto.document_type_id,
-
-        docType.document_sequences?.id ?? null,
-
+        sequenceId,
         tx,
       );
 
       const document = await tx.documents.create({
         data: {
           document_type_id: dto.document_type_id,
-
+          document_sequence_id: sequenceId,
           party_id: dto.party_id ?? null,
 
           number,
@@ -549,6 +586,41 @@ export class DocumentsSalesService {
     }
 
     await this.prisma.$transaction(async (tx) => {
+      let updatedSequenceId = doc.document_sequence_id;
+      let updatedNumber = doc.number;
+
+      // Cambiar de PV implica liberar el último número de la secuencia anterior
+      // (cuando todavía es seguro hacerlo) y reservar uno en la nueva.
+      if (
+        dto.document_sequence_id !== undefined &&
+        dto.document_sequence_id !== doc.document_sequence_id
+      ) {
+        updatedSequenceId = await this.resolveSequence(
+          doc.document_type_id,
+          dto.document_sequence_id,
+          null,
+          tx,
+        );
+
+        updatedNumber = await this.getNextNumber(
+          doc.document_type_id,
+          updatedSequenceId,
+          tx,
+        );
+
+        if (doc.document_sequence_id) {
+          // Solo retroceder si este documento consumió el último número. Si hay
+          // documentos posteriores, se conserva el hueco para evitar duplicados.
+          await tx.document_sequences.updateMany({
+            where: {
+              id: doc.document_sequence_id,
+              current_number: doc.number,
+            },
+            data: { current_number: { decrement: 1 } },
+          });
+        }
+      }
+
       if (items && totals) {
         await tx.document_item_taxes.deleteMany({
           where: {
@@ -605,6 +677,10 @@ export class DocumentsSalesService {
         },
 
         data: {
+          document_sequence_id: updatedSequenceId,
+
+          number: updatedNumber,
+
           party_id: dto.party_id ?? doc.party_id,
 
           date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
@@ -776,6 +852,8 @@ export class DocumentsSalesService {
       include: {
         document_types: true,
 
+        document_sequences: true,
+
         business_parties: true,
 
         document_items: {
@@ -865,15 +943,19 @@ export class DocumentsSalesService {
       include: {
         document_types: true,
 
+        document_sequences: true,
+
         business_parties: true,
 
         parent_document: {
           select: {
             id: true,
             number: true,
+            date: true,
             descrip: true,
             status: true,
-            document_types: { select: { code: true, description: true, category: true } },
+            document_sequences: { select: { point_of_sale: true } },
+            document_types: { select: { code: true, description: true, category: true, direction: true } },
           },
         },
 
@@ -881,10 +963,12 @@ export class DocumentsSalesService {
           select: {
             id: true,
             number: true,
+            date: true,
             descrip: true,
             status: true,
             total: true,
-            document_types: { select: { code: true, description: true, category: true } },
+            document_sequences: { select: { point_of_sale: true } },
+            document_types: { select: { code: true, description: true, category: true, direction: true } },
           },
           orderBy: { created_at: 'asc' },
         },
@@ -1176,18 +1260,23 @@ export class DocumentsSalesService {
       const totals = this.totalsService.calculate(items);
 
       await this.prisma.$transaction(async (tx) => {
+        const sequenceId = await this.resolveSequence(
+          docType.id,
+          null,
+          docType.document_sequences?.id ?? null,
+          tx,
+        );
+
         const number = await this.getNextNumber(
           docType.id,
-
-          docType.document_sequences?.id ?? null,
-
+          sequenceId,
           tx,
         );
 
         const document = await tx.documents.create({
           data: {
             document_type_id: docType.id,
-
+            document_sequence_id: sequenceId,
             party_id: group.customerId,
 
             number,
@@ -1376,9 +1465,10 @@ export class DocumentsSalesService {
 
       return tx.documents.findUnique({
         where: { id },
-        include: {
-          document_types: true,
-          business_parties: true,
+      include: {
+        document_types: true,
+        document_sequences: true,
+        business_parties: true,
           document_items: {
             include: {
               products: true,
@@ -1546,11 +1636,13 @@ export class DocumentsSalesService {
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
-      const number = await this.getNextNumber(orderType.id, orderType.document_sequences?.id ?? null, tx);
+      const sequenceId = await this.resolveSequence(orderType.id, null, orderType.document_sequences?.id ?? null, tx);
+      const number = await this.getNextNumber(orderType.id, sequenceId, tx);
 
       const newDoc = await tx.documents.create({
         data: {
           document_type_id: orderType.id,
+          document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
           number,
@@ -1626,11 +1718,13 @@ export class DocumentsSalesService {
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
-      const number = await this.getNextNumber(remitoType.id, remitoType.document_sequences?.id ?? null, tx);
+      const sequenceId = await this.resolveSequence(remitoType.id, null, remitoType.document_sequences?.id ?? null, tx);
+      const number = await this.getNextNumber(remitoType.id, sequenceId, tx);
 
       const newDoc = await tx.documents.create({
         data: {
           document_type_id: remitoType.id,
+          document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
           number,
@@ -1718,11 +1812,13 @@ export class DocumentsSalesService {
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
-      const number = await this.getNextNumber(remitoType.id, remitoType.document_sequences?.id ?? null, tx);
+      const sequenceId = await this.resolveSequence(remitoType.id, null, remitoType.document_sequences?.id ?? null, tx);
+      const number = await this.getNextNumber(remitoType.id, sequenceId, tx);
 
       const newDoc = await tx.documents.create({
         data: {
           document_type_id: remitoType.id,
+          document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
           number,
@@ -1823,11 +1919,13 @@ export class DocumentsSalesService {
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
-      const number = await this.getNextNumber(invoiceType.id, invoiceType.document_sequences?.id ?? null, tx);
+      const sequenceId = await this.resolveSequence(invoiceType.id, null, invoiceType.document_sequences?.id ?? null, tx);
+      const number = await this.getNextNumber(invoiceType.id, sequenceId, tx);
 
       const newDoc = await tx.documents.create({
         data: {
           document_type_id: invoiceType.id,
+          document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
           number,
@@ -1897,51 +1995,25 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   private async getNextNumber(
     documentTypeId: string,
-
     sequenceId: string | null,
-
     tx?: any,
   ): Promise<number> {
     const db = tx ?? this.prisma;
 
     if (!sequenceId) {
       const last = await db.documents.findFirst({
-        where: {
-          document_type_id: documentTypeId,
-        },
-
-        orderBy: {
-          number: 'desc',
-        },
+        where: { document_type_id: documentTypeId },
+        orderBy: { number: 'desc' },
       });
-
       return (last?.number ?? 0) + 1;
     }
 
-    // Con secuencia: incrementar y verificar que no exista
-    let attempts = 0;
-    while (attempts < 100) {
-      const seq = await db.document_sequences.update({
-        where: {
-          id: sequenceId,
-        },
-
-        data: {
-          current_number: {
-            increment: 1,
-          },
-        },
-      });
-
-      const exists = await db.documents.findFirst({
-        where: { document_type_id: documentTypeId, number: seq.current_number },
-      });
-
-      if (!exists) return seq.current_number;
-      attempts++;
-    }
-
-    throw new BadRequestException('No se pudo generar un número único de documento');
+    // Con secuencia: incrementar contador (cada PV tiene su propio rango)
+    const seq = await db.document_sequences.update({
+      where: { id: sequenceId },
+      data: { current_number: { increment: 1 } },
+    });
+    return seq.current_number;
   }
 
   // ─────────────────────────────────────────────

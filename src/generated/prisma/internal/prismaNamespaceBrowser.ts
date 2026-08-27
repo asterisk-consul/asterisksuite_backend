@@ -63,6 +63,7 @@ export const ModelName = {
   currency_rates: 'currency_rates',
   dashboard_configs: 'dashboard_configs',
   document_sequences: 'document_sequences',
+  document_type_sequences: 'document_type_sequences',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
   document_taxes: 'document_taxes',
@@ -417,6 +418,17 @@ export const Document_sequencesScalarFieldEnum = {
 export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
 
 
+export const Document_type_sequencesScalarFieldEnum = {
+  id: 'id',
+  document_type_id: 'document_type_id',
+  sequence_id: 'sequence_id',
+  is_default: 'is_default',
+  created_at: 'created_at'
+} as const
+
+export type Document_type_sequencesScalarFieldEnum = (typeof Document_type_sequencesScalarFieldEnum)[keyof typeof Document_type_sequencesScalarFieldEnum]
+
+
 export const Document_item_taxesScalarFieldEnum = {
   id: 'id',
   document_item_id: 'document_item_id',
@@ -526,6 +538,7 @@ export type Document_type_taxesScalarFieldEnum = (typeof Document_type_taxesScal
 export const DocumentsScalarFieldEnum = {
   id: 'id',
   document_type_id: 'document_type_id',
+  document_sequence_id: 'document_sequence_id',
   party_id: 'party_id',
   parent_document_id: 'parent_document_id',
   number: 'number',
@@ -1365,6 +1378,7 @@ export const Maintenance_partsScalarFieldEnum = {
   unit_cost: 'unit_cost',
   total_cost: 'total_cost',
   stock_movement_id: 'stock_movement_id',
+  document_id: 'document_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -1380,10 +1394,12 @@ export const Maintenance_laborScalarFieldEnum = {
   id: 'id',
   maintenance_order_id: 'maintenance_order_id',
   employee_id: 'employee_id',
+  supplier_id: 'supplier_id',
   description: 'description',
   hours: 'hours',
   hourly_cost: 'hourly_cost',
   total_cost: 'total_cost',
+  document_id: 'document_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

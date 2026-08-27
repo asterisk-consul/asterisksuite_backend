@@ -15,8 +15,24 @@ model document_sequences {
   updated_by     String?          @db.Uuid
   deleted_by     String?          @db.Uuid
   document_types document_types[]
+  document_type_sequences document_type_sequences[]
+  documents documents[]
 
   @@unique([point_of_sale, prefix])
+  @@schema("tenant")
+}
+
+model document_type_sequences {
+  id                String           @id @default(uuid()) @db.Uuid
+  document_type_id  String           @db.Uuid
+  sequence_id       String           @db.Uuid
+  is_default        Boolean          @default(false)
+  created_at        DateTime         @default(now()) @db.Timestamp(6)
+
+  document_types    document_types   @relation(fields: [document_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  document_sequences document_sequences @relation(fields: [sequence_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([document_type_id, sequence_id])
   @@schema("tenant")
 }
 
@@ -121,6 +137,7 @@ model document_types {
   document_sequences   document_sequences?   @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   system_modules       system_modules?       @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   documents            documents[]
+  document_type_sequences document_type_sequences[]
 
   @@schema("tenant")
 }
@@ -141,6 +158,7 @@ model document_type_taxes {
 model documents {
   id                         String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   document_type_id           String                       @db.Uuid
+  document_sequence_id       String?                      @db.Uuid
   party_id                   String?                      @db.Uuid
   parent_document_id         String?                      @db.Uuid
   number                     Int
@@ -176,6 +194,7 @@ model documents {
   document_items             document_items[]
   document_taxes             document_taxes[]
   document_types             document_types               @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  document_sequences         document_sequences?          @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   business_parties           business_parties?            @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   payment_documents          payment_documents[]
   parent_document            documents?                   @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -188,7 +207,7 @@ model documents {
   maintenance_services maintenance_services[]
   purchase_tires       tires[]
 
-  @@unique([document_type_id, number], map: "uq_document_number")
+  @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
   @@schema("tenant")
 }
