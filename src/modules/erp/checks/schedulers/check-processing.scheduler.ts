@@ -39,6 +39,7 @@ export class CheckProcessingScheduler {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    // ─── Procesar cheques propios (payment_date = hoy) ─────────
     const checksToProcess = await prisma.checks.findMany({
       where: {
         is_own: true,
@@ -48,13 +49,13 @@ export class CheckProcessingScheduler {
       },
     });
 
-    if (checksToProcess.length === 0) return;
-
-    this.logger.log(`[${companyName}] Cheques a procesar hoy: ${checksToProcess.length}`);
+    if (checksToProcess.length > 0) {
+      this.logger.log(`[${companyName}] Cheques propios a procesar hoy: ${checksToProcess.length}`);
+    }
 
     for (const check of checksToProcess) {
       if (!check.bank_account_id) {
-        this.logger.warn(`[${companyName}] Cheque #${check.check_number}: Sin cuenta bancaria, saltando...`);
+        this.logger.warn(`[${companyName}] Cheque propio #${check.check_number}: Sin cuenta bancaria, saltando...`);
         continue;
       }
 
@@ -63,12 +64,12 @@ export class CheckProcessingScheduler {
       });
 
       if (!bankAccount || !bankAccount.active) {
-        this.logger.warn(`[${companyName}] Cheque #${check.check_number}: Cuenta inactiva, saltando...`);
+        this.logger.warn(`[${companyName}] Cheque propio #${check.check_number}: Cuenta inactiva, saltando...`);
         continue;
       }
 
       if (Number(bankAccount.balance) >= Number(check.amount)) {
-        this.logger.log(`[${companyName}] Cheque #${check.check_number}: Fondos suficientes, procesando...`);
+        this.logger.log(`[${companyName}] Cheque propio #${check.check_number}: Fondos suficientes, procesando...`);
 
         await prisma.$transaction(async (tx: any) => {
           const currentBalance = Number(bankAccount.balance);
@@ -90,7 +91,7 @@ export class CheckProcessingScheduler {
               converted_amount: check.converted_amount,
               balance_before: currentBalance,
               balance_after: currentBalance - amount,
-              description: `Cheque #${check.check_number} cobrado por scheduler`,
+              description: `Cheque propio #${check.check_number} cobrado por scheduler`,
               reference_type: 'check',
               reference_id: check.id,
               payment_id: check.payment_id,
@@ -104,7 +105,7 @@ export class CheckProcessingScheduler {
           });
         });
       } else {
-        this.logger.warn(`[${companyName}] Cheque #${check.check_number}: Fondos insuficientes, rechazando...`);
+        this.logger.warn(`[${companyName}] Cheque propio #${check.check_number}: Fondos insuficientes, rechazando...`);
 
         await prisma.checks.update({
           where: { id: check.id },
@@ -133,7 +134,7 @@ export class CheckProcessingScheduler {
                   currency_code: check.currency_code,
                   balance_before: currentBalance,
                   balance_after: currentBalance + amount,
-                  description: `Cheque #${check.check_number} rechazado - reversión`,
+                  description: `Cheque propio #${check.check_number} rechazado - reversión`,
                   reference_type: 'check',
                   reference_id: check.id,
                   payment_id: check.payment_id,
@@ -149,6 +150,76 @@ export class CheckProcessingScheduler {
           }
         }
       }
+    }
+
+    // ─── Depósito automático de cheques de terceros (due_date <= hoy) ─────────
+    const thirdPartyChecksToDeposit = await prisma.checks.findMany({
+      where: {
+        is_own: false,
+        status: 'PENDING',
+        due_date: { lte: today },
+        bank_account_id: { not: null },
+        deleted_at: null,
+      },
+    });
+
+    if (thirdPartyChecksToDeposit.length > 0) {
+      this.logger.log(`[${companyName}] Cheques de terceros a depositar automáticamente: ${thirdPartyChecksToDeposit.length}`);
+    }
+
+    for (const check of thirdPartyChecksToDeposit) {
+      if (!check.bank_account_id) continue;
+
+      const bankAccount = await prisma.bank_accounts.findUnique({
+        where: { id: check.bank_account_id },
+      });
+
+      if (!bankAccount || !bankAccount.active) {
+        this.logger.warn(`[${companyName}] Cheque tercero #${check.check_number}: Cuenta inactiva, saltando...`);
+        continue;
+      }
+
+      this.logger.log(`[${companyName}] Cheque tercero #${check.check_number}: Depositing automáticamente...`);
+
+      const currentBalance = Number(bankAccount.balance);
+      const amount = Number(check.amount);
+      const balanceAfter = currentBalance + amount;
+
+      await prisma.$transaction(async (tx: any) => {
+        await tx.checks.update({
+          where: { id: check.id },
+          data: {
+            status: 'CLEARED',
+            clearing_date: today,
+            deposit_date: check.deposit_date ?? today,
+            updated_at: new Date(),
+          },
+        });
+
+        await tx.bank_account_movements.create({
+          data: {
+            bank_account_id: check.bank_account_id!,
+            type: 'COLLECTION',
+            amount: amount,
+            currency_code: check.currency_code,
+            exchange_rate: check.exchange_rate,
+            rate_type: check.rate_type,
+            converted_amount: check.converted_amount,
+            balance_before: currentBalance,
+            balance_after: balanceAfter,
+            description: `Cheque tercero #${check.check_number} depositado automáticamente`,
+            reference_type: 'check',
+            reference_id: check.id,
+            payment_id: check.payment_id,
+            date: today,
+          },
+        });
+
+        await tx.bank_accounts.update({
+          where: { id: check.bank_account_id! },
+          data: { balance: balanceAfter, updated_at: new Date() },
+        });
+      });
     }
   }
 }

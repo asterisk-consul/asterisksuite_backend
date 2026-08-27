@@ -19,12 +19,6 @@ export class ChecksController {
     return this.checksService.create(dto, user.id);
   }
 
-  @Post('light')
-  @RequirePermissions('treasury.checks.create')
-  createLight(@Body() dto: CreateCheckDto, @CurrentUser() user: AuthUser) {
-    return this.checksService.createLight(dto, user.id);
-  }
-
   @Get()
   @RequirePermissions('treasury.checks.read')
   findAll(
@@ -82,6 +76,25 @@ export class ChecksController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.checksService.clear(id, user.id);
+  }
+
+  @Patch(':id/deposit')
+  @RequirePermissions('treasury.checks.update')
+  deposit(
+    @Param('id') id: string,
+    @Body() body: { bank_account_id: string; amount?: number },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.checksService.deposit(id, body, user.id);
+  }
+
+  @Patch(':id/revert')
+  @RequirePermissions('treasury.checks.update')
+  revert(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.checksService.revert(id, user.id);
   }
 
   @Patch(':id/bounce')

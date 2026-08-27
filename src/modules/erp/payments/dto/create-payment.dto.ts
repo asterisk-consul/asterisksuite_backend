@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested, IsInt, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PaymentDocumentDto {
@@ -82,7 +82,7 @@ export class CreatePaymentDto {
   @IsOptional()
   documents?: PaymentDocumentDto[];
 
-  @IsInt()
+  @IsEnum(['DRAFT', 'CONFIRMED', 'PAID', 'REVERSED', 'CANCELLED'] as const)
   @IsOptional()
-  status?: number;
+  status?: string;
 }

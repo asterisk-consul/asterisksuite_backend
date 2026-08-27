@@ -61,11 +61,11 @@ export class DashboardService {
     return { success: true };
   }
 
-  async getDashboardData() {
+  async getDashboardData(checksDays?: number) {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const thirtyDays = new Date(today);
-    thirtyDays.setDate(thirtyDays.getDate() + 30);
+    const checksAhead = new Date(today);
+    checksAhead.setDate(checksAhead.getDate() + (checksDays ?? 30));
 
     const [
       quotes,
@@ -196,12 +196,12 @@ export class DashboardService {
         },
         _count: { id: true },
       }),
-      // Cheques a vencer: propios, pendientes, due_date en 30 días
+      // Cheques a vencer: propios, pendientes, due_date en N días
       this.prisma.checks.findMany({
         where: {
           is_own: true,
           status: 'PENDING',
-          due_date: { gte: today, lte: thirtyDays },
+          due_date: { gte: today, lte: checksAhead },
           deleted_at: null,
         },
         select: {

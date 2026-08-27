@@ -36,8 +36,8 @@ export class DashboardController {
   }
 
   @Get('data')
-  getDashboardData() {
-    return this.dashboardService.getDashboardData();
+  getDashboardData(@Query('checks_days') checksDays?: string) {
+    return this.dashboardService.getDashboardData(checksDays ? parseInt(checksDays, 10) : undefined);
   }
 
   @Get('personal')

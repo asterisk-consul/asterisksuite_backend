@@ -10,8 +10,8 @@ export class TreasuryReportsController {
 
   @Get('dashboard')
   @RequirePermissions('treasury.reports.read')
-  dashboard() {
-    return this.reportsService.dashboard();
+  dashboard(@Query('checks_days') checksDays?: string) {
+    return this.reportsService.dashboard(checksDays ? parseInt(checksDays, 10) : undefined);
   }
 
   @Get('movements')

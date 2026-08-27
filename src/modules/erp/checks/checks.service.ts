@@ -12,108 +12,6 @@ export class ChecksService {
   }
 
   async create(dto: CreateCheckDto, userId: string) {
-    const check = await this.prisma.checks.create({
-      data: {
-        payment_id: dto.payment_id,
-        bank_account_id: dto.bank_account_id,
-        check_number: dto.check_number,
-        bank_name: dto.bank_name,
-        bank_branch: dto.bank_branch,
-        account_number: dto.account_number,
-        issuer_name: dto.issuer_name,
-        issuer_id: dto.issuer_id,
-        amount: dto.amount,
-        currency_code: dto.currency_code,
-        issue_date: new Date(dto.issue_date),
-        due_date: new Date(dto.due_date),
-        is_own: dto.is_own ?? false,
-        notes: dto.notes,
-        payment_date: dto.payment_date ? new Date(dto.payment_date) : null,
-        status: 'PENDING',
-        created_by: userId,
-      },
-    });
-
-    // Obtener próximo número de pago
-    const lastPayment = await this.prisma.payments.findFirst({
-      where: { deleted_at: null },
-      orderBy: { number: 'desc' },
-    });
-    const nextNumber = (lastPayment?.number ?? 0) + 1;
-
-    // Crear pago y impactar cuenta corriente al registrar
-    const payment = await this.prisma.payments.create({
-      data: {
-        number: nextNumber,
-        type: dto.is_own ? 'PAYMENT' : 'COLLECTION',
-        date: new Date(),
-        party_id: dto.party_id,
-        party_type: dto.party_type ?? (dto.is_own ? 'SUPPLIER' : 'CUSTOMER'),
-        payment_method: 'CHECK',
-        amount: dto.amount,
-        currency_code: dto.currency_code,
-        description: `${dto.is_own ? 'Pago' : 'Cobro'} con cheque #${dto.check_number}`,
-        status: 1,
-        created_by: userId,
-      },
-    });
-
-    // Vincular cheque al pago
-    await this.prisma.checks.update({
-      where: { id: check.id },
-      data: { payment_id: payment.id },
-    });
-
-    // Impactar cuenta corriente
-    if (dto.party_id) {
-      let currentAccount = await this.prisma.current_accounts.findUnique({
-        where: { party_id: dto.party_id },
-      });
-
-      if (!currentAccount) {
-        currentAccount = await this.prisma.current_accounts.create({
-          data: {
-            party_id: dto.party_id,
-            party_type: dto.party_type ?? (dto.is_own ? 'SUPPLIER' : 'CUSTOMER'),
-            balance: 0,
-            created_by: userId,
-          },
-        });
-      }
-
-      const currentBalance = Number(currentAccount.balance);
-      // PAGO (is_own) → debita | COBRO (tercero) → acredita
-      const balanceAfter = dto.is_own
-        ? currentBalance - Number(dto.amount)
-        : currentBalance + Number(dto.amount);
-
-      await this.prisma.current_account_entries.create({
-        data: {
-          current_account_id: currentAccount.id,
-          type: dto.is_own ? 'PAYMENT' : 'COLLECTION',
-          amount: dto.amount,
-          currency_code: dto.currency_code,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
-          description: `${dto.is_own ? 'Pago' : 'Cobro'} con cheque #${dto.check_number}`,
-          reference_type: 'check',
-          reference_id: check.id,
-          payment_id: payment.id,
-          date: new Date(),
-          created_by: userId,
-        },
-      });
-
-      await this.prisma.current_accounts.update({
-        where: { id: currentAccount.id },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
-    }
-
-    return check;
-  }
-
-  async createLight(dto: CreateCheckDto, userId: string) {
     return this.prisma.checks.create({
       data: {
         payment_id: dto.payment_id,
@@ -142,7 +40,7 @@ export class ChecksService {
       where: {
         deleted_at: null,
         payment_id: null,
-        is_own: isOwn ?? true,
+        is_own: isOwn ?? false,
         status: 'PENDING',
       },
       orderBy: { due_date: 'asc' },
@@ -287,6 +185,129 @@ export class ChecksService {
           created_by: userId,
         },
       });
+
+      await tx.bank_accounts.update({
+        where: { id: check.bank_account_id! },
+        data: { balance: balanceAfter, updated_at: new Date() },
+      });
+    });
+
+    return this.findOne(id);
+  }
+
+  async deposit(id: string, dto: { bank_account_id: string; amount?: number }, userId: string) {
+    const check = await this.findOne(id);
+    if (check.is_own) {
+      throw new BadRequestException('Los cheques propios se procesan por scheduler');
+    }
+    if (!['PENDING', 'CONFIRMED'].includes(check.status)) {
+      throw new BadRequestException('Solo se pueden depositar cheques pendientes o confirmados');
+    }
+
+    const bankAccount = await this.prisma.bank_accounts.findUnique({
+      where: { id: dto.bank_account_id },
+    });
+    if (!bankAccount) {
+      throw new NotFoundException('Cuenta bancaria destino no encontrada');
+    }
+
+    const depositAmount = dto.amount ?? Number(check.amount);
+
+    const currentBalance = Number(bankAccount.balance);
+    const balanceAfter = currentBalance + depositAmount;
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.checks.update({
+        where: { id },
+        data: {
+          status: 'CLEARED',
+          bank_account_id: dto.bank_account_id,
+          deposit_date: new Date(),
+          clearing_date: new Date(),
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+
+      await tx.bank_account_movements.create({
+        data: {
+          bank_account_id: dto.bank_account_id,
+          type: 'COLLECTION',
+          amount: depositAmount,
+          currency_code: check.currency_code,
+          exchange_rate: check.exchange_rate,
+          rate_type: check.rate_type,
+          converted_amount: check.converted_amount,
+          balance_before: currentBalance,
+          balance_after: balanceAfter,
+          description: `Cheque #${check.check_number} depositado`,
+          reference_type: 'check',
+          reference_id: check.id,
+          payment_id: check.payment_id,
+          date: new Date(),
+          created_by: userId,
+        },
+      });
+
+      await tx.bank_accounts.update({
+        where: { id: dto.bank_account_id },
+        data: { balance: balanceAfter, updated_at: new Date() },
+      });
+    });
+
+    return this.findOne(id);
+  }
+
+  async revert(id: string, userId: string) {
+    const check = await this.findOne(id);
+    if (check.status !== 'CLEARED') {
+      throw new BadRequestException('Solo se pueden revertir cheques depositados');
+    }
+    if (!check.bank_account_id) {
+      throw new BadRequestException('El cheque no tiene cuenta bancaria asociada');
+    }
+
+    const bankAccount = await this.prisma.bank_accounts.findUnique({
+      where: { id: check.bank_account_id },
+    });
+    if (!bankAccount) {
+      throw new NotFoundException('Cuenta bancaria no encontrada');
+    }
+
+    const movement = await this.prisma.bank_account_movements.findFirst({
+      where: {
+        reference_type: 'check',
+        reference_id: check.id,
+        type: 'COLLECTION',
+        deleted_at: null,
+      },
+    });
+
+    const currentBalance = Number(bankAccount.balance);
+    const revertAmount = movement ? Number(movement.amount) : Number(check.amount);
+    const balanceAfter = currentBalance - revertAmount;
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.checks.update({
+        where: { id },
+        data: {
+          status: 'PENDING',
+          deposit_date: null,
+          clearing_date: null,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+
+      if (movement) {
+        await tx.bank_account_movements.update({
+          where: { id: movement.id },
+          data: {
+            deleted_at: new Date(),
+            deleted_by: userId,
+          },
+        });
+      }
 
       await tx.bank_accounts.update({
         where: { id: check.bank_account_id! },

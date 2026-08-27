@@ -79,12 +79,4 @@ export class CreateCheckDto {
   @IsOptional()
   @IsDateString()
   payment_date?: string;
-
-  @IsOptional()
-  @IsString()
-  party_id?: string;
-
-  @IsOptional()
-  @IsString()
-  party_type?: string;
 }

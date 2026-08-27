@@ -6,34 +6,53 @@ export class TrashService {
   constructor(private readonly prisma: PrismaService) {}
 
   // 🔥 1. TODA LA PAPELERA (multi-tabla)
-  findAllTrash(days?: number, table?: string) {
+  async findAllTrash(days?: number, table?: string) {
     const since = days
       ? new Date(Date.now() - days * 24 * 60 * 60 * 1000)
       : null;
 
     const models = this.getModels();
+    const filteredModels = models.filter((m) => !table || m === table);
 
-    const queries = models
-      .filter((m) => !table || m === table)
-      .map((model) => {
-        return this.prisma.getClientForCurrentContext()[model].findMany({
-          where: {
-            deleted_at: since ? { gte: since } : { not: null },
-          },
-          select: {
-            id: true,
-            deleted_at: true,
-            deleted_by: true,
-          },
-        });
+    const queries = filteredModels.map((model) => {
+      return this.prisma.getClientForCurrentContext()[model].findMany({
+        where: {
+          deleted_at: since ? { gte: since } : { not: null },
+        },
+        select: {
+          id: true,
+          deleted_at: true,
+          deleted_by: true,
+        },
       });
+    });
 
-    return Promise.all(queries).then((results) =>
-      results.flat().map((r) => ({
-        ...r,
-        table: table || 'mixed',
+    const results = await Promise.all(queries);
+    const items = results.flatMap((result, index) =>
+      result.map((r) => ({
+        id: r.id,
+        table: filteredModels[index],
+        deletedAt: r.deleted_at?.toISOString() ?? null,
+        deletedBy: r.deleted_by ?? null,
       })),
     );
+
+    const userIds = [...new Set(items.map((i) => i.deletedBy).filter(Boolean))] as string[];
+
+    let userMap = new Map<string, string>();
+    if (userIds.length > 0) {
+      const publicPrisma = this.prisma.getDefaultClient();
+      const users = await publicPrisma.users.findMany({
+        where: { id: { in: userIds } },
+        select: { id: true, name: true },
+      });
+      userMap = new Map(users.map((u) => [u.id, u.name]));
+    }
+
+    return items.map((item) => ({
+      ...item,
+      deletedByName: item.deletedBy ? (userMap.get(item.deletedBy) ?? null) : null,
+    }));
   }
 
   // 🗑️ soft delete
@@ -92,7 +111,6 @@ export class TrashService {
     return [
       'users',
       'business_parties',
-      'cargo_transfers',
       'companies',
       'delivery_notes',
       'drivers',
@@ -129,9 +147,7 @@ export class TrashService {
       'accounts',
       'product_attribute_values',
       'attributes',
-      'product_tags',
       'tags',
-      'product_categories',
       'categories',
       'product_components',
       'product_variants',
