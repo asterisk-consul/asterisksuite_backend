@@ -749,6 +749,8 @@ export class DocumentsSalesService {
     direction?: number,
 
     userId?: string,
+
+    partyId?: string,
   ) {
     return this.prisma.documents.findMany({
       where: {
@@ -767,6 +769,8 @@ export class DocumentsSalesService {
         ...(status !== undefined ? { status } : {}),
 
         ...(userId ? { created_by: userId } : {}),
+
+        ...(partyId ? { party_id: partyId } : {}),
       },
 
       include: {

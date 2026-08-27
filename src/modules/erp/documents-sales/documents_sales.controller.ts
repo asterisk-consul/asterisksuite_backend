@@ -62,6 +62,7 @@ export class DocumentsSalesController {
     @Query('status') status?: string,
     @Query('category') category?: string,
     @Query('direction') direction?: string,
+    @Query('party_id') partyId?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     return this.service.findAll(
@@ -70,6 +71,7 @@ export class DocumentsSalesController {
       category,
       direction !== undefined ? Number(direction) : undefined,
       companyRole === 'USER' ? user.id : undefined,
+      partyId,
     );
   }
 
