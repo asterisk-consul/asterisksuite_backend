@@ -1,11 +1,11 @@
 # ===== Etapa de build =====
 FROM node:20-alpine AS builder
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11.5.2
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 RUN pnpm install --frozen-lockfile
 
 COPY prisma ./prisma
@@ -19,13 +19,13 @@ RUN pnpm run build
 # ===== Etapa de producción =====
 FROM node:20-alpine
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11.5.2
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package.json pnpm-lock.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 RUN pnpm install --prod --frozen-lockfile
 
 COPY --from=builder /app/prisma ./prisma
