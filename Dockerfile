@@ -1,5 +1,5 @@
 # ===== Etapa de build =====
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 RUN npm install -g pnpm@11.5.2
 
@@ -17,7 +17,7 @@ RUN npx prisma generate
 RUN pnpm run build
 
 # ===== Etapa de producción =====
-FROM node:20-alpine
+FROM node:22-alpine
 
 RUN npm install -g pnpm@11.5.2
 
