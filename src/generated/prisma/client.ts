@@ -275,6 +275,11 @@ export type trip_temperature_logs = Prisma.trip_temperature_logsModel
  */
 export type dispatch_orders = Prisma.dispatch_ordersModel
 /**
+ * Model dispatch_order_items
+ * 
+ */
+export type dispatch_order_items = Prisma.dispatch_order_itemsModel
+/**
  * Model trips
  * 
  */
@@ -509,6 +514,16 @@ export type product_variant_costs = Prisma.product_variant_costsModel
  * 
  */
 export type product_suppliers = Prisma.product_suppliersModel
+/**
+ * Model product_party_prices
+ * 
+ */
+export type product_party_prices = Prisma.product_party_pricesModel
+/**
+ * Model product_party_price_history
+ * 
+ */
+export type product_party_price_history = Prisma.product_party_price_historyModel
 /**
  * Model price_lists
  * 

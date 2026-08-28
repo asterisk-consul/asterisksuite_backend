@@ -20,6 +20,7 @@ import { TaxCalculationService } from '../tax-engine/services/tax-calculation.se
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
+import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -52,6 +53,8 @@ export class DocumentsPurchasesService {
     private readonly conversionService: CurrencyConversionService,
 
     private readonly fiscalValidation: FiscalValidationService,
+
+    private readonly productPartyPricing: ProductPartyPricingService,
   ) {}
 
   private get prisma() {
@@ -1186,6 +1189,10 @@ export class DocumentsPurchasesService {
       if (updateProductPrices) {
         await this.syncProductPricesFromPurchase(tx, doc);
       }
+
+      // Siempre conserva el precio negociado con este proveedor. La opción
+      // anterior sigue controlando únicamente la actualización del precio general.
+      await this.productPartyPricing.captureDocumentPrices(tx, doc, 'PURCHASE', userId);
 
       return tx.documents.findUnique({ where: { id } });
     });

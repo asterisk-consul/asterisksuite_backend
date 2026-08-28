@@ -97,6 +97,7 @@ export type DocumentsMinAggregateOutputType = {
   updated_by: string | null
   deleted_by: string | null
   source: string | null
+  dispatch_order_id: string | null
 }
 
 export type DocumentsMaxAggregateOutputType = {
@@ -134,6 +135,7 @@ export type DocumentsMaxAggregateOutputType = {
   updated_by: string | null
   deleted_by: string | null
   source: string | null
+  dispatch_order_id: string | null
 }
 
 export type DocumentsCountAggregateOutputType = {
@@ -172,6 +174,7 @@ export type DocumentsCountAggregateOutputType = {
   updated_by: number
   deleted_by: number
   source: number
+  dispatch_order_id: number
   _all: number
 }
 
@@ -247,6 +250,7 @@ export type DocumentsMinAggregateInputType = {
   updated_by?: true
   deleted_by?: true
   source?: true
+  dispatch_order_id?: true
 }
 
 export type DocumentsMaxAggregateInputType = {
@@ -284,6 +288,7 @@ export type DocumentsMaxAggregateInputType = {
   updated_by?: true
   deleted_by?: true
   source?: true
+  dispatch_order_id?: true
 }
 
 export type DocumentsCountAggregateInputType = {
@@ -322,6 +327,7 @@ export type DocumentsCountAggregateInputType = {
   updated_by?: true
   deleted_by?: true
   source?: true
+  dispatch_order_id?: true
   _all?: true
 }
 
@@ -447,6 +453,7 @@ export type DocumentsGroupByOutputType = {
   updated_by: string | null
   deleted_by: string | null
   source: string
+  dispatch_order_id: string | null
   _count: DocumentsCountAggregateOutputType | null
   _avg: DocumentsAvgAggregateOutputType | null
   _sum: DocumentsSumAggregateOutputType | null
@@ -508,6 +515,7 @@ export type documentsWhereInput = {
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   source?: Prisma.StringFilter<"documents"> | string
+  dispatch_order_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   document_items?: Prisma.Document_itemsListRelationFilter
   document_taxes?: Prisma.Document_taxesListRelationFilter
   document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
@@ -516,6 +524,8 @@ export type documentsWhereInput = {
   payment_documents?: Prisma.Payment_documentsListRelationFilter
   parent_document?: Prisma.XOR<Prisma.DocumentsNullableScalarRelationFilter, Prisma.documentsWhereInput> | null
   child_documents?: Prisma.DocumentsListRelationFilter
+  dispatch_order?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
+  source_dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   presupuesto_doc?: Prisma.XOR<Prisma.Presupuesto_documentsNullableScalarRelationFilter, Prisma.presupuesto_documentsWhereInput> | null
   orden_venta_doc?: Prisma.XOR<Prisma.Orden_venta_documentsNullableScalarRelationFilter, Prisma.orden_venta_documentsWhereInput> | null
   orden_compra_doc?: Prisma.XOR<Prisma.Orden_compra_documentsNullableScalarRelationFilter, Prisma.orden_compra_documentsWhereInput> | null
@@ -561,6 +571,7 @@ export type documentsOrderByWithRelationInput = {
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   document_items?: Prisma.document_itemsOrderByRelationAggregateInput
   document_taxes?: Prisma.document_taxesOrderByRelationAggregateInput
   document_types?: Prisma.document_typesOrderByWithRelationInput
@@ -569,6 +580,8 @@ export type documentsOrderByWithRelationInput = {
   payment_documents?: Prisma.payment_documentsOrderByRelationAggregateInput
   parent_document?: Prisma.documentsOrderByWithRelationInput
   child_documents?: Prisma.documentsOrderByRelationAggregateInput
+  dispatch_order?: Prisma.dispatch_ordersOrderByWithRelationInput
+  source_dispatch_orders?: Prisma.dispatch_ordersOrderByRelationAggregateInput
   presupuesto_doc?: Prisma.presupuesto_documentsOrderByWithRelationInput
   orden_venta_doc?: Prisma.orden_venta_documentsOrderByWithRelationInput
   orden_compra_doc?: Prisma.orden_compra_documentsOrderByWithRelationInput
@@ -618,6 +631,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   source?: Prisma.StringFilter<"documents"> | string
+  dispatch_order_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   document_items?: Prisma.Document_itemsListRelationFilter
   document_taxes?: Prisma.Document_taxesListRelationFilter
   document_types?: Prisma.XOR<Prisma.Document_typesScalarRelationFilter, Prisma.document_typesWhereInput>
@@ -626,6 +640,8 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   payment_documents?: Prisma.Payment_documentsListRelationFilter
   parent_document?: Prisma.XOR<Prisma.DocumentsNullableScalarRelationFilter, Prisma.documentsWhereInput> | null
   child_documents?: Prisma.DocumentsListRelationFilter
+  dispatch_order?: Prisma.XOR<Prisma.Dispatch_ordersNullableScalarRelationFilter, Prisma.dispatch_ordersWhereInput> | null
+  source_dispatch_orders?: Prisma.Dispatch_ordersListRelationFilter
   presupuesto_doc?: Prisma.XOR<Prisma.Presupuesto_documentsNullableScalarRelationFilter, Prisma.presupuesto_documentsWhereInput> | null
   orden_venta_doc?: Prisma.XOR<Prisma.Orden_venta_documentsNullableScalarRelationFilter, Prisma.orden_venta_documentsWhereInput> | null
   orden_compra_doc?: Prisma.XOR<Prisma.Orden_compra_documentsNullableScalarRelationFilter, Prisma.orden_compra_documentsWhereInput> | null
@@ -671,6 +687,7 @@ export type documentsOrderByWithAggregationInput = {
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  dispatch_order_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.documentsCountOrderByAggregateInput
   _avg?: Prisma.documentsAvgOrderByAggregateInput
   _max?: Prisma.documentsMaxOrderByAggregateInput
@@ -717,6 +734,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   source?: Prisma.StringWithAggregatesFilter<"documents"> | string
+  dispatch_order_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
 }
 
 export type documentsCreateInput = {
@@ -759,6 +777,8 @@ export type documentsCreateInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -804,10 +824,12 @@ export type documentsUncheckedCreateInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -857,6 +879,8 @@ export type documentsUpdateInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -902,10 +926,12 @@ export type documentsUncheckedUpdateInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -951,6 +977,7 @@ export type documentsCreateManyInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
 }
 
 export type documentsUpdateManyMutationInput = {
@@ -1023,6 +1050,7 @@ export type documentsUncheckedUpdateManyInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DocumentsListRelationFilter = {
@@ -1087,6 +1115,7 @@ export type documentsCountOrderByAggregateInput = {
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  dispatch_order_id?: Prisma.SortOrder
 }
 
 export type documentsAvgOrderByAggregateInput = {
@@ -1142,6 +1171,7 @@ export type documentsMaxOrderByAggregateInput = {
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  dispatch_order_id?: Prisma.SortOrder
 }
 
 export type documentsMinOrderByAggregateInput = {
@@ -1179,6 +1209,7 @@ export type documentsMinOrderByAggregateInput = {
   updated_by?: Prisma.SortOrder
   deleted_by?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  dispatch_order_id?: Prisma.SortOrder
 }
 
 export type documentsSumOrderByAggregateInput = {
@@ -1439,6 +1470,64 @@ export type documentsUpdateOneRequiredWithoutInternational_operation_docsNestedI
   update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutInternational_operation_docsInput, Prisma.documentsUpdateWithoutInternational_operation_docsInput>, Prisma.documentsUncheckedUpdateWithoutInternational_operation_docsInput>
 }
 
+export type documentsCreateNestedOneWithoutSource_dispatch_ordersInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutSource_dispatch_ordersInput, Prisma.documentsUncheckedCreateWithoutSource_dispatch_ordersInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutSource_dispatch_ordersInput
+  connect?: Prisma.documentsWhereUniqueInput
+}
+
+export type documentsCreateNestedManyWithoutDispatch_orderInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDispatch_orderInput, Prisma.documentsUncheckedCreateWithoutDispatch_orderInput> | Prisma.documentsCreateWithoutDispatch_orderInput[] | Prisma.documentsUncheckedCreateWithoutDispatch_orderInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDispatch_orderInput | Prisma.documentsCreateOrConnectWithoutDispatch_orderInput[]
+  createMany?: Prisma.documentsCreateManyDispatch_orderInputEnvelope
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+}
+
+export type documentsUncheckedCreateNestedManyWithoutDispatch_orderInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDispatch_orderInput, Prisma.documentsUncheckedCreateWithoutDispatch_orderInput> | Prisma.documentsCreateWithoutDispatch_orderInput[] | Prisma.documentsUncheckedCreateWithoutDispatch_orderInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDispatch_orderInput | Prisma.documentsCreateOrConnectWithoutDispatch_orderInput[]
+  createMany?: Prisma.documentsCreateManyDispatch_orderInputEnvelope
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+}
+
+export type documentsUpdateOneWithoutSource_dispatch_ordersNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutSource_dispatch_ordersInput, Prisma.documentsUncheckedCreateWithoutSource_dispatch_ordersInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutSource_dispatch_ordersInput
+  upsert?: Prisma.documentsUpsertWithoutSource_dispatch_ordersInput
+  disconnect?: Prisma.documentsWhereInput | boolean
+  delete?: Prisma.documentsWhereInput | boolean
+  connect?: Prisma.documentsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutSource_dispatch_ordersInput, Prisma.documentsUpdateWithoutSource_dispatch_ordersInput>, Prisma.documentsUncheckedUpdateWithoutSource_dispatch_ordersInput>
+}
+
+export type documentsUpdateManyWithoutDispatch_orderNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDispatch_orderInput, Prisma.documentsUncheckedCreateWithoutDispatch_orderInput> | Prisma.documentsCreateWithoutDispatch_orderInput[] | Prisma.documentsUncheckedCreateWithoutDispatch_orderInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDispatch_orderInput | Prisma.documentsCreateOrConnectWithoutDispatch_orderInput[]
+  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutDispatch_orderInput | Prisma.documentsUpsertWithWhereUniqueWithoutDispatch_orderInput[]
+  createMany?: Prisma.documentsCreateManyDispatch_orderInputEnvelope
+  set?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  disconnect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  delete?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  update?: Prisma.documentsUpdateWithWhereUniqueWithoutDispatch_orderInput | Prisma.documentsUpdateWithWhereUniqueWithoutDispatch_orderInput[]
+  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutDispatch_orderInput | Prisma.documentsUpdateManyWithWhereWithoutDispatch_orderInput[]
+  deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
+}
+
+export type documentsUncheckedUpdateManyWithoutDispatch_orderNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutDispatch_orderInput, Prisma.documentsUncheckedCreateWithoutDispatch_orderInput> | Prisma.documentsCreateWithoutDispatch_orderInput[] | Prisma.documentsUncheckedCreateWithoutDispatch_orderInput[]
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutDispatch_orderInput | Prisma.documentsCreateOrConnectWithoutDispatch_orderInput[]
+  upsert?: Prisma.documentsUpsertWithWhereUniqueWithoutDispatch_orderInput | Prisma.documentsUpsertWithWhereUniqueWithoutDispatch_orderInput[]
+  createMany?: Prisma.documentsCreateManyDispatch_orderInputEnvelope
+  set?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  disconnect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  delete?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  connect?: Prisma.documentsWhereUniqueInput | Prisma.documentsWhereUniqueInput[]
+  update?: Prisma.documentsUpdateWithWhereUniqueWithoutDispatch_orderInput | Prisma.documentsUpdateWithWhereUniqueWithoutDispatch_orderInput[]
+  updateMany?: Prisma.documentsUpdateManyWithWhereWithoutDispatch_orderInput | Prisma.documentsUpdateManyWithWhereWithoutDispatch_orderInput[]
+  deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
+}
+
 export type documentsCreateNestedOneWithoutMaintenance_servicesInput = {
   create?: Prisma.XOR<Prisma.documentsCreateWithoutMaintenance_servicesInput, Prisma.documentsUncheckedCreateWithoutMaintenance_servicesInput>
   connectOrCreate?: Prisma.documentsCreateOrConnectWithoutMaintenance_servicesInput
@@ -1566,6 +1655,8 @@ export type documentsCreateWithoutDocument_sequencesInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -1610,10 +1701,12 @@ export type documentsUncheckedCreateWithoutDocument_sequencesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -1688,6 +1781,7 @@ export type documentsScalarWhereInput = {
   updated_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   deleted_by?: Prisma.UuidNullableFilter<"documents"> | string | null
   source?: Prisma.StringFilter<"documents"> | string
+  dispatch_order_id?: Prisma.UuidNullableFilter<"documents"> | string | null
 }
 
 export type documentsCreateWithoutDocument_itemsInput = {
@@ -1729,6 +1823,8 @@ export type documentsCreateWithoutDocument_itemsInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -1774,9 +1870,11 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -1841,6 +1939,8 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -1886,9 +1986,11 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -1937,6 +2039,8 @@ export type documentsCreateWithoutDocument_taxesInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -1982,9 +2086,11 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -2049,6 +2155,8 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -2094,9 +2202,11 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -2145,6 +2255,8 @@ export type documentsCreateWithoutDocument_typesInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -2189,10 +2301,12 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -2267,6 +2381,8 @@ export type documentsCreateWithoutChild_documentsInput = {
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -2312,9 +2428,11 @@ export type documentsUncheckedCreateWithoutChild_documentsInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -2368,6 +2486,8 @@ export type documentsCreateWithoutParent_documentInput = {
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -2412,10 +2532,12 @@ export type documentsUncheckedCreateWithoutParent_documentInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -2485,6 +2607,8 @@ export type documentsUpdateWithoutChild_documentsInput = {
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -2530,9 +2654,11 @@ export type documentsUncheckedUpdateWithoutChild_documentsInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -2598,6 +2724,8 @@ export type documentsCreateWithoutPresupuesto_docInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
@@ -2642,10 +2770,12 @@ export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
@@ -2710,6 +2840,8 @@ export type documentsUpdateWithoutPresupuesto_docInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
@@ -2754,10 +2886,12 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
@@ -2806,6 +2940,8 @@ export type documentsCreateWithoutOrden_venta_docInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
@@ -2850,10 +2986,12 @@ export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
@@ -2918,6 +3056,8 @@ export type documentsUpdateWithoutOrden_venta_docInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
@@ -2962,10 +3102,12 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
@@ -3014,6 +3156,8 @@ export type documentsCreateWithoutOrden_compra_docInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
@@ -3058,10 +3202,12 @@ export type documentsUncheckedCreateWithoutOrden_compra_docInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
@@ -3126,6 +3272,8 @@ export type documentsUpdateWithoutOrden_compra_docInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
@@ -3170,10 +3318,12 @@ export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
@@ -3222,6 +3372,8 @@ export type documentsCreateWithoutHr_vale_commission_detailsInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -3266,10 +3418,12 @@ export type documentsUncheckedCreateWithoutHr_vale_commission_detailsInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -3334,6 +3488,8 @@ export type documentsUpdateWithoutHr_vale_commission_detailsInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -3378,10 +3534,12 @@ export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -3430,6 +3588,8 @@ export type documentsCreateWithoutInternational_operation_docsInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -3474,10 +3634,12 @@ export type documentsUncheckedCreateWithoutInternational_operation_docsInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -3542,6 +3704,8 @@ export type documentsUpdateWithoutInternational_operation_docsInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -3586,6 +3750,333 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+}
+
+export type documentsCreateWithoutSource_dispatch_ordersInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
+  parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
+  child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
+}
+
+export type documentsUncheckedCreateWithoutSource_dispatch_ordersInput = {
+  id?: string
+  document_type_id: string
+  document_sequence_id?: string | null
+  party_id?: string | null
+  parent_document_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  dispatch_order_id?: string | null
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+}
+
+export type documentsCreateOrConnectWithoutSource_dispatch_ordersInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutSource_dispatch_ordersInput, Prisma.documentsUncheckedCreateWithoutSource_dispatch_ordersInput>
+}
+
+export type documentsCreateWithoutDispatch_orderInput = {
+  id?: string
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
+  parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
+  child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
+}
+
+export type documentsUncheckedCreateWithoutDispatch_orderInput = {
+  id?: string
+  document_type_id: string
+  document_sequence_id?: string | null
+  party_id?: string | null
+  parent_document_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+}
+
+export type documentsCreateOrConnectWithoutDispatch_orderInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDispatch_orderInput, Prisma.documentsUncheckedCreateWithoutDispatch_orderInput>
+}
+
+export type documentsCreateManyDispatch_orderInputEnvelope = {
+  data: Prisma.documentsCreateManyDispatch_orderInput | Prisma.documentsCreateManyDispatch_orderInput[]
+  skipDuplicates?: boolean
+}
+
+export type documentsUpsertWithoutSource_dispatch_ordersInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutSource_dispatch_ordersInput, Prisma.documentsUncheckedUpdateWithoutSource_dispatch_ordersInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutSource_dispatch_ordersInput, Prisma.documentsUncheckedCreateWithoutSource_dispatch_ordersInput>
+  where?: Prisma.documentsWhereInput
+}
+
+export type documentsUpdateToOneWithWhereWithoutSource_dispatch_ordersInput = {
+  where?: Prisma.documentsWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutSource_dispatch_ordersInput, Prisma.documentsUncheckedUpdateWithoutSource_dispatch_ordersInput>
+}
+
+export type documentsUpdateWithoutSource_dispatch_ordersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
+  parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
+  child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutSource_dispatch_ordersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
@@ -3594,8 +4085,25 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+}
+
+export type documentsUpsertWithWhereUniqueWithoutDispatch_orderInput = {
+  where: Prisma.documentsWhereUniqueInput
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutDispatch_orderInput, Prisma.documentsUncheckedUpdateWithoutDispatch_orderInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutDispatch_orderInput, Prisma.documentsUncheckedCreateWithoutDispatch_orderInput>
+}
+
+export type documentsUpdateWithWhereUniqueWithoutDispatch_orderInput = {
+  where: Prisma.documentsWhereUniqueInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutDispatch_orderInput, Prisma.documentsUncheckedUpdateWithoutDispatch_orderInput>
+}
+
+export type documentsUpdateManyWithWhereWithoutDispatch_orderInput = {
+  where: Prisma.documentsScalarWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutDispatch_orderInput>
 }
 
 export type documentsCreateWithoutMaintenance_servicesInput = {
@@ -3638,6 +4146,8 @@ export type documentsCreateWithoutMaintenance_servicesInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -3682,10 +4192,12 @@ export type documentsUncheckedCreateWithoutMaintenance_servicesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -3750,6 +4262,8 @@ export type documentsUpdateWithoutMaintenance_servicesInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -3794,10 +4308,12 @@ export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -3846,6 +4362,8 @@ export type documentsCreateWithoutPurchase_tiresInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -3890,10 +4408,12 @@ export type documentsUncheckedCreateWithoutPurchase_tiresInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -3958,6 +4478,8 @@ export type documentsUpdateWithoutPurchase_tiresInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -4002,10 +4524,12 @@ export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -4053,6 +4577,8 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -4097,10 +4623,12 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -4175,6 +4703,8 @@ export type documentsCreateWithoutPayment_documentsInput = {
   business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
   parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
   child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
@@ -4220,9 +4750,11 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
   document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
   child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
@@ -4287,6 +4819,8 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -4332,9 +4866,11 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -4379,6 +4915,7 @@ export type documentsCreateManyDocument_sequencesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
 }
 
 export type documentsUpdateWithoutDocument_sequencesInput = {
@@ -4420,6 +4957,8 @@ export type documentsUpdateWithoutDocument_sequencesInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -4464,10 +5003,12 @@ export type documentsUncheckedUpdateWithoutDocument_sequencesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -4512,6 +5053,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_sequencesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type documentsCreateManyDocument_typesInput = {
@@ -4549,6 +5091,7 @@ export type documentsCreateManyDocument_typesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
 }
 
 export type documentsUpdateWithoutDocument_typesInput = {
@@ -4590,6 +5133,8 @@ export type documentsUpdateWithoutDocument_typesInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -4634,10 +5179,12 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -4682,6 +5229,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type documentsCreateManyParent_documentInput = {
@@ -4719,6 +5267,7 @@ export type documentsCreateManyParent_documentInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
 }
 
 export type documentsUpdateWithoutParent_documentInput = {
@@ -4760,6 +5309,8 @@ export type documentsUpdateWithoutParent_documentInput = {
   business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -4804,10 +5355,12 @@ export type documentsUncheckedUpdateWithoutParent_documentInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -4822,6 +5375,183 @@ export type documentsUncheckedUpdateManyWithoutParent_documentInput = {
   document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type documentsCreateManyDispatch_orderInput = {
+  id?: string
+  document_type_id: string
+  document_sequence_id?: string | null
+  party_id?: string | null
+  parent_document_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+}
+
+export type documentsUpdateWithoutDispatch_orderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
+  parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
+  child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutDispatch_orderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+}
+
+export type documentsUncheckedUpdateManyWithoutDispatch_orderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4889,6 +5619,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   source?: string
+  dispatch_order_id?: string | null
 }
 
 export type documentsUpdateWithoutBusiness_partiesInput = {
@@ -4930,6 +5661,8 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
   parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
   child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
@@ -4974,10 +5707,12 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
   document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
   payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
   presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
@@ -5022,6 +5757,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -5034,6 +5770,7 @@ export type DocumentsCountOutputType = {
   document_taxes: number
   payment_documents: number
   child_documents: number
+  source_dispatch_orders: number
   hr_vale_commission_details: number
   international_operation_docs: number
   maintenance_services: number
@@ -5045,6 +5782,7 @@ export type DocumentsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensi
   document_taxes?: boolean | DocumentsCountOutputTypeCountDocument_taxesArgs
   payment_documents?: boolean | DocumentsCountOutputTypeCountPayment_documentsArgs
   child_documents?: boolean | DocumentsCountOutputTypeCountChild_documentsArgs
+  source_dispatch_orders?: boolean | DocumentsCountOutputTypeCountSource_dispatch_ordersArgs
   hr_vale_commission_details?: boolean | DocumentsCountOutputTypeCountHr_vale_commission_detailsArgs
   international_operation_docs?: boolean | DocumentsCountOutputTypeCountInternational_operation_docsArgs
   maintenance_services?: boolean | DocumentsCountOutputTypeCountMaintenance_servicesArgs
@@ -5087,6 +5825,13 @@ export type DocumentsCountOutputTypeCountPayment_documentsArgs<ExtArgs extends r
  */
 export type DocumentsCountOutputTypeCountChild_documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.documentsWhereInput
+}
+
+/**
+ * DocumentsCountOutputType without action
+ */
+export type DocumentsCountOutputTypeCountSource_dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.dispatch_ordersWhereInput
 }
 
 /**
@@ -5154,6 +5899,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updated_by?: boolean
   deleted_by?: boolean
   source?: boolean
+  dispatch_order_id?: boolean
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
@@ -5162,6 +5908,8 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   payment_documents?: boolean | Prisma.documents$payment_documentsArgs<ExtArgs>
   parent_document?: boolean | Prisma.documents$parent_documentArgs<ExtArgs>
   child_documents?: boolean | Prisma.documents$child_documentsArgs<ExtArgs>
+  dispatch_order?: boolean | Prisma.documents$dispatch_orderArgs<ExtArgs>
+  source_dispatch_orders?: boolean | Prisma.documents$source_dispatch_ordersArgs<ExtArgs>
   presupuesto_doc?: boolean | Prisma.documents$presupuesto_docArgs<ExtArgs>
   orden_venta_doc?: boolean | Prisma.documents$orden_venta_docArgs<ExtArgs>
   orden_compra_doc?: boolean | Prisma.documents$orden_compra_docArgs<ExtArgs>
@@ -5208,10 +5956,12 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updated_by?: boolean
   deleted_by?: boolean
   source?: boolean
+  dispatch_order_id?: boolean
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   document_sequences?: boolean | Prisma.documents$document_sequencesArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
   parent_document?: boolean | Prisma.documents$parent_documentArgs<ExtArgs>
+  dispatch_order?: boolean | Prisma.documents$dispatch_orderArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
 export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -5250,10 +6000,12 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updated_by?: boolean
   deleted_by?: boolean
   source?: boolean
+  dispatch_order_id?: boolean
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   document_sequences?: boolean | Prisma.documents$document_sequencesArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
   parent_document?: boolean | Prisma.documents$parent_documentArgs<ExtArgs>
+  dispatch_order?: boolean | Prisma.documents$dispatch_orderArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
 export type documentsSelectScalar = {
@@ -5292,9 +6044,10 @@ export type documentsSelectScalar = {
   updated_by?: boolean
   deleted_by?: boolean
   source?: boolean
+  dispatch_order_id?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -5304,6 +6057,8 @@ export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   payment_documents?: boolean | Prisma.documents$payment_documentsArgs<ExtArgs>
   parent_document?: boolean | Prisma.documents$parent_documentArgs<ExtArgs>
   child_documents?: boolean | Prisma.documents$child_documentsArgs<ExtArgs>
+  dispatch_order?: boolean | Prisma.documents$dispatch_orderArgs<ExtArgs>
+  source_dispatch_orders?: boolean | Prisma.documents$source_dispatch_ordersArgs<ExtArgs>
   presupuesto_doc?: boolean | Prisma.documents$presupuesto_docArgs<ExtArgs>
   orden_venta_doc?: boolean | Prisma.documents$orden_venta_docArgs<ExtArgs>
   orden_compra_doc?: boolean | Prisma.documents$orden_compra_docArgs<ExtArgs>
@@ -5318,12 +6073,14 @@ export type documentsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   document_sequences?: boolean | Prisma.documents$document_sequencesArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
   parent_document?: boolean | Prisma.documents$parent_documentArgs<ExtArgs>
+  dispatch_order?: boolean | Prisma.documents$dispatch_orderArgs<ExtArgs>
 }
 export type documentsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_types?: boolean | Prisma.document_typesDefaultArgs<ExtArgs>
   document_sequences?: boolean | Prisma.documents$document_sequencesArgs<ExtArgs>
   business_parties?: boolean | Prisma.documents$business_partiesArgs<ExtArgs>
   parent_document?: boolean | Prisma.documents$parent_documentArgs<ExtArgs>
+  dispatch_order?: boolean | Prisma.documents$dispatch_orderArgs<ExtArgs>
 }
 
 export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5337,6 +6094,8 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     payment_documents: Prisma.$payment_documentsPayload<ExtArgs>[]
     parent_document: Prisma.$documentsPayload<ExtArgs> | null
     child_documents: Prisma.$documentsPayload<ExtArgs>[]
+    dispatch_order: Prisma.$dispatch_ordersPayload<ExtArgs> | null
+    source_dispatch_orders: Prisma.$dispatch_ordersPayload<ExtArgs>[]
     presupuesto_doc: Prisma.$presupuesto_documentsPayload<ExtArgs> | null
     orden_venta_doc: Prisma.$orden_venta_documentsPayload<ExtArgs> | null
     orden_compra_doc: Prisma.$orden_compra_documentsPayload<ExtArgs> | null
@@ -5381,6 +6140,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     updated_by: string | null
     deleted_by: string | null
     source: string
+    dispatch_order_id: string | null
   }, ExtArgs["result"]["documents"]>
   composites: {}
 }
@@ -5783,6 +6543,8 @@ export interface Prisma__documentsClient<T, Null = never, ExtArgs extends runtim
   payment_documents<T extends Prisma.documents$payment_documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$payment_documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$payment_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   parent_document<T extends Prisma.documents$parent_documentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$parent_documentArgs<ExtArgs>>): Prisma.Prisma__documentsClient<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   child_documents<T extends Prisma.documents$child_documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$child_documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispatch_order<T extends Prisma.documents$dispatch_orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$dispatch_orderArgs<ExtArgs>>): Prisma.Prisma__dispatch_ordersClient<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  source_dispatch_orders<T extends Prisma.documents$source_dispatch_ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$source_dispatch_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dispatch_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   presupuesto_doc<T extends Prisma.documents$presupuesto_docArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$presupuesto_docArgs<ExtArgs>>): Prisma.Prisma__presupuesto_documentsClient<runtime.Types.Result.GetResult<Prisma.$presupuesto_documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   orden_venta_doc<T extends Prisma.documents$orden_venta_docArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$orden_venta_docArgs<ExtArgs>>): Prisma.Prisma__orden_venta_documentsClient<runtime.Types.Result.GetResult<Prisma.$orden_venta_documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   orden_compra_doc<T extends Prisma.documents$orden_compra_docArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$orden_compra_docArgs<ExtArgs>>): Prisma.Prisma__orden_compra_documentsClient<runtime.Types.Result.GetResult<Prisma.$orden_compra_documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -5854,6 +6616,7 @@ export interface documentsFieldRefs {
   readonly updated_by: Prisma.FieldRef<"documents", 'String'>
   readonly deleted_by: Prisma.FieldRef<"documents", 'String'>
   readonly source: Prisma.FieldRef<"documents", 'String'>
+  readonly dispatch_order_id: Prisma.FieldRef<"documents", 'String'>
 }
     
 
@@ -6405,6 +7168,49 @@ export type documents$child_documentsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.DocumentsScalarFieldEnum | Prisma.DocumentsScalarFieldEnum[]
+}
+
+/**
+ * documents.dispatch_order
+ */
+export type documents$dispatch_orderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
+}
+
+/**
+ * documents.source_dispatch_orders
+ */
+export type documents$source_dispatch_ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the dispatch_orders
+   */
+  select?: Prisma.dispatch_ordersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the dispatch_orders
+   */
+  omit?: Prisma.dispatch_ordersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.dispatch_ordersInclude<ExtArgs> | null
+  where?: Prisma.dispatch_ordersWhereInput
+  orderBy?: Prisma.dispatch_ordersOrderByWithRelationInput | Prisma.dispatch_ordersOrderByWithRelationInput[]
+  cursor?: Prisma.dispatch_ordersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Dispatch_ordersScalarFieldEnum | Prisma.Dispatch_ordersScalarFieldEnum[]
 }
 
 /**

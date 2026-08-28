@@ -82,6 +82,30 @@ export class ReporteChoferesService {
 
     // ── Query principal ────────────────────────────────────────────────
     const mainQuery = `
+      WITH product_amounts AS (
+        SELECT
+          doi.dispatch_order_id AS dispatch_id,
+          (array_agg(doi.id ORDER BY doi.created_at))[1] AS id,
+          SUM(doi.quantity * doi.unit_price)::numeric AS value
+        FROM dispatch_order_items doi
+        GROUP BY doi.dispatch_order_id
+      ),
+      legacy_amounts AS (
+        SELECT
+          dr.dispatch_id,
+          (array_agg(dr.id ORDER BY dr.created_at))[1] AS id,
+          SUM(dr.value)::numeric AS value
+        FROM dispatch_rates dr
+        WHERE NOT EXISTS (
+          SELECT 1 FROM dispatch_order_items doi WHERE doi.dispatch_order_id = dr.dispatch_id
+        )
+        GROUP BY dr.dispatch_id
+      ),
+      effective_rates AS (
+        SELECT * FROM product_amounts
+        UNION ALL
+        SELECT * FROM legacy_amounts
+      )
       SELECT
         dr.id,
         td.driver_id                                                     AS "choferId",
@@ -136,7 +160,7 @@ export class ReporteChoferesService {
         ) * 0.15, 2)) OVER (
           PARTITION BY td.driver_id, date_trunc('month', d.planned_date)
         )                                                               AS "totalMesChofer"
-      FROM dispatch_rates dr
+      FROM effective_rates dr
         JOIN dispatch_orders d        ON d.id = dr.dispatch_id
         JOIN business_parties bp      ON bp.id = d.customer_id
         JOIN locations l              ON l.id = d.origin_location_id
@@ -177,8 +201,26 @@ export class ReporteChoferesService {
 
     // ── Count ───────────────────────────────────────────────────────────
     const countQuery = `
+      WITH product_amounts AS (
+        SELECT doi.dispatch_order_id AS dispatch_id
+        FROM dispatch_order_items doi
+        GROUP BY doi.dispatch_order_id
+      ),
+      legacy_amounts AS (
+        SELECT dr.dispatch_id
+        FROM dispatch_rates dr
+        WHERE NOT EXISTS (
+          SELECT 1 FROM dispatch_order_items doi WHERE doi.dispatch_order_id = dr.dispatch_id
+        )
+        GROUP BY dr.dispatch_id
+      ),
+      effective_rates AS (
+        SELECT * FROM product_amounts
+        UNION ALL
+        SELECT * FROM legacy_amounts
+      )
       SELECT COUNT(*) AS count
-      FROM dispatch_rates dr
+      FROM effective_rates dr
         JOIN dispatch_orders d        ON d.id = dr.dispatch_id
         JOIN business_parties bp      ON bp.id = d.customer_id
         JOIN locations l              ON l.id = d.origin_location_id

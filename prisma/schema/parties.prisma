@@ -29,6 +29,8 @@ model business_parties {
   hr_accounts         hr_accounts[]
   hr_vales            hr_vales[]
   product_suppliers   product_suppliers[]
+  product_party_prices product_party_prices[]
+  product_party_price_history product_party_price_history[]
   international_operations international_operations[]
   maintenance_orders_as_supplier maintenance_orders[]
   maintenance_services_as_supplier maintenance_services[]

@@ -191,6 +191,7 @@ model documents {
   updated_by                 String?                      @db.Uuid
   deleted_by                 String?                      @db.Uuid
   source                     String                       @default("manual")
+  dispatch_order_id          String?                      @db.Uuid
   document_items             document_items[]
   document_taxes             document_taxes[]
   document_types             document_types               @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -199,6 +200,8 @@ model documents {
   payment_documents          payment_documents[]
   parent_document            documents?                   @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   child_documents            documents[]                  @relation("DocumentChain")
+  dispatch_order             dispatch_orders?             @relation("DispatchDocuments", fields: [dispatch_order_id], references: [id], onDelete: SetNull)
+  source_dispatch_orders     dispatch_orders[]             @relation("DispatchSourceDocument")
   presupuesto_doc            presupuesto_documents?
   orden_venta_doc            orden_venta_documents?
   orden_compra_doc           orden_compra_documents?

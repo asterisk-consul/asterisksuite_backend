@@ -20,6 +20,7 @@ import { TaxCalculationService } from '../tax-engine/services/tax-calculation.se
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
+import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -54,6 +55,8 @@ export class DocumentsSalesService {
     private readonly conversionService: CurrencyConversionService,
 
     private readonly fiscalValidation: FiscalValidationService,
+
+    private readonly productPartyPricing: ProductPartyPricingService,
   ) {}
 
   private get prisma() {
@@ -1463,6 +1466,10 @@ export class DocumentsSalesService {
         );
       }
 
+      // El precio confirmado pasa a ser el precio vigente de este producto
+      // para este cliente, sin modificar la lista general ni otros clientes.
+      await this.productPartyPricing.captureDocumentPrices(tx, doc, 'SALE', userId);
+
       return tx.documents.findUnique({
         where: { id },
       include: {
@@ -1679,8 +1686,8 @@ export class DocumentsSalesService {
   async deliver(id: string, userId: string) {
     const doc = await this.findOne(id);
 
-    if (doc.status !== STATUS_CONFIRMED) {
-      throw new BadRequestException('La orden debe estar confirmada para despachar');
+    if (doc.status !== STATUS_CONFIRMED && doc.status !== STATUS_PENDING) {
+      throw new BadRequestException('La orden debe estar aprobada o confirmada para crear un remito');
     }
 
     // Buscar tipo de documento REMITO con la misma dirección
@@ -1966,6 +1973,103 @@ export class DocumentsSalesService {
   }
 
   // ─────────────────────────────────────────────
+  // DISPATCH FLOW (OV → Dispatch → Remito)
+  // ─────────────────────────────────────────────
+  async createDispatchFromDocument(id: string, userId: string) {
+    const doc = await this.findOne(id);
+    if (doc.document_types?.category !== 'ORDER') {
+      throw new BadRequestException('La Orden de Despacho solo puede generarse desde una Orden de Venta');
+    }
+    const existing = await this.prisma.dispatch_orders.findFirst({
+      where: { source_document_id: id, deleted_at: null },
+    });
+    if (existing) return this.prisma.dispatch_orders.findUnique({
+      where: { id: existing.id },
+      include: { customers: true, dispatch_items: { include: { product: true } }, dispatch_rates: true },
+    });
+
+    return this.prisma.dispatch_orders.create({
+      data: {
+        order_number: `OD-${doc.number}-${Date.now().toString().slice(-6)}`,
+        status: 'PENDING',
+        customer_id: doc.party_id,
+        source_document_id: doc.id,
+        created_by: userId,
+        dispatch_items: {
+          create: doc.document_items.map(item => ({
+            product_id: item.product_id,
+            source_document_item_id: item.id,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+            currency_code: item.currency_code ?? doc.currency_code,
+          })),
+        },
+      },
+      include: { customers: true, dispatch_items: { include: { product: true } }, dispatch_rates: true },
+    });
+  }
+
+  async createRemitoFromDispatch(dispatchId: string, userId: string) {
+    const dispatch = await this.prisma.dispatch_orders.findUnique({
+      where: { id: dispatchId },
+      include: { dispatch_items: true, source_document: true },
+    });
+    if (!dispatch) throw new NotFoundException('Orden de Despacho no encontrada');
+
+    const existing = await this.prisma.documents.findFirst({
+      where: { dispatch_order_id: dispatchId, document_types: { category: 'REMITO' }, deleted_at: null },
+    });
+    if (existing) return this.findOne(existing.id);
+
+    const remitoType = await this.prisma.document_types.findFirst({
+      where: { category: 'REMITO', direction: 1, active: true },
+      include: { document_sequences: true },
+    });
+    if (!remitoType) throw new NotFoundException('No hay un tipo de Remito de venta configurado');
+    if (!dispatch.dispatch_items.length) throw new BadRequestException('La Orden de Despacho no tiene productos');
+
+    let createdId = '';
+    await this.prisma.$transaction(async tx => {
+      const sequenceId = await this.resolveSequence(remitoType.id, null, remitoType.document_sequences?.id ?? null, tx);
+      const number = await this.getNextNumber(remitoType.id, sequenceId, tx);
+      const subtotal = dispatch.dispatch_items.reduce((sum, item) => sum + Number(item.quantity) * Number(item.unit_price), 0);
+      const created = await tx.documents.create({
+        data: {
+          document_type_id: remitoType.id,
+          document_sequence_id: sequenceId,
+          party_id: dispatch.customer_id,
+          parent_document_id: dispatch.source_document_id,
+          dispatch_order_id: dispatch.id,
+          number,
+          date: new Date(),
+          status: STATUS_DRAFT,
+          currency_code: dispatch.dispatch_items[0]?.currency_code ?? 'ARS',
+          subtotal,
+          taxable_base: subtotal,
+          total: subtotal,
+          ref: dispatch.order_number.substring(0, 50),
+          descrip: 'Remito generado desde Orden de Despacho',
+          created_by: userId,
+        },
+      });
+      createdId = created.id;
+      await tx.document_items.createMany({
+        data: dispatch.dispatch_items.map(item => ({
+          document_id: created.id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          unit_price: item.unit_price,
+          original_unit_price: item.unit_price,
+          currency_code: item.currency_code,
+          exchange_rate: 1,
+          price: Number(item.quantity) * Number(item.unit_price),
+        })),
+      });
+    });
+    return this.findOne(createdId);
+  }
+
+  // ─────────────────────────────────────────────
   // CHANGE STATUS (con validación de transiciones)
   // ─────────────────────────────────────────────
   async changeStatus(id: string, newStatus: number, userId: string) {
@@ -1986,6 +2090,39 @@ export class DocumentsSalesService {
       where: { id },
       data: { status: newStatus, updated_at: new Date() },
     });
+
+    // El remito entregado es el evento operativo que cierra despacho/viaje
+    // y deja preparada la factura comercial.
+    if (category === 'REMITO' && newStatus === 2) {
+      if (doc.dispatch_order_id) {
+        await this.prisma.$transaction(async tx => {
+          await tx.dispatch_orders.update({
+            where: { id: doc.dispatch_order_id! },
+            data: { status: 'COMPLETED', confirmed_at: new Date(), updated_at: new Date() },
+          });
+          const tripIds = await tx.trip_stop_orders.findMany({
+            where: { dispatch_order_id: doc.dispatch_order_id! },
+            select: { trip_stop: { select: { trip_id: true } } },
+          });
+          for (const row of tripIds) {
+            const remaining = await tx.trip_stop_orders.count({
+              where: {
+                trip_stop: { trip_id: row.trip_stop.trip_id },
+                dispatch_order: { status: { notIn: ['COMPLETED', 'CANCELLED'] } },
+              },
+            });
+            if (remaining === 0) {
+              await tx.trips.update({ where: { id: row.trip_stop.trip_id }, data: { status: 'COMPLETED', updated_at: new Date() } });
+            }
+          }
+        });
+      }
+
+      const hasInvoice = doc.child_documents.some(child => child.document_types?.category === 'INVOICE' && child.status !== STATUS_CANCELLED);
+      if (!hasInvoice && doc.document_items.length) {
+        await this.partialInvoice(id, doc.document_items.map(item => ({ document_item_id: item.id, quantity: Number(item.quantity) })), userId);
+      }
+    }
 
     return this.findOne(id);
   }

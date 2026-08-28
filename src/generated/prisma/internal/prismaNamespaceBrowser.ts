@@ -98,6 +98,7 @@ export const ModelName = {
   trip_cargo: 'trip_cargo',
   trip_temperature_logs: 'trip_temperature_logs',
   dispatch_orders: 'dispatch_orders',
+  dispatch_order_items: 'dispatch_order_items',
   trips: 'trips',
   trip_stops: 'trip_stops',
   trip_stop_orders: 'trip_stop_orders',
@@ -145,6 +146,8 @@ export const ModelName = {
   product_variant_prices: 'product_variant_prices',
   product_variant_costs: 'product_variant_costs',
   product_suppliers: 'product_suppliers',
+  product_party_prices: 'product_party_prices',
+  product_party_price_history: 'product_party_price_history',
   price_lists: 'price_lists',
   product_list_prices: 'product_list_prices',
   companies: 'companies',
@@ -570,7 +573,8 @@ export const DocumentsScalarFieldEnum = {
   created_by: 'created_by',
   updated_by: 'updated_by',
   deleted_by: 'deleted_by',
-  source: 'source'
+  source: 'source',
+  dispatch_order_id: 'dispatch_order_id'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
@@ -1066,6 +1070,7 @@ export const Dispatch_ordersScalarFieldEnum = {
   origin_location_id: 'origin_location_id',
   destination_location_id: 'destination_location_id',
   corridor_id: 'corridor_id',
+  source_document_id: 'source_document_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -1075,6 +1080,20 @@ export const Dispatch_ordersScalarFieldEnum = {
 } as const
 
 export type Dispatch_ordersScalarFieldEnum = (typeof Dispatch_ordersScalarFieldEnum)[keyof typeof Dispatch_ordersScalarFieldEnum]
+
+
+export const Dispatch_order_itemsScalarFieldEnum = {
+  id: 'id',
+  dispatch_order_id: 'dispatch_order_id',
+  product_id: 'product_id',
+  source_document_item_id: 'source_document_item_id',
+  quantity: 'quantity',
+  unit_price: 'unit_price',
+  currency_code: 'currency_code',
+  created_at: 'created_at'
+} as const
+
+export type Dispatch_order_itemsScalarFieldEnum = (typeof Dispatch_order_itemsScalarFieldEnum)[keyof typeof Dispatch_order_itemsScalarFieldEnum]
 
 
 export const TripsScalarFieldEnum = {
@@ -2023,6 +2042,46 @@ export const Product_suppliersScalarFieldEnum = {
 } as const
 
 export type Product_suppliersScalarFieldEnum = (typeof Product_suppliersScalarFieldEnum)[keyof typeof Product_suppliersScalarFieldEnum]
+
+
+export const Product_party_pricesScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  party_id: 'party_id',
+  currency_id: 'currency_id',
+  operation_type: 'operation_type',
+  price: 'price',
+  active: 'active',
+  effective_from: 'effective_from',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Product_party_pricesScalarFieldEnum = (typeof Product_party_pricesScalarFieldEnum)[keyof typeof Product_party_pricesScalarFieldEnum]
+
+
+export const Product_party_price_historyScalarFieldEnum = {
+  id: 'id',
+  product_party_price_id: 'product_party_price_id',
+  product_id: 'product_id',
+  party_id: 'party_id',
+  currency_id: 'currency_id',
+  operation_type: 'operation_type',
+  previous_price: 'previous_price',
+  new_price: 'new_price',
+  effective_at: 'effective_at',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  document_item_id: 'document_item_id',
+  created_by: 'created_by',
+  created_at: 'created_at'
+} as const
+
+export type Product_party_price_historyScalarFieldEnum = (typeof Product_party_price_historyScalarFieldEnum)[keyof typeof Product_party_price_historyScalarFieldEnum]
 
 
 export const Price_listsScalarFieldEnum = {

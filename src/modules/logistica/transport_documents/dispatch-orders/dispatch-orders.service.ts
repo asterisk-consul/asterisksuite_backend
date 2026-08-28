@@ -16,6 +16,18 @@ export class DispatchOrdersService {
     return this.db.getClientForCurrentContext();
   }
 
+  private withEffectiveTariff<T extends { dispatch_items?: any[]; dispatch_rates?: any[] }>(order: T) {
+    const usesProducts = Boolean(order.dispatch_items?.length);
+    const tariffTotal = usesProducts
+      ? order.dispatch_items!.reduce((sum, item) => sum + Number(item.quantity) * Number(item.unit_price), 0)
+      : (order.dispatch_rates ?? []).reduce((sum, rate) => sum + Number(rate.value), 0);
+    return {
+      ...order,
+      tariff_total: tariffTotal,
+      tariff_source: usesProducts ? 'PRODUCTS' : 'LEGACY_RATES',
+    };
+  }
+
   async create(dto: CreateDispatchOrderDto, userId: string) {
     const order = await this.prisma.dispatch_orders.create({
       data: {
@@ -36,9 +48,23 @@ export class DispatchOrdersService {
               })),
             }
           : undefined,
+        dispatch_items: dto.items?.length
+          ? {
+              create: dto.items.map((item) => ({
+                product_id: item.product_id,
+                source_document_item_id: item.source_document_item_id,
+                quantity: item.quantity,
+                unit_price: item.unit_price,
+                currency_code: item.currency_code,
+              })),
+            }
+          : undefined,
       },
       include: {
         customers: true,
+        source_document: { include: { document_types: true } },
+        documents: { include: { document_types: true } },
+        dispatch_items: { include: { product: true } },
         origin_location: true,
         destination_location: true,
         corridors: true,
@@ -56,10 +82,13 @@ export class DispatchOrdersService {
   }
 
   async findAll() {
-    return this.prisma.dispatch_orders.findMany({
+    const orders = await this.prisma.dispatch_orders.findMany({
       orderBy: { created_at: 'desc' },
       include: {
         customers: true,
+        source_document: { include: { document_types: true } },
+        documents: { include: { document_types: true } },
+        dispatch_items: { include: { product: true } },
         origin_location: true,
         destination_location: true,
         tripStopOrders: {
@@ -69,6 +98,7 @@ export class DispatchOrdersService {
         corridors: true,
       },
     });
+    return orders.map(order => this.withEffectiveTariff(order));
   }
 
   async findOne(id: string) {
@@ -76,6 +106,9 @@ export class DispatchOrdersService {
       where: { id },
       include: {
         customers: true,
+        source_document: { include: { document_types: true } },
+        documents: { include: { document_types: true } },
+        dispatch_items: { include: { product: true } },
         origin_location: true,
         destination_location: true,
         tripStopOrders: {
@@ -86,11 +119,11 @@ export class DispatchOrdersService {
       },
     });
     if (!order) throw new NotFoundException('Dispatch order not found');
-    return order;
+    return this.withEffectiveTariff(order);
   }
 
   async update(id: string, dto: UpdateDispatchOrderDto) {
-    const { rates, ...rest } = dto;
+    const { rates, items, ...rest } = dto;
 
     const data = buildPrismaUpdate(rest);
 
@@ -100,6 +133,20 @@ export class DispatchOrdersService {
         create: rates.map((r) => ({
           rate_id: r.rate_id,
           value: r.value,
+        })),
+      };
+    }
+
+
+    if (items) {
+      data.dispatch_items = {
+        deleteMany: {},
+        create: items.map((item) => ({
+          product_id: item.product_id,
+          source_document_item_id: item.source_document_item_id,
+          quantity: item.quantity,
+          unit_price: item.unit_price,
+          currency_code: item.currency_code,
         })),
       };
     }

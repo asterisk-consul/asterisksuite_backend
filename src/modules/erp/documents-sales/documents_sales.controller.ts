@@ -53,6 +53,18 @@ export class DocumentsSalesController {
     return this.service.create(dto, user.id);
   }
 
+  @Post(':id/create-dispatch')
+  @RequirePermissions('dispatch_orders.create')
+  createDispatch(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.service.createDispatchFromDocument(id, user.id);
+  }
+
+  @Post('dispatch/:dispatchId/create-remito')
+  @RequirePermissions('documents.create')
+  createRemitoFromDispatch(@Param('dispatchId') dispatchId: string, @CurrentUser() user: AuthUser) {
+    return this.service.createRemitoFromDispatch(dispatchId, user.id);
+  }
+
   @Get()
   @RequirePermissions('documents.read')
   findAll(

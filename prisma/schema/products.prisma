@@ -71,8 +71,11 @@ model products {
   expense_account           accounts?                    @relation("product_expense_account", fields: [expense_account_id], references: [id])
   inventory_account         accounts?                    @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
   document_items            document_items[]
+  dispatch_order_items      dispatch_order_items[]
   pallet_items              pallet_items[]
   picking_items             picking_items[]
+  product_party_prices      product_party_prices[]
+  product_party_price_history product_party_price_history[]
   product_price             product_price[]
   product_taxes             product_taxes[]
   tax_category              tax_categories?              @relation(fields: [tax_category_id], references: [id])
@@ -351,6 +354,57 @@ model product_suppliers {
   @@index([product_id])
   @@index([supplier_id])
   @@index([currency_id])
+  @@schema("tenant")
+}
+
+model product_party_prices {
+  id                   String    @id @default(uuid()) @db.Uuid
+  product_id           String    @db.Uuid
+  party_id             String    @db.Uuid
+  currency_id          String    @db.Uuid
+  operation_type       String    @db.VarChar(10) // SALE | PURCHASE
+  price                Decimal   @db.Decimal(15, 2)
+  active               Boolean   @default(true)
+  effective_from       DateTime  @default(now()) @db.Timestamp(6)
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+  updated_at           DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?   @db.Uuid
+  updated_by           String?   @db.Uuid
+  deleted_by           String?   @db.Uuid
+  products             products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  business_parties     business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade)
+  currencies           currencies @relation(fields: [currency_id], references: [id])
+  history              product_party_price_history[]
+
+  @@unique([product_id, party_id, operation_type, currency_id])
+  @@index([party_id, operation_type])
+  @@index([product_id, operation_type])
+  @@schema("tenant")
+}
+
+model product_party_price_history {
+  id                     String    @id @default(uuid()) @db.Uuid
+  product_party_price_id String    @db.Uuid
+  product_id             String    @db.Uuid
+  party_id               String    @db.Uuid
+  currency_id            String    @db.Uuid
+  operation_type         String    @db.VarChar(10)
+  previous_price         Decimal?  @db.Decimal(15, 2)
+  new_price              Decimal   @db.Decimal(15, 2)
+  effective_at           DateTime  @default(now()) @db.Timestamp(6)
+  source_type            String    @db.VarChar(30)
+  source_id              String?   @db.Uuid
+  document_item_id       String?   @db.Uuid
+  created_by             String?   @db.Uuid
+  created_at             DateTime  @default(now()) @db.Timestamp(6)
+  party_price            product_party_prices @relation(fields: [product_party_price_id], references: [id], onDelete: Cascade)
+  products               products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  business_parties       business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade)
+  currencies             currencies @relation(fields: [currency_id], references: [id])
+
+  @@index([party_id, product_id, operation_type, effective_at])
+  @@index([source_id])
   @@schema("tenant")
 }
 
