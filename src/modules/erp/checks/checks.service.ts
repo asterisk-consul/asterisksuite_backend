@@ -23,6 +23,7 @@ export class ChecksService {
         issuer_name: dto.issuer_name,
         issuer_id: dto.issuer_id,
         amount: dto.amount,
+        available_amount: dto.amount,
         currency_code: dto.currency_code,
         issue_date: new Date(dto.issue_date),
         due_date: new Date(dto.due_date),
@@ -36,13 +37,24 @@ export class ChecksService {
   }
 
   async findAvailable(isOwn?: boolean) {
+    const where: Record<string, any> = {
+      deleted_at: null,
+      status: 'PENDING',
+      // Con aplicación parcial: disponible si nunca se usó (null) o le queda saldo
+      AND: [
+        {
+          OR: [
+            { available_amount: null },
+            { available_amount: { gt: 0 } },
+          ],
+        },
+      ],
+    };
+    // Sin isOwn → devolver propios y de terceros
+    if (isOwn !== undefined) where.is_own = isOwn;
+
     return this.prisma.checks.findMany({
-      where: {
-        deleted_at: null,
-        payment_id: null,
-        is_own: isOwn ?? false,
-        status: 'PENDING',
-      },
+      where,
       orderBy: { due_date: 'asc' },
       include: {
         bank_account: {
@@ -112,18 +124,44 @@ export class ChecksService {
       updated_by: userId,
     };
 
-    if (dto.bank_name) data.bank_name = dto.bank_name;
+    if (dto.check_number !== undefined) data.check_number = dto.check_number;
+    if (dto.issue_date !== undefined) data.issue_date = new Date(dto.issue_date);
+    if (dto.currency_code !== undefined) data.currency_code = dto.currency_code;
+    if (dto.bank_name !== undefined && dto.bank_name !== '') data.bank_name = dto.bank_name;
     if (dto.bank_account_id !== undefined) data.bank_account_id = dto.bank_account_id;
-    if (dto.bank_branch) data.bank_branch = dto.bank_branch;
-    if (dto.account_number) data.account_number = dto.account_number;
-    if (dto.issuer_name) data.issuer_name = dto.issuer_name;
-    if (dto.issuer_id) data.issuer_id = dto.issuer_id;
+    if (dto.bank_branch !== undefined) data.bank_branch = dto.bank_branch;
+    if (dto.account_number !== undefined) data.account_number = dto.account_number;
+    if (dto.issuer_name !== undefined && dto.issuer_name !== '') data.issuer_name = dto.issuer_name;
+    if (dto.issuer_id !== undefined) data.issuer_id = dto.issuer_id;
     if (dto.due_date) data.due_date = new Date(dto.due_date);
     if (dto.status) data.status = dto.status;
-    if (dto.notes) data.notes = dto.notes;
+    if (dto.notes !== undefined) data.notes = dto.notes;
     if (dto.payment_date) data.payment_date = new Date(dto.payment_date);
     if (dto.deposit_date) data.deposit_date = new Date(dto.deposit_date);
     if (dto.clearing_date) data.clearing_date = new Date(dto.clearing_date);
+
+    // Cambio de monto: ajustar el saldo disponible coherentemente
+    if (dto.amount !== undefined && Number(dto.amount) !== Number(check.amount)) {
+      const appliedTotal = await this.prisma.payment_checks.aggregate({
+        where: { check_id: id },
+        _sum: { amount_applied: true },
+      });
+      const applied = appliedTotal._sum.amount_applied?.toNumber() ?? 0;
+      const newAmount = Number(dto.amount);
+      if (newAmount < applied) {
+        throw new BadRequestException(
+          `El cheque tiene ${applied.toFixed(2)} aplicado(s) en pagos; el nuevo monto no puede ser menor`,
+        );
+      }
+      data.amount = newAmount;
+      if (check.available_amount == null) {
+        // Nunca usado: el disponible pasa a ser el nuevo monto
+        data.available_amount = newAmount;
+      } else {
+        // Parcialmente usado: ajustar por la diferencia
+        data.available_amount = Number((Number(check.available_amount) + (newAmount - Number(check.amount))).toFixed(2));
+      }
+    }
 
     await this.prisma.checks.update({
       where: { id },

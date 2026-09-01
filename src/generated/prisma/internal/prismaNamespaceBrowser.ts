@@ -187,6 +187,7 @@ export const ModelName = {
   payments: 'payments',
   payment_documents: 'payment_documents',
   checks: 'checks',
+  payment_checks: 'payment_checks',
   credit_cards: 'credit_cards',
   credit_card_transactions: 'credit_card_transactions',
   credit_card_installments: 'credit_card_installments',
@@ -2792,6 +2793,7 @@ export const PaymentsScalarFieldEnum = {
   reference: 'reference',
   bank_account_id: 'bank_account_id',
   cash_box_id: 'cash_box_id',
+  account_id: 'account_id',
   status: 'status',
   payment_mode: 'payment_mode',
   confirmed_at: 'confirmed_at',
@@ -2835,6 +2837,7 @@ export const ChecksScalarFieldEnum = {
   issuer_name: 'issuer_name',
   issuer_id: 'issuer_id',
   amount: 'amount',
+  available_amount: 'available_amount',
   currency_code: 'currency_code',
   exchange_rate: 'exchange_rate',
   rate_type: 'rate_type',
@@ -2859,6 +2862,17 @@ export const ChecksScalarFieldEnum = {
 } as const
 
 export type ChecksScalarFieldEnum = (typeof ChecksScalarFieldEnum)[keyof typeof ChecksScalarFieldEnum]
+
+
+export const Payment_checksScalarFieldEnum = {
+  payment_id: 'payment_id',
+  check_id: 'check_id',
+  amount_applied: 'amount_applied',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Payment_checksScalarFieldEnum = (typeof Payment_checksScalarFieldEnum)[keyof typeof Payment_checksScalarFieldEnum]
 
 
 export const Credit_cardsScalarFieldEnum = {

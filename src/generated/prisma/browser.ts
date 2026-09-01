@@ -698,6 +698,11 @@ export type payment_documents = Prisma.payment_documentsModel
  */
 export type checks = Prisma.checksModel
 /**
+ * Model payment_checks
+ * 
+ */
+export type payment_checks = Prisma.payment_checksModel
+/**
  * Model credit_cards
  * 
  */

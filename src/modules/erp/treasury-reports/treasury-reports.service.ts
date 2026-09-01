@@ -441,4 +441,119 @@ export class TreasuryReportsService {
       parties: Object.values(byPartyAndMonth).sort((a, b) => b.total - a.total),
     };
   }
+
+  /**
+   * Reporte de gastos por cuenta contable.
+   * Agrupa pagos confirmados (CONFIRMED/PAID) por la cuenta contable asignada (account_id).
+   * Los montos se expresan en moneda base usando converted_amount cuando existe.
+   */
+  async expensesByAccount(filters?: { date_from?: string; date_to?: string; account_id?: string; type?: string }) {
+    const where: any = {
+      deleted_at: null,
+      status: { in: ['CONFIRMED', 'PAID'] },
+    };
+
+    if (filters?.date_from || filters?.date_to) {
+      where.date = {};
+      if (filters.date_from) where.date.gte = new Date(filters.date_from);
+      if (filters.date_to) where.date.lte = new Date(filters.date_to);
+    }
+
+    if (filters?.account_id) {
+      where.account_id = filters.account_id;
+    }
+
+    if (filters?.type) {
+      where.type = filters.type;
+    }
+
+    const payments = await this.prisma.payments.findMany({
+      where,
+      include: {
+        account: { select: { id: true, code: true, name: true, account_type: true } },
+        party: { select: { id: true, name: true } },
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    const byAccount: Record<string, {
+      account_id: string;
+      code: string;
+      name: string;
+      account_type: string;
+      count: number;
+      total_base: number;
+      by_currency: Record<string, number>;
+      payments: Array<{
+        id: string;
+        number: number;
+        date: Date;
+        party_name: string | null;
+        payment_method: string;
+        amount: number;
+        currency_code: string;
+        converted_amount: number | null;
+      }>;
+    }> = {};
+
+    const unassigned: typeof byAccount[string]['payments'] = [];
+
+    for (const p of payments) {
+      const base = Number(p.converted_amount ?? p.amount) || 0;
+      const item = {
+        id: p.id,
+        number: p.number,
+        date: p.date,
+        party_name: p.party?.name ?? null,
+        payment_method: p.payment_method,
+        amount: Number(p.amount),
+        currency_code: p.currency_code,
+        converted_amount: p.converted_amount ? Number(p.converted_amount) : null,
+      };
+
+      if (!p.account_id || !p.account) {
+        unassigned.push(item);
+        continue;
+      }
+
+      if (!byAccount[p.account_id]) {
+        byAccount[p.account_id] = {
+          account_id: p.account_id,
+          code: p.account.code,
+          name: p.account.name,
+          account_type: p.account.account_type,
+          count: 0,
+          total_base: 0,
+          by_currency: {},
+          payments: [],
+        };
+      }
+
+      byAccount[p.account_id].count += 1;
+      byAccount[p.account_id].total_base += base;
+      byAccount[p.account_id].by_currency[p.currency_code] =
+        (byAccount[p.account_id].by_currency[p.currency_code] ?? 0) + Number(p.amount);
+      byAccount[p.account_id].payments.push(item);
+    }
+
+    const accounts = Object.values(byAccount)
+      .map(a => ({ ...a, payments: a.payments.sort((x, y) => y.date.getTime() - x.date.getTime()) }))
+      .sort((a, b) => b.total_base - a.total_base);
+
+    const totalBase = accounts.reduce((s, a) => s + a.total_base, 0);
+
+    return {
+      accounts,
+      unassigned: {
+        count: unassigned.length,
+        total_base: unassigned.reduce((s, p) => s + (p.converted_amount ?? p.amount), 0),
+        payments: unassigned,
+      },
+      total_base: totalBase,
+      period: {
+        date_from: filters?.date_from ?? null,
+        date_to: filters?.date_to ?? null,
+      },
+    };
+  }
 }

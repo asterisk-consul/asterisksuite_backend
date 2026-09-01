@@ -309,6 +309,7 @@ model payments {
   reference        String?           @db.VarChar(100)
   bank_account_id  String?           @db.Uuid
   cash_box_id      String?           @db.Uuid
+  account_id       String?           @db.Uuid
   status           PaymentStatus     @default(DRAFT)
   payment_mode     PaymentMode       @default(NORMAL)
   confirmed_at     DateTime?
@@ -325,8 +326,10 @@ model payments {
   party                            business_parties?                  @relation(fields: [party_id], references: [id])
   bank_account                     bank_accounts?                     @relation(fields: [bank_account_id], references: [id])
   cash_box                         cash_boxes?                        @relation(fields: [cash_box_id], references: [id])
+  account                          accounts?                          @relation(fields: [account_id], references: [id])
   documents                        payment_documents[]
   checks                           checks[]
+  payment_allocations              payment_checks[]
   credit_card_transactions         credit_card_transactions[]
   account_entries                  current_account_entries[]
   bank_account_movements           bank_account_movements[]
@@ -375,6 +378,7 @@ model checks {
   issuer_name      String            @db.VarChar(255)
   issuer_id        String?           @db.VarChar(50)
   amount           Decimal           @db.Decimal(15, 2)
+  available_amount Decimal?          @db.Decimal(15, 2)
   currency_code    String            @db.VarChar(10)
   exchange_rate    Decimal?          @db.Decimal(18, 6)
   rate_type        CurrencyRateType?
@@ -402,12 +406,29 @@ model checks {
 
   payment      payments?      @relation(fields: [payment_id], references: [id])
   bank_account bank_accounts? @relation(fields: [bank_account_id], references: [id])
+  payment_allocations payment_checks[]
 
   @@index([payment_id])
   @@index([bank_account_id])
   @@index([status])
   @@index([due_date])
   @@index([payment_date])
+  @@schema("tenant")
+}
+
+// Aplicación de cheques a pagos — permite uso parcial de un cheque en varios pagos
+model payment_checks {
+  payment_id     String   @db.Uuid
+  check_id       String   @db.Uuid
+  amount_applied Decimal  @db.Decimal(15, 2)
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+  created_by     String?  @db.Uuid
+
+  payment payments @relation(fields: [payment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  check   checks   @relation(fields: [check_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([payment_id, check_id])
+  @@index([check_id])
   @@schema("tenant")
 }
 

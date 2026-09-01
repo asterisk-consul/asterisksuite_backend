@@ -53,4 +53,20 @@ export class TreasuryReportsController {
   ) {
     return this.reportsService.utilityPayments(dateFrom, dateTo);
   }
+
+  @Get('expenses-by-account')
+  @RequirePermissions('treasury.reports.read')
+  expensesByAccount(
+    @Query('date_from') dateFrom?: string,
+    @Query('date_to') dateTo?: string,
+    @Query('account_id') accountId?: string,
+    @Query('type') type?: string,
+  ) {
+    return this.reportsService.expensesByAccount({
+      date_from: dateFrom,
+      date_to: dateTo,
+      account_id: accountId,
+      type,
+    });
+  }
 }

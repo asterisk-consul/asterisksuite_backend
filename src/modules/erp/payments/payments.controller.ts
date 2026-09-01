@@ -34,6 +34,7 @@ export class PaymentsController {
     @Query('type') type?: string,
     @Query('payment_method') paymentMethod?: string,
     @Query('status') status?: string,
+    @Query('account_id') accountId?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     return this.paymentsService.findAll({
@@ -41,6 +42,7 @@ export class PaymentsController {
       type,
       payment_method: paymentMethod,
       status,
+      account_id: accountId,
       user_id: companyRole === 'USER' ? user.id : undefined,
     });
   }

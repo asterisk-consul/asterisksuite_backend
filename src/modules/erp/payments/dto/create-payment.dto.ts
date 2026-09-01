@@ -66,6 +66,15 @@ export class PaymentWithholdingDto {
   allocations?: PaymentWithholdingAllocationDto[];
 }
 
+export class PaymentCheckDto {
+  @IsString()
+  check_id!: string;
+
+  @IsNumber()
+  @Min(0.01)
+  amount_applied!: number;
+}
+
 export class CreatePaymentDto {
   @IsEnum(['PAYMENT', 'COLLECTION'] as const)
   type!: string;
@@ -127,10 +136,20 @@ export class CreatePaymentDto {
   @IsOptional()
   cash_box_id?: string;
 
+  @IsString()
+  @IsOptional()
+  account_id?: string;
+
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
   check_ids?: string[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentCheckDto)
+  @IsOptional()
+  checks?: PaymentCheckDto[];
 
   @IsArray()
   @ValidateNested({ each: true })

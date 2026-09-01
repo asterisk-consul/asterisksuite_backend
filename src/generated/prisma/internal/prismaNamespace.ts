@@ -520,6 +520,7 @@ export const ModelName = {
   payments: 'payments',
   payment_documents: 'payment_documents',
   checks: 'checks',
+  payment_checks: 'payment_checks',
   credit_cards: 'credit_cards',
   credit_card_transactions: 'credit_card_transactions',
   credit_card_installments: 'credit_card_installments',
@@ -545,7 +546,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -10613,6 +10614,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    payment_checks: {
+      payload: Prisma.$payment_checksPayload<ExtArgs>
+      fields: Prisma.payment_checksFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.payment_checksFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.payment_checksFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>
+        }
+        findFirst: {
+          args: Prisma.payment_checksFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.payment_checksFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>
+        }
+        findMany: {
+          args: Prisma.payment_checksFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>[]
+        }
+        create: {
+          args: Prisma.payment_checksCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>
+        }
+        createMany: {
+          args: Prisma.payment_checksCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.payment_checksCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>[]
+        }
+        delete: {
+          args: Prisma.payment_checksDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>
+        }
+        update: {
+          args: Prisma.payment_checksUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>
+        }
+        deleteMany: {
+          args: Prisma.payment_checksDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.payment_checksUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.payment_checksUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>[]
+        }
+        upsert: {
+          args: Prisma.payment_checksUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$payment_checksPayload>
+        }
+        aggregate: {
+          args: Prisma.Payment_checksAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePayment_checks>
+        }
+        groupBy: {
+          args: Prisma.payment_checksGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Payment_checksGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.payment_checksCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Payment_checksCountAggregateOutputType> | number
+        }
+      }
+    }
     credit_cards: {
       payload: Prisma.$credit_cardsPayload<ExtArgs>
       fields: Prisma.credit_cardsFieldRefs
@@ -13969,6 +14044,7 @@ export const PaymentsScalarFieldEnum = {
   reference: 'reference',
   bank_account_id: 'bank_account_id',
   cash_box_id: 'cash_box_id',
+  account_id: 'account_id',
   status: 'status',
   payment_mode: 'payment_mode',
   confirmed_at: 'confirmed_at',
@@ -14012,6 +14088,7 @@ export const ChecksScalarFieldEnum = {
   issuer_name: 'issuer_name',
   issuer_id: 'issuer_id',
   amount: 'amount',
+  available_amount: 'available_amount',
   currency_code: 'currency_code',
   exchange_rate: 'exchange_rate',
   rate_type: 'rate_type',
@@ -14036,6 +14113,17 @@ export const ChecksScalarFieldEnum = {
 } as const
 
 export type ChecksScalarFieldEnum = (typeof ChecksScalarFieldEnum)[keyof typeof ChecksScalarFieldEnum]
+
+
+export const Payment_checksScalarFieldEnum = {
+  payment_id: 'payment_id',
+  check_id: 'check_id',
+  amount_applied: 'amount_applied',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Payment_checksScalarFieldEnum = (typeof Payment_checksScalarFieldEnum)[keyof typeof Payment_checksScalarFieldEnum]
 
 
 export const Credit_cardsScalarFieldEnum = {
@@ -15530,6 +15618,7 @@ export type GlobalOmitConfig = {
   payments?: Prisma.paymentsOmit
   payment_documents?: Prisma.payment_documentsOmit
   checks?: Prisma.checksOmit
+  payment_checks?: Prisma.payment_checksOmit
   credit_cards?: Prisma.credit_cardsOmit
   credit_card_transactions?: Prisma.credit_card_transactionsOmit
   credit_card_installments?: Prisma.credit_card_installmentsOmit

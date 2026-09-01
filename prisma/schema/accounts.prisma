@@ -16,6 +16,7 @@ model accounts {
   income_products    products[]  @relation("product_income_account")
   expense_products   products[]  @relation("product_expense_account")
   inventory_products products[]  @relation("product_inventory_account")
+  payments           payments[]
 
   @@unique([code])
   @@index([parent_id])

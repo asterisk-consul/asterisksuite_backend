@@ -59,6 +59,10 @@ export class UpdatePaymentDto {
   @IsOptional()
   cash_box_id?: string;
 
+  @IsString()
+  @IsOptional()
+  account_id?: string;
+
   @IsEnum(['NORMAL', 'ADVANCE'] as const)
   @IsOptional()
   payment_mode?: string;

@@ -91,6 +91,7 @@ export class PaymentsService {
           reference: dto.reference,
           bank_account_id: dto.bank_account_id,
           cash_box_id: dto.cash_box_id,
+          account_id: dto.account_id,
           status: 'DRAFT',
           created_by: userId,
         },
@@ -154,14 +155,49 @@ export class PaymentsService {
       }
     }
 
-    // Link checks to this payment
-    if (dto.check_ids && dto.check_ids.length > 0) {
-      for (const checkId of dto.check_ids) {
-        await this.prisma.checks.update({
-          where: { id: checkId },
-          data: { payment_id: payment.id, updated_at: new Date(), updated_by: userId },
-        });
+    // Link checks to this payment (con aplicación parcial opcional)
+    const checkAllocations: { check_id: string; amount_applied: number }[] = [];
+    if (dto.checks && dto.checks.length > 0) {
+      for (const c of dto.checks) {
+        const check = await this.prisma.checks.findFirst({ where: { id: c.check_id, deleted_at: null } });
+        if (!check) throw new NotFoundException(`Cheque ${c.check_id} no encontrado`);
+        const available = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
+        if (c.amount_applied > available + 0.01) {
+          throw new BadRequestException(
+            `El cheque #${check.check_number} tiene saldo disponible ${available} y se intenta aplicar ${c.amount_applied}`,
+          );
+        }
+        if (check.is_own && Math.abs(c.amount_applied - Number(check.amount)) > 0.01) {
+          throw new BadRequestException(
+            `El cheque propio #${check.check_number} se aplica por su monto total (${check.amount}). Usá un anticipo para el resto.`,
+          );
+        }
+        checkAllocations.push({ check_id: c.check_id, amount_applied: c.amount_applied });
       }
+    } else if (dto.check_ids && dto.check_ids.length > 0) {
+      // Legacy: check_ids se aplican por su monto completo
+      for (const checkId of dto.check_ids) {
+        const check = await this.prisma.checks.findFirst({ where: { id: checkId, deleted_at: null } });
+        if (!check) throw new NotFoundException(`Cheque ${checkId} no encontrado`);
+        checkAllocations.push({ check_id: checkId, amount_applied: check.available_amount != null ? Number(check.available_amount) : Number(check.amount) });
+      }
+    }
+
+    for (const alloc of checkAllocations) {
+      await this.prisma.checks.update({
+        where: { id: alloc.check_id },
+        data: { payment_id: payment.id, updated_at: new Date(), updated_by: userId },
+      });
+      await this.prisma.payment_checks.upsert({
+        where: { payment_id_check_id: { payment_id: payment.id, check_id: alloc.check_id } },
+        update: { amount_applied: alloc.amount_applied },
+        create: {
+          payment_id: payment.id,
+          check_id: alloc.check_id,
+          amount_applied: alloc.amount_applied,
+          created_by: userId,
+        },
+      });
     }
 
     return payment;
@@ -237,6 +273,22 @@ export class PaymentsService {
         throw new BadRequestException(
           `El importe aplicado (${appliedTotal.toFixed(2)}) excede el dinero efectivo (${cashTotal.toFixed(2)}) más retenciones (${withheldTotal.toFixed(2)})`,
         );
+      }
+    }
+
+    // Validación: los cheques vinculados deben cubrir lo aplicado a documentos
+    if (payment.payment_method === 'CHECK') {
+      const allocations = await this.prisma.payment_checks.findMany({
+        where: { payment_id: payment.id },
+      });
+      if (allocations.length > 0) {
+        const checksTotal = allocations.reduce((s, a) => s + a.amount_applied.toNumber(), 0);
+        const appliedDocsTotal = paymentDocs.reduce((s, pd) => s + pd.amount_applied.toNumber(), 0);
+        if (appliedDocsTotal > checksTotal + withheldTotal + 0.01) {
+          throw new BadRequestException(
+            `Los cheques vinculados (${checksTotal.toFixed(2)}) no cubren el importe aplicado a documentos (${appliedDocsTotal.toFixed(2)})`,
+          );
+        }
       }
     }
 
@@ -419,12 +471,13 @@ export class PaymentsService {
   // FIND ALL / ONE
   // ═══════════════════════════════════════════
 
-  async findAll(filters?: { party_id?: string; type?: string; payment_method?: string; status?: string; user_id?: string }) {
+  async findAll(filters?: { party_id?: string; type?: string; payment_method?: string; status?: string; account_id?: string; user_id?: string }) {
     const where: Record<string, any> = { deleted_at: null };
     if (filters?.party_id) where.party_id = filters.party_id;
     if (filters?.type) where.type = filters.type;
     if (filters?.payment_method) where.payment_method = filters.payment_method;
     if (filters?.status) where.status = filters.status;
+    if (filters?.account_id) where.account_id = filters.account_id;
     if (filters?.user_id) where.created_by = filters.user_id;
 
     const payments = await this.prisma.payments.findMany({
@@ -432,6 +485,7 @@ export class PaymentsService {
       orderBy: { number: 'desc' },
       include: {
         party: { select: { id: true, name: true } },
+        account: { select: { id: true, code: true, name: true, account_type: true } },
         documents: {
           include: {
             document: { select: { id: true, number: true } },
@@ -466,6 +520,7 @@ export class PaymentsService {
       include: {
         party: { select: { id: true, name: true } },
         bank_account: { select: { id: true, name: true } },
+        account: { select: { id: true, code: true, name: true, account_type: true } },
         documents: {
           include: {
             document: { select: { id: true, number: true, total: true, paid_amount: true } },
@@ -515,6 +570,7 @@ export class PaymentsService {
     if (dto.reference) data.reference = dto.reference;
     if (dto.bank_account_id) data.bank_account_id = dto.bank_account_id;
     if (dto.cash_box_id) data.cash_box_id = dto.cash_box_id;
+    if (dto.account_id !== undefined) data.account_id = dto.account_id || null;
     if (dto.payment_mode) data.payment_mode = dto.payment_mode;
 
     return this.prisma.payments.update({
@@ -565,10 +621,16 @@ export class PaymentsService {
     const checks = await prisma.checks.findMany({
       where: { payment_id: payment.id, deleted_at: null },
     });
+    const allocations = await prisma.payment_checks.findMany({
+      where: { payment_id: payment.id },
+    });
 
     for (const check of checks) {
+      const allocation = allocations.find((a: any) => a.check_id === check.id);
+      const applied = allocation ? allocation.amount_applied.toNumber() : Number(check.amount);
+
       if (check.is_own) {
-        // Cheque propio: CONFIRMED + debita banco asignado al cheque
+        // Cheque propio: CONFIRMED + debita banco asignado al cheque (siempre por el total)
         if (check.bank_account_id) {
           const bankAccount = await prisma.bank_accounts.findUnique({
             where: { id: check.bank_account_id },
@@ -628,12 +690,17 @@ export class PaymentsService {
           });
         }
       } else {
-        // Cheque de tercero: solo cambia estado a CLEARED (se usa en pago, no deposita en banco)
+        // Cheque de tercero: aplicación parcial — descuenta el saldo disponible.
+        // Queda PENDING (en cartera) mientras le quede saldo; CLEARED al agotarse.
+        const currentAvailable = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
+        const remaining = Math.max(0, Number((currentAvailable - applied).toFixed(2)));
+        const fullyUsed = remaining <= 0.01;
+
         await prisma.checks.update({
           where: { id: check.id },
           data: {
-            status: 'CLEARED',
-            clearing_date: new Date(),
+            available_amount: fullyUsed ? 0 : remaining,
+            ...(fullyUsed ? { status: 'CLEARED', clearing_date: new Date() } : {}),
             updated_at: new Date(),
             updated_by: userId,
           },
@@ -956,16 +1023,29 @@ export class PaymentsService {
           },
         });
       } else {
-        // Revertir estado del cheque de tercero
+        // Revertir estado del cheque de tercero: devuelve el saldo aplicado
+        const allocation = await this.prisma.payment_checks.findUnique({
+          where: { payment_id_check_id: { payment_id: payment.id, check_id: check.id } },
+        });
+        const applied = allocation ? allocation.amount_applied.toNumber() : Number(check.amount);
+        const currentAvailable = check.available_amount != null ? Number(check.available_amount) : 0;
+
         await this.prisma.checks.update({
           where: { id: check.id },
           data: {
             status: 'PENDING',
             clearing_date: null,
+            available_amount: Number((currentAvailable + applied).toFixed(2)),
             updated_at: new Date(),
             updated_by: userId,
           },
         });
+
+        if (allocation) {
+          await this.prisma.payment_checks.delete({
+            where: { payment_id_check_id: { payment_id: payment.id, check_id: check.id } },
+          });
+        }
       }
     }
   }

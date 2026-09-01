@@ -1,6 +1,24 @@
-import { IsDateString, IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsDateString, IsIn, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
 
 export class UpdateCheckDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  check_number?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0.01)
+  amount?: number;
+
+  @IsOptional()
+  @IsString()
+  currency_code?: string;
+
+  @IsOptional()
+  @IsDateString()
+  issue_date?: string;
+
   @IsOptional()
   @IsString()
   @MaxLength(100)
