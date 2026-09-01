@@ -94,11 +94,12 @@ export class CurrentAccountsService {
 
     console.log('[CC] addEntry dto.date:', dto.date, '→ parsed:', entry.date?.toISOString?.() ?? entry.date)
 
-    // ─── Update account balance (always in base currency) ─────
+    // ─── Update account balance + last entry date ────────────
     await this.prisma.current_accounts.update({
       where: { id: account.id },
       data: {
         balance: balanceAfter,
+        last_entry_date: entry.date,
         updated_at: new Date(),
       },
     });
@@ -142,10 +143,12 @@ export class CurrentAccountsService {
         : [];
     const userMap = new Map(users.map((u) => [u.id, u.name]));
 
-    return entries.map((e) => ({
+    const entriesWithUser = entries.map((e) => ({
       ...e,
       user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
     }));
+
+    return this.enrichEntriesWithDocumentChain(entriesWithUser);
   }
 
   async getStatement(partyId: string, userId?: string) {
@@ -177,10 +180,12 @@ export class CurrentAccountsService {
       user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
     }));
 
+    const enrichedEntries = await this.enrichEntriesWithDocumentChain(entriesWithUser);
+
     return {
       account,
       balance: account.balance,
-      entries: entriesWithUser,
+      entries: enrichedEntries,
     };
   }
 
@@ -199,16 +204,28 @@ export class CurrentAccountsService {
   }
 
   async findActive() {
-    return this.prisma.current_accounts.findMany({
+    const accounts = await this.prisma.current_accounts.findMany({
       where: {
         deleted_at: null,
         balance: { not: 0 },
       },
       include: {
         party: { select: { id: true, name: true, type: true, tax_id: true } },
+        entries: {
+          where: { deleted_at: null },
+          orderBy: { date: 'desc' },
+          take: 1,
+          select: { type: true, description: true, reference_type: true, date: true },
+        },
       },
       orderBy: { balance: 'asc' },
     });
+
+    return accounts.map((a) => ({
+      ...a,
+      last_entry: a.entries[0] ?? null,
+      entries: undefined,
+    }));
   }
 
   async findAll(filters?: { party_type?: string; balance_filter?: string }) {
@@ -223,13 +240,25 @@ export class CurrentAccountsService {
     else if (filters?.balance_filter === 'negative') where.balance = { lt: 0 };
     else if (filters?.balance_filter === 'zero') where.balance = 0;
 
-    return this.prisma.current_accounts.findMany({
+    const accounts = await this.prisma.current_accounts.findMany({
       where,
       include: {
         party: { select: { id: true, name: true, type: true, tax_id: true } },
+        entries: {
+          where: { deleted_at: null },
+          orderBy: { date: 'desc' },
+          take: 1,
+          select: { type: true, description: true, reference_type: true, date: true },
+        },
       },
       orderBy: { balance: 'desc' },
     });
+
+    return accounts.map((a) => ({
+      ...a,
+      last_entry: a.entries[0] ?? null,
+      entries: undefined,
+    }));
   }
 
   private resolveIsDebit(type: string, partyType: string): boolean {
@@ -238,5 +267,78 @@ export class CurrentAccountsService {
       return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION', 'WITHHOLDING'].includes(type);
     }
     return ['CREDIT_NOTE', 'PAYMENT', 'ADVANCE', 'WITHHOLDING'].includes(type);
+  }
+
+  // ─── Document chain builder ────────────────────────────────
+  // Builds an ordered array from root → leaf for a given document
+
+  private async buildDocumentChain(documentId: string): Promise<Array<{
+    id: string; number: number; type_code: string; description: string | null; role: 'parent' | 'current' | 'child'
+  }>> {
+    const doc = await this.prisma.documents.findUnique({
+      where: { id: documentId },
+      include: {
+        document_types: { select: { code: true } },
+      },
+    });
+    if (!doc) return [];
+
+    // Walk UP to root via parent_document_id
+    const ancestors: any[] = [];
+    let current = doc;
+    while (current.parent_document_id) {
+      const parent = await this.prisma.documents.findUnique({
+        where: { id: current.parent_document_id },
+        include: { document_types: { select: { code: true } } },
+      });
+      if (!parent) break;
+      ancestors.unshift(parent);
+      current = parent;
+    }
+
+    // Walk DOWN via child_documents
+    const descendants: any[] = [];
+    const collectChildren = async (parentId: string) => {
+      const children = await this.prisma.documents.findMany({
+        where: { parent_document_id: parentId, deleted_at: null },
+        include: { document_types: { select: { code: true } } },
+        orderBy: { created_at: 'asc' },
+      });
+      for (const child of children) {
+        descendants.push(child);
+        await collectChildren(child.id);
+      }
+    };
+    await collectChildren(doc.id);
+
+    // Build flat chain: root → ... → current doc → ... → leaf
+    const chain = [...ancestors, doc, ...descendants];
+    return chain.map((d) => ({
+      id: d.id,
+      number: d.number,
+      type_code: d.document_types?.code ?? d.type_code ?? '—',
+      description: d.descrip ?? null,
+      role: d.id === doc.id ? 'current' as const
+        : ancestors.some(a => a.id === d.id) ? 'parent' as const
+        : 'child' as const,
+    }));
+  }
+
+  private async enrichEntriesWithDocumentChain(entries: any[]) {
+    const docEntries = entries.filter(
+      (e) => (e.reference_type === 'document' || e.reference_type === 'document_reversal') && e.reference_id
+    );
+
+    const chainMap = new Map<string, any[]>();
+    for (const e of docEntries) {
+      if (!chainMap.has(e.reference_id)) {
+        chainMap.set(e.reference_id, await this.buildDocumentChain(e.reference_id));
+      }
+    }
+
+    return entries.map((e) => ({
+      ...e,
+      document_chain: chainMap.get(e.reference_id) ?? null,
+    }));
   }
 }
