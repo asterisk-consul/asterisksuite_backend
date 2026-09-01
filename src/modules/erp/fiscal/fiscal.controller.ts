@@ -11,7 +11,7 @@ import {
 } from './dto/fiscal.dto'
 import { CalculateWithholdingsDto } from './dto/calculate-withholdings.dto'
 
-@Controller('fiscal')
+@Controller('erp/fiscal')
 export class FiscalController {
   constructor(
     private db: PrismaService,
