@@ -45,6 +45,7 @@ export type Document_typesMinAggregateOutputType = {
   affects_accounting: boolean | null
   affects_tax_book: boolean | null
   affects_payment: boolean | null
+  calculates_taxes: boolean | null
   active: boolean | null
   category: string | null
   letter_type: string | null
@@ -70,6 +71,7 @@ export type Document_typesMaxAggregateOutputType = {
   affects_accounting: boolean | null
   affects_tax_book: boolean | null
   affects_payment: boolean | null
+  calculates_taxes: boolean | null
   active: boolean | null
   category: string | null
   letter_type: string | null
@@ -95,6 +97,7 @@ export type Document_typesCountAggregateOutputType = {
   affects_accounting: number
   affects_tax_book: number
   affects_payment: number
+  calculates_taxes: number
   active: number
   category: number
   letter_type: number
@@ -131,6 +134,7 @@ export type Document_typesMinAggregateInputType = {
   affects_accounting?: true
   affects_tax_book?: true
   affects_payment?: true
+  calculates_taxes?: true
   active?: true
   category?: true
   letter_type?: true
@@ -156,6 +160,7 @@ export type Document_typesMaxAggregateInputType = {
   affects_accounting?: true
   affects_tax_book?: true
   affects_payment?: true
+  calculates_taxes?: true
   active?: true
   category?: true
   letter_type?: true
@@ -181,6 +186,7 @@ export type Document_typesCountAggregateInputType = {
   affects_accounting?: true
   affects_tax_book?: true
   affects_payment?: true
+  calculates_taxes?: true
   active?: true
   category?: true
   letter_type?: true
@@ -294,6 +300,7 @@ export type Document_typesGroupByOutputType = {
   affects_accounting: boolean
   affects_tax_book: boolean
   affects_payment: boolean
+  calculates_taxes: boolean
   active: boolean
   category: string | null
   letter_type: string | null
@@ -343,6 +350,7 @@ export type document_typesWhereInput = {
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   affects_payment?: Prisma.BoolFilter<"document_types"> | boolean
+  calculates_taxes?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
   category?: Prisma.StringNullableFilter<"document_types"> | string | null
   letter_type?: Prisma.StringNullableFilter<"document_types"> | string | null
@@ -374,6 +382,7 @@ export type document_typesOrderByWithRelationInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   affects_payment?: Prisma.SortOrder
+  calculates_taxes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
   letter_type?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -408,6 +417,7 @@ export type document_typesWhereUniqueInput = Prisma.AtLeast<{
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   affects_payment?: Prisma.BoolFilter<"document_types"> | boolean
+  calculates_taxes?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
   category?: Prisma.StringNullableFilter<"document_types"> | string | null
   letter_type?: Prisma.StringNullableFilter<"document_types"> | string | null
@@ -439,6 +449,7 @@ export type document_typesOrderByWithAggregationInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   affects_payment?: Prisma.SortOrder
+  calculates_taxes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
   letter_type?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -473,6 +484,7 @@ export type document_typesScalarWhereWithAggregatesInput = {
   affects_accounting?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   affects_payment?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  calculates_taxes?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   category?: Prisma.StringNullableWithAggregatesFilter<"document_types"> | string | null
   letter_type?: Prisma.StringNullableWithAggregatesFilter<"document_types"> | string | null
@@ -497,6 +509,7 @@ export type document_typesCreateInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -528,6 +541,7 @@ export type document_typesUncheckedCreateInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -555,6 +569,7 @@ export type document_typesUpdateInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -586,6 +601,7 @@ export type document_typesUncheckedUpdateInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -615,6 +631,7 @@ export type document_typesCreateManyInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -639,6 +656,7 @@ export type document_typesUpdateManyMutationInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -665,6 +683,7 @@ export type document_typesUncheckedUpdateManyInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -706,6 +725,7 @@ export type document_typesCountOrderByAggregateInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   affects_payment?: Prisma.SortOrder
+  calculates_taxes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   category?: Prisma.SortOrder
   letter_type?: Prisma.SortOrder
@@ -736,6 +756,7 @@ export type document_typesMaxOrderByAggregateInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   affects_payment?: Prisma.SortOrder
+  calculates_taxes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   category?: Prisma.SortOrder
   letter_type?: Prisma.SortOrder
@@ -761,6 +782,7 @@ export type document_typesMinOrderByAggregateInput = {
   affects_accounting?: Prisma.SortOrder
   affects_tax_book?: Prisma.SortOrder
   affects_payment?: Prisma.SortOrder
+  calculates_taxes?: Prisma.SortOrder
   active?: Prisma.SortOrder
   category?: Prisma.SortOrder
   letter_type?: Prisma.SortOrder
@@ -914,6 +936,7 @@ export type document_typesCreateWithoutDocument_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -943,6 +966,7 @@ export type document_typesUncheckedCreateWithoutDocument_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1001,6 +1025,7 @@ export type document_typesScalarWhereInput = {
   affects_accounting?: Prisma.BoolFilter<"document_types"> | boolean
   affects_tax_book?: Prisma.BoolFilter<"document_types"> | boolean
   affects_payment?: Prisma.BoolFilter<"document_types"> | boolean
+  calculates_taxes?: Prisma.BoolFilter<"document_types"> | boolean
   active?: Prisma.BoolFilter<"document_types"> | boolean
   category?: Prisma.StringNullableFilter<"document_types"> | string | null
   letter_type?: Prisma.StringNullableFilter<"document_types"> | string | null
@@ -1025,6 +1050,7 @@ export type document_typesCreateWithoutDocument_type_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1055,6 +1081,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1097,6 +1124,7 @@ export type document_typesUpdateWithoutDocument_type_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1127,6 +1155,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1153,6 +1182,7 @@ export type document_typesCreateWithoutDocument_type_taxesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1183,6 +1213,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_taxesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1225,6 +1256,7 @@ export type document_typesUpdateWithoutDocument_type_taxesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1255,6 +1287,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_taxesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1281,6 +1314,7 @@ export type document_typesCreateWithoutDocumentsInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1311,6 +1345,7 @@ export type document_typesUncheckedCreateWithoutDocumentsInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1353,6 +1388,7 @@ export type document_typesUpdateWithoutDocumentsInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1383,6 +1419,7 @@ export type document_typesUncheckedUpdateWithoutDocumentsInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1409,6 +1446,7 @@ export type document_typesCreateWithoutSystem_modulesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1438,6 +1476,7 @@ export type document_typesUncheckedCreateWithoutSystem_modulesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1492,6 +1531,7 @@ export type document_typesCreateManyDocument_sequencesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1516,6 +1556,7 @@ export type document_typesUpdateWithoutDocument_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1545,6 +1586,7 @@ export type document_typesUncheckedUpdateWithoutDocument_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1573,6 +1615,7 @@ export type document_typesUncheckedUpdateManyWithoutDocument_sequencesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1598,6 +1641,7 @@ export type document_typesCreateManySystem_modulesInput = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: string | null
   letter_type?: string | null
@@ -1622,6 +1666,7 @@ export type document_typesUpdateWithoutSystem_modulesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1651,6 +1696,7 @@ export type document_typesUncheckedUpdateWithoutSystem_modulesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1679,6 +1725,7 @@ export type document_typesUncheckedUpdateManyWithoutSystem_modulesInput = {
   affects_accounting?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_tax_book?: Prisma.BoolFieldUpdateOperationsInput | boolean
   affects_payment?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculates_taxes?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   letter_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1754,6 +1801,7 @@ export type document_typesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: boolean
   letter_type?: boolean
@@ -1786,6 +1834,7 @@ export type document_typesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: boolean
   letter_type?: boolean
@@ -1814,6 +1863,7 @@ export type document_typesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: boolean
   letter_type?: boolean
@@ -1842,6 +1892,7 @@ export type document_typesSelectScalar = {
   affects_accounting?: boolean
   affects_tax_book?: boolean
   affects_payment?: boolean
+  calculates_taxes?: boolean
   active?: boolean
   category?: boolean
   letter_type?: boolean
@@ -1857,7 +1908,7 @@ export type document_typesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "affects_payment" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "custom_fields_config" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
+export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "affects_payment" | "calculates_taxes" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "custom_fields_config" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
 export type document_typesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_type_taxes?: boolean | Prisma.document_types$document_type_taxesArgs<ExtArgs>
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
@@ -1895,6 +1946,7 @@ export type $document_typesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     affects_accounting: boolean
     affects_tax_book: boolean
     affects_payment: boolean
+    calculates_taxes: boolean
     active: boolean
     category: string | null
     letter_type: string | null
@@ -2346,6 +2398,7 @@ export interface document_typesFieldRefs {
   readonly affects_accounting: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly affects_tax_book: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly affects_payment: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly calculates_taxes: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly active: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly category: Prisma.FieldRef<"document_types", 'String'>
   readonly letter_type: Prisma.FieldRef<"document_types", 'String'>

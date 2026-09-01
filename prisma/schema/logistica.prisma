@@ -156,33 +156,33 @@ model trip_temperature_logs {
 }
 
 model dispatch_orders {
-  id                      String             @id @default(uuid()) @db.Uuid
-  order_number            String             @unique @db.VarChar(50)
+  id                      String                 @id @default(uuid()) @db.Uuid
+  order_number            String                 @unique @db.VarChar(50)
   status                  DispatchStatus
-  requires_stock          Boolean            @default(false)
-  planned_date            DateTime?          @db.Timestamp(6)
-  confirmed_at            DateTime?          @db.Timestamp(6)
-  customer_id             String?            @db.Uuid
-  origin_location_id      String?            @db.Uuid
-  destination_location_id String?            @db.Uuid
-  corridor_id             String?            @db.Uuid
-  source_document_id      String?            @db.Uuid
-  created_at              DateTime           @default(now()) @db.Timestamp(6)
-  updated_at              DateTime?          @updatedAt @db.Timestamp(6)
+  requires_stock          Boolean                @default(false)
+  planned_date            DateTime?              @db.Timestamp(6)
+  confirmed_at            DateTime?              @db.Timestamp(6)
+  customer_id             String?                @db.Uuid
+  origin_location_id      String?                @db.Uuid
+  destination_location_id String?                @db.Uuid
+  corridor_id             String?                @db.Uuid
+  source_document_id      String?                @db.Uuid
+  created_at              DateTime               @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?              @updatedAt @db.Timestamp(6)
   deleted_at              DateTime?
-  created_by              String?            @db.Uuid
-  updated_by              String?            @db.Uuid
-  deleted_by              String?            @db.Uuid
+  created_by              String?                @db.Uuid
+  updated_by              String?                @db.Uuid
+  deleted_by              String?                @db.Uuid
   delivery_notes          delivery_notes[]
-  corridors               corridors?         @relation(fields: [corridor_id], references: [id])
-  customers               business_parties?  @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  destination_location    locations?         @relation("dispatch_destination_location", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  origin_location         locations?         @relation("dispatch_origin_location", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  corridors               corridors?             @relation(fields: [corridor_id], references: [id])
+  customers               business_parties?      @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  destination_location    locations?             @relation("dispatch_destination_location", fields: [destination_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  origin_location         locations?             @relation("dispatch_origin_location", fields: [origin_location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   dispatch_rates          dispatch_rates[]
   picking_orders          picking_orders[]
   tripStopOrders          trip_stop_orders[]
-  source_document         documents?         @relation("DispatchSourceDocument", fields: [source_document_id], references: [id], onDelete: SetNull)
-  documents               documents[]        @relation("DispatchDocuments")
+  source_document         documents?             @relation("DispatchSourceDocument", fields: [source_document_id], references: [id], onDelete: SetNull)
+  documents               documents[]            @relation("DispatchDocuments")
   dispatch_items          dispatch_order_items[]
 
   @@index([status], map: "idx_dispatch_orders_status")
@@ -330,30 +330,30 @@ model corridor_stops {
 }
 
 model vehicles {
-  id                           String                 @id @default(uuid()) @db.Uuid
-  type                         String                 @db.VarChar(30)
-  plate                        String                 @unique @db.VarChar(20)
-  brand                        String?                @db.VarChar(100)
-  model                        String?                @db.VarChar(100)
+  id                           String                   @id @default(uuid()) @db.Uuid
+  type                         String                   @db.VarChar(30)
+  plate                        String                   @unique @db.VarChar(20)
+  brand                        String?                  @db.VarChar(100)
+  model                        String?                  @db.VarChar(100)
   year                         Int?
-  max_weight                   Decimal?               @db.Decimal(12, 3)
-  max_volume                   Decimal?               @db.Decimal(12, 3)
-  refrigeration                Boolean?               @default(false)
-  active                       Boolean                @default(true)
-  created_at                   DateTime               @default(now()) @db.Timestamp(6)
-  updated_at                   DateTime?              @updatedAt @db.Timestamp(6)
+  max_weight                   Decimal?                 @db.Decimal(12, 3)
+  max_volume                   Decimal?                 @db.Decimal(12, 3)
+  refrigeration                Boolean?                 @default(false)
+  active                       Boolean                  @default(true)
+  created_at                   DateTime                 @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime?                @updatedAt @db.Timestamp(6)
   deleted_at                   DateTime?
-  created_by                   String?                @db.Uuid
-  updated_by                   String?                @db.Uuid
-  deleted_by                   String?                @db.Uuid
+  created_by                   String?                  @db.Uuid
+  updated_by                   String?                  @db.Uuid
+  deleted_by                   String?                  @db.Uuid
   vehicleDocuments             documents_vehicle[]
-  vehicle_combinations_tractor vehicle_combinations[] @relation("tractor_vehicle")
-  vehicle_combinations_trailer vehicle_combinations[] @relation("trailer_vehicle")
+  vehicle_combinations_tractor vehicle_combinations[]   @relation("tractor_vehicle")
+  vehicle_combinations_trailer vehicle_combinations[]   @relation("trailer_vehicle")
   maintenance_orders           maintenance_orders[]
   tire_positions               vehicle_tire_positions[]
   tire_movements               tire_movements[]
   tire_position_history        tire_position_history[]
-  current_tires                tires[]                 @relation("current_tire_vehicle")
+  current_tires                tires[]                  @relation("current_tire_vehicle")
 
   @@schema("tenant")
 }

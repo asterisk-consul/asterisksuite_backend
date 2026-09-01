@@ -1,40 +1,43 @@
 model business_parties {
-  id                  String                @id @default(uuid()) @db.Uuid
-  type                PartyType
-  name                String                @db.VarChar(255)
-  business_names      String?               @db.VarChar(255)
-  document_type       String?               @db.VarChar(20) // CUIT, DNI, CUIL
-  email               String?               @db.VarChar(150)
-  tax_id              String?               @db.VarChar(50)
-  vat_condition       String?               @db.VarChar(30) // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, CONSUMIDOR_FINAL, EXENTO
-  exemption_rate      Decimal               @default(0) @db.Decimal(5, 2)
-  active              Boolean               @default(true)
-  created_at          DateTime              @default(now()) @db.Timestamp(6)
-  updated_at          DateTime?             @updatedAt @db.Timestamp(6)
-  deleted_at          DateTime?
-  created_by          String?               @db.Uuid
-  updated_by          String?               @db.Uuid
-  deleted_by          String?               @db.Uuid
-  delivery_notes      delivery_notes[]
-  dispatch_orders     dispatch_orders[]
-  documents           documents[]
-  party_contacts      party_contacts[]
-  party_locations     party_locations[]
-  party_bank_accounts party_bank_accounts[]
-  employees           employees[]
-  partners            partners[]
-  payments            payments[]
-  credit_cards        credit_cards[]
-  current_accounts    current_accounts[]
-  hr_accounts         hr_accounts[]
-  hr_vales            hr_vales[]
-  product_suppliers   product_suppliers[]
-  product_party_prices product_party_prices[]
-  product_party_price_history product_party_price_history[]
-  international_operations international_operations[]
-  maintenance_orders_as_supplier maintenance_orders[]
+  id                               String                                @id @default(uuid()) @db.Uuid
+  type                             PartyType
+  name                             String                                @db.VarChar(255)
+  business_names                   String?                               @db.VarChar(255)
+  document_type                    String?                               @db.VarChar(20) // CUIT, DNI, CUIL
+  email                            String?                               @db.VarChar(150)
+  tax_id                           String?                               @db.VarChar(50)
+  vat_condition                    String?                               @db.VarChar(30) // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, CONSUMIDOR_FINAL, EXENTO
+  exemption_rate                   Decimal                               @default(0) @db.Decimal(5, 2)
+  active                           Boolean                               @default(true)
+  created_at                       DateTime                              @default(now()) @db.Timestamp(6)
+  updated_at                       DateTime?                             @updatedAt @db.Timestamp(6)
+  deleted_at                       DateTime?
+  created_by                       String?                               @db.Uuid
+  updated_by                       String?                               @db.Uuid
+  deleted_by                       String?                               @db.Uuid
+  delivery_notes                   delivery_notes[]
+  dispatch_orders                  dispatch_orders[]
+  documents                        documents[]
+  party_contacts                   party_contacts[]
+  party_locations                  party_locations[]
+  party_bank_accounts              party_bank_accounts[]
+  employees                        employees[]
+  partners                         partners[]
+  payments                         payments[]
+  credit_cards                     credit_cards[]
+  current_accounts                 current_accounts[]
+  hr_accounts                      hr_accounts[]
+  hr_vales                         hr_vales[]
+  product_suppliers                product_suppliers[]
+  product_party_prices             product_party_prices[]
+  product_party_price_history      product_party_price_history[]
+  international_operations         international_operations[]
+  withholding_profiles             business_party_withholding_profiles[]
+  iibb_registrations               business_party_iibb_registrations[]
+  withholdings                     withholdings[]
+  maintenance_orders_as_supplier   maintenance_orders[]
   maintenance_services_as_supplier maintenance_services[]
-  tires_as_supplier   tires[]
+  tires_as_supplier                tires[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
   @@schema("tenant")

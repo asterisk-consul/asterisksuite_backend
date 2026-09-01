@@ -322,15 +322,16 @@ model payments {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  party                    business_parties?          @relation(fields: [party_id], references: [id])
-  bank_account             bank_accounts?             @relation(fields: [bank_account_id], references: [id])
-  cash_box                 cash_boxes?                @relation(fields: [cash_box_id], references: [id])
-  documents                payment_documents[]
-  checks                   checks[]
-  credit_card_transactions credit_card_transactions[]
-  account_entries          current_account_entries[]
-  bank_account_movements   bank_account_movements[]
-  cash_box_movements       cash_box_movements[]
+  party                            business_parties?                  @relation(fields: [party_id], references: [id])
+  bank_account                     bank_accounts?                     @relation(fields: [bank_account_id], references: [id])
+  cash_box                         cash_boxes?                        @relation(fields: [cash_box_id], references: [id])
+  documents                        payment_documents[]
+  checks                           checks[]
+  credit_card_transactions         credit_card_transactions[]
+  account_entries                  current_account_entries[]
+  bank_account_movements           bank_account_movements[]
+  cash_box_movements               cash_box_movements[]
+  withholdings                     withholdings[]
   international_operation_payments international_operation_payments[]
 
   @@unique([number])

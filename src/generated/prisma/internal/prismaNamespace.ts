@@ -411,11 +411,21 @@ export const ModelName = {
   product_structure_versions: 'product_structure_versions',
   entity_photos: 'entity_photos',
   files: 'files',
+  tax_jurisdictions: 'tax_jurisdictions',
+  withholding_concepts: 'withholding_concepts',
+  business_party_withholding_profiles: 'business_party_withholding_profiles',
+  business_party_iibb_registrations: 'business_party_iibb_registrations',
+  company_tax_jurisdictions: 'company_tax_jurisdictions',
+  tax_rules: 'tax_rules',
+  tax_rule_brackets: 'tax_rule_brackets',
+  withholdings: 'withholdings',
+  withholding_allocations: 'withholding_allocations',
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
   hr_vale_commission_details: 'hr_vale_commission_details',
   international_operations: 'international_operations',
+  international_operation_quotes: 'international_operation_quotes',
   international_containers: 'international_containers',
   container_events: 'container_events',
   international_operation_documents: 'international_operation_documents',
@@ -535,7 +545,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2537,6 +2547,672 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    tax_jurisdictions: {
+      payload: Prisma.$tax_jurisdictionsPayload<ExtArgs>
+      fields: Prisma.tax_jurisdictionsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tax_jurisdictionsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tax_jurisdictionsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>
+        }
+        findFirst: {
+          args: Prisma.tax_jurisdictionsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tax_jurisdictionsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>
+        }
+        findMany: {
+          args: Prisma.tax_jurisdictionsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>[]
+        }
+        create: {
+          args: Prisma.tax_jurisdictionsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>
+        }
+        createMany: {
+          args: Prisma.tax_jurisdictionsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tax_jurisdictionsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>[]
+        }
+        delete: {
+          args: Prisma.tax_jurisdictionsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>
+        }
+        update: {
+          args: Prisma.tax_jurisdictionsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>
+        }
+        deleteMany: {
+          args: Prisma.tax_jurisdictionsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tax_jurisdictionsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tax_jurisdictionsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>[]
+        }
+        upsert: {
+          args: Prisma.tax_jurisdictionsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_jurisdictionsPayload>
+        }
+        aggregate: {
+          args: Prisma.Tax_jurisdictionsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTax_jurisdictions>
+        }
+        groupBy: {
+          args: Prisma.tax_jurisdictionsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tax_jurisdictionsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tax_jurisdictionsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tax_jurisdictionsCountAggregateOutputType> | number
+        }
+      }
+    }
+    withholding_concepts: {
+      payload: Prisma.$withholding_conceptsPayload<ExtArgs>
+      fields: Prisma.withholding_conceptsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.withholding_conceptsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.withholding_conceptsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>
+        }
+        findFirst: {
+          args: Prisma.withholding_conceptsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.withholding_conceptsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>
+        }
+        findMany: {
+          args: Prisma.withholding_conceptsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>[]
+        }
+        create: {
+          args: Prisma.withholding_conceptsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>
+        }
+        createMany: {
+          args: Prisma.withholding_conceptsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.withholding_conceptsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>[]
+        }
+        delete: {
+          args: Prisma.withholding_conceptsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>
+        }
+        update: {
+          args: Prisma.withholding_conceptsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>
+        }
+        deleteMany: {
+          args: Prisma.withholding_conceptsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.withholding_conceptsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.withholding_conceptsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>[]
+        }
+        upsert: {
+          args: Prisma.withholding_conceptsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_conceptsPayload>
+        }
+        aggregate: {
+          args: Prisma.Withholding_conceptsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWithholding_concepts>
+        }
+        groupBy: {
+          args: Prisma.withholding_conceptsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_conceptsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.withholding_conceptsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_conceptsCountAggregateOutputType> | number
+        }
+      }
+    }
+    business_party_withholding_profiles: {
+      payload: Prisma.$business_party_withholding_profilesPayload<ExtArgs>
+      fields: Prisma.business_party_withholding_profilesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.business_party_withholding_profilesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.business_party_withholding_profilesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>
+        }
+        findFirst: {
+          args: Prisma.business_party_withholding_profilesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.business_party_withholding_profilesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>
+        }
+        findMany: {
+          args: Prisma.business_party_withholding_profilesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>[]
+        }
+        create: {
+          args: Prisma.business_party_withholding_profilesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>
+        }
+        createMany: {
+          args: Prisma.business_party_withholding_profilesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.business_party_withholding_profilesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>[]
+        }
+        delete: {
+          args: Prisma.business_party_withholding_profilesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>
+        }
+        update: {
+          args: Prisma.business_party_withholding_profilesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>
+        }
+        deleteMany: {
+          args: Prisma.business_party_withholding_profilesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.business_party_withholding_profilesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.business_party_withholding_profilesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>[]
+        }
+        upsert: {
+          args: Prisma.business_party_withholding_profilesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_withholding_profilesPayload>
+        }
+        aggregate: {
+          args: Prisma.Business_party_withholding_profilesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBusiness_party_withholding_profiles>
+        }
+        groupBy: {
+          args: Prisma.business_party_withholding_profilesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Business_party_withholding_profilesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.business_party_withholding_profilesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Business_party_withholding_profilesCountAggregateOutputType> | number
+        }
+      }
+    }
+    business_party_iibb_registrations: {
+      payload: Prisma.$business_party_iibb_registrationsPayload<ExtArgs>
+      fields: Prisma.business_party_iibb_registrationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.business_party_iibb_registrationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.business_party_iibb_registrationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>
+        }
+        findFirst: {
+          args: Prisma.business_party_iibb_registrationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.business_party_iibb_registrationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>
+        }
+        findMany: {
+          args: Prisma.business_party_iibb_registrationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>[]
+        }
+        create: {
+          args: Prisma.business_party_iibb_registrationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>
+        }
+        createMany: {
+          args: Prisma.business_party_iibb_registrationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.business_party_iibb_registrationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>[]
+        }
+        delete: {
+          args: Prisma.business_party_iibb_registrationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>
+        }
+        update: {
+          args: Prisma.business_party_iibb_registrationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.business_party_iibb_registrationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.business_party_iibb_registrationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.business_party_iibb_registrationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.business_party_iibb_registrationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$business_party_iibb_registrationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Business_party_iibb_registrationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBusiness_party_iibb_registrations>
+        }
+        groupBy: {
+          args: Prisma.business_party_iibb_registrationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Business_party_iibb_registrationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.business_party_iibb_registrationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Business_party_iibb_registrationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    company_tax_jurisdictions: {
+      payload: Prisma.$company_tax_jurisdictionsPayload<ExtArgs>
+      fields: Prisma.company_tax_jurisdictionsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.company_tax_jurisdictionsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.company_tax_jurisdictionsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>
+        }
+        findFirst: {
+          args: Prisma.company_tax_jurisdictionsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.company_tax_jurisdictionsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>
+        }
+        findMany: {
+          args: Prisma.company_tax_jurisdictionsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>[]
+        }
+        create: {
+          args: Prisma.company_tax_jurisdictionsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>
+        }
+        createMany: {
+          args: Prisma.company_tax_jurisdictionsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.company_tax_jurisdictionsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>[]
+        }
+        delete: {
+          args: Prisma.company_tax_jurisdictionsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>
+        }
+        update: {
+          args: Prisma.company_tax_jurisdictionsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>
+        }
+        deleteMany: {
+          args: Prisma.company_tax_jurisdictionsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.company_tax_jurisdictionsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.company_tax_jurisdictionsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>[]
+        }
+        upsert: {
+          args: Prisma.company_tax_jurisdictionsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_tax_jurisdictionsPayload>
+        }
+        aggregate: {
+          args: Prisma.Company_tax_jurisdictionsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompany_tax_jurisdictions>
+        }
+        groupBy: {
+          args: Prisma.company_tax_jurisdictionsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_tax_jurisdictionsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.company_tax_jurisdictionsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_tax_jurisdictionsCountAggregateOutputType> | number
+        }
+      }
+    }
+    tax_rules: {
+      payload: Prisma.$tax_rulesPayload<ExtArgs>
+      fields: Prisma.tax_rulesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tax_rulesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tax_rulesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>
+        }
+        findFirst: {
+          args: Prisma.tax_rulesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tax_rulesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>
+        }
+        findMany: {
+          args: Prisma.tax_rulesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>[]
+        }
+        create: {
+          args: Prisma.tax_rulesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>
+        }
+        createMany: {
+          args: Prisma.tax_rulesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tax_rulesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>[]
+        }
+        delete: {
+          args: Prisma.tax_rulesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>
+        }
+        update: {
+          args: Prisma.tax_rulesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>
+        }
+        deleteMany: {
+          args: Prisma.tax_rulesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tax_rulesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tax_rulesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>[]
+        }
+        upsert: {
+          args: Prisma.tax_rulesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rulesPayload>
+        }
+        aggregate: {
+          args: Prisma.Tax_rulesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTax_rules>
+        }
+        groupBy: {
+          args: Prisma.tax_rulesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tax_rulesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tax_rulesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tax_rulesCountAggregateOutputType> | number
+        }
+      }
+    }
+    tax_rule_brackets: {
+      payload: Prisma.$tax_rule_bracketsPayload<ExtArgs>
+      fields: Prisma.tax_rule_bracketsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tax_rule_bracketsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tax_rule_bracketsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>
+        }
+        findFirst: {
+          args: Prisma.tax_rule_bracketsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tax_rule_bracketsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>
+        }
+        findMany: {
+          args: Prisma.tax_rule_bracketsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>[]
+        }
+        create: {
+          args: Prisma.tax_rule_bracketsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>
+        }
+        createMany: {
+          args: Prisma.tax_rule_bracketsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tax_rule_bracketsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>[]
+        }
+        delete: {
+          args: Prisma.tax_rule_bracketsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>
+        }
+        update: {
+          args: Prisma.tax_rule_bracketsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>
+        }
+        deleteMany: {
+          args: Prisma.tax_rule_bracketsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tax_rule_bracketsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tax_rule_bracketsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>[]
+        }
+        upsert: {
+          args: Prisma.tax_rule_bracketsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tax_rule_bracketsPayload>
+        }
+        aggregate: {
+          args: Prisma.Tax_rule_bracketsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTax_rule_brackets>
+        }
+        groupBy: {
+          args: Prisma.tax_rule_bracketsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tax_rule_bracketsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tax_rule_bracketsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Tax_rule_bracketsCountAggregateOutputType> | number
+        }
+      }
+    }
+    withholdings: {
+      payload: Prisma.$withholdingsPayload<ExtArgs>
+      fields: Prisma.withholdingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.withholdingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.withholdingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>
+        }
+        findFirst: {
+          args: Prisma.withholdingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.withholdingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>
+        }
+        findMany: {
+          args: Prisma.withholdingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>[]
+        }
+        create: {
+          args: Prisma.withholdingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>
+        }
+        createMany: {
+          args: Prisma.withholdingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.withholdingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>[]
+        }
+        delete: {
+          args: Prisma.withholdingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>
+        }
+        update: {
+          args: Prisma.withholdingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.withholdingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.withholdingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.withholdingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.withholdingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholdingsPayload>
+        }
+        aggregate: {
+          args: Prisma.WithholdingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWithholdings>
+        }
+        groupBy: {
+          args: Prisma.withholdingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WithholdingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.withholdingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WithholdingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    withholding_allocations: {
+      payload: Prisma.$withholding_allocationsPayload<ExtArgs>
+      fields: Prisma.withholding_allocationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.withholding_allocationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.withholding_allocationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>
+        }
+        findFirst: {
+          args: Prisma.withholding_allocationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.withholding_allocationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>
+        }
+        findMany: {
+          args: Prisma.withholding_allocationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>[]
+        }
+        create: {
+          args: Prisma.withholding_allocationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>
+        }
+        createMany: {
+          args: Prisma.withholding_allocationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.withholding_allocationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>[]
+        }
+        delete: {
+          args: Prisma.withholding_allocationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>
+        }
+        update: {
+          args: Prisma.withholding_allocationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.withholding_allocationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.withholding_allocationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.withholding_allocationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.withholding_allocationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_allocationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Withholding_allocationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWithholding_allocations>
+        }
+        groupBy: {
+          args: Prisma.withholding_allocationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_allocationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.withholding_allocationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_allocationsCountAggregateOutputType> | number
+        }
+      }
+    }
     hr_accounts: {
       payload: Prisma.$hr_accountsPayload<ExtArgs>
       fields: Prisma.hr_accountsFieldRefs
@@ -2904,6 +3580,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.international_operationsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.International_operationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    international_operation_quotes: {
+      payload: Prisma.$international_operation_quotesPayload<ExtArgs>
+      fields: Prisma.international_operation_quotesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.international_operation_quotesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.international_operation_quotesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>
+        }
+        findFirst: {
+          args: Prisma.international_operation_quotesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.international_operation_quotesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>
+        }
+        findMany: {
+          args: Prisma.international_operation_quotesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>[]
+        }
+        create: {
+          args: Prisma.international_operation_quotesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>
+        }
+        createMany: {
+          args: Prisma.international_operation_quotesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.international_operation_quotesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>[]
+        }
+        delete: {
+          args: Prisma.international_operation_quotesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>
+        }
+        update: {
+          args: Prisma.international_operation_quotesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>
+        }
+        deleteMany: {
+          args: Prisma.international_operation_quotesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.international_operation_quotesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.international_operation_quotesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>[]
+        }
+        upsert: {
+          args: Prisma.international_operation_quotesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_quotesPayload>
+        }
+        aggregate: {
+          args: Prisma.International_operation_quotesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInternational_operation_quotes>
+        }
+        groupBy: {
+          args: Prisma.international_operation_quotesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_quotesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.international_operation_quotesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_quotesCountAggregateOutputType> | number
         }
       }
     }
@@ -10946,6 +11696,7 @@ export const Document_typesScalarFieldEnum = {
   affects_accounting: 'affects_accounting',
   affects_tax_book: 'affects_tax_book',
   affects_payment: 'affects_payment',
+  calculates_taxes: 'calculates_taxes',
   active: 'active',
   category: 'category',
   letter_type: 'letter_type',
@@ -11172,6 +11923,188 @@ export const FilesScalarFieldEnum = {
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
 
 
+export const Tax_jurisdictionsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  country: 'country',
+  is_active: 'is_active',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tax_jurisdictionsScalarFieldEnum = (typeof Tax_jurisdictionsScalarFieldEnum)[keyof typeof Tax_jurisdictionsScalarFieldEnum]
+
+
+export const Withholding_conceptsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Withholding_conceptsScalarFieldEnum = (typeof Withholding_conceptsScalarFieldEnum)[keyof typeof Withholding_conceptsScalarFieldEnum]
+
+
+export const Business_party_withholding_profilesScalarFieldEnum = {
+  id: 'id',
+  business_party_id: 'business_party_id',
+  tax_type: 'tax_type',
+  is_subject: 'is_subject',
+  status: 'status',
+  is_pyme: 'is_pyme',
+  observations: 'observations',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Business_party_withholding_profilesScalarFieldEnum = (typeof Business_party_withholding_profilesScalarFieldEnum)[keyof typeof Business_party_withholding_profilesScalarFieldEnum]
+
+
+export const Business_party_iibb_registrationsScalarFieldEnum = {
+  id: 'id',
+  business_party_id: 'business_party_id',
+  registration_type: 'registration_type',
+  jurisdiction_id: 'jurisdiction_id',
+  registration_number: 'registration_number',
+  prorrate_percentage: 'prorrate_percentage',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Business_party_iibb_registrationsScalarFieldEnum = (typeof Business_party_iibb_registrationsScalarFieldEnum)[keyof typeof Business_party_iibb_registrationsScalarFieldEnum]
+
+
+export const Company_tax_jurisdictionsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  jurisdiction_id: 'jurisdiction_id',
+  tax_type: 'tax_type',
+  is_withholding_agent: 'is_withholding_agent',
+  is_perception_agent: 'is_perception_agent',
+  registration_number: 'registration_number',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Company_tax_jurisdictionsScalarFieldEnum = (typeof Company_tax_jurisdictionsScalarFieldEnum)[keyof typeof Company_tax_jurisdictionsScalarFieldEnum]
+
+
+export const Tax_rulesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  tax_type: 'tax_type',
+  application_type: 'application_type',
+  jurisdiction_id: 'jurisdiction_id',
+  withholding_concept_id: 'withholding_concept_id',
+  operation_type: 'operation_type',
+  supplier_condition: 'supplier_condition',
+  customer_condition: 'customer_condition',
+  cuit_suffix_group: 'cuit_suffix_group',
+  base_type: 'base_type',
+  calculation_method: 'calculation_method',
+  rate: 'rate',
+  fixed_amount: 'fixed_amount',
+  minimum_amount: 'minimum_amount',
+  maximum_amount: 'maximum_amount',
+  priority: 'priority',
+  is_active: 'is_active',
+  valid_from: 'valid_from',
+  valid_to: 'valid_to',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tax_rulesScalarFieldEnum = (typeof Tax_rulesScalarFieldEnum)[keyof typeof Tax_rulesScalarFieldEnum]
+
+
+export const Tax_rule_bracketsScalarFieldEnum = {
+  id: 'id',
+  tax_rule_id: 'tax_rule_id',
+  accumulated_from: 'accumulated_from',
+  accumulated_to: 'accumulated_to',
+  rate: 'rate',
+  created_at: 'created_at'
+} as const
+
+export type Tax_rule_bracketsScalarFieldEnum = (typeof Tax_rule_bracketsScalarFieldEnum)[keyof typeof Tax_rule_bracketsScalarFieldEnum]
+
+
+export const WithholdingsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  business_party_id: 'business_party_id',
+  direction: 'direction',
+  payment_id: 'payment_id',
+  tax_type: 'tax_type',
+  jurisdiction_id: 'jurisdiction_id',
+  withholding_concept_id: 'withholding_concept_id',
+  tax_rule_id: 'tax_rule_id',
+  base_amount: 'base_amount',
+  rate: 'rate',
+  withheld_amount: 'withheld_amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  certificate_number: 'certificate_number',
+  certificate_date: 'certificate_date',
+  status: 'status',
+  automatic_amount: 'automatic_amount',
+  manual_amount: 'manual_amount',
+  modification_reason: 'modification_reason',
+  date: 'date',
+  observations: 'observations',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type WithholdingsScalarFieldEnum = (typeof WithholdingsScalarFieldEnum)[keyof typeof WithholdingsScalarFieldEnum]
+
+
+export const Withholding_allocationsScalarFieldEnum = {
+  id: 'id',
+  withholding_id: 'withholding_id',
+  document_id: 'document_id',
+  allocated_amount: 'allocated_amount',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Withholding_allocationsScalarFieldEnum = (typeof Withholding_allocationsScalarFieldEnum)[keyof typeof Withholding_allocationsScalarFieldEnum]
+
+
 export const Hr_accountsScalarFieldEnum = {
   id: 'id',
   party_id: 'party_id',
@@ -11293,6 +12226,23 @@ export const International_operationsScalarFieldEnum = {
 export type International_operationsScalarFieldEnum = (typeof International_operationsScalarFieldEnum)[keyof typeof International_operationsScalarFieldEnum]
 
 
+export const International_operation_quotesScalarFieldEnum = {
+  id: 'id',
+  operation_id: 'operation_id',
+  document_id: 'document_id',
+  status: 'status',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type International_operation_quotesScalarFieldEnum = (typeof International_operation_quotesScalarFieldEnum)[keyof typeof International_operation_quotesScalarFieldEnum]
+
+
 export const International_containersScalarFieldEnum = {
   id: 'id',
   operation_id: 'operation_id',
@@ -11357,6 +12307,7 @@ export type International_operation_documentsScalarFieldEnum = (typeof Internati
 export const International_operation_paymentsScalarFieldEnum = {
   operation_id: 'operation_id',
   payment_id: 'payment_id',
+  container_id: 'container_id',
   created_at: 'created_at'
 } as const
 
@@ -13538,6 +14489,90 @@ export type ListEnumCurrencyRateTypeFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'WithholdingSubjectStatus'
+ */
+export type EnumWithholdingSubjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithholdingSubjectStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'WithholdingSubjectStatus[]'
+ */
+export type ListEnumWithholdingSubjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithholdingSubjectStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'IibbRegistrationType'
+ */
+export type EnumIibbRegistrationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IibbRegistrationType'>
+    
+
+
+/**
+ * Reference to a field of type 'IibbRegistrationType[]'
+ */
+export type ListEnumIibbRegistrationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IibbRegistrationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TaxApplicationType'
+ */
+export type EnumTaxApplicationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaxApplicationType'>
+    
+
+
+/**
+ * Reference to a field of type 'TaxApplicationType[]'
+ */
+export type ListEnumTaxApplicationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaxApplicationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TaxBaseType'
+ */
+export type EnumTaxBaseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaxBaseType'>
+    
+
+
+/**
+ * Reference to a field of type 'TaxBaseType[]'
+ */
+export type ListEnumTaxBaseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaxBaseType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WithholdingDirection'
+ */
+export type EnumWithholdingDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithholdingDirection'>
+    
+
+
+/**
+ * Reference to a field of type 'WithholdingDirection[]'
+ */
+export type ListEnumWithholdingDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithholdingDirection[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WithholdingStatus'
+ */
+export type EnumWithholdingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithholdingStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'WithholdingStatus[]'
+ */
+export type ListEnumWithholdingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithholdingStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'HrAccountEntryType'
  */
 export type EnumHrAccountEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HrAccountEntryType'>
@@ -13632,6 +14667,20 @@ export type EnumIncotermFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'Incoterm[]'
  */
 export type ListEnumIncotermFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Incoterm[]'>
+    
+
+
+/**
+ * Reference to a field of type 'QuoteStatus'
+ */
+export type EnumQuoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuoteStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'QuoteStatus[]'
+ */
+export type ListEnumQuoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuoteStatus[]'>
     
 
 
@@ -14372,11 +15421,21 @@ export type GlobalOmitConfig = {
   product_structure_versions?: Prisma.product_structure_versionsOmit
   entity_photos?: Prisma.entity_photosOmit
   files?: Prisma.filesOmit
+  tax_jurisdictions?: Prisma.tax_jurisdictionsOmit
+  withholding_concepts?: Prisma.withholding_conceptsOmit
+  business_party_withholding_profiles?: Prisma.business_party_withholding_profilesOmit
+  business_party_iibb_registrations?: Prisma.business_party_iibb_registrationsOmit
+  company_tax_jurisdictions?: Prisma.company_tax_jurisdictionsOmit
+  tax_rules?: Prisma.tax_rulesOmit
+  tax_rule_brackets?: Prisma.tax_rule_bracketsOmit
+  withholdings?: Prisma.withholdingsOmit
+  withholding_allocations?: Prisma.withholding_allocationsOmit
   hr_accounts?: Prisma.hr_accountsOmit
   hr_account_entries?: Prisma.hr_account_entriesOmit
   hr_vales?: Prisma.hr_valesOmit
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsOmit
   international_operations?: Prisma.international_operationsOmit
+  international_operation_quotes?: Prisma.international_operation_quotesOmit
   international_containers?: Prisma.international_containersOmit
   container_events?: Prisma.container_eventsOmit
   international_operation_documents?: Prisma.international_operation_documentsOmit

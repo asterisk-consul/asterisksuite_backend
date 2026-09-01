@@ -342,12 +342,25 @@ const documentTypes = [
   },
 
   // ═══════════════════════════════════════════════════════════
-  // PRESUPUESTOS (direction: 1)
+  // PRESUPUESTOS (direction: 1 y -1)
   // ═══════════════════════════════════════════════════════════
   {
     code: 'PRES',
     description: 'Presupuesto',
     direction: 1,
+    category: 'QUOTE',
+    letter_type: null,
+    afip_code: null,
+    requires_cae: false,
+    is_electronic: false,
+    affects_stock: false,
+    affects_accounting: false,
+    affects_tax_book: false,
+  },
+  {
+    code: 'PRE-C',
+    description: 'Presupuesto de Compra',
+    direction: -1,
     category: 'QUOTE',
     letter_type: null,
     afip_code: null,

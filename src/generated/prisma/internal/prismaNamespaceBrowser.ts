@@ -78,11 +78,21 @@ export const ModelName = {
   product_structure_versions: 'product_structure_versions',
   entity_photos: 'entity_photos',
   files: 'files',
+  tax_jurisdictions: 'tax_jurisdictions',
+  withholding_concepts: 'withholding_concepts',
+  business_party_withholding_profiles: 'business_party_withholding_profiles',
+  business_party_iibb_registrations: 'business_party_iibb_registrations',
+  company_tax_jurisdictions: 'company_tax_jurisdictions',
+  tax_rules: 'tax_rules',
+  tax_rule_brackets: 'tax_rule_brackets',
+  withholdings: 'withholdings',
+  withholding_allocations: 'withholding_allocations',
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
   hr_vale_commission_details: 'hr_vale_commission_details',
   international_operations: 'international_operations',
+  international_operation_quotes: 'international_operation_quotes',
   international_containers: 'international_containers',
   container_events: 'container_events',
   international_operation_documents: 'international_operation_documents',
@@ -509,6 +519,7 @@ export const Document_typesScalarFieldEnum = {
   affects_accounting: 'affects_accounting',
   affects_tax_book: 'affects_tax_book',
   affects_payment: 'affects_payment',
+  calculates_taxes: 'calculates_taxes',
   active: 'active',
   category: 'category',
   letter_type: 'letter_type',
@@ -735,6 +746,188 @@ export const FilesScalarFieldEnum = {
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
 
 
+export const Tax_jurisdictionsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  country: 'country',
+  is_active: 'is_active',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tax_jurisdictionsScalarFieldEnum = (typeof Tax_jurisdictionsScalarFieldEnum)[keyof typeof Tax_jurisdictionsScalarFieldEnum]
+
+
+export const Withholding_conceptsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Withholding_conceptsScalarFieldEnum = (typeof Withholding_conceptsScalarFieldEnum)[keyof typeof Withholding_conceptsScalarFieldEnum]
+
+
+export const Business_party_withholding_profilesScalarFieldEnum = {
+  id: 'id',
+  business_party_id: 'business_party_id',
+  tax_type: 'tax_type',
+  is_subject: 'is_subject',
+  status: 'status',
+  is_pyme: 'is_pyme',
+  observations: 'observations',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Business_party_withholding_profilesScalarFieldEnum = (typeof Business_party_withholding_profilesScalarFieldEnum)[keyof typeof Business_party_withholding_profilesScalarFieldEnum]
+
+
+export const Business_party_iibb_registrationsScalarFieldEnum = {
+  id: 'id',
+  business_party_id: 'business_party_id',
+  registration_type: 'registration_type',
+  jurisdiction_id: 'jurisdiction_id',
+  registration_number: 'registration_number',
+  prorrate_percentage: 'prorrate_percentage',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Business_party_iibb_registrationsScalarFieldEnum = (typeof Business_party_iibb_registrationsScalarFieldEnum)[keyof typeof Business_party_iibb_registrationsScalarFieldEnum]
+
+
+export const Company_tax_jurisdictionsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  jurisdiction_id: 'jurisdiction_id',
+  tax_type: 'tax_type',
+  is_withholding_agent: 'is_withholding_agent',
+  is_perception_agent: 'is_perception_agent',
+  registration_number: 'registration_number',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Company_tax_jurisdictionsScalarFieldEnum = (typeof Company_tax_jurisdictionsScalarFieldEnum)[keyof typeof Company_tax_jurisdictionsScalarFieldEnum]
+
+
+export const Tax_rulesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  tax_type: 'tax_type',
+  application_type: 'application_type',
+  jurisdiction_id: 'jurisdiction_id',
+  withholding_concept_id: 'withholding_concept_id',
+  operation_type: 'operation_type',
+  supplier_condition: 'supplier_condition',
+  customer_condition: 'customer_condition',
+  cuit_suffix_group: 'cuit_suffix_group',
+  base_type: 'base_type',
+  calculation_method: 'calculation_method',
+  rate: 'rate',
+  fixed_amount: 'fixed_amount',
+  minimum_amount: 'minimum_amount',
+  maximum_amount: 'maximum_amount',
+  priority: 'priority',
+  is_active: 'is_active',
+  valid_from: 'valid_from',
+  valid_to: 'valid_to',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Tax_rulesScalarFieldEnum = (typeof Tax_rulesScalarFieldEnum)[keyof typeof Tax_rulesScalarFieldEnum]
+
+
+export const Tax_rule_bracketsScalarFieldEnum = {
+  id: 'id',
+  tax_rule_id: 'tax_rule_id',
+  accumulated_from: 'accumulated_from',
+  accumulated_to: 'accumulated_to',
+  rate: 'rate',
+  created_at: 'created_at'
+} as const
+
+export type Tax_rule_bracketsScalarFieldEnum = (typeof Tax_rule_bracketsScalarFieldEnum)[keyof typeof Tax_rule_bracketsScalarFieldEnum]
+
+
+export const WithholdingsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  business_party_id: 'business_party_id',
+  direction: 'direction',
+  payment_id: 'payment_id',
+  tax_type: 'tax_type',
+  jurisdiction_id: 'jurisdiction_id',
+  withholding_concept_id: 'withholding_concept_id',
+  tax_rule_id: 'tax_rule_id',
+  base_amount: 'base_amount',
+  rate: 'rate',
+  withheld_amount: 'withheld_amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  certificate_number: 'certificate_number',
+  certificate_date: 'certificate_date',
+  status: 'status',
+  automatic_amount: 'automatic_amount',
+  manual_amount: 'manual_amount',
+  modification_reason: 'modification_reason',
+  date: 'date',
+  observations: 'observations',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type WithholdingsScalarFieldEnum = (typeof WithholdingsScalarFieldEnum)[keyof typeof WithholdingsScalarFieldEnum]
+
+
+export const Withholding_allocationsScalarFieldEnum = {
+  id: 'id',
+  withholding_id: 'withholding_id',
+  document_id: 'document_id',
+  allocated_amount: 'allocated_amount',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Withholding_allocationsScalarFieldEnum = (typeof Withholding_allocationsScalarFieldEnum)[keyof typeof Withholding_allocationsScalarFieldEnum]
+
+
 export const Hr_accountsScalarFieldEnum = {
   id: 'id',
   party_id: 'party_id',
@@ -856,6 +1049,23 @@ export const International_operationsScalarFieldEnum = {
 export type International_operationsScalarFieldEnum = (typeof International_operationsScalarFieldEnum)[keyof typeof International_operationsScalarFieldEnum]
 
 
+export const International_operation_quotesScalarFieldEnum = {
+  id: 'id',
+  operation_id: 'operation_id',
+  document_id: 'document_id',
+  status: 'status',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type International_operation_quotesScalarFieldEnum = (typeof International_operation_quotesScalarFieldEnum)[keyof typeof International_operation_quotesScalarFieldEnum]
+
+
 export const International_containersScalarFieldEnum = {
   id: 'id',
   operation_id: 'operation_id',
@@ -920,6 +1130,7 @@ export type International_operation_documentsScalarFieldEnum = (typeof Internati
 export const International_operation_paymentsScalarFieldEnum = {
   operation_id: 'operation_id',
   payment_id: 'payment_id',
+  container_id: 'container_id',
   created_at: 'created_at'
 } as const
 

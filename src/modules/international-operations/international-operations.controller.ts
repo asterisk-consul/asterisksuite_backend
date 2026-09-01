@@ -21,6 +21,8 @@ import { CreateContainerDto } from './containers/dto/create-container.dto';
 import { UpdateContainerDto } from './containers/dto/update-container.dto';
 import { CreateEventDto } from './events/dto/create-event.dto';
 import { AssociateDocumentDto } from './dto/associate-document.dto';
+import { AssociateQuoteDto } from './dto/associate-quote.dto';
+import { UpdateQuoteStatusDto } from './dto/update-quote-status.dto';
 import { OperationStatus } from '@/generated/prisma/enums';
 
 @UseGuards(JwtAuthGuard)
@@ -100,8 +102,8 @@ export class InternationalOperationsController {
 
   @Post(':id/payments')
   @RequirePermissions('international_operations.update')
-  associatePayment(@Param('id') id: string, @Body('payment_id') payment_id: string) {
-    return this.operationsService.associatePayment(id, payment_id);
+  associatePayment(@Param('id') id: string, @Body('payment_id') payment_id: string, @Body('container_id') container_id?: string) {
+    return this.operationsService.associatePayment(id, payment_id, container_id);
   }
 
   @Delete(':id/payments/:payId')
@@ -120,6 +122,24 @@ export class InternationalOperationsController {
   @RequirePermissions('international_operations.update')
   disassociatePurchaseOrder(@Param('id') id: string, @Param('poId') poId: string) {
     return this.operationsService.disassociatePurchaseOrder(id, poId);
+  }
+
+  @Post(':id/quotes')
+  @RequirePermissions('international_operations.update')
+  associateQuote(@Param('id') id: string, @Body() dto: AssociateQuoteDto) {
+    return this.operationsService.associateQuote(id, dto.document_id);
+  }
+
+  @Patch(':id/quotes/:quoteId/status')
+  @RequirePermissions('international_operations.update')
+  updateQuoteStatus(@Param('id') id: string, @Param('quoteId') quoteId: string, @Body() dto: UpdateQuoteStatusDto) {
+    return this.operationsService.updateQuoteStatus(id, quoteId, dto.status);
+  }
+
+  @Delete(':id/quotes/:quoteId')
+  @RequirePermissions('international_operations.update')
+  disassociateQuote(@Param('id') id: string, @Param('quoteId') quoteId: string) {
+    return this.operationsService.disassociateQuote(id, quoteId);
   }
 
   @Post(':id/containers')

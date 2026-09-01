@@ -198,6 +198,7 @@ enum AccountEntryType {
   DEBIT
   CREDIT
   OPENING_BALANCE
+  WITHHOLDING
 
   @@schema("tenant")
 }
@@ -296,4 +297,62 @@ enum FiscalMode {
   COMPLETE // Motor fiscal completo: IVA, percepciones, etc.
 
   @@schema("public")
+}
+
+// ══════════════════════════════════════════════════════════
+// MOTOR FISCAL — Retenciones / Perfiles fiscales
+// ══════════════════════════════════════════════════════════
+
+enum IibbRegistrationType {
+  DIRECTO // Inscripción directa en una jurisdicción
+  CONVENIO_MULTILATERAL // Prorrateo por jurisdicción
+  NO_INSCRIPTO
+  EXENTO
+
+  @@schema("tenant")
+}
+
+enum WithholdingSubjectStatus {
+  NORMAL
+  EXENTO
+  NO_SUJETO
+  CERTIFICADO_NO_RETENCION
+
+  @@schema("tenant")
+}
+
+enum WithholdingDirection {
+  PRACTICADA // Nuestra empresa retiene al tercero (pago a proveedor)
+  SUFRIDA // El tercero nos retiene (cobro a cliente)
+
+  @@schema("tenant")
+}
+
+enum WithholdingStatus {
+  CALCULATED
+  APPLIED
+  CERTIFIED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum TaxApplicationType {
+  TAX // Impuesto de operación (IVA, etc.)
+  PERCEPTION // Percepción (en factura)
+  WITHHOLDING // Retención (en pago/cobro)
+
+  @@schema("tenant")
+}
+
+enum TaxBaseType {
+  NET_AMOUNT
+  GROSS_AMOUNT
+  VAT_AMOUNT
+  TAXABLE_AMOUNT
+  PAYMENT_AMOUNT
+  ACCUMULATED_AMOUNT
+  CUSTOM
+
+  @@schema("tenant")
 }

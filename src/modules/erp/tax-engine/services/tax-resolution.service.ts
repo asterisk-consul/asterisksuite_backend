@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Inject } from '@nestjs/common'
+import { PrismaService } from '@/prisma/prisma.service'
 import type { TaxResolutionResult, ResolvedTax, ResolvedTaxSettings } from '../interfaces/tax-result.interface'
 import type { TaxContext } from '../interfaces/tax-context.interface'
 import type { ITaxCategoryRepository } from '../repositories/tax-category.repository.interface'
@@ -19,11 +20,25 @@ export class TaxResolutionService {
     @Inject('ICompanyTaxSettingsRepository') private settingsRepo: ICompanyTaxSettingsRepository,
     @Inject('IOperationTaxRepository') private operationTaxRepo: IOperationTaxRepository,
     @Inject('IProductRepository') private productRepo: IProductRepository,
+    private prisma: PrismaService,
   ) {}
+
+  private get db() {
+    return this.prisma.getClientForCurrentContext()
+  }
 
   async resolve(ctx: TaxContext): Promise<TaxResolutionResult> {
     const rawSettings = await this.settingsRepo.findByCompanyId(ctx.issuerCompanyId)
     const settings = this.resolveSettings(rawSettings)
+
+    // Flag del tipo de documento: comprobantes sin cálculo de impuestos
+    const docType = await this.db.document_types.findUnique({
+      where: { id: ctx.documentTypeId },
+      select: { calculates_taxes: true },
+    })
+    if (docType && docType.calculates_taxes === false) {
+      return { settings, productTaxes: new Map(), operationTaxes: [] }
+    }
 
     const productTaxes = new Map<string, ResolvedTax[]>()
     for (const item of ctx.items) {
@@ -33,8 +48,23 @@ export class TaxResolutionService {
       }
     }
 
-    const operationTaxes = await this.resolveOperationTaxes(ctx, settings)
-    return { settings, productTaxes, operationTaxes }
+    // Whitelist: si el document_type tiene impuestos asociados, limitar la resolución a ese conjunto
+    const docTypeTaxes = await this.db.document_type_taxes.findMany({
+      where: { document_type_id: ctx.documentTypeId },
+      select: { tax_id: true },
+    })
+    const allowedTaxIds = docTypeTaxes.length > 0 ? new Set(docTypeTaxes.map((t) => t.tax_id)) : null
+
+    const filterTaxes = (taxes: ResolvedTax[]): ResolvedTax[] =>
+      allowedTaxIds ? taxes.filter((t) => allowedTaxIds.has(t.tax_id)) : taxes
+
+    const filteredProductTaxes = new Map<string, ResolvedTax[]>()
+    for (const [productId, taxes] of productTaxes) {
+      filteredProductTaxes.set(productId, filterTaxes(taxes))
+    }
+
+    const operationTaxes = filterTaxes(await this.resolveOperationTaxes(ctx, settings))
+    return { settings, productTaxes: filteredProductTaxes, operationTaxes }
   }
 
   private resolveSettings(raw: any): ResolvedTaxSettings {

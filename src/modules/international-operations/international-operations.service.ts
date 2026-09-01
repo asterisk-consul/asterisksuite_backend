@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { convertWithMarketRate } from '@/common/utils/currency-conversion';
 import { DocumentSequencesService } from '@/modules/erp/document-sequences/document-sequences.service';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
-import { OperationStatus, InternationalExpenseType } from '@/generated/prisma/enums';
+import { OperationStatus, InternationalExpenseType, QuoteStatus } from '@/generated/prisma/enums';
 
 @Injectable()
 export class InternationalOperationsService {
@@ -139,7 +140,23 @@ export class InternationalOperationsService {
         operation_payments: {
           include: {
             payment: true,
+            container: { select: { id: true, container_number: true } },
           },
+        },
+        operation_quotes: {
+          where: { deleted_at: null },
+          include: {
+            document: {
+              include: {
+                document_types: { select: { code: true, description: true, category: true } },
+                business_parties: { select: { id: true, name: true } },
+                document_items: {
+                  include: { products: { select: { id: true, name: true, sku: true } } },
+                },
+              },
+            },
+          },
+          orderBy: { created_at: 'asc' },
         },
         purchase_orders: {
           include: {
@@ -223,26 +240,6 @@ export class InternationalOperationsService {
   async updateStatus(id: string, status: OperationStatus) {
     const operation = await this.findOne(id);
 
-    const validTransitions: Record<OperationStatus, OperationStatus[]> = {
-      PLANNED: ['IN_PREPARATION', 'CANCELLED'],
-      IN_PREPARATION: ['SHIPPED', 'CANCELLED'],
-      SHIPPED: ['IN_TRANSIT'],
-      IN_TRANSIT: ['ARRIVED'],
-      ARRIVED: ['CUSTOMS'],
-      CUSTOMS: ['RELEASED'],
-      RELEASED: ['DELIVERED'],
-      DELIVERED: ['CLOSED'],
-      CLOSED: [],
-      CANCELLED: [],
-    };
-
-    const allowed = validTransitions[operation.status] ?? [];
-    if (!allowed.includes(status)) {
-      throw new BadRequestException(
-        `No se puede cambiar de estado "${operation.status}" a "${status}"`,
-      );
-    }
-
     const data: any = { status };
 
     if (status === 'IN_TRANSIT' && !operation.actual_departure_date) {
@@ -287,6 +284,9 @@ export class InternationalOperationsService {
       total: number;
       paid: number;
       documents: any[];
+      currency: string;
+      unconvertedCount: number;
+      unconvertedAmount: number;
     }> = {};
 
     // Agrupar financial por moneda
@@ -307,6 +307,7 @@ export class InternationalOperationsService {
       STORAGE: 'Almacenaje',
       LOCAL_TRANSPORT: 'Transporte Interno',
       CUSTOMS_DUTIES: 'Derechos de Aduana',
+      NACIONALIZACION: 'Nacionalización',
       OTHER: 'Otros',
     };
 
@@ -314,6 +315,14 @@ export class InternationalOperationsService {
     let totalBase = 0;
     let paidOriginal = 0;
     let paidBase = 0;
+
+    // Consolidado en la moneda de la operación: cada documento se convierte
+    // con el exchange_rate asignado al asociarlo; los sin TC se rastrean aparte.
+    const opCurrency = operation.currency_code ?? 'USD';
+    let totalOpCurrency = 0;
+    let paidOpCurrency = 0;
+    let unconvertedCount = 0;
+    let unconvertedAmount = 0;
 
     for (const rel of operation.operation_documents) {
       const doc = rel.document;
@@ -328,6 +337,17 @@ export class InternationalOperationsService {
       totalBase += docBase;
       paidOriginal += docPaid;
       paidBase += docPaid;
+
+      // Consolidado en moneda de operación
+      const convertedTotal = convertWithMarketRate(docTotal, docCurrency, opCurrency, rel.exchange_rate ? Number(rel.exchange_rate) : null);
+      const convertedPaid = convertWithMarketRate(docPaid, docCurrency, opCurrency, rel.exchange_rate ? Number(rel.exchange_rate) : null);
+      if (convertedTotal != null) {
+        totalOpCurrency += convertedTotal;
+        paidOpCurrency += convertedPaid ?? 0;
+      } else {
+        unconvertedCount += 1;
+        unconvertedAmount += docTotal;
+      }
 
       // Financial por moneda
       if (!financialByCurrency[docCurrency]) {
@@ -350,10 +370,19 @@ export class InternationalOperationsService {
           total: 0,
           paid: 0,
           documents: [],
+          currency: opCurrency,
+          unconvertedCount: 0,
+          unconvertedAmount: 0,
         };
       }
-      expenseGroups[expenseType].total += docTotal;
-      expenseGroups[expenseType].paid += docPaid;
+      // Totales del grupo en la moneda de la operación
+      if (convertedTotal != null) {
+        expenseGroups[expenseType].total += convertedTotal;
+        expenseGroups[expenseType].paid += convertedPaid ?? 0;
+      } else {
+        expenseGroups[expenseType].unconvertedCount += 1;
+        expenseGroups[expenseType].unconvertedAmount += docTotal;
+      }
       expenseGroups[expenseType].documents.push({
         ...rel,
         paid_amount: docPaid,
@@ -369,6 +398,15 @@ export class InternationalOperationsService {
       for (const pay of pays) {
         paidOriginal += Number(pay.amount);
         paidBase += Number(pay.converted_amount ?? pay.amount);
+        const payCurrency = pay.currency_code ?? opCurrency;
+        if (payCurrency === opCurrency) {
+          paidOpCurrency += Number(pay.amount);
+        } else if (pay.converted_amount != null) {
+          paidOpCurrency += Number(pay.converted_amount);
+        } else {
+          unconvertedCount += 1;
+          unconvertedAmount += Number(pay.amount);
+        }
       }
     }
 
@@ -409,9 +447,11 @@ export class InternationalOperationsService {
         productCount,
       },
       financial: {
-        total: { amount: totalOriginal, baseAmount: totalBase },
-        paid: { amount: paidOriginal, baseAmount: paidBase },
-        pending: { amount: totalOriginal - paidOriginal, baseAmount: totalBase - paidBase },
+        currency: opCurrency,
+        total: { amount: totalOpCurrency, baseAmount: totalOpCurrency },
+        paid: { amount: paidOpCurrency, baseAmount: paidOpCurrency },
+        pending: { amount: totalOpCurrency - paidOpCurrency, baseAmount: totalOpCurrency - paidOpCurrency },
+        unconverted: { count: unconvertedCount, amount: unconvertedAmount },
       },
       financialByCurrency: Object.values(financialByCurrency).map(f => ({
         currency: f.currency,
@@ -425,6 +465,9 @@ export class InternationalOperationsService {
         total: g.total,
         paid: g.paid,
         pending: g.total - g.paid,
+        currency: g.currency,
+        unconvertedCount: g.unconvertedCount,
+        unconvertedAmount: g.unconvertedAmount,
         documentCount: g.documents.length,
         documents: g.documents,
       })),
@@ -487,13 +530,22 @@ export class InternationalOperationsService {
     });
   }
 
-  async associatePayment(operationId: string, paymentId: string) {
+  async associatePayment(operationId: string, paymentId: string, containerId?: string) {
     await this.findOne(operationId);
 
     const pay = await this.prisma.payments.findFirst({
       where: { id: paymentId, deleted_at: null },
     });
     if (!pay) throw new NotFoundException('Pago no encontrado');
+
+    if (containerId) {
+      const container = await this.prisma.international_containers.findFirst({
+        where: { id: containerId, operation_id: operationId, deleted_at: null },
+      });
+      if (!container) {
+        throw new BadRequestException('El contenedor no pertenece a esta operación');
+      }
+    }
 
     const existing = await this.prisma.international_operation_payments.findUnique({
       where: { operation_id_payment_id: { operation_id: operationId, payment_id: paymentId } },
@@ -503,7 +555,11 @@ export class InternationalOperationsService {
     }
 
     return this.prisma.international_operation_payments.create({
-      data: { operation_id: operationId, payment_id: paymentId },
+      data: {
+        operation_id: operationId,
+        payment_id: paymentId,
+        container_id: containerId ?? null,
+      },
     });
   }
 
@@ -522,8 +578,76 @@ export class InternationalOperationsService {
     });
   }
 
-  async associatePurchaseOrder(operationId: string, documentId: string) {
+  async associateQuote(operationId: string, documentId: string) {
     await this.findOne(operationId);
+
+    const doc = await this.prisma.documents.findFirst({
+      where: { id: documentId, deleted_at: null },
+      include: { document_types: { select: { category: true, direction: true } } },
+    });
+    if (!doc) throw new NotFoundException('Documento no encontrado');
+    if (doc.document_types?.category !== 'QUOTE') {
+      throw new BadRequestException('El documento debe ser un presupuesto (categoría QUOTE)');
+    }
+    if (Number(doc.document_types?.direction) !== -1) {
+      throw new BadRequestException('El presupuesto debe ser de compra');
+    }
+
+    const existing = await this.prisma.international_operation_quotes.findFirst({
+      where: { operation_id: operationId, document_id: documentId, deleted_at: null },
+    });
+    if (existing) {
+      throw new BadRequestException('El presupuesto ya está asociado a esta operación');
+    }
+
+    return this.prisma.international_operation_quotes.create({
+      data: { operation_id: operationId, document_id: documentId },
+    });
+  }
+
+  async updateQuoteStatus(operationId: string, quoteId: string, status: QuoteStatus) {
+    await this.findOne(operationId);
+
+    const quote = await this.prisma.international_operation_quotes.findFirst({
+      where: { id: quoteId, operation_id: operationId, deleted_at: null },
+    });
+    if (!quote) throw new NotFoundException('Presupuesto no encontrado');
+
+    if (status === 'ACCEPTED') {
+      return this.prisma.$transaction(async (tx) => {
+        await tx.international_operation_quotes.updateMany({
+          where: { operation_id: operationId, id: { not: quoteId }, status: 'PENDING' },
+          data: { status: 'REJECTED' },
+        });
+        return tx.international_operation_quotes.update({
+          where: { id: quoteId },
+          data: { status: 'ACCEPTED' },
+          include: { document: { include: { business_parties: true } } },
+        });
+      });
+    }
+
+    return this.prisma.international_operation_quotes.update({
+      where: { id: quoteId },
+      data: { status },
+      include: { document: { include: { business_parties: true } } },
+    });
+  }
+
+  async disassociateQuote(operationId: string, quoteId: string) {
+    await this.findOne(operationId);
+
+    const quote = await this.prisma.international_operation_quotes.findFirst({
+      where: { id: quoteId, operation_id: operationId, deleted_at: null },
+    });
+    if (!quote) throw new NotFoundException('Presupuesto no encontrado');
+
+    return this.prisma.international_operation_quotes.delete({
+      where: { id: quoteId },
+    });
+  }
+
+  async associatePurchaseOrder(operationId: string, documentId: string) {    await this.findOne(operationId);
 
     const po = await this.prisma.orden_compra_documents.findFirst({
       where: { document_id: documentId },

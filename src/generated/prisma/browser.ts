@@ -153,6 +153,51 @@ export type entity_photos = Prisma.entity_photosModel
  */
 export type files = Prisma.filesModel
 /**
+ * Model tax_jurisdictions
+ * 
+ */
+export type tax_jurisdictions = Prisma.tax_jurisdictionsModel
+/**
+ * Model withholding_concepts
+ * 
+ */
+export type withholding_concepts = Prisma.withholding_conceptsModel
+/**
+ * Model business_party_withholding_profiles
+ * 
+ */
+export type business_party_withholding_profiles = Prisma.business_party_withholding_profilesModel
+/**
+ * Model business_party_iibb_registrations
+ * 
+ */
+export type business_party_iibb_registrations = Prisma.business_party_iibb_registrationsModel
+/**
+ * Model company_tax_jurisdictions
+ * 
+ */
+export type company_tax_jurisdictions = Prisma.company_tax_jurisdictionsModel
+/**
+ * Model tax_rules
+ * 
+ */
+export type tax_rules = Prisma.tax_rulesModel
+/**
+ * Model tax_rule_brackets
+ * 
+ */
+export type tax_rule_brackets = Prisma.tax_rule_bracketsModel
+/**
+ * Model withholdings
+ * 
+ */
+export type withholdings = Prisma.withholdingsModel
+/**
+ * Model withholding_allocations
+ * 
+ */
+export type withholding_allocations = Prisma.withholding_allocationsModel
+/**
  * Model hr_accounts
  * 
  */
@@ -177,6 +222,11 @@ export type hr_vale_commission_details = Prisma.hr_vale_commission_detailsModel
  * 
  */
 export type international_operations = Prisma.international_operationsModel
+/**
+ * Model international_operation_quotes
+ * 
+ */
+export type international_operation_quotes = Prisma.international_operation_quotesModel
 /**
  * Model international_containers
  * 

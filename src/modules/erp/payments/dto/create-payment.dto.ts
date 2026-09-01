@@ -10,6 +10,62 @@ export class PaymentDocumentDto {
   amount_applied!: number;
 }
 
+export class PaymentWithholdingAllocationDto {
+  @IsString()
+  document_id!: string;
+
+  @IsNumber()
+  @Min(0.01)
+  allocated_amount!: number;
+}
+
+export class PaymentWithholdingDto {
+  @IsEnum(['GANANCIAS', 'IIBB', 'SUSS', 'IVA'] as const)
+  tax_type!: string;
+
+  @IsString()
+  @IsOptional()
+  jurisdiction_id?: string;
+
+  @IsString()
+  @IsOptional()
+  withholding_concept_id?: string;
+
+  @IsString()
+  @IsOptional()
+  tax_rule_id?: string;
+
+  @IsNumber()
+  @Min(0.01)
+  base_amount!: number;
+
+  @IsNumber()
+  @IsOptional()
+  rate?: number;
+
+  @IsNumber()
+  @Min(0.01)
+  withheld_amount!: number;
+
+  @IsString()
+  @IsOptional()
+  certificate_number?: string;
+
+  @IsDateString()
+  @IsOptional()
+  certificate_date?: string;
+
+  @IsString()
+  @IsOptional()
+  observations?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentWithholdingAllocationDto)
+  @IsOptional()
+  allocations?: PaymentWithholdingAllocationDto[];
+}
+
 export class CreatePaymentDto {
   @IsEnum(['PAYMENT', 'COLLECTION'] as const)
   type!: string;
@@ -81,6 +137,12 @@ export class CreatePaymentDto {
   @Type(() => PaymentDocumentDto)
   @IsOptional()
   documents?: PaymentDocumentDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentWithholdingDto)
+  @IsOptional()
+  withholdings?: PaymentWithholdingDto[];
 
   @IsEnum(['DRAFT', 'CONFIRMED', 'PAID', 'REVERSED', 'CANCELLED'] as const)
   @IsOptional()

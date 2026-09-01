@@ -223,7 +223,8 @@ export const AccountEntryType = {
   DEBIT_NOTE: 'DEBIT_NOTE',
   DEBIT: 'DEBIT',
   CREDIT: 'CREDIT',
-  OPENING_BALANCE: 'OPENING_BALANCE'
+  OPENING_BALANCE: 'OPENING_BALANCE',
+  WITHHOLDING: 'WITHHOLDING'
 } as const
 
 export type AccountEntryType = (typeof AccountEntryType)[keyof typeof AccountEntryType]
@@ -330,6 +331,66 @@ export const FiscalMode = {
 } as const
 
 export type FiscalMode = (typeof FiscalMode)[keyof typeof FiscalMode]
+
+
+export const IibbRegistrationType = {
+  DIRECTO: 'DIRECTO',
+  CONVENIO_MULTILATERAL: 'CONVENIO_MULTILATERAL',
+  NO_INSCRIPTO: 'NO_INSCRIPTO',
+  EXENTO: 'EXENTO'
+} as const
+
+export type IibbRegistrationType = (typeof IibbRegistrationType)[keyof typeof IibbRegistrationType]
+
+
+export const WithholdingSubjectStatus = {
+  NORMAL: 'NORMAL',
+  EXENTO: 'EXENTO',
+  NO_SUJETO: 'NO_SUJETO',
+  CERTIFICADO_NO_RETENCION: 'CERTIFICADO_NO_RETENCION'
+} as const
+
+export type WithholdingSubjectStatus = (typeof WithholdingSubjectStatus)[keyof typeof WithholdingSubjectStatus]
+
+
+export const WithholdingDirection = {
+  PRACTICADA: 'PRACTICADA',
+  SUFRIDA: 'SUFRIDA'
+} as const
+
+export type WithholdingDirection = (typeof WithholdingDirection)[keyof typeof WithholdingDirection]
+
+
+export const WithholdingStatus = {
+  CALCULATED: 'CALCULATED',
+  APPLIED: 'APPLIED',
+  CERTIFIED: 'CERTIFIED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type WithholdingStatus = (typeof WithholdingStatus)[keyof typeof WithholdingStatus]
+
+
+export const TaxApplicationType = {
+  TAX: 'TAX',
+  PERCEPTION: 'PERCEPTION',
+  WITHHOLDING: 'WITHHOLDING'
+} as const
+
+export type TaxApplicationType = (typeof TaxApplicationType)[keyof typeof TaxApplicationType]
+
+
+export const TaxBaseType = {
+  NET_AMOUNT: 'NET_AMOUNT',
+  GROSS_AMOUNT: 'GROSS_AMOUNT',
+  VAT_AMOUNT: 'VAT_AMOUNT',
+  TAXABLE_AMOUNT: 'TAXABLE_AMOUNT',
+  PAYMENT_AMOUNT: 'PAYMENT_AMOUNT',
+  ACCUMULATED_AMOUNT: 'ACCUMULATED_AMOUNT',
+  CUSTOM: 'CUSTOM'
+} as const
+
+export type TaxBaseType = (typeof TaxBaseType)[keyof typeof TaxBaseType]
 
 
 export const HrValeType = {
@@ -470,10 +531,20 @@ export const InternationalExpenseType = {
   STORAGE: 'STORAGE',
   LOCAL_TRANSPORT: 'LOCAL_TRANSPORT',
   CUSTOMS_DUTIES: 'CUSTOMS_DUTIES',
+  NACIONALIZACION: 'NACIONALIZACION',
   OTHER: 'OTHER'
 } as const
 
 export type InternationalExpenseType = (typeof InternationalExpenseType)[keyof typeof InternationalExpenseType]
+
+
+export const QuoteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type QuoteStatus = (typeof QuoteStatus)[keyof typeof QuoteStatus]
 
 
 export const MaintenanceAssetType = {

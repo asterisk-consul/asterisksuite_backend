@@ -5,6 +5,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
 @Injectable()
 export class PaymentsService {
@@ -15,6 +16,10 @@ export class PaymentsService {
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  private getCompanyId(): string | undefined {
+    return getCurrentCompanyId();
   }
 
   // ═══════════════════════════════════════════
@@ -105,6 +110,50 @@ export class PaymentsService {
       }
     }
 
+    // Store withholdings (retenciones) — status CALCULATED until confirm
+    if (dto.withholdings && dto.withholdings.length > 0) {
+      if (!dto.party_id) {
+        throw new BadRequestException('party_id es requerido cuando se registran retenciones');
+      }
+      for (const wh of dto.withholdings) {
+        await this.prisma.withholdings.create({
+          data: {
+            company_id: this.getCompanyId() ?? payment.id,
+            business_party_id: payment.party_id!,
+            direction: payment.type === 'PAYMENT' ? 'PRACTICADA' : 'SUFRIDA',
+            payment_id: payment.id,
+            tax_type: wh.tax_type,
+            jurisdiction_id: wh.jurisdiction_id ?? null,
+            withholding_concept_id: wh.withholding_concept_id ?? null,
+            tax_rule_id: wh.tax_rule_id ?? null,
+            base_amount: wh.base_amount,
+            rate: wh.rate ?? null,
+            withheld_amount: wh.withheld_amount,
+            automatic_amount: wh.withheld_amount,
+            currency_code: payment.currency_code,
+            exchange_rate: payment.exchange_rate,
+            certificate_number: wh.certificate_number ?? null,
+            certificate_date: wh.certificate_date ? new Date(wh.certificate_date) : null,
+            status: 'CALCULATED',
+            date: payment.date,
+            observations: wh.observations ?? null,
+            created_by: userId,
+            ...(wh.allocations?.length
+              ? {
+                  allocations: {
+                    create: wh.allocations.map((al) => ({
+                      document_id: al.document_id,
+                      allocated_amount: al.allocated_amount,
+                      created_by: userId,
+                    })),
+                  },
+                }
+              : {}),
+          },
+        });
+      }
+    }
+
     // Link checks to this payment
     if (dto.check_ids && dto.check_ids.length > 0) {
       for (const checkId of dto.check_ids) {
@@ -137,6 +186,16 @@ export class PaymentsService {
       where: { payment_id: id, deleted_at: null },
     });
 
+    // Load withholdings for validation + confirmation
+    const withholdings = await this.prisma.withholdings.findMany({
+      where: { payment_id: id, deleted_at: null },
+    });
+    const withheldTotal = withholdings.reduce((s, w) => s + w.withheld_amount.toNumber(), 0);
+
+    if (withholdings.length > 0 && !payment.party_id) {
+      throw new BadRequestException('party_id es requerido cuando se registran retenciones');
+    }
+
     if (paymentDocs.length > 0) {
       if (!payment.party_id) {
         throw new BadRequestException('party_id es requerido cuando se aplican documentos');
@@ -167,6 +226,17 @@ export class PaymentsService {
             `El monto aplicado (${pd.amount_applied}) excede el saldo pendiente (${pendingInPayCurrency} ${payCurrency}) del documento ${document.number}`,
           );
         }
+      }
+    }
+
+    // Validación: dinero efectivo + retenciones >= importe aplicado a documentos
+    if (paymentDocs.length > 0 && withholdings.length > 0) {
+      const appliedTotal = paymentDocs.reduce((s, pd) => s + pd.amount_applied.toNumber(), 0);
+      const cashTotal = payment.amount.toNumber();
+      if (appliedTotal > cashTotal + withheldTotal + 0.01) {
+        throw new BadRequestException(
+          `El importe aplicado (${appliedTotal.toFixed(2)}) excede el dinero efectivo (${cashTotal.toFixed(2)}) más retenciones (${withheldTotal.toFixed(2)})`,
+        );
       }
     }
 
@@ -234,6 +304,33 @@ export class PaymentsService {
       // (the advance impacts CC only when applied to an invoice)
       if (payment.party_id && !isAdvanceNoDocs) {
         await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
+      }
+
+      // Retenciones: entrada de cuenta corriente + marcar APPLIED
+      if (withholdings.length > 0 && payment.party_id && !isAdvanceNoDocs) {
+        for (const wh of withholdings) {
+          await this.currentAccountsService.addEntry(
+            {
+              party_id: payment.party_id,
+              party_type: payment.party_type ?? 'SUPPLIER',
+              currency_code: wh.currency_code,
+              type: 'WITHHOLDING',
+              amount: wh.withheld_amount.toNumber(),
+              exchange_rate: wh.exchange_rate ? Number(wh.exchange_rate) : undefined,
+              rate_type: payment.rate_type ?? undefined,
+              description: `Retención ${wh.tax_type}${wh.certificate_number ? ` (cert. ${wh.certificate_number})` : ''} - Pago #${payment.number}`,
+              reference_type: 'withholding',
+              reference_id: wh.id,
+              payment_id: payment.id,
+              date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
+            },
+            userId,
+          );
+        }
+        await tx.withholdings.updateMany({
+          where: { payment_id: id, deleted_at: null },
+          data: { status: 'APPLIED', updated_at: new Date(), updated_by: userId },
+        });
       }
 
       // Update status
@@ -340,6 +437,10 @@ export class PaymentsService {
             document: { select: { id: true, number: true } },
           },
         },
+        withholdings: {
+          where: { deleted_at: null },
+          include: { jurisdiction: { select: { id: true, name: true } } },
+        },
       },
     });
 
@@ -368,6 +469,15 @@ export class PaymentsService {
         documents: {
           include: {
             document: { select: { id: true, number: true, total: true, paid_amount: true } },
+          },
+        },
+        withholdings: {
+          where: { deleted_at: null },
+          include: {
+            jurisdiction: { select: { id: true, name: true } },
+            allocations: {
+              include: { document: { select: { id: true, number: true } } },
+            },
           },
         },
       },
@@ -425,6 +535,14 @@ export class PaymentsService {
 
     // Remove linked payment_documents
     await this.prisma.payment_documents.deleteMany({
+      where: { payment_id: id },
+    });
+
+    // Remove linked withholdings + allocations
+    await this.prisma.withholding_allocations.deleteMany({
+      where: { withholding: { payment_id: id } },
+    });
+    await this.prisma.withholdings.deleteMany({
       where: { payment_id: id },
     });
 
@@ -641,6 +759,12 @@ export class PaymentsService {
   }
 
   private async reverseSideEffects(payment: any, userId: string, referenceType: string) {
+    // Anular retenciones asociadas
+    await this.prisma.withholdings.updateMany({
+      where: { payment_id: payment.id, deleted_at: null },
+      data: { status: 'CANCELLED', updated_at: new Date(), updated_by: userId },
+    });
+
     // Revert documents
     const paymentDocs = await this.prisma.payment_documents.findMany({
       where: { payment_id: payment.id },

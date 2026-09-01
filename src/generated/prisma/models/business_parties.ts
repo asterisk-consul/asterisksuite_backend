@@ -321,6 +321,9 @@ export type business_partiesWhereInput = {
   product_party_prices?: Prisma.Product_party_pricesListRelationFilter
   product_party_price_history?: Prisma.Product_party_price_historyListRelationFilter
   international_operations?: Prisma.International_operationsListRelationFilter
+  withholding_profiles?: Prisma.Business_party_withholding_profilesListRelationFilter
+  iibb_registrations?: Prisma.Business_party_iibb_registrationsListRelationFilter
+  withholdings?: Prisma.WithholdingsListRelationFilter
   maintenance_orders_as_supplier?: Prisma.Maintenance_ordersListRelationFilter
   maintenance_services_as_supplier?: Prisma.Maintenance_servicesListRelationFilter
   tires_as_supplier?: Prisma.TiresListRelationFilter
@@ -360,6 +363,9 @@ export type business_partiesOrderByWithRelationInput = {
   product_party_prices?: Prisma.product_party_pricesOrderByRelationAggregateInput
   product_party_price_history?: Prisma.product_party_price_historyOrderByRelationAggregateInput
   international_operations?: Prisma.international_operationsOrderByRelationAggregateInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesOrderByRelationAggregateInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsOrderByRelationAggregateInput
+  withholdings?: Prisma.withholdingsOrderByRelationAggregateInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersOrderByRelationAggregateInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesOrderByRelationAggregateInput
   tires_as_supplier?: Prisma.tiresOrderByRelationAggregateInput
@@ -402,6 +408,9 @@ export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
   product_party_prices?: Prisma.Product_party_pricesListRelationFilter
   product_party_price_history?: Prisma.Product_party_price_historyListRelationFilter
   international_operations?: Prisma.International_operationsListRelationFilter
+  withholding_profiles?: Prisma.Business_party_withholding_profilesListRelationFilter
+  iibb_registrations?: Prisma.Business_party_iibb_registrationsListRelationFilter
+  withholdings?: Prisma.WithholdingsListRelationFilter
   maintenance_orders_as_supplier?: Prisma.Maintenance_ordersListRelationFilter
   maintenance_services_as_supplier?: Prisma.Maintenance_servicesListRelationFilter
   tires_as_supplier?: Prisma.TiresListRelationFilter
@@ -487,6 +496,9 @@ export type business_partiesCreateInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -526,6 +538,9 @@ export type business_partiesUncheckedCreateInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -565,6 +580,9 @@ export type business_partiesUpdateInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -604,6 +622,9 @@ export type business_partiesUncheckedUpdateInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -787,6 +808,48 @@ export type business_partiesUpdateOneWithoutPartnersNestedInput = {
   delete?: Prisma.business_partiesWhereInput | boolean
   connect?: Prisma.business_partiesWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutPartnersInput, Prisma.business_partiesUpdateWithoutPartnersInput>, Prisma.business_partiesUncheckedUpdateWithoutPartnersInput>
+}
+
+export type business_partiesCreateNestedOneWithoutWithholding_profilesInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholding_profilesInput, Prisma.business_partiesUncheckedCreateWithoutWithholding_profilesInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutWithholding_profilesInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+}
+
+export type business_partiesUpdateOneRequiredWithoutWithholding_profilesNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholding_profilesInput, Prisma.business_partiesUncheckedCreateWithoutWithholding_profilesInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutWithholding_profilesInput
+  upsert?: Prisma.business_partiesUpsertWithoutWithholding_profilesInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutWithholding_profilesInput, Prisma.business_partiesUpdateWithoutWithholding_profilesInput>, Prisma.business_partiesUncheckedUpdateWithoutWithholding_profilesInput>
+}
+
+export type business_partiesCreateNestedOneWithoutIibb_registrationsInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutIibb_registrationsInput, Prisma.business_partiesUncheckedCreateWithoutIibb_registrationsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutIibb_registrationsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+}
+
+export type business_partiesUpdateOneRequiredWithoutIibb_registrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutIibb_registrationsInput, Prisma.business_partiesUncheckedCreateWithoutIibb_registrationsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutIibb_registrationsInput
+  upsert?: Prisma.business_partiesUpsertWithoutIibb_registrationsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutIibb_registrationsInput, Prisma.business_partiesUpdateWithoutIibb_registrationsInput>, Prisma.business_partiesUncheckedUpdateWithoutIibb_registrationsInput>
+}
+
+export type business_partiesCreateNestedOneWithoutWithholdingsInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholdingsInput, Prisma.business_partiesUncheckedCreateWithoutWithholdingsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutWithholdingsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+}
+
+export type business_partiesUpdateOneRequiredWithoutWithholdingsNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholdingsInput, Prisma.business_partiesUncheckedCreateWithoutWithholdingsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutWithholdingsInput
+  upsert?: Prisma.business_partiesUpsertWithoutWithholdingsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutWithholdingsInput, Prisma.business_partiesUpdateWithoutWithholdingsInput>, Prisma.business_partiesUncheckedUpdateWithoutWithholdingsInput>
 }
 
 export type business_partiesCreateNestedOneWithoutHr_accountsInput = {
@@ -1080,6 +1143,9 @@ export type business_partiesCreateWithoutDocumentsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -1118,6 +1184,9 @@ export type business_partiesUncheckedCreateWithoutDocumentsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -1172,6 +1241,9 @@ export type business_partiesUpdateWithoutDocumentsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -1210,6 +1282,9 @@ export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -1248,6 +1323,9 @@ export type business_partiesCreateWithoutEmployeesInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -1286,6 +1364,9 @@ export type business_partiesUncheckedCreateWithoutEmployeesInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -1340,6 +1421,9 @@ export type business_partiesUpdateWithoutEmployeesInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -1378,6 +1462,9 @@ export type business_partiesUncheckedUpdateWithoutEmployeesInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -1416,6 +1503,9 @@ export type business_partiesCreateWithoutPartnersInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -1454,6 +1544,9 @@ export type business_partiesUncheckedCreateWithoutPartnersInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -1508,6 +1601,9 @@ export type business_partiesUpdateWithoutPartnersInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -1546,6 +1642,549 @@ export type business_partiesUncheckedUpdateWithoutPartnersInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesCreateWithoutWithholding_profilesInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesUncheckedCreateWithoutWithholding_profilesInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesCreateOrConnectWithoutWithholding_profilesInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholding_profilesInput, Prisma.business_partiesUncheckedCreateWithoutWithholding_profilesInput>
+}
+
+export type business_partiesUpsertWithoutWithholding_profilesInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutWithholding_profilesInput, Prisma.business_partiesUncheckedUpdateWithoutWithholding_profilesInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholding_profilesInput, Prisma.business_partiesUncheckedCreateWithoutWithholding_profilesInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutWithholding_profilesInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutWithholding_profilesInput, Prisma.business_partiesUncheckedUpdateWithoutWithholding_profilesInput>
+}
+
+export type business_partiesUpdateWithoutWithholding_profilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutWithholding_profilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesCreateWithoutIibb_registrationsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesUncheckedCreateWithoutIibb_registrationsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesCreateOrConnectWithoutIibb_registrationsInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutIibb_registrationsInput, Prisma.business_partiesUncheckedCreateWithoutIibb_registrationsInput>
+}
+
+export type business_partiesUpsertWithoutIibb_registrationsInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutIibb_registrationsInput, Prisma.business_partiesUncheckedUpdateWithoutIibb_registrationsInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutIibb_registrationsInput, Prisma.business_partiesUncheckedCreateWithoutIibb_registrationsInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutIibb_registrationsInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutIibb_registrationsInput, Prisma.business_partiesUncheckedUpdateWithoutIibb_registrationsInput>
+}
+
+export type business_partiesUpdateWithoutIibb_registrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutIibb_registrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesCreateWithoutWithholdingsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesUncheckedCreateWithoutWithholdingsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesCreateOrConnectWithoutWithholdingsInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholdingsInput, Prisma.business_partiesUncheckedCreateWithoutWithholdingsInput>
+}
+
+export type business_partiesUpsertWithoutWithholdingsInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutWithholdingsInput, Prisma.business_partiesUncheckedUpdateWithoutWithholdingsInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutWithholdingsInput, Prisma.business_partiesUncheckedCreateWithoutWithholdingsInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutWithholdingsInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutWithholdingsInput, Prisma.business_partiesUncheckedUpdateWithoutWithholdingsInput>
+}
+
+export type business_partiesUpdateWithoutWithholdingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutWithholdingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -1584,6 +2223,9 @@ export type business_partiesCreateWithoutHr_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -1622,6 +2264,9 @@ export type business_partiesUncheckedCreateWithoutHr_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -1676,6 +2321,9 @@ export type business_partiesUpdateWithoutHr_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -1714,6 +2362,9 @@ export type business_partiesUncheckedUpdateWithoutHr_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -1752,6 +2403,9 @@ export type business_partiesCreateWithoutHr_valesInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -1790,6 +2444,9 @@ export type business_partiesUncheckedCreateWithoutHr_valesInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -1844,6 +2501,9 @@ export type business_partiesUpdateWithoutHr_valesInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -1882,6 +2542,9 @@ export type business_partiesUncheckedUpdateWithoutHr_valesInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -1920,6 +2583,9 @@ export type business_partiesCreateWithoutInternational_operationsInput = {
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -1958,6 +2624,9 @@ export type business_partiesUncheckedCreateWithoutInternational_operationsInput 
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -2012,6 +2681,9 @@ export type business_partiesUpdateWithoutInternational_operationsInput = {
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -2050,6 +2722,9 @@ export type business_partiesUncheckedUpdateWithoutInternational_operationsInput 
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -2088,6 +2763,9 @@ export type business_partiesCreateWithoutDelivery_notesInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -2126,6 +2804,9 @@ export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -2180,6 +2861,9 @@ export type business_partiesUpdateWithoutDelivery_notesInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -2218,6 +2902,9 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -2256,6 +2943,9 @@ export type business_partiesCreateWithoutDispatch_ordersInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -2294,6 +2984,9 @@ export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -2348,6 +3041,9 @@ export type business_partiesUpdateWithoutDispatch_ordersInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -2386,6 +3082,9 @@ export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -2425,6 +3124,9 @@ export type business_partiesCreateWithoutMaintenance_orders_as_supplierInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
 }
@@ -2463,6 +3165,9 @@ export type business_partiesUncheckedCreateWithoutMaintenance_orders_as_supplier
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
 }
@@ -2517,6 +3222,9 @@ export type business_partiesUpdateWithoutMaintenance_orders_as_supplierInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
 }
@@ -2555,6 +3263,9 @@ export type business_partiesUncheckedUpdateWithoutMaintenance_orders_as_supplier
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
 }
@@ -2593,6 +3304,9 @@ export type business_partiesCreateWithoutMaintenance_services_as_supplierInput =
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
 }
@@ -2631,6 +3345,9 @@ export type business_partiesUncheckedCreateWithoutMaintenance_services_as_suppli
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
 }
@@ -2685,6 +3402,9 @@ export type business_partiesUpdateWithoutMaintenance_services_as_supplierInput =
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
 }
@@ -2723,6 +3443,9 @@ export type business_partiesUncheckedUpdateWithoutMaintenance_services_as_suppli
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
 }
@@ -2761,6 +3484,9 @@ export type business_partiesCreateWithoutTires_as_supplierInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
 }
@@ -2799,6 +3525,9 @@ export type business_partiesUncheckedCreateWithoutTires_as_supplierInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
 }
@@ -2853,6 +3582,9 @@ export type business_partiesUpdateWithoutTires_as_supplierInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
 }
@@ -2891,6 +3623,9 @@ export type business_partiesUncheckedUpdateWithoutTires_as_supplierInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
 }
@@ -2928,6 +3663,9 @@ export type business_partiesCreateWithoutParty_bank_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -2966,6 +3704,9 @@ export type business_partiesUncheckedCreateWithoutParty_bank_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -3020,6 +3761,9 @@ export type business_partiesUpdateWithoutParty_bank_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -3058,6 +3802,9 @@ export type business_partiesUncheckedUpdateWithoutParty_bank_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -3096,6 +3843,9 @@ export type business_partiesCreateWithoutParty_locationsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -3134,6 +3884,9 @@ export type business_partiesUncheckedCreateWithoutParty_locationsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -3188,6 +3941,9 @@ export type business_partiesUpdateWithoutParty_locationsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -3226,6 +3982,9 @@ export type business_partiesUncheckedUpdateWithoutParty_locationsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -3264,6 +4023,9 @@ export type business_partiesCreateWithoutParty_contactsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -3302,6 +4064,9 @@ export type business_partiesUncheckedCreateWithoutParty_contactsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -3356,6 +4121,9 @@ export type business_partiesUpdateWithoutParty_contactsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -3394,6 +4162,9 @@ export type business_partiesUncheckedUpdateWithoutParty_contactsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -3432,6 +4203,9 @@ export type business_partiesCreateWithoutProduct_suppliersInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -3470,6 +4244,9 @@ export type business_partiesUncheckedCreateWithoutProduct_suppliersInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -3524,6 +4301,9 @@ export type business_partiesUpdateWithoutProduct_suppliersInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -3562,6 +4342,9 @@ export type business_partiesUncheckedUpdateWithoutProduct_suppliersInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -3600,6 +4383,9 @@ export type business_partiesCreateWithoutProduct_party_pricesInput = {
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -3638,6 +4424,9 @@ export type business_partiesUncheckedCreateWithoutProduct_party_pricesInput = {
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -3692,6 +4481,9 @@ export type business_partiesUpdateWithoutProduct_party_pricesInput = {
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -3730,6 +4522,9 @@ export type business_partiesUncheckedUpdateWithoutProduct_party_pricesInput = {
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -3768,6 +4563,9 @@ export type business_partiesCreateWithoutProduct_party_price_historyInput = {
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -3806,6 +4604,9 @@ export type business_partiesUncheckedCreateWithoutProduct_party_price_historyInp
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -3860,6 +4661,9 @@ export type business_partiesUpdateWithoutProduct_party_price_historyInput = {
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -3898,6 +4702,9 @@ export type business_partiesUncheckedUpdateWithoutProduct_party_price_historyInp
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -3936,6 +4743,9 @@ export type business_partiesCreateWithoutPaymentsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -3974,6 +4784,9 @@ export type business_partiesUncheckedCreateWithoutPaymentsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -4028,6 +4841,9 @@ export type business_partiesUpdateWithoutPaymentsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -4066,6 +4882,9 @@ export type business_partiesUncheckedUpdateWithoutPaymentsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -4104,6 +4923,9 @@ export type business_partiesCreateWithoutCredit_cardsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -4142,6 +4964,9 @@ export type business_partiesUncheckedCreateWithoutCredit_cardsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -4196,6 +5021,9 @@ export type business_partiesUpdateWithoutCredit_cardsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -4234,6 +5062,9 @@ export type business_partiesUncheckedUpdateWithoutCredit_cardsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -4272,6 +5103,9 @@ export type business_partiesCreateWithoutCurrent_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
@@ -4310,6 +5144,9 @@ export type business_partiesUncheckedCreateWithoutCurrent_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
   international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
   tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
@@ -4364,6 +5201,9 @@ export type business_partiesUpdateWithoutCurrent_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
@@ -4402,6 +5242,9 @@ export type business_partiesUncheckedUpdateWithoutCurrent_accountsInput = {
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
   maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
   maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
   tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
@@ -4430,6 +5273,9 @@ export type Business_partiesCountOutputType = {
   product_party_prices: number
   product_party_price_history: number
   international_operations: number
+  withholding_profiles: number
+  iibb_registrations: number
+  withholdings: number
   maintenance_orders_as_supplier: number
   maintenance_services_as_supplier: number
   tires_as_supplier: number
@@ -4453,6 +5299,9 @@ export type Business_partiesCountOutputTypeSelect<ExtArgs extends runtime.Types.
   product_party_prices?: boolean | Business_partiesCountOutputTypeCountProduct_party_pricesArgs
   product_party_price_history?: boolean | Business_partiesCountOutputTypeCountProduct_party_price_historyArgs
   international_operations?: boolean | Business_partiesCountOutputTypeCountInternational_operationsArgs
+  withholding_profiles?: boolean | Business_partiesCountOutputTypeCountWithholding_profilesArgs
+  iibb_registrations?: boolean | Business_partiesCountOutputTypeCountIibb_registrationsArgs
+  withholdings?: boolean | Business_partiesCountOutputTypeCountWithholdingsArgs
   maintenance_orders_as_supplier?: boolean | Business_partiesCountOutputTypeCountMaintenance_orders_as_supplierArgs
   maintenance_services_as_supplier?: boolean | Business_partiesCountOutputTypeCountMaintenance_services_as_supplierArgs
   tires_as_supplier?: boolean | Business_partiesCountOutputTypeCountTires_as_supplierArgs
@@ -4590,6 +5439,27 @@ export type Business_partiesCountOutputTypeCountInternational_operationsArgs<Ext
 /**
  * Business_partiesCountOutputType without action
  */
+export type Business_partiesCountOutputTypeCountWithholding_profilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.business_party_withholding_profilesWhereInput
+}
+
+/**
+ * Business_partiesCountOutputType without action
+ */
+export type Business_partiesCountOutputTypeCountIibb_registrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.business_party_iibb_registrationsWhereInput
+}
+
+/**
+ * Business_partiesCountOutputType without action
+ */
+export type Business_partiesCountOutputTypeCountWithholdingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.withholdingsWhereInput
+}
+
+/**
+ * Business_partiesCountOutputType without action
+ */
 export type Business_partiesCountOutputTypeCountMaintenance_orders_as_supplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.maintenance_ordersWhereInput
 }
@@ -4643,6 +5513,9 @@ export type business_partiesSelect<ExtArgs extends runtime.Types.Extensions.Inte
   product_party_prices?: boolean | Prisma.business_parties$product_party_pricesArgs<ExtArgs>
   product_party_price_history?: boolean | Prisma.business_parties$product_party_price_historyArgs<ExtArgs>
   international_operations?: boolean | Prisma.business_parties$international_operationsArgs<ExtArgs>
+  withholding_profiles?: boolean | Prisma.business_parties$withholding_profilesArgs<ExtArgs>
+  iibb_registrations?: boolean | Prisma.business_parties$iibb_registrationsArgs<ExtArgs>
+  withholdings?: boolean | Prisma.business_parties$withholdingsArgs<ExtArgs>
   maintenance_orders_as_supplier?: boolean | Prisma.business_parties$maintenance_orders_as_supplierArgs<ExtArgs>
   maintenance_services_as_supplier?: boolean | Prisma.business_parties$maintenance_services_as_supplierArgs<ExtArgs>
   tires_as_supplier?: boolean | Prisma.business_parties$tires_as_supplierArgs<ExtArgs>
@@ -4725,6 +5598,9 @@ export type business_partiesInclude<ExtArgs extends runtime.Types.Extensions.Int
   product_party_prices?: boolean | Prisma.business_parties$product_party_pricesArgs<ExtArgs>
   product_party_price_history?: boolean | Prisma.business_parties$product_party_price_historyArgs<ExtArgs>
   international_operations?: boolean | Prisma.business_parties$international_operationsArgs<ExtArgs>
+  withholding_profiles?: boolean | Prisma.business_parties$withholding_profilesArgs<ExtArgs>
+  iibb_registrations?: boolean | Prisma.business_parties$iibb_registrationsArgs<ExtArgs>
+  withholdings?: boolean | Prisma.business_parties$withholdingsArgs<ExtArgs>
   maintenance_orders_as_supplier?: boolean | Prisma.business_parties$maintenance_orders_as_supplierArgs<ExtArgs>
   maintenance_services_as_supplier?: boolean | Prisma.business_parties$maintenance_services_as_supplierArgs<ExtArgs>
   tires_as_supplier?: boolean | Prisma.business_parties$tires_as_supplierArgs<ExtArgs>
@@ -4753,6 +5629,9 @@ export type $business_partiesPayload<ExtArgs extends runtime.Types.Extensions.In
     product_party_prices: Prisma.$product_party_pricesPayload<ExtArgs>[]
     product_party_price_history: Prisma.$product_party_price_historyPayload<ExtArgs>[]
     international_operations: Prisma.$international_operationsPayload<ExtArgs>[]
+    withholding_profiles: Prisma.$business_party_withholding_profilesPayload<ExtArgs>[]
+    iibb_registrations: Prisma.$business_party_iibb_registrationsPayload<ExtArgs>[]
+    withholdings: Prisma.$withholdingsPayload<ExtArgs>[]
     maintenance_orders_as_supplier: Prisma.$maintenance_ordersPayload<ExtArgs>[]
     maintenance_services_as_supplier: Prisma.$maintenance_servicesPayload<ExtArgs>[]
     tires_as_supplier: Prisma.$tiresPayload<ExtArgs>[]
@@ -5185,6 +6064,9 @@ export interface Prisma__business_partiesClient<T, Null = never, ExtArgs extends
   product_party_prices<T extends Prisma.business_parties$product_party_pricesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$product_party_pricesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_party_pricesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_party_price_history<T extends Prisma.business_parties$product_party_price_historyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$product_party_price_historyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_party_price_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   international_operations<T extends Prisma.business_parties$international_operationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$international_operationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$international_operationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  withholding_profiles<T extends Prisma.business_parties$withholding_profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$withholding_profilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$business_party_withholding_profilesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  iibb_registrations<T extends Prisma.business_parties$iibb_registrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$iibb_registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$business_party_iibb_registrationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  withholdings<T extends Prisma.business_parties$withholdingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$withholdingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$withholdingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   maintenance_orders_as_supplier<T extends Prisma.business_parties$maintenance_orders_as_supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$maintenance_orders_as_supplierArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$maintenance_ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   maintenance_services_as_supplier<T extends Prisma.business_parties$maintenance_services_as_supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$maintenance_services_as_supplierArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$maintenance_servicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tires_as_supplier<T extends Prisma.business_parties$tires_as_supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$tires_as_supplierArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tiresPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6031,6 +6913,78 @@ export type business_parties$international_operationsArgs<ExtArgs extends runtim
   take?: number
   skip?: number
   distinct?: Prisma.International_operationsScalarFieldEnum | Prisma.International_operationsScalarFieldEnum[]
+}
+
+/**
+ * business_parties.withholding_profiles
+ */
+export type business_parties$withholding_profilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the business_party_withholding_profiles
+   */
+  select?: Prisma.business_party_withholding_profilesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the business_party_withholding_profiles
+   */
+  omit?: Prisma.business_party_withholding_profilesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.business_party_withholding_profilesInclude<ExtArgs> | null
+  where?: Prisma.business_party_withholding_profilesWhereInput
+  orderBy?: Prisma.business_party_withholding_profilesOrderByWithRelationInput | Prisma.business_party_withholding_profilesOrderByWithRelationInput[]
+  cursor?: Prisma.business_party_withholding_profilesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Business_party_withholding_profilesScalarFieldEnum | Prisma.Business_party_withholding_profilesScalarFieldEnum[]
+}
+
+/**
+ * business_parties.iibb_registrations
+ */
+export type business_parties$iibb_registrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the business_party_iibb_registrations
+   */
+  select?: Prisma.business_party_iibb_registrationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the business_party_iibb_registrations
+   */
+  omit?: Prisma.business_party_iibb_registrationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.business_party_iibb_registrationsInclude<ExtArgs> | null
+  where?: Prisma.business_party_iibb_registrationsWhereInput
+  orderBy?: Prisma.business_party_iibb_registrationsOrderByWithRelationInput | Prisma.business_party_iibb_registrationsOrderByWithRelationInput[]
+  cursor?: Prisma.business_party_iibb_registrationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Business_party_iibb_registrationsScalarFieldEnum | Prisma.Business_party_iibb_registrationsScalarFieldEnum[]
+}
+
+/**
+ * business_parties.withholdings
+ */
+export type business_parties$withholdingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the withholdings
+   */
+  select?: Prisma.withholdingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the withholdings
+   */
+  omit?: Prisma.withholdingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.withholdingsInclude<ExtArgs> | null
+  where?: Prisma.withholdingsWhereInput
+  orderBy?: Prisma.withholdingsOrderByWithRelationInput | Prisma.withholdingsOrderByWithRelationInput[]
+  cursor?: Prisma.withholdingsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WithholdingsScalarFieldEnum | Prisma.WithholdingsScalarFieldEnum[]
 }
 
 /**

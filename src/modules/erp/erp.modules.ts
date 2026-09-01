@@ -31,6 +31,7 @@ import { ChecksModule } from './checks/checks.module';
 import { TreasuryReportsModule } from './treasury-reports/treasury-reports.module';
 import { HrModule } from './hr/hr.module';
 import { TaxEngineModule } from './tax-engine/tax-engine.module';
+import { FiscalModule } from './fiscal/fiscal.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ProductSuppliersModule } from './pricing/product-suppliers/product-suppliers.module';
 import { PriceListsModule } from './pricing/price-lists/price-lists.module';
@@ -66,6 +67,7 @@ import { ListPricesModule } from './pricing/list-prices/list-prices.module';
     TreasuryReportsModule,
     HrModule,
     TaxEngineModule,
+    FiscalModule,
     DashboardModule,
     ProductSuppliersModule,
     PriceListsModule,
@@ -100,6 +102,7 @@ import { ListPricesModule } from './pricing/list-prices/list-prices.module';
     TreasuryReportsModule,
     HrModule,
     TaxEngineModule,
+    FiscalModule,
     DashboardModule,
     ProductSuppliersModule,
     PriceListsModule,

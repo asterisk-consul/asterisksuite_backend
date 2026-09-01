@@ -1,0 +1,254 @@
+// ══════════════════════════════════════════════════════════
+// MOTOR FISCAL — Catálogos, perfiles, reglas y retenciones
+// ══════════════════════════════════════════════════════════
+
+// ─── JURISDICCIONES FISCALES ────────────────────────────
+
+model tax_jurisdictions {
+  id         String  @id @default(uuid()) @db.Uuid
+  code       String  @unique @db.VarChar(10) // "AR-C", "AR-B", "AR-X"
+  name       String  @db.VarChar(100) // "Córdoba", "Buenos Aires"
+  country    String  @default("AR") @db.VarChar(3)
+  is_active  Boolean @default(true)
+  sort_order Int     @default(0)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  iibb_registrations    business_party_iibb_registrations[]
+  company_jurisdictions company_tax_jurisdictions[]
+  tax_rules             tax_rules[]
+  withholdings          withholdings[]
+
+  @@schema("tenant")
+}
+
+// ─── CONCEPTOS DE RETENCIÓN ─────────────────────────────
+
+model withholding_concepts {
+  id          String  @id @default(uuid()) @db.Uuid
+  code        String  @unique @db.VarChar(30) // OBRA, SERVICIO, VENTA_BIENES, HONORARIOS...
+  name        String  @db.VarChar(100)
+  description String? @db.Text
+  is_active   Boolean @default(true)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  tax_rules    tax_rules[]
+  withholdings withholdings[]
+
+  @@schema("tenant")
+}
+
+// ─── PERFIL FISCAL DEL TERCERO — Sujeto pasible ────────
+
+model business_party_withholding_profiles {
+  id                String                   @id @default(uuid()) @db.Uuid
+  business_party_id String                   @db.Uuid
+  tax_type          String                   @db.VarChar(30) // GANANCIAS, IIBB, SUSS, IVA
+  is_subject        Boolean                  @default(true)
+  status            WithholdingSubjectStatus @default(NORMAL)
+  is_pyme           Boolean                  @default(false) // Para SUSS: 1% en lugar de 2%
+  observations      String?                  @db.Text
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  business_party business_parties @relation(fields: [business_party_id], references: [id], onDelete: Cascade)
+
+  @@unique([business_party_id, tax_type])
+  @@index([tax_type])
+  @@schema("tenant")
+}
+
+// ─── PERFIL IIBB DEL TERCERO — Inscripciones ───────────
+
+model business_party_iibb_registrations {
+  id                  String               @id @default(uuid()) @db.Uuid
+  business_party_id   String               @db.Uuid
+  registration_type   IibbRegistrationType @default(NO_INSCRIPTO)
+  jurisdiction_id     String?              @db.Uuid // null = aplica a todas (CM usa múltiples filas)
+  registration_number String?              @db.VarChar(50)
+  prorrate_percentage Decimal?             @db.Decimal(7, 4) // Solo CM: % asignación jurisdicción (suma 100)
+  is_active           Boolean              @default(true)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  business_party business_parties   @relation(fields: [business_party_id], references: [id], onDelete: Cascade)
+  jurisdiction   tax_jurisdictions? @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
+
+  @@index([business_party_id])
+  @@index([jurisdiction_id])
+  @@schema("tenant")
+}
+
+// ─── CONFIGURACIÓN DE LA EMPRESA COMO AGENTE ───────────
+// Nota: en schema tenant porque se relaciona con tax_jurisdictions
+// y lo consume el motor con contexto tenant. company_id es Uuid
+// plano sin FK cross-schema (aislamiento por DB ya garantizado).
+
+model company_tax_jurisdictions {
+  id                   String  @id @default(uuid()) @db.Uuid
+  company_id           String  @db.Uuid
+  jurisdiction_id      String  @db.Uuid
+  tax_type             String  @db.VarChar(30) // GANANCIAS, IIBB, SUSS, IVA
+  is_withholding_agent Boolean @default(false)
+  is_perception_agent  Boolean @default(false)
+  registration_number  String? @db.VarChar(50)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  jurisdiction tax_jurisdictions @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
+
+  @@unique([company_id, jurisdiction_id, tax_type])
+  @@index([company_id])
+  @@schema("tenant")
+}
+
+// ─── REGLAS FISCALES PARAMÉTRICAS ───────────────────────
+// tax_type reutiliza los códigos de taxes (IVA, IIBB, GANANCIAS, SUSS)
+
+model tax_rules {
+  id                     String             @id @default(uuid()) @db.Uuid
+  name                   String             @db.VarChar(150)
+  tax_type               String             @db.VarChar(30)
+  application_type       TaxApplicationType @default(WITHHOLDING)
+  jurisdiction_id        String?            @db.Uuid
+  withholding_concept_id String?            @db.Uuid
+  operation_type         String?            @db.VarChar(20) // SALE, PURCHASE (null = ambos)
+  supplier_condition     String?            @db.VarChar(30) // vat_condition del emisor
+  customer_condition     String?            @db.VarChar(30) // vat_condition del receptor
+  cuit_suffix_group      String?            @db.VarChar(30) // Ganancias: "PF" (20/23/24/27), "PJ" (30/33/34)
+  base_type              TaxBaseType        @default(PAYMENT_AMOUNT)
+  calculation_method     String             @default("RATE_TIMES_BASE") @db.VarChar(50) // RATE_TIMES_BASE, SCALE, FIXED
+  rate                   Decimal?           @db.Decimal(8, 4)
+  fixed_amount           Decimal?           @db.Decimal(15, 2)
+  minimum_amount         Decimal?           @db.Decimal(15, 2) // Mínimo no sujeto
+  maximum_amount         Decimal?           @db.Decimal(15, 2)
+  priority               Int                @default(0)
+  is_active              Boolean            @default(true)
+  valid_from             DateTime           @db.Date
+  valid_to               DateTime?          @db.Date
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  jurisdiction tax_jurisdictions?    @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
+  concept      withholding_concepts? @relation(fields: [withholding_concept_id], references: [id], onDelete: NoAction)
+  brackets     tax_rule_brackets[]
+
+  @@index([tax_type, is_active])
+  @@index([jurisdiction_id])
+  @@index([valid_from, valid_to])
+  @@schema("tenant")
+}
+
+// Escalas: para Ganancias (tramos por pagos acumulados del mes)
+
+model tax_rule_brackets {
+  id               String   @id @default(uuid()) @db.Uuid
+  tax_rule_id      String   @db.Uuid
+  accumulated_from Decimal  @db.Decimal(15, 2) // pagos acumulados desde
+  accumulated_to   Decimal? @db.Decimal(15, 2) // hasta (null = sin tope)
+  rate             Decimal  @db.Decimal(8, 4)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  tax_rule tax_rules @relation(fields: [tax_rule_id], references: [id], onDelete: Cascade)
+
+  @@index([tax_rule_id])
+  @@schema("tenant")
+}
+
+// ─── RETENCIONES ────────────────────────────────────────
+// Simétrico: PRACTICADA (pagamos y retenemos) / SUFRIDA (nos retienen)
+
+model withholdings {
+  id                     String               @id @default(uuid()) @db.Uuid
+  company_id             String               @db.Uuid
+  business_party_id      String               @db.Uuid
+  direction              WithholdingDirection
+  payment_id             String?              @db.Uuid // Pago o cobro asociado
+  tax_type               String               @db.VarChar(30)
+  jurisdiction_id        String?              @db.Uuid
+  withholding_concept_id String?              @db.Uuid
+  tax_rule_id            String?              @db.Uuid // Regla que originó el cálculo (auditoría)
+  base_amount            Decimal              @db.Decimal(15, 2)
+  rate                   Decimal?             @db.Decimal(8, 4)
+  withheld_amount        Decimal              @db.Decimal(15, 2)
+  currency_code          String               @db.VarChar(10)
+  exchange_rate          Decimal?             @db.Decimal(18, 6)
+  certificate_number     String?              @db.VarChar(50) // Opcional — no bloquea el pago
+  certificate_date       DateTime?            @db.Date
+  status                 WithholdingStatus    @default(APPLIED)
+  automatic_amount       Decimal?             @db.Decimal(15, 2) // Propuesta del motor
+  manual_amount          Decimal?             @db.Decimal(15, 2) // Valor aplicado por el usuario
+  modification_reason    String?              @db.Text
+  date                   DateTime             @db.Date
+  observations           String?              @db.Text
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  business_party business_parties          @relation(fields: [business_party_id], references: [id], onDelete: NoAction)
+  payment        payments?                 @relation(fields: [payment_id], references: [id], onDelete: NoAction)
+  jurisdiction   tax_jurisdictions?        @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
+  concept        withholding_concepts?     @relation(fields: [withholding_concept_id], references: [id], onDelete: NoAction)
+  allocations    withholding_allocations[]
+
+  @@index([business_party_id, tax_type])
+  @@index([payment_id])
+  @@index([date])
+  @@index([direction, status])
+  @@schema("tenant")
+}
+
+// Asignación de una retención a múltiples documentos
+
+model withholding_allocations {
+  id               String  @id @default(uuid()) @db.Uuid
+  withholding_id   String  @db.Uuid
+  document_id      String  @db.Uuid
+  allocated_amount Decimal @db.Decimal(15, 2)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  created_by String?  @db.Uuid
+
+  withholding withholdings @relation(fields: [withholding_id], references: [id], onDelete: Cascade)
+  document    documents    @relation(fields: [document_id], references: [id], onDelete: Cascade)
+
+  @@unique([withholding_id, document_id])
+  @@index([document_id])
+  @@schema("tenant")
+}

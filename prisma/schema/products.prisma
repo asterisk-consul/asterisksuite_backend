@@ -1,20 +1,20 @@
 model product_price {
-  id                 String     @id @default(uuid()) @db.Uuid
-  product_id         String     @db.Uuid
-  currency_id        String     @db.Uuid
-  price              Decimal    @db.Decimal(15, 2)
-  sale_price         Decimal?   @db.Decimal(15, 2)
-  margin_percentage  Decimal?   @db.Decimal(5, 2)
-  exemption_rate     Decimal    @default(0) @db.Decimal(5, 2)
-  active             Boolean    @default(true)
-  created_at         DateTime   @default(now()) @db.Timestamp(6)
-  updated_at         DateTime?  @updatedAt @db.Timestamp(6)
-  deleted_at         DateTime?
-  created_by         String?    @db.Uuid
-  updated_by         String?    @db.Uuid
-  deleted_by         String?    @db.Uuid
-  products           products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  currencies         currencies @relation(fields: [currency_id], references: [id])
+  id                String     @id @default(uuid()) @db.Uuid
+  product_id        String     @db.Uuid
+  currency_id       String     @db.Uuid
+  price             Decimal    @db.Decimal(15, 2)
+  sale_price        Decimal?   @db.Decimal(15, 2)
+  margin_percentage Decimal?   @db.Decimal(5, 2)
+  exemption_rate    Decimal    @default(0) @db.Decimal(5, 2)
+  active            Boolean    @default(true)
+  created_at        DateTime   @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?  @updatedAt @db.Timestamp(6)
+  deleted_at        DateTime?
+  created_by        String?    @db.Uuid
+  updated_by        String?    @db.Uuid
+  deleted_by        String?    @db.Uuid
+  products          products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  currencies        currencies @relation(fields: [currency_id], references: [id])
 
   @@unique([product_id, currency_id])
   @@index([product_id])
@@ -58,39 +58,39 @@ model products {
   unit_id                  String?           @db.Uuid
 
   // RELACIONES 
-  product_variants          product_variants[]
+  product_variants            product_variants[]
   //articulo raiz no solo el padre
-  parent_components         product_components[]         @relation("parent_product")
-  child_components          product_components[]         @relation("child_product")
-  product_categories        product_categories[]
-  product_tags              product_tags[]
-  product_attribute_values  product_attribute_values[]
+  parent_components           product_components[]          @relation("parent_product")
+  child_components            product_components[]          @relation("child_product")
+  product_categories          product_categories[]
+  product_tags                product_tags[]
+  product_attribute_values    product_attribute_values[]
   //
-  current_cost              Decimal?                     @db.Decimal(15, 2)
-  income_account            accounts?                    @relation("product_income_account", fields: [income_account_id], references: [id])
-  expense_account           accounts?                    @relation("product_expense_account", fields: [expense_account_id], references: [id])
-  inventory_account         accounts?                    @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
-  document_items            document_items[]
-  dispatch_order_items      dispatch_order_items[]
-  pallet_items              pallet_items[]
-  picking_items             picking_items[]
-  product_party_prices      product_party_prices[]
+  current_cost                Decimal?                      @db.Decimal(15, 2)
+  income_account              accounts?                     @relation("product_income_account", fields: [income_account_id], references: [id])
+  expense_account             accounts?                     @relation("product_expense_account", fields: [expense_account_id], references: [id])
+  inventory_account           accounts?                     @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
+  document_items              document_items[]
+  dispatch_order_items        dispatch_order_items[]
+  pallet_items                pallet_items[]
+  picking_items               picking_items[]
+  product_party_prices        product_party_prices[]
   product_party_price_history product_party_price_history[]
-  product_price             product_price[]
-  product_taxes             product_taxes[]
-  tax_category              tax_categories?              @relation(fields: [tax_category_id], references: [id])
-  transfer_rate             transfer_rates?              @relation(fields: [rate_id], references: [id])
-  warehouse_stock           warehouse_stock[]
-  warehouse_stock_movements warehouse_stock_movements[]
-  product_costs             product_costs[]
-  productCostBreakdowns     product_cost_breakdowns[]
-  cost_template             cost_templates?              @relation(fields: [cost_template_id], references: [id])
-  maintenance_parts         maintenance_parts[]
-  tires                     tires[]
-  productStructureVersions  product_structure_versions[]
-  unit                      units?                       @relation(fields: [unit_id], references: [id])
-  product_suppliers         product_suppliers[]
-  product_list_prices       product_list_prices[]
+  product_price               product_price[]
+  product_taxes               product_taxes[]
+  tax_category                tax_categories?               @relation(fields: [tax_category_id], references: [id])
+  transfer_rate               transfer_rates?               @relation(fields: [rate_id], references: [id])
+  warehouse_stock             warehouse_stock[]
+  warehouse_stock_movements   warehouse_stock_movements[]
+  product_costs               product_costs[]
+  productCostBreakdowns       product_cost_breakdowns[]
+  cost_template               cost_templates?               @relation(fields: [cost_template_id], references: [id])
+  maintenance_parts           maintenance_parts[]
+  tires                       tires[]
+  productStructureVersions    product_structure_versions[]
+  unit                        units?                        @relation(fields: [unit_id], references: [id])
+  product_suppliers           product_suppliers[]
+  product_list_prices         product_list_prices[]
 
   @@schema("tenant")
 }
@@ -331,24 +331,24 @@ model product_variant_costs {
 }
 
 model product_suppliers {
-  id                   String    @id @default(uuid()) @db.Uuid
-  product_id           String    @db.Uuid
-  supplier_id          String    @db.Uuid
-  purchase_price       Decimal   @db.Decimal(15, 2)
-  currency_id          String    @db.Uuid
-  lead_time_days       Int?
-  min_order_quantity   Decimal?  @db.Decimal(12, 3)
-  is_primary           Boolean   @default(false)
-  active               Boolean   @default(true)
-  created_at           DateTime  @default(now()) @db.Timestamp(6)
-  updated_at           DateTime? @updatedAt @db.Timestamp(6)
-  deleted_at           DateTime?
-  created_by           String?   @db.Uuid
-  updated_by           String?   @db.Uuid
-  deleted_by           String?   @db.Uuid
-  products             products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  business_parties     business_parties @relation(fields: [supplier_id], references: [id])
-  currencies           currencies @relation(fields: [currency_id], references: [id])
+  id                 String           @id @default(uuid()) @db.Uuid
+  product_id         String           @db.Uuid
+  supplier_id        String           @db.Uuid
+  purchase_price     Decimal          @db.Decimal(15, 2)
+  currency_id        String           @db.Uuid
+  lead_time_days     Int?
+  min_order_quantity Decimal?         @db.Decimal(12, 3)
+  is_primary         Boolean          @default(false)
+  active             Boolean          @default(true)
+  created_at         DateTime         @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?        @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?          @db.Uuid
+  updated_by         String?          @db.Uuid
+  deleted_by         String?          @db.Uuid
+  products           products         @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  business_parties   business_parties @relation(fields: [supplier_id], references: [id])
+  currencies         currencies       @relation(fields: [currency_id], references: [id])
 
   @@unique([product_id, supplier_id])
   @@index([product_id])
@@ -358,24 +358,24 @@ model product_suppliers {
 }
 
 model product_party_prices {
-  id                   String    @id @default(uuid()) @db.Uuid
-  product_id           String    @db.Uuid
-  party_id             String    @db.Uuid
-  currency_id          String    @db.Uuid
-  operation_type       String    @db.VarChar(10) // SALE | PURCHASE
-  price                Decimal   @db.Decimal(15, 2)
-  active               Boolean   @default(true)
-  effective_from       DateTime  @default(now()) @db.Timestamp(6)
-  created_at           DateTime  @default(now()) @db.Timestamp(6)
-  updated_at           DateTime? @updatedAt @db.Timestamp(6)
-  deleted_at           DateTime?
-  created_by           String?   @db.Uuid
-  updated_by           String?   @db.Uuid
-  deleted_by           String?   @db.Uuid
-  products             products @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  business_parties     business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade)
-  currencies           currencies @relation(fields: [currency_id], references: [id])
-  history              product_party_price_history[]
+  id               String                        @id @default(uuid()) @db.Uuid
+  product_id       String                        @db.Uuid
+  party_id         String                        @db.Uuid
+  currency_id      String                        @db.Uuid
+  operation_type   String                        @db.VarChar(10) // SALE | PURCHASE
+  price            Decimal                       @db.Decimal(15, 2)
+  active           Boolean                       @default(true)
+  effective_from   DateTime                      @default(now()) @db.Timestamp(6)
+  created_at       DateTime                      @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?                     @updatedAt @db.Timestamp(6)
+  deleted_at       DateTime?
+  created_by       String?                       @db.Uuid
+  updated_by       String?                       @db.Uuid
+  deleted_by       String?                       @db.Uuid
+  products         products                      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  business_parties business_parties              @relation(fields: [party_id], references: [id], onDelete: Cascade)
+  currencies       currencies                    @relation(fields: [currency_id], references: [id])
+  history          product_party_price_history[]
 
   @@unique([product_id, party_id, operation_type, currency_id])
   @@index([party_id, operation_type])
@@ -384,24 +384,24 @@ model product_party_prices {
 }
 
 model product_party_price_history {
-  id                     String    @id @default(uuid()) @db.Uuid
-  product_party_price_id String    @db.Uuid
-  product_id             String    @db.Uuid
-  party_id               String    @db.Uuid
-  currency_id            String    @db.Uuid
-  operation_type         String    @db.VarChar(10)
-  previous_price         Decimal?  @db.Decimal(15, 2)
-  new_price              Decimal   @db.Decimal(15, 2)
-  effective_at           DateTime  @default(now()) @db.Timestamp(6)
-  source_type            String    @db.VarChar(30)
-  source_id              String?   @db.Uuid
-  document_item_id       String?   @db.Uuid
-  created_by             String?   @db.Uuid
-  created_at             DateTime  @default(now()) @db.Timestamp(6)
+  id                     String               @id @default(uuid()) @db.Uuid
+  product_party_price_id String               @db.Uuid
+  product_id             String               @db.Uuid
+  party_id               String               @db.Uuid
+  currency_id            String               @db.Uuid
+  operation_type         String               @db.VarChar(10)
+  previous_price         Decimal?             @db.Decimal(15, 2)
+  new_price              Decimal              @db.Decimal(15, 2)
+  effective_at           DateTime             @default(now()) @db.Timestamp(6)
+  source_type            String               @db.VarChar(30)
+  source_id              String?              @db.Uuid
+  document_item_id       String?              @db.Uuid
+  created_by             String?              @db.Uuid
+  created_at             DateTime             @default(now()) @db.Timestamp(6)
   party_price            product_party_prices @relation(fields: [product_party_price_id], references: [id], onDelete: Cascade)
-  products               products @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  business_parties       business_parties @relation(fields: [party_id], references: [id], onDelete: Cascade)
-  currencies             currencies @relation(fields: [currency_id], references: [id])
+  products               products             @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  business_parties       business_parties     @relation(fields: [party_id], references: [id], onDelete: Cascade)
+  currencies             currencies           @relation(fields: [currency_id], references: [id])
 
   @@index([party_id, product_id, operation_type, effective_at])
   @@index([source_id])
@@ -409,19 +409,19 @@ model product_party_price_history {
 }
 
 model price_lists {
-  id           String    @id @default(uuid()) @db.Uuid
-  name         String    @db.VarChar(255)
-  type         String    @db.VarChar(20)
-  currency_id  String    @db.Uuid
-  description  String?
-  active       Boolean   @default(true)
-  created_at   DateTime  @default(now()) @db.Timestamp(6)
-  updated_at   DateTime? @updatedAt @db.Timestamp(6)
-  deleted_at   DateTime?
-  created_by   String?   @db.Uuid
-  updated_by   String?   @db.Uuid
-  deleted_by   String?   @db.Uuid
-  currencies   currencies @relation(fields: [currency_id], references: [id])
+  id                  String                @id @default(uuid()) @db.Uuid
+  name                String                @db.VarChar(255)
+  type                String                @db.VarChar(20)
+  currency_id         String                @db.Uuid
+  description         String?
+  active              Boolean               @default(true)
+  created_at          DateTime              @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?             @updatedAt @db.Timestamp(6)
+  deleted_at          DateTime?
+  created_by          String?               @db.Uuid
+  updated_by          String?               @db.Uuid
+  deleted_by          String?               @db.Uuid
+  currencies          currencies            @relation(fields: [currency_id], references: [id])
   product_list_prices product_list_prices[]
 
   @@index([type])
@@ -430,18 +430,18 @@ model price_lists {
 }
 
 model product_list_prices {
-  id                String     @id @default(uuid()) @db.Uuid
-  price_list_id     String     @db.Uuid
-  product_id        String     @db.Uuid
-  price             Decimal    @db.Decimal(15, 2)
-  margin_percentage Decimal?   @db.Decimal(5, 2)
-  active            Boolean    @default(true)
-  created_at        DateTime   @default(now()) @db.Timestamp(6)
-  updated_at        DateTime?  @updatedAt @db.Timestamp(6)
+  id                String      @id @default(uuid()) @db.Uuid
+  price_list_id     String      @db.Uuid
+  product_id        String      @db.Uuid
+  price             Decimal     @db.Decimal(15, 2)
+  margin_percentage Decimal?    @db.Decimal(5, 2)
+  active            Boolean     @default(true)
+  created_at        DateTime    @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?   @updatedAt @db.Timestamp(6)
   deleted_at        DateTime?
-  created_by        String?    @db.Uuid
-  updated_by        String?    @db.Uuid
-  deleted_by        String?    @db.Uuid
+  created_by        String?     @db.Uuid
+  updated_by        String?     @db.Uuid
+  deleted_by        String?     @db.Uuid
   price_lists       price_lists @relation(fields: [price_list_id], references: [id], onDelete: Cascade)
   products          products    @relation(fields: [product_id], references: [id], onDelete: Cascade)
 

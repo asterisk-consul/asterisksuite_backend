@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateContainerDto } from './dto/create-container.dto';
 import { UpdateContainerDto } from './dto/update-container.dto';
@@ -116,7 +116,20 @@ export class ContainersService {
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    const container = await this.findOne(id);
+
+    const docsCount = await this.prisma.international_operation_documents.count({
+      where: { container_id: id },
+    });
+    const paysCount = await this.prisma.international_operation_payments.count({
+      where: { container_id: id },
+    });
+
+    if (docsCount > 0 || paysCount > 0) {
+      throw new BadRequestException(
+        `No se puede eliminar el contenedor ${container.container_number}: tiene ${docsCount} documento(s) y ${paysCount} pago(s) asociado(s). Desasocialos primero.`,
+      );
+    }
 
     return this.prisma.international_containers.update({
       where: { id },

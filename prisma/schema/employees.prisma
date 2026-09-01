@@ -16,8 +16,8 @@ model employees {
   salary                  Decimal?  @db.Decimal(15, 2)
   currency_code           String    @db.VarChar(10)
   default_commission_rate Decimal?  @db.Decimal(5, 2)
-  is_salesperson         Boolean   @default(false)
-  is_active              Boolean   @default(true)
+  is_salesperson          Boolean   @default(false)
+  is_active               Boolean   @default(true)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -26,10 +26,10 @@ model employees {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  party         business_parties?       @relation(fields: [party_id], references: [id])
-  cash_boxes    cash_boxes[]
-  movements     cash_box_movements[]
-  sales_ordenes orden_venta_documents[]
+  party             business_parties?       @relation(fields: [party_id], references: [id])
+  cash_boxes        cash_boxes[]
+  movements         cash_box_movements[]
+  sales_ordenes     orden_venta_documents[]
   maintenance_labor maintenance_labor[]
 
   @@index([party_id])
