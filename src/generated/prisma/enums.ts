@@ -265,6 +265,15 @@ export const CashBoxUserRole = {
 export type CashBoxUserRole = (typeof CashBoxUserRole)[keyof typeof CashBoxUserRole]
 
 
+export const BankAccountUserRole = {
+  RESPONSIBLE: 'RESPONSIBLE',
+  OPERATOR: 'OPERATOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type BankAccountUserRole = (typeof BankAccountUserRole)[keyof typeof BankAccountUserRole]
+
+
 export const CreditCardType = {
   COMPANY: 'COMPANY',
   CUSTOMER: 'CUSTOMER'

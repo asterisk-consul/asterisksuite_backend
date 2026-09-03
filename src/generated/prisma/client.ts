@@ -665,6 +665,11 @@ export type taxes = Prisma.taxesModel
  */
 export type bank_accounts = Prisma.bank_accountsModel
 /**
+ * Model bank_account_user_roles
+ * 
+ */
+export type bank_account_user_roles = Prisma.bank_account_user_rolesModel
+/**
  * Model bank_account_movements
  * 
  */

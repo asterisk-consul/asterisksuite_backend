@@ -27,4 +27,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/asterisk-consul/asterisksuite-backend:dev
+          tags: |
+            ghcr.io/asterisk-consul/asterisksuite-backend:dev
+            ghcr.io/asterisk-consul/asterisksuite-backend:dev-${{ github.sha }}

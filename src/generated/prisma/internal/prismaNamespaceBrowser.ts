@@ -176,6 +176,7 @@ export const ModelName = {
   product_taxes: 'product_taxes',
   taxes: 'taxes',
   bank_accounts: 'bank_accounts',
+  bank_account_user_roles: 'bank_account_user_roles',
   bank_account_movements: 'bank_account_movements',
   cash_boxes: 'cash_boxes',
   cash_box_sessions: 'cash_box_sessions',
@@ -2569,6 +2570,22 @@ export const Bank_accountsScalarFieldEnum = {
 } as const
 
 export type Bank_accountsScalarFieldEnum = (typeof Bank_accountsScalarFieldEnum)[keyof typeof Bank_accountsScalarFieldEnum]
+
+
+export const Bank_account_user_rolesScalarFieldEnum = {
+  id: 'id',
+  bank_account_id: 'bank_account_id',
+  user_id: 'user_id',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_account_user_rolesScalarFieldEnum = (typeof Bank_account_user_rolesScalarFieldEnum)[keyof typeof Bank_account_user_rolesScalarFieldEnum]
 
 
 export const Bank_account_movementsScalarFieldEnum = {

@@ -13,11 +13,43 @@ export class TreasuryReportsService {
     return this.db.getClientForCurrentContext();
   }
 
-  async dashboard(checksDays?: number) {
+  async dashboard(checksDays?: number, userId?: string, companyUserRole?: string) {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const checksAhead = new Date(today);
     checksAhead.setDate(checksAhead.getDate() + (checksDays ?? 30));
+
+    const isOwnerOrAdmin = companyUserRole === 'OWNER' || companyUserRole === 'ADMIN';
+
+    // Resolver cajas permitidas (solo si no es OWNER/ADMIN)
+    let allowedCashBoxIds: string[] | null = null;
+    if (!isOwnerOrAdmin && userId) {
+      const userRoles = await this.prisma.cash_box_user_roles.findMany({
+        where: { user_id: userId, deleted_at: null },
+        select: { cash_box_id: true },
+      });
+      allowedCashBoxIds = userRoles.map(r => r.cash_box_id);
+    }
+
+    // Resolver cuentas bancarias permitidas (solo si no es OWNER/ADMIN)
+    let allowedBankAccountIds: string[] | null = null;
+    if (!isOwnerOrAdmin && userId) {
+      const userRoles = await this.prisma.bank_account_user_roles.findMany({
+        where: { user_id: userId, deleted_at: null },
+        select: { bank_account_id: true },
+      });
+      allowedBankAccountIds = userRoles.map(r => r.bank_account_id);
+    }
+
+    const bankAccountWhere: Record<string, any> = { active: true, deleted_at: null };
+    if (allowedBankAccountIds !== null) {
+      bankAccountWhere.id = { in: allowedBankAccountIds };
+    }
+
+    const cashBoxWhere: Record<string, any> = { deleted_at: null };
+    if (allowedCashBoxIds !== null) {
+      cashBoxWhere.id = { in: allowedCashBoxIds };
+    }
 
     const [
       bankBalances,
@@ -29,11 +61,11 @@ export class TreasuryReportsService {
       totalCollections,
     ] = await Promise.all([
       this.prisma.bank_accounts.findMany({
-        where: { active: true, deleted_at: null },
+        where: bankAccountWhere,
         select: { id: true, name: true, bank_name: true, currency_code: true, balance: true },
       }),
       this.prisma.cash_boxes.findMany({
-        where: { deleted_at: null },
+        where: cashBoxWhere,
         include: {
           balances: {
             select: { currency_code: true, balance: true },

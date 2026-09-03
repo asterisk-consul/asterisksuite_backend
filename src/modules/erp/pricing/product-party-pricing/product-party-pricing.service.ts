@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { UpsertProductPartyPriceDto } from './dto/upsert-product-party-price.dto';
+import * as XLSX from 'xlsx';
 
 type OperationType = 'SALE' | 'PURCHASE';
 
@@ -138,6 +139,60 @@ export class ProductPartyPricingService {
     }
 
     return { price: null, currency_code: currencyCode, source: 'NONE' };
+  }
+
+  async importFromExcel(buffer: Buffer, partyId: string, operationType: string, userId?: string) {
+    const opType = operationType as OperationType;
+
+    const party = await this.prisma.business_parties.findUnique({ where: { id: partyId } });
+    if (!party) throw new NotFoundException('Cliente/proveedor no encontrado');
+
+    const wb = XLSX.read(buffer, { type: 'buffer' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws) as any[];
+
+    const result = { success: true, total: rows.length, saved: 0, failed: 0, errors: [] as { row: number; message: string }[] };
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const rowNum = i + 2;
+
+      try {
+        const sku = String(row['SKU'] ?? row['sku'] ?? '').trim();
+        const currencyCode = String(row['Moneda'] ?? row['currency'] ?? '').trim().toUpperCase();
+        const priceRaw = row['Precio acordado'] ?? row['Precio'] ?? row['price'] ?? 0;
+        const price = Number(priceRaw);
+
+        if (!sku) throw new Error('SKU vacío');
+        if (!currencyCode) throw new Error('Moneda vacía');
+        if (isNaN(price) || price <= 0) throw new Error('Precio inválido');
+
+        const product = await this.prisma.products.findFirst({ where: { sku, deleted_at: null } });
+        if (!product) throw new Error(`Producto con SKU "${sku}" no encontrado`);
+
+        const currency = await this.prisma.currencies.findFirst({ where: { code: currencyCode, deleted_at: null } });
+        if (!currency) throw new Error(`Moneda "${currencyCode}" no encontrada`);
+
+        await this.prisma.$transaction((tx) =>
+          this.upsertWithHistory(
+            tx,
+            { product_id: product.id, party_id: partyId, currency_id: currency.id, operation_type: opType, price },
+            'MANUAL',
+            null,
+            null,
+            userId,
+          ),
+        );
+
+        result.saved++;
+      } catch (err: any) {
+        result.failed++;
+        result.errors.push({ row: rowNum, message: err.message || 'Error desconocido' });
+      }
+    }
+
+    if (result.failed > 0) result.success = false;
+    return result;
   }
 
   async upsert(dto: UpsertProductPartyPriceDto, userId?: string) {

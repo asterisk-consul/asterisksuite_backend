@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
@@ -57,6 +58,18 @@ export class ProductPartyPricingController {
   @Post()
   upsert(@Body() dto: UpsertProductPartyPriceDto, @CurrentUser() user: AuthUser) {
     return this.service.upsert(dto, user.id);
+  }
+
+  @RequirePermissions('product-prices.update')
+  @Post('import')
+  @UseInterceptors(FileInterceptor('file'))
+  importPrices(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('party_id') partyId: string,
+    @Body('operation_type') operationType: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.service.importFromExcel(file.buffer, partyId, operationType, user.id);
   }
 
   @RequirePermissions('product-prices.delete')

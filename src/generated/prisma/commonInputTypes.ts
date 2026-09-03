@@ -1275,6 +1275,23 @@ export type EnumPermissionEffectWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPermissionEffectFilter<$PrismaModel>
 }
 
+export type EnumBankAccountUserRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.BankAccountUserRole | Prisma.EnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBankAccountUserRoleFilter<$PrismaModel> | $Enums.BankAccountUserRole
+}
+
+export type EnumBankAccountUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BankAccountUserRole | Prisma.EnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBankAccountUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.BankAccountUserRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBankAccountUserRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBankAccountUserRoleFilter<$PrismaModel>
+}
+
 export type EnumAccountEntryTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.AccountEntryType | Prisma.EnumAccountEntryTypeFieldRefInput<$PrismaModel>
   in?: $Enums.AccountEntryType[] | Prisma.ListEnumAccountEntryTypeFieldRefInput<$PrismaModel>
@@ -2744,6 +2761,23 @@ export type NestedEnumPermissionEffectWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPermissionEffectFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPermissionEffectFilter<$PrismaModel>
+}
+
+export type NestedEnumBankAccountUserRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.BankAccountUserRole | Prisma.EnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBankAccountUserRoleFilter<$PrismaModel> | $Enums.BankAccountUserRole
+}
+
+export type NestedEnumBankAccountUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BankAccountUserRole | Prisma.EnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BankAccountUserRole[] | Prisma.ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBankAccountUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.BankAccountUserRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBankAccountUserRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBankAccountUserRoleFilter<$PrismaModel>
 }
 
 export type NestedEnumAccountEntryTypeFilter<$PrismaModel = never> = {

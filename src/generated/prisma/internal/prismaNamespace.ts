@@ -509,6 +509,7 @@ export const ModelName = {
   product_taxes: 'product_taxes',
   taxes: 'taxes',
   bank_accounts: 'bank_accounts',
+  bank_account_user_roles: 'bank_account_user_roles',
   bank_account_movements: 'bank_account_movements',
   cash_boxes: 'cash_boxes',
   cash_box_sessions: 'cash_box_sessions',
@@ -546,7 +547,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -9800,6 +9801,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    bank_account_user_roles: {
+      payload: Prisma.$bank_account_user_rolesPayload<ExtArgs>
+      fields: Prisma.bank_account_user_rolesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.bank_account_user_rolesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.bank_account_user_rolesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>
+        }
+        findFirst: {
+          args: Prisma.bank_account_user_rolesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.bank_account_user_rolesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>
+        }
+        findMany: {
+          args: Prisma.bank_account_user_rolesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>[]
+        }
+        create: {
+          args: Prisma.bank_account_user_rolesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>
+        }
+        createMany: {
+          args: Prisma.bank_account_user_rolesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.bank_account_user_rolesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>[]
+        }
+        delete: {
+          args: Prisma.bank_account_user_rolesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>
+        }
+        update: {
+          args: Prisma.bank_account_user_rolesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>
+        }
+        deleteMany: {
+          args: Prisma.bank_account_user_rolesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.bank_account_user_rolesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.bank_account_user_rolesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>[]
+        }
+        upsert: {
+          args: Prisma.bank_account_user_rolesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_account_user_rolesPayload>
+        }
+        aggregate: {
+          args: Prisma.Bank_account_user_rolesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBank_account_user_roles>
+        }
+        groupBy: {
+          args: Prisma.bank_account_user_rolesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_account_user_rolesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.bank_account_user_rolesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_account_user_rolesCountAggregateOutputType> | number
+        }
+      }
+    }
     bank_account_movements: {
       payload: Prisma.$bank_account_movementsPayload<ExtArgs>
       fields: Prisma.bank_account_movementsFieldRefs
@@ -13822,6 +13897,22 @@ export const Bank_accountsScalarFieldEnum = {
 export type Bank_accountsScalarFieldEnum = (typeof Bank_accountsScalarFieldEnum)[keyof typeof Bank_accountsScalarFieldEnum]
 
 
+export const Bank_account_user_rolesScalarFieldEnum = {
+  id: 'id',
+  bank_account_id: 'bank_account_id',
+  user_id: 'user_id',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_account_user_rolesScalarFieldEnum = (typeof Bank_account_user_rolesScalarFieldEnum)[keyof typeof Bank_account_user_rolesScalarFieldEnum]
+
+
 export const Bank_account_movementsScalarFieldEnum = {
   id: 'id',
   bank_account_id: 'bank_account_id',
@@ -15166,6 +15257,20 @@ export type ListEnumPermissionEffectFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'BankAccountUserRole'
+ */
+export type EnumBankAccountUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BankAccountUserRole'>
+    
+
+
+/**
+ * Reference to a field of type 'BankAccountUserRole[]'
+ */
+export type ListEnumBankAccountUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BankAccountUserRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'AccountEntryType'
  */
 export type EnumAccountEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountEntryType'>
@@ -15608,6 +15713,7 @@ export type GlobalOmitConfig = {
   product_taxes?: Prisma.product_taxesOmit
   taxes?: Prisma.taxesOmit
   bank_accounts?: Prisma.bank_accountsOmit
+  bank_account_user_roles?: Prisma.bank_account_user_rolesOmit
   bank_account_movements?: Prisma.bank_account_movementsOmit
   cash_boxes?: Prisma.cash_boxesOmit
   cash_box_sessions?: Prisma.cash_box_sessionsOmit

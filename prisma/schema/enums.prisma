@@ -234,6 +234,14 @@ enum CashBoxUserRole {
   @@schema("tenant")
 }
 
+enum BankAccountUserRole {
+  RESPONSIBLE
+  OPERATOR
+  VIEWER
+
+  @@schema("tenant")
+}
+
 enum CreditCardType {
   COMPANY
   CUSTOMER

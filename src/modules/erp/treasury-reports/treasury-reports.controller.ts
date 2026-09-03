@@ -1,6 +1,9 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
+import type { Request } from 'express';
 import { TreasuryReportsService } from './treasury-reports.service';
 
 @UseGuards(JwtAuthGuard)
@@ -10,8 +13,17 @@ export class TreasuryReportsController {
 
   @Get('dashboard')
   @RequirePermissions('treasury.reports.read')
-  dashboard(@Query('checks_days') checksDays?: string) {
-    return this.reportsService.dashboard(checksDays ? parseInt(checksDays, 10) : undefined);
+  dashboard(
+    @Query('checks_days') checksDays: string | undefined,
+    @Req() req: Request,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const companyRole = req['companyUserRole'] as string | undefined;
+    return this.reportsService.dashboard(
+      checksDays ? parseInt(checksDays, 10) : undefined,
+      user.id,
+      companyRole,
+    );
   }
 
   @Get('movements')
