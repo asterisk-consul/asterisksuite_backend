@@ -6,7 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import type { Response } from 'express';
 
 import { AccountsService } from './accounts.service';
 
@@ -17,6 +23,27 @@ import { RequirePermissions } from '@/access-control/decorators/require-permissi
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
+
+  @RequirePermissions('accounts.read')
+  @Get('export')
+  async exportAccounts(
+    @Query('format') format: 'xlsx' | 'csv' = 'xlsx',
+    @Res() res?: Response,
+  ) {
+    const result = await this.accountsService.exportToExcel(format);
+    res?.set({
+      'Content-Type': result.contentType,
+      'Content-Disposition': `attachment; filename=${result.filename}`,
+    });
+    res?.send(result.buffer);
+  }
+
+  @RequirePermissions('accounts.create')
+  @Post('import')
+  @UseInterceptors(FileInterceptor('file'))
+  importAccounts(@UploadedFile() file: Express.Multer.File) {
+    return this.accountsService.importFromExcel(file.buffer);
+  }
 
   @RequirePermissions('accounts.create')
   @Post()
