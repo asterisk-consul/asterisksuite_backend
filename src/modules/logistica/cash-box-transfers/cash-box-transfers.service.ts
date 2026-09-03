@@ -15,8 +15,18 @@ export class CashBoxTransfersService {
       throw new BadRequestException('Origen y destino no pueden ser iguales');
     }
 
-    // Validar saldo en origen si es caja
+    // Validar sesión abierta en caja origen
     if (dto.source_type === 'cash_box') {
+      const box = await this.prisma.cash_boxes.findUnique({
+        where: { id: dto.source_id },
+        select: { current_session_id: true },
+      });
+      if (!box?.current_session_id) {
+        throw new BadRequestException('La caja origen debe tener una sesión abierta');
+      }
+      dto.session_id = box.current_session_id;
+
+      // Validar saldo en origen
       const balance = await this.prisma.cash_box_balances.findUnique({
         where: {
           cash_box_id_currency_code: {
@@ -78,17 +88,90 @@ export class CashBoxTransfersService {
     const isSourceCashBox = transfer.source_type === 'cash_box';
     const isDestCashBox = transfer.dest_type === 'cash_box';
 
+    const sourceAmount = transfer.amount.toNumber();
+    const destAmount = transfer.converted_amount?.toNumber() ?? sourceAmount;
+
+    // Resolve destination currency code
+    let destCurrencyCode = transfer.currency_code;
+    if (isDestCashBox) {
+      const destBox = await this.prisma.cash_boxes.findUnique({ where: { id: transfer.dest_id }, select: { currency_code: true, current_session_id: true } });
+      destCurrencyCode = destBox?.currency_code ?? transfer.currency_code;
+    } else {
+      const destAccount = await this.prisma.bank_accounts.findUnique({ where: { id: transfer.dest_id }, select: { currency_code: true } });
+      destCurrencyCode = destAccount?.currency_code ?? transfer.currency_code;
+    }
+
+    // Resolve destination session ID (each cash box has its own session)
+    let destSessionId: string | null = null;
+    if (isDestCashBox) {
+      const destBox = await this.prisma.cash_boxes.findUnique({ where: { id: transfer.dest_id }, select: { current_session_id: true } });
+      destSessionId = destBox?.current_session_id ?? null;
+    }
+
+    // Read balances BEFORE updating (needed for correct balance_before in movements)
+    let sourceBalanceBefore = 0;
+    if (isSourceCashBox) {
+      const bal = await this.prisma.cash_box_balances.findUnique({
+        where: { cash_box_id_currency_code: { cash_box_id: transfer.source_id, currency_code: transfer.currency_code } },
+        select: { balance: true },
+      });
+      sourceBalanceBefore = bal?.balance.toNumber() ?? 0;
+    } else {
+      const acc = await this.prisma.bank_accounts.findUnique({ where: { id: transfer.source_id }, select: { balance: true } });
+      sourceBalanceBefore = acc?.balance.toNumber() ?? 0;
+    }
+
+    let destBalanceBefore = 0;
+    if (isDestCashBox) {
+      const bal = await this.prisma.cash_box_balances.findUnique({
+        where: { cash_box_id_currency_code: { cash_box_id: transfer.dest_id, currency_code: destCurrencyCode } },
+        select: { balance: true },
+      });
+      destBalanceBefore = bal?.balance.toNumber() ?? 0;
+    } else {
+      const acc = await this.prisma.bank_accounts.findUnique({ where: { id: transfer.dest_id }, select: { balance: true } });
+      destBalanceBefore = acc?.balance.toNumber() ?? 0;
+    }
+
     // Restar del origen
     if (isSourceCashBox) {
-      await this.updateCashBoxBalance(transfer.source_id, transfer.currency_code, -transfer.amount.toNumber());
-      await this.createMovement(transfer.source_id, transfer.session_id, 'TRANSFER', transfer.amount.toNumber(), transfer.currency_code, `Transferencia saliente`, userId);
+      await this.updateCashBoxBalance(transfer.source_id, transfer.currency_code, -sourceAmount);
+      await this.createMovement(transfer.source_id, transfer.session_id, 'TRANSFER', -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId, sourceBalanceBefore);
+    } else {
+      await this.updateBankAccountBalance(transfer.source_id, -sourceAmount);
+      await this.createBankMovement(transfer.source_id, 'TRANSFER', -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId, sourceBalanceBefore);
     }
 
     // Sumar al destino
     if (isDestCashBox) {
-      await this.updateCashBoxBalance(transfer.dest_id, transfer.currency_code, transfer.amount.toNumber());
-      await this.createMovement(transfer.dest_id, transfer.session_id, 'TRANSFER', transfer.amount.toNumber(), transfer.currency_code, `Transferencia entrante`, userId);
+      await this.updateCashBoxBalance(transfer.dest_id, destCurrencyCode, destAmount);
+      await this.createMovement(transfer.dest_id, destSessionId, 'TRANSFER', destAmount, destCurrencyCode, 'Transferencia entrante', userId, destBalanceBefore);
+    } else {
+      await this.updateBankAccountBalance(transfer.dest_id, destAmount);
+      await this.createBankMovement(transfer.dest_id, 'TRANSFER', destAmount, destCurrencyCode, 'Transferencia entrante', userId, destBalanceBefore);
     }
+  }
+
+  private async updateBankAccountBalance(accountId: string, delta: number) {
+    await this.prisma.bank_accounts.update({
+      where: { id: accountId },
+      data: { balance: { increment: delta } },
+    });
+  }
+
+  private async createBankMovement(bankAccountId: string, type: string, amount: number, currencyCode: string, description: string, userId: string, balanceBefore: number) {
+    await this.prisma.bank_account_movements.create({
+      data: {
+        bank_account_id: bankAccountId,
+        type: type as any,
+        amount,
+        currency_code: currencyCode,
+        balance_before: balanceBefore,
+        balance_after: balanceBefore + amount,
+        description,
+        created_by: userId,
+      },
+    });
   }
 
   private async updateCashBoxBalance(cashBoxId: string, currencyCode: string, delta: number) {
@@ -117,26 +200,36 @@ export class CashBoxTransfersService {
     }
   }
 
-  private async createMovement(cashBoxId: string, sessionId: string | null, type: string, amount: number, currencyCode: string, description: string, userId: string) {
-    const balance = await this.prisma.cash_box_balances.findUnique({
-      where: {
-        cash_box_id_currency_code: { cash_box_id: cashBoxId, currency_code: currencyCode },
-      },
-    });
-
-    await this.prisma.cash_box_movements.create({
+  private async createMovement(cashBoxId: string, sessionId: string | null, type: string, amount: number, currencyCode: string, description: string, userId: string, balanceBefore: number) {
+    const movement = await this.prisma.cash_box_movements.create({
       data: {
         cash_box_id: cashBoxId,
         session_id: sessionId,
         type: type as any,
         amount,
         currency_code: currencyCode,
-        balance_before: balance?.balance.toNumber() ?? 0,
-        balance_after: (balance?.balance.toNumber() ?? 0) + amount,
+        balance_before: balanceBefore,
+        balance_after: balanceBefore + amount,
         description,
         created_by: userId,
       },
     });
+
+    // Actualizar totales de la sesión
+    if (sessionId) {
+      const sessionUpdate: Record<string, any> = { movement_count: { increment: 1 } };
+      if (amount > 0) {
+        sessionUpdate.total_income = { increment: amount };
+      } else {
+        sessionUpdate.total_expenses = { increment: Math.abs(amount) };
+      }
+      await this.prisma.cash_box_sessions.update({
+        where: { id: sessionId },
+        data: sessionUpdate,
+      });
+    }
+
+    return movement;
   }
 
   async findAll(filters?: { source_type?: string; source_id?: string; dest_type?: string; dest_id?: string; status?: string; user_id?: string }) {
