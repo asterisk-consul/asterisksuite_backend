@@ -519,11 +519,50 @@ export class PaymentsService {
       where: { id, deleted_at: null },
       include: {
         party: { select: { id: true, name: true } },
-        bank_account: { select: { id: true, name: true } },
+        bank_account: {
+          select: {
+            id: true,
+            name: true,
+            bank_name: true,
+            account_number: true,
+            cbu: true,
+            alias: true,
+            currency_code: true,
+          },
+        },
+        cash_box: { select: { id: true, name: true, type: true, currency_code: true } },
         account: { select: { id: true, code: true, name: true, account_type: true } },
+        payment_allocations: {
+          include: {
+            check: {
+              select: {
+                id: true,
+                check_number: true,
+                bank_name: true,
+                issuer_name: true,
+                amount: true,
+                currency_code: true,
+                due_date: true,
+                is_own: true,
+              },
+            },
+          },
+        },
         documents: {
           include: {
-            document: { select: { id: true, number: true, total: true, paid_amount: true } },
+            document: {
+              select: {
+                id: true,
+                number: true,
+                total: true,
+                paid_amount: true,
+                party_id: true,
+                date: true,
+                currency_code: true,
+                business_parties: { select: { id: true, name: true } },
+                document_types: { select: { id: true, code: true, description: true, category: true } },
+              },
+            },
           },
         },
         withholdings: {
