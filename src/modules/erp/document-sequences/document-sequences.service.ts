@@ -54,7 +54,16 @@ export class DocumentSequencesService {
         });
       }
 
-      return this.findOne(sequence.id);
+      return tx.document_sequences.findFirst({
+        where: { id: sequence.id, deleted_at: null },
+        include: {
+          document_type_sequences: {
+            include: {
+              document_types: true,
+            },
+          },
+        },
+      });
     });
   }
 

@@ -11947,6 +11947,7 @@ export const Orden_venta_documentsScalarFieldEnum = {
   confirmed_delivery_date: 'confirmed_delivery_date',
   seller_id: 'seller_id',
   commission_rate: 'commission_rate',
+  commission_base: 'commission_base',
   commission_settled_at: 'commission_settled_at',
   commission_vale_id: 'commission_vale_id',
   created_at: 'created_at',
@@ -11990,6 +11991,7 @@ export const EmployeesScalarFieldEnum = {
   salary: 'salary',
   currency_code: 'currency_code',
   default_commission_rate: 'default_commission_rate',
+  commission_base: 'commission_base',
   is_salesperson: 'is_salesperson',
   is_active: 'is_active',
   created_at: 'created_at',
@@ -12336,6 +12338,7 @@ export const Hr_vale_commission_detailsScalarFieldEnum = {
   subtotal: 'subtotal',
   commission_rate: 'commission_rate',
   commission_amount: 'commission_amount',
+  commission_base: 'commission_base',
   date: 'date',
   created_at: 'created_at'
 } as const

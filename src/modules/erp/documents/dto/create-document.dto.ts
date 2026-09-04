@@ -182,6 +182,10 @@ export class CreateDocumentDto {
   commission_rate?: number;
 
   @IsOptional()
+  @IsString()
+  commission_base?: string;
+
+  @IsOptional()
   @IsUUID()
   buyer_id?: string;
 

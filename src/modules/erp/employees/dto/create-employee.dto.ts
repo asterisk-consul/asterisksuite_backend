@@ -132,6 +132,10 @@ export class CreateEmployeeDto {
   @IsBoolean()
   is_salesperson?: boolean;
 
+  @IsOptional()
+  @IsString()
+  commission_base?: string;
+
   // ─── Business party fields (for auto-creation) ─
   @IsOptional()
   @IsString()

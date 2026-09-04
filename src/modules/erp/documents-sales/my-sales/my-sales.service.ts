@@ -51,6 +51,9 @@ export class MySalesService {
         document: { date: { gte: start, lte: end }, status: { in: [1, 2] }, deleted_at: null },
       },
       include: {
+        seller: {
+          select: { commission_base: true },
+        },
         document: {
           select: {
             id: true, number: true, date: true, total: true, subtotal: true,
@@ -85,11 +88,21 @@ export class MySalesService {
     const pendienteCobro = totalFacturado - totalCobrado;
     const totalComision = ordenes.reduce((sum, ov) => {
       const rate = ov.commission_rate ? Number(ov.commission_rate) : 0;
-      return sum + (Number(ov.document.subtotal) * rate / 100);
+      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
+      let baseAmount = Number(ov.document.subtotal);
+      if (base === 'PAID') {
+        baseAmount = ov.document.child_documents.reduce((s, f) => s + Number(f.paid_amount ?? 0), 0);
+      }
+      return sum + (baseAmount * rate / 100);
     }, 0);
     const comisionPendiente = ordenes.filter((ov) => !ov.commission_settled_at).reduce((sum, ov) => {
       const rate = ov.commission_rate ? Number(ov.commission_rate) : 0;
-      return sum + (Number(ov.document.subtotal) * rate / 100);
+      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
+      let baseAmount = Number(ov.document.subtotal);
+      if (base === 'PAID') {
+        baseAmount = ov.document.child_documents.reduce((s, f) => s + Number(f.paid_amount ?? 0), 0);
+      }
+      return sum + (baseAmount * rate / 100);
     }, 0);
 
     return {

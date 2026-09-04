@@ -74,6 +74,20 @@ export class HrController {
   }
 
   // ══════════════════════════════════════════════════════════
+  // REPORTE DE SOCIO
+  // ══════════════════════════════════════════════════════════
+
+  @Get('partner-report/:partyId')
+  getPartnerReport(
+    @Param('partyId') partyId: string,
+    @Req() req: ExpressRequest,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const companyRole = req['companyUserRole'] as string | undefined;
+    return this.service.getPartnerReport(partyId, user.id, companyRole);
+  }
+
+  // ══════════════════════════════════════════════════════════
   // REPORTE DE COMISIONES
   // ══════════════════════════════════════════════════════════
 

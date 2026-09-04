@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
 import { parseLocalDateTime } from '@/common/utils/dates';
@@ -11,6 +11,27 @@ export class HrService {
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  /**
+   * Resuelve el monto base para calcular comisión de una OV.
+   * Si commission_base es 'PAID', suma paid_amount de facturas hijas.
+   * Si es 'INVOICED' (default), usa el subtotal de la OV.
+   */
+  private async getCommissionBaseAmount(documentId: string, ovSubtotal: number, commissionBase?: string | null): Promise<number> {
+    if (commissionBase === 'PAID') {
+      const invoices = await this.prisma.documents.findMany({
+        where: {
+          parent_document_id: documentId,
+          deleted_at: null,
+          status: { in: [1, 2] },
+          document_types: { category: 'INVOICE' },
+        },
+        select: { paid_amount: true },
+      });
+      return invoices.reduce((sum, inv) => sum + Number(inv.paid_amount ?? 0), 0);
+    }
+    return ovSubtotal;
   }
 
   // ══════════════════════════════════════════════════════════
@@ -41,6 +62,9 @@ export class HrService {
         type: dto.type as any,
         amount: dto.amount,
         currency_code: dto.currency_code,
+        exchange_rate: dto.exchange_rate,
+        rate_type: dto.rate_type as any ?? 'OFFICIAL',
+        converted_amount: dto.converted_amount,
         date: parseLocalDateTime(dto.date),
         description: dto.description,
         status: 'DRAFT',
@@ -160,6 +184,9 @@ export class HrService {
         type: isDebit ? 'VALE_DEBIT' : 'VALE_CREDIT',
         amount,
         currency_code: vale.currency_code,
+        exchange_rate: vale.exchange_rate,
+        rate_type: vale.rate_type,
+        converted_amount: vale.converted_amount,
         balance_before: currentBalance,
         balance_after: balanceAfter,
         description: `Vale #${vale.number} - ${vale.type}`,
@@ -356,6 +383,9 @@ export class HrService {
         type: isDebit ? 'COLLECTION' : 'PAYMENT',
         amount,
         currency_code: vale.currency_code,
+        exchange_rate: vale.exchange_rate,
+        rate_type: vale.rate_type,
+        converted_amount: vale.converted_amount,
         balance_before: currentBalance,
         balance_after: balanceAfter,
         description: `Vale #${vale.number} - ${vale.description || vale.type}`,
@@ -530,7 +560,7 @@ export class HrService {
       },
       include: {
         seller: {
-          select: { id: true, first_name: true, last_name: true, party_id: true },
+          select: { id: true, first_name: true, last_name: true, party_id: true, commission_base: true },
         },
         document: {
           select: { id: true, number: true, subtotal: true, date: true, currency_code: true },
@@ -553,6 +583,7 @@ export class HrService {
         subtotal: number;
         commission_rate: number;
         commission_amount: number;
+        commission_base: string;
         date: Date;
       }[];
     }>();
@@ -575,7 +606,9 @@ export class HrService {
       const entry = sellerMap.get(key)!;
       const subtotal = Number(ov.document.subtotal);
       const rate = Number(ov.commission_rate);
-      const amount = subtotal * rate / 100;
+      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
+      const baseAmount = await this.getCommissionBaseAmount(ov.document_id, subtotal, base);
+      const amount = baseAmount * rate / 100;
 
       entry.total_ventas += subtotal;
       entry.total_comisiones += amount;
@@ -586,6 +619,7 @@ export class HrService {
         subtotal,
         commission_rate: rate,
         commission_amount: amount,
+        commission_base: base,
         date: ov.document.date,
       });
     }
@@ -628,7 +662,7 @@ export class HrService {
       },
       include: {
         seller: {
-          select: { id: true, first_name: true, last_name: true, party_id: true },
+          select: { id: true, first_name: true, last_name: true, party_id: true, commission_base: true },
         },
         document: {
           select: { id: true, number: true, subtotal: true, date: true, currency_code: true },
@@ -652,7 +686,9 @@ export class HrService {
     for (const ov of ordenes) {
       const subtotal = Number(ov.document.subtotal);
       const rate = Number(ov.commission_rate);
-      totalCommission += subtotal * rate / 100;
+      const base = ov.commission_base ?? seller.commission_base ?? 'INVOICED';
+      const baseAmount = await this.getCommissionBaseAmount(ov.document_id, subtotal, base);
+      totalCommission += baseAmount * rate / 100;
     }
 
     // Create vale
@@ -687,16 +723,19 @@ export class HrService {
     for (const ov of ordenes) {
       const subtotal = Number(ov.document.subtotal);
       const rate = Number(ov.commission_rate);
-      const amount = subtotal * rate / 100;
+      const base = ov.commission_base ?? seller.commission_base ?? 'INVOICED';
+      const baseAmount = await this.getCommissionBaseAmount(ov.document_id, subtotal, base);
+      const amount = baseAmount * rate / 100;
 
       await this.prisma.hr_vale_commission_details.create({
         data: {
           hr_vale_id: vale.id,
           document_id: ov.document_id,
           seller_id: sellerId,
-          subtotal,
+          subtotal: baseAmount,
           commission_rate: rate,
           commission_amount: amount,
+          commission_base: base,
           date: ov.document.date,
         },
       });
@@ -714,5 +753,128 @@ export class HrService {
     this.logger.log(`Vale EXTRAS #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`);
 
     return vale;
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // REPORTE DE SOCIO
+  // ══════════════════════════════════════════════════════════
+
+  async getPartnerReport(partyId: string, userId: string, companyRole?: string) {
+    // 1. Validar acceso: socio solo ve su propio reporte
+    if (companyRole === 'USER') {
+      const userPartners = await this.db.getDefaultClient().partners.findMany({
+        where: { user_id: userId, deleted_at: null },
+        select: { party_id: true },
+      });
+      const userPartyIds = userPartners.map(p => p.party_id).filter(Boolean);
+      if (!userPartyIds.includes(partyId)) {
+        throw new ForbiddenException('No tenés acceso al reporte de este socio');
+      }
+    }
+
+    // 2. Datos del socio
+    const partner = await this.prisma.partners.findFirst({
+      where: { party_id: partyId, deleted_at: null },
+      include: {
+        party: {
+          select: { id: true, name: true, tax_id: true, document_type: true, document_number: true },
+        },
+      },
+    });
+
+    if (!partner) {
+      throw new NotFoundException('Socio no encontrado');
+    }
+
+    // 3. Vales del socio
+    const vales = await this.prisma.hr_vales.findMany({
+      where: { party_id: partyId, party_type: 'PARTNER', deleted_at: null },
+      include: {
+        party: { select: { id: true, name: true, tax_id: true } },
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    // 4. Saldos por moneda
+    const accounts = await this.prisma.hr_accounts.findMany({
+      where: { party_id: partyId, active: true },
+    });
+
+    const balances = accounts.map(a => ({
+      currency_code: a.currency_code,
+      balance: a.balance.toNumber(),
+      converted_balance: a.converted_balance?.toNumber() ?? null,
+    }));
+
+    // 5. Resumen por tipo
+    const summary = {
+      total_aportes: 0,
+      total_retiros: 0,
+      total_reembolsos: 0,
+      total_prestamos: 0,
+      saldo_neto_ars: 0,
+      saldo_neto_usd: 0,
+    };
+
+    for (const vale of vales) {
+      const amount = vale.amount.toNumber();
+      const isCredit = ['APORTE'].includes(vale.type);
+      const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
+
+      if (vale.type === 'APORTE') summary.total_aportes += amount;
+      if (vale.type === 'RETIRO') summary.total_retiros += amount;
+      if (vale.type === 'REEMBOLSO') summary.total_reembolsos += amount;
+      if (vale.type === 'PRESTAMO') summary.total_prestamos += amount;
+    }
+
+    // Saldos por moneda
+    for (const b of balances) {
+      if (b.currency_code === 'ARS') summary.saldo_neto_ars = b.balance;
+      if (b.currency_code === 'USD') summary.saldo_neto_usd = b.balance;
+    }
+
+    // 6. Evolución de saldos (agrupada por fecha)
+    const hrAccountIds = accounts.map(a => a.id);
+    const entries = hrAccountIds.length > 0
+      ? await this.prisma.hr_account_entries.findMany({
+          where: { hr_account_id: { in: hrAccountIds } },
+          orderBy: { date: 'asc' },
+        })
+      : [];
+
+    const evolutionMap = new Map<string, { balance_ars: number; balance_usd: number }>();
+    for (const entry of entries) {
+      const dateKey = entry.date.toISOString().split('T')[0];
+      const existing = evolutionMap.get(dateKey) ?? { balance_ars: 0, balance_usd: 0 };
+      if (entry.currency_code === 'ARS') existing.balance_ars = entry.balance_after.toNumber();
+      if (entry.currency_code === 'USD') existing.balance_usd = entry.balance_after.toNumber();
+      evolutionMap.set(dateKey, existing);
+    }
+
+    const evolution = Array.from(evolutionMap.entries()).map(([date, data]) => ({
+      date,
+      ...data,
+    }));
+
+    return {
+      partner: {
+        id: partner.id,
+        name: partner.party?.name ?? `${partner.first_name} ${partner.last_name}`,
+        document_type: partner.document_type,
+        document_number: partner.document_number,
+        share_percentage: partner.share_percentage?.toNumber() ?? null,
+        capital_contributed: partner.capital_contributed?.toNumber() ?? null,
+        is_active: partner.is_active,
+      },
+      balances,
+      summary,
+      vales: vales.map(v => ({
+        ...v,
+        amount: v.amount.toNumber(),
+        exchange_rate: v.exchange_rate?.toNumber() ?? null,
+        converted_amount: v.converted_amount?.toNumber() ?? null,
+      })),
+      evolution,
+    };
   }
 }

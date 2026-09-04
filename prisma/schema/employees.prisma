@@ -16,7 +16,8 @@ model employees {
   salary                  Decimal?  @db.Decimal(15, 2)
   currency_code           String    @db.VarChar(10)
   default_commission_rate Decimal?  @db.Decimal(5, 2)
-  is_salesperson          Boolean   @default(false)
+  commission_base         String     @default("INVOICED") @db.VarChar(20)
+  is_salesperson          Boolean    @default(false)
   is_active               Boolean   @default(true)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)

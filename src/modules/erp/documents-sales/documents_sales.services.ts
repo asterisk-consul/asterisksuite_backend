@@ -351,6 +351,16 @@ export class DocumentsSalesService {
       }
 
       if (docType.category === 'ORDER') {
+        // Inherit commission_base from seller if not provided
+        let commissionBase = dto.commission_base ?? null;
+        if (!commissionBase && dto.seller_id) {
+          const seller = await tx.employees.findUnique({
+            where: { id: dto.seller_id },
+            select: { commission_base: true },
+          });
+          commissionBase = seller?.commission_base ?? 'INVOICED';
+        }
+
         await tx.orden_venta_documents.create({
           data: {
             document_id: document.id,
@@ -364,6 +374,7 @@ export class DocumentsSalesService {
             confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
             seller_id: dto.seller_id ?? null,
             commission_rate: dto.commission_rate ?? null,
+            commission_base: commissionBase,
           },
         });
       }
@@ -749,6 +760,7 @@ export class DocumentsSalesService {
               : existingExtension.confirmed_delivery_date,
             seller_id: dto.seller_id ?? existingExtension.seller_id,
             commission_rate: dto.commission_rate ?? existingExtension.commission_rate,
+            commission_base: dto.commission_base ?? existingExtension.commission_base,
             updated_at: new Date(),
           },
         });
