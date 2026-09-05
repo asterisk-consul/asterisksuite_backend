@@ -62,6 +62,8 @@ model warehouses {
   trips_trips_origin_warehouse_idTowarehouses      trips[]                     @relation("trips_origin_warehouse_idTowarehouses")
   warehouse_stock                                  warehouse_stock[]
   warehouse_stock_movements                        warehouse_stock_movements[]
+  documents                                        documents[]                 @relation("DocumentWarehouse")
+  document_items                                   document_items[]             @relation("DocumentItemWarehouse")
   maintenance_parts                                maintenance_parts[]
   current_tires                                    tires[]
   locations                                        locations?                  @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)

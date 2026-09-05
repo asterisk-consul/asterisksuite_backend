@@ -31,6 +31,13 @@ export class CurrentAccountsService {
           created_by: userId,
         },
       });
+    } else if (account.party_type !== dto.party_type) {
+      // Mantener la clasificación sincronizada con la parte interesada.
+      // También repara cuentas antiguas creadas genéricamente como SUPPLIER.
+      account = await this.prisma.current_accounts.update({
+        where: { id: account.id },
+        data: { party_type: dto.party_type },
+      });
     }
 
     const isBaseCurrency = dto.currency_code.toUpperCase() === baseCurrency.code.toUpperCase();

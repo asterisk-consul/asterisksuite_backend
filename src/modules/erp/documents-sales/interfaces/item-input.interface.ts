@@ -17,6 +17,8 @@ export interface ItemInput {
 
   variant_id?: string | null;
 
+  warehouse_id?: string | null;
+
   quantity: number;
 
   currency: string;

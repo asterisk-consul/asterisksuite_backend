@@ -123,4 +123,37 @@ export class CreateBusinessPartyDto {
   @ValidateNested({ each: true })
   @Type(() => CreatePartyBankAccountDto)
   bank_accounts?: CreatePartyBankAccountDto[];
+
+  // ─── Datos laborales (solo se aplican al empleado vinculado si type = EMPLOYEE) ───
+  @IsOptional()
+  @IsString()
+  position?: string;
+
+  @IsOptional()
+  @IsString()
+  department?: string;
+
+  @IsOptional()
+  @IsString()
+  hire_date?: string;
+
+  @IsOptional()
+  @IsString()
+  salary?: string;
+
+  @IsOptional()
+  @IsString()
+  currency_code?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  is_salesperson?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  default_commission_rate?: number;
+
+  @IsOptional()
+  @IsString()
+  commission_base?: string;
 }

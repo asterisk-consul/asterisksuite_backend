@@ -588,6 +588,7 @@ export class SalesService {
         document_types: {
           include: { document_sequences: true },
         },
+        document_sequences: true,
       },
       orderBy: { date: 'desc' },
     });
@@ -600,7 +601,12 @@ export class SalesService {
     }>();
 
     for (const doc of documents) {
-      const pv = doc.document_types?.document_sequences?.point_of_sale ?? 'S/PV';
+      // El PV del documento es la secuencia asignada al documento al momento
+      // de emitirlo; la secuencia del tipo de documento es solo el fallback.
+      const pv =
+        doc.document_sequences?.point_of_sale ??
+        doc.document_types?.document_sequences?.point_of_sale ??
+        'S/PV';
       const existing = pvMap.get(pv);
 
       if (existing) {

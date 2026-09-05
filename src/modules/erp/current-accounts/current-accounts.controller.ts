@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { CurrentAccountsService } from './current-accounts.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
-import type { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/current-accounts')
@@ -26,24 +25,14 @@ export class CurrentAccountsController {
 
   @Get('party/:partyId/entries')
   @RequirePermissions('treasury.current_accounts.read')
-  getEntries(
-    @Req() req: Request,
-    @Param('partyId') partyId: string,
-    @CurrentUser() user: AuthUser,
-  ) {
-    const companyRole = req['companyUserRole'] as string | undefined;
-    return this.currentAccountsService.getEntries(partyId, companyRole === 'USER' ? user.id : undefined);
+  getEntries(@Param('partyId') partyId: string) {
+    return this.currentAccountsService.getEntries(partyId);
   }
 
   @Get('party/:partyId/statement')
   @RequirePermissions('treasury.current_accounts.read')
-  getStatement(
-    @Req() req: Request,
-    @Param('partyId') partyId: string,
-    @CurrentUser() user: AuthUser,
-  ) {
-    const companyRole = req['companyUserRole'] as string | undefined;
-    return this.currentAccountsService.getStatement(partyId, companyRole === 'USER' ? user.id : undefined);
+  getStatement(@Param('partyId') partyId: string) {
+    return this.currentAccountsService.getStatement(partyId);
   }
 
   @Get('party/:partyId/balance')

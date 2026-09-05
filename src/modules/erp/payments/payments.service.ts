@@ -38,6 +38,17 @@ export class PaymentsService {
       throw new BadRequestException('party_id es requerido para anticipos');
     }
 
+    const party = dto.party_id
+      ? await this.prisma.business_parties.findFirst({
+          where: { id: dto.party_id, deleted_at: null },
+          select: { type: true },
+        })
+      : null;
+
+    if (dto.party_id && !party) {
+      throw new BadRequestException('La parte interesada seleccionada no existe');
+    }
+
     const lastPayment = await this.prisma.payments.findFirst({
       where: { deleted_at: null },
       orderBy: { number: 'desc' },
@@ -79,7 +90,7 @@ export class PaymentsService {
           payment_mode: (dto.payment_mode as any) ?? 'NORMAL',
           date: parseLocalDateTime(dto.date),
           party_id: dto.party_id,
-          party_type: dto.party_type,
+          party_type: party?.type ?? dto.party_type,
           payment_method: dto.payment_method as any,
           amount: dto.amount,
           currency_code: dto.currency_code,

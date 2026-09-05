@@ -82,7 +82,7 @@ export class DocumentsSalesController {
       status !== undefined ? Number(status) : undefined,
       category,
       direction !== undefined ? Number(direction) : undefined,
-      companyRole === 'USER' ? user.id : undefined,
+      partyId ? undefined : (companyRole === 'USER' ? user.id : undefined),
       partyId,
     );
   }

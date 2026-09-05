@@ -11,14 +11,23 @@ function uuid(): string {
 }
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.resolve(process.cwd(), 'uploads');
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const MAX_DOCUMENT_SIZE = 10 * 1024 * 1024;
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ALLOWED_TYPES = [...IMAGE_TYPES, 'application/pdf'];
+const MIME_BY_EXTENSION: Record<string, string> = {
+  '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
+  '.webp': 'image/webp', '.gif': 'image/gif', '.pdf': 'application/pdf',
+};
 
 const ENTITY_CONFIG: Record<string, { maxImages: number; maxWidth: number; subfolder: string }> = {
   product: { maxImages: 5, maxWidth: 1200, subfolder: 'products' },
   company: { maxImages: 1, maxWidth: 800, subfolder: 'companies' },
-  document: { maxImages: 3, maxWidth: 1200, subfolder: 'documents' },
-  payment: { maxImages: 3, maxWidth: 1200, subfolder: 'payments' },
+  document: { maxImages: 10, maxWidth: 1600, subfolder: 'documents' },
+  payment: { maxImages: 10, maxWidth: 1600, subfolder: 'payments' },
+  check: { maxImages: 5, maxWidth: 1600, subfolder: 'checks' },
+  check_deposit: { maxImages: 5, maxWidth: 1600, subfolder: 'check-deposits' },
+  intake: { maxImages: 10, maxWidth: 1600, subfolder: 'intake' },
 };
 
 @Injectable()
@@ -59,8 +68,9 @@ export class FilesService {
       throw new BadRequestException('No se proporcionó archivo');
     }
 
-    if (file.size > MAX_FILE_SIZE) {
-      throw new BadRequestException(`El archivo excede el tamaño máximo de ${MAX_FILE_SIZE / 1024 / 1024}MB`);
+    const maxFileSize = file.mimetype === 'application/pdf' ? MAX_DOCUMENT_SIZE : MAX_IMAGE_SIZE;
+    if (file.size > maxFileSize) {
+      throw new BadRequestException(`El archivo excede el tamaño máximo de ${maxFileSize / 1024 / 1024} MB`);
     }
 
     if (!ALLOWED_TYPES.includes(file.mimetype)) {
@@ -90,13 +100,15 @@ export class FilesService {
       fs.mkdirSync(subDir, { recursive: true });
     }
 
+    const isImage = IMAGE_TYPES.includes(file.mimetype);
+
     // Create file record first to get the Prisma-generated ID
     const fileData: any = {
       storage_provider: 'local',
       file_path: '', // will update after saving
       public_url: '',
       file_name: file.originalname,
-      mime_type: 'image/webp',
+      mime_type: file.mimetype,
       file_size: 0,
     };
 
@@ -111,38 +123,29 @@ export class FilesService {
     // Use the Prisma-generated ID as the filename
     const baseName = fileRecord.id;
 
-    // Convert to WebP and create variants
-    const fullBuffer = await sharp(file.buffer)
-      .resize(config.maxWidth, null, { withoutEnlargement: true })
-      .webp({ quality: 80 })
-      .toBuffer();
+    const safeExtension = path.extname(file.originalname).toLowerCase() || (isImage ? '.img' : '.pdf');
+    const originalPath = path.join(subDir, `${baseName}_original${safeExtension}`);
+    fs.writeFileSync(originalPath, file.buffer);
 
-    const mediumBuffer = await sharp(file.buffer)
-      .resize(600, null, { withoutEnlargement: true })
-      .webp({ quality: 75 })
-      .toBuffer();
-
-    const thumbBuffer = await sharp(file.buffer)
-      .resize(200, null, { withoutEnlargement: true })
-      .webp({ quality: 70 })
-      .toBuffer();
-
-    // Save files
-    const fullPath = path.join(subDir, `${baseName}_full.webp`);
-    const mediumPath = path.join(subDir, `${baseName}_medium.webp`);
-    const thumbPath = path.join(subDir, `${baseName}_thumb.webp`);
-
-    fs.writeFileSync(fullPath, fullBuffer);
-    fs.writeFileSync(mediumPath, mediumBuffer);
-    fs.writeFileSync(thumbPath, thumbBuffer);
+    if (isImage) {
+      const fullBuffer = await sharp(file.buffer).rotate()
+        .resize(config.maxWidth, null, { withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
+      const mediumBuffer = await sharp(file.buffer).rotate()
+        .resize(800, null, { withoutEnlargement: true }).webp({ quality: 78 }).toBuffer();
+      const thumbBuffer = await sharp(file.buffer).rotate()
+        .resize(240, null, { withoutEnlargement: true }).webp({ quality: 72 }).toBuffer();
+      fs.writeFileSync(path.join(subDir, `${baseName}_full.webp`), fullBuffer);
+      fs.writeFileSync(path.join(subDir, `${baseName}_medium.webp`), mediumBuffer);
+      fs.writeFileSync(path.join(subDir, `${baseName}_thumb.webp`), thumbBuffer);
+    }
 
     // Update file record with correct path
     await this.prisma.files.update({
       where: { id: fileRecord.id },
       data: {
-        file_path: fullPath,
+        file_path: originalPath,
         public_url: `/api/media/files/${fileRecord.id}/download`,
-        file_size: fullBuffer.length,
+        file_size: file.size,
       },
     });
 
@@ -166,17 +169,18 @@ export class FilesService {
       id: fileRecord.id,
       photo_id: photo.id,
       file_uuid: fileRecord.id,
-      url: `/uploads/${config.subfolder}/${baseName}_full.webp`,
-      thumb_url: `/uploads/${config.subfolder}/${baseName}_thumb.webp`,
-      medium_url: `/uploads/${config.subfolder}/${baseName}_medium.webp`,
+      url: `/api/media/files/${baseName}/view`,
+      thumb_url: isImage ? `/api/media/files/${baseName}/thumb` : null,
+      medium_url: isImage ? `/api/media/files/${baseName}/medium` : null,
       file_name: file.originalname,
-      file_size: fullBuffer.length,
+      file_size: file.size,
+      mime_type: file.mimetype,
     };
   }
 
   getFilePath(fileUuid: string, variant: string = 'full'): string | null {
     // Search in all subfolders
-    const subfolders = ['products', 'companies', 'documents', 'payments'];
+    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'intake'];
     for (const subfolder of subfolders) {
       // Try new format: {uuid}_{variant}.webp
       const filePath = path.join(UPLOAD_DIR, subfolder, `${fileUuid}_${variant}.webp`);
@@ -192,6 +196,45 @@ export class FilesService {
       }
     }
     return null;
+  }
+
+  private getOriginalFilePath(fileUuid: string): string | null {
+    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'intake'];
+    for (const subfolder of subfolders) {
+      const directory = path.join(UPLOAD_DIR, subfolder);
+      if (!fs.existsSync(directory)) continue;
+      const match = fs.readdirSync(directory).find((name) => name.startsWith(`${fileUuid}_original.`));
+      if (match) return path.join(directory, match);
+    }
+    return null;
+  }
+
+  private getPhysicalFileMetadata(fileUuid: string) {
+    const filePath = this.getOriginalFilePath(fileUuid) || this.getFilePath(fileUuid, 'full');
+    if (!filePath || !fs.existsSync(filePath)) return null;
+    const extension = path.extname(filePath).toLowerCase();
+    return {
+      filePath,
+      fileName: `Comprobante${extension || ''}`,
+      mimeType: MIME_BY_EXTENSION[extension] || 'application/octet-stream',
+      fileSize: fs.statSync(filePath).size,
+    };
+  }
+
+  async getStoredFile(fileUuid: string, variant: 'original' | 'full' | 'medium' | 'thumb' = 'original') {
+    const record = await this.prisma.files.findFirst({ where: { id: fileUuid, deleted_at: null } });
+    if (!record) {
+      const physical = this.getPhysicalFileMetadata(fileUuid);
+      if (!physical) return null;
+      const requestedPath = variant === 'original' ? physical.filePath : this.getFilePath(fileUuid, variant) || physical.filePath;
+      return {
+        record: { mime_type: physical.mimeType, file_name: physical.fileName },
+        filePath: requestedPath,
+      };
+    }
+    if (variant === 'original') return { record, filePath: record.file_path };
+    const variantPath = this.getFilePath(fileUuid, variant);
+    return { record, filePath: variantPath || record.file_path };
   }
 
   async findByEntity(entityType: string, entityId: string) {
@@ -214,19 +257,38 @@ export class FilesService {
 
     // Filtrar eliminados en JS
     const active = photos.filter((p) => !p.deleted_at);
+    const fileRecords = active.length
+      ? await this.prisma.files.findMany({ where: { id: { in: active.map((p) => p.file_id) } } })
+      : [];
+    const fileMap = new Map(fileRecords.map((file) => [file.id, file]));
 
     console.log('[findByEntity] active count:', active.length);
 
-    return active.map((p) => ({
-      id: p.id,
-      photo_type: p.photo_type,
-      file_id: p.file_id,
-      url: `/uploads/${config.subfolder}/${p.file_id}_full.webp`,
-      thumb_url: `/uploads/${config.subfolder}/${p.file_id}_thumb.webp`,
-      medium_url: `/uploads/${config.subfolder}/${p.file_id}_medium.webp`,
-      file_name: p.files?.file_name,
-      file_size: p.files?.file_size,
-    }));
+    return active.map((p) => {
+      const storedFile = fileMap.get(p.file_id) || p.files;
+      const physical = this.getPhysicalFileMetadata(p.file_id);
+      let fileSize = Number(storedFile?.file_size) || physical?.fileSize || 0;
+      if (!fileSize && storedFile?.file_path) {
+        try {
+          fileSize = fs.statSync(storedFile.file_path).size;
+        } catch {
+          // El archivo puede pertenecer a un almacenamiento externo o ya no existir.
+        }
+      }
+
+      return {
+        id: p.id,
+        photo_type: p.photo_type,
+        file_id: p.file_id,
+        url: `/api/media/files/${p.file_id}/view`,
+        download_url: `/api/media/files/${p.file_id}/download`,
+        thumb_url: (storedFile?.mime_type || physical?.mimeType)?.startsWith('image/') ? `/api/media/files/${p.file_id}/thumb` : null,
+        medium_url: (storedFile?.mime_type || physical?.mimeType)?.startsWith('image/') ? `/api/media/files/${p.file_id}/medium` : null,
+        file_name: storedFile?.file_name || physical?.fileName || 'Comprobante adjunto',
+        file_size: fileSize,
+        mime_type: storedFile?.mime_type || physical?.mimeType || 'application/octet-stream',
+      };
+    });
   }
 
   async deletePhoto(photoId: string, userId?: string) {

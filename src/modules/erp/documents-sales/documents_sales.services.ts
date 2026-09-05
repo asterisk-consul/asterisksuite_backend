@@ -216,6 +216,7 @@ export class DocumentsSalesService {
 
       return {
         product_id: item.productId ?? null,
+        warehouse_id: dtoItems[idx]?.warehouse_id ?? dto.warehouse_id ?? null,
         quantity: item.quantity,
         currency: currencyCode,
         exchange_rate: exchangeRate,
@@ -284,6 +285,7 @@ export class DocumentsSalesService {
           document_type_id: dto.document_type_id,
           document_sequence_id: sequenceId,
           party_id: dto.party_id ?? null,
+          warehouse_id: dto.warehouse_id ?? null,
 
           number,
 
@@ -554,12 +556,13 @@ export class DocumentsSalesService {
         }
       }
 
-      items = calculation.document.items.map((item) => {
+      items = calculation.document.items.map((item, idx) => {
         const convertedUnitPrice = updateIsBase ? null : this.conversionService.convertAmount(item.unitPrice, updateExchangeRate)
         const convertedPrice = updateIsBase ? null : this.conversionService.convertAmount(item.total, updateExchangeRate)
 
         return {
           product_id: item.productId ?? null,
+          warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
           quantity: item.quantity,
           currency: updateCurrencyCode,
           exchange_rate: updateExchangeRate,
@@ -696,6 +699,7 @@ export class DocumentsSalesService {
           number: updatedNumber,
 
           party_id: dto.party_id ?? doc.party_id,
+          warehouse_id: dto.warehouse_id ?? doc.warehouse_id,
 
           date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
 
@@ -787,6 +791,8 @@ export class DocumentsSalesService {
 
           product_id: item.product_id ?? null,
 
+          warehouse_id: item.warehouse_id ?? null,
+
           quantity: item.quantity,
 
           unit_price: item.unit_price,
@@ -871,9 +877,13 @@ export class DocumentsSalesService {
 
         business_parties: true,
 
+        warehouse: true,
+
         document_items: {
           include: {
             products: true,
+
+            warehouse: true,
 
             document_item_taxes: {
               include: {
@@ -1007,19 +1017,6 @@ export class DocumentsSalesService {
         },
 
         presupuesto_doc: true,
-        orden_venta_doc: {
-          include: {
-            seller: {
-              select: {
-                id: true,
-                first_name: true,
-                last_name: true,
-                party_id: true,
-                user_id: true,
-              },
-            },
-          },
-        },
 
         payment_documents: {
           where: { deleted_at: null },
@@ -1032,7 +1029,28 @@ export class DocumentsSalesService {
       throw new NotFoundException('Documento no encontrado');
     }
 
-    return doc;
+    // No consultar la extensión de OV para presupuestos/facturas. Prisma
+    // selecciona todas las columnas de una relación incluida aun cuando no
+    // exista una fila relacionada; un desfase de schema en OV no debe impedir
+    // abrir documentos de otras categorías.
+    const ordenVentaDoc = doc.document_types.category === 'ORDER'
+      ? await this.prisma.orden_venta_documents.findUnique({
+          where: { document_id: id },
+          include: {
+            seller: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                party_id: true,
+                user_id: true,
+              },
+            },
+          },
+        })
+      : null;
+
+    return { ...doc, orden_venta_doc: ordenVentaDoc };
   }
   // ─────────────────────────────────────────────
   // GENERAR BORRADORES DESDE VIAJE
@@ -1358,8 +1376,8 @@ export class DocumentsSalesService {
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
-      if (doc.status === STATUS_CONFIRMED) {
-        throw new BadRequestException('El documento ya está confirmado');
+      if (doc.status !== STATUS_DRAFT) {
+        throw new BadRequestException('Solo se puede confirmar un documento en borrador');
       }
 
       const category = doc.document_types?.category;
@@ -1383,9 +1401,13 @@ export class DocumentsSalesService {
         for (const item of doc.document_items) {
           if (!item.product_id) continue;
 
-          // Buscar un almacén por defecto (el primero activo)
-          const warehouse = await tx.warehouses.findFirst({ where: { active: true } });
-          if (!warehouse) continue;
+          const warehouseId = item.warehouse_id ?? doc.warehouse_id;
+          if (!warehouseId) {
+            throw new BadRequestException('Seleccioná el depósito de salida antes de confirmar el remito');
+          }
+
+          const warehouse = await tx.warehouses.findFirst({ where: { id: warehouseId, active: true } });
+          if (!warehouse) throw new BadRequestException('El depósito seleccionado no existe o está inactivo');
 
           const qty = new Prisma.Decimal(item.quantity);
           const signedQty = direction === 'IN' ? qty : qty.neg();
@@ -1426,6 +1448,10 @@ export class DocumentsSalesService {
               },
             });
           } else {
+            const availableQty = stock.quantity.minus(stock.reserved_quantity);
+            if (direction === 'OUT' && availableQty.lessThan(qty)) {
+              throw new BadRequestException(`Stock disponible insuficiente para el producto ${item.product_id}`);
+            }
             const newQty = stock.quantity.plus(signedQty);
             if (newQty.isNegative()) {
               throw new BadRequestException(`Stock negativo no permitido para producto ${item.product_id}`);
@@ -1525,6 +1551,34 @@ export class DocumentsSalesService {
         throw new BadRequestException(
           'No se puede anular el documento porque tiene pagos asociados. Primero anule los pagos.'
         );
+      }
+
+      if (doc.status === STATUS_CONFIRMED && doc.document_types?.affects_stock) {
+        const movements = await tx.warehouse_stock_movements.findMany({
+          where: { reference_type: 'document', reference_id: doc.id, movement_type: 'DOCUMENT' },
+        });
+        for (const movement of movements) {
+          const reverseDirection = movement.direction === 'OUT' ? 'IN' : 'OUT';
+          const stock = await tx.warehouse_stock.findUnique({
+            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+          });
+          if (reverseDirection === 'OUT' && (!stock || stock.quantity.lessThan(movement.quantity))) {
+            throw new BadRequestException('No se puede anular: el stock recibido ya no está disponible');
+          }
+          await tx.warehouse_stock.upsert({
+            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+            create: { warehouse_id: movement.warehouse_id, product_id: movement.product_id, quantity: movement.quantity },
+            update: { quantity: reverseDirection === 'IN' ? { increment: movement.quantity } : { decrement: movement.quantity } },
+          });
+          await tx.warehouse_stock_movements.create({
+            data: {
+              warehouse_id: movement.warehouse_id, product_id: movement.product_id,
+              movement_type: 'DOCUMENT_REVERSAL', direction: reverseDirection,
+              quantity: movement.quantity, reference_type: 'document_reversal',
+              reference_id: doc.id, created_by: userId,
+            },
+          });
+        }
       }
 
       await tx.documents.update({

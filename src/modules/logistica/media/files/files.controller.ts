@@ -11,6 +11,7 @@ import {
   UploadedFile,
   Res,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
@@ -21,14 +22,18 @@ import { CreateFileDto } from './dto/create-file.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
+import { PermissionContextBuilder } from '@/access-control/authorization/permission-context.builder';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
 
 @Controller('media')
 @UseGuards(JwtAuthGuard)
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(
+    private readonly filesService: FilesService,
+    private readonly permissionContextBuilder: PermissionContextBuilder,
+  ) {}
 
   // ─── Upload ──────────────────────────────────────────
   @Post('upload')
@@ -51,7 +56,15 @@ export class FilesController {
     @Body('entity_id') entityId: string,
     @Body('photo_type') photoType?: string,
     @CurrentUser() user?: AuthUser,
+    @Req() req?: Request,
   ) {
+    if (entityType === 'intake' && (req as any)?.companyUserRole !== 'OWNER') {
+      if (!user?.id) throw new ForbiddenException('No tienes permisos para adjuntar archivos');
+      const permissionContext = await this.permissionContextBuilder.build(user.id);
+      if (!permissionContext.can('intake.upload')) {
+        throw new ForbiddenException('No tienes permisos para adjuntar archivos a capturas');
+      }
+    }
     return this.filesService.upload(file, entityType, entityId, photoType, user?.id);
   }
 
@@ -61,12 +74,30 @@ export class FilesController {
     @Param('fileUuid') fileUuid: string,
     @Res() res: Response,
   ) {
-    const filePath = this.filesService.getFilePath(fileUuid, 'full');
-    if (!filePath || !fs.existsSync(filePath)) {
+    const stored = await this.filesService.getStoredFile(fileUuid, 'original');
+    if (!stored?.filePath || !fs.existsSync(stored.filePath)) {
       return res.status(404).json({ message: 'Archivo no encontrado' });
     }
-    res.set({ 'Content-Type': 'image/webp', 'Cache-Control': 'public, max-age=31536000' });
-    fs.createReadStream(filePath).pipe(res);
+    res.set({
+      'Content-Type': stored.record.mime_type || 'application/octet-stream',
+      'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(stored.record.file_name || 'archivo')}`,
+      'Content-Length': fs.statSync(stored.filePath).size.toString(),
+      'Cache-Control': 'private, no-store',
+    });
+    fs.createReadStream(stored.filePath).pipe(res);
+  }
+
+  @Get('files/:fileUuid/view')
+  async view(@Param('fileUuid') fileUuid: string, @Res() res: Response) {
+    const stored = await this.filesService.getStoredFile(fileUuid, 'original');
+    if (!stored?.filePath || !fs.existsSync(stored.filePath)) return res.status(404).json({ message: 'Archivo no encontrado' });
+    res.set({
+      'Content-Type': stored.record.mime_type || 'application/octet-stream',
+      'Content-Disposition': `inline; filename*=UTF-8''${encodeURIComponent(stored.record.file_name || 'archivo')}`,
+      'Content-Length': fs.statSync(stored.filePath).size.toString(),
+      'Cache-Control': 'private, max-age=3600',
+    });
+    fs.createReadStream(stored.filePath).pipe(res);
   }
 
   // ─── Download (medium) ───────────────────────────────
@@ -75,12 +106,16 @@ export class FilesController {
     @Param('fileUuid') fileUuid: string,
     @Res() res: Response,
   ) {
-    const filePath = this.filesService.getFilePath(fileUuid, 'medium');
-    if (!filePath || !fs.existsSync(filePath)) {
+    const stored = await this.filesService.getStoredFile(fileUuid, 'medium');
+    if (!stored?.filePath || !fs.existsSync(stored.filePath)) {
       return res.status(404).json({ message: 'Archivo no encontrado' });
     }
-    res.set({ 'Content-Type': 'image/webp', 'Cache-Control': 'public, max-age=31536000' });
-    fs.createReadStream(filePath).pipe(res);
+    res.set({
+      'Content-Type': 'image/webp',
+      'Content-Length': fs.statSync(stored.filePath).size.toString(),
+      'Cache-Control': 'private, max-age=3600',
+    });
+    fs.createReadStream(stored.filePath).pipe(res);
   }
 
   // ─── Download (thumb) ────────────────────────────────
@@ -89,12 +124,16 @@ export class FilesController {
     @Param('fileUuid') fileUuid: string,
     @Res() res: Response,
   ) {
-    const filePath = this.filesService.getFilePath(fileUuid, 'thumb');
-    if (!filePath || !fs.existsSync(filePath)) {
+    const stored = await this.filesService.getStoredFile(fileUuid, 'thumb');
+    if (!stored?.filePath || !fs.existsSync(stored.filePath)) {
       return res.status(404).json({ message: 'Archivo no encontrado' });
     }
-    res.set({ 'Content-Type': 'image/webp', 'Cache-Control': 'public, max-age=31536000' });
-    fs.createReadStream(filePath).pipe(res);
+    res.set({
+      'Content-Type': 'image/webp',
+      'Content-Length': fs.statSync(stored.filePath).size.toString(),
+      'Cache-Control': 'private, max-age=3600',
+    });
+    fs.createReadStream(stored.filePath).pipe(res);
   }
 
   // ─── Get photos by entity ────────────────────────────

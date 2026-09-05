@@ -25,7 +25,8 @@ export class EmployeesController {
     return this.employeesService.findAll();
   }
 
-  @RequirePermissions('employees.read')
+  // Sin @RequirePermissions: endpoint self-scoped (solo retorna el empleado del usuario logueado).
+  // Necesario para que cualquier vendedor vea "Mis ventas" sin requerir employees.read.
   @Get('me')
   findMe(@CurrentUser() user: AuthUser) {
     return this.employeesService.findByUserId(user.id);

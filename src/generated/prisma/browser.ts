@@ -153,6 +153,11 @@ export type entity_photos = Prisma.entity_photosModel
  */
 export type files = Prisma.filesModel
 /**
+ * Model intake_records
+ * 
+ */
+export type intake_records = Prisma.intake_recordsModel
+/**
  * Model tax_jurisdictions
  * 
  */

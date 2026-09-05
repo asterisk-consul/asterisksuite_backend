@@ -133,6 +133,14 @@ export const RBAC_PERMISSIONS = [
   { code: 'payments.reject', description: 'Rechazar pagos' },
   { code: 'payments.mark_as_paid', description: 'Marcar pagos como pagados' },
 
+  // ─── Capturas de comprobantes ───────────────────────────────
+  { code: 'intake.read', description: 'Ver menú y bandeja de capturas' },
+  { code: 'intake.create', description: 'Crear capturas en borrador' },
+  { code: 'intake.upload', description: 'Adjuntar imágenes o PDF a capturas' },
+  { code: 'intake.send', description: 'Enviar capturas a otro usuario' },
+  { code: 'intake.delete', description: 'Eliminar capturas propias en borrador' },
+  { code: 'intake.process', description: 'Procesar capturas asignadas' },
+
   // ─── ERP - Currency Rates ─────────────────────────────────
   { code: 'currency_rates.read', description: 'Ver tipos de cambio' },
   { code: 'currency_rates.create', description: 'Crear tipos de cambio' },
@@ -387,6 +395,7 @@ export const RBAC_ROLES = [
       'cash_boxes.read', 'cash_boxes.open', 'cash_boxes.close',
       'cash_box_movements.read', 'cash_box_renditions.read', 'cash_box_transfers.read',
       'bank_accounts.read', 'payments.read', 'payments.create', 'payments.update',
+      'intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete', 'intake.process',
       'business_parties.read', 'contacts.read', 'locations.read',
       'product_variants.read', 'product_components.read',
       'attributes.read', 'tags.read',
@@ -400,6 +409,13 @@ export const RBAC_ROLES = [
     description: 'Solo lectura',
     is_system: true,
     permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read')).map((p) => p.code),
+  },
+  {
+    code: 'capturist',
+    name: 'Capturista',
+    description: 'Carga y envía imágenes o PDF sin acceso al resto de Tesorería',
+    is_system: true,
+    permissionCodes: ['intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete'],
   },
 ]
 

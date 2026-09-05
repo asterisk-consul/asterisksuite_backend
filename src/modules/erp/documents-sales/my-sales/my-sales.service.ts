@@ -59,7 +59,7 @@ export class MySalesService {
             id: true, number: true, date: true, total: true, subtotal: true,
             currency_code: true, party_id: true, status: true,
             child_documents: {
-              where: { deleted_at: null, document_type: { category: 'INVOICE' }, status: { in: [1, 2] } },
+              where: { deleted_at: null, document_types: { category: 'INVOICE' }, status: { in: [1, 2] } },
               select: { id: true, total: true, paid_amount: true },
             },
           },
@@ -135,9 +135,9 @@ export class MySalesService {
           select: {
             id: true, number: true, date: true, total: true, subtotal: true,
             currency_code: true, status: true,
-            party: { select: { id: true, name: true } },
+            business_parties: { select: { id: true, name: true } },
             child_documents: {
-              where: { deleted_at: null, document_type: { category: 'INVOICE' }, status: { in: [1, 2] } },
+              where: { deleted_at: null, document_types: { category: 'INVOICE' }, status: { in: [1, 2] } },
               select: { id: true, total: true, paid_amount: true },
             },
           },
@@ -159,7 +159,7 @@ export class MySalesService {
       }
       return {
         id: doc.id, number: doc.number, date: doc.date,
-        client_name: doc.party?.name || 'Sin cliente',
+        client_name: doc.business_parties?.name || 'Sin cliente',
         total: Number(doc.total), facturado, cobrado, pendiente,
         status, currency_code: doc.currency_code,
         commission_rate: ov.commission_rate ? Number(ov.commission_rate) : null,
@@ -173,12 +173,12 @@ export class MySalesService {
 
     const facturas = await this.prisma.documents.findMany({
       where: {
-        parent_document: { orden_venta_document: { seller_id: employeeId } },
-        document_type: { category: 'INVOICE' },
+        parent_document: { orden_venta_doc: { seller_id: employeeId } },
+        document_types: { category: 'INVOICE' },
         status: { in: [1, 2] },
         deleted_at: null,
       },
-      include: { party: { select: { id: true, name: true } } },
+      include: { business_parties: { select: { id: true, name: true } } },
       orderBy: { date: 'desc' },
     });
 
@@ -187,7 +187,7 @@ export class MySalesService {
       const cid = f.party_id;
       if (!clientMap.has(cid)) {
         clientMap.set(cid, {
-          client_id: cid, client_name: f.party?.name || 'Sin cliente',
+          client_id: cid, client_name: f.business_parties?.name || 'Sin cliente',
           facturas: 0, total_facturado: 0, cobrado: 0, pendiente: 0,
         });
       }
@@ -215,9 +215,9 @@ export class MySalesService {
         document: {
           select: {
             id: true, total: true, party_id: true,
-            party: { select: { id: true, name: true } },
+            business_parties: { select: { id: true, name: true } },
             child_documents: {
-              where: { deleted_at: null, document_type: { category: 'INVOICE' }, status: { in: [1, 2] } },
+              where: { deleted_at: null, document_types: { category: 'INVOICE' }, status: { in: [1, 2] } },
               select: { total: true, paid_amount: true },
             },
           },
@@ -231,7 +231,7 @@ export class MySalesService {
       const cid = doc.party_id;
       if (!clientMap.has(cid)) {
         clientMap.set(cid, {
-          client_id: cid, client_name: doc.party?.name || 'Sin cliente',
+          client_id: cid, client_name: doc.business_parties?.name || 'Sin cliente',
           ordenes: 0, facturado: 0, cobrado: 0, pendiente: 0,
         });
       }
@@ -280,7 +280,7 @@ export class MySalesService {
           select: {
             total: true, subtotal: true,
             child_documents: {
-              where: { deleted_at: null, document_type: { category: 'INVOICE' }, status: { in: [1, 2] } },
+              where: { deleted_at: null, document_types: { category: 'INVOICE' }, status: { in: [1, 2] } },
               select: { total: true, paid_amount: true },
             },
           },

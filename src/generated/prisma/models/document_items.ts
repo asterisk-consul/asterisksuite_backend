@@ -55,6 +55,7 @@ export type Document_itemsMinAggregateOutputType = {
   document_id: string | null
   product_id: string | null
   variant_id: string | null
+  warehouse_id: string | null
   quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
@@ -79,6 +80,7 @@ export type Document_itemsMaxAggregateOutputType = {
   document_id: string | null
   product_id: string | null
   variant_id: string | null
+  warehouse_id: string | null
   quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
@@ -103,6 +105,7 @@ export type Document_itemsCountAggregateOutputType = {
   document_id: number
   product_id: number
   variant_id: number
+  warehouse_id: number
   quantity: number
   price: number
   unit_price: number
@@ -153,6 +156,7 @@ export type Document_itemsMinAggregateInputType = {
   document_id?: true
   product_id?: true
   variant_id?: true
+  warehouse_id?: true
   quantity?: true
   price?: true
   unit_price?: true
@@ -177,6 +181,7 @@ export type Document_itemsMaxAggregateInputType = {
   document_id?: true
   product_id?: true
   variant_id?: true
+  warehouse_id?: true
   quantity?: true
   price?: true
   unit_price?: true
@@ -201,6 +206,7 @@ export type Document_itemsCountAggregateInputType = {
   document_id?: true
   product_id?: true
   variant_id?: true
+  warehouse_id?: true
   quantity?: true
   price?: true
   unit_price?: true
@@ -312,6 +318,7 @@ export type Document_itemsGroupByOutputType = {
   document_id: string
   product_id: string | null
   variant_id: string | null
+  warehouse_id: string | null
   quantity: runtime.Decimal
   price: runtime.Decimal
   unit_price: runtime.Decimal
@@ -359,6 +366,7 @@ export type document_itemsWhereInput = {
   document_id?: Prisma.UuidFilter<"document_items"> | string
   product_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   variant_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  warehouse_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -380,6 +388,7 @@ export type document_itemsWhereInput = {
   documents?: Prisma.XOR<Prisma.DocumentsScalarRelationFilter, Prisma.documentsWhereInput>
   products?: Prisma.XOR<Prisma.ProductsNullableScalarRelationFilter, Prisma.productsWhereInput> | null
   product_variants?: Prisma.XOR<Prisma.Product_variantsNullableScalarRelationFilter, Prisma.product_variantsWhereInput> | null
+  warehouse?: Prisma.XOR<Prisma.WarehousesNullableScalarRelationFilter, Prisma.warehousesWhereInput> | null
 }
 
 export type document_itemsOrderByWithRelationInput = {
@@ -387,6 +396,7 @@ export type document_itemsOrderByWithRelationInput = {
   document_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrderInput | Prisma.SortOrder
   variant_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
@@ -408,6 +418,7 @@ export type document_itemsOrderByWithRelationInput = {
   documents?: Prisma.documentsOrderByWithRelationInput
   products?: Prisma.productsOrderByWithRelationInput
   product_variants?: Prisma.product_variantsOrderByWithRelationInput
+  warehouse?: Prisma.warehousesOrderByWithRelationInput
 }
 
 export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
@@ -418,6 +429,7 @@ export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
   document_id?: Prisma.UuidFilter<"document_items"> | string
   product_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   variant_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  warehouse_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -439,6 +451,7 @@ export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
   documents?: Prisma.XOR<Prisma.DocumentsScalarRelationFilter, Prisma.documentsWhereInput>
   products?: Prisma.XOR<Prisma.ProductsNullableScalarRelationFilter, Prisma.productsWhereInput> | null
   product_variants?: Prisma.XOR<Prisma.Product_variantsNullableScalarRelationFilter, Prisma.product_variantsWhereInput> | null
+  warehouse?: Prisma.XOR<Prisma.WarehousesNullableScalarRelationFilter, Prisma.warehousesWhereInput> | null
 }, "id">
 
 export type document_itemsOrderByWithAggregationInput = {
@@ -446,6 +459,7 @@ export type document_itemsOrderByWithAggregationInput = {
   document_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrderInput | Prisma.SortOrder
   variant_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
@@ -478,6 +492,7 @@ export type document_itemsScalarWhereWithAggregatesInput = {
   document_id?: Prisma.UuidWithAggregatesFilter<"document_items"> | string
   product_id?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
   variant_id?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
+  warehouse_id?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -520,6 +535,7 @@ export type document_itemsCreateInput = {
   documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
   products?: Prisma.productsCreateNestedOneWithoutDocument_itemsInput
   product_variants?: Prisma.product_variantsCreateNestedOneWithoutDocument_itemsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocument_itemsInput
 }
 
 export type document_itemsUncheckedCreateInput = {
@@ -527,6 +543,7 @@ export type document_itemsUncheckedCreateInput = {
   document_id: string
   product_id?: string | null
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -570,6 +587,7 @@ export type document_itemsUpdateInput = {
   documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
   products?: Prisma.productsUpdateOneWithoutDocument_itemsNestedInput
   product_variants?: Prisma.product_variantsUpdateOneWithoutDocument_itemsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocument_itemsNestedInput
 }
 
 export type document_itemsUncheckedUpdateInput = {
@@ -577,6 +595,7 @@ export type document_itemsUncheckedUpdateInput = {
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -602,6 +621,7 @@ export type document_itemsCreateManyInput = {
   document_id: string
   product_id?: string | null
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -647,6 +667,7 @@ export type document_itemsUncheckedUpdateManyInput = {
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -676,6 +697,7 @@ export type document_itemsCountOrderByAggregateInput = {
   document_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
   variant_id?: Prisma.SortOrder
+  warehouse_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
@@ -712,6 +734,7 @@ export type document_itemsMaxOrderByAggregateInput = {
   document_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
   variant_id?: Prisma.SortOrder
+  warehouse_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
@@ -736,6 +759,7 @@ export type document_itemsMinOrderByAggregateInput = {
   document_id?: Prisma.SortOrder
   product_id?: Prisma.SortOrder
   variant_id?: Prisma.SortOrder
+  warehouse_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
@@ -921,6 +945,48 @@ export type document_itemsUncheckedUpdateManyWithoutProduct_variantsNestedInput 
   deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
 }
 
+export type document_itemsCreateNestedManyWithoutWarehouseInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutWarehouseInput, Prisma.document_itemsUncheckedCreateWithoutWarehouseInput> | Prisma.document_itemsCreateWithoutWarehouseInput[] | Prisma.document_itemsUncheckedCreateWithoutWarehouseInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutWarehouseInput | Prisma.document_itemsCreateOrConnectWithoutWarehouseInput[]
+  createMany?: Prisma.document_itemsCreateManyWarehouseInputEnvelope
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+}
+
+export type document_itemsUncheckedCreateNestedManyWithoutWarehouseInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutWarehouseInput, Prisma.document_itemsUncheckedCreateWithoutWarehouseInput> | Prisma.document_itemsCreateWithoutWarehouseInput[] | Prisma.document_itemsUncheckedCreateWithoutWarehouseInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutWarehouseInput | Prisma.document_itemsCreateOrConnectWithoutWarehouseInput[]
+  createMany?: Prisma.document_itemsCreateManyWarehouseInputEnvelope
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+}
+
+export type document_itemsUpdateManyWithoutWarehouseNestedInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutWarehouseInput, Prisma.document_itemsUncheckedCreateWithoutWarehouseInput> | Prisma.document_itemsCreateWithoutWarehouseInput[] | Prisma.document_itemsUncheckedCreateWithoutWarehouseInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutWarehouseInput | Prisma.document_itemsCreateOrConnectWithoutWarehouseInput[]
+  upsert?: Prisma.document_itemsUpsertWithWhereUniqueWithoutWarehouseInput | Prisma.document_itemsUpsertWithWhereUniqueWithoutWarehouseInput[]
+  createMany?: Prisma.document_itemsCreateManyWarehouseInputEnvelope
+  set?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  disconnect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  delete?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  update?: Prisma.document_itemsUpdateWithWhereUniqueWithoutWarehouseInput | Prisma.document_itemsUpdateWithWhereUniqueWithoutWarehouseInput[]
+  updateMany?: Prisma.document_itemsUpdateManyWithWhereWithoutWarehouseInput | Prisma.document_itemsUpdateManyWithWhereWithoutWarehouseInput[]
+  deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
+}
+
+export type document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput = {
+  create?: Prisma.XOR<Prisma.document_itemsCreateWithoutWarehouseInput, Prisma.document_itemsUncheckedCreateWithoutWarehouseInput> | Prisma.document_itemsCreateWithoutWarehouseInput[] | Prisma.document_itemsUncheckedCreateWithoutWarehouseInput[]
+  connectOrCreate?: Prisma.document_itemsCreateOrConnectWithoutWarehouseInput | Prisma.document_itemsCreateOrConnectWithoutWarehouseInput[]
+  upsert?: Prisma.document_itemsUpsertWithWhereUniqueWithoutWarehouseInput | Prisma.document_itemsUpsertWithWhereUniqueWithoutWarehouseInput[]
+  createMany?: Prisma.document_itemsCreateManyWarehouseInputEnvelope
+  set?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  disconnect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  delete?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  connect?: Prisma.document_itemsWhereUniqueInput | Prisma.document_itemsWhereUniqueInput[]
+  update?: Prisma.document_itemsUpdateWithWhereUniqueWithoutWarehouseInput | Prisma.document_itemsUpdateWithWhereUniqueWithoutWarehouseInput[]
+  updateMany?: Prisma.document_itemsUpdateManyWithWhereWithoutWarehouseInput | Prisma.document_itemsUpdateManyWithWhereWithoutWarehouseInput[]
+  deleteMany?: Prisma.document_itemsScalarWhereInput | Prisma.document_itemsScalarWhereInput[]
+}
+
 export type document_itemsCreateWithoutDocument_item_taxesInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -943,6 +1009,7 @@ export type document_itemsCreateWithoutDocument_item_taxesInput = {
   documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
   products?: Prisma.productsCreateNestedOneWithoutDocument_itemsInput
   product_variants?: Prisma.product_variantsCreateNestedOneWithoutDocument_itemsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocument_itemsInput
 }
 
 export type document_itemsUncheckedCreateWithoutDocument_item_taxesInput = {
@@ -950,6 +1017,7 @@ export type document_itemsUncheckedCreateWithoutDocument_item_taxesInput = {
   document_id: string
   product_id?: string | null
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1007,6 +1075,7 @@ export type document_itemsUpdateWithoutDocument_item_taxesInput = {
   documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
   products?: Prisma.productsUpdateOneWithoutDocument_itemsNestedInput
   product_variants?: Prisma.product_variantsUpdateOneWithoutDocument_itemsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocument_itemsNestedInput
 }
 
 export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
@@ -1014,6 +1083,7 @@ export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1055,12 +1125,14 @@ export type document_itemsCreateWithoutDocumentsInput = {
   document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutDocument_itemsInput
   products?: Prisma.productsCreateNestedOneWithoutDocument_itemsInput
   product_variants?: Prisma.product_variantsCreateNestedOneWithoutDocument_itemsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocument_itemsInput
 }
 
 export type document_itemsUncheckedCreateWithoutDocumentsInput = {
   id?: string
   product_id?: string | null
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1115,6 +1187,7 @@ export type document_itemsScalarWhereInput = {
   document_id?: Prisma.UuidFilter<"document_items"> | string
   product_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   variant_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  warehouse_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1156,12 +1229,14 @@ export type document_itemsCreateWithoutProductsInput = {
   document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutDocument_itemsInput
   documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
   product_variants?: Prisma.product_variantsCreateNestedOneWithoutDocument_itemsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocument_itemsInput
 }
 
 export type document_itemsUncheckedCreateWithoutProductsInput = {
   id?: string
   document_id: string
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1230,12 +1305,14 @@ export type document_itemsCreateWithoutProduct_variantsInput = {
   document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutDocument_itemsInput
   documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
   products?: Prisma.productsCreateNestedOneWithoutDocument_itemsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocument_itemsInput
 }
 
 export type document_itemsUncheckedCreateWithoutProduct_variantsInput = {
   id?: string
   document_id: string
   product_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1282,10 +1359,87 @@ export type document_itemsUpdateManyWithWhereWithoutProduct_variantsInput = {
   data: Prisma.XOR<Prisma.document_itemsUpdateManyMutationInput, Prisma.document_itemsUncheckedUpdateManyWithoutProduct_variantsInput>
 }
 
+export type document_itemsCreateWithoutWarehouseInput = {
+  id?: string
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency_code?: string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_item_taxes?: Prisma.document_item_taxesCreateNestedManyWithoutDocument_itemsInput
+  documents: Prisma.documentsCreateNestedOneWithoutDocument_itemsInput
+  products?: Prisma.productsCreateNestedOneWithoutDocument_itemsInput
+  product_variants?: Prisma.product_variantsCreateNestedOneWithoutDocument_itemsInput
+}
+
+export type document_itemsUncheckedCreateWithoutWarehouseInput = {
+  id?: string
+  document_id: string
+  product_id?: string | null
+  variant_id?: string | null
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency_code?: string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  document_item_taxes?: Prisma.document_item_taxesUncheckedCreateNestedManyWithoutDocument_itemsInput
+}
+
+export type document_itemsCreateOrConnectWithoutWarehouseInput = {
+  where: Prisma.document_itemsWhereUniqueInput
+  create: Prisma.XOR<Prisma.document_itemsCreateWithoutWarehouseInput, Prisma.document_itemsUncheckedCreateWithoutWarehouseInput>
+}
+
+export type document_itemsCreateManyWarehouseInputEnvelope = {
+  data: Prisma.document_itemsCreateManyWarehouseInput | Prisma.document_itemsCreateManyWarehouseInput[]
+  skipDuplicates?: boolean
+}
+
+export type document_itemsUpsertWithWhereUniqueWithoutWarehouseInput = {
+  where: Prisma.document_itemsWhereUniqueInput
+  update: Prisma.XOR<Prisma.document_itemsUpdateWithoutWarehouseInput, Prisma.document_itemsUncheckedUpdateWithoutWarehouseInput>
+  create: Prisma.XOR<Prisma.document_itemsCreateWithoutWarehouseInput, Prisma.document_itemsUncheckedCreateWithoutWarehouseInput>
+}
+
+export type document_itemsUpdateWithWhereUniqueWithoutWarehouseInput = {
+  where: Prisma.document_itemsWhereUniqueInput
+  data: Prisma.XOR<Prisma.document_itemsUpdateWithoutWarehouseInput, Prisma.document_itemsUncheckedUpdateWithoutWarehouseInput>
+}
+
+export type document_itemsUpdateManyWithWhereWithoutWarehouseInput = {
+  where: Prisma.document_itemsScalarWhereInput
+  data: Prisma.XOR<Prisma.document_itemsUpdateManyMutationInput, Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseInput>
+}
+
 export type document_itemsCreateManyDocumentsInput = {
   id?: string
   product_id?: string | null
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1327,12 +1481,14 @@ export type document_itemsUpdateWithoutDocumentsInput = {
   document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutDocument_itemsNestedInput
   products?: Prisma.productsUpdateOneWithoutDocument_itemsNestedInput
   product_variants?: Prisma.product_variantsUpdateOneWithoutDocument_itemsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocument_itemsNestedInput
 }
 
 export type document_itemsUncheckedUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1357,6 +1513,7 @@ export type document_itemsUncheckedUpdateManyWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1380,6 +1537,7 @@ export type document_itemsCreateManyProductsInput = {
   id?: string
   document_id: string
   variant_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1421,12 +1579,14 @@ export type document_itemsUpdateWithoutProductsInput = {
   document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutDocument_itemsNestedInput
   documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
   product_variants?: Prisma.product_variantsUpdateOneWithoutDocument_itemsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocument_itemsNestedInput
 }
 
 export type document_itemsUncheckedUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1451,6 +1611,7 @@ export type document_itemsUncheckedUpdateManyWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1474,6 +1635,7 @@ export type document_itemsCreateManyProduct_variantsInput = {
   id?: string
   document_id: string
   product_id?: string | null
+  warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1515,12 +1677,14 @@ export type document_itemsUpdateWithoutProduct_variantsInput = {
   document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutDocument_itemsNestedInput
   documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
   products?: Prisma.productsUpdateOneWithoutDocument_itemsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocument_itemsNestedInput
 }
 
 export type document_itemsUncheckedUpdateWithoutProduct_variantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1545,6 +1709,105 @@ export type document_itemsUncheckedUpdateManyWithoutProduct_variantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   document_id?: Prisma.StringFieldUpdateOperationsInput | string
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type document_itemsCreateManyWarehouseInput = {
+  id?: string
+  document_id: string
+  product_id?: string | null
+  variant_id?: string | null
+  quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency_code?: string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  original_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+}
+
+export type document_itemsUpdateWithoutWarehouseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_item_taxes?: Prisma.document_item_taxesUpdateManyWithoutDocument_itemsNestedInput
+  documents?: Prisma.documentsUpdateOneRequiredWithoutDocument_itemsNestedInput
+  products?: Prisma.productsUpdateOneWithoutDocument_itemsNestedInput
+  product_variants?: Prisma.product_variantsUpdateOneWithoutDocument_itemsNestedInput
+}
+
+export type document_itemsUncheckedUpdateWithoutWarehouseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_id?: Prisma.StringFieldUpdateOperationsInput | string
+  product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  original_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_unit_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_delivered?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  quantity_invoiced?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_item_taxes?: Prisma.document_item_taxesUncheckedUpdateManyWithoutDocument_itemsNestedInput
+}
+
+export type document_itemsUncheckedUpdateManyWithoutWarehouseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_id?: Prisma.StringFieldUpdateOperationsInput | string
+  product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1600,6 +1863,7 @@ export type document_itemsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   document_id?: boolean
   product_id?: boolean
   variant_id?: boolean
+  warehouse_id?: boolean
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
@@ -1621,6 +1885,7 @@ export type document_itemsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   products?: boolean | Prisma.document_items$productsArgs<ExtArgs>
   product_variants?: boolean | Prisma.document_items$product_variantsArgs<ExtArgs>
+  warehouse?: boolean | Prisma.document_items$warehouseArgs<ExtArgs>
   _count?: boolean | Prisma.Document_itemsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document_items"]>
 
@@ -1629,6 +1894,7 @@ export type document_itemsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   document_id?: boolean
   product_id?: boolean
   variant_id?: boolean
+  warehouse_id?: boolean
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
@@ -1649,6 +1915,7 @@ export type document_itemsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   products?: boolean | Prisma.document_items$productsArgs<ExtArgs>
   product_variants?: boolean | Prisma.document_items$product_variantsArgs<ExtArgs>
+  warehouse?: boolean | Prisma.document_items$warehouseArgs<ExtArgs>
 }, ExtArgs["result"]["document_items"]>
 
 export type document_itemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1656,6 +1923,7 @@ export type document_itemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   document_id?: boolean
   product_id?: boolean
   variant_id?: boolean
+  warehouse_id?: boolean
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
@@ -1676,6 +1944,7 @@ export type document_itemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   products?: boolean | Prisma.document_items$productsArgs<ExtArgs>
   product_variants?: boolean | Prisma.document_items$product_variantsArgs<ExtArgs>
+  warehouse?: boolean | Prisma.document_items$warehouseArgs<ExtArgs>
 }, ExtArgs["result"]["document_items"]>
 
 export type document_itemsSelectScalar = {
@@ -1683,6 +1952,7 @@ export type document_itemsSelectScalar = {
   document_id?: boolean
   product_id?: boolean
   variant_id?: boolean
+  warehouse_id?: boolean
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
@@ -1702,23 +1972,26 @@ export type document_itemsSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "variant_id" | "quantity" | "price" | "unit_price" | "exchange_rate" | "currency_code" | "rate_type" | "original_unit_price" | "converted_unit_price" | "converted_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
+export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "variant_id" | "warehouse_id" | "quantity" | "price" | "unit_price" | "exchange_rate" | "currency_code" | "rate_type" | "original_unit_price" | "converted_unit_price" | "converted_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
 export type document_itemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_item_taxes?: boolean | Prisma.document_items$document_item_taxesArgs<ExtArgs>
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   products?: boolean | Prisma.document_items$productsArgs<ExtArgs>
   product_variants?: boolean | Prisma.document_items$product_variantsArgs<ExtArgs>
+  warehouse?: boolean | Prisma.document_items$warehouseArgs<ExtArgs>
   _count?: boolean | Prisma.Document_itemsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type document_itemsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   products?: boolean | Prisma.document_items$productsArgs<ExtArgs>
   product_variants?: boolean | Prisma.document_items$product_variantsArgs<ExtArgs>
+  warehouse?: boolean | Prisma.document_items$warehouseArgs<ExtArgs>
 }
 export type document_itemsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
   products?: boolean | Prisma.document_items$productsArgs<ExtArgs>
   product_variants?: boolean | Prisma.document_items$product_variantsArgs<ExtArgs>
+  warehouse?: boolean | Prisma.document_items$warehouseArgs<ExtArgs>
 }
 
 export type $document_itemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1728,12 +2001,14 @@ export type $document_itemsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     documents: Prisma.$documentsPayload<ExtArgs>
     products: Prisma.$productsPayload<ExtArgs> | null
     product_variants: Prisma.$product_variantsPayload<ExtArgs> | null
+    warehouse: Prisma.$warehousesPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     document_id: string
     product_id: string | null
     variant_id: string | null
+    warehouse_id: string | null
     quantity: runtime.Decimal
     price: runtime.Decimal
     unit_price: runtime.Decimal
@@ -2149,6 +2424,7 @@ export interface Prisma__document_itemsClient<T, Null = never, ExtArgs extends r
   documents<T extends Prisma.documentsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documentsDefaultArgs<ExtArgs>>): Prisma.Prisma__documentsClient<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   products<T extends Prisma.document_items$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_items$productsArgs<ExtArgs>>): Prisma.Prisma__productsClient<runtime.Types.Result.GetResult<Prisma.$productsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   product_variants<T extends Prisma.document_items$product_variantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_items$product_variantsArgs<ExtArgs>>): Prisma.Prisma__product_variantsClient<runtime.Types.Result.GetResult<Prisma.$product_variantsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  warehouse<T extends Prisma.document_items$warehouseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.document_items$warehouseArgs<ExtArgs>>): Prisma.Prisma__warehousesClient<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2182,6 +2458,7 @@ export interface document_itemsFieldRefs {
   readonly document_id: Prisma.FieldRef<"document_items", 'String'>
   readonly product_id: Prisma.FieldRef<"document_items", 'String'>
   readonly variant_id: Prisma.FieldRef<"document_items", 'String'>
+  readonly warehouse_id: Prisma.FieldRef<"document_items", 'String'>
   readonly quantity: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly price: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly unit_price: Prisma.FieldRef<"document_items", 'Decimal'>
@@ -2659,6 +2936,25 @@ export type document_items$product_variantsArgs<ExtArgs extends runtime.Types.Ex
    */
   include?: Prisma.product_variantsInclude<ExtArgs> | null
   where?: Prisma.product_variantsWhereInput
+}
+
+/**
+ * document_items.warehouse
+ */
+export type document_items$warehouseArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the warehouses
+   */
+  select?: Prisma.warehousesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the warehouses
+   */
+  omit?: Prisma.warehousesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.warehousesInclude<ExtArgs> | null
+  where?: Prisma.warehousesWhereInput
 }
 
 /**

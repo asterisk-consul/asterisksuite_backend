@@ -43,7 +43,7 @@ export class PaymentsController {
       payment_method: paymentMethod,
       status,
       account_id: accountId,
-      user_id: companyRole === 'USER' ? user.id : undefined,
+      user_id: partyId ? undefined : (companyRole === 'USER' ? user.id : undefined),
     });
   }
 

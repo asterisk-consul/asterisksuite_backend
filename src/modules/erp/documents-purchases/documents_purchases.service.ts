@@ -2,6 +2,8 @@
 
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 
+import { Prisma } from '@/generated/prisma/client';
+
 import { PrismaService } from '@/prisma/prisma.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
 
@@ -200,6 +202,7 @@ export class DocumentsPurchasesService {
     // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
     const items: ItemInput[] = calculation.document.items.map((item, idx) => ({
       product_id: item.productId ?? null,
+      warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? null,
       quantity: item.quantity,
       currency: currencyCode,
       exchange_rate: exchangeRate,
@@ -267,6 +270,7 @@ export class DocumentsPurchasesService {
           document_type_id: dto.document_type_id,
           document_sequence_id: sequenceId,
           party_id: dto.party_id ?? null,
+          warehouse_id: dto.warehouse_id ?? null,
 
           number,
 
@@ -428,8 +432,9 @@ export class DocumentsPurchasesService {
       const resolution = await this.taxResolution.resolve(taxContext);
       const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
 
-      items = calculation.document.items.map((item) => ({
+      items = calculation.document.items.map((item, idx) => ({
         product_id: item.productId ?? null,
+        warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: item.quantity,
         currency: updateCurrencyCode,
         exchange_rate: updateExchangeRate,
@@ -524,6 +529,7 @@ export class DocumentsPurchasesService {
 
         data: {
           party_id: dto.party_id ?? doc.party_id,
+          warehouse_id: dto.warehouse_id ?? doc.warehouse_id,
 
           date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
 
@@ -609,6 +615,8 @@ export class DocumentsPurchasesService {
           document_id: documentId,
 
           product_id: item.product_id ?? null,
+
+          warehouse_id: item.warehouse_id ?? null,
 
           variant_id: item.variant_id ?? null,
 
@@ -721,10 +729,12 @@ export class DocumentsPurchasesService {
         document_types: true,
         document_sequences: true,
         business_parties: true,
+        warehouse: true,
 
         document_items: {
           include: {
             products: true,
+            warehouse: true,
 
             document_item_taxes: {
               include: {
@@ -1134,8 +1144,8 @@ export class DocumentsPurchasesService {
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
-      if (doc.status === STATUS_CONFIRMED) {
-        throw new BadRequestException('El documento ya está confirmado');
+      if (doc.status !== STATUS_DRAFT) {
+        throw new BadRequestException('Solo se puede confirmar un documento en borrador');
       }
 
       const category = doc.document_types?.category;
@@ -1152,9 +1162,45 @@ export class DocumentsPurchasesService {
         },
       });
 
+      // Los remitos de compra ingresan stock al depósito elegido.
+      if (doc.document_types?.affects_stock) {
+        for (const item of doc.document_items) {
+          if (!item.product_id) continue;
+
+          const warehouseId = item.warehouse_id ?? doc.warehouse_id;
+          if (!warehouseId) {
+            throw new BadRequestException('Seleccioná el depósito receptor antes de confirmar el remito');
+          }
+
+          const warehouse = await tx.warehouses.findFirst({ where: { id: warehouseId, active: true } });
+          if (!warehouse) throw new BadRequestException('El depósito seleccionado no existe o está inactivo');
+
+          const qty = new Prisma.Decimal(item.quantity);
+          await tx.warehouse_stock_movements.create({
+            data: {
+              warehouse_id: warehouseId,
+              product_id: item.product_id,
+              movement_type: 'DOCUMENT',
+              direction: 'IN',
+              quantity: qty,
+              reference_type: 'document',
+              reference_id: doc.id,
+              created_by: userId,
+            },
+          });
+
+          await tx.warehouse_stock.upsert({
+            where: { warehouse_id_product_id: { warehouse_id: warehouseId, product_id: item.product_id } },
+            create: { warehouse_id: warehouseId, product_id: item.product_id, quantity: qty },
+            update: { quantity: { increment: qty }, updated_at: new Date() },
+          });
+        }
+      }
+
       // Crear entrada de cuenta corriente solo si el tipo afecta contabilidad
       if (doc.party_id && doc.document_types?.affects_accounting) {
-        const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
+        const partyType = doc.business_parties?.type
+          ?? (doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER');
         const docTotal = doc.total.toNumber();
 
         const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
@@ -1358,6 +1404,34 @@ export class DocumentsPurchasesService {
         );
       }
 
+      if (doc.status === STATUS_CONFIRMED && doc.document_types?.affects_stock) {
+        const movements = await tx.warehouse_stock_movements.findMany({
+          where: { reference_type: 'document', reference_id: doc.id, movement_type: 'DOCUMENT' },
+        });
+        for (const movement of movements) {
+          const reverseDirection = movement.direction === 'OUT' ? 'IN' : 'OUT';
+          const stock = await tx.warehouse_stock.findUnique({
+            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+          });
+          if (reverseDirection === 'OUT' && (!stock || stock.quantity.lessThan(movement.quantity))) {
+            throw new BadRequestException('No se puede anular: el stock recibido ya no está disponible');
+          }
+          await tx.warehouse_stock.upsert({
+            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+            create: { warehouse_id: movement.warehouse_id, product_id: movement.product_id, quantity: movement.quantity },
+            update: { quantity: reverseDirection === 'IN' ? { increment: movement.quantity } : { decrement: movement.quantity } },
+          });
+          await tx.warehouse_stock_movements.create({
+            data: {
+              warehouse_id: movement.warehouse_id, product_id: movement.product_id,
+              movement_type: 'DOCUMENT_REVERSAL', direction: reverseDirection,
+              quantity: movement.quantity, reference_type: 'document_reversal',
+              reference_id: doc.id, created_by: userId,
+            },
+          });
+        }
+      }
+
       await tx.documents.update({
         where: { id },
         data: {
@@ -1371,7 +1445,8 @@ export class DocumentsPurchasesService {
       console.log('[cancel-purchases] affects_accounting:', doc.document_types?.affects_accounting)
 
       if (doc.party_id && doc.document_types?.affects_accounting) {
-        const partyType = doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER';
+        const partyType = doc.business_parties?.type
+          ?? (doc.document_types?.direction === -1 ? 'SUPPLIER' : 'CUSTOMER');
         const docTotal = doc.total.toNumber();
 
         // La reversión siempre es CREDIT_NOTE para compras

@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsArray, IsDateString, IsNumber, IsOptional, IsString, IsUUID, Min, ValidateNested } from 'class-validator';
 
 export class CreateDocumentItemTaxDto {
@@ -15,6 +15,11 @@ export class CreateDocumentItemDto {
   @IsUUID()
   @IsOptional()
   product_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  warehouse_id?: string;
 
   @IsNumber()
   @Min(0)
@@ -58,7 +63,13 @@ export class CreateDocumentDto {
 
   @IsUUID()
   @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
   party_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  warehouse_id?: string;
 
   @IsDateString()
   date!: string;
@@ -119,6 +130,7 @@ export class CreateDocumentDto {
   // ─── Presupuesto fields ─────────────────────────
   @IsOptional()
   @IsDateString()
+  @Transform(({ value }) => value === '' ? undefined : value)
   validity_date?: string;
 
   @IsOptional()

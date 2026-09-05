@@ -78,6 +78,7 @@ export const ModelName = {
   product_structure_versions: 'product_structure_versions',
   entity_photos: 'entity_photos',
   files: 'files',
+  intake_records: 'intake_records',
   tax_jurisdictions: 'tax_jurisdictions',
   withholding_concepts: 'withholding_concepts',
   business_party_withholding_profiles: 'business_party_withholding_profiles',
@@ -467,6 +468,7 @@ export const Document_itemsScalarFieldEnum = {
   document_id: 'document_id',
   product_id: 'product_id',
   variant_id: 'variant_id',
+  warehouse_id: 'warehouse_id',
   quantity: 'quantity',
   price: 'price',
   unit_price: 'unit_price',
@@ -557,6 +559,7 @@ export const DocumentsScalarFieldEnum = {
   document_sequence_id: 'document_sequence_id',
   party_id: 'party_id',
   parent_document_id: 'parent_document_id',
+  warehouse_id: 'warehouse_id',
   number: 'number',
   date: 'date',
   status: 'status',
@@ -748,6 +751,29 @@ export const FilesScalarFieldEnum = {
 } as const
 
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
+
+
+export const Intake_recordsScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  notes: 'notes',
+  suggested_type: 'suggested_type',
+  status: 'status',
+  assigned_to: 'assigned_to',
+  sent_at: 'sent_at',
+  completed_at: 'completed_at',
+  completed_by: 'completed_by',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Intake_recordsScalarFieldEnum = (typeof Intake_recordsScalarFieldEnum)[keyof typeof Intake_recordsScalarFieldEnum]
 
 
 export const Tax_jurisdictionsScalarFieldEnum = {
