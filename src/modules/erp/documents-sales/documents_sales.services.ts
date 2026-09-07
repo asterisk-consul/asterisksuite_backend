@@ -865,7 +865,7 @@ export class DocumentsSalesService {
 
         ...(status !== undefined ? { status } : {}),
 
-        ...(userId ? { created_by: userId } : {}),
+        ...(userId ? { OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] } : {}),
 
         ...(partyId ? { party_id: partyId } : {}),
       },
@@ -1718,6 +1718,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          created_by: userId,
           number,
           date: new Date(),
           status: STATUS_DRAFT,
@@ -1800,6 +1801,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          created_by: userId,
           number,
           date: new Date(),
           status: STATUS_DRAFT,
@@ -1894,6 +1896,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          created_by: userId,
           number,
           date: new Date(),
           status: STATUS_DRAFT,
@@ -2001,6 +2004,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          created_by: userId,
           number,
           date: new Date(),
           status: STATUS_DRAFT,

@@ -581,6 +581,7 @@ export const DocumentsScalarFieldEnum = {
   converted_taxable_base: 'converted_taxable_base',
   converted_paid_amount: 'converted_paid_amount',
   custom_fields: 'custom_fields',
+  assigned_to: 'assigned_to',
   validity_date: 'validity_date',
   delivery_date: 'delivery_date',
   created_at: 'created_at',

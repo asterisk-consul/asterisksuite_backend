@@ -89,6 +89,7 @@ export type DocumentsMinAggregateOutputType = {
   converted_total: runtime.Decimal | null
   converted_taxable_base: runtime.Decimal | null
   converted_paid_amount: runtime.Decimal | null
+  assigned_to: string | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -128,6 +129,7 @@ export type DocumentsMaxAggregateOutputType = {
   converted_total: runtime.Decimal | null
   converted_taxable_base: runtime.Decimal | null
   converted_paid_amount: runtime.Decimal | null
+  assigned_to: string | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -168,6 +170,7 @@ export type DocumentsCountAggregateOutputType = {
   converted_taxable_base: number
   converted_paid_amount: number
   custom_fields: number
+  assigned_to: number
   validity_date: number
   delivery_date: number
   created_at: number
@@ -245,6 +248,7 @@ export type DocumentsMinAggregateInputType = {
   converted_total?: true
   converted_taxable_base?: true
   converted_paid_amount?: true
+  assigned_to?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -284,6 +288,7 @@ export type DocumentsMaxAggregateInputType = {
   converted_total?: true
   converted_taxable_base?: true
   converted_paid_amount?: true
+  assigned_to?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -324,6 +329,7 @@ export type DocumentsCountAggregateInputType = {
   converted_taxable_base?: true
   converted_paid_amount?: true
   custom_fields?: true
+  assigned_to?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -451,6 +457,7 @@ export type DocumentsGroupByOutputType = {
   converted_taxable_base: runtime.Decimal | null
   converted_paid_amount: runtime.Decimal | null
   custom_fields: runtime.JsonValue | null
+  assigned_to: string | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -514,6 +521,7 @@ export type documentsWhereInput = {
   converted_taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableFilter<"documents">
+  assigned_to?: Prisma.UuidNullableFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -574,6 +582,7 @@ export type documentsOrderByWithRelationInput = {
   converted_taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
+  assigned_to?: Prisma.SortOrderInput | Prisma.SortOrder
   validity_date?: Prisma.SortOrderInput | Prisma.SortOrder
   delivery_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -638,6 +647,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   converted_taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableFilter<"documents">
+  assigned_to?: Prisma.UuidNullableFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -698,6 +708,7 @@ export type documentsOrderByWithAggregationInput = {
   converted_taxable_base?: Prisma.SortOrderInput | Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
+  assigned_to?: Prisma.SortOrderInput | Prisma.SortOrder
   validity_date?: Prisma.SortOrderInput | Prisma.SortOrder
   delivery_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -746,6 +757,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   converted_taxable_base?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.DecimalNullableWithAggregatesFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableWithAggregatesFilter<"documents">
+  assigned_to?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
@@ -781,6 +793,7 @@ export type documentsCreateInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -840,6 +853,7 @@ export type documentsUncheckedCreateInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -889,6 +903,7 @@ export type documentsUpdateInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -948,6 +963,7 @@ export type documentsUncheckedUpdateInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1002,6 +1018,7 @@ export type documentsCreateManyInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -1037,6 +1054,7 @@ export type documentsUpdateManyMutationInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1076,6 +1094,7 @@ export type documentsUncheckedUpdateManyInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1142,6 +1161,7 @@ export type documentsCountOrderByAggregateInput = {
   converted_taxable_base?: Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrder
   custom_fields?: Prisma.SortOrder
+  assigned_to?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -1199,6 +1219,7 @@ export type documentsMaxOrderByAggregateInput = {
   converted_total?: Prisma.SortOrder
   converted_taxable_base?: Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrder
+  assigned_to?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -1238,6 +1259,7 @@ export type documentsMinOrderByAggregateInput = {
   converted_total?: Prisma.SortOrder
   converted_taxable_base?: Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrder
+  assigned_to?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -1747,6 +1769,7 @@ export type documentsCreateWithoutDocument_sequencesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -1804,6 +1827,7 @@ export type documentsUncheckedCreateWithoutDocument_sequencesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -1887,6 +1911,7 @@ export type documentsScalarWhereInput = {
   converted_taxable_base?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.DecimalNullableFilter<"documents"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.JsonNullableFilter<"documents">
+  assigned_to?: Prisma.UuidNullableFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -1922,6 +1947,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -1980,6 +2006,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2044,6 +2071,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2102,6 +2130,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2150,6 +2179,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2208,6 +2238,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2272,6 +2303,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2330,6 +2362,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2378,6 +2411,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2435,6 +2469,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2510,6 +2545,7 @@ export type documentsCreateWithoutChild_documentsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2568,6 +2604,7 @@ export type documentsUncheckedCreateWithoutChild_documentsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2621,6 +2658,7 @@ export type documentsCreateWithoutParent_documentInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2678,6 +2716,7 @@ export type documentsUncheckedCreateWithoutParent_documentInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2748,6 +2787,7 @@ export type documentsUpdateWithoutChild_documentsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2806,6 +2846,7 @@ export type documentsUncheckedUpdateWithoutChild_documentsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2870,6 +2911,7 @@ export type documentsCreateWithoutPresupuesto_docInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2928,6 +2970,7 @@ export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2992,6 +3035,7 @@ export type documentsUpdateWithoutPresupuesto_docInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3050,6 +3094,7 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3098,6 +3143,7 @@ export type documentsCreateWithoutOrden_venta_docInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3156,6 +3202,7 @@ export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3220,6 +3267,7 @@ export type documentsUpdateWithoutOrden_venta_docInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3278,6 +3326,7 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3326,6 +3375,7 @@ export type documentsCreateWithoutOrden_compra_docInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3384,6 +3434,7 @@ export type documentsUncheckedCreateWithoutOrden_compra_docInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3448,6 +3499,7 @@ export type documentsUpdateWithoutOrden_compra_docInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3506,6 +3558,7 @@ export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3554,6 +3607,7 @@ export type documentsCreateWithoutWithholding_allocationsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3612,6 +3666,7 @@ export type documentsUncheckedCreateWithoutWithholding_allocationsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3676,6 +3731,7 @@ export type documentsUpdateWithoutWithholding_allocationsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3734,6 +3790,7 @@ export type documentsUncheckedUpdateWithoutWithholding_allocationsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3782,6 +3839,7 @@ export type documentsCreateWithoutHr_vale_commission_detailsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3840,6 +3898,7 @@ export type documentsUncheckedCreateWithoutHr_vale_commission_detailsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3904,6 +3963,7 @@ export type documentsUpdateWithoutHr_vale_commission_detailsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3962,6 +4022,7 @@ export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4010,6 +4071,7 @@ export type documentsCreateWithoutInternational_operation_quotesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4068,6 +4130,7 @@ export type documentsUncheckedCreateWithoutInternational_operation_quotesInput =
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4132,6 +4195,7 @@ export type documentsUpdateWithoutInternational_operation_quotesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4190,6 +4254,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_quotesInput =
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4238,6 +4303,7 @@ export type documentsCreateWithoutInternational_operation_docsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4296,6 +4362,7 @@ export type documentsUncheckedCreateWithoutInternational_operation_docsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4360,6 +4427,7 @@ export type documentsUpdateWithoutInternational_operation_docsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4418,6 +4486,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4466,6 +4535,7 @@ export type documentsCreateWithoutSource_dispatch_ordersInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4524,6 +4594,7 @@ export type documentsUncheckedCreateWithoutSource_dispatch_ordersInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4577,6 +4648,7 @@ export type documentsCreateWithoutDispatch_orderInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4635,6 +4707,7 @@ export type documentsUncheckedCreateWithoutDispatch_orderInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4704,6 +4777,7 @@ export type documentsUpdateWithoutSource_dispatch_ordersInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4762,6 +4836,7 @@ export type documentsUncheckedUpdateWithoutSource_dispatch_ordersInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4826,6 +4901,7 @@ export type documentsCreateWithoutMaintenance_servicesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4884,6 +4960,7 @@ export type documentsUncheckedCreateWithoutMaintenance_servicesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4948,6 +5025,7 @@ export type documentsUpdateWithoutMaintenance_servicesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5006,6 +5084,7 @@ export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5054,6 +5133,7 @@ export type documentsCreateWithoutPurchase_tiresInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5112,6 +5192,7 @@ export type documentsUncheckedCreateWithoutPurchase_tiresInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5176,6 +5257,7 @@ export type documentsUpdateWithoutPurchase_tiresInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5234,6 +5316,7 @@ export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5282,6 +5365,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5339,6 +5423,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5414,6 +5499,7 @@ export type documentsCreateWithoutPayment_documentsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5472,6 +5558,7 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5536,6 +5623,7 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5594,6 +5682,7 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5642,6 +5731,7 @@ export type documentsCreateWithoutWarehouseInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5699,6 +5789,7 @@ export type documentsUncheckedCreateWithoutWarehouseInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5778,6 +5869,7 @@ export type documentsCreateManyDocument_sequencesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5813,6 +5905,7 @@ export type documentsUpdateWithoutDocument_sequencesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5870,6 +5963,7 @@ export type documentsUncheckedUpdateWithoutDocument_sequencesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5923,6 +6017,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_sequencesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5962,6 +6057,7 @@ export type documentsCreateManyDocument_typesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5997,6 +6093,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6054,6 +6151,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6107,6 +6205,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6146,6 +6245,7 @@ export type documentsCreateManyParent_documentInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6181,6 +6281,7 @@ export type documentsUpdateWithoutParent_documentInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6238,6 +6339,7 @@ export type documentsUncheckedUpdateWithoutParent_documentInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6291,6 +6393,7 @@ export type documentsUncheckedUpdateManyWithoutParent_documentInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6331,6 +6434,7 @@ export type documentsCreateManyDispatch_orderInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6365,6 +6469,7 @@ export type documentsUpdateWithoutDispatch_orderInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6423,6 +6528,7 @@ export type documentsUncheckedUpdateWithoutDispatch_orderInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6476,6 +6582,7 @@ export type documentsUncheckedUpdateManyWithoutDispatch_orderInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6514,6 +6621,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6549,6 +6657,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6606,6 +6715,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6659,6 +6769,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6698,6 +6809,7 @@ export type documentsCreateManyWarehouseInput = {
   converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6733,6 +6845,7 @@ export type documentsUpdateWithoutWarehouseInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6790,6 +6903,7 @@ export type documentsUncheckedUpdateWithoutWarehouseInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6843,6 +6957,7 @@ export type documentsUncheckedUpdateManyWithoutWarehouseInput = {
   converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7004,6 +7119,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   converted_taxable_base?: boolean
   converted_paid_amount?: boolean
   custom_fields?: boolean
+  assigned_to?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -7065,6 +7181,7 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   converted_taxable_base?: boolean
   converted_paid_amount?: boolean
   custom_fields?: boolean
+  assigned_to?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -7111,6 +7228,7 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   converted_taxable_base?: boolean
   converted_paid_amount?: boolean
   custom_fields?: boolean
+  assigned_to?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -7157,6 +7275,7 @@ export type documentsSelectScalar = {
   converted_taxable_base?: boolean
   converted_paid_amount?: boolean
   custom_fields?: boolean
+  assigned_to?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -7169,7 +7288,7 @@ export type documentsSelectScalar = {
   dispatch_order_id?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "warehouse_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "warehouse_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "assigned_to" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -7262,6 +7381,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     converted_taxable_base: runtime.Decimal | null
     converted_paid_amount: runtime.Decimal | null
     custom_fields: runtime.JsonValue | null
+    assigned_to: string | null
     validity_date: Date | null
     delivery_date: Date | null
     created_at: Date | null
@@ -7742,6 +7862,7 @@ export interface documentsFieldRefs {
   readonly converted_taxable_base: Prisma.FieldRef<"documents", 'Decimal'>
   readonly converted_paid_amount: Prisma.FieldRef<"documents", 'Decimal'>
   readonly custom_fields: Prisma.FieldRef<"documents", 'Json'>
+  readonly assigned_to: Prisma.FieldRef<"documents", 'String'>
   readonly validity_date: Prisma.FieldRef<"documents", 'DateTime'>
   readonly delivery_date: Prisma.FieldRef<"documents", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"documents", 'DateTime'>

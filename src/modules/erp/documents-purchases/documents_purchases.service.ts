@@ -681,7 +681,7 @@ export class DocumentsPurchasesService {
 
         ...(status !== undefined ? { status } : {}),
 
-        ...(userId ? { created_by: userId } : {}),
+        ...(userId ? { OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] } : {}),
       },
 
       include: {

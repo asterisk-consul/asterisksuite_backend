@@ -187,6 +187,7 @@ model documents {
   converted_taxable_base       Decimal?                            @db.Decimal(18, 2)
   converted_paid_amount        Decimal?                            @db.Decimal(18, 2)
   custom_fields                Json?
+  assigned_to                  String?                             @db.Uuid
   validity_date                DateTime?                           @db.Date
   delivery_date                DateTime?                           @db.Date
   created_at                   DateTime?                           @default(now()) @db.Timestamp(6)
@@ -220,6 +221,7 @@ model documents {
 
   @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
+  @@index([assigned_to])
   @@index([warehouse_id])
   @@schema("tenant")
 }

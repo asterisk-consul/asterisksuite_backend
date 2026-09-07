@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AccessControlModule } from '@/access-control/access-control.module';
+import { DocumentAssignmentController } from '../documents/document-assignment.controller';
 import { DocumentsSalesService } from './documents_sales.services';
 import { DocumentsSalesController } from './documents_sales.controller';
 import { PrismaModule } from '@/prisma/prisma.module';
@@ -13,8 +15,8 @@ import { CommonErpModule } from '@/common/common-erp.module';
 import { MySalesModule } from './my-sales/my-sales.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule],
-  controllers: [DocumentsSalesController],
+  imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule],
+  controllers: [DocumentsSalesController, DocumentAssignmentController],
   providers: [
     DocumentsSalesService,
     DocumentsSalesItemsService,
