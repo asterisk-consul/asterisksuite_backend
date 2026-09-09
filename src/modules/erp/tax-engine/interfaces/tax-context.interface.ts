@@ -8,6 +8,7 @@ export interface TaxContext {
   currency: string
   date: string
   warehouseId?: string
+  jurisdictionId?: string
   operationType: 'SALE' | 'PURCHASE'
   items: TaxContextItem[]
 }

@@ -69,6 +69,7 @@ export type DocumentsMinAggregateOutputType = {
   party_id: string | null
   parent_document_id: string | null
   warehouse_id: string | null
+  fiscal_jurisdiction_id: string | null
   number: number | null
   date: Date | null
   status: number | null
@@ -109,6 +110,7 @@ export type DocumentsMaxAggregateOutputType = {
   party_id: string | null
   parent_document_id: string | null
   warehouse_id: string | null
+  fiscal_jurisdiction_id: string | null
   number: number | null
   date: Date | null
   status: number | null
@@ -149,6 +151,7 @@ export type DocumentsCountAggregateOutputType = {
   party_id: number
   parent_document_id: number
   warehouse_id: number
+  fiscal_jurisdiction_id: number
   number: number
   date: number
   status: number
@@ -228,6 +231,7 @@ export type DocumentsMinAggregateInputType = {
   party_id?: true
   parent_document_id?: true
   warehouse_id?: true
+  fiscal_jurisdiction_id?: true
   number?: true
   date?: true
   status?: true
@@ -268,6 +272,7 @@ export type DocumentsMaxAggregateInputType = {
   party_id?: true
   parent_document_id?: true
   warehouse_id?: true
+  fiscal_jurisdiction_id?: true
   number?: true
   date?: true
   status?: true
@@ -308,6 +313,7 @@ export type DocumentsCountAggregateInputType = {
   party_id?: true
   parent_document_id?: true
   warehouse_id?: true
+  fiscal_jurisdiction_id?: true
   number?: true
   date?: true
   status?: true
@@ -436,6 +442,7 @@ export type DocumentsGroupByOutputType = {
   party_id: string | null
   parent_document_id: string | null
   warehouse_id: string | null
+  fiscal_jurisdiction_id: string | null
   number: number
   date: Date
   status: number
@@ -500,6 +507,7 @@ export type documentsWhereInput = {
   party_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   parent_document_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   warehouse_id?: Prisma.UuidNullableFilter<"documents"> | string | null
+  fiscal_jurisdiction_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   number?: Prisma.IntFilter<"documents"> | number
   date?: Prisma.DateTimeFilter<"documents"> | Date | string
   status?: Prisma.IntFilter<"documents"> | number
@@ -561,6 +569,7 @@ export type documentsOrderByWithRelationInput = {
   party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   parent_document_id?: Prisma.SortOrderInput | Prisma.SortOrder
   warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  fiscal_jurisdiction_id?: Prisma.SortOrderInput | Prisma.SortOrder
   number?: Prisma.SortOrder
   date?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -626,6 +635,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   party_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   parent_document_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   warehouse_id?: Prisma.UuidNullableFilter<"documents"> | string | null
+  fiscal_jurisdiction_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   number?: Prisma.IntFilter<"documents"> | number
   date?: Prisma.DateTimeFilter<"documents"> | Date | string
   status?: Prisma.IntFilter<"documents"> | number
@@ -687,6 +697,7 @@ export type documentsOrderByWithAggregationInput = {
   party_id?: Prisma.SortOrderInput | Prisma.SortOrder
   parent_document_id?: Prisma.SortOrderInput | Prisma.SortOrder
   warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  fiscal_jurisdiction_id?: Prisma.SortOrderInput | Prisma.SortOrder
   number?: Prisma.SortOrder
   date?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -736,6 +747,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   party_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   parent_document_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   warehouse_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
+  fiscal_jurisdiction_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   number?: Prisma.IntWithAggregatesFilter<"documents"> | number
   date?: Prisma.DateTimeWithAggregatesFilter<"documents"> | Date | string
   status?: Prisma.IntWithAggregatesFilter<"documents"> | number
@@ -772,6 +784,7 @@ export type documentsScalarWhereWithAggregatesInput = {
 
 export type documentsCreateInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -832,6 +845,7 @@ export type documentsUncheckedCreateInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -882,6 +896,7 @@ export type documentsUncheckedCreateInput = {
 
 export type documentsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -942,6 +957,7 @@ export type documentsUncheckedUpdateInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -997,6 +1013,7 @@ export type documentsCreateManyInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -1033,6 +1050,7 @@ export type documentsCreateManyInput = {
 
 export type documentsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1073,6 +1091,7 @@ export type documentsUncheckedUpdateManyInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1140,6 +1159,7 @@ export type documentsCountOrderByAggregateInput = {
   party_id?: Prisma.SortOrder
   parent_document_id?: Prisma.SortOrder
   warehouse_id?: Prisma.SortOrder
+  fiscal_jurisdiction_id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   date?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -1199,6 +1219,7 @@ export type documentsMaxOrderByAggregateInput = {
   party_id?: Prisma.SortOrder
   parent_document_id?: Prisma.SortOrder
   warehouse_id?: Prisma.SortOrder
+  fiscal_jurisdiction_id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   date?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -1239,6 +1260,7 @@ export type documentsMinOrderByAggregateInput = {
   party_id?: Prisma.SortOrder
   parent_document_id?: Prisma.SortOrder
   warehouse_id?: Prisma.SortOrder
+  fiscal_jurisdiction_id?: Prisma.SortOrder
   number?: Prisma.SortOrder
   date?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -1748,6 +1770,7 @@ export type documentsUncheckedUpdateManyWithoutWarehouseNestedInput = {
 
 export type documentsCreateWithoutDocument_sequencesInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -1806,6 +1829,7 @@ export type documentsUncheckedCreateWithoutDocument_sequencesInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -1890,6 +1914,7 @@ export type documentsScalarWhereInput = {
   party_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   parent_document_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   warehouse_id?: Prisma.UuidNullableFilter<"documents"> | string | null
+  fiscal_jurisdiction_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   number?: Prisma.IntFilter<"documents"> | number
   date?: Prisma.DateTimeFilter<"documents"> | Date | string
   status?: Prisma.IntFilter<"documents"> | number
@@ -1926,6 +1951,7 @@ export type documentsScalarWhereInput = {
 
 export type documentsCreateWithoutDocument_itemsInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -1985,6 +2011,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2050,6 +2077,7 @@ export type documentsUpdateToOneWithWhereWithoutDocument_itemsInput = {
 
 export type documentsUpdateWithoutDocument_itemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2109,6 +2137,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2158,6 +2187,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
 
 export type documentsCreateWithoutDocument_taxesInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2217,6 +2247,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2282,6 +2313,7 @@ export type documentsUpdateToOneWithWhereWithoutDocument_taxesInput = {
 
 export type documentsUpdateWithoutDocument_taxesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2341,6 +2373,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2390,6 +2423,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
 
 export type documentsCreateWithoutDocument_typesInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2448,6 +2482,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2524,6 +2559,7 @@ export type documentsUpdateManyWithWhereWithoutDocument_typesInput = {
 
 export type documentsCreateWithoutChild_documentsInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2583,6 +2619,7 @@ export type documentsUncheckedCreateWithoutChild_documentsInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2637,6 +2674,7 @@ export type documentsCreateOrConnectWithoutChild_documentsInput = {
 
 export type documentsCreateWithoutParent_documentInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2695,6 +2733,7 @@ export type documentsUncheckedCreateWithoutParent_documentInput = {
   document_sequence_id?: string | null
   party_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2766,6 +2805,7 @@ export type documentsUpdateToOneWithWhereWithoutChild_documentsInput = {
 
 export type documentsUpdateWithoutChild_documentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2825,6 +2865,7 @@ export type documentsUncheckedUpdateWithoutChild_documentsInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2890,6 +2931,7 @@ export type documentsUpdateManyWithWhereWithoutParent_documentInput = {
 
 export type documentsCreateWithoutPresupuesto_docInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -2949,6 +2991,7 @@ export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3014,6 +3057,7 @@ export type documentsUpdateToOneWithWhereWithoutPresupuesto_docInput = {
 
 export type documentsUpdateWithoutPresupuesto_docInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3073,6 +3117,7 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3122,6 +3167,7 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
 
 export type documentsCreateWithoutOrden_venta_docInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3181,6 +3227,7 @@ export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3246,6 +3293,7 @@ export type documentsUpdateToOneWithWhereWithoutOrden_venta_docInput = {
 
 export type documentsUpdateWithoutOrden_venta_docInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3305,6 +3353,7 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3354,6 +3403,7 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
 
 export type documentsCreateWithoutOrden_compra_docInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3413,6 +3463,7 @@ export type documentsUncheckedCreateWithoutOrden_compra_docInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3478,6 +3529,7 @@ export type documentsUpdateToOneWithWhereWithoutOrden_compra_docInput = {
 
 export type documentsUpdateWithoutOrden_compra_docInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3537,6 +3589,7 @@ export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3586,6 +3639,7 @@ export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
 
 export type documentsCreateWithoutWithholding_allocationsInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3645,6 +3699,7 @@ export type documentsUncheckedCreateWithoutWithholding_allocationsInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3710,6 +3765,7 @@ export type documentsUpdateToOneWithWhereWithoutWithholding_allocationsInput = {
 
 export type documentsUpdateWithoutWithholding_allocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3769,6 +3825,7 @@ export type documentsUncheckedUpdateWithoutWithholding_allocationsInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3818,6 +3875,7 @@ export type documentsUncheckedUpdateWithoutWithholding_allocationsInput = {
 
 export type documentsCreateWithoutHr_vale_commission_detailsInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3877,6 +3935,7 @@ export type documentsUncheckedCreateWithoutHr_vale_commission_detailsInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -3942,6 +4001,7 @@ export type documentsUpdateToOneWithWhereWithoutHr_vale_commission_detailsInput 
 
 export type documentsUpdateWithoutHr_vale_commission_detailsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4001,6 +4061,7 @@ export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4050,6 +4111,7 @@ export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
 
 export type documentsCreateWithoutInternational_operation_quotesInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4109,6 +4171,7 @@ export type documentsUncheckedCreateWithoutInternational_operation_quotesInput =
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4174,6 +4237,7 @@ export type documentsUpdateToOneWithWhereWithoutInternational_operation_quotesIn
 
 export type documentsUpdateWithoutInternational_operation_quotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4233,6 +4297,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_quotesInput =
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4282,6 +4347,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_quotesInput =
 
 export type documentsCreateWithoutInternational_operation_docsInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4341,6 +4407,7 @@ export type documentsUncheckedCreateWithoutInternational_operation_docsInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4406,6 +4473,7 @@ export type documentsUpdateToOneWithWhereWithoutInternational_operation_docsInpu
 
 export type documentsUpdateWithoutInternational_operation_docsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4465,6 +4533,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4514,6 +4583,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
 
 export type documentsCreateWithoutSource_dispatch_ordersInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4573,6 +4643,7 @@ export type documentsUncheckedCreateWithoutSource_dispatch_ordersInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4627,6 +4698,7 @@ export type documentsCreateOrConnectWithoutSource_dispatch_ordersInput = {
 
 export type documentsCreateWithoutDispatch_orderInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4686,6 +4758,7 @@ export type documentsUncheckedCreateWithoutDispatch_orderInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4756,6 +4829,7 @@ export type documentsUpdateToOneWithWhereWithoutSource_dispatch_ordersInput = {
 
 export type documentsUpdateWithoutSource_dispatch_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4815,6 +4889,7 @@ export type documentsUncheckedUpdateWithoutSource_dispatch_ordersInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4880,6 +4955,7 @@ export type documentsUpdateManyWithWhereWithoutDispatch_orderInput = {
 
 export type documentsCreateWithoutMaintenance_servicesInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -4939,6 +5015,7 @@ export type documentsUncheckedCreateWithoutMaintenance_servicesInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5004,6 +5081,7 @@ export type documentsUpdateToOneWithWhereWithoutMaintenance_servicesInput = {
 
 export type documentsUpdateWithoutMaintenance_servicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5063,6 +5141,7 @@ export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5112,6 +5191,7 @@ export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
 
 export type documentsCreateWithoutPurchase_tiresInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5171,6 +5251,7 @@ export type documentsUncheckedCreateWithoutPurchase_tiresInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5236,6 +5317,7 @@ export type documentsUpdateToOneWithWhereWithoutPurchase_tiresInput = {
 
 export type documentsUpdateWithoutPurchase_tiresInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5295,6 +5377,7 @@ export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5344,6 +5427,7 @@ export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
 
 export type documentsCreateWithoutBusiness_partiesInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5402,6 +5486,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   document_sequence_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5478,6 +5563,7 @@ export type documentsUpdateManyWithWhereWithoutBusiness_partiesInput = {
 
 export type documentsCreateWithoutPayment_documentsInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5537,6 +5623,7 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5602,6 +5689,7 @@ export type documentsUpdateToOneWithWhereWithoutPayment_documentsInput = {
 
 export type documentsUpdateWithoutPayment_documentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5661,6 +5749,7 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5710,6 +5799,7 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
 
 export type documentsCreateWithoutWarehouseInput = {
   id?: string
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5768,6 +5858,7 @@ export type documentsUncheckedCreateWithoutWarehouseInput = {
   document_sequence_id?: string | null
   party_id?: string | null
   parent_document_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5848,6 +5939,7 @@ export type documentsCreateManyDocument_sequencesInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -5884,6 +5976,7 @@ export type documentsCreateManyDocument_sequencesInput = {
 
 export type documentsUpdateWithoutDocument_sequencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5942,6 +6035,7 @@ export type documentsUncheckedUpdateWithoutDocument_sequencesInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5996,6 +6090,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_sequencesInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6036,6 +6131,7 @@ export type documentsCreateManyDocument_typesInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -6072,6 +6168,7 @@ export type documentsCreateManyDocument_typesInput = {
 
 export type documentsUpdateWithoutDocument_typesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6130,6 +6227,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6184,6 +6282,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6224,6 +6323,7 @@ export type documentsCreateManyParent_documentInput = {
   document_sequence_id?: string | null
   party_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -6260,6 +6360,7 @@ export type documentsCreateManyParent_documentInput = {
 
 export type documentsUpdateWithoutParent_documentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6318,6 +6419,7 @@ export type documentsUncheckedUpdateWithoutParent_documentInput = {
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6372,6 +6474,7 @@ export type documentsUncheckedUpdateManyWithoutParent_documentInput = {
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6413,6 +6516,7 @@ export type documentsCreateManyDispatch_orderInput = {
   party_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -6448,6 +6552,7 @@ export type documentsCreateManyDispatch_orderInput = {
 
 export type documentsUpdateWithoutDispatch_orderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6507,6 +6612,7 @@ export type documentsUncheckedUpdateWithoutDispatch_orderInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6561,6 +6667,7 @@ export type documentsUncheckedUpdateManyWithoutDispatch_orderInput = {
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6600,6 +6707,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   document_sequence_id?: string | null
   parent_document_id?: string | null
   warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -6636,6 +6744,7 @@ export type documentsCreateManyBusiness_partiesInput = {
 
 export type documentsUpdateWithoutBusiness_partiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6694,6 +6803,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6748,6 +6858,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6788,6 +6899,7 @@ export type documentsCreateManyWarehouseInput = {
   document_sequence_id?: string | null
   party_id?: string | null
   parent_document_id?: string | null
+  fiscal_jurisdiction_id?: string | null
   number: number
   date: Date | string
   status?: number
@@ -6824,6 +6936,7 @@ export type documentsCreateManyWarehouseInput = {
 
 export type documentsUpdateWithoutWarehouseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6882,6 +6995,7 @@ export type documentsUncheckedUpdateWithoutWarehouseInput = {
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6936,6 +7050,7 @@ export type documentsUncheckedUpdateManyWithoutWarehouseInput = {
   document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7098,6 +7213,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   party_id?: boolean
   parent_document_id?: boolean
   warehouse_id?: boolean
+  fiscal_jurisdiction_id?: boolean
   number?: boolean
   date?: boolean
   status?: boolean
@@ -7160,6 +7276,7 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   party_id?: boolean
   parent_document_id?: boolean
   warehouse_id?: boolean
+  fiscal_jurisdiction_id?: boolean
   number?: boolean
   date?: boolean
   status?: boolean
@@ -7207,6 +7324,7 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   party_id?: boolean
   parent_document_id?: boolean
   warehouse_id?: boolean
+  fiscal_jurisdiction_id?: boolean
   number?: boolean
   date?: boolean
   status?: boolean
@@ -7254,6 +7372,7 @@ export type documentsSelectScalar = {
   party_id?: boolean
   parent_document_id?: boolean
   warehouse_id?: boolean
+  fiscal_jurisdiction_id?: boolean
   number?: boolean
   date?: boolean
   status?: boolean
@@ -7288,7 +7407,7 @@ export type documentsSelectScalar = {
   dispatch_order_id?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "warehouse_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "assigned_to" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "warehouse_id" | "fiscal_jurisdiction_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "assigned_to" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -7360,6 +7479,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     party_id: string | null
     parent_document_id: string | null
     warehouse_id: string | null
+    fiscal_jurisdiction_id: string | null
     number: number
     date: Date
     status: number
@@ -7841,6 +7961,7 @@ export interface documentsFieldRefs {
   readonly party_id: Prisma.FieldRef<"documents", 'String'>
   readonly parent_document_id: Prisma.FieldRef<"documents", 'String'>
   readonly warehouse_id: Prisma.FieldRef<"documents", 'String'>
+  readonly fiscal_jurisdiction_id: Prisma.FieldRef<"documents", 'String'>
   readonly number: Prisma.FieldRef<"documents", 'Int'>
   readonly date: Prisma.FieldRef<"documents", 'DateTime'>
   readonly status: Prisma.FieldRef<"documents", 'Int'>

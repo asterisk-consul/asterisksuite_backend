@@ -46,6 +46,10 @@ export class TaxContextDto {
   @IsString()
   warehouseId?: string
 
+  @IsOptional()
+  @IsString()
+  jurisdictionId?: string
+
   @IsString()
   @IsIn(['SALE', 'PURCHASE'])
   operationType: 'SALE' | 'PURCHASE'

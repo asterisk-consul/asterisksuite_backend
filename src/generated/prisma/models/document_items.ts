@@ -30,6 +30,7 @@ export type Document_itemsAvgAggregateOutputType = {
   quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
+  discount_percentage: runtime.Decimal | null
   exchange_rate: runtime.Decimal | null
   original_unit_price: runtime.Decimal | null
   converted_unit_price: runtime.Decimal | null
@@ -42,6 +43,7 @@ export type Document_itemsSumAggregateOutputType = {
   quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
+  discount_percentage: runtime.Decimal | null
   exchange_rate: runtime.Decimal | null
   original_unit_price: runtime.Decimal | null
   converted_unit_price: runtime.Decimal | null
@@ -59,6 +61,7 @@ export type Document_itemsMinAggregateOutputType = {
   quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
+  discount_percentage: runtime.Decimal | null
   exchange_rate: runtime.Decimal | null
   currency_code: string | null
   rate_type: $Enums.CurrencyRateType | null
@@ -84,6 +87,7 @@ export type Document_itemsMaxAggregateOutputType = {
   quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
+  discount_percentage: runtime.Decimal | null
   exchange_rate: runtime.Decimal | null
   currency_code: string | null
   rate_type: $Enums.CurrencyRateType | null
@@ -109,6 +113,7 @@ export type Document_itemsCountAggregateOutputType = {
   quantity: number
   price: number
   unit_price: number
+  discount_percentage: number
   exchange_rate: number
   currency_code: number
   rate_type: number
@@ -131,6 +136,7 @@ export type Document_itemsAvgAggregateInputType = {
   quantity?: true
   price?: true
   unit_price?: true
+  discount_percentage?: true
   exchange_rate?: true
   original_unit_price?: true
   converted_unit_price?: true
@@ -143,6 +149,7 @@ export type Document_itemsSumAggregateInputType = {
   quantity?: true
   price?: true
   unit_price?: true
+  discount_percentage?: true
   exchange_rate?: true
   original_unit_price?: true
   converted_unit_price?: true
@@ -160,6 +167,7 @@ export type Document_itemsMinAggregateInputType = {
   quantity?: true
   price?: true
   unit_price?: true
+  discount_percentage?: true
   exchange_rate?: true
   currency_code?: true
   rate_type?: true
@@ -185,6 +193,7 @@ export type Document_itemsMaxAggregateInputType = {
   quantity?: true
   price?: true
   unit_price?: true
+  discount_percentage?: true
   exchange_rate?: true
   currency_code?: true
   rate_type?: true
@@ -210,6 +219,7 @@ export type Document_itemsCountAggregateInputType = {
   quantity?: true
   price?: true
   unit_price?: true
+  discount_percentage?: true
   exchange_rate?: true
   currency_code?: true
   rate_type?: true
@@ -322,6 +332,7 @@ export type Document_itemsGroupByOutputType = {
   quantity: runtime.Decimal
   price: runtime.Decimal
   unit_price: runtime.Decimal
+  discount_percentage: runtime.Decimal
   exchange_rate: runtime.Decimal | null
   currency_code: string | null
   rate_type: $Enums.CurrencyRateType | null
@@ -370,6 +381,7 @@ export type document_itemsWhereInput = {
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableFilter<"document_items"> | string | null
   rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"document_items"> | $Enums.CurrencyRateType | null
@@ -400,6 +412,7 @@ export type document_itemsOrderByWithRelationInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
   rate_type?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -433,6 +446,7 @@ export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableFilter<"document_items"> | string | null
   rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"document_items"> | $Enums.CurrencyRateType | null
@@ -463,6 +477,7 @@ export type document_itemsOrderByWithAggregationInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrderInput | Prisma.SortOrder
   currency_code?: Prisma.SortOrderInput | Prisma.SortOrder
   rate_type?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -496,6 +511,7 @@ export type document_itemsScalarWhereWithAggregatesInput = {
   quantity?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.DecimalNullableWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableWithAggregatesFilter<"document_items"> | string | null
   rate_type?: Prisma.EnumCurrencyRateTypeNullableWithAggregatesFilter<"document_items"> | $Enums.CurrencyRateType | null
@@ -517,6 +533,7 @@ export type document_itemsCreateInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -547,6 +564,7 @@ export type document_itemsUncheckedCreateInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -569,6 +587,7 @@ export type document_itemsUpdateInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -599,6 +618,7 @@ export type document_itemsUncheckedUpdateInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -625,6 +645,7 @@ export type document_itemsCreateManyInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -646,6 +667,7 @@ export type document_itemsUpdateManyMutationInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -671,6 +693,7 @@ export type document_itemsUncheckedUpdateManyInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -701,6 +724,7 @@ export type document_itemsCountOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   rate_type?: Prisma.SortOrder
@@ -721,6 +745,7 @@ export type document_itemsAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
   converted_unit_price?: Prisma.SortOrder
@@ -738,6 +763,7 @@ export type document_itemsMaxOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   rate_type?: Prisma.SortOrder
@@ -763,6 +789,7 @@ export type document_itemsMinOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   currency_code?: Prisma.SortOrder
   rate_type?: Prisma.SortOrder
@@ -783,6 +810,7 @@ export type document_itemsSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
+  discount_percentage?: Prisma.SortOrder
   exchange_rate?: Prisma.SortOrder
   original_unit_price?: Prisma.SortOrder
   converted_unit_price?: Prisma.SortOrder
@@ -992,6 +1020,7 @@ export type document_itemsCreateWithoutDocument_item_taxesInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1021,6 +1050,7 @@ export type document_itemsUncheckedCreateWithoutDocument_item_taxesInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1058,6 +1088,7 @@ export type document_itemsUpdateWithoutDocument_item_taxesInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1087,6 +1118,7 @@ export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1108,6 +1140,7 @@ export type document_itemsCreateWithoutDocumentsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1136,6 +1169,7 @@ export type document_itemsUncheckedCreateWithoutDocumentsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1191,6 +1225,7 @@ export type document_itemsScalarWhereInput = {
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.StringNullableFilter<"document_items"> | string | null
   rate_type?: Prisma.EnumCurrencyRateTypeNullableFilter<"document_items"> | $Enums.CurrencyRateType | null
@@ -1212,6 +1247,7 @@ export type document_itemsCreateWithoutProductsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1240,6 +1276,7 @@ export type document_itemsUncheckedCreateWithoutProductsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1288,6 +1325,7 @@ export type document_itemsCreateWithoutProduct_variantsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1316,6 +1354,7 @@ export type document_itemsUncheckedCreateWithoutProduct_variantsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1364,6 +1403,7 @@ export type document_itemsCreateWithoutWarehouseInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1392,6 +1432,7 @@ export type document_itemsUncheckedCreateWithoutWarehouseInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1443,6 +1484,7 @@ export type document_itemsCreateManyDocumentsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1464,6 +1506,7 @@ export type document_itemsUpdateWithoutDocumentsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1492,6 +1535,7 @@ export type document_itemsUncheckedUpdateWithoutDocumentsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1517,6 +1561,7 @@ export type document_itemsUncheckedUpdateManyWithoutDocumentsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1541,6 +1586,7 @@ export type document_itemsCreateManyProductsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1562,6 +1608,7 @@ export type document_itemsUpdateWithoutProductsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1590,6 +1637,7 @@ export type document_itemsUncheckedUpdateWithoutProductsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1615,6 +1663,7 @@ export type document_itemsUncheckedUpdateManyWithoutProductsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1639,6 +1688,7 @@ export type document_itemsCreateManyProduct_variantsInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1660,6 +1710,7 @@ export type document_itemsUpdateWithoutProduct_variantsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1688,6 +1739,7 @@ export type document_itemsUncheckedUpdateWithoutProduct_variantsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1713,6 +1765,7 @@ export type document_itemsUncheckedUpdateManyWithoutProduct_variantsInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1737,6 +1790,7 @@ export type document_itemsCreateManyWarehouseInput = {
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: string | null
   rate_type?: $Enums.CurrencyRateType | null
@@ -1758,6 +1812,7 @@ export type document_itemsUpdateWithoutWarehouseInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1786,6 +1841,7 @@ export type document_itemsUncheckedUpdateWithoutWarehouseInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1811,6 +1867,7 @@ export type document_itemsUncheckedUpdateManyWithoutWarehouseInput = {
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
@@ -1867,6 +1924,7 @@ export type document_itemsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
+  discount_percentage?: boolean
   exchange_rate?: boolean
   currency_code?: boolean
   rate_type?: boolean
@@ -1898,6 +1956,7 @@ export type document_itemsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
+  discount_percentage?: boolean
   exchange_rate?: boolean
   currency_code?: boolean
   rate_type?: boolean
@@ -1927,6 +1986,7 @@ export type document_itemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
+  discount_percentage?: boolean
   exchange_rate?: boolean
   currency_code?: boolean
   rate_type?: boolean
@@ -1956,6 +2016,7 @@ export type document_itemsSelectScalar = {
   quantity?: boolean
   price?: boolean
   unit_price?: boolean
+  discount_percentage?: boolean
   exchange_rate?: boolean
   currency_code?: boolean
   rate_type?: boolean
@@ -1972,7 +2033,7 @@ export type document_itemsSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "variant_id" | "warehouse_id" | "quantity" | "price" | "unit_price" | "exchange_rate" | "currency_code" | "rate_type" | "original_unit_price" | "converted_unit_price" | "converted_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
+export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "variant_id" | "warehouse_id" | "quantity" | "price" | "unit_price" | "discount_percentage" | "exchange_rate" | "currency_code" | "rate_type" | "original_unit_price" | "converted_unit_price" | "converted_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
 export type document_itemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_item_taxes?: boolean | Prisma.document_items$document_item_taxesArgs<ExtArgs>
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
@@ -2012,6 +2073,7 @@ export type $document_itemsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     quantity: runtime.Decimal
     price: runtime.Decimal
     unit_price: runtime.Decimal
+    discount_percentage: runtime.Decimal
     exchange_rate: runtime.Decimal | null
     currency_code: string | null
     rate_type: $Enums.CurrencyRateType | null
@@ -2462,6 +2524,7 @@ export interface document_itemsFieldRefs {
   readonly quantity: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly price: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly unit_price: Prisma.FieldRef<"document_items", 'Decimal'>
+  readonly discount_percentage: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly exchange_rate: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly currency_code: Prisma.FieldRef<"document_items", 'String'>
   readonly rate_type: Prisma.FieldRef<"document_items", 'CurrencyRateType'>

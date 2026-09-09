@@ -126,4 +126,11 @@ export class CashBoxesController {
   getSessionHistory(@Param('id') id: string) {
     return this.cashBoxesService.getSessionHistory(id);
   }
+
+  @Post(':id/recalculate')
+  @UseGuards(CashBoxAccessGuard)
+  @RequirePermissions('treasury.cash_boxes.update')
+  recalculate(@Param('id') id: string) {
+    return this.cashBoxesService.recalculate(id);
+  }
 }

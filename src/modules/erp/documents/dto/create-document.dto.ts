@@ -29,6 +29,11 @@ export class CreateDocumentItemDto {
   @Min(0)
   unit_price!: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  discount_percentage?: number;
+
   // ✅ ahora opcional (backend lo calcula)
   @IsOptional()
   @IsNumber()
@@ -55,6 +60,13 @@ export class CreateDocumentTaxDto {
 
   @IsNumber()
   tax_amount!: number;
+
+  @IsOptional()
+  manual?: boolean;
+
+  @IsOptional()
+  @IsString()
+  modification_reason?: string;
 }
 
 export class CreateDocumentDto {
@@ -70,6 +82,11 @@ export class CreateDocumentDto {
   @IsOptional()
   @Transform(({ value }) => value === '' ? undefined : value)
   warehouse_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  fiscal_jurisdiction_id?: string;
 
   @IsDateString()
   date!: string;

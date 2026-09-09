@@ -167,16 +167,30 @@ export class DocumentsSalesService {
       documentLetterType: docType.letter_type ?? undefined,
       currency: dto.currency_code ?? 'ARS',
       date: dto.date,
+      jurisdictionId: dto.fiscal_jurisdiction_id,
       operationType: 'SALE',
       items: dtoItems.map(i => ({
         productId: i.product_id,
         quantity: Number(i.quantity),
-        unitPrice: Number(i.unit_price),
+        unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
       })),
     }
 
     const resolution = await this.taxResolution.resolve(taxContext)
     const calculation = this.taxCalculation.calculate(resolution, taxContext.items)
+    if (dto.taxes?.some(t => t.manual && !t.modification_reason?.trim())) {
+      throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB')
+    }
+    for (const override of dto.taxes?.filter(t => t.manual) ?? []) {
+      const calculated = calculation.document.documentTaxes.find(t => t.tax_id === override.tax_id)
+      if (!calculated) continue
+      const delta = Number(override.tax_amount) - calculated.amount
+      calculated.amount = Number(override.tax_amount)
+      calculated.rate = Number(override.tax_rate)
+      calculated.taxableBase = Number(override.taxable_base)
+      calculation.document.totalTaxes += delta
+      calculation.document.total += delta
+    }
 
     console.log('[SalesService] Tax Engine result:', JSON.stringify(calculation.document, null, 2))
 
@@ -221,8 +235,9 @@ export class DocumentsSalesService {
         currency: currencyCode,
         exchange_rate: exchangeRate,
         rate_type: rateType,
-        original_unit_price: item.unitPrice,
+        original_unit_price: Number(dtoItems[idx]?.unit_price ?? item.unitPrice),
         unit_price: item.unitPrice,
+        discount_percentage: Number(dtoItems[idx]?.discount_percentage ?? 0),
         converted_unit_price: convertedUnitPrice,
         price: item.total,
         total: item.total,
@@ -251,6 +266,9 @@ export class DocumentsSalesService {
         tax_rate: t.rate,
         taxable_base: t.taxableBase,
         tax_amount: t.amount,
+        automatic_tax_amount: this.taxCalculation.calculate(resolution, taxContext.items).document.documentTaxes.find(a => a.tax_id === t.tax_id)?.amount ?? t.amount,
+        is_manual: dto.taxes?.some(o => o.tax_id === t.tax_id && o.manual) ?? false,
+        modification_reason: dto.taxes?.find(o => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
       })),
     }
 
@@ -286,6 +304,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: dto.party_id ?? null,
           warehouse_id: dto.warehouse_id ?? null,
+          fiscal_jurisdiction_id: dto.fiscal_jurisdiction_id ?? null,
 
           number,
 
@@ -401,6 +420,14 @@ export class DocumentsSalesService {
             taxable_base: t.taxable_base,
 
             tax_amount: t.tax_amount,
+
+            automatic_tax_amount: t.automatic_tax_amount,
+
+            is_manual: t.is_manual,
+
+            modification_reason: t.modification_reason,
+
+            manual_override_by: t.is_manual ? userId ?? null : null,
 
             converted_taxable_base: isBase ? null : this.conversionService.convertAmount(t.taxable_base, exchangeRate),
 
@@ -525,16 +552,31 @@ export class DocumentsSalesService {
         documentLetterType: docType?.letter_type ?? undefined,
         currency: dto.currency_code,
         date: dto.date ?? new Date(doc.date).toISOString(),
+        jurisdictionId: dto.fiscal_jurisdiction_id ?? doc.fiscal_jurisdiction_id ?? undefined,
         operationType: 'SALE',
         items: dto.items.map(i => ({
           productId: i.product_id,
           quantity: Number(i.quantity),
-          unitPrice: Number(i.unit_price),
+          unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
         })),
       };
 
       const resolution = await this.taxResolution.resolve(taxContext);
       const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+      const automaticDocumentTaxes = calculation.document.documentTaxes.map(t => ({ ...t }))
+      if (dto.taxes?.some(t => t.manual && !t.modification_reason?.trim())) {
+        throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB')
+      }
+      for (const override of dto.taxes?.filter(t => t.manual) ?? []) {
+        const calculated = calculation.document.documentTaxes.find(t => t.tax_id === override.tax_id)
+        if (!calculated) continue
+        const delta = Number(override.tax_amount) - calculated.amount
+        calculated.amount = Number(override.tax_amount)
+        calculated.rate = Number(override.tax_rate)
+        calculated.taxableBase = Number(override.taxable_base)
+        calculation.document.totalTaxes += delta
+        calculation.document.total += delta
+      }
 
       // For fiscal documents (A/B/C), force OFFICIAL
       if (docType?.letter_type && ['A', 'B', 'C'].includes(docType.letter_type)) {
@@ -567,8 +609,9 @@ export class DocumentsSalesService {
           currency: updateCurrencyCode,
           exchange_rate: updateExchangeRate,
           rate_type: updateRateType,
-          original_unit_price: item.unitPrice,
+          original_unit_price: Number(dto.items?.[idx]?.unit_price ?? item.unitPrice),
           unit_price: item.unitPrice,
+          discount_percentage: Number(dto.items?.[idx]?.discount_percentage ?? 0),
           converted_unit_price: convertedUnitPrice,
           price: item.total,
           converted_price: convertedPrice,
@@ -598,6 +641,9 @@ export class DocumentsSalesService {
           tax_rate: t.rate,
           taxable_base: t.taxableBase,
           tax_amount: t.amount,
+          automatic_tax_amount: automaticDocumentTaxes.find(a => a.tax_id === t.tax_id)?.amount ?? t.amount,
+          is_manual: dto.taxes?.some(o => o.tax_id === t.tax_id && o.manual) ?? false,
+          modification_reason: dto.taxes?.find(o => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
         })),
       };
     }
@@ -680,6 +726,14 @@ export class DocumentsSalesService {
 
               tax_amount: t.tax_amount,
 
+              automatic_tax_amount: t.automatic_tax_amount,
+
+              is_manual: t.is_manual,
+
+              modification_reason: t.modification_reason,
+
+              manual_override_by: null,
+
               converted_taxable_base: updateIsBase ? null : this.conversionService.convertAmount(t.taxable_base, updateExchangeRate),
 
               converted_tax_amount: updateIsBase ? null : this.conversionService.convertAmount(t.tax_amount, updateExchangeRate),
@@ -700,6 +754,7 @@ export class DocumentsSalesService {
 
           party_id: dto.party_id ?? doc.party_id,
           warehouse_id: dto.warehouse_id ?? doc.warehouse_id,
+          fiscal_jurisdiction_id: dto.fiscal_jurisdiction_id ?? doc.fiscal_jurisdiction_id,
 
           date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
 
@@ -2129,6 +2184,8 @@ export class DocumentsSalesService {
           product_id: item.product_id,
           quantity: item.quantity,
           unit_price: item.unit_price,
+
+          discount_percentage: item.discount_percentage ?? 0,
           original_unit_price: item.unit_price,
           currency_code: item.currency_code,
           exchange_rate: 1,

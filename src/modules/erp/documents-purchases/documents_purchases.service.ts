@@ -159,6 +159,7 @@ export class DocumentsPurchasesService {
       documentLetterType: docType.letter_type ?? undefined,
       currency: dto.currency_code ?? 'ARS',
       date: dto.date,
+      jurisdictionId: dto.fiscal_jurisdiction_id,
       operationType: 'PURCHASE',
       items: dtoItems.map(i => ({
         productId: i.product_id,
@@ -169,6 +170,20 @@ export class DocumentsPurchasesService {
 
     const resolution = await this.taxResolution.resolve(taxContext)
     const calculation = this.taxCalculation.calculate(resolution, taxContext.items)
+    if (dto.taxes?.some(t => t.manual && !t.modification_reason?.trim())) {
+      throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB')
+    }
+    const automaticDocumentTaxes = calculation.document.documentTaxes.map(t => ({ ...t }))
+    for (const override of dto.taxes?.filter(t => t.manual) ?? []) {
+      const calculated = calculation.document.documentTaxes.find(t => t.tax_id === override.tax_id)
+      if (!calculated) continue
+      const delta = Number(override.tax_amount) - calculated.amount
+      calculated.amount = Number(override.tax_amount)
+      calculated.rate = Number(override.tax_rate)
+      calculated.taxableBase = Number(override.taxable_base)
+      calculation.document.totalTaxes += delta
+      calculation.document.total += delta
+    }
 
     console.log('[PurchasesService] Tax Engine result:', JSON.stringify(calculation.document, null, 2))
 
@@ -236,6 +251,9 @@ export class DocumentsPurchasesService {
         tax_rate: t.rate,
         taxable_base: t.taxableBase,
         tax_amount: t.amount,
+        automatic_tax_amount: automaticDocumentTaxes.find(a => a.tax_id === t.tax_id)?.amount ?? t.amount,
+        is_manual: dto.taxes?.some(o => o.tax_id === t.tax_id && o.manual) ?? false,
+        modification_reason: dto.taxes?.find(o => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
       })),
     }
 
@@ -271,6 +289,7 @@ export class DocumentsPurchasesService {
           document_sequence_id: sequenceId,
           party_id: dto.party_id ?? null,
           warehouse_id: dto.warehouse_id ?? null,
+          fiscal_jurisdiction_id: dto.fiscal_jurisdiction_id ?? null,
 
           number,
 
@@ -350,6 +369,14 @@ export class DocumentsPurchasesService {
             taxable_base: t.taxable_base,
 
             tax_amount: t.tax_amount,
+
+            automatic_tax_amount: t.automatic_tax_amount,
+
+            is_manual: t.is_manual,
+
+            modification_reason: t.modification_reason,
+
+            manual_override_by: t.is_manual ? userId ?? null : null,
 
             converted_taxable_base: isBase ? null : this.conversionService.convertAmount(t.taxable_base, exchangeRate),
 

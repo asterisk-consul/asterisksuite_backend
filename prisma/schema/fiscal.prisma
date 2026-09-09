@@ -83,6 +83,11 @@ model business_party_iibb_registrations {
   jurisdiction_id     String?              @db.Uuid // null = aplica a todas (CM usa múltiples filas)
   registration_number String?              @db.VarChar(50)
   prorrate_percentage Decimal?             @db.Decimal(7, 4) // Solo CM: % asignación jurisdicción (suma 100)
+  perception_rate     Decimal?             @db.Decimal(8, 4)
+  retention_rate      Decimal?             @db.Decimal(8, 4)
+  valid_from          DateTime?            @db.Date
+  valid_to            DateTime?            @db.Date
+  source              String               @default("MANUAL") @db.VarChar(30)
   is_active           Boolean              @default(true)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
@@ -113,6 +118,10 @@ model company_tax_jurisdictions {
   is_withholding_agent Boolean @default(false)
   is_perception_agent  Boolean @default(false)
   registration_number  String? @db.VarChar(50)
+  default_perception_rate Decimal? @db.Decimal(8, 4)
+  default_retention_rate  Decimal? @db.Decimal(8, 4)
+  valid_from              DateTime? @db.Date
+  valid_to                DateTime? @db.Date
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)

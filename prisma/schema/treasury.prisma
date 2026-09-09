@@ -130,6 +130,7 @@ model cash_box_sessions {
   closing_balance Decimal?  @db.Decimal(15, 2)
   actual_balance  Decimal?  @db.Decimal(15, 2)
   difference      Decimal?  @db.Decimal(15, 2)
+  difference_reason String? @db.VarChar(500)
 
   total_income   Decimal @default(0) @db.Decimal(15, 2)
   total_expenses Decimal @default(0) @db.Decimal(15, 2)

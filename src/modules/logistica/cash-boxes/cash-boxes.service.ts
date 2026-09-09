@@ -247,11 +247,15 @@ export class CashBoxesService {
       throw new BadRequestException('Ya hay una sesión abierta en esta caja');
     }
 
+    const currencyCode = box.currency_code ?? 'ARS';
+    const currentBalance = box.balances.find((balance) => balance.currency_code === currencyCode);
+    const openingBalance = currentBalance?.balance.toNumber() ?? 0;
+
     const session = await this.prisma.cash_box_sessions.create({
       data: {
         cash_box_id: cashBoxId,
         user_id: userId,
-        opening_balance: dto.opening_balance,
+        opening_balance: openingBalance,
         status: 'OPEN',
         created_by: userId,
       },
@@ -270,80 +274,94 @@ export class CashBoxesService {
   }
 
   async closeSession(cashBoxId: string, dto: CloseSessionDto, userId: string) {
-    const box = await this.findOne(cashBoxId);
-    if (!box.current_session) {
-      throw new BadRequestException('No hay sesión abierta en esta caja');
-    }
+    return this.prisma.$transaction(async (tx) => {
+      const box = await tx.cash_boxes.findFirst({
+        where: { id: cashBoxId, deleted_at: null },
+        include: { current_session: true, balances: true },
+      });
+      if (!box?.current_session) throw new BadRequestException('No hay sesión abierta en esta caja');
 
-    const session = box.current_session;
-    const income = Number(session.total_income ?? 0);
-    const expenses = Number(session.total_expenses ?? 0);
-    const openingBalance = Number(session.opening_balance ?? 0);
-    const theoreticalBalance = openingBalance + income - expenses;
-    const difference = Number(dto.actual_balance ?? 0) - theoreticalBalance;
+      const currencyCode = box.currency_code ?? 'ARS';
+      const balance = box.balances.find((item) => item.currency_code === currencyCode && !item.deleted_at);
+      const systemBalance = balance?.balance.toNumber() ?? 0;
+      const actualBalance = Number(dto.actual_balance);
+      const difference = Number((actualBalance - systemBalance).toFixed(2));
+      const reason = dto.notes?.trim() || null;
 
-    const closed = await this.prisma.cash_box_sessions.update({
-      where: { id: session.id },
-      data: {
-        closed_at: new Date(),
-        closing_balance: theoreticalBalance,
-        actual_balance: dto.actual_balance,
-        difference,
-        status: 'CLOSED',
-      },
+      if (Math.abs(difference) > 0.01 && !reason) {
+        throw new BadRequestException('Indicá el motivo de la diferencia de caja');
+      }
+
+      if (Math.abs(difference) > 0.01) {
+        if (balance) {
+          await tx.cash_box_balances.update({
+            where: { id: balance.id },
+            data: { balance: actualBalance, updated_at: new Date(), updated_by: userId },
+          });
+        } else {
+          await tx.cash_box_balances.create({
+            data: { cash_box_id: cashBoxId, currency_code: currencyCode, balance: actualBalance, created_by: userId },
+          });
+        }
+
+        await tx.cash_box_movements.create({
+          data: {
+            cash_box_id: cashBoxId,
+            session_id: box.current_session.id,
+            type: 'ADJUSTMENT',
+            amount: Math.abs(difference),
+            currency_code: currencyCode,
+            balance_before: systemBalance,
+            balance_after: actualBalance,
+            description: `Ajuste por cierre de caja: ${reason}`,
+            reference_type: 'cash_box_closing',
+            reference_id: box.current_session.id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+      }
+
+      const closedAt = new Date();
+      const closed = await tx.cash_box_sessions.update({
+        where: { id: box.current_session.id },
+        data: {
+          closed_at: closedAt,
+          closing_balance: systemBalance,
+          actual_balance: actualBalance,
+          difference,
+          difference_reason: reason,
+          movement_count: Math.abs(difference) > 0.01 ? { increment: 1 } : undefined,
+          status: 'CLOSED',
+          updated_by: userId,
+        },
+      });
+
+      await tx.cash_boxes.update({
+        where: { id: cashBoxId },
+        data: { current_session_id: null, status: 'CLOSED', last_session_closed_at: closedAt },
+      });
+
+      return closed;
     });
-
-    // Actualizar caja
-    await this.prisma.cash_boxes.update({
-      where: { id: cashBoxId },
-      data: {
-        current_session_id: null,
-        status: 'CLOSED',
-        last_session_closed_at: new Date(),
-      },
-    });
-
-    return closed;
   }
 
   async forceCloseSession(cashBoxId: string, dto: ForceCloseSessionDto, userId: string) {
-    const box = await this.findOne(cashBoxId);
-    if (!box.current_session) {
-      throw new BadRequestException('No hay sesión abierta en esta caja');
-    }
+    const reason = dto.reason?.trim();
+    if (!reason) throw new BadRequestException('Indicá el motivo del cierre forzado');
 
-    const session = box.current_session;
-    const income = Number(session.total_income ?? 0);
-    const expenses = Number(session.total_expenses ?? 0);
-    const openingBalance = Number(session.opening_balance ?? 0);
-    const theoreticalBalance = openingBalance + income - expenses;
-    const difference = Number(dto.actual_balance ?? 0) - theoreticalBalance;
-
-    const closed = await this.prisma.cash_box_sessions.update({
-      where: { id: session.id },
+    const closed = await this.closeSession(cashBoxId, { actual_balance: dto.actual_balance, notes: reason }, userId);
+    const forcedAt = new Date();
+    return this.prisma.cash_box_sessions.update({
+      where: { id: closed.id },
       data: {
-        closed_at: new Date(),
-        closing_balance: theoreticalBalance,
-        actual_balance: dto.actual_balance,
-        difference,
         status: 'FORCED',
         force_closed: true,
         force_closed_by: userId,
-        force_closed_at: new Date(),
-        force_close_reason: dto.reason,
+        force_closed_at: forcedAt,
+        force_close_reason: reason,
       },
     });
-
-    await this.prisma.cash_boxes.update({
-      where: { id: cashBoxId },
-      data: {
-        current_session_id: null,
-        status: 'CLOSED',
-        last_session_closed_at: new Date(),
-      },
-    });
-
-    return closed;
   }
 
   async getCurrentSession(cashBoxId: string) {
@@ -363,5 +381,79 @@ export class CashBoxesService {
       orderBy: { opened_at: 'desc' },
       take: 50,
     });
+  }
+
+  // ═══════════════════════════════════════════
+  // RECALCULAR SALDOS (corrección de divergencias)
+  // ═══════════════════════════════════════════
+
+  OUTFLOW_TYPES = ['PAYMENT', 'LOAN', 'LOAN_PAYMENT', 'CHECK_ISSUED', 'CHECK_BOUNCED', 'DEBIT'];
+
+  async recalculate(cashBoxId: string) {
+    const box = await this.prisma.cash_boxes.findUnique({
+      where: { id: cashBoxId },
+      include: { balances: true },
+    });
+    if (!box) throw new NotFoundException('Caja no encontrada');
+
+    // 1. Recalcular saldos por moneda desde todos los movimientos
+    const movements = await this.prisma.cash_box_movements.findMany({
+      where: { cash_box_id: cashBoxId, deleted_at: null },
+      orderBy: { date: 'asc' },
+    });
+
+    const balanceByCurrency = new Map<string, number>();
+    for (const m of movements) {
+      const cur = m.currency_code;
+      const current = balanceByCurrency.get(cur) ?? 0;
+      const isOutflow = this.OUTFLOW_TYPES.includes(m.type);
+      balanceByCurrency.set(cur, isOutflow ? current - m.amount.toNumber() : current + m.amount.toNumber());
+    }
+
+    // Actualizar balances por moneda
+    for (const [currencyCode, newBalance] of balanceByCurrency) {
+      const existing = box.balances.find(b => b.currency_code === currencyCode && !b.deleted_at);
+      if (existing) {
+        await this.prisma.cash_box_balances.update({
+          where: { id: existing.id },
+          data: { balance: newBalance, updated_at: new Date() },
+        });
+      } else {
+        await this.prisma.cash_box_balances.create({
+          data: { cash_box_id: cashBoxId, currency_code: currencyCode, balance: newBalance, created_by: 'system' },
+        });
+      }
+    }
+
+    // 2. Recalcular totales de la sesión actual
+    const currentSession = box.current_session_id
+      ? await this.prisma.cash_box_sessions.findUnique({ where: { id: box.current_session_id } })
+      : null;
+
+    if (currentSession) {
+      const sessionMovements = movements.filter(m => m.session_id === currentSession.id);
+      let totalIncome = 0;
+      let totalExpenses = 0;
+      for (const m of sessionMovements) {
+        const isOutflow = this.OUTFLOW_TYPES.includes(m.type);
+        if (isOutflow) {
+          totalExpenses += m.amount.toNumber();
+        } else {
+          totalIncome += m.amount.toNumber();
+        }
+      }
+
+      await this.prisma.cash_box_sessions.update({
+        where: { id: currentSession.id },
+        data: {
+          total_income: totalIncome,
+          total_expenses: totalExpenses,
+          movement_count: sessionMovements.length,
+          updated_at: new Date(),
+        },
+      });
+    }
+
+    return { balances: Object.fromEntries(balanceByCurrency), session_recalculated: !!currentSession };
   }
 }

@@ -31,6 +31,8 @@ export interface ItemInput {
 
   unit_price: number;
 
+  discount_percentage?: number;
+
   converted_unit_price?: number | null;
 
   price: number;

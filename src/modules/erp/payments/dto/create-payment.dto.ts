@@ -76,7 +76,7 @@ export class PaymentCheckDto {
 }
 
 export class CreatePaymentDto {
-  @IsEnum(['PAYMENT', 'COLLECTION'] as const)
+  @IsEnum(['PAYMENT', 'COLLECTION', 'EXPENSE'] as const)
   type!: string;
 
   @IsEnum(['NORMAL', 'ADVANCE'] as const)

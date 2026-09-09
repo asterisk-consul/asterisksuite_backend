@@ -69,6 +69,21 @@ export class TaxCalculationService {
     }
 
     const documentTaxes = this.groupTaxesByTaxId(allItemTaxes)
+    const documentTaxableBase = calcItems.reduce((s, i) => s + i.taxableBase, 0)
+    const documentLevelTaxes = resolution.operationTaxes
+      .filter(tax => tax.calculation_level.toLowerCase() === 'document')
+      .map(tax => ({
+        tax_id: tax.tax_id,
+        code: tax.code,
+        name: tax.name,
+        rate: tax.rate,
+        taxableBase: documentTaxableBase,
+        amount: documentTaxableBase * (tax.rate / 100),
+        source: tax.source,
+        reason: tax.reason,
+      }))
+    documentTaxes.push(...documentLevelTaxes)
+    const documentLevelTaxTotal = documentLevelTaxes.reduce((sum, tax) => sum + tax.amount, 0)
 
     return {
       document: {
@@ -78,8 +93,8 @@ export class TaxCalculationService {
         subtotal: calcItems.reduce((s, i) => s + i.price, 0),
         exemptAmount: 0,
         taxableBase: calcItems.reduce((s, i) => s + i.taxableBase, 0),
-        totalTaxes: allItemTaxes.reduce((s, t) => s + t.amount, 0),
-        total: calcItems.reduce((s, i) => s + i.total, 0),
+        totalTaxes: allItemTaxes.reduce((s, t) => s + t.amount, 0) + documentLevelTaxTotal,
+        total: calcItems.reduce((s, i) => s + i.total, 0) + documentLevelTaxTotal,
       },
     }
   }

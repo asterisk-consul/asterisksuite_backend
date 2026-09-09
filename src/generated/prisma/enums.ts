@@ -171,7 +171,8 @@ export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 export const PaymentType = {
   PAYMENT: 'PAYMENT',
-  COLLECTION: 'COLLECTION'
+  COLLECTION: 'COLLECTION',
+  EXPENSE: 'EXPENSE'
 } as const
 
 export type PaymentType = (typeof PaymentType)[keyof typeof PaymentType]

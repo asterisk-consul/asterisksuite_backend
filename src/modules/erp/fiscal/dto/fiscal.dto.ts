@@ -61,6 +61,28 @@ export class IibbRegistrationDto {
   prorrate_percentage?: number | null
 
   @IsOptional()
+  @IsNumber()
+  @Max(100)
+  perception_rate?: number | null
+
+  @IsOptional()
+  @IsNumber()
+  @Max(100)
+  retention_rate?: number | null
+
+  @IsOptional()
+  @IsDateString()
+  valid_from?: string | null
+
+  @IsOptional()
+  @IsDateString()
+  valid_to?: string | null
+
+  @IsOptional()
+  @IsString()
+  source?: string
+
+  @IsOptional()
   @IsBoolean()
   is_active?: boolean
 }
@@ -90,6 +112,24 @@ export class CompanyTaxJurisdictionDto {
   @IsOptional()
   @IsString()
   registration_number?: string | null
+
+  @IsOptional()
+  @IsNumber()
+  @Max(100)
+  default_perception_rate?: number | null
+
+  @IsOptional()
+  @IsNumber()
+  @Max(100)
+  default_retention_rate?: number | null
+
+  @IsOptional()
+  @IsDateString()
+  valid_from?: string | null
+
+  @IsOptional()
+  @IsDateString()
+  valid_to?: string | null
 }
 
 export class PutCompanyTaxJurisdictionsDto {
@@ -154,7 +194,19 @@ export class CreateTaxRuleDto {
 
   @IsOptional()
   @IsNumber()
+  fixed_amount?: number | null
+
+  @IsOptional()
+  @IsNumber()
   minimum_amount?: number | null
+
+  @IsOptional()
+  @IsNumber()
+  maximum_amount?: number | null
+
+  @IsOptional()
+  @IsNumber()
+  priority?: number
 
   @IsOptional()
   @IsDateString()

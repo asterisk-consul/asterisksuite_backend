@@ -42,9 +42,6 @@ export class ProductsService {
   // ─────────────────────────────
 
   async findAll() {
-    const searchPath = await this.prisma.$queryRawUnsafe('SHOW search_path');
-
-    console.log('SEARCH PATH:', searchPath);
     return this.prisma.products.findMany({
       where: {
         deleted_at: null,

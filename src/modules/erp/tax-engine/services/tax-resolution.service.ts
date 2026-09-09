@@ -63,7 +63,11 @@ export class TaxResolutionService {
       filteredProductTaxes.set(productId, filterTaxes(taxes))
     }
 
-    const operationTaxes = filterTaxes(await this.resolveOperationTaxes(ctx, settings))
+    // Los impuestos automáticos de la operación (por ejemplo, percepciones IIBB)
+    // se gobiernan por la configuración fiscal, la jurisdicción y el tercero.
+    // No deben quedar excluidos por la lista de impuestos de producto del tipo
+    // de documento, que normalmente contiene únicamente las alícuotas de IVA.
+    const operationTaxes = await this.resolveOperationTaxes(ctx, settings)
     return { settings, productTaxes: filteredProductTaxes, operationTaxes }
   }
 
@@ -110,9 +114,82 @@ export class TaxResolutionService {
   }
 
   private async resolveOperationTaxes(ctx: TaxContext, settings: ResolvedTaxSettings): Promise<ResolvedTax[]> {
-    if (!settings.calculateIibb) return []
+    if (!settings.calculateIibb || !ctx.partnerId || !ctx.jurisdictionId) return []
 
-    const jurisdiction = ctx.warehouseId ?? 'default'
+    const date = new Date(ctx.date)
+    const companyJurisdiction = await this.db.company_tax_jurisdictions.findFirst({
+      where: {
+        company_id: ctx.issuerCompanyId,
+        jurisdiction_id: ctx.jurisdictionId,
+        tax_type: 'IIBB',
+        is_perception_agent: true,
+        deleted_at: null,
+        OR: [{ valid_from: null }, { valid_from: { lte: date } }],
+        AND: [{ OR: [{ valid_to: null }, { valid_to: { gte: date } }] }],
+      },
+    })
+    if (!companyJurisdiction) return []
+
+    const registration = await this.db.business_party_iibb_registrations.findFirst({
+      where: {
+        business_party_id: ctx.partnerId,
+        jurisdiction_id: ctx.jurisdictionId,
+        is_active: true,
+        registration_type: { notIn: ['EXENTO', 'NO_INSCRIPTO'] },
+        OR: [{ valid_from: null }, { valid_from: { lte: date } }],
+        AND: [{ OR: [{ valid_to: null }, { valid_to: { gte: date } }] }],
+      },
+    })
+    if (!registration) return []
+
+    const generalRule = await this.db.tax_rules.findFirst({
+      where: {
+        jurisdiction_id: ctx.jurisdictionId,
+        tax_type: 'IIBB',
+        application_type: 'PERCEPTION',
+        is_active: true,
+        deleted_at: null,
+        AND: [
+          { OR: [{ operation_type: null }, { operation_type: ctx.operationType }] },
+          { valid_from: { lte: date } },
+          { OR: [{ valid_to: null }, { valid_to: { gte: date } }] },
+        ],
+      },
+      orderBy: { priority: 'desc' },
+    })
+    if (!generalRule) return []
+
+    const configuredRate = registration.perception_rate
+      ?? companyJurisdiction?.default_perception_rate
+      ?? generalRule.rate
+    if (configuredRate == null) return []
+
+    const expectedCode = ctx.operationType === 'SALE' ? 'PERC_IIBB' : 'COM_PERC_IIBB'
+    const configuredTax = await this.db.taxes.findFirst({
+      where: { code: expectedCode, active: true, deleted_at: null },
+    })
+    if (configuredTax) {
+      return [{
+        tax_id: configuredTax.id,
+        code: configuredTax.code,
+        name: configuredTax.name,
+        rate: Number(configuredRate),
+        tax_type: configuredTax.tax_type,
+        calculation_level: 'document',
+        is_included_in_price: false,
+        source: 'OPERATION' as const,
+        reason: registration.perception_rate != null
+          ? `Alícuota particular del tercero (${registration.source})`
+          : companyJurisdiction?.default_perception_rate != null
+            ? 'Alícuota general configurada por la empresa para la jurisdicción'
+            : `Regla fiscal: ${generalRule?.name ?? 'alícuota general de la jurisdicción'}`,
+      }]
+    }
+
+    const jurisdictionRecord = await this.db.tax_jurisdictions.findUnique({
+      where: { id: ctx.jurisdictionId },
+    })
+    const jurisdiction = jurisdictionRecord?.code ?? jurisdictionRecord?.name ?? 'default'
     const operationTaxes = await this.operationTaxRepo.findByContext(jurisdiction, ctx.documentLetterType)
 
     const filtered = operationTaxes

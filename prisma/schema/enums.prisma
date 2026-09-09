@@ -150,6 +150,7 @@ enum PaymentMethod {
 enum PaymentType {
   PAYMENT
   COLLECTION
+  EXPENSE
 
   @@schema("tenant")
 }

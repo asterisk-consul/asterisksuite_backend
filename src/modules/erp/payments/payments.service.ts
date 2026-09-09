@@ -132,7 +132,7 @@ export class PaymentsService {
           data: {
             company_id: this.getCompanyId() ?? payment.id,
             business_party_id: payment.party_id!,
-            direction: payment.type === 'PAYMENT' ? 'PRACTICADA' : 'SUFRIDA',
+            direction: (payment.type === 'PAYMENT' || payment.type === 'EXPENSE') ? 'PRACTICADA' : 'SUFRIDA',
             payment_id: payment.id,
             tax_type: wh.tax_type,
             jurisdiction_id: wh.jurisdiction_id ?? null,
@@ -305,7 +305,7 @@ export class PaymentsService {
 
     // Determine current account entry type:
     // ADVANCE without docs → NO current account entry (pendiente de factura)
-    // Otherwise → PAYMENT/COLLECTION (como siempre)
+    // Otherwise → PAYMENT/COLLECTION/EXPENSE (como siempre)
     const isAdvanceNoDocs = payment.payment_mode === 'ADVANCE' && paymentDocs.length === 0;
 
     return this.prisma.$transaction(async (tx) => {
@@ -761,6 +761,15 @@ export class PaymentsService {
 
   private async createCashBoxMovement(payment: any, userId: string, tx?: any) {
     const prisma = tx || this.prisma;
+    const cashBox = await prisma.cash_boxes.findFirst({
+      where: { id: payment.cash_box_id, deleted_at: null },
+      select: { currency_code: true, current_session_id: true },
+    });
+    if (!cashBox) throw new BadRequestException('Caja no encontrada');
+    if (cashBox.currency_code !== payment.currency_code) {
+      throw new BadRequestException(`La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`);
+    }
+
     const balance = await prisma.cash_box_balances.findUnique({
       where: {
         cash_box_id_currency_code: {
@@ -771,7 +780,7 @@ export class PaymentsService {
     });
 
     const currentBalance = balance?.balance.toNumber() ?? 0;
-    const isOutflow = payment.type === 'PAYMENT';
+    const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
     const amount = payment.amount.toNumber();
     const balanceAfter = isOutflow ? currentBalance - amount : currentBalance + amount;
 
@@ -782,7 +791,8 @@ export class PaymentsService {
     await prisma.cash_box_movements.create({
       data: {
         cash_box_id: payment.cash_box_id,
-        type: payment.type as any,
+        session_id: cashBox.current_session_id,
+        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
@@ -798,6 +808,18 @@ export class PaymentsService {
         created_by: userId,
       },
     });
+
+    if (cashBox.current_session_id) {
+      await prisma.cash_box_sessions.update({
+        where: { id: cashBox.current_session_id },
+        data: {
+          movement_count: { increment: 1 },
+          ...(isOutflow
+            ? { total_expenses: { increment: amount } }
+            : { total_income: { increment: amount } }),
+        },
+      });
+    }
 
     if (balance) {
       await prisma.cash_box_balances.update({
@@ -825,14 +847,14 @@ export class PaymentsService {
     if (!bankAccount) return;
 
     const currentBankBalance = bankAccount.balance.toNumber();
-    const isOutflow = payment.type === 'PAYMENT';
+    const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
     const amount = payment.amount.toNumber();
     const bankBalanceAfter = isOutflow ? currentBankBalance - amount : currentBankBalance + amount;
 
     await prisma.bank_account_movements.create({
       data: {
         bank_account_id: payment.bank_account_id,
-        type: payment.type as any,
+        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
@@ -901,6 +923,14 @@ export class PaymentsService {
 
     // Revert cash box movement
     if (payment.cash_box_id) {
+      const cashBox = await this.prisma.cash_boxes.findFirst({
+        where: { id: payment.cash_box_id, deleted_at: null },
+        select: { currency_code: true, current_session_id: true },
+      });
+      if (!cashBox) throw new BadRequestException('Caja no encontrada');
+      if (cashBox.currency_code !== payment.currency_code) {
+        throw new BadRequestException(`La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`);
+      }
       const balance = await this.prisma.cash_box_balances.findUnique({
         where: {
           cash_box_id_currency_code: {
@@ -912,14 +942,15 @@ export class PaymentsService {
 
       if (balance) {
         const currentBalance = balance.balance.toNumber();
-        const isOutflow = payment.type === 'PAYMENT';
+        const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
         const amount = payment.amount.toNumber();
         const balanceAfter = isOutflow ? currentBalance + amount : currentBalance - amount;
 
         await this.prisma.cash_box_movements.create({
           data: {
             cash_box_id: payment.cash_box_id,
-            type: payment.type as any,
+            session_id: cashBox.current_session_id,
+            type: 'ADJUSTMENT',
             amount: payment.amount,
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
@@ -936,6 +967,18 @@ export class PaymentsService {
           },
         });
 
+        if (cashBox.current_session_id) {
+          await this.prisma.cash_box_sessions.update({
+            where: { id: cashBox.current_session_id },
+            data: {
+              movement_count: { increment: 1 },
+              ...(isOutflow
+                ? { total_income: { increment: amount } }
+                : { total_expenses: { increment: amount } }),
+            },
+          });
+        }
+
         await this.prisma.cash_box_balances.update({
           where: { id: balance.id },
           data: { balance: balanceAfter, updated_at: new Date() },
@@ -951,14 +994,14 @@ export class PaymentsService {
 
       if (bankAccount) {
         const currentBankBalance = bankAccount.balance.toNumber();
-        const isOutflow = payment.type === 'PAYMENT';
+        const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
         const amount = payment.amount.toNumber();
         const bankBalanceAfter = isOutflow ? currentBankBalance + amount : currentBankBalance - amount;
 
         await this.prisma.bank_account_movements.create({
           data: {
             bank_account_id: payment.bank_account_id,
-            type: payment.type as any,
+            type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
             amount: payment.amount,
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
