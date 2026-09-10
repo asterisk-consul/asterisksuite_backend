@@ -76,6 +76,10 @@ export class CreateDocumentsTypeDto {
 
   @IsOptional()
   @IsArray()
+  enabled_statuses?: number[];
+
+  @IsOptional()
+  @IsArray()
   @IsUUID('4', { each: true })
   tax_ids?: string[];
 }

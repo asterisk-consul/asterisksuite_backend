@@ -100,6 +100,25 @@ const COLOR_MAPS: Record<string, Record<number, BadgeColor>> = {
   RECEIPT: INVOICE_STATUS_COLORS,
 }
 
+export function getCategoryStatuses(
+  category: string | null | undefined,
+  enabled_statuses?: number[] | null,
+): { value: number; label: string; color: BadgeColor }[] {
+  const cat = category ?? ''
+  const allStatuses = STATUS_MAPS[cat]
+  const allColors = COLOR_MAPS[cat]
+  if (!allStatuses) return []
+
+  const entries = Object.entries(allStatuses).map(([value, label]) => ({
+    value: Number(value),
+    label,
+    color: allColors?.[Number(value)] ?? 'neutral',
+  }))
+
+  if (!enabled_statuses || enabled_statuses.length === 0) return entries
+  return entries.filter(s => enabled_statuses.includes(s.value))
+}
+
 export function getStatusLabel(category: string | null | undefined, status: number): string {
   return STATUS_MAPS[category ?? '']?.[status] ?? `Status ${status}`
 }

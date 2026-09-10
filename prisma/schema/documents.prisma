@@ -136,6 +136,7 @@ model document_types {
   requires_cae            Boolean                   @default(false)
   is_electronic           Boolean                   @default(false)
   custom_fields_config    Json?
+  enabled_statuses        Json?                       // Array de enteros: [0,1,2,3] o null = todos
   created_at              DateTime                  @default(now()) @db.Timestamp(6)
   updated_at              DateTime?                 @updatedAt @db.Timestamp(6)
   deleted_at              DateTime?

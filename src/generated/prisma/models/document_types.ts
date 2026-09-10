@@ -105,6 +105,7 @@ export type Document_typesCountAggregateOutputType = {
   requires_cae: number
   is_electronic: number
   custom_fields_config: number
+  enabled_statuses: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -194,6 +195,7 @@ export type Document_typesCountAggregateInputType = {
   requires_cae?: true
   is_electronic?: true
   custom_fields_config?: true
+  enabled_statuses?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -308,6 +310,7 @@ export type Document_typesGroupByOutputType = {
   requires_cae: boolean
   is_electronic: boolean
   custom_fields_config: runtime.JsonValue | null
+  enabled_statuses: runtime.JsonValue | null
   created_at: Date
   updated_at: Date | null
   deleted_at: Date | null
@@ -358,6 +361,7 @@ export type document_typesWhereInput = {
   requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
   custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
+  enabled_statuses?: Prisma.JsonNullableFilter<"document_types">
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
@@ -390,6 +394,7 @@ export type document_typesOrderByWithRelationInput = {
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
   custom_fields_config?: Prisma.SortOrderInput | Prisma.SortOrder
+  enabled_statuses?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -425,6 +430,7 @@ export type document_typesWhereUniqueInput = Prisma.AtLeast<{
   requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
   custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
+  enabled_statuses?: Prisma.JsonNullableFilter<"document_types">
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
@@ -457,6 +463,7 @@ export type document_typesOrderByWithAggregationInput = {
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
   custom_fields_config?: Prisma.SortOrderInput | Prisma.SortOrder
+  enabled_statuses?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -492,6 +499,7 @@ export type document_typesScalarWhereWithAggregatesInput = {
   requires_cae?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   custom_fields_config?: Prisma.JsonNullableWithAggregatesFilter<"document_types">
+  enabled_statuses?: Prisma.JsonNullableWithAggregatesFilter<"document_types">
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_types"> | Date | string | null
@@ -517,6 +525,7 @@ export type document_typesCreateInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -549,6 +558,7 @@ export type document_typesUncheckedCreateInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -577,6 +587,7 @@ export type document_typesUpdateInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609,6 +620,7 @@ export type document_typesUncheckedUpdateInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -639,6 +651,7 @@ export type document_typesCreateManyInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -664,6 +677,7 @@ export type document_typesUpdateManyMutationInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -691,6 +705,7 @@ export type document_typesUncheckedUpdateManyInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -733,6 +748,7 @@ export type document_typesCountOrderByAggregateInput = {
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
   custom_fields_config?: Prisma.SortOrder
+  enabled_statuses?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -944,6 +960,7 @@ export type document_typesCreateWithoutDocument_sequencesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -974,6 +991,7 @@ export type document_typesUncheckedCreateWithoutDocument_sequencesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1033,6 +1051,7 @@ export type document_typesScalarWhereInput = {
   requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
   custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
+  enabled_statuses?: Prisma.JsonNullableFilter<"document_types">
   created_at?: Prisma.DateTimeFilter<"document_types"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"document_types"> | Date | string | null
@@ -1058,6 +1077,7 @@ export type document_typesCreateWithoutDocument_type_sequencesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1089,6 +1109,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_sequencesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1132,6 +1153,7 @@ export type document_typesUpdateWithoutDocument_type_sequencesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1163,6 +1185,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_sequencesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1190,6 +1213,7 @@ export type document_typesCreateWithoutDocument_type_taxesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1221,6 +1245,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_taxesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1264,6 +1289,7 @@ export type document_typesUpdateWithoutDocument_type_taxesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1295,6 +1321,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_taxesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1322,6 +1349,7 @@ export type document_typesCreateWithoutDocumentsInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1353,6 +1381,7 @@ export type document_typesUncheckedCreateWithoutDocumentsInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1396,6 +1425,7 @@ export type document_typesUpdateWithoutDocumentsInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1427,6 +1457,7 @@ export type document_typesUncheckedUpdateWithoutDocumentsInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1454,6 +1485,7 @@ export type document_typesCreateWithoutSystem_modulesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1484,6 +1516,7 @@ export type document_typesUncheckedCreateWithoutSystem_modulesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1539,6 +1572,7 @@ export type document_typesCreateManyDocument_sequencesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1564,6 +1598,7 @@ export type document_typesUpdateWithoutDocument_sequencesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1594,6 +1629,7 @@ export type document_typesUncheckedUpdateWithoutDocument_sequencesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1623,6 +1659,7 @@ export type document_typesUncheckedUpdateManyWithoutDocument_sequencesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1649,6 +1686,7 @@ export type document_typesCreateManySystem_modulesInput = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1674,6 +1712,7 @@ export type document_typesUpdateWithoutSystem_modulesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1704,6 +1743,7 @@ export type document_typesUncheckedUpdateWithoutSystem_modulesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1733,6 +1773,7 @@ export type document_typesUncheckedUpdateManyWithoutSystem_modulesInput = {
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1809,6 +1850,7 @@ export type document_typesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: boolean
+  enabled_statuses?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1842,6 +1884,7 @@ export type document_typesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: boolean
+  enabled_statuses?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1871,6 +1914,7 @@ export type document_typesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: boolean
+  enabled_statuses?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1900,6 +1944,7 @@ export type document_typesSelectScalar = {
   requires_cae?: boolean
   is_electronic?: boolean
   custom_fields_config?: boolean
+  enabled_statuses?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1908,7 +1953,7 @@ export type document_typesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "affects_payment" | "calculates_taxes" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "custom_fields_config" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
+export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "affects_payment" | "calculates_taxes" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "custom_fields_config" | "enabled_statuses" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
 export type document_typesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_type_taxes?: boolean | Prisma.document_types$document_type_taxesArgs<ExtArgs>
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
@@ -1954,6 +1999,7 @@ export type $document_typesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     requires_cae: boolean
     is_electronic: boolean
     custom_fields_config: runtime.JsonValue | null
+    enabled_statuses: runtime.JsonValue | null
     created_at: Date
     updated_at: Date | null
     deleted_at: Date | null
@@ -2406,6 +2452,7 @@ export interface document_typesFieldRefs {
   readonly requires_cae: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly is_electronic: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly custom_fields_config: Prisma.FieldRef<"document_types", 'Json'>
+  readonly enabled_statuses: Prisma.FieldRef<"document_types", 'Json'>
   readonly created_at: Prisma.FieldRef<"document_types", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"document_types", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"document_types", 'DateTime'>
