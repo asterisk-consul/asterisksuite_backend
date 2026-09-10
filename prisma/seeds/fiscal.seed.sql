@@ -169,8 +169,8 @@ FROM tenant.tax_jurisdictions j;
 -- SUFRIDA con las retenciones que el cliente informa manualmente (V1).
 
 -- ─── PERCEPCIONES IIBB EN COMPROBANTES ───────────────────────
--- Se crea una regla editable por jurisdicción. Quedan inactivas hasta
--- que la empresa valide la alícuota aplicable y habilite la jurisdicción.
+-- Se crea una regla editable y activa por jurisdicción. La aplicación efectiva
+-- sigue dependiendo de la jurisdicción habilitada por la empresa.
 INSERT INTO tenant.tax_rules (
   id, name, tax_type, application_type, jurisdiction_id,
   operation_type, base_type, calculation_method,
@@ -189,7 +189,7 @@ SELECT
     WHEN 'AR-V' THEN 5.0000
     ELSE 3.0000
   END,
-  NULL, 10, false, CURRENT_DATE
+  NULL, 10, true, CURRENT_DATE
 FROM tenant.tax_jurisdictions j
 WHERE j.deleted_at IS NULL
   AND NOT EXISTS (

@@ -9,9 +9,10 @@ import { CurrentAccountsModule } from '../current-accounts/current-accounts.modu
 import { TaxEngineModule } from '../tax-engine/tax-engine.module';
 import { CurrenciesModule } from '../currencies/currencies.module';
 import { CommonErpModule } from '@/common/common-erp.module';
+import { AccessControlModule } from '@/access-control/access-control.module';
 
 @Module({
-  imports: [PrismaModule, ProductPricingModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule],
+  imports: [AccessControlModule, PrismaModule, ProductPricingModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule],
   controllers: [DocumentsPurchasesController],
   providers: [DocumentsPurchasesService, DocumentsPurchasesItemsService, DocumentsPurchasesTotalsService],
   exports: [DocumentsPurchasesService],

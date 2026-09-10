@@ -19,6 +19,7 @@ import { BusinessPartiesService } from './business-parties.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('master-data/business-parties')
 @UseGuards(JwtAuthGuard)
@@ -37,6 +38,7 @@ export class BusinessPartiesController {
 
   // 🔥 Rutas fijas ANTES de @Get(':id') para evitar conflicto
   @Get('export/template')
+  @RequirePermissions('business_parties.import')
   downloadTemplate(@Res() res: Response) {
     const headers = [
       'id', 'tipo', 'razon_social', 'nombre_fantasia', 'tipo_documento', 'CUIT', 'email',
@@ -80,6 +82,7 @@ export class BusinessPartiesController {
   }
 
   @Get('export')
+  @RequirePermissions('business_parties.export')
   async exportParties(
     @Query('type') type?: string,
     @Query('format') format: string = 'xlsx',

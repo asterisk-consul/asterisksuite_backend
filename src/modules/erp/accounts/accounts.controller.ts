@@ -24,7 +24,7 @@ import { RequirePermissions } from '@/access-control/decorators/require-permissi
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
-  @RequirePermissions('accounts.read')
+  @RequirePermissions('accounts.export')
   @Get('export')
   async exportAccounts(
     @Query('format') format: 'xlsx' | 'csv' = 'xlsx',
@@ -38,7 +38,7 @@ export class AccountsController {
     res?.send(result.buffer);
   }
 
-  @RequirePermissions('accounts.create')
+  @RequirePermissions('accounts.import')
   @Post('import')
   @UseInterceptors(FileInterceptor('file'))
   importAccounts(@UploadedFile() file: Express.Multer.File) {

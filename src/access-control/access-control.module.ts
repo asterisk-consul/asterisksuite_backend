@@ -12,6 +12,7 @@ import { AuthorizationService } from './services/authorization.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PermissionContextBuilder } from './authorization/permission-context.builder';
 import { PermissionsGuard } from './guards/permissions.guard';
+import { DocumentAccessService } from './services/document-access.service';
 
 @Module({
   imports: [PrismaModule],
@@ -22,8 +23,9 @@ import { PermissionsGuard } from './guards/permissions.guard';
     AuthorizationService,
     PermissionContextBuilder,
     PermissionsGuard,
+    DocumentAccessService,
     // { provide: APP_GUARD, useClass: PermissionsGuard },  // ← Usar CombinedGuard en AppModule
   ],
-  exports: [AuthorizationService, PermissionContextBuilder, PermissionsGuard],
+  exports: [AuthorizationService, PermissionContextBuilder, PermissionsGuard, DocumentAccessService],
 })
 export class AccessControlModule {}

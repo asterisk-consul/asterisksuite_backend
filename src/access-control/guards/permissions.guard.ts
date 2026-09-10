@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 
 import { PermissionContextBuilder } from '../authorization/permission-context.builder';
 import { REQUIRE_PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
+import { REQUIRE_ANY_PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
 import { AuthUser } from '@/auth/types/auth-user.interface';
 
 @Injectable()
@@ -27,11 +28,15 @@ export class PermissionsGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+    const anyPermissions = this.reflector.getAllAndOverride<string[]>(REQUIRE_ANY_PERMISSIONS_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     // console.log('REQUIRED PERMISSIONS:', requiredPermissions);
 
     // Si no hay permisos requeridos, deja pasar
-    if (!requiredPermissions || requiredPermissions.length === 0) {
+    if ((!requiredPermissions || requiredPermissions.length === 0) && (!anyPermissions || anyPermissions.length === 0)) {
       // console.log('No permissions required -> ALLOW');
       return true;
     }
@@ -64,11 +69,12 @@ export class PermissionsGuard implements CanActivate {
     // console.log('Permission context built');
 
     // Evaluate permissions
-    const hasAllPermissions = requiredPermissions.every((permission) => permissionContext.can(permission));
+    const hasAllPermissions = !requiredPermissions?.length || requiredPermissions.every((permission) => permissionContext.can(permission));
+    const hasAnyPermission = !anyPermissions?.length || anyPermissions.some((permission) => permissionContext.can(permission));
 
     // console.log('HAS ALL PERMISSIONS:', hasAllPermissions);
 
-    if (!hasAllPermissions) {
+    if (!hasAllPermissions || !hasAnyPermission) {
       // console.log('FORBIDDEN -> missing permissions');
       throw new ForbiddenException('No tienes permisos para realizar esta acción');
     }

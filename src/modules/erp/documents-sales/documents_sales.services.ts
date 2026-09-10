@@ -896,7 +896,7 @@ export class DocumentsSalesService {
 
     status?: number,
 
-    category?: string,
+    category?: string | string[],
 
     direction?: number,
 
@@ -909,7 +909,7 @@ export class DocumentsSalesService {
         document_types: {
           direction: direction ?? 1,
 
-          ...(category ? { category } : {}),
+          ...(category ? { category: Array.isArray(category) ? { in: category } : category } : {}),
         },
 
         ...(documentTypeId

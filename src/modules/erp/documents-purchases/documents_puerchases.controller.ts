@@ -8,29 +8,31 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { DocumentAccessService } from '@/access-control/services/document-access.service';
 
 @Controller('documents/purchases-documents')
 @UseGuards(JwtAuthGuard)
 export class DocumentsPurchasesController {
-  constructor(private readonly service: DocumentsPurchasesService) {}
+  constructor(private readonly service: DocumentsPurchasesService, private readonly documentAccess: DocumentAccessService) {}
 
-  @RequirePermissions('documents-purchases.create')
   @Post()
-  create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser) {
+  async create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocumentType(user.id, req['companyUserRole'] as string | undefined, 'purchases', dto.document_type_id, 'create');
     return this.service.create(dto, user.id);
   }
 
   @Get('pending')
-  @RequirePermissions('documents-purchases.read')
-  findPending(
+  async findPending(
     @Query('party_id') partyId?: string,
+    @CurrentUser() user?: AuthUser,
+    @Req() req?: Request,
   ) {
+    await this.documentAccess.assertCategory(user!.id, req?.['companyUserRole'] as string | undefined, 'purchases', 'INVOICE', 'read');
     return this.service.findPending(partyId);
   }
 
-  @RequirePermissions('documents-purchases.read')
   @Get()
-  findAll(
+  async findAll(
     @Req() req: Request,
     @CurrentUser() user: AuthUser,
     @Query('documentTypeId') documentTypeId?: string,
@@ -39,42 +41,44 @@ export class DocumentsPurchasesController {
     @Query('direction') direction?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
+    const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'purchases', 'read');
+    if (category) await this.documentAccess.assertCategory(user.id, companyRole, 'purchases', category, 'read');
     return this.service.findAll(
       documentTypeId,
       status !== undefined ? Number(status) : undefined,
-      category,
+      category ?? allowedCategories,
       direction !== undefined ? Number(direction) : undefined,
       companyRole === 'USER' ? user.id : undefined,
     );
   }
 
-  @RequirePermissions('documents-purchases.read')
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'read');
     return this.service.findOne(id);
   }
 
-  @RequirePermissions('documents-purchases.update')
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateDocumentDto) {
+  async update(@Param('id') id: string, @Body() dto: UpdateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'update');
     return this.service.update(id, dto);
   }
 
-  @RequirePermissions('documents-purchases.confirm')
   @Patch(':id/confirm')
-  confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Query() query?: ConfirmPurchaseDto) {
+  async confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request, @Query() query?: ConfirmPurchaseDto) {
+    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'confirm');
     return this.service.confirm(id, user.id, query);
   }
 
-  @RequirePermissions('documents-purchases.cancel')
   @Patch(':id/cancel')
-  cancel(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+  async cancel(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'cancel');
     return this.service.cancel(id, user.id);
   }
 
-  @RequirePermissions('documents-purchases.delete')
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'delete');
     return this.service.remove(id);
   }
 }

@@ -169,6 +169,32 @@ export const RBAC_PERMISSIONS = [
   { code: 'purchases.confirm', description: 'Confirmar compras' },
   { code: 'purchases.cancel', description: 'Cancelar compras' },
 
+  // ─── Documentos por circuito y categoría ────────────────
+  ...(['sales', 'purchases'] as const).flatMap((scope) =>
+    ([
+      ['quotes', 'presupuestos'],
+      ['orders', scope === 'sales' ? 'órdenes de venta' : 'órdenes de compra'],
+      ['invoices', 'facturas'],
+      ['delivery_notes', 'remitos'],
+      ['credit_notes', 'notas de crédito'],
+      ['debit_notes', 'notas de débito'],
+      ['receipts', 'recibos'],
+      ['opening_balances', 'saldos iniciales'],
+    ] as const).flatMap(([category, label]) =>
+      ([
+        ['read', 'Ver'],
+        ['create', 'Crear'],
+        ['update', 'Editar'],
+        ['confirm', 'Confirmar'],
+        ['cancel', 'Anular'],
+        ['delete', 'Eliminar'],
+      ] as const).map(([action, verb]) => ({
+        code: `${scope}.${category}.${action}`,
+        description: `${verb} ${label} de ${scope === 'sales' ? 'ventas' : 'compras'}`,
+      })),
+    ),
+  ),
+
   // ─── Master Data - Business Parties ────────────────────────
   { code: 'business_parties.read', description: 'Ver terceros' },
   { code: 'business_parties.create', description: 'Crear terceros' },
@@ -324,6 +350,22 @@ export const RBAC_PERMISSIONS = [
 
   // ─── Data Import ──────────────────────────────────────────
   { code: 'data_import.execute', description: 'Ejecutar importaciones' },
+  { code: 'products.import', description: 'Importar productos' },
+  { code: 'products.export', description: 'Exportar productos' },
+  { code: 'business_parties.import', description: 'Importar clientes y proveedores' },
+  { code: 'business_parties.export', description: 'Exportar clientes y proveedores' },
+  { code: 'sales.documents.import', description: 'Importar documentos de venta' },
+  { code: 'sales.documents.export', description: 'Exportar documentos de venta' },
+  { code: 'purchases.documents.import', description: 'Importar documentos de compra' },
+  { code: 'purchases.documents.export', description: 'Exportar documentos de compra' },
+  { code: 'accounts.import', description: 'Importar plan de cuentas' },
+  { code: 'accounts.export', description: 'Exportar plan de cuentas' },
+  { code: 'treasury.payments.import', description: 'Importar pagos y cobros' },
+  { code: 'treasury.payments.export', description: 'Exportar pagos y cobros' },
+  { code: 'sales.reports.export', description: 'Exportar reportes de ventas' },
+  { code: 'purchases.reports.export', description: 'Exportar reportes de compras' },
+  { code: 'treasury.reports.export', description: 'Exportar reportes de tesorería' },
+  { code: 'logistics.reports.export', description: 'Exportar reportes logísticos' },
 
   // ─── ERP - HR (Employees, Partners, Vales) ───────────────
   { code: 'employees.read', description: 'Ver empleados' },

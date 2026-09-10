@@ -116,6 +116,7 @@ export class PaymentsController {
   }
 
   @Get('export')
+  @RequirePermissions('treasury.payments.export')
   async exportPayments(
     @Query('type') type?: string,
     @Query('status') status?: string,
@@ -180,6 +181,7 @@ export class PaymentsController {
   }
 
   @Get('export/template')
+  @RequirePermissions('treasury.payments.import')
   downloadTemplate(@Res() res: Response) {
     const headers = [
       'fecha', 'tipo', 'tercero_nombre', 'tercero_cuit',
@@ -217,6 +219,7 @@ export class PaymentsController {
   }
 
   @Post('import')
+  @RequirePermissions('treasury.payments.import')
   @UseInterceptors(FileInterceptor('file'))
   async importPayments(
     @UploadedFile() file: Express.Multer.File,

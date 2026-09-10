@@ -1,8 +1,11 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, NotFoundException, Param, ParseUUIDPipe, Patch, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, NotFoundException, Param, ParseUUIDPipe, Patch, Req, UseGuards } from '@nestjs/common';
 import { IsUUID } from 'class-validator';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { PermissionsGuard } from '@/access-control/guards/permissions.guard';
-import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
+import type { Request } from 'express';
+import { DocumentAccessService } from '@/access-control/services/document-access.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { requestContext } from '@/common/context/request-context';
 
@@ -14,7 +17,7 @@ export class AssignDocumentDto {
 @Controller('documents/assignment')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class DocumentAssignmentController {
-  constructor(private readonly db: PrismaService) {}
+  constructor(private readonly db: PrismaService, private readonly documentAccess: DocumentAccessService) {}
 
   private context() {
     const context = requestContext.getStore();
@@ -25,9 +28,14 @@ export class DocumentAssignmentController {
   }
 
   @Get('users')
-  @RequirePermissions('documents.update')
-  async users() {
+  async users(@CurrentUser() user: AuthUser, @Req() req: Request) {
     const context = this.context();
+    const role = req['companyUserRole'] as string | undefined;
+    const [sales, purchases] = await Promise.all([
+      this.documentAccess.allowedCategories(user.id, role, 'sales', 'update'),
+      this.documentAccess.allowedCategories(user.id, role, 'purchases', 'update'),
+    ]);
+    if (sales?.length === 0 && purchases?.length === 0) throw new ForbiddenException('No tenés permiso para reasignar documentos');
     const members = await this.db.getDefaultClient().company_users.findMany({
       where: { company_id: context.companyId, user: { active: true, deleted_at: null } },
       select: { user: { select: { id: true, name: true } } },
@@ -36,9 +44,9 @@ export class DocumentAssignmentController {
   }
 
   @Get(':id')
-  @RequirePermissions('documents.read')
-  async current(@Param('id', ParseUUIDPipe) id: string) {
+  async current(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     this.context();
+    await this.documentAccess.assertAnyDocument(user.id, req['companyUserRole'] as string | undefined, id, 'read');
     const document = await this.db.getClientForCurrentContext().documents.findFirst({
       where: { id, deleted_at: null },
       select: { assigned_to: true },
@@ -52,9 +60,9 @@ export class DocumentAssignmentController {
   }
 
   @Patch(':id')
-  @RequirePermissions('documents.update')
-  async assign(@Param('id', ParseUUIDPipe) id: string, @Body() dto: AssignDocumentDto) {
+  async assign(@Param('id', ParseUUIDPipe) id: string, @Body() dto: AssignDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const context = this.context();
+    await this.documentAccess.assertAnyDocument(user.id, req['companyUserRole'] as string | undefined, id, 'update');
     const member = await this.db.getDefaultClient().company_users.findFirst({
       where: { company_id: context.companyId, user_id: dto.user_id, user: { active: true, deleted_at: null } },
       select: { user: { select: { id: true, name: true } } },
