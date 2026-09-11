@@ -9,6 +9,11 @@ Primero se registra el catálogo sin cambiar roles:
 npx tsx prisma/seeds/document-permissions.seed.ts dev
 ```
 
+Para una empresa nueva o al ejecutar `seed-all.ts`, este catálogo ya está incluido
+en `RBAC_PERMISSIONS` y se registra automáticamente mediante `rbac.seed.ts`. El
+comando específico se conserva para actualizar solamente el catálogo de una base
+existente sin reasignar roles.
+
 ## Equivalencias sugeridas
 
 - `documents.<acción>`: asignar la acción a todas las categorías de ventas y compras.

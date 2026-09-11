@@ -26,6 +26,7 @@ model business_parties {
   payments                         payments[]
   credit_cards                     credit_cards[]
   current_accounts                 current_accounts[]
+  commercial_operations            commercial_operations[]
   hr_accounts                      hr_accounts[]
   hr_vales                         hr_vales[]
   product_suppliers                product_suppliers[]

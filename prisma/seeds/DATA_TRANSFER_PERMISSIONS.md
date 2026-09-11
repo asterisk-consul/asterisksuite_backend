@@ -9,6 +9,10 @@ npx tsx prisma/seeds/data-transfer-permissions.seed.ts dev
 El comando no asigna permisos ni modifica roles. Después se administran desde
 Configuración → Roles. `OWNER` conserva acceso automático.
 
+`seed-all.ts` y el alta de una empresa nueva ya registran este catálogo desde
+`RBAC_PERMISSIONS`. El comando específico se usa únicamente para incorporar los
+permisos a una base existente sin modificar sus roles.
+
 Permisos disponibles:
 
 - `products.import` / `products.export`

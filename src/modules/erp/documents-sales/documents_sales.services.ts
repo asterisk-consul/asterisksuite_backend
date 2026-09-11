@@ -21,6 +21,7 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
+import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -47,6 +48,8 @@ export class DocumentsSalesService {
     private readonly totalsService: DocumentsSalesTotalsService,
 
     private readonly currentAccountsService: CurrentAccountsService,
+
+    private readonly commercialFlow: SalesCommercialFlowService,
 
     private readonly taxResolution: TaxResolutionService,
 
@@ -137,8 +140,8 @@ export class DocumentsSalesService {
       if (isNcNd && parentCategory !== 'INVOICE') {
         throw new BadRequestException('Solo se puede referenciar una factura')
       }
-      if (isInvoice && !['ORDER', 'REMITO', 'INVOICE'].includes(parentCategory)) {
-        throw new BadRequestException('El documento referenciado debe ser una orden de venta, remito o factura')
+      if (isInvoice && !['ORDER', 'INVOICE'].includes(parentCategory)) {
+        throw new BadRequestException('Por configuración, un remito no puede originar una factura')
       }
       if (parentDoc.document_types?.direction !== docType.direction) {
         throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante')
@@ -408,6 +411,14 @@ export class DocumentsSalesService {
         tx,
       );
 
+      if (docType.direction === 1) {
+        if (docType.category === 'ORDER') {
+          await this.commercialFlow.createForOrder(tx, document, userId);
+        } else {
+          await this.commercialFlow.inheritFromParent(tx, document.id, dto.parent_document_id);
+        }
+      }
+
       if (totals.documentTaxes.length) {
         await tx.document_taxes.createMany({
           data: totals.documentTaxes.map((t) => ({
@@ -438,10 +449,10 @@ export class DocumentsSalesService {
 
       // ─── Tracking: INVOICE referencing ORDER → update quantity_invoiced + status ───
       if (docType.category === 'INVOICE' && dto.parent_document_id) {
-        const parentCategory = (await tx.document_types.findFirst({
-          where: { id: dto.document_type_id },
-          select: { category: true },
-        }))?.category
+        const parentCategory = (await tx.documents.findUnique({
+          where: { id: dto.parent_document_id },
+          select: { document_types: { select: { category: true } } },
+        }))?.document_types.category
 
         if (parentCategory === 'ORDER') {
           const parentItems = await tx.document_items.findMany({
@@ -467,8 +478,6 @@ export class DocumentsSalesService {
               }
             }
           }
-
-          let allFullyInvoiced = parentItems.length > 0
 
           for (const invoiceItem of invoiceItems) {
             const key = invoiceItem.product_id ?? `idx-${invoiceItem.id}`
@@ -629,6 +638,13 @@ export class DocumentsSalesService {
           })),
         }
       });
+
+      if (docType?.category === 'REMITO') {
+        const missingWarehouse = items.filter(item => !item.warehouse_id);
+        if (missingWarehouse.length > 0) {
+          throw new BadRequestException('Todos los productos del remito deben tener un depósito de salida');
+        }
+      }
 
       totals = {
         subtotal: calculation.document.subtotal,
@@ -888,6 +904,46 @@ export class DocumentsSalesService {
     }
   }
 
+  /** Recalcula la entrega de una OV desde sus remitos confirmados. */
+  private async refreshOrderDeliveredQuantities(orderId: string, tx: any) {
+    const order = await tx.documents.findFirst({
+      where: { id: orderId, document_types: { category: 'ORDER' } },
+      include: { document_items: { orderBy: { created_at: 'asc' } } },
+    });
+    if (!order) return;
+
+    const confirmedRemitos = await tx.documents.findMany({
+      where: {
+        parent_document_id: orderId,
+        status: STATUS_CONFIRMED,
+        deleted_at: null,
+        document_types: { category: 'REMITO' },
+      },
+      include: { document_items: true },
+    });
+
+    const deliveredByProduct = new Map<string, number>();
+    for (const remito of confirmedRemitos) {
+      for (const item of remito.document_items) {
+        if (!item.product_id) continue;
+        deliveredByProduct.set(item.product_id, (deliveredByProduct.get(item.product_id) ?? 0) + Number(item.quantity));
+      }
+    }
+
+    for (const item of order.document_items) {
+      const available = item.product_id ? deliveredByProduct.get(item.product_id) ?? 0 : 0;
+      const delivered = Math.min(Number(item.quantity), available);
+      if (item.product_id) deliveredByProduct.set(item.product_id, Math.max(0, available - delivered));
+      await tx.document_items.update({ where: { id: item.id }, data: { quantity_delivered: delivered } });
+    }
+
+    const refreshedItems = await tx.document_items.findMany({ where: { document_id: orderId } });
+    const deliveredTotal = refreshedItems.reduce((sum: number, item: any) => sum + Number(item.quantity_delivered ?? 0), 0);
+    const orderedTotal = refreshedItems.reduce((sum: number, item: any) => sum + Number(item.quantity), 0);
+    const status = deliveredTotal <= 0 ? 3 : deliveredTotal + 0.000001 >= orderedTotal ? 5 : 4;
+    await tx.documents.update({ where: { id: orderId }, data: { status, updated_at: new Date() } });
+  }
+
   // ─────────────────────────────────────────────
   // FIND ALL
   // ─────────────────────────────────────────────
@@ -934,6 +990,8 @@ export class DocumentsSalesService {
 
         warehouse: true,
 
+        commercial_operation: true,
+
         document_items: {
           include: {
             products: true,
@@ -969,8 +1027,11 @@ export class DocumentsSalesService {
       where: {
         document_types: {
           direction: 1,
-          affects_payment: true,
         },
+        OR: [
+          { document_types: { direction: 1, affects_payment: true } },
+          { commercial_operation_id: { not: null } },
+        ],
         status: 2,
         deleted_at: null,
         ...(partyId ? { party_id: partyId } : {}),
@@ -978,14 +1039,34 @@ export class DocumentsSalesService {
       include: {
         document_types: { select: { code: true, description: true, direction: true, category: true } },
         business_parties: { select: { id: true, name: true, type: true } },
+        commercial_operation: {
+          include: {
+            documents: {
+              where: { deleted_at: null, status: 2 },
+              select: { id: true, document_types: { select: { category: true } } },
+            },
+          },
+        },
       },
       orderBy: { date: 'asc' },
     });
 
     return docs
+      .filter((d) => {
+        const operation = d.commercial_operation;
+        if (!operation) return true;
+        const category = d.document_types?.category;
+        if (operation.payment_document_basis === 'ORDER') return category === 'ORDER';
+        if (operation.payment_document_basis === 'INVOICE') return category === 'INVOICE';
+        // BOTH mantiene una única tarjeta representativa por operación. La OV
+        // conserva el total vendido aunque existan varias facturas parciales.
+        return category === 'ORDER';
+      })
       .map((d) => {
-        const total = Number(d.total);
-        const paid = Number(d.paid_amount);
+        const operation = d.commercial_operation;
+        const usesOperationBalance = operation && operation.payment_document_basis !== 'INVOICE';
+        const total = usesOperationBalance ? Number(operation.ordered_total) : Number(d.total);
+        const paid = usesOperationBalance ? Number(operation.paid_total) : Number(d.paid_amount);
         const pending = total - paid;
         return {
           id: d.id,
@@ -1027,6 +1108,10 @@ export class DocumentsSalesService {
 
         business_parties: true,
 
+        warehouse: true,
+
+        commercial_operation: true,
+
         parent_document: {
           select: {
             id: true,
@@ -1056,6 +1141,8 @@ export class DocumentsSalesService {
         document_items: {
           include: {
             products: true,
+
+            warehouse: true,
 
             document_item_taxes: {
               include: {
@@ -1428,7 +1515,7 @@ export class DocumentsSalesService {
   // CONFIRM
   // ─────────────────────────────────────────────
   async confirm(id: string, userId: string) {
-    return this.prisma.$transaction(async (tx) => {
+    const confirmed = await this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
       if (doc.status !== STATUS_DRAFT) {
@@ -1448,6 +1535,10 @@ export class DocumentsSalesService {
           updated_at: new Date(),
         },
       });
+
+      if (category === 'REMITO' && doc.parent_document_id) {
+        await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
+      }
 
       // ─── Stock automático si affects_stock ──────────────────────
       if (doc.document_types?.affects_stock) {
@@ -1519,8 +1610,16 @@ export class DocumentsSalesService {
         }
       }
 
-      // ─── Cuenta corriente si affects_accounting ─────────────────
-      if (doc.party_id && doc.document_types?.affects_accounting) {
+      const operationBasis = doc.commercial_operation?.accounting_basis;
+      const operationControlsAccounting = Boolean(operationBasis && ['ORDER', 'INVOICE'].includes(category));
+      const affectsAccounting = operationControlsAccounting
+        ? (category === 'ORDER'
+            ? ['ORDER', 'ORDER_THEN_INVOICE'].includes(operationBasis)
+            : ['INVOICE', 'ORDER_THEN_INVOICE'].includes(operationBasis))
+        : doc.document_types?.affects_accounting;
+
+      // ─── Cuenta corriente según política copiada en la operación ─────────
+      if (doc.party_id && affectsAccounting) {
         let currencyCode = doc.currency_code;
 
         if (!currencyCode) {
@@ -1541,6 +1640,24 @@ export class DocumentsSalesService {
         const description = docRef
           ? `${docTypeName} #${doc.number} - ${docRef}`
           : `${docTypeName} #${doc.number}`;
+
+        if (category === 'INVOICE' && operationBasis === 'ORDER_THEN_INVOICE') {
+          await this.currentAccountsService.addEntry(
+            {
+              party_id: doc.party_id,
+              party_type: partyType,
+              currency_code: currencyCode,
+              type: 'CREDIT_NOTE',
+              amount: docTotal,
+              exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
+              rate_type: doc.rate_type ?? undefined,
+              description: `Reemplazo de deuda provisoria por ${description}`,
+              reference_type: 'order_invoice_replacement',
+              reference_id: doc.id,
+            },
+            userId,
+          );
+        }
 
         await this.currentAccountsService.addEntry(
           {
@@ -1578,7 +1695,32 @@ export class DocumentsSalesService {
           document_taxes: { include: { taxes: true } },
         },
       });
+
     });
+
+    if (confirmed?.commercial_operation_id) {
+      if (confirmed.document_types?.category === 'REMITO') {
+        const operation = await this.prisma.commercial_operations.update({
+          where: { id: confirmed.commercial_operation_id },
+          data: { delivery_status: 'DELIVERED', updated_by: userId },
+        });
+        await this.prisma.documents.update({
+          where: { id: operation.root_document_id },
+          data: { status: 5, updated_at: new Date(), updated_by: userId },
+        });
+        return confirmed;
+      }
+      const operation = await this.commercialFlow.refresh(confirmed.commercial_operation_id);
+      if (operation?.delivery_status === 'ELIGIBLE' && operation.auto_create_delivery_note && !operation.delivery_note_id) {
+        const remito = await this.deliver(operation.root_document_id, userId);
+        await this.prisma.commercial_operations.update({
+          where: { id: operation.id },
+          data: { delivery_note_id: remito.id, delivery_status: 'DRAFT_CREATED', updated_by: userId },
+        });
+      }
+    }
+
+    return confirmed;
   }
 
   // ─────────────────────────────────────────────
@@ -1644,12 +1786,20 @@ export class DocumentsSalesService {
         },
       });
 
-      // Revertir entrada de cuenta corriente solo si el tipo afecta contabilidad
-      console.log('[cancel] doc.party_id:', doc.party_id)
-      console.log('[cancel] affects_accounting:', doc.document_types?.affects_accounting)
-      console.log('[cancel] would create entry:', !!(doc.party_id && doc.document_types?.affects_accounting))
+      if (doc.document_types?.category === 'REMITO' && doc.parent_document_id) {
+        await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
+      }
 
-      if (doc.party_id && doc.document_types?.affects_accounting) {
+      const category = doc.document_types?.category;
+      const operationBasis = doc.commercial_operation?.accounting_basis;
+      const operationControlsAccounting = Boolean(operationBasis && ['ORDER', 'INVOICE'].includes(category));
+      const affectsAccounting = operationControlsAccounting
+        ? (category === 'ORDER'
+            ? ['ORDER', 'ORDER_THEN_INVOICE'].includes(operationBasis)
+            : ['INVOICE', 'ORDER_THEN_INVOICE'].includes(operationBasis))
+        : doc.document_types?.affects_accounting;
+
+      if (doc.party_id && affectsAccounting) {
         const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
         const docTotal = doc.total.toNumber();
 
@@ -1676,6 +1826,26 @@ export class DocumentsSalesService {
           },
           userId,
         );
+
+        // Al anular una factura del modo combinado también se revierte el asiento
+        // que había reemplazado la deuda provisoria de la OV.
+        if (category === 'INVOICE' && operationBasis === 'ORDER_THEN_INVOICE') {
+          await this.currentAccountsService.addEntry(
+            {
+              party_id: doc.party_id,
+              party_type: partyType,
+              currency_code: doc.currency_code,
+              type: 'DEBIT_NOTE',
+              amount: docTotal,
+              exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
+              rate_type: doc.rate_type ?? undefined,
+              description: `Restitución de deuda provisoria por anulación ${baseDesc}`,
+              reference_type: 'order_invoice_replacement_reversal',
+              reference_id: doc.id,
+            },
+            userId,
+          );
+        }
       }
 
       return tx.documents.findUnique({ where: { id } });
@@ -1791,6 +1961,7 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, items, tx);
+      await this.commercialFlow.createForOrder(tx, newDoc, userId);
 
       // Actualizar presupuesto a "Convertido" (status 5)
       await tx.documents.update({
@@ -1807,6 +1978,14 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   async deliver(id: string, userId: string) {
     const doc = await this.findOne(id);
+
+    if (doc.commercial_operation_id) {
+      const operation = await this.commercialFlow.refresh(doc.commercial_operation_id);
+      if (operation?.delivery_status === 'PENDING') {
+        throw new BadRequestException('La operación todavía no cumple la condición configurada para remitir');
+      }
+      if (operation?.delivery_note_id) return this.findOne(operation.delivery_note_id);
+    }
 
     if (doc.status !== STATUS_CONFIRMED && doc.status !== STATUS_PENDING) {
       throw new BadRequestException('La orden debe estar aprobada o confirmada para crear un remito');
@@ -1875,12 +2054,16 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, items, tx);
+      await this.commercialFlow.inheritFromParent(tx, newDoc.id, doc.id);
 
-      // Actualizar OV a "Entregada" (status 5)
-      await tx.documents.update({
-        where: { id: doc.id },
-        data: { status: 5, updated_at: new Date() },
-      });
+      if (doc.commercial_operation_id) {
+        await tx.commercial_operations.update({
+          where: { id: doc.commercial_operation_id },
+          data: { delivery_note_id: newDoc.id, delivery_status: 'DRAFT_CREATED', updated_by: userId },
+        });
+      }
+
+      // La OV se marca entregada al confirmar la salida, no al crear el borrador.
     });
 
     return this.findOne(createdId);
@@ -1891,6 +2074,16 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   async partialDeliver(id: string, items: { document_item_id: string; quantity: number }[], userId: string) {
     const doc = await this.findOne(id);
+
+    if (doc.commercial_operation_id) {
+      const operation = await this.commercialFlow.refresh(doc.commercial_operation_id);
+      if (operation?.delivery_status === 'PENDING') {
+        throw new BadRequestException('La operación todavía no cumple la condición configurada para remitir');
+      }
+      if (operation && !operation.allow_partial_delivery) {
+        throw new BadRequestException('La política de esta operación no permite entregas parciales');
+      }
+    }
 
     if (doc.status !== STATUS_CONFIRMED && doc.status !== 1) {
       throw new BadRequestException('La orden debe estar confirmada o aprobada para despachar');
@@ -1970,25 +2163,10 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, remitoItems, tx);
+      await this.commercialFlow.inheritFromParent(tx, newDoc.id, doc.id);
 
       // Actualizar tracking en items de la OV
-      for (const req of items) {
-        const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
-        const newDelivered = Number(sourceItem.quantity_delivered ?? 0) + req.quantity;
-        await tx.document_items.update({
-          where: { id: req.document_item_id },
-          data: { quantity_delivered: newDelivered },
-        });
-      }
-
-      // Verificar si todos los items fueron entregados
-      const allItems = await tx.document_items.findMany({ where: { document_id: id } });
-      const allDelivered = allItems.every(i => Number(i.quantity_delivered ?? 0) >= Number(i.quantity));
-      if (allDelivered) {
-        await tx.documents.update({ where: { id }, data: { status: 5 } }); // ENTREGADA
-      } else {
-        await tx.documents.update({ where: { id }, data: { status: 4 } }); // PARCIAL_ENTREGADA
-      }
+      // La OV se actualiza cuando el remito queda efectivamente confirmado.
     });
 
     return this.findOne(createdId);
@@ -2077,6 +2255,7 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, invoiceItems, tx);
+      await this.commercialFlow.inheritFromParent(tx, newDoc.id, doc.id);
 
       // Actualizar tracking
       for (const req of items) {
@@ -2132,6 +2311,7 @@ export class DocumentsSalesService {
       },
       include: { customers: true, dispatch_items: { include: { product: true } }, dispatch_rates: true },
     });
+
   }
 
   async createRemitoFromDispatch(dispatchId: string, userId: string) {
@@ -2178,6 +2358,7 @@ export class DocumentsSalesService {
         },
       });
       createdId = created.id;
+      await this.commercialFlow.inheritFromParent(tx, created.id, dispatch.source_document_id);
       await tx.document_items.createMany({
         data: dispatch.dispatch_items.map(item => ({
           document_id: created.id,
@@ -2218,6 +2399,10 @@ export class DocumentsSalesService {
       data: { status: newStatus, updated_at: new Date() },
     });
 
+    if (category === 'REMITO' && newStatus === STATUS_CONFIRMED && doc.parent_document_id) {
+      await this.refreshOrderDeliveredQuantities(doc.parent_document_id, this.prisma);
+    }
+
     // El remito entregado es el evento operativo que cierra despacho/viaje
     // y deja preparada la factura comercial.
     if (category === 'REMITO' && newStatus === 2) {
@@ -2245,10 +2430,7 @@ export class DocumentsSalesService {
         });
       }
 
-      const hasInvoice = doc.child_documents.some(child => child.document_types?.category === 'INVOICE' && child.status !== STATUS_CANCELLED);
-      if (!hasInvoice && doc.document_items.length) {
-        await this.partialInvoice(id, doc.document_items.map(item => ({ document_item_id: item.id, quantity: Number(item.quantity) })), userId);
-      }
+      // La entrega no genera una factura. La facturación se inicia desde la OV.
     }
 
     return this.findOne(id);

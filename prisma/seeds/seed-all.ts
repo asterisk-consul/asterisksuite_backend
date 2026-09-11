@@ -23,6 +23,7 @@ import {
   SQL_BANK_CONCEPTS,
   SQL_DOCUMENT_SEQUENCES,
   SQL_LINK_SEQUENCES,
+  RBAC_PERMISSIONS,
   executeSeedSql,
 } from './seed-sql'
 
@@ -60,6 +61,19 @@ async function runSql(label: string, sql: string) {
 // ─── Main ─────────────────────────────────────────────────
 async function main() {
   const startTime = Date.now()
+
+  // Estos catálogos también alimentan document-permissions.seed.ts y
+  // data-transfer-permissions.seed.ts. seed-all los registra mediante rbac.seed.ts,
+  // por lo que no es necesario ejecutar esos scripts por separado.
+  const documentPermissions = RBAC_PERMISSIONS.filter(({ code }) =>
+    /^(sales|purchases)\.[^.]+\.(read|create|update|confirm|cancel|delete)$/.test(code),
+  )
+  const dataTransferPermissions = RBAC_PERMISSIONS.filter(({ code }) =>
+    code.endsWith('.import') || code.endsWith('.export'),
+  )
+  if (!documentPermissions.length || !dataTransferPermissions.length) {
+    throw new Error('El catálogo RBAC no incluye los permisos documentales o de importación/exportación')
+  }
 
   // 1. Impuestos
   await runSql('Impuestos (IVA, percepciones, retenciones)', SQL_TAXES)
@@ -100,8 +114,8 @@ async function main() {
     console.log('  Error (puede que ya exista)')
   }
 
-  // 11. RBAC — permisos y roles (TypeScript seed)
-  console.log('  RBAC (permisos y roles)...')
+  // 11. RBAC — incluye permisos documentales e importación/exportación
+  console.log(`  RBAC (${documentPermissions.length} documentales + ${dataTransferPermissions.length} importación/exportación + resto del sistema)...`)
   try {
     execSync(`npx tsx prisma/seeds/rbac.seed.ts ${tenant}`, {
       stdio: 'inherit',

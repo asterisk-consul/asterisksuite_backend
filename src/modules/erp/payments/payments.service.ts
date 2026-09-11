@@ -6,6 +6,8 @@ import { parseLocalDateTime } from '@/common/utils/dates';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { CurrentAccountsService } from '../current-accounts/current-accounts.service';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { SalesCommercialFlowService } from '../documents-sales/sales-commercial-flow.service';
+import { DocumentsSalesService } from '../documents-sales/documents_sales.services';
 
 @Injectable()
 export class PaymentsService {
@@ -13,6 +15,8 @@ export class PaymentsService {
     private db: PrismaService,
     private conversionService: CurrencyConversionService,
     private currentAccountsService: CurrentAccountsService,
+    private commercialFlow: SalesCommercialFlowService,
+    private documentsSales: DocumentsSalesService,
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -274,6 +278,26 @@ export class PaymentsService {
           );
         }
       }
+
+      const linkedDocs = await this.prisma.documents.findMany({
+        where: { id: { in: paymentDocs.map(pd => pd.document_id) } },
+        select: { id: true, commercial_operation_id: true },
+      });
+      const applicationsByOperation = new Map<string, number>();
+      for (const pd of paymentDocs) {
+        const operationId = linkedDocs.find(doc => doc.id === pd.document_id)?.commercial_operation_id;
+        if (!operationId) continue;
+        applicationsByOperation.set(
+          operationId,
+          (applicationsByOperation.get(operationId) ?? 0) + pd.amount_applied.toNumber(),
+        );
+      }
+      for (const [operationId, newAmount] of applicationsByOperation) {
+        const operation = await this.commercialFlow.refresh(operationId);
+        if (operation && Number(operation.paid_total) + newAmount > Number(operation.ordered_total) + 0.01) {
+          throw new BadRequestException('El monto aplicado excede el saldo pendiente de la operación comercial');
+        }
+      }
     }
 
     // Validación: dinero efectivo + retenciones >= importe aplicado a documentos
@@ -308,7 +332,7 @@ export class PaymentsService {
     // Otherwise → PAYMENT/COLLECTION/EXPENSE (como siempre)
     const isAdvanceNoDocs = payment.payment_mode === 'ADVANCE' && paymentDocs.length === 0;
 
-    return this.prisma.$transaction(async (tx) => {
+    const confirmed = await this.prisma.$transaction(async (tx) => {
       // Apply to documents
       for (const pd of paymentDocs) {
         await tx.documents.update({
@@ -408,6 +432,24 @@ export class PaymentsService {
         },
       });
     });
+
+    const operationIds = [...new Set((await this.prisma.documents.findMany({
+      where: { id: { in: paymentDocs.map(pd => pd.document_id) }, commercial_operation_id: { not: null } },
+      select: { commercial_operation_id: true },
+    })).map(doc => doc.commercial_operation_id).filter(Boolean))] as string[];
+
+    for (const operationId of operationIds) {
+      const operation = await this.commercialFlow.refresh(operationId);
+      if (operation?.delivery_status === 'ELIGIBLE' && operation.auto_create_delivery_note && !operation.delivery_note_id) {
+        const remito = await this.documentsSales.deliver(operation.root_document_id, userId);
+        await this.prisma.commercial_operations.update({
+          where: { id: operation.id },
+          data: { delivery_note_id: remito.id, delivery_status: 'DRAFT_CREATED', updated_by: userId },
+        });
+      }
+    }
+
+    return confirmed;
   }
 
   // ═══════════════════════════════════════════
@@ -443,7 +485,7 @@ export class PaymentsService {
 
     await this.reverseSideEffects(payment, userId, 'payment_rejection');
 
-    return this.prisma.payments.update({
+    const rejected = await this.prisma.payments.update({
       where: { id },
       data: {
         status: 'REVERSED',
@@ -451,6 +493,8 @@ export class PaymentsService {
         updated_by: userId,
       },
     });
+    await this.refreshPaymentOperations(id);
+    return rejected;
   }
 
   // ═══════════════════════════════════════════
@@ -468,7 +512,7 @@ export class PaymentsService {
 
     await this.reverseSideEffects(payment, userId, 'payment_reversal');
 
-    return this.prisma.payments.update({
+    const reversed = await this.prisma.payments.update({
       where: { id },
       data: {
         status: 'CANCELLED',
@@ -476,6 +520,8 @@ export class PaymentsService {
         updated_by: userId,
       },
     });
+    await this.refreshPaymentOperations(id);
+    return reversed;
   }
 
   // ═══════════════════════════════════════════
@@ -664,6 +710,19 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
   // PRIVATE HELPERS
   // ═══════════════════════════════════════════
+
+  private async refreshPaymentOperations(paymentId: string) {
+    const links = await this.prisma.payment_documents.findMany({
+      where: { payment_id: paymentId, deleted_at: null },
+      select: { document: { select: { commercial_operation_id: true } } },
+    });
+    const operationIds = [...new Set(links
+      .map(link => link.document.commercial_operation_id)
+      .filter(Boolean))] as string[];
+    for (const operationId of operationIds) {
+      await this.commercialFlow.refresh(operationId);
+    }
+  }
 
   private async processLinkedChecks(payment: any, userId: string, tx?: any) {
     const prisma = tx || this.prisma;

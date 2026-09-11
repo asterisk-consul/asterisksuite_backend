@@ -645,6 +645,16 @@ export type business_user_roles = Prisma.business_user_rolesModel
  */
 export type user_permission_overrides = Prisma.user_permission_overridesModel
 /**
+ * Model sales_flow_settings
+ * 
+ */
+export type sales_flow_settings = Prisma.sales_flow_settingsModel
+/**
+ * Model commercial_operations
+ * 
+ */
+export type commercial_operations = Prisma.commercial_operationsModel
+/**
  * Model tax_categories
  * 
  */

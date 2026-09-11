@@ -315,6 +315,7 @@ export type business_partiesWhereInput = {
   payments?: Prisma.PaymentsListRelationFilter
   credit_cards?: Prisma.Credit_cardsListRelationFilter
   current_accounts?: Prisma.Current_accountsListRelationFilter
+  commercial_operations?: Prisma.Commercial_operationsListRelationFilter
   hr_accounts?: Prisma.Hr_accountsListRelationFilter
   hr_vales?: Prisma.Hr_valesListRelationFilter
   product_suppliers?: Prisma.Product_suppliersListRelationFilter
@@ -357,6 +358,7 @@ export type business_partiesOrderByWithRelationInput = {
   payments?: Prisma.paymentsOrderByRelationAggregateInput
   credit_cards?: Prisma.credit_cardsOrderByRelationAggregateInput
   current_accounts?: Prisma.current_accountsOrderByRelationAggregateInput
+  commercial_operations?: Prisma.commercial_operationsOrderByRelationAggregateInput
   hr_accounts?: Prisma.hr_accountsOrderByRelationAggregateInput
   hr_vales?: Prisma.hr_valesOrderByRelationAggregateInput
   product_suppliers?: Prisma.product_suppliersOrderByRelationAggregateInput
@@ -402,6 +404,7 @@ export type business_partiesWhereUniqueInput = Prisma.AtLeast<{
   payments?: Prisma.PaymentsListRelationFilter
   credit_cards?: Prisma.Credit_cardsListRelationFilter
   current_accounts?: Prisma.Current_accountsListRelationFilter
+  commercial_operations?: Prisma.Commercial_operationsListRelationFilter
   hr_accounts?: Prisma.Hr_accountsListRelationFilter
   hr_vales?: Prisma.Hr_valesListRelationFilter
   product_suppliers?: Prisma.Product_suppliersListRelationFilter
@@ -490,6 +493,7 @@ export type business_partiesCreateInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -532,6 +536,7 @@ export type business_partiesUncheckedCreateInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -574,6 +579,7 @@ export type business_partiesUpdateInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -616,6 +622,7 @@ export type business_partiesUncheckedUpdateInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1064,6 +1071,22 @@ export type business_partiesUpdateOneRequiredWithoutProduct_party_price_historyN
   update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutProduct_party_price_historyInput, Prisma.business_partiesUpdateWithoutProduct_party_price_historyInput>, Prisma.business_partiesUncheckedUpdateWithoutProduct_party_price_historyInput>
 }
 
+export type business_partiesCreateNestedOneWithoutCommercial_operationsInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutCommercial_operationsInput, Prisma.business_partiesUncheckedCreateWithoutCommercial_operationsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutCommercial_operationsInput
+  connect?: Prisma.business_partiesWhereUniqueInput
+}
+
+export type business_partiesUpdateOneWithoutCommercial_operationsNestedInput = {
+  create?: Prisma.XOR<Prisma.business_partiesCreateWithoutCommercial_operationsInput, Prisma.business_partiesUncheckedCreateWithoutCommercial_operationsInput>
+  connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutCommercial_operationsInput
+  upsert?: Prisma.business_partiesUpsertWithoutCommercial_operationsInput
+  disconnect?: Prisma.business_partiesWhereInput | boolean
+  delete?: Prisma.business_partiesWhereInput | boolean
+  connect?: Prisma.business_partiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.business_partiesUpdateToOneWithWhereWithoutCommercial_operationsInput, Prisma.business_partiesUpdateWithoutCommercial_operationsInput>, Prisma.business_partiesUncheckedUpdateWithoutCommercial_operationsInput>
+}
+
 export type business_partiesCreateNestedOneWithoutPaymentsInput = {
   create?: Prisma.XOR<Prisma.business_partiesCreateWithoutPaymentsInput, Prisma.business_partiesUncheckedCreateWithoutPaymentsInput>
   connectOrCreate?: Prisma.business_partiesCreateOrConnectWithoutPaymentsInput
@@ -1137,6 +1160,7 @@ export type business_partiesCreateWithoutDocumentsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -1178,6 +1202,7 @@ export type business_partiesUncheckedCreateWithoutDocumentsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1235,6 +1260,7 @@ export type business_partiesUpdateWithoutDocumentsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -1276,6 +1302,7 @@ export type business_partiesUncheckedUpdateWithoutDocumentsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1317,6 +1344,7 @@ export type business_partiesCreateWithoutEmployeesInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -1358,6 +1386,7 @@ export type business_partiesUncheckedCreateWithoutEmployeesInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1415,6 +1444,7 @@ export type business_partiesUpdateWithoutEmployeesInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -1456,6 +1486,7 @@ export type business_partiesUncheckedUpdateWithoutEmployeesInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1497,6 +1528,7 @@ export type business_partiesCreateWithoutPartnersInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -1538,6 +1570,7 @@ export type business_partiesUncheckedCreateWithoutPartnersInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1595,6 +1628,7 @@ export type business_partiesUpdateWithoutPartnersInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -1636,6 +1670,7 @@ export type business_partiesUncheckedUpdateWithoutPartnersInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1678,6 +1713,7 @@ export type business_partiesCreateWithoutWithholding_profilesInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -1719,6 +1755,7 @@ export type business_partiesUncheckedCreateWithoutWithholding_profilesInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1776,6 +1813,7 @@ export type business_partiesUpdateWithoutWithholding_profilesInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -1817,6 +1855,7 @@ export type business_partiesUncheckedUpdateWithoutWithholding_profilesInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -1858,6 +1897,7 @@ export type business_partiesCreateWithoutIibb_registrationsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -1899,6 +1939,7 @@ export type business_partiesUncheckedCreateWithoutIibb_registrationsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -1956,6 +1997,7 @@ export type business_partiesUpdateWithoutIibb_registrationsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -1997,6 +2039,7 @@ export type business_partiesUncheckedUpdateWithoutIibb_registrationsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -2038,6 +2081,7 @@ export type business_partiesCreateWithoutWithholdingsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -2079,6 +2123,7 @@ export type business_partiesUncheckedCreateWithoutWithholdingsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -2136,6 +2181,7 @@ export type business_partiesUpdateWithoutWithholdingsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -2177,6 +2223,7 @@ export type business_partiesUncheckedUpdateWithoutWithholdingsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -2218,6 +2265,7 @@ export type business_partiesCreateWithoutHr_accountsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
@@ -2259,6 +2307,7 @@ export type business_partiesUncheckedCreateWithoutHr_accountsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -2316,6 +2365,7 @@ export type business_partiesUpdateWithoutHr_accountsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
@@ -2357,6 +2407,7 @@ export type business_partiesUncheckedUpdateWithoutHr_accountsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -2398,6 +2449,7 @@ export type business_partiesCreateWithoutHr_valesInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
@@ -2439,6 +2491,7 @@ export type business_partiesUncheckedCreateWithoutHr_valesInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -2496,6 +2549,7 @@ export type business_partiesUpdateWithoutHr_valesInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
@@ -2537,6 +2591,7 @@ export type business_partiesUncheckedUpdateWithoutHr_valesInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -2578,6 +2633,7 @@ export type business_partiesCreateWithoutInternational_operationsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -2619,6 +2675,7 @@ export type business_partiesUncheckedCreateWithoutInternational_operationsInput 
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -2676,6 +2733,7 @@ export type business_partiesUpdateWithoutInternational_operationsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -2717,6 +2775,7 @@ export type business_partiesUncheckedUpdateWithoutInternational_operationsInput 
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -2757,6 +2816,7 @@ export type business_partiesCreateWithoutDelivery_notesInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -2798,6 +2858,7 @@ export type business_partiesUncheckedCreateWithoutDelivery_notesInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -2855,6 +2916,7 @@ export type business_partiesUpdateWithoutDelivery_notesInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -2896,6 +2958,7 @@ export type business_partiesUncheckedUpdateWithoutDelivery_notesInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -2937,6 +3000,7 @@ export type business_partiesCreateWithoutDispatch_ordersInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -2978,6 +3042,7 @@ export type business_partiesUncheckedCreateWithoutDispatch_ordersInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -3035,6 +3100,7 @@ export type business_partiesUpdateWithoutDispatch_ordersInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -3076,6 +3142,7 @@ export type business_partiesUncheckedUpdateWithoutDispatch_ordersInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -3118,6 +3185,7 @@ export type business_partiesCreateWithoutMaintenance_orders_as_supplierInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -3159,6 +3227,7 @@ export type business_partiesUncheckedCreateWithoutMaintenance_orders_as_supplier
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -3216,6 +3285,7 @@ export type business_partiesUpdateWithoutMaintenance_orders_as_supplierInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -3257,6 +3327,7 @@ export type business_partiesUncheckedUpdateWithoutMaintenance_orders_as_supplier
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -3298,6 +3369,7 @@ export type business_partiesCreateWithoutMaintenance_services_as_supplierInput =
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -3339,6 +3411,7 @@ export type business_partiesUncheckedCreateWithoutMaintenance_services_as_suppli
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -3396,6 +3469,7 @@ export type business_partiesUpdateWithoutMaintenance_services_as_supplierInput =
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -3437,6 +3511,7 @@ export type business_partiesUncheckedUpdateWithoutMaintenance_services_as_suppli
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -3478,6 +3553,7 @@ export type business_partiesCreateWithoutTires_as_supplierInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -3519,6 +3595,7 @@ export type business_partiesUncheckedCreateWithoutTires_as_supplierInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -3576,6 +3653,7 @@ export type business_partiesUpdateWithoutTires_as_supplierInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -3617,6 +3695,7 @@ export type business_partiesUncheckedUpdateWithoutTires_as_supplierInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -3657,6 +3736,7 @@ export type business_partiesCreateWithoutParty_bank_accountsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -3698,6 +3778,7 @@ export type business_partiesUncheckedCreateWithoutParty_bank_accountsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -3755,6 +3836,7 @@ export type business_partiesUpdateWithoutParty_bank_accountsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -3796,6 +3878,7 @@ export type business_partiesUncheckedUpdateWithoutParty_bank_accountsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -3837,6 +3920,7 @@ export type business_partiesCreateWithoutParty_locationsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -3878,6 +3962,7 @@ export type business_partiesUncheckedCreateWithoutParty_locationsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -3935,6 +4020,7 @@ export type business_partiesUpdateWithoutParty_locationsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -3976,6 +4062,7 @@ export type business_partiesUncheckedUpdateWithoutParty_locationsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -4017,6 +4104,7 @@ export type business_partiesCreateWithoutParty_contactsInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -4058,6 +4146,7 @@ export type business_partiesUncheckedCreateWithoutParty_contactsInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -4115,6 +4204,7 @@ export type business_partiesUpdateWithoutParty_contactsInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -4156,6 +4246,7 @@ export type business_partiesUncheckedUpdateWithoutParty_contactsInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -4198,6 +4289,7 @@ export type business_partiesCreateWithoutProduct_suppliersInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
@@ -4239,6 +4331,7 @@ export type business_partiesUncheckedCreateWithoutProduct_suppliersInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -4296,6 +4389,7 @@ export type business_partiesUpdateWithoutProduct_suppliersInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
@@ -4337,6 +4431,7 @@ export type business_partiesUncheckedUpdateWithoutProduct_suppliersInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -4378,6 +4473,7 @@ export type business_partiesCreateWithoutProduct_party_pricesInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -4419,6 +4515,7 @@ export type business_partiesUncheckedCreateWithoutProduct_party_pricesInput = {
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -4476,6 +4573,7 @@ export type business_partiesUpdateWithoutProduct_party_pricesInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -4517,6 +4615,7 @@ export type business_partiesUncheckedUpdateWithoutProduct_party_pricesInput = {
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -4558,6 +4657,7 @@ export type business_partiesCreateWithoutProduct_party_price_historyInput = {
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -4599,6 +4699,7 @@ export type business_partiesUncheckedCreateWithoutProduct_party_price_historyInp
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -4656,6 +4757,7 @@ export type business_partiesUpdateWithoutProduct_party_price_historyInput = {
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -4697,10 +4799,195 @@ export type business_partiesUncheckedUpdateWithoutProduct_party_price_historyInp
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUncheckedUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesCreateWithoutCommercial_operationsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesUncheckedCreateWithoutCommercial_operationsInput = {
+  id?: string
+  type: $Enums.PartyType
+  name: string
+  business_names?: string | null
+  document_type?: string | null
+  email?: string | null
+  tax_id?: string | null
+  vat_condition?: string | null
+  exemption_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutCustomersInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_contacts?: Prisma.party_contactsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_locations?: Prisma.party_locationsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  employees?: Prisma.employeesUncheckedCreateNestedManyWithoutPartyInput
+  partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
+  payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
+  credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
+  current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
+  hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutBusiness_partiesInput
+  international_operations?: Prisma.international_operationsUncheckedCreateNestedManyWithoutPrimary_supplierInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedCreateNestedManyWithoutBusiness_partyInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  withholdings?: Prisma.withholdingsUncheckedCreateNestedManyWithoutBusiness_partyInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUncheckedCreateNestedManyWithoutSupplierInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutSupplierInput
+  tires_as_supplier?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_supplierInput
+}
+
+export type business_partiesCreateOrConnectWithoutCommercial_operationsInput = {
+  where: Prisma.business_partiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutCommercial_operationsInput, Prisma.business_partiesUncheckedCreateWithoutCommercial_operationsInput>
+}
+
+export type business_partiesUpsertWithoutCommercial_operationsInput = {
+  update: Prisma.XOR<Prisma.business_partiesUpdateWithoutCommercial_operationsInput, Prisma.business_partiesUncheckedUpdateWithoutCommercial_operationsInput>
+  create: Prisma.XOR<Prisma.business_partiesCreateWithoutCommercial_operationsInput, Prisma.business_partiesUncheckedCreateWithoutCommercial_operationsInput>
+  where?: Prisma.business_partiesWhereInput
+}
+
+export type business_partiesUpdateToOneWithWhereWithoutCommercial_operationsInput = {
+  where?: Prisma.business_partiesWhereInput
+  data: Prisma.XOR<Prisma.business_partiesUpdateWithoutCommercial_operationsInput, Prisma.business_partiesUncheckedUpdateWithoutCommercial_operationsInput>
+}
+
+export type business_partiesUpdateWithoutCommercial_operationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutBusiness_partiesNestedInput
+  international_operations?: Prisma.international_operationsUpdateManyWithoutPrimary_supplierNestedInput
+  withholding_profiles?: Prisma.business_party_withholding_profilesUpdateManyWithoutBusiness_partyNestedInput
+  iibb_registrations?: Prisma.business_party_iibb_registrationsUpdateManyWithoutBusiness_partyNestedInput
+  withholdings?: Prisma.withholdingsUpdateManyWithoutBusiness_partyNestedInput
+  maintenance_orders_as_supplier?: Prisma.maintenance_ordersUpdateManyWithoutSupplierNestedInput
+  maintenance_services_as_supplier?: Prisma.maintenance_servicesUpdateManyWithoutSupplierNestedInput
+  tires_as_supplier?: Prisma.tiresUpdateManyWithoutPurchase_supplierNestedInput
+}
+
+export type business_partiesUncheckedUpdateWithoutCommercial_operationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPartyTypeFieldUpdateOperationsInput | $Enums.PartyType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  business_names?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exemption_rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutCustomersNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_contacts?: Prisma.party_contactsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_locations?: Prisma.party_locationsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  party_bank_accounts?: Prisma.party_bank_accountsUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  employees?: Prisma.employeesUncheckedUpdateManyWithoutPartyNestedInput
+  partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
+  payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
+  credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
+  current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutBusiness_partiesNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutBusiness_partiesNestedInput
   international_operations?: Prisma.international_operationsUncheckedUpdateManyWithoutPrimary_supplierNestedInput
   withholding_profiles?: Prisma.business_party_withholding_profilesUncheckedUpdateManyWithoutBusiness_partyNestedInput
   iibb_registrations?: Prisma.business_party_iibb_registrationsUncheckedUpdateManyWithoutBusiness_partyNestedInput
@@ -4737,6 +5024,7 @@ export type business_partiesCreateWithoutPaymentsInput = {
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -4778,6 +5066,7 @@ export type business_partiesUncheckedCreateWithoutPaymentsInput = {
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -4835,6 +5124,7 @@ export type business_partiesUpdateWithoutPaymentsInput = {
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -4876,6 +5166,7 @@ export type business_partiesUncheckedUpdateWithoutPaymentsInput = {
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -4917,6 +5208,7 @@ export type business_partiesCreateWithoutCredit_cardsInput = {
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -4958,6 +5250,7 @@ export type business_partiesUncheckedCreateWithoutCredit_cardsInput = {
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   current_accounts?: Prisma.current_accountsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -5015,6 +5308,7 @@ export type business_partiesUpdateWithoutCredit_cardsInput = {
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -5056,6 +5350,7 @@ export type business_partiesUncheckedUpdateWithoutCredit_cardsInput = {
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   current_accounts?: Prisma.current_accountsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -5097,6 +5392,7 @@ export type business_partiesCreateWithoutCurrent_accountsInput = {
   partners?: Prisma.partnersCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutBusiness_partiesInput
@@ -5138,6 +5434,7 @@ export type business_partiesUncheckedCreateWithoutCurrent_accountsInput = {
   partners?: Prisma.partnersUncheckedCreateNestedManyWithoutPartyInput
   payments?: Prisma.paymentsUncheckedCreateNestedManyWithoutPartyInput
   credit_cards?: Prisma.credit_cardsUncheckedCreateNestedManyWithoutPartyInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedCreateNestedManyWithoutPartyInput
   hr_accounts?: Prisma.hr_accountsUncheckedCreateNestedManyWithoutPartyInput
   hr_vales?: Prisma.hr_valesUncheckedCreateNestedManyWithoutPartyInput
   product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutBusiness_partiesInput
@@ -5195,6 +5492,7 @@ export type business_partiesUpdateWithoutCurrent_accountsInput = {
   partners?: Prisma.partnersUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUpdateManyWithoutBusiness_partiesNestedInput
@@ -5236,6 +5534,7 @@ export type business_partiesUncheckedUpdateWithoutCurrent_accountsInput = {
   partners?: Prisma.partnersUncheckedUpdateManyWithoutPartyNestedInput
   payments?: Prisma.paymentsUncheckedUpdateManyWithoutPartyNestedInput
   credit_cards?: Prisma.credit_cardsUncheckedUpdateManyWithoutPartyNestedInput
+  commercial_operations?: Prisma.commercial_operationsUncheckedUpdateManyWithoutPartyNestedInput
   hr_accounts?: Prisma.hr_accountsUncheckedUpdateManyWithoutPartyNestedInput
   hr_vales?: Prisma.hr_valesUncheckedUpdateManyWithoutPartyNestedInput
   product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutBusiness_partiesNestedInput
@@ -5267,6 +5566,7 @@ export type Business_partiesCountOutputType = {
   payments: number
   credit_cards: number
   current_accounts: number
+  commercial_operations: number
   hr_accounts: number
   hr_vales: number
   product_suppliers: number
@@ -5293,6 +5593,7 @@ export type Business_partiesCountOutputTypeSelect<ExtArgs extends runtime.Types.
   payments?: boolean | Business_partiesCountOutputTypeCountPaymentsArgs
   credit_cards?: boolean | Business_partiesCountOutputTypeCountCredit_cardsArgs
   current_accounts?: boolean | Business_partiesCountOutputTypeCountCurrent_accountsArgs
+  commercial_operations?: boolean | Business_partiesCountOutputTypeCountCommercial_operationsArgs
   hr_accounts?: boolean | Business_partiesCountOutputTypeCountHr_accountsArgs
   hr_vales?: boolean | Business_partiesCountOutputTypeCountHr_valesArgs
   product_suppliers?: boolean | Business_partiesCountOutputTypeCountProduct_suppliersArgs
@@ -5392,6 +5693,13 @@ export type Business_partiesCountOutputTypeCountCredit_cardsArgs<ExtArgs extends
  */
 export type Business_partiesCountOutputTypeCountCurrent_accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.current_accountsWhereInput
+}
+
+/**
+ * Business_partiesCountOutputType without action
+ */
+export type Business_partiesCountOutputTypeCountCommercial_operationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.commercial_operationsWhereInput
 }
 
 /**
@@ -5507,6 +5815,7 @@ export type business_partiesSelect<ExtArgs extends runtime.Types.Extensions.Inte
   payments?: boolean | Prisma.business_parties$paymentsArgs<ExtArgs>
   credit_cards?: boolean | Prisma.business_parties$credit_cardsArgs<ExtArgs>
   current_accounts?: boolean | Prisma.business_parties$current_accountsArgs<ExtArgs>
+  commercial_operations?: boolean | Prisma.business_parties$commercial_operationsArgs<ExtArgs>
   hr_accounts?: boolean | Prisma.business_parties$hr_accountsArgs<ExtArgs>
   hr_vales?: boolean | Prisma.business_parties$hr_valesArgs<ExtArgs>
   product_suppliers?: boolean | Prisma.business_parties$product_suppliersArgs<ExtArgs>
@@ -5592,6 +5901,7 @@ export type business_partiesInclude<ExtArgs extends runtime.Types.Extensions.Int
   payments?: boolean | Prisma.business_parties$paymentsArgs<ExtArgs>
   credit_cards?: boolean | Prisma.business_parties$credit_cardsArgs<ExtArgs>
   current_accounts?: boolean | Prisma.business_parties$current_accountsArgs<ExtArgs>
+  commercial_operations?: boolean | Prisma.business_parties$commercial_operationsArgs<ExtArgs>
   hr_accounts?: boolean | Prisma.business_parties$hr_accountsArgs<ExtArgs>
   hr_vales?: boolean | Prisma.business_parties$hr_valesArgs<ExtArgs>
   product_suppliers?: boolean | Prisma.business_parties$product_suppliersArgs<ExtArgs>
@@ -5623,6 +5933,7 @@ export type $business_partiesPayload<ExtArgs extends runtime.Types.Extensions.In
     payments: Prisma.$paymentsPayload<ExtArgs>[]
     credit_cards: Prisma.$credit_cardsPayload<ExtArgs>[]
     current_accounts: Prisma.$current_accountsPayload<ExtArgs>[]
+    commercial_operations: Prisma.$commercial_operationsPayload<ExtArgs>[]
     hr_accounts: Prisma.$hr_accountsPayload<ExtArgs>[]
     hr_vales: Prisma.$hr_valesPayload<ExtArgs>[]
     product_suppliers: Prisma.$product_suppliersPayload<ExtArgs>[]
@@ -6058,6 +6369,7 @@ export interface Prisma__business_partiesClient<T, Null = never, ExtArgs extends
   payments<T extends Prisma.business_parties$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   credit_cards<T extends Prisma.business_parties$credit_cardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$credit_cardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$credit_cardsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   current_accounts<T extends Prisma.business_parties$current_accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$current_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$current_accountsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commercial_operations<T extends Prisma.business_parties$commercial_operationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$commercial_operationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$commercial_operationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hr_accounts<T extends Prisma.business_parties$hr_accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$hr_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$hr_accountsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hr_vales<T extends Prisma.business_parties$hr_valesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$hr_valesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$hr_valesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_suppliers<T extends Prisma.business_parties$product_suppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.business_parties$product_suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_suppliersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6769,6 +7081,30 @@ export type business_parties$current_accountsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.Current_accountsScalarFieldEnum | Prisma.Current_accountsScalarFieldEnum[]
+}
+
+/**
+ * business_parties.commercial_operations
+ */
+export type business_parties$commercial_operationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the commercial_operations
+   */
+  select?: Prisma.commercial_operationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the commercial_operations
+   */
+  omit?: Prisma.commercial_operationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.commercial_operationsInclude<ExtArgs> | null
+  where?: Prisma.commercial_operationsWhereInput
+  orderBy?: Prisma.commercial_operationsOrderByWithRelationInput | Prisma.commercial_operationsOrderByWithRelationInput[]
+  cursor?: Prisma.commercial_operationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Commercial_operationsScalarFieldEnum | Prisma.Commercial_operationsScalarFieldEnum[]
 }
 
 /**

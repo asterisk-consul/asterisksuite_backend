@@ -171,6 +171,7 @@ model documents {
   document_sequence_id         String?                             @db.Uuid
   party_id                     String?                             @db.Uuid
   parent_document_id           String?                             @db.Uuid
+  commercial_operation_id      String?                             @db.Uuid
   warehouse_id                 String?                             @db.Uuid
   fiscal_jurisdiction_id       String?                             @db.Uuid
   number                       Int
@@ -214,6 +215,8 @@ model documents {
   payment_documents            payment_documents[]
   parent_document              documents?                          @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   child_documents              documents[]                         @relation("DocumentChain")
+  commercial_operation         commercial_operations?              @relation("CommercialOperationDocuments", fields: [commercial_operation_id], references: [id], onDelete: SetNull)
+  rooted_commercial_operation  commercial_operations?              @relation("CommercialOperationRoot")
   dispatch_order               dispatch_orders?                    @relation("DispatchDocuments", fields: [dispatch_order_id], references: [id], onDelete: SetNull)
   source_dispatch_orders       dispatch_orders[]                   @relation("DispatchSourceDocument")
   presupuesto_doc              presupuesto_documents?
@@ -229,6 +232,7 @@ model documents {
   @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
   @@index([assigned_to])
+  @@index([commercial_operation_id])
   @@index([warehouse_id])
   @@schema("tenant")
 }

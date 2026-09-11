@@ -172,6 +172,8 @@ export const ModelName = {
   business_role_permissions: 'business_role_permissions',
   business_user_roles: 'business_user_roles',
   user_permission_overrides: 'user_permission_overrides',
+  sales_flow_settings: 'sales_flow_settings',
+  commercial_operations: 'commercial_operations',
   tax_categories: 'tax_categories',
   tax_category_taxes: 'tax_category_taxes',
   product_taxes: 'product_taxes',
@@ -565,6 +567,7 @@ export const DocumentsScalarFieldEnum = {
   document_sequence_id: 'document_sequence_id',
   party_id: 'party_id',
   parent_document_id: 'parent_document_id',
+  commercial_operation_id: 'commercial_operation_id',
   warehouse_id: 'warehouse_id',
   fiscal_jurisdiction_id: 'fiscal_jurisdiction_id',
   number: 'number',
@@ -2531,6 +2534,53 @@ export const User_permission_overridesScalarFieldEnum = {
 } as const
 
 export type User_permission_overridesScalarFieldEnum = (typeof User_permission_overridesScalarFieldEnum)[keyof typeof User_permission_overridesScalarFieldEnum]
+
+
+export const Sales_flow_settingsScalarFieldEnum = {
+  id: 'id',
+  settings_key: 'settings_key',
+  accounting_basis: 'accounting_basis',
+  payment_document_basis: 'payment_document_basis',
+  require_payment_for_delivery: 'require_payment_for_delivery',
+  delivery_payment_percentage: 'delivery_payment_percentage',
+  require_invoice_for_delivery: 'require_invoice_for_delivery',
+  auto_create_delivery_note: 'auto_create_delivery_note',
+  allow_partial_delivery: 'allow_partial_delivery',
+  active_from: 'active_from',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Sales_flow_settingsScalarFieldEnum = (typeof Sales_flow_settingsScalarFieldEnum)[keyof typeof Sales_flow_settingsScalarFieldEnum]
+
+
+export const Commercial_operationsScalarFieldEnum = {
+  id: 'id',
+  root_document_id: 'root_document_id',
+  party_id: 'party_id',
+  currency_code: 'currency_code',
+  accounting_basis: 'accounting_basis',
+  payment_document_basis: 'payment_document_basis',
+  require_payment_for_delivery: 'require_payment_for_delivery',
+  delivery_payment_percentage: 'delivery_payment_percentage',
+  require_invoice_for_delivery: 'require_invoice_for_delivery',
+  auto_create_delivery_note: 'auto_create_delivery_note',
+  allow_partial_delivery: 'allow_partial_delivery',
+  ordered_total: 'ordered_total',
+  invoiced_total: 'invoiced_total',
+  paid_total: 'paid_total',
+  delivery_status: 'delivery_status',
+  released_at: 'released_at',
+  delivery_note_id: 'delivery_note_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Commercial_operationsScalarFieldEnum = (typeof Commercial_operationsScalarFieldEnum)[keyof typeof Commercial_operationsScalarFieldEnum]
 
 
 export const Tax_categoriesScalarFieldEnum = {

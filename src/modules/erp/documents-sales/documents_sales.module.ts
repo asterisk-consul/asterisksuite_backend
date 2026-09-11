@@ -13,15 +13,18 @@ import { TaxEngineModule } from '../tax-engine/tax-engine.module';
 import { CurrenciesModule } from '../currencies/currencies.module';
 import { CommonErpModule } from '@/common/common-erp.module';
 import { MySalesModule } from './my-sales/my-sales.module';
+import { SalesCommercialFlowService } from './sales-commercial-flow.service';
+import { SalesCommercialFlowController } from './sales-commercial-flow.controller';
 
 @Module({
   imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule],
-  controllers: [DocumentsSalesController, DocumentAssignmentController],
+  controllers: [DocumentsSalesController, DocumentAssignmentController, SalesCommercialFlowController],
   providers: [
     DocumentsSalesService,
     DocumentsSalesItemsService,
     DocumentsSalesTotalsService,
+    SalesCommercialFlowService,
   ],
-  exports: [DocumentsSalesService, MySalesModule],
+  exports: [DocumentsSalesService, SalesCommercialFlowService, MySalesModule],
 })
 export class DocumentsSalesModule {}

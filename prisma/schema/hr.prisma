@@ -128,7 +128,7 @@ model hr_vales {
 model hr_vale_commission_details {
   id                String   @id @default(uuid()) @db.Uuid
   hr_vale_id        String   @db.Uuid
-  document_id       String   @unique @db.Uuid
+  document_id       String   @db.Uuid
   seller_id         String?  @db.Uuid
   subtotal          Decimal  @db.Decimal(15, 2)
   commission_rate   Decimal  @db.Decimal(5, 2)
@@ -141,5 +141,6 @@ model hr_vale_commission_details {
   document documents @relation(fields: [document_id], references: [id], onDelete: NoAction)
 
   @@index([hr_vale_id])
+  @@index([document_id])
   @@schema("tenant")
 }

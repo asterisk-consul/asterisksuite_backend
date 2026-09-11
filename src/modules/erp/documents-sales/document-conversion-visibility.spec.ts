@@ -38,7 +38,7 @@ describe('Creator visibility after sales document conversion', () => {
     service = new DocumentsSalesService(
       { getClientForCurrentContext: () => prisma } as any,
       { calculate: () => ({ subtotal: 20, exempt_amount: 0, taxable_base: 20, total_taxes: 0, total: 20 }) } as any,
-      {} as any, {} as any, {} as any, {} as any, {} as any, {} as any,
+      {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any,
     );
     jest.spyOn(service, 'findOne').mockImplementation(async id => id === 'source' ? source : saved);
     jest.spyOn(service as any, 'resolveSequence').mockResolvedValue(null);
