@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, Request, R
 import type { Request as ExpressRequest } from 'express';
 import { HrService } from './hr.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
+import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
@@ -45,8 +46,8 @@ export class HrController {
   }
 
   @Patch('vales/:id/confirm')
-  confirmVale(@Param('id') id: string, @Request() req: any) {
-    return this.service.confirmVale(id, req.user.id);
+  confirmVale(@Param('id') id: string, @Body() dto: ConfirmHrValeDto, @Request() req: any) {
+    return this.service.confirmVale(id, req.user.id, dto);
   }
 
   @Patch('vales/:id/cancel')
@@ -76,6 +77,11 @@ export class HrController {
   // ══════════════════════════════════════════════════════════
   // REPORTE DE SOCIO
   // ══════════════════════════════════════════════════════════
+
+  @Get('partner-report-options')
+  getPartnerReportOptions() {
+    return this.service.getPartnerReportOptions();
+  }
 
   @Get('partner-report/:partyId')
   getPartnerReport(
