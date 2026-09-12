@@ -1,6 +1,7 @@
 import { Transformer } from '../../core/interfaces';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { FacturaVentaRaw } from '../schemas/sales.schema';
+import type { business_parties, products, taxes, document_types } from '../../../generated/prisma/client';
 
 function extractNumber(comprobante: string): number {
   const parts = comprobante.split('-');
@@ -16,6 +17,7 @@ export type VentasTransformado = {
   status: number;
   subtotal: number;
   exempt_amount: number;
+  taxable_base: number;
   total_taxes: number;
   total: number;
   document_taxes: {
@@ -31,11 +33,13 @@ export type VentasTransformado = {
   }[];
 };
 
-export class VentasTransformer implements Transformer<
-  FacturaVentaRaw,
-  VentasTransformado
-> {
-  constructor(private prisma: PrismaService) {}
+export class VentasTransformer implements Transformer<FacturaVentaRaw, VentasTransformado> {
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async transform(documents: FacturaVentaRaw[]): Promise<VentasTransformado[]> {
     const resultado: VentasTransformado[] = [];
@@ -47,14 +51,25 @@ export class VentasTransformer implements Transformer<
       this.prisma.document_types.findMany(),
     ]);
 
-    const partyMap = new Map(parties.map((p) => [p.name, p]));
-    const productMap = new Map(products.map((p) => [p.name, p]));
-    const taxMap = new Map(taxes.map((t) => [t.code, t]));
-    const documentTypeMap = new Map(documentTypes.map((dt) => [dt.code, dt]));
+    const partyMap = new Map<string, business_parties>(parties.map((p) => [p.name, p]));
 
-    const documentType = documentTypeMap.get('VEN');
+    const productMap = new Map<string, products>(products.map((p) => [p.name, p]));
+
+    const taxMap = new Map<string, taxes>(taxes.map((t) => [t.code, t]));
+
+    const documentTypeMap = new Map<string, document_types>(documentTypes.map((dt) => [dt.code, dt]));
+    
+    // Buscar tipo de documento por categoría INVOICE o por código FAV
+    let documentType = documentTypes.find(dt => dt.category === 'INVOICE' && dt.direction === 1);
     if (!documentType) {
-      throw new Error('Tipo de documento "FAV" no encontrado en la BD');
+      documentType = documentTypeMap.get('FAV');
+    }
+    if (!documentType) {
+      // Buscar cualquier tipo de venta
+      documentType = documentTypes.find(dt => dt.direction === 1);
+    }
+    if (!documentType) {
+      throw new Error('No se encontró un tipo de documento de venta en la BD');
     }
 
     // Para manejar refs duplicadas (ej: A-00099-31012026 con múltiples filas)
@@ -71,9 +86,7 @@ export class VentasTransformer implements Transformer<
 
       const product = productMap.get(factura.Concepto);
       if (!product) {
-        console.warn(
-          `⚠️  Producto no encontrado: "${factura.Concepto}" — se omite`,
-        );
+        console.warn(`⚠️  Producto no encontrado: "${factura.Concepto}" — se omite`);
         continue;
       }
 
@@ -122,6 +135,7 @@ export class VentasTransformer implements Transformer<
         status: 1,
         subtotal: factura.Imp_gravado,
         exempt_amount: factura.Imp_Excento,
+        taxable_base: factura.Imp_gravado,
         total_taxes: totalTaxes,
         total: factura.Imp_total,
 

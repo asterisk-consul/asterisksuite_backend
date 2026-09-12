@@ -6,7 +6,12 @@ import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class DriversService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async findAll() {
     return this.prisma.drivers.findMany({

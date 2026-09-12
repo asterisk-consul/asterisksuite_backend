@@ -1,0 +1,204 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@cashBoxId = c2ef3f0a-2b1b-4579-af51-a6f744ebaea8
+@cashBoxIdChica = e7bbbf97-4784-4791-bebc-fa3f4ce24d47
+
+### =========================================================
+### CREATE CASH BOX - CAJA FIJA
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-boxes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "name": "Caja Principal",
+  "type": "MAIN",
+  "opening_balance": 100000,
+  "is_main": true
+}
+
+###
+
+### =========================================================
+### CREATE CASH BOX - CAJA CHICA
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-boxes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "name": "Caja Chica Oficina",
+  "type": "FIXED",
+  "opening_balance": 50000,
+  "max_limit": 200000
+}
+
+###
+
+### =========================================================
+### CREATE CASH BOX - REGISTRADORA
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-boxes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "name": "Registradora SUCURSAL 1",
+  "type": "REGISTER"
+}
+
+###
+
+### =========================================================
+### GET ALL CASH BOXES
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-boxes
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET MAIN CASH BOX
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-boxes/main
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE CASH BOX
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### UPDATE CASH BOX
+### =========================================================
+
+PATCH {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "max_limit": 300000
+}
+
+###
+
+### =========================================================
+### GET BALANCES
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/balances
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### OPEN SESSION
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/open
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "opening_balance": 100000
+}
+
+###
+
+### =========================================================
+### GET CURRENT SESSION
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/session
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### CLOSE SESSION
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/close
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "actual_balance": 95000
+}
+
+###
+
+### =========================================================
+### FORCE CLOSE SESSION
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/force-close
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "actual_balance": 90000,
+  "reason": "Sesión olvidada - cierre automático"
+}
+
+###
+
+### =========================================================
+### SESSION HISTORY
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}/sessions
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### DELETE CASH BOX (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/logistica/cash-boxes/{{cashBoxId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

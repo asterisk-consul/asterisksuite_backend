@@ -2,6 +2,12 @@ import { Transformer } from '../../core/interfaces';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotaRaw } from '../schemas/notas.schema';
 import { ComprasTransformado } from './compras.transformer';
+import type {
+  business_parties,
+  products,
+  taxes,
+  document_types,
+} from '../../../generated/prisma/client';
 
 function extractNumber(comprobante: string): number {
   const match = comprobante.match(/\d+$/);
@@ -13,9 +19,14 @@ export class NotaTransformer implements Transformer<
   ComprasTransformado
 > {
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private documentTypeCode: string, // 'NC' o 'ND'
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async transform(documents: NotaRaw[]): Promise<ComprasTransformado[]> {
     const resultado: ComprasTransformado[] = [];
@@ -27,12 +38,27 @@ export class NotaTransformer implements Transformer<
       this.prisma.document_types.findMany(),
     ]);
 
-    const partyMap = new Map(parties.map((p) => [p.name, p]));
-    const productMap = new Map(products.map((p) => [p.name, p]));
-    const taxMap = new Map(taxes.map((t) => [t.code, t]));
-    const documentTypeMap = new Map(documentTypes.map((dt) => [dt.code, dt]));
+    const partyMap = new Map<string, business_parties>(
+      parties.map((p) => [p.name, p]),
+    );
 
-    const documentType = documentTypeMap.get(this.documentTypeCode);
+    const productMap = new Map<string, products>(
+      products.map((p) => [p.name, p]),
+    );
+
+    const taxMap = new Map<string, taxes>(taxes.map((t) => [t.code, t]));
+
+    const documentTypeMap = new Map<string, document_types>(
+      documentTypes.map((dt) => [dt.code, dt]),
+    );
+
+    // Buscar tipo de documento por categoría o por código
+    let documentType = documentTypes.find(dt => dt.code === this.documentTypeCode);
+    if (!documentType) {
+      // Buscar por categoría (NC para notas de crédito, ND para notas de débito)
+      const category = this.documentTypeCode === 'NC' ? 'CREDIT_NOTE' : 'DEBIT_NOTE';
+      documentType = documentTypes.find(dt => dt.category === category);
+    }
     if (!documentType) {
       throw new Error(
         `Tipo de documento "${this.documentTypeCode}" no encontrado en la BD`,
@@ -100,6 +126,7 @@ export class NotaTransformer implements Transformer<
         status: 1,
         subtotal: nota.Imp_Gravado ?? 0,
         exempt_amount: nota.Imp_Exento ?? 0,
+        taxable_base: nota.Imp_Gravado ?? 0,
         total_taxes: totalTaxes,
         total: nota.Imp_Total ?? 0,
 

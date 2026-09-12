@@ -6,39 +6,58 @@ export class TrashService {
   constructor(private readonly prisma: PrismaService) {}
 
   // 🔥 1. TODA LA PAPELERA (multi-tabla)
-  findAllTrash(days?: number, table?: string) {
+  async findAllTrash(days?: number, table?: string) {
     const since = days
       ? new Date(Date.now() - days * 24 * 60 * 60 * 1000)
       : null;
 
     const models = this.getModels();
+    const filteredModels = models.filter((m) => !table || m === table);
 
-    const queries = models
-      .filter((m) => !table || m === table)
-      .map((model) => {
-        return this.prisma[model].findMany({
-          where: {
-            deleted_at: since ? { gte: since } : { not: null },
-          },
-          select: {
-            id: true,
-            deleted_at: true,
-            deleted_by: true,
-          },
-        });
+    const queries = filteredModels.map((model) => {
+      return this.prisma.getClientForCurrentContext()[model].findMany({
+        where: {
+          deleted_at: since ? { gte: since } : { not: null },
+        },
+        select: {
+          id: true,
+          deleted_at: true,
+          deleted_by: true,
+        },
       });
+    });
 
-    return Promise.all(queries).then((results) =>
-      results.flat().map((r) => ({
-        ...r,
-        table: table || 'mixed',
+    const results = await Promise.all(queries);
+    const items = results.flatMap((result, index) =>
+      result.map((r) => ({
+        id: r.id,
+        table: filteredModels[index],
+        deletedAt: r.deleted_at?.toISOString() ?? null,
+        deletedBy: r.deleted_by ?? null,
       })),
     );
+
+    const userIds = [...new Set(items.map((i) => i.deletedBy).filter(Boolean))] as string[];
+
+    let userMap = new Map<string, string>();
+    if (userIds.length > 0) {
+      const publicPrisma = this.prisma.getDefaultClient();
+      const users = await publicPrisma.users.findMany({
+        where: { id: { in: userIds } },
+        select: { id: true, name: true },
+      });
+      userMap = new Map(users.map((u) => [u.id, u.name]));
+    }
+
+    return items.map((item) => ({
+      ...item,
+      deletedByName: item.deletedBy ? (userMap.get(item.deletedBy) ?? null) : null,
+    }));
   }
 
   // 🗑️ soft delete
   softDelete(model: string, id: string, userId: string) {
-    return this.prisma[model].update({
+    return this.prisma.getClientForCurrentContext()[model].update({
       where: { id },
       data: {
         deleted_at: new Date(),
@@ -49,7 +68,7 @@ export class TrashService {
 
   // ♻️ restore
   restore(model: string, id: string) {
-    return this.prisma[model].update({
+    return this.prisma.getClientForCurrentContext()[model].update({
       where: { id },
       data: {
         deleted_at: null,
@@ -60,7 +79,7 @@ export class TrashService {
 
   // 🗑️ soft delete BULK
   softDeleteMany(model: string, ids: string[], userId: string) {
-    return this.prisma[model].updateMany({
+    return this.prisma.getClientForCurrentContext()[model].updateMany({
       where: { id: { in: ids } },
       data: {
         deleted_at: new Date(),
@@ -71,7 +90,7 @@ export class TrashService {
 
   // ♻️ restore BULK
   restoreMany(model: string, ids: string[]) {
-    return this.prisma[model].updateMany({
+    return this.prisma.getClientForCurrentContext()[model].updateMany({
       where: { id: { in: ids } },
       data: {
         deleted_at: null,
@@ -82,7 +101,7 @@ export class TrashService {
 
   // 💀 hard delete BULK (elimina físicamente)
   hardDeleteMany(model: string, ids: string[]) {
-    return this.prisma[model].deleteMany({
+    return this.prisma.getClientForCurrentContext()[model].deleteMany({
       where: { id: { in: ids } },
     });
   }
@@ -92,7 +111,6 @@ export class TrashService {
     return [
       'users',
       'business_parties',
-      'cargo_transfers',
       'companies',
       'delivery_notes',
       'drivers',
@@ -125,6 +143,17 @@ export class TrashService {
       'documents',
       'product_taxes',
       'taxes',
+      'product_price',
+      'accounts',
+      'product_attribute_values',
+      'attributes',
+      'tags',
+      'categories',
+      'product_components',
+      'product_variants',
+      'units',
+      'currency_rates',
+      'currencies',
     ];
   }
 }

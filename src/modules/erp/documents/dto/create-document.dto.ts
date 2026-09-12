@@ -1,14 +1,5 @@
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Min,
-  ValidateNested,
-} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsArray, IsDateString, IsNumber, IsOptional, IsString, IsUUID, Min, ValidateNested } from 'class-validator';
 
 export class CreateDocumentItemTaxDto {
   @IsUUID()
@@ -25,6 +16,11 @@ export class CreateDocumentItemDto {
   @IsOptional()
   product_id?: string;
 
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  warehouse_id?: string;
+
   @IsNumber()
   @Min(0)
   quantity!: number;
@@ -32,6 +28,11 @@ export class CreateDocumentItemDto {
   @IsNumber()
   @Min(0)
   unit_price!: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  discount_percentage?: number;
 
   // ✅ ahora opcional (backend lo calcula)
   @IsOptional()
@@ -59,6 +60,13 @@ export class CreateDocumentTaxDto {
 
   @IsNumber()
   tax_amount!: number;
+
+  @IsOptional()
+  manual?: boolean;
+
+  @IsOptional()
+  @IsString()
+  modification_reason?: string;
 }
 
 export class CreateDocumentDto {
@@ -67,7 +75,18 @@ export class CreateDocumentDto {
 
   @IsUUID()
   @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
   party_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  warehouse_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  fiscal_jurisdiction_id?: string;
 
   @IsDateString()
   date!: string;
@@ -78,9 +97,21 @@ export class CreateDocumentDto {
 
   @IsString()
   @IsOptional()
+  currency_code!: string;
+
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  exchange_rate?: number;
+
+  @IsString()
+  @IsOptional()
+  rate_type?: string;
+
+  @IsString()
+  @IsOptional()
   ref?: string;
 
-  // ✅ ahora opcionales (backend los recalcula)
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -104,12 +135,96 @@ export class CreateDocumentDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentItemDto)
-  items!: CreateDocumentItemDto[];
+  @IsOptional()
+  items?: CreateDocumentItemDto[];
 
-  // ✅ opcional (backend los genera)
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentTaxDto)
   @IsOptional()
   taxes?: CreateDocumentTaxDto[];
+
+  // ─── Presupuesto fields ─────────────────────────
+  @IsOptional()
+  @IsDateString()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  validity_date?: string;
+
+  @IsOptional()
+  @IsString()
+  warranty_info?: string;
+
+  @IsOptional()
+  @IsString()
+  exclusions?: string;
+
+  @IsOptional()
+  @IsString()
+  commercial_notes?: string;
+
+  @IsOptional()
+  @IsString()
+  internal_notes?: string;
+
+  @IsOptional()
+  @IsString()
+  terms_and_conditions?: string;
+
+  // ─── Orden de Venta fields ──────────────────────
+  @IsOptional()
+  @IsString()
+  priority?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_address?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_contact?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_phone?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_time?: string;
+
+  @IsOptional()
+  @IsString()
+  delivery_instructions?: string;
+
+  @IsOptional()
+  @IsString()
+  transport_provider?: string;
+
+  @IsOptional()
+  @IsDateString()
+  confirmed_delivery_date?: string;
+
+  @IsOptional()
+  @IsUUID()
+  seller_id?: string;
+
+  @IsOptional()
+  commission_rate?: number;
+
+  @IsOptional()
+  @IsString()
+  commission_base?: string;
+
+  @IsOptional()
+  @IsUUID()
+  buyer_id?: string;
+
+  // ─── Parent document (OV/OC) ──────────────────────
+  @IsOptional()
+  @IsUUID()
+  parent_document_id?: string;
+
+  // ─── Punto de venta (secuencia) ──────────────────────
+  @IsOptional()
+  @IsUUID()
+  document_sequence_id?: string;
 }

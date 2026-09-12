@@ -190,7 +190,7 @@ export type Product_taxesGroupByOutputType = {
   is_included_in_price: boolean
   active: boolean
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -225,7 +225,7 @@ export type product_taxesWhereInput = {
   is_included_in_price?: Prisma.BoolFilter<"product_taxes"> | boolean
   active?: Prisma.BoolFilter<"product_taxes"> | boolean
   created_at?: Prisma.DateTimeFilter<"product_taxes"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"product_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"product_taxes"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"product_taxes"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"product_taxes"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"product_taxes"> | string | null
@@ -241,7 +241,7 @@ export type product_taxesOrderByWithRelationInput = {
   is_included_in_price?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -261,7 +261,7 @@ export type product_taxesWhereUniqueInput = Prisma.AtLeast<{
   is_included_in_price?: Prisma.BoolFilter<"product_taxes"> | boolean
   active?: Prisma.BoolFilter<"product_taxes"> | boolean
   created_at?: Prisma.DateTimeFilter<"product_taxes"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"product_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"product_taxes"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"product_taxes"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"product_taxes"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"product_taxes"> | string | null
@@ -277,7 +277,7 @@ export type product_taxesOrderByWithAggregationInput = {
   is_included_in_price?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -297,7 +297,7 @@ export type product_taxesScalarWhereWithAggregatesInput = {
   is_included_in_price?: Prisma.BoolWithAggregatesFilter<"product_taxes"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"product_taxes"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"product_taxes"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"product_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"product_taxes"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"product_taxes"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"product_taxes"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"product_taxes"> | string | null
@@ -309,7 +309,7 @@ export type product_taxesCreateInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -325,7 +325,7 @@ export type product_taxesUncheckedCreateInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -337,7 +337,7 @@ export type product_taxesUpdateInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -353,7 +353,7 @@ export type product_taxesUncheckedUpdateInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -367,7 +367,7 @@ export type product_taxesCreateManyInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -379,7 +379,7 @@ export type product_taxesUpdateManyMutationInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -393,7 +393,7 @@ export type product_taxesUncheckedUpdateManyInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -546,7 +546,7 @@ export type product_taxesCreateWithoutProductsInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -560,7 +560,7 @@ export type product_taxesUncheckedCreateWithoutProductsInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -603,7 +603,7 @@ export type product_taxesScalarWhereInput = {
   is_included_in_price?: Prisma.BoolFilter<"product_taxes"> | boolean
   active?: Prisma.BoolFilter<"product_taxes"> | boolean
   created_at?: Prisma.DateTimeFilter<"product_taxes"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"product_taxes"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"product_taxes"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"product_taxes"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"product_taxes"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"product_taxes"> | string | null
@@ -615,7 +615,7 @@ export type product_taxesCreateWithoutTaxesInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -629,7 +629,7 @@ export type product_taxesUncheckedCreateWithoutTaxesInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -668,7 +668,7 @@ export type product_taxesCreateManyProductsInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -680,7 +680,7 @@ export type product_taxesUpdateWithoutProductsInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -694,7 +694,7 @@ export type product_taxesUncheckedUpdateWithoutProductsInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -707,7 +707,7 @@ export type product_taxesUncheckedUpdateManyWithoutProductsInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -720,7 +720,7 @@ export type product_taxesCreateManyTaxesInput = {
   is_included_in_price?: boolean
   active?: boolean
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -732,7 +732,7 @@ export type product_taxesUpdateWithoutTaxesInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -746,7 +746,7 @@ export type product_taxesUncheckedUpdateWithoutTaxesInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -759,7 +759,7 @@ export type product_taxesUncheckedUpdateManyWithoutTaxesInput = {
   is_included_in_price?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -857,7 +857,7 @@ export type $product_taxesPayload<ExtArgs extends runtime.Types.Extensions.Inter
     is_included_in_price: boolean
     active: boolean
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

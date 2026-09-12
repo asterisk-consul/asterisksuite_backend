@@ -11,7 +11,12 @@ import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class VehicleCombinationsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // --------------------------------------------------
   // VALIDAR CONFLICTOS ACTIVOS (tractor, trailer, driver)

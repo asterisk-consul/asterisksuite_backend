@@ -275,48 +275,6 @@ export type picking_resultsMinOrderByAggregateInput = {
   pallet_id?: Prisma.SortOrder
 }
 
-export type picking_resultsCreateNestedManyWithoutPalletsInput = {
-  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
-  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
-  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-}
-
-export type picking_resultsUncheckedCreateNestedManyWithoutPalletsInput = {
-  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
-  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
-  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-}
-
-export type picking_resultsUpdateManyWithoutPalletsNestedInput = {
-  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
-  upsert?: Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput[]
-  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
-  set?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  disconnect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  delete?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  update?: Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput[]
-  updateMany?: Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput[]
-  deleteMany?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
-}
-
-export type picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput = {
-  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
-  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
-  upsert?: Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput[]
-  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
-  set?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  disconnect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  delete?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
-  update?: Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput[]
-  updateMany?: Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput[]
-  deleteMany?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
-}
-
 export type picking_resultsCreateNestedManyWithoutPicking_ordersInput = {
   create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPicking_ordersInput, Prisma.picking_resultsUncheckedCreateWithoutPicking_ordersInput> | Prisma.picking_resultsCreateWithoutPicking_ordersInput[] | Prisma.picking_resultsUncheckedCreateWithoutPicking_ordersInput[]
   connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPicking_ordersInput | Prisma.picking_resultsCreateOrConnectWithoutPicking_ordersInput[]
@@ -359,49 +317,46 @@ export type picking_resultsUncheckedUpdateManyWithoutPicking_ordersNestedInput =
   deleteMany?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
 }
 
-export type picking_resultsCreateWithoutPalletsInput = {
-  id?: string
-  picking_orders: Prisma.picking_ordersCreateNestedOneWithoutPicking_resultsInput
+export type picking_resultsCreateNestedManyWithoutPalletsInput = {
+  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
+  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
+  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
 }
 
-export type picking_resultsUncheckedCreateWithoutPalletsInput = {
-  id?: string
-  picking_order_id: string
+export type picking_resultsUncheckedCreateNestedManyWithoutPalletsInput = {
+  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
+  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
+  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
 }
 
-export type picking_resultsCreateOrConnectWithoutPalletsInput = {
-  where: Prisma.picking_resultsWhereUniqueInput
-  create: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput>
+export type picking_resultsUpdateManyWithoutPalletsNestedInput = {
+  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
+  upsert?: Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput[]
+  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
+  set?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  disconnect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  delete?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  update?: Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput[]
+  updateMany?: Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput[]
+  deleteMany?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
 }
 
-export type picking_resultsCreateManyPalletsInputEnvelope = {
-  data: Prisma.picking_resultsCreateManyPalletsInput | Prisma.picking_resultsCreateManyPalletsInput[]
-  skipDuplicates?: boolean
-}
-
-export type picking_resultsUpsertWithWhereUniqueWithoutPalletsInput = {
-  where: Prisma.picking_resultsWhereUniqueInput
-  update: Prisma.XOR<Prisma.picking_resultsUpdateWithoutPalletsInput, Prisma.picking_resultsUncheckedUpdateWithoutPalletsInput>
-  create: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput>
-}
-
-export type picking_resultsUpdateWithWhereUniqueWithoutPalletsInput = {
-  where: Prisma.picking_resultsWhereUniqueInput
-  data: Prisma.XOR<Prisma.picking_resultsUpdateWithoutPalletsInput, Prisma.picking_resultsUncheckedUpdateWithoutPalletsInput>
-}
-
-export type picking_resultsUpdateManyWithWhereWithoutPalletsInput = {
-  where: Prisma.picking_resultsScalarWhereInput
-  data: Prisma.XOR<Prisma.picking_resultsUpdateManyMutationInput, Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsInput>
-}
-
-export type picking_resultsScalarWhereInput = {
-  AND?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
-  OR?: Prisma.picking_resultsScalarWhereInput[]
-  NOT?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"picking_results"> | string
-  picking_order_id?: Prisma.UuidFilter<"picking_results"> | string
-  pallet_id?: Prisma.UuidFilter<"picking_results"> | string
+export type picking_resultsUncheckedUpdateManyWithoutPalletsNestedInput = {
+  create?: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput> | Prisma.picking_resultsCreateWithoutPalletsInput[] | Prisma.picking_resultsUncheckedCreateWithoutPalletsInput[]
+  connectOrCreate?: Prisma.picking_resultsCreateOrConnectWithoutPalletsInput | Prisma.picking_resultsCreateOrConnectWithoutPalletsInput[]
+  upsert?: Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpsertWithWhereUniqueWithoutPalletsInput[]
+  createMany?: Prisma.picking_resultsCreateManyPalletsInputEnvelope
+  set?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  disconnect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  delete?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  connect?: Prisma.picking_resultsWhereUniqueInput | Prisma.picking_resultsWhereUniqueInput[]
+  update?: Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput | Prisma.picking_resultsUpdateWithWhereUniqueWithoutPalletsInput[]
+  updateMany?: Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput | Prisma.picking_resultsUpdateManyWithWhereWithoutPalletsInput[]
+  deleteMany?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
 }
 
 export type picking_resultsCreateWithoutPicking_ordersInput = {
@@ -440,24 +395,49 @@ export type picking_resultsUpdateManyWithWhereWithoutPicking_ordersInput = {
   data: Prisma.XOR<Prisma.picking_resultsUpdateManyMutationInput, Prisma.picking_resultsUncheckedUpdateManyWithoutPicking_ordersInput>
 }
 
-export type picking_resultsCreateManyPalletsInput = {
+export type picking_resultsScalarWhereInput = {
+  AND?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
+  OR?: Prisma.picking_resultsScalarWhereInput[]
+  NOT?: Prisma.picking_resultsScalarWhereInput | Prisma.picking_resultsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"picking_results"> | string
+  picking_order_id?: Prisma.UuidFilter<"picking_results"> | string
+  pallet_id?: Prisma.UuidFilter<"picking_results"> | string
+}
+
+export type picking_resultsCreateWithoutPalletsInput = {
+  id?: string
+  picking_orders: Prisma.picking_ordersCreateNestedOneWithoutPicking_resultsInput
+}
+
+export type picking_resultsUncheckedCreateWithoutPalletsInput = {
   id?: string
   picking_order_id: string
 }
 
-export type picking_resultsUpdateWithoutPalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  picking_orders?: Prisma.picking_ordersUpdateOneRequiredWithoutPicking_resultsNestedInput
+export type picking_resultsCreateOrConnectWithoutPalletsInput = {
+  where: Prisma.picking_resultsWhereUniqueInput
+  create: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput>
 }
 
-export type picking_resultsUncheckedUpdateWithoutPalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  picking_order_id?: Prisma.StringFieldUpdateOperationsInput | string
+export type picking_resultsCreateManyPalletsInputEnvelope = {
+  data: Prisma.picking_resultsCreateManyPalletsInput | Prisma.picking_resultsCreateManyPalletsInput[]
+  skipDuplicates?: boolean
 }
 
-export type picking_resultsUncheckedUpdateManyWithoutPalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  picking_order_id?: Prisma.StringFieldUpdateOperationsInput | string
+export type picking_resultsUpsertWithWhereUniqueWithoutPalletsInput = {
+  where: Prisma.picking_resultsWhereUniqueInput
+  update: Prisma.XOR<Prisma.picking_resultsUpdateWithoutPalletsInput, Prisma.picking_resultsUncheckedUpdateWithoutPalletsInput>
+  create: Prisma.XOR<Prisma.picking_resultsCreateWithoutPalletsInput, Prisma.picking_resultsUncheckedCreateWithoutPalletsInput>
+}
+
+export type picking_resultsUpdateWithWhereUniqueWithoutPalletsInput = {
+  where: Prisma.picking_resultsWhereUniqueInput
+  data: Prisma.XOR<Prisma.picking_resultsUpdateWithoutPalletsInput, Prisma.picking_resultsUncheckedUpdateWithoutPalletsInput>
+}
+
+export type picking_resultsUpdateManyWithWhereWithoutPalletsInput = {
+  where: Prisma.picking_resultsScalarWhereInput
+  data: Prisma.XOR<Prisma.picking_resultsUpdateManyMutationInput, Prisma.picking_resultsUncheckedUpdateManyWithoutPalletsInput>
 }
 
 export type picking_resultsCreateManyPicking_ordersInput = {
@@ -478,6 +458,26 @@ export type picking_resultsUncheckedUpdateWithoutPicking_ordersInput = {
 export type picking_resultsUncheckedUpdateManyWithoutPicking_ordersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pallet_id?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type picking_resultsCreateManyPalletsInput = {
+  id?: string
+  picking_order_id: string
+}
+
+export type picking_resultsUpdateWithoutPalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  picking_orders?: Prisma.picking_ordersUpdateOneRequiredWithoutPicking_resultsNestedInput
+}
+
+export type picking_resultsUncheckedUpdateWithoutPalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  picking_order_id?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type picking_resultsUncheckedUpdateManyWithoutPalletsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  picking_order_id?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 

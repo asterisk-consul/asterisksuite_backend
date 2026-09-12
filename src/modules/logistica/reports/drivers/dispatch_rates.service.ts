@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './../../../../prisma/prisma.service';
+import { PrismaClient } from '@/generated/prisma/client';
+
 import {
   ReporteChoferesQueryDto,
   ReporteChoferItemDto,
@@ -8,180 +10,234 @@ import {
 
 @Injectable()
 export class ReporteChoferesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
 
-  async findAll(
-    query: ReporteChoferesQueryDto,
-  ): Promise<ReporteChoferesResponseDto> {
-    const {
-      fechaDesde,
-      fechaHasta,
-      choferId,
-      mes,
-      cliente,
-      corredor,
-      numeroViaje,
-      page = 1,
-      limit = 50,
-    } = query;
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
+
+  async findAll(query: ReporteChoferesQueryDto): Promise<ReporteChoferesResponseDto> {
+    const { fechaDesde, fechaHasta, choferId, mes, cliente, corredor, numeroViaje, page = 1, limit = 50 } = query;
 
     const offset = (page - 1) * limit;
 
+    // ── Helpers robustos ────────────────────────────────────────────────
     const isValid = (v: any) => v !== undefined && v !== null && v !== '';
+
     const isValidDate = (v: any) => {
       if (!isValid(v)) return false;
-      return !isNaN(new Date(v).getTime());
+      const d = new Date(v);
+      return !isNaN(d.getTime());
     };
 
-    // Parámetros compartidos (sin LIMIT/OFFSET)
-    const sharedParams: any[] = [];
-    const sharedConditions: string[] = [];
-    let idx = 1;
+    // ── Condiciones WHERE dinámicas ─────────────────────────────────────
+    const conditions: string[] = [];
+    const params: any[] = [];
+    let paramIndex = 1;
 
     if (isValidDate(fechaDesde)) {
-      sharedConditions.push(`d.planned_date >= $${idx++}`);
-      sharedParams.push(new Date(fechaDesde as string));
+      const fd = new Date(fechaDesde as string);
+      conditions.push(`d.planned_date >= $${paramIndex++}`);
+      params.push(fd);
     }
 
     if (isValidDate(fechaHasta)) {
-      sharedConditions.push(`d.planned_date <= $${idx++}`);
-      sharedParams.push(new Date(fechaHasta as string));
+      const fh = new Date(fechaHasta as string);
+      conditions.push(`d.planned_date <= $${paramIndex++}`);
+      params.push(fh);
     }
 
     if (isValid(choferId)) {
-      sharedConditions.push(`dt.driver_id = $${idx++}::uuid`);
-      sharedParams.push(choferId);
+      conditions.push(`td.driver_id = $${paramIndex++}::uuid`);
+      params.push(choferId);
     }
 
     if (isValid(mes)) {
       const mesDate = new Date(`${mes}-01`);
       if (!isNaN(mesDate.getTime())) {
-        sharedConditions.push(
-          `date_trunc('month', d.planned_date) = date_trunc('month', $${idx++}::timestamptz)`,
-        );
-        sharedParams.push(mesDate);
+        conditions.push(`
+          date_trunc('month', d.planned_date) =
+          date_trunc('month', $${paramIndex++}::timestamptz)
+        `);
+        params.push(mesDate);
       }
     }
 
     if (isValid(cliente)) {
-      sharedConditions.push(`bp.name ILIKE $${idx++}`);
-      sharedParams.push(`%${cliente}%`);
+      conditions.push(`bp.name ILIKE $${paramIndex++}`);
+      params.push(`%${cliente}%`);
     }
 
     if (isValid(corredor)) {
-      sharedConditions.push(`c.name ILIKE $${idx++}`);
-      sharedParams.push(`%${corredor}%`);
+      conditions.push(`c.name ILIKE $${paramIndex++}`);
+      params.push(`%${corredor}%`);
     }
-
     if (isValid(numeroViaje)) {
-      sharedConditions.push(`dt.reference_number ILIKE $${idx++}`);
-      sharedParams.push(`%${numeroViaje}%`);
+      conditions.push(`t.reference_number ILIKE $${paramIndex++}`);
+      params.push(`%${numeroViaje}%`);
     }
 
-    const whereClause =
-      sharedConditions.length > 0
-        ? `WHERE ${sharedConditions.join(' AND ')}`
-        : '';
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    // CTE compartida para reutilizar en ambas queries
-    const cteBlock = `
-      WITH rates AS (
-        SELECT DISTINCT ON (dispatch_id)
-          id,
-          dispatch_id,
-          value
-        FROM dispatch_rates
-        ORDER BY dispatch_id
-      ),
-      driver_trips AS (
-        SELECT DISTINCT ON (tso.dispatch_order_id)
-          tso.dispatch_order_id,
-          t.id,
-          t.reference_number,
-          td.driver_id,
-          td.first_name,
-          td.last_name,
-          td.unit_number
-        FROM trip_stop_orders tso
-        JOIN trip_stops ts             ON ts.id = tso.trip_stop_id
-        JOIN trips t                   ON t.id = ts.trip_id
-        LEFT JOIN vw_trips_drivers td  ON td.trip_id = t.id
-        WHERE tso.action = 'PICKUP'
-        ORDER BY tso.dispatch_order_id, tso.id
-      )
-    `;
-
-    // ── Main query ──────────────────────────────────────────────────────
-    const mainParams = [...sharedParams, limit, offset];
-    const limitIdx = idx;
-    const offsetIdx = idx + 1;
-
+    // ── Query principal ────────────────────────────────────────────────
     const mainQuery = `
-      ${cteBlock}
+      WITH product_amounts AS (
+        SELECT
+          doi.dispatch_order_id AS dispatch_id,
+          (array_agg(doi.id ORDER BY doi.created_at))[1] AS id,
+          SUM(doi.quantity * doi.unit_price)::numeric AS value
+        FROM dispatch_order_items doi
+        GROUP BY doi.dispatch_order_id
+      ),
+      legacy_amounts AS (
+        SELECT
+          dr.dispatch_id,
+          (array_agg(dr.id ORDER BY dr.created_at))[1] AS id,
+          SUM(dr.value)::numeric AS value
+        FROM dispatch_rates dr
+        WHERE NOT EXISTS (
+          SELECT 1 FROM dispatch_order_items doi WHERE doi.dispatch_order_id = dr.dispatch_id
+        )
+        GROUP BY dr.dispatch_id
+      ),
+      effective_rates AS (
+        SELECT * FROM product_amounts
+        UNION ALL
+        SELECT * FROM legacy_amounts
+      )
       SELECT
-        r.id,
-        dt.id                                                               AS "tripId",
-        dt.driver_id                                                        AS "choferId",
-        dt.first_name                                                       AS "nombre",
-        dt.last_name                                                        AS "apellido",
-        TRIM(COALESCE(dt.first_name, '') || ' ' || COALESCE(dt.last_name, '')) AS "chofer",
-        dt.unit_number                                                      AS "unidad",
-        d.id                                                                AS "despachoId",
-        d.order_number                                                      AS "numeroCarga",
-        d.planned_date                                                      AS "fecha",
-        date_trunc('month', d.planned_date)                                AS "mes",
-        (l.city || ' / ' || l2.city)                                       AS "origenDestino",
-        l.city                                                              AS "origen",
-        l2.city                                                             AS "destino",
-        bp.name                                                             AS "cliente",
-        c.name                                                              AS "corredor",
-        dt.reference_number                                                 AS "numeroViaje",
-        round(r.value::numeric, 2)                                         AS "tarifa",
-        0::numeric                                                          AS "adicional0",
-        0::numeric                                                          AS "adicional1",
-        0::numeric                                                          AS "adicional2",
-        0::numeric                                                          AS "adicional3",
-        0::numeric                                                          AS "adicional4",
-        0::numeric                                                          AS "adicional5",
-        round(r.value::numeric, 2)                                         AS "tarifaTotal",
-        round(r.value::numeric * 0.15, 2)                                  AS "comisionChofer",
-        sum(round(r.value::numeric * 0.15, 2)) OVER (
-          PARTITION BY dt.driver_id, date_trunc('month', d.planned_date)
-        )                                                                   AS "totalMesChofer"
-      FROM rates r
-      JOIN dispatch_orders d    ON d.id = r.dispatch_id
-      JOIN business_parties bp  ON bp.id = d.customer_id
-      JOIN locations l          ON l.id = d.origin_location_id
-      JOIN locations l2         ON l2.id = d.destination_location_id
-      LEFT JOIN driver_trips dt ON dt.dispatch_order_id = d.id
-      LEFT JOIN corridors c     ON c.id = d.corridor_id
+        dr.id,
+        td.driver_id                                                     AS "choferId",
+        td.first_name                                                    AS "nombre",
+        td.last_name                                                     AS "apellido",
+      TRIM(
+  COALESCE(td.first_name, '') || ' ' || COALESCE(td.last_name, '')
+) AS "chofer",
+        td.unit_number                                                   AS "unidad",
+        d.id                                                             AS "despachoId",
+        d.order_number                                                   AS "numeroCarga",
+        d.planned_date                                                   AS "fecha",
+        date_trunc('month', d.planned_date)                             AS "mes",
+        (l.city::text || ' / ' || l2.city::text)                        AS "origenDestino",
+        l.city                                                           AS "origen",
+        l2.city                                                          AS "destino",
+        bp.name                                                          AS "cliente",
+        c.name                                                           AS "corredor",
+        t.reference_number                                               AS "numeroViaje",
+        round(dr.value::numeric, 2)                                     AS "tarifa",
+        COALESCE(ag.total_adicional_0, 0::numeric)                      AS "adicional0",
+        COALESCE(ag.total_adicional_1, 0::numeric)                      AS "adicional1",
+        COALESCE(ag.total_adicional_2, 0::numeric)                      AS "adicional2",
+        COALESCE(ag.total_adicional_3, 0::numeric)                      AS "adicional3",
+        COALESCE(ag.total_adicional_4, 0::numeric)                      AS "adicional4",
+        COALESCE(ag.total_adicional_5, 0::numeric)                      AS "adicional5",
+        round(
+          COALESCE(dr.value::numeric, 0) +
+          COALESCE(ag.total_adicional_0, 0) +
+          COALESCE(ag.total_adicional_1, 0) +
+          COALESCE(ag.total_adicional_2, 0) +
+          COALESCE(ag.total_adicional_3, 0) +
+          COALESCE(ag.total_adicional_4, 0) +
+          COALESCE(ag.total_adicional_5, 0), 2)                         AS "tarifaTotal",
+        round((
+          COALESCE(dr.value::numeric, 0) +
+          COALESCE(ag.total_adicional_0, 0) +
+          COALESCE(ag.total_adicional_1, 0) +
+          COALESCE(ag.total_adicional_2, 0) +
+          COALESCE(ag.total_adicional_3, 0) +
+          COALESCE(ag.total_adicional_4, 0) +
+          COALESCE(ag.total_adicional_5, 0)
+        ) * 0.15, 2)                                                    AS "comisionChofer",
+        sum(round((
+          COALESCE(dr.value::numeric, 0) +
+          COALESCE(ag.total_adicional_0, 0) +
+          COALESCE(ag.total_adicional_1, 0) +
+          COALESCE(ag.total_adicional_2, 0) +
+          COALESCE(ag.total_adicional_3, 0) +
+          COALESCE(ag.total_adicional_4, 0) +
+          COALESCE(ag.total_adicional_5, 0)
+        ) * 0.15, 2)) OVER (
+          PARTITION BY td.driver_id, date_trunc('month', d.planned_date)
+        )                                                               AS "totalMesChofer"
+      FROM effective_rates dr
+        JOIN dispatch_orders d        ON d.id = dr.dispatch_id
+        JOIN business_parties bp      ON bp.id = d.customer_id
+        JOIN locations l              ON l.id = d.origin_location_id
+        JOIN locations l2             ON l2.id = d.destination_location_id
+        JOIN LATERAL (
+          SELECT tso.*
+          FROM trip_stop_orders tso
+          WHERE tso.dispatch_order_id = d.id
+            AND tso.action = 'PICKUP'
+          LIMIT 1
+        ) tso ON true
+        JOIN trip_stops ts  ON ts.id = tso.trip_stop_id
+        LEFT JOIN trips t ON t.id = ts.trip_id
+        LEFT JOIN vw_trips_drivers td ON td.trip_id = t.id
+        LEFT JOIN corridors c         ON c.id = d.corridor_id
+        LEFT JOIN (
+          SELECT
+            NULL::uuid    AS dispatch_id,
+            NULL::numeric AS total_adicional_0,
+            NULL::numeric AS total_adicional_1,
+            NULL::numeric AS total_adicional_2,
+            NULL::numeric AS total_adicional_3,
+            NULL::numeric AS total_adicional_4,
+            NULL::numeric AS total_adicional_5
+          WHERE false
+        ) ag ON ag.dispatch_id = d.id
       ${whereClause}
-      ORDER BY dt.first_name, dt.last_name, d.planned_date
-      LIMIT $${limitIdx} OFFSET $${offsetIdx}
+      ORDER BY td.first_name, td.last_name, d.planned_date
+      LIMIT $${paramIndex++} OFFSET $${paramIndex++}
     `;
 
-    const rows = await this.prisma.$queryRawUnsafe<ReporteChoferItemDto[]>(
+    params.push(limit, offset);
+
+    const rows = await (this.prisma as unknown as PrismaClient).$queryRawUnsafe<ReporteChoferItemDto[]>(
       mainQuery,
-      ...mainParams,
+      ...params,
     );
 
-    // ── Count query ─────────────────────────────────────────────────────
+    // ── Count ───────────────────────────────────────────────────────────
     const countQuery = `
-      ${cteBlock}
+      WITH product_amounts AS (
+        SELECT doi.dispatch_order_id AS dispatch_id
+        FROM dispatch_order_items doi
+        GROUP BY doi.dispatch_order_id
+      ),
+      legacy_amounts AS (
+        SELECT dr.dispatch_id
+        FROM dispatch_rates dr
+        WHERE NOT EXISTS (
+          SELECT 1 FROM dispatch_order_items doi WHERE doi.dispatch_order_id = dr.dispatch_id
+        )
+        GROUP BY dr.dispatch_id
+      ),
+      effective_rates AS (
+        SELECT * FROM product_amounts
+        UNION ALL
+        SELECT * FROM legacy_amounts
+      )
       SELECT COUNT(*) AS count
-      FROM rates r
-      JOIN dispatch_orders d    ON d.id = r.dispatch_id
-      JOIN business_parties bp  ON bp.id = d.customer_id
-      JOIN locations l          ON l.id = d.origin_location_id
-      JOIN locations l2         ON l2.id = d.destination_location_id
-      LEFT JOIN driver_trips dt ON dt.dispatch_order_id = d.id
-      LEFT JOIN corridors c     ON c.id = d.corridor_id
+      FROM effective_rates dr
+        JOIN dispatch_orders d        ON d.id = dr.dispatch_id
+        JOIN business_parties bp      ON bp.id = d.customer_id
+        JOIN locations l              ON l.id = d.origin_location_id
+        JOIN locations l2             ON l2.id = d.destination_location_id
+        JOIN trip_stops ts            ON ts.stop_order = 1
+        JOIN trip_stop_orders tso     ON tso.trip_stop_id = ts.id AND tso.dispatch_order_id = d.id
+        JOIN trips t                  ON t.id = ts.trip_id
+        LEFT JOIN vw_trips_drivers td ON td.trip_id = t.id
+        LEFT JOIN corridors c         ON c.id = d.corridor_id
       ${whereClause}
     `;
 
-    const countResult = await this.prisma.$queryRawUnsafe<[{ count: bigint }]>(
+    const countParams = params.slice(0, -2);
+
+    const countResult = await (this.prisma as unknown as PrismaClient).$queryRawUnsafe<[{ count: bigint }]>(
       countQuery,
-      ...sharedParams,
+      ...countParams,
     );
 
     const total = Number(countResult[0]?.count ?? 0);

@@ -1,0 +1,154 @@
+### =====================================================
+### BASES 
+### =====================================================
+@baseUrl = http://localhost:3000/api
+
+### =====================================================
+### LOGIN
+### =====================================================
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+### =====================================================
+### CREAR MONEDA ARS
+### =====================================================
+
+POST {{baseUrl}}/currencies
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "ARS",
+  "name": "Peso Argentino",
+  "symbol": "$",
+  "is_base": true,
+  "active": true
+}
+
+### =====================================================
+### CREAR MONEDA USD
+### =====================================================
+
+POST {{baseUrl}}/currencies
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "USD",
+  "name": "Dólar Estadounidense",
+  "symbol": "US$",
+  "is_base": false,
+  "active": true
+}
+
+### =====================================================
+### LISTAR MONEDAS
+### =====================================================
+
+GET {{baseUrl}}/currencies
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### OBTENER MONEDA BASE
+### =====================================================
+
+GET {{baseUrl}}/currencies/base
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### OBTENER MONEDA POR ID
+### =====================================================
+
+@currencyId = c02aaadd-43ed-4ee6-b6e6-69a791d55269
+
+GET {{baseUrl}}/currencies/{{currencyId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### ACTUALIZAR MONEDA
+### =====================================================
+
+PATCH {{baseUrl}}/currencies/{{currencyId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Peso Argentino Oficial",
+  "symbol": "$",
+  "active": true
+}
+
+### =====================================================
+### ELIMINAR MONEDA (SOFT DELETE)
+### =====================================================
+
+DELETE {{baseUrl}}/currencies/{{currencyId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### CREAR COTIZACIÓN USD -> ARS
+### =====================================================
+
+@fromCurrencyId = c02aaadd-43ed-4ee6-b6e6-69a791d55269
+@toCurrencyId = 839c208c-744d-4321-a375-2a747c911fa2
+
+POST {{baseUrl}}/currency-rates
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "from_currency_id": "{{fromCurrencyId}}",
+  "to_currency_id": "{{toCurrencyId}}",
+  "rate": 1150,
+  "source": "Manual",
+  "effective_date": "2026-05-16T00:00:00.000Z",
+  "rate_type": "OFFICIAL"
+}
+
+### =====================================================
+### LISTAR COTIZACIONES
+### =====================================================
+
+GET {{baseUrl}}/currency-rates
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### OBTENER COTIZACIÓN POR ID
+### =====================================================
+
+@currencyRateId = 93066cee-2d8d-4aca-ab2e-0be8ead681a4
+
+GET {{baseUrl}}/currency-rates/{{currencyRateId}}
+Authorization: Bearer {{accessToken}}
+
+### =====================================================
+### ACTUALIZAR COTIZACIÓN
+### =====================================================
+
+PATCH {{baseUrl}}/currency-rates/{{currencyRateId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "rate": 1200,
+  "source": "Actualización manual"
+}
+
+### =====================================================
+### ELIMINAR COTIZACIÓN
+### =====================================================
+
+DELETE {{baseUrl}}/currency-rates/{{currencyRateId}}
+Authorization: Bearer {{accessToken}}

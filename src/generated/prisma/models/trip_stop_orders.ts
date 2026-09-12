@@ -183,7 +183,7 @@ export type Trip_stop_ordersGroupByOutputType = {
   dispatch_order_id: string
   action: string
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -217,7 +217,7 @@ export type trip_stop_ordersWhereInput = {
   dispatch_order_id?: Prisma.UuidFilter<"trip_stop_orders"> | string
   action?: Prisma.StringFilter<"trip_stop_orders"> | string
   created_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"trip_stop_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"trip_stop_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"trip_stop_orders"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"trip_stop_orders"> | string | null
@@ -232,7 +232,7 @@ export type trip_stop_ordersOrderByWithRelationInput = {
   dispatch_order_id?: Prisma.SortOrder
   action?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -250,7 +250,7 @@ export type trip_stop_ordersWhereUniqueInput = Prisma.AtLeast<{
   dispatch_order_id?: Prisma.UuidFilter<"trip_stop_orders"> | string
   action?: Prisma.StringFilter<"trip_stop_orders"> | string
   created_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"trip_stop_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"trip_stop_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"trip_stop_orders"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"trip_stop_orders"> | string | null
@@ -265,7 +265,7 @@ export type trip_stop_ordersOrderByWithAggregationInput = {
   dispatch_order_id?: Prisma.SortOrder
   action?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -284,7 +284,7 @@ export type trip_stop_ordersScalarWhereWithAggregatesInput = {
   dispatch_order_id?: Prisma.UuidWithAggregatesFilter<"trip_stop_orders"> | string
   action?: Prisma.StringWithAggregatesFilter<"trip_stop_orders"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"trip_stop_orders"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"trip_stop_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"trip_stop_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"trip_stop_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"trip_stop_orders"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"trip_stop_orders"> | string | null
@@ -295,7 +295,7 @@ export type trip_stop_ordersCreateInput = {
   id?: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -310,7 +310,7 @@ export type trip_stop_ordersUncheckedCreateInput = {
   dispatch_order_id: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -321,7 +321,7 @@ export type trip_stop_ordersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -336,7 +336,7 @@ export type trip_stop_ordersUncheckedUpdateInput = {
   dispatch_order_id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -349,7 +349,7 @@ export type trip_stop_ordersCreateManyInput = {
   dispatch_order_id: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -360,7 +360,7 @@ export type trip_stop_ordersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -373,7 +373,7 @@ export type trip_stop_ordersUncheckedUpdateManyInput = {
   dispatch_order_id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -517,7 +517,7 @@ export type trip_stop_ordersCreateWithoutDispatch_orderInput = {
   id?: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -530,7 +530,7 @@ export type trip_stop_ordersUncheckedCreateWithoutDispatch_orderInput = {
   trip_stop_id: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -572,7 +572,7 @@ export type trip_stop_ordersScalarWhereInput = {
   dispatch_order_id?: Prisma.UuidFilter<"trip_stop_orders"> | string
   action?: Prisma.StringFilter<"trip_stop_orders"> | string
   created_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"trip_stop_orders"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"trip_stop_orders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"trip_stop_orders"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"trip_stop_orders"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"trip_stop_orders"> | string | null
@@ -583,7 +583,7 @@ export type trip_stop_ordersCreateWithoutTrip_stopInput = {
   id?: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -596,7 +596,7 @@ export type trip_stop_ordersUncheckedCreateWithoutTrip_stopInput = {
   dispatch_order_id: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -634,7 +634,7 @@ export type trip_stop_ordersCreateManyDispatch_orderInput = {
   trip_stop_id: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -645,7 +645,7 @@ export type trip_stop_ordersUpdateWithoutDispatch_orderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -658,7 +658,7 @@ export type trip_stop_ordersUncheckedUpdateWithoutDispatch_orderInput = {
   trip_stop_id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -670,7 +670,7 @@ export type trip_stop_ordersUncheckedUpdateManyWithoutDispatch_orderInput = {
   trip_stop_id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -682,7 +682,7 @@ export type trip_stop_ordersCreateManyTrip_stopInput = {
   dispatch_order_id: string
   action: string
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -693,7 +693,7 @@ export type trip_stop_ordersUpdateWithoutTrip_stopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -706,7 +706,7 @@ export type trip_stop_ordersUncheckedUpdateWithoutTrip_stopInput = {
   dispatch_order_id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -718,7 +718,7 @@ export type trip_stop_ordersUncheckedUpdateManyWithoutTrip_stopInput = {
   dispatch_order_id?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -811,7 +811,7 @@ export type $trip_stop_ordersPayload<ExtArgs extends runtime.Types.Extensions.In
     dispatch_order_id: string
     action: string
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

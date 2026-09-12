@@ -1,23 +1,25 @@
-import {
-  NotFoundException,
-  Injectable,
-  BadRequestException,
-} from '@nestjs/common';
+import { NotFoundException, Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { buildPrismaCreate } from '@/common/utils/buildPrisma';
 import { DispatchStatus, Prisma, TripStatus } from '@/generated/prisma/client';
 import { DocumentsSalesService } from '../../../erp/documents-sales/documents_sales.services';
+import { PrismaTransactionClient } from '@/prisma/prisma.service';
 
 @Injectable()
 export class TripsService {
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private documentsSalesService: DocumentsSalesService,
   ) {}
 
-  private async reorderTripStops(tx: Prisma.TransactionClient, tripId: string) {
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
+
+  private async reorderTripStops(tx: PrismaTransactionClient, tripId: string) {
     const stops = await tx.trip_stops.findMany({
       where: { trip_id: tripId },
       orderBy: { stop_order: 'asc' },
@@ -70,23 +72,14 @@ export class TripsService {
             customer_name: o.customer_name,
             actions: [o.action],
             origins: o.origin_location_id ? [o.origin_location_id] : [],
-            destinations: o.destination_location_id
-              ? [o.destination_location_id]
-              : [],
+            destinations: o.destination_location_id ? [o.destination_location_id] : [],
           });
         } else {
           const existing = orderMap.get(o.dispatch_order_id);
-          if (!existing.actions.includes(o.action))
-            existing.actions.push(o.action);
-          if (
-            o.origin_location_id &&
-            !existing.origins.includes(o.origin_location_id)
-          )
+          if (!existing.actions.includes(o.action)) existing.actions.push(o.action);
+          if (o.origin_location_id && !existing.origins.includes(o.origin_location_id))
             existing.origins.push(o.origin_location_id);
-          if (
-            o.destination_location_id &&
-            !existing.destinations.includes(o.destination_location_id)
-          )
+          if (o.destination_location_id && !existing.destinations.includes(o.destination_location_id))
             existing.destinations.push(o.destination_location_id);
         }
       });
@@ -222,7 +215,7 @@ export class TripsService {
     return this.findOne(id);
   }
 
-  async updateStatus(id: string, status: TripStatus) {
+  async updateStatus(id: string, status: TripStatus, generate = false) {
     await this.findOne(id);
 
     const trip = await this.prisma.trips.update({
@@ -230,8 +223,8 @@ export class TripsService {
       data: { status },
     });
 
-    // 🔥 Hook: cuando el viaje pasa a COMPLETED generar borradores de factura
-    if (status === TripStatus.COMPLETED) {
+    // 🔥 Hook: solo genera factura si el caller lo pide explícitamente
+    if (status === TripStatus.COMPLETED && generate) {
       await this.documentsSalesService.generateDraftsFromTrip(id);
     }
 
@@ -263,9 +256,7 @@ export class TripsService {
     if (!trip) throw new NotFoundException('Trip not found');
 
     if (trip.status !== 'PLANNED') {
-      throw new BadRequestException(
-        'Cannot modify a trip in progress or completed',
-      );
+      throw new BadRequestException('Cannot modify a trip in progress or completed');
     }
 
     return this.prisma.$transaction(async (tx) => {
@@ -312,9 +303,7 @@ export class TripsService {
       }
 
       // 5️⃣ actualizar estado órdenes
-      const orderIds = [
-        ...new Set(tripOrdersData.map((o) => o.dispatch_order_id)),
-      ];
+      const orderIds = [...new Set(tripOrdersData.map((o) => o.dispatch_order_id))];
 
       if (orderIds.length > 0) {
         await tx.dispatch_orders.updateMany({
@@ -343,9 +332,7 @@ export class TripsService {
       if (!trip) throw new NotFoundException('Trip not found');
 
       if (trip.status !== 'PLANNED') {
-        throw new BadRequestException(
-          'No se puede modificar un viaje en este estado',
-        );
+        throw new BadRequestException('No se puede modificar un viaje en este estado');
       }
 
       const stopIds = trip.trip_stops.map((s) => s.id);

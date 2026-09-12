@@ -1,0 +1,60 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+@productId = REEMPLAZAR_PRODUCT_ID
+@categoryId = REEMPLAZAR_CATEGORY_ID
+@categoryId2 = REEMPLAZAR_CATEGORY_ID_2
+@categoryId3 = REEMPLAZAR_CATEGORY_ID_3
+
+### Asignar categoría a producto
+POST {{baseUrl}}/product-categories
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "category_id": "{{categoryId}}"
+}
+
+###
+
+### Asignar múltiples categorías a producto
+POST {{baseUrl}}/product-categories/bulk
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "category_ids": [
+    "{{categoryId}}",
+    "{{categoryId2}}",
+    "{{categoryId3}}"
+  ]
+}
+
+###
+
+### Obtener categorías de un producto
+GET {{baseUrl}}/product-categories/product/{{productId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Eliminar relación producto-categoría (soft delete)
+DELETE {{baseUrl}}/product-categories/{{productId}}/{{categoryId}}
+Authorization: Bearer {{accessToken}}
+
+###

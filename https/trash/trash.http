@@ -1,0 +1,106 @@
+@baseUrl = http://localhost:3000/api
+
+###########################################################
+# LOGIN
+###########################################################
+
+### LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+###########################################################
+# VARIABLES
+###########################################################
+
+@table = products
+@id = 12345678-1234-1234-1234-123456789012
+
+###########################################################
+# TRASH
+###########################################################
+
+### 🗑️ VER TODA LA PAPELERA
+GET {{baseUrl}}/trash
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🗑️ VER PAPELERA FILTRADA POR DÍAS
+GET {{baseUrl}}/trash?days=30
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🗑️ VER PAPELERA FILTRADA POR TABLA
+GET {{baseUrl}}/trash?table={{table}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🗑️ VER PAPELERA FILTRADA POR TABLA Y DÍAS
+GET {{baseUrl}}/trash?table={{table}}&days=30
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🗑️ SOFT DELETE
+DELETE {{baseUrl}}/trash/{{table}}/{{id}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### ♻️ RESTORE
+PATCH {{baseUrl}}/trash/{{table}}/{{id}}/restore
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 🗑️ SOFT DELETE BULK
+DELETE {{baseUrl}}/trash/bulk/{{table}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "ids": [
+    "12345678-1234-1234-1234-123456789012",
+    "87654321-4321-4321-4321-210987654321"
+  ]
+}
+
+###
+
+### ♻️ RESTORE BULK
+PATCH {{baseUrl}}/trash/bulk/{{table}}/restore
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "ids": [
+    "12345678-1234-1234-1234-123456789012",
+    "87654321-4321-4321-4321-210987654321"
+  ]
+}
+
+###
+
+### 💀 HARD DELETE BULK
+DELETE {{baseUrl}}/trash/hard/{{table}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "ids": [
+    "12345678-1234-1234-1234-123456789012",
+    "87654321-4321-4321-4321-210987654321"
+  ]
+}

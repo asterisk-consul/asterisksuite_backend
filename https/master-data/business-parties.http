@@ -1,14 +1,17 @@
- @baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3000/api
 #@baseUrl = https://apidonandres.asterisksuite.cloud/api
-@partyId = b8c46fe5-c77a-4ea3-aed5-3d73e5e27915
+@partyId = REEMPLAZAR_PARTY_ID
+@employeeId = REEMPLAZAR_EMPLOYEE_ID
+@partnerId = REEMPLAZAR_PARTNER_ID
 
 ###
 # ==============================
-# 🔐 LOGIN
+# LOGIN
 # ==============================
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+x-tenant: dev
 
 {
   "email": "admin@mail.com",
@@ -17,65 +20,490 @@ Content-Type: application/json
 ###
 @accessToken = {{login.response.body.accessToken}}
 
+# =====================================================
+# BUSINESS PARTIES — CRUD BÁSICO
+# =====================================================
 
 ### =====================================================
-### Crear Business Party
-### POST /master-data/business-parties
+### Crear Business Party — CLIENTE
 ### =====================================================
 
 POST {{baseUrl}}/master-data/business-parties
-Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 {
-  "type": "customer",
+  "type": "CUSTOMER",
   "name": "Cliente de Prueba SA",
   "tax_id": "30-12345678-9",
   "active": true,
   "exemption_rate": 0
 }
 
-
+###
 
 ### =====================================================
-### Listar Business Parties por empresa
-### GET /master-data/business-parties?company_id=
+### Crear Business Party — PROVEEDOR
 ### =====================================================
 
-GET {{baseUrl}}/master-data/business-parties?company_id={{companyId}}
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
+{
+  "type": "SUPPLIER",
+  "name": "Proveedor ABC SRL",
+  "tax_id": "30-98765432-1",
+  "active": true
+}
+
+###
+
+### =====================================================
+### Crear Business Party — EMPLEADO (manual)
+### =====================================================
+### Nota: Si se crea employee sin party_id, se auto-crea este registro.
+### Este request es para crear el party ANTES de vincularlo.
+
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "EMPLOYEE",
+  "name": "Juan Pérez",
+  "tax_id": "20-12345678-9",
+  "active": true
+}
+
+###
+
+### =====================================================
+### Crear Business Party — SOCIO (manual)
+### =====================================================
+### Nota: Si se crea partner sin party_id, se auto-crea este registro.
+
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "PARTNER",
+  "name": "Tomas García",
+  "tax_id": "27-98765432-0",
+  "active": true
+}
+
+###
+
+### =====================================================
+### Listar todos los Business Parties
+### =====================================================
+
+GET {{baseUrl}}/master-data/business-parties
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Filtrar por tipo — CLIENTES
+### =====================================================
+
+GET {{baseUrl}}/master-data/business-parties?type=CUSTOMER
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Filtrar por tipo — EMPLEADOS
+### =====================================================
+
+GET {{baseUrl}}/master-data/business-parties?type=EMPLOYEE
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Filtrar por tipo — SOCIOS
+### =====================================================
+
+GET {{baseUrl}}/master-data/business-parties?type=PARTNER
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
 
 ### =====================================================
 ### Obtener Business Party por ID
-### (incluye party_locations y locations)
-### GET /master-data/business-parties/:id
 ### =====================================================
 
 GET {{baseUrl}}/master-data/business-parties/{{partyId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
+###
 
 ### =====================================================
 ### Actualizar Business Party
-### PATCH /master-data/business-parties/:id
 ### =====================================================
 
 PATCH {{baseUrl}}/master-data/business-parties/{{partyId}}
-Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
 
 {
-  "name": "Cliente Demo Actualizado SA",
-  "phone": "3514448888",
-  "email": "nuevoemail@demo.com"
+  "name": "Cliente Demo Actualizado SA"
 }
 
+###
 
 ### =====================================================
 ### Soft Delete (active = false)
-### DELETE /master-data/business-parties/:id
 ### =====================================================
 
 DELETE {{baseUrl}}/master-data/business-parties/{{partyId}}
 Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# FLUJO COMPLETO: CREAR EMPLEADO CON BUSINESS PARTY
+# =====================================================
+# Opción A: Crear party primero, luego employee
+# Opción B: Crear employee directo (auto-crea party)
+
+### =====================================================
+### OPCIÓN A.1 — Crear party tipo EMPLOYEE
+### =====================================================
+# @name createEmployeeParty
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "EMPLOYEE",
+  "name": "Carlos López",
+  "tax_id": "20-11223344-5",
+  "active": true
+}
+
+###
+@employeePartyId = {{createEmployeeParty.response.body.id}}
+
+### =====================================================
+### OPCIÓN A.2 — Crear employee vinculado al party
+### =====================================================
+
+POST {{baseUrl}}/erp/employees
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "party_id": "{{employeePartyId}}",
+  "first_name": "Carlos",
+  "last_name": "López",
+  "document_type": "DNI",
+  "document_number": "11223344",
+  "position": "Desarrollador",
+  "department": "IT",
+  "hire_date": "2026-07-11",
+  "salary": "500000",
+  "currency_code": "ARS"
+}
+
+###
+
+### =====================================================
+### OPCIÓN B — Crear employee directo (auto-crea party)
+### =====================================================
+# No se envía party_id → se crea business_parties automáticamente
+
+POST {{baseUrl}}/erp/employees
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Ana",
+  "last_name": "Martínez",
+  "document_type": "DNI",
+  "document_number": "55667788",
+  "position": "Diseñadora",
+  "department": "Diseño"
+}
+
+###
+
+### =====================================================
+### Crear employee con usuario nuevo
+### =====================================================
+
+POST {{baseUrl}}/erp/employees
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Pedro",
+  "last_name": "Gómez",
+  "document_type": "DNI",
+  "document_number": "99887766",
+  "position": "Contador",
+  "department": "Finanzas",
+  "create_user": {
+    "name": "Pedro Gómez",
+    "email": "pedro.gomez@empresa.com",
+    "password": "123456"
+  }
+}
+
+###
+
+### =====================================================
+### Listar empleados
+### =====================================================
+
+GET {{baseUrl}}/erp/employees
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Obtener empleado (resuelve user cross-DB)
+### =====================================================
+
+GET {{baseUrl}}/erp/employees/{{employeeId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Vincular employee con user existente
+### =====================================================
+
+PATCH {{baseUrl}}/erp/employees/{{employeeId}}/link-user
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "user_id": "REEMPLAZAR_USER_ID"
+}
+
+###
+
+### =====================================================
+### Desvincular employee
+### =====================================================
+
+PATCH {{baseUrl}}/erp/employees/{{employeeId}}/unlink-user
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Actualizar employee
+### =====================================================
+
+PATCH {{baseUrl}}/erp/employees/{{employeeId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "position": "Senior Developer",
+  "department": "IT"
+}
+
+###
+
+### =====================================================
+### Eliminar employee (soft delete)
+### =====================================================
+
+DELETE {{baseUrl}}/erp/employees/{{employeeId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# FLUJO COMPLETO: CREAR SOCIO CON BUSINESS PARTY
+# =====================================================
+
+### =====================================================
+### OPCIÓN A.1 — Crear party tipo PARTNER
+### =====================================================
+# @name createPartnerParty
+POST {{baseUrl}}/master-data/business-parties
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "type": "PARTNER",
+  "name": "Laura Fernández",
+  "tax_id": "27-55667788-3"
+}
+
+###
+@partnerPartyId = {{createPartnerParty.response.body.id}}
+
+### =====================================================
+### OPCIÓN A.2 — Crear partner vinculado al party
+### =====================================================
+
+POST {{baseUrl}}/erp/partners
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "party_id": "{{partnerPartyId}}",
+  "first_name": "Laura",
+  "last_name": "Fernández",
+  "document_type": "DNI",
+  "document_number": "55667788",
+  "share_percentage": 25.5,
+  "capital_contributed": 1000000
+}
+
+###
+
+### =====================================================
+### OPCIÓN B — Crear partner directo (auto-crea party)
+### =====================================================
+
+POST {{baseUrl}}/erp/partners
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Roberto",
+  "last_name": "Sánchez",
+  "document_type": "DNI",
+  "document_number": "33445566",
+  "share_percentage": 15,
+  "capital_contributed": 500000
+}
+
+###
+
+### =====================================================
+### Crear partner con usuario nuevo
+### =====================================================
+
+POST {{baseUrl}}/erp/partners
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Lucía",
+  "last_name": "Torres",
+  "document_type": "DNI",
+  "document_number": "77889900",
+  "share_percentage": 10,
+  "capital_contributed": 250000,
+  "create_user": {
+    "name": "Lucía Torres",
+    "email": "lucia.torres@empresa.com",
+    "password": "123456"
+  }
+}
+
+###
+
+### =====================================================
+### Listar socios
+### =====================================================
+
+GET {{baseUrl}}/erp/partners
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Obtener socio (resuelve user cross-DB)
+### =====================================================
+
+GET {{baseUrl}}/erp/partners/{{partnerId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Vincular partner con user existente
+### =====================================================
+
+PATCH {{baseUrl}}/erp/partners/{{partnerId}}/link-user
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "user_id": "REEMPLAZAR_USER_ID"
+}
+
+###
+
+### =====================================================
+### Desvincular partner
+### =====================================================
+
+PATCH {{baseUrl}}/erp/partners/{{partnerId}}/unlink-user
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =====================================================
+### Actualizar partner
+### =====================================================
+
+PATCH {{baseUrl}}/erp/partners/{{partnerId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "share_percentage": 30,
+  "capital_contributed": 1500000
+}
+
+###
+
+### =====================================================
+### Eliminar partner (soft delete)
+### =====================================================
+
+DELETE {{baseUrl}}/erp/partners/{{partnerId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+# =====================================================
+# ERRORES COMUNES
+# =====================================================
+# - party_id con tipo incorrecto → 400 "tipo X, se esperaba EMPLOYEE/PARTNER"
+# - document duplicado → 400 "Ya existe un empleado/socio con DNI XXXXXXXX"
+# - party_id inexistente → 404 "business_party no encontrado"
+# - user_id + create_user ambos → 400 "No se puede enviar user_id y create_user al mismo tiempo"

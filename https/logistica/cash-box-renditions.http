@@ -1,0 +1,108 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@cashBoxId = REEMPLAZAR_CASH_BOX_ID
+@renditionId = REEMPLAZAR_RENDITION_ID
+
+### =========================================================
+### CREATE RENDITION
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-renditions
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "start_date": "2026-01-01",
+  "end_date": "2026-01-31",
+  "opening_balance": 100000,
+  "closing_balance": 95000,
+  "actual_balance": 94500,
+  "notes": "Rendición mensual enero"
+}
+
+###
+
+### =========================================================
+### GET ALL RENDITIONS
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-renditions
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET RENDITIONS BY CASH BOX
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-renditions?cash_box_id={{cashBoxId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE RENDITION
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-renditions/{{renditionId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### APPROVE RENDITION
+### =========================================================
+
+PATCH {{baseUrl}}/logistica/cash-box-renditions/{{renditionId}}/approve
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "actual_balance": 94500,
+  "notes": "Aprobado por gerencia"
+}
+
+###
+
+### =========================================================
+### REJECT RENDITION
+### =========================================================
+
+PATCH {{baseUrl}}/logistica/cash-box-renditions/{{renditionId}}/reject
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### DELETE RENDITION (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/logistica/cash-box-renditions/{{renditionId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

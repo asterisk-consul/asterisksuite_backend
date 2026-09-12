@@ -4,7 +4,12 @@ import { CreatePhotoDto } from './dto/create-photo.dto';
 
 @Injectable()
 export class PhotosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   create(dto: CreatePhotoDto) {
     return this.prisma.entity_photos.create({

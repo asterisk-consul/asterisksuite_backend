@@ -321,16 +321,6 @@ export type refresh_tokensUncheckedUpdateManyInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type Refresh_tokensListRelationFilter = {
-  every?: Prisma.refresh_tokensWhereInput
-  some?: Prisma.refresh_tokensWhereInput
-  none?: Prisma.refresh_tokensWhereInput
-}
-
-export type refresh_tokensOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type refresh_tokensCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
@@ -359,6 +349,16 @@ export type refresh_tokensMinOrderByAggregateInput = {
   revoked?: Prisma.SortOrder
   revoked_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+}
+
+export type Refresh_tokensListRelationFilter = {
+  every?: Prisma.refresh_tokensWhereInput
+  some?: Prisma.refresh_tokensWhereInput
+  none?: Prisma.refresh_tokensWhereInput
+}
+
+export type refresh_tokensOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type refresh_tokensCreateNestedManyWithoutUsersInput = {

@@ -24,6 +24,26 @@ export class DispatchRateDto {
   value!: number;
 }
 
+export class DispatchItemDto {
+  @IsOptional()
+  @IsUUID()
+  product_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  source_document_item_id?: string;
+
+  @IsNumber()
+  quantity!: number;
+
+  @IsNumber()
+  unit_price!: number;
+
+  @IsOptional()
+  @IsString()
+  currency_code?: string;
+}
+
 /**
  * 🔹 CREATE
  */
@@ -66,6 +86,12 @@ export class CreateDispatchOrderDto {
   @ValidateNested({ each: true })
   @Type(() => DispatchRateDto)
   rates?: DispatchRateDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DispatchItemDto)
+  items?: DispatchItemDto[];
 }
 
 /**
@@ -79,4 +105,10 @@ export class UpdateDispatchOrderDto extends PartialType(
   @ValidateNested({ each: true })
   @Type(() => DispatchRateDto)
   rates?: DispatchRateDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DispatchItemDto)
+  items?: DispatchItemDto[];
 }

@@ -1,0 +1,27 @@
+export interface ResolvedItemTax {
+  tax_id: string;
+  tax_rate: number;
+  tax_amount: number;
+  calculation_level: string;
+  is_included_in_price: boolean;
+}
+
+export interface ResolvedItem {
+  product_id: string;
+
+  currency_code: string;
+
+  quantity: number;
+
+  unit_price: number;
+
+  converted_unit_price?: number;
+
+  price: number;
+
+  exempt_amount: number;
+
+  taxable_base: number;
+
+  taxes: ResolvedItemTax[];
+}

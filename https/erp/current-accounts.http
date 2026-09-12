@@ -1,0 +1,101 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@partyId = 40289234-773d-473f-9748-bc3b090adcea
+@partyIdClient = 40289234-773d-473f-9748-bc3b090adcea
+
+### =========================================================
+### CREATE ENTRY - PAGO A PROVEEDOR
+### =========================================================
+
+POST {{baseUrl}}/erp/current-accounts/entries
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "party_id": "{{partyId}}",
+  "party_type": "SUPPLIER",
+  "currency_code": "USD",
+  "type": "PAYMENT",
+  "amount": 5000,
+  "description": "Pago factura #001"
+}
+
+###
+
+### =========================================================
+### CREATE ENTRY - COBRO A CLIENTE
+### =========================================================
+
+POST {{baseUrl}}/erp/current-accounts/entries
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "party_id": "{{partyIdClient}}",
+  "party_type": "CUSTOMER",
+  "currency_code": "USD",
+  "type": "COLLECTION",
+  "amount": 8000,
+  "description": "Cobro factura venta"
+}
+
+###
+
+### =========================================================
+### GET ACCOUNTS BY PARTY
+### =========================================================
+
+GET {{baseUrl}}/erp/current-accounts/party/{{partyId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ENTRIES BY PARTY
+### =========================================================
+
+GET {{baseUrl}}/erp/current-accounts/party/{{partyId}}/entries?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET STATEMENT
+### =========================================================
+
+GET {{baseUrl}}/erp/current-accounts/party/{{partyId}}/statement?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET BALANCE
+### =========================================================
+
+GET {{baseUrl}}/erp/current-accounts/party/{{partyId}}/balance?currency_code=USD
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

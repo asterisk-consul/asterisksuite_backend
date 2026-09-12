@@ -6,7 +6,12 @@ import { omitUndefined } from '@/common/utils/object.utils';
 
 @Injectable()
 export class WarehousesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(data: CreateWarehouseDto) {
     return this.prisma.warehouses.create({
@@ -14,6 +19,7 @@ export class WarehousesService {
         name: data.name,
         code: data.code,
         location_id: data.locationId,
+        unit_id: data.unitId,
         active: data.active ?? true,
       },
     });
@@ -23,6 +29,7 @@ export class WarehousesService {
     return this.prisma.warehouses.findMany({
       include: {
         locations: true,
+        units: true,
       },
       orderBy: {
         created_at: 'desc',
@@ -35,6 +42,7 @@ export class WarehousesService {
       where: { id },
       include: {
         locations: true,
+        units: true,
         warehouse_stock: true,
       },
     });
@@ -55,10 +63,12 @@ export class WarehousesService {
         name: data.name,
         code: data.code,
         location_id: data.locationId,
+        unit_id: data.unitId,
         active: data.active,
       }),
       include: {
         locations: true,
+        units: true,
       },
     });
   }

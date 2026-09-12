@@ -8,7 +8,12 @@ import { TransferPalletDto } from './dto/transfer-pallet.dto';
 
 @Injectable()
 export class PickingService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   /* ============================================================
      CREATE SIMPLE PICKING (DESCUENTA STOCK DIRECTO)

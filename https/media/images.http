@@ -1,0 +1,45 @@
+### Test: Subir imagen de producto
+POST http://localhost:3000/api/media/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{token}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="entity_type"
+
+product
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="entity_id"
+
+8a6f5f0b-90fd-4fb8-8c5a-4882b27a18c6
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo_type"
+
+frontal
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Test: Ver fotos del producto
+GET http://localhost:3000/api/media/photos/product/8a6f5f0b-90fd-4fb8-8c5a-4882b27a18c6
+x-tenant: donandres
+
+###
+
+### Test: Descargar imagen (full)
+# Copiar el file_id del response anterior
+GET http://localhost:3000/uploads/products/68560824-990e-4fca-b8a8-17e003e42d46_full.webp
+
+###
+
+### Test: Descargar thumbnail
+GET http://localhost:3000/uploads/products/68560824-990e-4fca-b8a8-17e003e42d46_thumb.webp
+
+###
+
+### Test: Descargar medium
+GET http://localhost:3000/uploads/products/68560824-990e-4fca-b8a8-17e003e42d46_medium.webp

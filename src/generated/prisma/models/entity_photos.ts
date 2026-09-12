@@ -190,7 +190,7 @@ export type Entity_photosGroupByOutputType = {
   file_id: string
   photo_type: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -225,7 +225,7 @@ export type entity_photosWhereInput = {
   file_id?: Prisma.UuidFilter<"entity_photos"> | string
   photo_type?: Prisma.StringNullableFilter<"entity_photos"> | string | null
   created_at?: Prisma.DateTimeFilter<"entity_photos"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"entity_photos"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"entity_photos"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"entity_photos"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"entity_photos"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"entity_photos"> | string | null
@@ -240,7 +240,7 @@ export type entity_photosOrderByWithRelationInput = {
   file_id?: Prisma.SortOrder
   photo_type?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -258,7 +258,7 @@ export type entity_photosWhereUniqueInput = Prisma.AtLeast<{
   file_id?: Prisma.UuidFilter<"entity_photos"> | string
   photo_type?: Prisma.StringNullableFilter<"entity_photos"> | string | null
   created_at?: Prisma.DateTimeFilter<"entity_photos"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"entity_photos"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"entity_photos"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"entity_photos"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"entity_photos"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"entity_photos"> | string | null
@@ -273,7 +273,7 @@ export type entity_photosOrderByWithAggregationInput = {
   file_id?: Prisma.SortOrder
   photo_type?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -293,7 +293,7 @@ export type entity_photosScalarWhereWithAggregatesInput = {
   file_id?: Prisma.UuidWithAggregatesFilter<"entity_photos"> | string
   photo_type?: Prisma.StringNullableWithAggregatesFilter<"entity_photos"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"entity_photos"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"entity_photos"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"entity_photos"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"entity_photos"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"entity_photos"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"entity_photos"> | string | null
@@ -306,7 +306,7 @@ export type entity_photosCreateInput = {
   entity_id: string
   photo_type?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -321,7 +321,7 @@ export type entity_photosUncheckedCreateInput = {
   file_id: string
   photo_type?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -334,7 +334,7 @@ export type entity_photosUpdateInput = {
   entity_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -349,7 +349,7 @@ export type entity_photosUncheckedUpdateInput = {
   file_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -363,7 +363,7 @@ export type entity_photosCreateManyInput = {
   file_id: string
   photo_type?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -376,7 +376,7 @@ export type entity_photosUpdateManyMutationInput = {
   entity_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -390,7 +390,7 @@ export type entity_photosUncheckedUpdateManyInput = {
   file_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -497,7 +497,7 @@ export type entity_photosCreateWithoutFilesInput = {
   entity_id: string
   photo_type?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -510,7 +510,7 @@ export type entity_photosUncheckedCreateWithoutFilesInput = {
   entity_id: string
   photo_type?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -553,7 +553,7 @@ export type entity_photosScalarWhereInput = {
   file_id?: Prisma.UuidFilter<"entity_photos"> | string
   photo_type?: Prisma.StringNullableFilter<"entity_photos"> | string | null
   created_at?: Prisma.DateTimeFilter<"entity_photos"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"entity_photos"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"entity_photos"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"entity_photos"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"entity_photos"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"entity_photos"> | string | null
@@ -566,7 +566,7 @@ export type entity_photosCreateManyFilesInput = {
   entity_id: string
   photo_type?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -579,7 +579,7 @@ export type entity_photosUpdateWithoutFilesInput = {
   entity_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -592,7 +592,7 @@ export type entity_photosUncheckedUpdateWithoutFilesInput = {
   entity_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -605,7 +605,7 @@ export type entity_photosUncheckedUpdateManyWithoutFilesInput = {
   entity_id?: Prisma.StringFieldUpdateOperationsInput | string
   photo_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -696,7 +696,7 @@ export type $entity_photosPayload<ExtArgs extends runtime.Types.Extensions.Inter
     file_id: string
     photo_type: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null

@@ -1,0 +1,152 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "usuariodev@test.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@employeeId = 703de8f1-4972-4319-b28f-1ae956e3ddca
+@userId = 78aefc55-c0e0-4af6-a8fb-de09a6080fd7
+
+### =========================================================
+### CREATE EMPLOYEE - Sin user
+### =========================================================
+
+POST {{baseUrl}}/erp/employees
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Juan",
+  "last_name": "Pérez",
+  "document_type": "DNI",
+  "document_number": "12345678",
+  "position": "Desarrollador",
+  "department": "IT"
+}
+
+###
+
+### =========================================================
+### CREATE EMPLOYEE - Vincular user existente
+### =========================================================
+
+POST {{baseUrl}}/erp/employees
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "María",
+  "last_name": "García",
+  "user_id": "{{userId}}"
+}
+
+###
+
+### =========================================================
+### CREATE EMPLOYEE - Crear user nuevo y vincular
+### =========================================================
+
+POST {{baseUrl}}/erp/employees
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "first_name": "Carlos",
+  "last_name": "López",
+  "position": "Contador",
+  "department": "Finance",
+  "create_user": {
+    "name": "Carlos López",
+    "email": "carlos@test.com",
+    "password": "123456"
+  }
+}
+
+###
+
+### =========================================================
+### GET ALL EMPLOYEES
+### =========================================================
+
+GET {{baseUrl}}/erp/employees
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE EMPLOYEE (incluye user si está vinculado)
+### =========================================================
+
+GET {{baseUrl}}/erp/employees/{{employeeId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### LINK USER - Vincular employee con user existente
+### =========================================================
+
+PATCH {{baseUrl}}/erp/employees/{{employeeId}}/link-user
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "user_id": "{{userId}}"
+}
+
+###
+
+### =========================================================
+### UNLINK USER - Desvincular employee de su user
+### =========================================================
+
+PATCH {{baseUrl}}/erp/employees/{{employeeId}}/unlink-user
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### UPDATE EMPLOYEE
+### =========================================================
+
+PATCH {{baseUrl}}/erp/employees/{{employeeId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "position": "Senior Desarrollador",
+  "salary": "950000"
+}
+
+###
+
+### =========================================================
+### DELETE EMPLOYEE (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/erp/employees/{{employeeId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

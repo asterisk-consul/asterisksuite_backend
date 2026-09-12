@@ -1,31 +1,35 @@
 # ===== Etapa de build =====
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
+
+RUN npm install -g pnpm@11.5.2
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+RUN pnpm install --frozen-lockfile
 
 COPY prisma ./prisma
 COPY . .
+
+# DATABASE_URL dummy solo para que prisma generate pueda leer el config
+ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
 RUN npx prisma generate
-RUN npm run build
+RUN pnpm run build
 
 # ===== Etapa de producción =====
-FROM node:20-alpine
+FROM node:22-alpine
+
+RUN npm install -g pnpm@11.5.2
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package*.json ./
-RUN npm install --only=production
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+RUN pnpm install --prod --frozen-lockfile
 
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/src/generated ./src/generated
-
-RUN npx prisma generate
-
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000

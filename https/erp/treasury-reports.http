@@ -1,0 +1,80 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+### =========================================================
+### DASHBOARD DE TESORERÍA
+### =========================================================
+### Resumen completo: saldos bancarios, cajas, cheques, pagos
+
+GET {{baseUrl}}/erp/treasury/dashboard
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### =========================================================
+### MOVIMIENTOS UNIFICADOS
+### =========================================================
+### Feed cronológico de todos los movimientos (bancarios, caja, pagos)
+
+### ---------------------------------------------------------
+### TODOS LOS MOVIMIENTOS
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/treasury/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### SOLO MOVIMIENTOS BANCARIOS
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/treasury/movements?type=bank_movement
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### SOLO MOVIMIENTOS DE CAJA
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/treasury/movements?type=cash_movement
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### SOLO PAGOS
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/treasury/movements?type=payment
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### FILTRAR POR FECHA
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/treasury/movements?date_from=2026-07-01&date_to=2026-07-31
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+### ---------------------------------------------------------
+### LIMITAR RESULTADOS
+### ---------------------------------------------------------
+
+GET {{baseUrl}}/erp/treasury/movements?limit=10
+Authorization: Bearer {{accessToken}}
+x-tenant: dev

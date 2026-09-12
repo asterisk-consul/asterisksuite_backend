@@ -4,7 +4,12 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class TransfersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   create(dto: CreateTransferDto, userId: string) {
     return this.prisma.cargo_transfers.create({

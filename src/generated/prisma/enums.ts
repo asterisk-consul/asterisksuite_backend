@@ -38,3 +38,681 @@ export const AuditAction = {
 } as const
 
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
+
+
+export const ProductType = {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  SEMI_FINISHED: 'SEMI_FINISHED',
+  FINISHED_PRODUCT: 'FINISHED_PRODUCT',
+  SERVICE: 'SERVICE',
+  RATES: 'RATES'
+} as const
+
+export type ProductType = (typeof ProductType)[keyof typeof ProductType]
+
+
+export const UsageType = {
+  SALE: 'SALE',
+  PURCHASE: 'PURCHASE',
+  BOTH: 'BOTH'
+} as const
+
+export type UsageType = (typeof UsageType)[keyof typeof UsageType]
+
+
+export const UnitType = {
+  UNIT: 'UNIT',
+  WEIGHT: 'WEIGHT',
+  LENGTH: 'LENGTH',
+  AREA: 'AREA',
+  VOLUME: 'VOLUME'
+} as const
+
+export type UnitType = (typeof UnitType)[keyof typeof UnitType]
+
+
+export const AccountType = {
+  ASSET: 'ASSET',
+  LIABILITY: 'LIABILITY',
+  EQUITY: 'EQUITY',
+  REVENUE: 'REVENUE',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type AccountType = (typeof AccountType)[keyof typeof AccountType]
+
+
+export const AttributeType = {
+  TEXT: 'TEXT',
+  NUMBER: 'NUMBER',
+  BOOLEAN: 'BOOLEAN',
+  SELECT: 'SELECT'
+} as const
+
+export type AttributeType = (typeof AttributeType)[keyof typeof AttributeType]
+
+
+export const CalculationType = {
+  UNIT: 'UNIT',
+  SURFACE: 'SURFACE',
+  VOLUME: 'VOLUME',
+  LINEAR: 'LINEAR'
+} as const
+
+export type CalculationType = (typeof CalculationType)[keyof typeof CalculationType]
+
+
+export const CurrencyRateType = {
+  OFFICIAL: 'OFFICIAL',
+  BLUE: 'BLUE',
+  MEP: 'MEP',
+  CCL: 'CCL',
+  WHOLESALE: 'WHOLESALE',
+  CRYPTO: 'CRYPTO',
+  CARD: 'CARD'
+} as const
+
+export type CurrencyRateType = (typeof CurrencyRateType)[keyof typeof CurrencyRateType]
+
+
+export const ProductCostSource = {
+  MANUAL: 'MANUAL',
+  BOM: 'BOM',
+  ENGINEERING: 'ENGINEERING',
+  PURCHASE: 'PURCHASE',
+  RATE: 'RATE'
+} as const
+
+export type ProductCostSource = (typeof ProductCostSource)[keyof typeof ProductCostSource]
+
+
+export const VariantCostSource = {
+  MANUAL: 'MANUAL',
+  PURCHASE: 'PURCHASE',
+  IMPORT: 'IMPORT',
+  ENGINEERING: 'ENGINEERING',
+  SUPPLIER: 'SUPPLIER'
+} as const
+
+export type VariantCostSource = (typeof VariantCostSource)[keyof typeof VariantCostSource]
+
+
+export const CostComponentType = {
+  MATERIAL: 'MATERIAL',
+  LABOR: 'LABOR',
+  OVERHEAD: 'OVERHEAD',
+  OTHER: 'OTHER'
+} as const
+
+export type CostComponentType = (typeof CostComponentType)[keyof typeof CostComponentType]
+
+
+export const CostValueType = {
+  FROM_BOM: 'FROM_BOM',
+  PERCENTAGE_OF_MATERIAL: 'PERCENTAGE_OF_MATERIAL',
+  PERCENTAGE_OF_TOTAL: 'PERCENTAGE_OF_TOTAL',
+  FIXED_PER_UNIT: 'FIXED_PER_UNIT'
+} as const
+
+export type CostValueType = (typeof CostValueType)[keyof typeof CostValueType]
+
+
+export const PaymentMethod = {
+  CASH: 'CASH',
+  CHECK: 'CHECK',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CREDIT_CARD: 'CREDIT_CARD',
+  DEBIT_CARD: 'DEBIT_CARD',
+  VIRTUAL_WALLET: 'VIRTUAL_WALLET'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const PaymentType = {
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type PaymentType = (typeof PaymentType)[keyof typeof PaymentType]
+
+
+export const PaymentStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  PAID: 'PAID',
+  REVERSED: 'REVERSED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const PaymentMode = {
+  NORMAL: 'NORMAL',
+  ADVANCE: 'ADVANCE'
+} as const
+
+export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
+
+
+export const CheckStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CLEARED: 'CLEARED',
+  BOUNCED: 'BOUNCED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type CheckStatus = (typeof CheckStatus)[keyof typeof CheckStatus]
+
+
+export const AccountEntryType = {
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  ADVANCE: 'ADVANCE',
+  LOAN: 'LOAN',
+  LOAN_PAYMENT: 'LOAN_PAYMENT',
+  ADJUSTMENT: 'ADJUSTMENT',
+  TRANSFER: 'TRANSFER',
+  CHECK_ISSUED: 'CHECK_ISSUED',
+  CHECK_RECEIVED: 'CHECK_RECEIVED',
+  CHECK_BOUNCED: 'CHECK_BOUNCED',
+  INVOICE: 'INVOICE',
+  CREDIT_NOTE: 'CREDIT_NOTE',
+  DEBIT_NOTE: 'DEBIT_NOTE',
+  DEBIT: 'DEBIT',
+  CREDIT: 'CREDIT',
+  OPENING_BALANCE: 'OPENING_BALANCE',
+  WITHHOLDING: 'WITHHOLDING'
+} as const
+
+export type AccountEntryType = (typeof AccountEntryType)[keyof typeof AccountEntryType]
+
+
+export const CashBoxType = {
+  MAIN: 'MAIN',
+  FIXED: 'FIXED',
+  REGISTER: 'REGISTER'
+} as const
+
+export type CashBoxType = (typeof CashBoxType)[keyof typeof CashBoxType]
+
+
+export const CashBoxStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+} as const
+
+export type CashBoxStatus = (typeof CashBoxStatus)[keyof typeof CashBoxStatus]
+
+
+export const CashBoxSessionStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  FORCED: 'FORCED'
+} as const
+
+export type CashBoxSessionStatus = (typeof CashBoxSessionStatus)[keyof typeof CashBoxSessionStatus]
+
+
+export const CashBoxUserRole = {
+  RESPONSIBLE: 'RESPONSIBLE',
+  OPERATOR: 'OPERATOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type CashBoxUserRole = (typeof CashBoxUserRole)[keyof typeof CashBoxUserRole]
+
+
+export const BankAccountUserRole = {
+  RESPONSIBLE: 'RESPONSIBLE',
+  OPERATOR: 'OPERATOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type BankAccountUserRole = (typeof BankAccountUserRole)[keyof typeof BankAccountUserRole]
+
+
+export const CreditCardType = {
+  COMPANY: 'COMPANY',
+  CUSTOMER: 'CUSTOMER'
+} as const
+
+export type CreditCardType = (typeof CreditCardType)[keyof typeof CreditCardType]
+
+
+export const CreditCardBrand = {
+  VISA: 'VISA',
+  MASTERCARD: 'MASTERCARD',
+  AMEX: 'AMEX',
+  NARANJA: 'NARANJA',
+  CABAL: 'CABAL',
+  OTHER: 'OTHER'
+} as const
+
+export type CreditCardBrand = (typeof CreditCardBrand)[keyof typeof CreditCardBrand]
+
+
+export const CreditCardTransactionType = {
+  PURCHASE: 'PURCHASE',
+  COLLECTION: 'COLLECTION'
+} as const
+
+export type CreditCardTransactionType = (typeof CreditCardTransactionType)[keyof typeof CreditCardTransactionType]
+
+
+export const ClearingStatus = {
+  PENDING: 'PENDING',
+  CLEARED: 'CLEARED',
+  FAILED: 'FAILED'
+} as const
+
+export type ClearingStatus = (typeof ClearingStatus)[keyof typeof ClearingStatus]
+
+
+export const InstallmentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE'
+} as const
+
+export type InstallmentStatus = (typeof InstallmentStatus)[keyof typeof InstallmentStatus]
+
+
+export const PartyType = {
+  CUSTOMER: 'CUSTOMER',
+  SUPPLIER: 'SUPPLIER',
+  EMPLOYEE: 'EMPLOYEE',
+  PARTNER: 'PARTNER',
+  TAX_AUTHORITY: 'TAX_AUTHORITY',
+  UTILITY: 'UTILITY',
+  FINANCIAL: 'FINANCIAL',
+  SERVICE_PROVIDER: 'SERVICE_PROVIDER'
+} as const
+
+export type PartyType = (typeof PartyType)[keyof typeof PartyType]
+
+
+export const FiscalMode = {
+  SIMPLE: 'SIMPLE',
+  COMPLETE: 'COMPLETE'
+} as const
+
+export type FiscalMode = (typeof FiscalMode)[keyof typeof FiscalMode]
+
+
+export const IibbRegistrationType = {
+  DIRECTO: 'DIRECTO',
+  CONVENIO_MULTILATERAL: 'CONVENIO_MULTILATERAL',
+  NO_INSCRIPTO: 'NO_INSCRIPTO',
+  EXENTO: 'EXENTO'
+} as const
+
+export type IibbRegistrationType = (typeof IibbRegistrationType)[keyof typeof IibbRegistrationType]
+
+
+export const WithholdingSubjectStatus = {
+  NORMAL: 'NORMAL',
+  EXENTO: 'EXENTO',
+  NO_SUJETO: 'NO_SUJETO',
+  CERTIFICADO_NO_RETENCION: 'CERTIFICADO_NO_RETENCION'
+} as const
+
+export type WithholdingSubjectStatus = (typeof WithholdingSubjectStatus)[keyof typeof WithholdingSubjectStatus]
+
+
+export const WithholdingDirection = {
+  PRACTICADA: 'PRACTICADA',
+  SUFRIDA: 'SUFRIDA'
+} as const
+
+export type WithholdingDirection = (typeof WithholdingDirection)[keyof typeof WithholdingDirection]
+
+
+export const WithholdingStatus = {
+  CALCULATED: 'CALCULATED',
+  APPLIED: 'APPLIED',
+  CERTIFIED: 'CERTIFIED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type WithholdingStatus = (typeof WithholdingStatus)[keyof typeof WithholdingStatus]
+
+
+export const TaxApplicationType = {
+  TAX: 'TAX',
+  PERCEPTION: 'PERCEPTION',
+  WITHHOLDING: 'WITHHOLDING'
+} as const
+
+export type TaxApplicationType = (typeof TaxApplicationType)[keyof typeof TaxApplicationType]
+
+
+export const TaxBaseType = {
+  NET_AMOUNT: 'NET_AMOUNT',
+  GROSS_AMOUNT: 'GROSS_AMOUNT',
+  VAT_AMOUNT: 'VAT_AMOUNT',
+  TAXABLE_AMOUNT: 'TAXABLE_AMOUNT',
+  PAYMENT_AMOUNT: 'PAYMENT_AMOUNT',
+  ACCUMULATED_AMOUNT: 'ACCUMULATED_AMOUNT',
+  CUSTOM: 'CUSTOM'
+} as const
+
+export type TaxBaseType = (typeof TaxBaseType)[keyof typeof TaxBaseType]
+
+
+export const HrValeType = {
+  SUELDO: 'SUELDO',
+  ADELANTO: 'ADELANTO',
+  EXTRAS: 'EXTRAS',
+  RETIRO: 'RETIRO',
+  REEMBOLSO: 'REEMBOLSO',
+  PRESTAMO: 'PRESTAMO',
+  APORTE: 'APORTE'
+} as const
+
+export type HrValeType = (typeof HrValeType)[keyof typeof HrValeType]
+
+
+export const HrValeStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type HrValeStatus = (typeof HrValeStatus)[keyof typeof HrValeStatus]
+
+
+export const HrAccountEntryType = {
+  VALE_DEBIT: 'VALE_DEBIT',
+  VALE_CREDIT: 'VALE_CREDIT',
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type HrAccountEntryType = (typeof HrAccountEntryType)[keyof typeof HrAccountEntryType]
+
+
+export const OperationType = {
+  IMPORT: 'IMPORT',
+  EXPORT: 'EXPORT',
+  OTHER: 'OTHER'
+} as const
+
+export type OperationType = (typeof OperationType)[keyof typeof OperationType]
+
+
+export const TransportType = {
+  MARITIME: 'MARITIME',
+  AIR: 'AIR',
+  LAND: 'LAND',
+  MULTIMODAL: 'MULTIMODAL',
+  OTHER: 'OTHER'
+} as const
+
+export type TransportType = (typeof TransportType)[keyof typeof TransportType]
+
+
+export const OperationStatus = {
+  PLANNED: 'PLANNED',
+  IN_PREPARATION: 'IN_PREPARATION',
+  SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  ARRIVED: 'ARRIVED',
+  CUSTOMS: 'CUSTOMS',
+  RELEASED: 'RELEASED',
+  DELIVERED: 'DELIVERED',
+  CLOSED: 'CLOSED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type OperationStatus = (typeof OperationStatus)[keyof typeof OperationStatus]
+
+
+export const ContainerType = {
+  TWENTY_DV: 'TWENTY_DV',
+  FORTY_DV: 'FORTY_DV',
+  FORTY_HC: 'FORTY_HC',
+  FORTY_FIVE_HC: 'FORTY_FIVE_HC',
+  OTHER: 'OTHER'
+} as const
+
+export type ContainerType = (typeof ContainerType)[keyof typeof ContainerType]
+
+
+export const ContainerStatus = {
+  PREPARING: 'PREPARING',
+  LOADED: 'LOADED',
+  SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  ARRIVED: 'ARRIVED',
+  CUSTOMS: 'CUSTOMS',
+  RELEASED: 'RELEASED',
+  DELIVERED: 'DELIVERED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type ContainerStatus = (typeof ContainerStatus)[keyof typeof ContainerStatus]
+
+
+export const ContainerEventType = {
+  LOADED_AT_ORIGIN: 'LOADED_AT_ORIGIN',
+  DEPARTED_ORIGIN: 'DEPARTED_ORIGIN',
+  SHIPPED: 'SHIPPED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  ARRIVED_AT_PORT: 'ARRIVED_AT_PORT',
+  CUSTOMS: 'CUSTOMS',
+  RELEASED: 'RELEASED',
+  INLAND_TRANSPORT: 'INLAND_TRANSPORT',
+  ARRIVED_AT_WAREHOUSE: 'ARRIVED_AT_WAREHOUSE',
+  DELIVERED: 'DELIVERED'
+} as const
+
+export type ContainerEventType = (typeof ContainerEventType)[keyof typeof ContainerEventType]
+
+
+export const Incoterm = {
+  EXW: 'EXW',
+  FCA: 'FCA',
+  FOB: 'FOB',
+  CFR: 'CFR',
+  CIF: 'CIF',
+  CPT: 'CPT',
+  CIP: 'CIP',
+  DAP: 'DAP',
+  DPU: 'DPU',
+  DDP: 'DDP'
+} as const
+
+export type Incoterm = (typeof Incoterm)[keyof typeof Incoterm]
+
+
+export const InternationalExpenseType = {
+  MERCHANDISE: 'MERCHANDISE',
+  INTERNATIONAL_FREIGHT: 'INTERNATIONAL_FREIGHT',
+  INSURANCE: 'INSURANCE',
+  CUSTOMS_BROKER: 'CUSTOMS_BROKER',
+  COMMERCIAL_AGENT: 'COMMERCIAL_AGENT',
+  PORT_EXPENSE: 'PORT_EXPENSE',
+  STORAGE: 'STORAGE',
+  LOCAL_TRANSPORT: 'LOCAL_TRANSPORT',
+  CUSTOMS_DUTIES: 'CUSTOMS_DUTIES',
+  NACIONALIZACION: 'NACIONALIZACION',
+  OTHER: 'OTHER'
+} as const
+
+export type InternationalExpenseType = (typeof InternationalExpenseType)[keyof typeof InternationalExpenseType]
+
+
+export const QuoteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type QuoteStatus = (typeof QuoteStatus)[keyof typeof QuoteStatus]
+
+
+export const MaintenanceAssetType = {
+  VEHICLE: 'VEHICLE',
+  TIRE: 'TIRE',
+  BATTERY: 'BATTERY',
+  ENGINE: 'ENGINE',
+  TRANSMISSION: 'TRANSMISSION',
+  DIFFERENTIAL: 'DIFFERENTIAL',
+  OTHER_COMPONENT: 'OTHER_COMPONENT'
+} as const
+
+export type MaintenanceAssetType = (typeof MaintenanceAssetType)[keyof typeof MaintenanceAssetType]
+
+
+export const MaintenancePriority = {
+  CRITICAL: 'CRITICAL',
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW'
+} as const
+
+export type MaintenancePriority = (typeof MaintenancePriority)[keyof typeof MaintenancePriority]
+
+
+export const MaintenanceStatus = {
+  PENDING: 'PENDING',
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_PARTS: 'WAITING_PARTS',
+  WAITING_SUPPLIER: 'WAITING_SUPPLIER',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type MaintenanceStatus = (typeof MaintenanceStatus)[keyof typeof MaintenanceStatus]
+
+
+export const MaintenanceType = {
+  CORRECTIVE: 'CORRECTIVE',
+  PREVENTIVE: 'PREVENTIVE',
+  PREDICTIVE: 'PREDICTIVE',
+  INSPECTION: 'INSPECTION',
+  SCHEDULED: 'SCHEDULED'
+} as const
+
+export type MaintenanceType = (typeof MaintenanceType)[keyof typeof MaintenanceType]
+
+
+export const MaintenanceCategory = {
+  ENGINE: 'ENGINE',
+  TRANSMISSION: 'TRANSMISSION',
+  BRAKES: 'BRAKES',
+  SUSPENSION: 'SUSPENSION',
+  STEERING: 'STEERING',
+  ELECTRICAL: 'ELECTRICAL',
+  COOLING: 'COOLING',
+  LUBRICATION: 'LUBRICATION',
+  TIRES: 'TIRES',
+  BODY: 'BODY',
+  LIGHTING: 'LIGHTING',
+  TRAILER: 'TRAILER',
+  OTHER: 'OTHER'
+} as const
+
+export type MaintenanceCategory = (typeof MaintenanceCategory)[keyof typeof MaintenanceCategory]
+
+
+export const MaintenanceTaskStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type MaintenanceTaskStatus = (typeof MaintenanceTaskStatus)[keyof typeof MaintenanceTaskStatus]
+
+
+export const TireMovementType = {
+  PURCHASE: 'PURCHASE',
+  RECEIPT: 'RECEIPT',
+  TRANSFER: 'TRANSFER',
+  INSTALLATION: 'INSTALLATION',
+  REMOVAL: 'REMOVAL',
+  ROTATION: 'ROTATION',
+  REPAIR: 'REPAIR',
+  RETREAD: 'RETREAD',
+  WAREHOUSE_ENTRY: 'WAREHOUSE_ENTRY',
+  WAREHOUSE_EXIT: 'WAREHOUSE_EXIT',
+  SCRAP: 'SCRAP',
+  SALE: 'SALE'
+} as const
+
+export type TireMovementType = (typeof TireMovementType)[keyof typeof TireMovementType]
+
+
+export const TirePositionSide = {
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT'
+} as const
+
+export type TirePositionSide = (typeof TirePositionSide)[keyof typeof TirePositionSide]
+
+
+export const PlanIntervalType = {
+  INTERVAL_KM: 'INTERVAL_KM',
+  INTERVAL_DAYS: 'INTERVAL_DAYS',
+  INTERVAL_MONTHS: 'INTERVAL_MONTHS',
+  FIXED_DATE: 'FIXED_DATE'
+} as const
+
+export type PlanIntervalType = (typeof PlanIntervalType)[keyof typeof PlanIntervalType]
+
+
+export const TireStatus = {
+  IN_STOCK: 'IN_STOCK',
+  INSTALLED: 'INSTALLED',
+  IN_REPAIR: 'IN_REPAIR',
+  SCRAPPED: 'SCRAPPED',
+  SOLD: 'SOLD'
+} as const
+
+export type TireStatus = (typeof TireStatus)[keyof typeof TireStatus]
+
+
+export const TireLocationType = {
+  WAREHOUSE: 'WAREHOUSE',
+  VEHICLE: 'VEHICLE',
+  TIRE_SHOP: 'TIRE_SHOP',
+  SCRAP: 'SCRAP',
+  CUSTOMER: 'CUSTOMER'
+} as const
+
+export type TireLocationType = (typeof TireLocationType)[keyof typeof TireLocationType]
+
+
+export const CompanyRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  USER: 'USER'
+} as const
+
+export type CompanyRole = (typeof CompanyRole)[keyof typeof CompanyRole]
+
+
+export const PlatformRole = {
+  PLATFORM_OWNER: 'PLATFORM_OWNER',
+  SUPPORT: 'SUPPORT',
+  PLATFORM_ADMIN: 'PLATFORM_ADMIN',
+  PLATFORM_USER: 'PLATFORM_USER'
+} as const
+
+export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
+
+
+export const PermissionEffect = {
+  ALLOW: 'ALLOW',
+  DENY: 'DENY'
+} as const
+
+export type PermissionEffect = (typeof PermissionEffect)[keyof typeof PermissionEffect]

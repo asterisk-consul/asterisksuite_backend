@@ -1,14 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
-import { ValidationPipe, Logger } from '@nestjs/common';
+import { ValidationPipe, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RequestContextInterceptor } from './common/interceptors/request-context.interceptor.js';
+import * as express from 'express';
+import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Main');
 
   app.setGlobalPrefix('api');
+
+  // ✅ Aumentar límite de body para uploads (50MB)
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+  // ✅ Servir archivos estáticos desde /uploads
+  const uploadsPath = path.resolve(process.cwd(), 'uploads');
+  app.use('/uploads', express.static(uploadsPath));
 
   // Un solo enableCors con todos los orígenes
   app.enableCors({
@@ -29,6 +39,14 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
       forbidNonWhitelisted: true,
+      exceptionFactory: (errors) => {
+        console.log('[VALIDATION] Errors:', JSON.stringify(errors.map(e => ({
+          field: e.property,
+          constraints: e.constraints,
+          value: e.value
+        }))))
+        return new BadRequestException(errors)
+      }
     }),
   );
 

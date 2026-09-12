@@ -1,0 +1,210 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@cashBoxId = c2ef3f0a-2b1b-4579-af51-a6f744ebaea8
+@movementId = REEMPLAZAR_MOVEMENT_ID
+
+### =========================================================
+### CREATE MOVEMENT - INGRESO (COLLECTION)
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-movements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "type": "COLLECTION",
+  "amount": 50000,
+  "currency_code": "USD",
+  "description": "Cobro factura #001"
+}
+
+###
+
+### =========================================================
+### CREATE MOVEMENT - EGRESO (PAYMENT)
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-movements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "type": "PAYMENT",
+  "amount": 15000,
+  "currency_code": "USD",
+  "description": "Pago a proveedor ABC"
+}
+
+###
+
+### =========================================================
+### CREATE MOVEMENT - PRÉSTAMO (LOAN)
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-movements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "type": "LOAN",
+  "amount": 10000,
+  "currency_code": "USD",
+  "description": "Préstamo a empleado"
+}
+
+###
+
+### =========================================================
+### CREATE MOVEMENT - ANTICIPO (ADVANCE)
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-movements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "type": "ADVANCE",
+  "amount": 5000,
+  "currency_code": "USD",
+  "description": "Anticipo de viaje"
+}
+
+###
+
+### =========================================================
+### CREATE MOVEMENT - DEVOLUCIÓN DE PRÉSTAMO
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-movements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "type": "LOAN_PAYMENT",
+  "amount": 3000,
+  "currency_code": "USD",
+  "description": "Devolución parcial préstamo"
+}
+
+###
+
+### =========================================================
+### CREATE MOVEMENT - AJUSTE
+### =========================================================
+
+POST {{baseUrl}}/logistica/cash-box-movements
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "cash_box_id": "{{cashBoxId}}",
+  "type": "ADJUSTMENT",
+  "amount": 500,
+  "currency_code": "USD",
+  "description": "Ajuste por diferencia de conteo"
+}
+
+###
+
+### =========================================================
+### GET ALL MOVEMENTS
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-movements
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET MOVEMENTS FILTERED BY CASH BOX
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-movements?cash_box_id={{cashBoxId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET MOVEMENTS FILTERED BY TYPE
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-movements?type=COLLECTION
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET MOVEMENTS FILTERED BY DATE RANGE
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-movements?date_from=2026-01-01&date_to=2026-12-31
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ONE MOVEMENT
+### =========================================================
+
+GET {{baseUrl}}/logistica/cash-box-movements/{{movementId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### UPDATE MOVEMENT
+### =========================================================
+
+PATCH {{baseUrl}}/logistica/cash-box-movements/{{movementId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+{
+  "description": "Descripción actualizada"
+}
+
+###
+
+### =========================================================
+### DELETE MOVEMENT (SOFT DELETE)
+### =========================================================
+
+DELETE {{baseUrl}}/logistica/cash-box-movements/{{movementId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

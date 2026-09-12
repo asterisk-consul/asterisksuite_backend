@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -19,9 +15,14 @@ type RefreshTokenWithUser = Prisma.refresh_tokensGetPayload<{
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
+    private db: PrismaService,
     private jwtService: JwtService,
   ) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getDefaultClient();
+  }
 
   private hashToken(token: string) {
     return crypto.createHash('sha256').update(token).digest('hex');
@@ -57,8 +58,22 @@ export class AuthService {
       role: user.role,
     };
 
+    // 🔎 Empresas del usuario
+    const companyMemberships = await this.prisma.company_users.findMany({
+      where: { user_id: user.id },
+      include: { company: true },
+    });
+
+    const companies = companyMemberships.map((cu) => ({
+      id: cu.company.id,
+      name: cu.company.name,
+      subdomain: cu.company.subdomain,
+      role: cu.role,
+    }));
+
     return {
       user: safeUser,
+      companies,
       accessToken,
       refreshToken,
     };
@@ -86,6 +101,37 @@ export class AuthService {
         role: dto.role ?? 'user',
       },
     });
+
+    // Vincular con employee/partner si se solicita (requiere tenant context)
+    if (dto.link_employee_id || dto.link_partner_id) {
+      try {
+        const tenantPrisma = this.db.getClientForCurrentContext();
+
+        if (dto.link_employee_id) {
+          await tenantPrisma.employees.update({
+            where: { id: dto.link_employee_id },
+            data: { user_id: user.id },
+          });
+          await this.prisma.users.update({
+            where: { id: user.id },
+            data: { employee_id: dto.link_employee_id },
+          });
+        }
+
+        if (dto.link_partner_id) {
+          await tenantPrisma.partners.update({
+            where: { id: dto.link_partner_id },
+            data: { user_id: user.id },
+          });
+          await this.prisma.users.update({
+            where: { id: user.id },
+            data: { partner_id: dto.link_partner_id },
+          });
+        }
+      } catch (e) {
+        // Si no hay tenant context, ignora el linking (el endpoint es público)
+      }
+    }
 
     return this.generateTokens({
       id: user.id,
@@ -127,23 +173,22 @@ export class AuthService {
 
     const GRACE_WINDOW_MS = 60000;
 
-    const stored: RefreshTokenWithUser | null =
-      await this.prisma.refresh_tokens.findFirst({
-        where: {
-          token_hash: hashed,
-          expires_at: { gt: now },
-          OR: [
-            { revoked: false },
-            {
-              revoked: true,
-              revoked_at: {
-                gte: new Date(now.getTime() - GRACE_WINDOW_MS),
-              },
+    const stored: RefreshTokenWithUser | null = await this.prisma.refresh_tokens.findFirst({
+      where: {
+        token_hash: hashed,
+        expires_at: { gt: now },
+        OR: [
+          { revoked: false },
+          {
+            revoked: true,
+            revoked_at: {
+              gte: new Date(now.getTime() - GRACE_WINDOW_MS),
             },
-          ],
-        },
-        include: { users: true },
-      });
+          },
+        ],
+      },
+      include: { users: true },
+    });
 
     if (!stored) {
       throw new UnauthorizedException('Refresh token invalido');
@@ -199,11 +244,7 @@ export class AuthService {
   // =========================
   // CHANGE PASSWORD
   // =========================
-  async changePassword(
-    userId: string,
-    currentPassword: string,
-    newPassword: string,
-  ) {
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
     const user = await this.prisma.users.findUnique({
       where: { id: userId },
     });
@@ -231,5 +272,52 @@ export class AuthService {
     });
 
     return { message: 'Password actualizado. Todas las sesiones cerradas' };
+  }
+
+  async getMyCompanies(userId: string) {
+    const prisma = this.db.getDefaultClient();
+
+    return prisma.company_users.findMany({
+      where: {
+        user_id: userId,
+      },
+      include: {
+        company: true,
+      },
+    });
+  }
+
+  async getCurrentUser(userId: string) {
+    const publicPrisma = this.db.getDefaultClient();
+    const user = await publicPrisma.users.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        companyUsers: {
+          include: {
+            company: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+
+      companies: user.companyUsers.map((cu) => ({
+        id: cu.company.id,
+        name: cu.company.name,
+        subdomain: cu.company.subdomain,
+        schemaName: cu.company.schema_name,
+        role: cu.role,
+      })),
+    };
   }
 }

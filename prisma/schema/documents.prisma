@@ -1,0 +1,311 @@
+model document_sequences {
+  id                      String                    @id @default(uuid()) @db.Uuid
+  name                    String                    @db.VarChar(50)
+  automatic               Boolean                   @default(true)
+  range_start             Int?
+  range_end               Int?
+  point_of_sale           String                    @db.VarChar(10)
+  current_number          Int                       @default(0)
+  prefix                  String?                   @db.VarChar(20)
+  active                  Boolean                   @default(true)
+  created_at              DateTime                  @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @updatedAt @db.Timestamp(6)
+  deleted_at              DateTime?
+  created_by              String?                   @db.Uuid
+  updated_by              String?                   @db.Uuid
+  deleted_by              String?                   @db.Uuid
+  document_types          document_types[]
+  document_type_sequences document_type_sequences[]
+  documents               documents[]
+
+  @@unique([point_of_sale, prefix])
+  @@schema("tenant")
+}
+
+model document_type_sequences {
+  id               String   @id @default(uuid()) @db.Uuid
+  document_type_id String   @db.Uuid
+  sequence_id      String   @db.Uuid
+  is_default       Boolean  @default(false)
+  created_at       DateTime @default(now()) @db.Timestamp(6)
+
+  document_types     document_types     @relation(fields: [document_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  document_sequences document_sequences @relation(fields: [sequence_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([document_type_id, sequence_id])
+  @@schema("tenant")
+}
+
+model document_item_taxes {
+  id                   String         @id @default(uuid()) @db.Uuid
+  document_item_id     String         @db.Uuid
+  tax_id               String         @db.Uuid
+  tax_rate             Decimal        @db.Decimal(6, 3)
+  tax_amount           Decimal        @db.Decimal(15, 2)
+  converted_tax_amount Decimal?       @db.Decimal(18, 2)
+  created_at           DateTime       @default(now()) @db.Timestamp(6)
+  updated_at           DateTime?      @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?        @db.Uuid
+  updated_by           String?        @db.Uuid
+  deleted_by           String?        @db.Uuid
+  document_items       document_items @relation(fields: [document_item_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "dit_document_item_fkey")
+  taxes                taxes          @relation(fields: [tax_id], references: [id], onUpdate: NoAction, map: "dit_tax_fkey")
+
+  @@index([document_item_id], map: "idx_document_item_taxes_document_item")
+  @@index([tax_id], map: "idx_document_item_taxes_tax")
+  @@schema("tenant")
+}
+
+model document_items {
+  id                   String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_id          String                @db.Uuid
+  product_id           String?               @db.Uuid
+  variant_id           String?               @db.Uuid
+  warehouse_id         String?               @db.Uuid
+  quantity             Decimal               @db.Decimal(15, 3)
+  price                Decimal               @db.Decimal(15, 2)
+  unit_price           Decimal               @default(0) @db.Decimal(15, 2)
+  discount_percentage Decimal               @default(0) @db.Decimal(8, 4)
+  exchange_rate        Decimal?              @db.Decimal(18, 6)
+  currency_code        String?               @db.VarChar(10)
+  rate_type            CurrencyRateType?
+  original_unit_price  Decimal?              @db.Decimal(15, 2)
+  converted_unit_price Decimal?              @db.Decimal(18, 2)
+  converted_price      Decimal?              @db.Decimal(18, 2)
+  quantity_delivered   Decimal?              @db.Decimal(15, 3)
+  quantity_invoiced    Decimal?              @db.Decimal(15, 3)
+  created_at           DateTime              @default(now()) @db.Timestamp(6)
+  updated_at           DateTime?             @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?               @db.Uuid
+  updated_by           String?               @db.Uuid
+  deleted_by           String?               @db.Uuid
+  document_item_taxes  document_item_taxes[]
+  documents            documents             @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  products             products?             @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  product_variants     product_variants?     @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouse            warehouses?           @relation("DocumentItemWarehouse", fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([warehouse_id])
+  @@schema("tenant")
+}
+
+model document_taxes {
+  id                     String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_id            String            @db.Uuid
+  tax_id                 String            @db.Uuid
+  tax_rate               Decimal           @db.Decimal(6, 3)
+  taxable_base           Decimal           @db.Decimal(15, 2)
+  tax_amount             Decimal           @db.Decimal(15, 2)
+  rate_type              CurrencyRateType?
+  converted_taxable_base Decimal?          @db.Decimal(18, 2)
+  converted_tax_amount   Decimal?          @db.Decimal(18, 2)
+  automatic_tax_amount   Decimal?          @db.Decimal(15, 2)
+  is_manual              Boolean           @default(false)
+  modification_reason    String?           @db.VarChar(250)
+  manual_override_by     String?           @db.Uuid
+  created_at             DateTime          @default(now()) @db.Timestamp(6)
+  updated_at             DateTime?         @updatedAt @db.Timestamp(6)
+  deleted_at             DateTime?
+  created_by             String?           @db.Uuid
+  updated_by             String?           @db.Uuid
+  deleted_by             String?           @db.Uuid
+  documents              documents         @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  taxes                  taxes             @relation(fields: [tax_id], references: [id], onUpdate: NoAction)
+
+  @@schema("tenant")
+}
+
+model document_types {
+  id                      String                    @id @default(uuid()) @db.Uuid
+  document_sequence_id    String?                   @db.Uuid
+  module_id               String?                   @db.Uuid
+  code                    String                    @unique @db.VarChar(20)
+  description             String                    @db.VarChar(150)
+  direction               Int                       @db.SmallInt
+  affects_stock           Boolean                   @default(false)
+  affects_accounting      Boolean                   @default(false)
+  affects_tax_book        Boolean                   @default(false)
+  affects_payment         Boolean                   @default(false)
+  calculates_taxes        Boolean                   @default(true) // false = comprobante sin desglose de impuestos (X, internos)
+  active                  Boolean                   @default(true)
+  category                String?                   @db.VarChar(30) // INVOICE, CREDIT_NOTE, DEBIT_NOTE, ORDER, QUOTE
+  letter_type             String?                   @db.VarChar(5) // A, B, C, X
+  afip_code               String?                   @db.VarChar(5) // 01, 06, 11, etc.
+  requires_cae            Boolean                   @default(false)
+  is_electronic           Boolean                   @default(false)
+  custom_fields_config    Json?
+  enabled_statuses        Json?                       // Array de enteros: [0,1,2,3] o null = todos
+  created_at              DateTime                  @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @updatedAt @db.Timestamp(6)
+  deleted_at              DateTime?
+  created_by              String?                   @db.Uuid
+  updated_by              String?                   @db.Uuid
+  deleted_by              String?                   @db.Uuid
+  document_type_taxes     document_type_taxes[]
+  document_sequences      document_sequences?       @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  system_modules          system_modules?           @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  documents               documents[]
+  document_type_sequences document_type_sequences[]
+
+  @@schema("tenant")
+}
+
+model document_type_taxes {
+  id               String         @id @default(uuid()) @db.Uuid
+  document_type_id String         @db.Uuid
+  tax_id           String         @db.Uuid
+  created_at       DateTime       @default(now()) @db.Timestamp(6)
+  created_by       String?        @db.Uuid
+  document_types   document_types @relation(fields: [document_type_id], references: [id], onDelete: Cascade)
+  taxes            taxes          @relation(fields: [tax_id], references: [id])
+
+  @@unique([document_type_id, tax_id])
+  @@schema("tenant")
+}
+
+model documents {
+  id                           String                              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_type_id             String                              @db.Uuid
+  document_sequence_id         String?                             @db.Uuid
+  party_id                     String?                             @db.Uuid
+  parent_document_id           String?                             @db.Uuid
+  commercial_operation_id      String?                             @db.Uuid
+  warehouse_id                 String?                             @db.Uuid
+  fiscal_jurisdiction_id       String?                             @db.Uuid
+  number                       Int
+  date                         DateTime                            @db.Date
+  status                       Int                                 @default(0) @db.SmallInt
+  subtotal                     Decimal                             @default(0) @db.Decimal(15, 2)
+  exempt_amount                Decimal                             @default(0) @db.Decimal(15, 2)
+  total_taxes                  Decimal                             @default(0) @db.Decimal(15, 2)
+  total                        Decimal                             @default(0) @db.Decimal(15, 2)
+  paid_amount                  Decimal                             @default(0) @db.Decimal(15, 2)
+  descrip                      String?                             @db.VarChar(50)
+  ref                          String?                             @db.VarChar(50)
+  currency_code                String?                             @db.VarChar(10)
+  exchange_rate                Decimal?                            @db.Decimal(18, 6)
+  rate_type                    CurrencyRateType?
+  taxable_base                 Decimal?                            @db.Decimal(15, 2)
+  converted_subtotal           Decimal?                            @db.Decimal(18, 2)
+  converted_exempt_amount      Decimal?                            @db.Decimal(18, 2)
+  converted_total_taxes        Decimal?                            @db.Decimal(18, 2)
+  converted_total              Decimal?                            @db.Decimal(18, 2)
+  converted_taxable_base       Decimal?                            @db.Decimal(18, 2)
+  converted_paid_amount        Decimal?                            @db.Decimal(18, 2)
+  custom_fields                Json?
+  assigned_to                  String?                             @db.Uuid
+  validity_date                DateTime?                           @db.Date
+  delivery_date                DateTime?                           @db.Date
+  created_at                   DateTime?                           @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime?                           @updatedAt @db.Timestamp(6)
+  deleted_at                   DateTime?
+  created_by                   String?                             @db.Uuid
+  updated_by                   String?                             @db.Uuid
+  deleted_by                   String?                             @db.Uuid
+  source                       String                              @default("manual")
+  dispatch_order_id            String?                             @db.Uuid
+  document_items               document_items[]
+  document_taxes               document_taxes[]
+  document_types               document_types                      @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  document_sequences           document_sequences?                 @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties             business_parties?                   @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouse                    warehouses?                         @relation("DocumentWarehouse", fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_documents            payment_documents[]
+  parent_document              documents?                          @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child_documents              documents[]                         @relation("DocumentChain")
+  commercial_operation         commercial_operations?              @relation("CommercialOperationDocuments", fields: [commercial_operation_id], references: [id], onDelete: SetNull)
+  rooted_commercial_operation  commercial_operations?              @relation("CommercialOperationRoot")
+  dispatch_order               dispatch_orders?                    @relation("DispatchDocuments", fields: [dispatch_order_id], references: [id], onDelete: SetNull)
+  source_dispatch_orders       dispatch_orders[]                   @relation("DispatchSourceDocument")
+  presupuesto_doc              presupuesto_documents?
+  orden_venta_doc              orden_venta_documents?
+  orden_compra_doc             orden_compra_documents?
+  hr_vale_commission_details   hr_vale_commission_details[]
+  international_operation_docs international_operation_documents[]
+  international_operation_quotes international_operation_quotes[]
+  withholding_allocations      withholding_allocations[]
+  maintenance_services         maintenance_services[]
+  purchase_tires               tires[]
+
+  @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
+  @@index([currency_code, date], map: "idx_documents_currency_date")
+  @@index([assigned_to])
+  @@index([commercial_operation_id])
+  @@index([warehouse_id])
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// EXTENSIÓN: Presupuesto
+// ══════════════════════════════════════════════════════════
+model presupuesto_documents {
+  id                   String    @id @default(uuid()) @db.Uuid
+  document_id          String    @unique @db.Uuid
+  validity_date        DateTime? @db.Date
+  warranty_info        String?   @db.VarChar(200)
+  exclusions           String?   @db.Text
+  commercial_notes     String?   @db.Text
+  internal_notes       String?   @db.Text
+  terms_and_conditions String?   @db.Text
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+  updated_at           DateTime? @updatedAt @db.Timestamp(6)
+
+  document documents @relation(fields: [document_id], references: [id], onDelete: Cascade)
+
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// EXTENSIÓN: Orden de Venta
+// ══════════════════════════════════════════════════════════
+model orden_venta_documents {
+  id                      String    @id @default(uuid()) @db.Uuid
+  document_id             String    @unique @db.Uuid
+  priority                String?   @db.VarChar(20)
+  delivery_address        String?   @db.VarChar(300)
+  delivery_contact        String?   @db.VarChar(100)
+  delivery_phone          String?   @db.VarChar(30)
+  delivery_time           String?   @db.VarChar(100)
+  delivery_instructions   String?   @db.Text
+  transport_provider      String?   @db.VarChar(100)
+  confirmed_delivery_date DateTime? @db.Date
+  seller_id               String?   @db.Uuid
+  commission_rate         Decimal?  @db.Decimal(5, 2)
+  commission_base         String?   @db.VarChar(20)
+  commission_settled_at   DateTime? @db.Timestamp(6)
+  commission_vale_id      String?   @db.Uuid
+  created_at              DateTime  @default(now()) @db.Timestamp(6)
+  updated_at              DateTime? @updatedAt @db.Timestamp(6)
+
+  document documents  @relation(fields: [document_id], references: [id], onDelete: Cascade)
+  seller   employees? @relation(fields: [seller_id], references: [id], onDelete: NoAction)
+
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// EXTENSIÓN: Orden de Compra
+// ══════════════════════════════════════════════════════════
+model orden_compra_documents {
+  id                         String    @id @default(uuid()) @db.Uuid
+  document_id                String    @unique @db.Uuid
+  priority                   String?   @db.VarChar(20)
+  delivery_address           String?   @db.VarChar(300)
+  delivery_contact           String?   @db.VarChar(100)
+  delivery_phone             String?   @db.VarChar(30)
+  delivery_time              String?   @db.VarChar(100)
+  delivery_instructions      String?   @db.Text
+  transport_provider         String?   @db.VarChar(100)
+  confirmed_delivery_date    DateTime? @db.Date
+  buyer_id                   String?   @db.Uuid
+  international_operation_id String?   @db.Uuid
+  created_at                 DateTime  @default(now()) @db.Timestamp(6)
+  updated_at                 DateTime? @updatedAt @db.Timestamp(6)
+
+  document                documents                 @relation(fields: [document_id], references: [id], onDelete: Cascade)
+  international_operation international_operations? @relation(fields: [international_operation_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("tenant")
+}

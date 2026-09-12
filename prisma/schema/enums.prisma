@@ -1,0 +1,367 @@
+enum DispatchStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum TripStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  RESTORE
+
+  @@schema("public")
+}
+
+enum ProductType {
+  RAW_MATERIAL
+  SEMI_FINISHED
+  FINISHED_PRODUCT
+  SERVICE
+  RATES
+
+  @@schema("tenant")
+}
+
+enum UsageType {
+  SALE
+  PURCHASE
+  BOTH
+
+  @@schema("tenant")
+}
+
+enum UnitType {
+  UNIT //Unidad	un
+  WEIGHT //Kilogramo	kg
+  LENGTH //Metro	m
+  AREA //Metro cuadrado	m2
+  VOLUME //Metro cúbico	m3
+
+  @@schema("tenant")
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+
+  @@schema("tenant")
+}
+
+enum AttributeType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
+
+  @@schema("tenant")
+}
+
+enum CalculationType {
+  UNIT
+  SURFACE
+  VOLUME
+  LINEAR
+
+  @@schema("tenant")
+}
+
+enum CurrencyRateType {
+  OFFICIAL
+  BLUE
+  MEP
+  CCL
+  WHOLESALE
+  CRYPTO
+  CARD
+
+  @@schema("tenant")
+}
+
+enum ProductCostSource {
+  MANUAL
+  BOM
+  ENGINEERING
+  PURCHASE
+  RATE
+
+  @@schema("tenant")
+}
+
+enum VariantCostSource {
+  MANUAL
+  PURCHASE
+  IMPORT
+  ENGINEERING
+  SUPPLIER
+
+  @@schema("tenant")
+}
+
+enum CostComponentType {
+  MATERIAL
+  LABOR
+  OVERHEAD
+  OTHER
+
+  @@schema("tenant")
+}
+
+enum CostValueType {
+  FROM_BOM
+  PERCENTAGE_OF_MATERIAL
+  PERCENTAGE_OF_TOTAL
+  FIXED_PER_UNIT
+
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// TESORERÍA — Enums
+// ══════════════════════════════════════════════════════════
+
+enum PaymentMethod {
+  CASH
+  CHECK
+  BANK_TRANSFER
+  CREDIT_CARD
+  DEBIT_CARD
+  VIRTUAL_WALLET
+
+  @@schema("tenant")
+}
+
+enum PaymentType {
+  PAYMENT
+  COLLECTION
+  EXPENSE
+
+  @@schema("tenant")
+}
+
+enum PaymentStatus {
+  DRAFT
+  CONFIRMED
+  PAID
+  REVERSED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum PaymentMode {
+  NORMAL
+  ADVANCE
+
+  @@schema("tenant")
+}
+
+enum CheckStatus {
+  PENDING
+  CONFIRMED
+  CLEARED
+  BOUNCED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum AccountEntryType {
+  PAYMENT
+  COLLECTION
+  ADVANCE
+  LOAN
+  LOAN_PAYMENT
+  ADJUSTMENT
+  TRANSFER
+  CHECK_ISSUED
+  CHECK_RECEIVED
+  CHECK_BOUNCED
+  INVOICE
+  CREDIT_NOTE
+  DEBIT_NOTE
+  DEBIT
+  CREDIT
+  OPENING_BALANCE
+  WITHHOLDING
+
+  @@schema("tenant")
+}
+
+enum CashBoxType {
+  MAIN
+  FIXED
+  REGISTER
+
+  @@schema("tenant")
+}
+
+enum CashBoxStatus {
+  OPEN
+  CLOSED
+
+  @@schema("tenant")
+}
+
+enum CashBoxSessionStatus {
+  OPEN
+  CLOSED
+  FORCED
+
+  @@schema("tenant")
+}
+
+enum CashBoxUserRole {
+  RESPONSIBLE
+  OPERATOR
+  VIEWER
+
+  @@schema("tenant")
+}
+
+enum BankAccountUserRole {
+  RESPONSIBLE
+  OPERATOR
+  VIEWER
+
+  @@schema("tenant")
+}
+
+enum CreditCardType {
+  COMPANY
+  CUSTOMER
+
+  @@schema("tenant")
+}
+
+enum CreditCardBrand {
+  VISA
+  MASTERCARD
+  AMEX
+  NARANJA
+  CABAL
+  OTHER
+
+  @@schema("tenant")
+}
+
+enum CreditCardTransactionType {
+  PURCHASE
+  COLLECTION
+
+  @@schema("tenant")
+}
+
+enum ClearingStatus {
+  PENDING
+  CLEARED
+  FAILED
+
+  @@schema("tenant")
+}
+
+enum InstallmentStatus {
+  PENDING
+  PAID
+  OVERDUE
+
+  @@schema("tenant")
+}
+
+enum PartyType {
+  CUSTOMER // Cliente
+  SUPPLIER // Proveedor
+  EMPLOYEE // Empleado
+  PARTNER // Socio
+  TAX_AUTHORITY // Ente impositivo (ARCA, IIBB, etc.)
+  UTILITY // Servicios públicos (EPEC, gas, etc.)
+  FINANCIAL // Entidades financieras (banco, tarjeta)
+  SERVICE_PROVIDER // Proveedor de servicios
+
+  @@schema("tenant")
+}
+
+// ══════════════════════════════════════════════════════════
+// TAX ENGINE — Enums
+// ══════════════════════════════════════════════════════════
+
+enum FiscalMode {
+  SIMPLE // Precio final, sin discriminación de impuestos
+  COMPLETE // Motor fiscal completo: IVA, percepciones, etc.
+
+  @@schema("public")
+}
+
+// ══════════════════════════════════════════════════════════
+// MOTOR FISCAL — Retenciones / Perfiles fiscales
+// ══════════════════════════════════════════════════════════
+
+enum IibbRegistrationType {
+  DIRECTO // Inscripción directa en una jurisdicción
+  CONVENIO_MULTILATERAL // Prorrateo por jurisdicción
+  NO_INSCRIPTO
+  EXENTO
+
+  @@schema("tenant")
+}
+
+enum WithholdingSubjectStatus {
+  NORMAL
+  EXENTO
+  NO_SUJETO
+  CERTIFICADO_NO_RETENCION
+
+  @@schema("tenant")
+}
+
+enum WithholdingDirection {
+  PRACTICADA // Nuestra empresa retiene al tercero (pago a proveedor)
+  SUFRIDA // El tercero nos retiene (cobro a cliente)
+
+  @@schema("tenant")
+}
+
+enum WithholdingStatus {
+  CALCULATED
+  APPLIED
+  CERTIFIED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum TaxApplicationType {
+  TAX // Impuesto de operación (IVA, etc.)
+  PERCEPTION // Percepción (en factura)
+  WITHHOLDING // Retención (en pago/cobro)
+
+  @@schema("tenant")
+}
+
+enum TaxBaseType {
+  NET_AMOUNT
+  GROSS_AMOUNT
+  VAT_AMOUNT
+  TAXABLE_AMOUNT
+  PAYMENT_AMOUNT
+  ACCUMULATED_AMOUNT
+  CUSTOM
+
+  @@schema("tenant")
+}

@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsBoolean,
   IsInt,
   IsOptional,
@@ -11,6 +12,11 @@ export class CreateDocumentsTypeDto {
   @IsOptional()
   @IsUUID()
   document_sequence_id?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  document_sequence_ids?: string[];
 
   @IsString()
   @MaxLength(20)
@@ -33,5 +39,47 @@ export class CreateDocumentsTypeDto {
   affects_tax_book!: boolean;
 
   @IsBoolean()
+  affects_payment!: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  calculates_taxes?: boolean;
+
+  @IsBoolean()
   active!: boolean;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(30)
+  category?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(5)
+  letter_type?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(5)
+  afip_code?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  requires_cae?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  is_electronic?: boolean;
+
+  @IsOptional()
+  custom_fields_config?: any;
+
+  @IsOptional()
+  @IsArray()
+  enabled_statuses?: number[];
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  tax_ids?: string[];
 }

@@ -6,7 +6,12 @@ import { UpdateTaxDto } from './dto/update-tax.dto';
 
 @Injectable()
 export class TaxesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async create(dto: CreateTaxDto) {
     return this.prisma.taxes.create({

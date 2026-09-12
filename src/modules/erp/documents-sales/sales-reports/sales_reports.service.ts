@@ -35,23 +35,22 @@ interface ProductTotalAccumulator {
 
 @Injectable()
 export class SalesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   /**
-   * Mapeo de filtros públicos (enum) a códigos internos de documento.
-   * Nunca se exponen los códigos internos fuera de este servicio.
+   * Mapa de filtros públicos (enum) a categorías internas de documento.
+   * Las categorías coinciden con los valores del campo `category` en document_types.
    */
-  private readonly documentTypeCodeMap: Record<DocumentTypeFilter, string> = {
-    [DocumentTypeFilter.INVOICE]: 'VEN',
-    [DocumentTypeFilter.CREDIT_NOTE]: 'NCV',
-    [DocumentTypeFilter.DEBIT_NOTE]: 'NDV',
+  private readonly categoryMap: Record<DocumentTypeFilter, string> = {
+    [DocumentTypeFilter.INVOICE]: 'INVOICE',
+    [DocumentTypeFilter.CREDIT_NOTE]: 'CREDIT_NOTE',
+    [DocumentTypeFilter.DEBIT_NOTE]: 'DEBIT_NOTE',
   };
-
-  /**
-   * Códigos internos válidos para documentos de VENTA.
-   * Se usa como whitelist para que nunca se filtren documentos de compra.
-   */
-  private readonly salesCodes = Object.values(this.documentTypeCodeMap);
 
   // ---------------------------------------------------------------------------
   // RESUMEN GLOBAL DE VENTAS POR PRODUCTO
@@ -88,7 +87,7 @@ export class SalesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
       const isInvoice = sign === 1;
       const documentSubtotal = Number(doc.subtotal) * sign;
 
@@ -114,7 +113,7 @@ export class SalesService {
           creditNoteCount: 0,
           firstSalesDate: null,
           lastSalesDate: null,
-          salesValues: [],
+          salesValues: [] as number[],
         };
 
         const productTaxes = doc.document_taxes.reduce((sum, tax) => {
@@ -181,7 +180,7 @@ export class SalesService {
 
     const negTotal = documents.reduce((sum, doc) => {
       if (!doc.document_types) return sum;
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
       if (sign === -1) return sum + Number(doc.subtotal);
       return sum;
     }, 0);
@@ -252,7 +251,7 @@ export class SalesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
 
       const productTotal =
         doc.document_items.reduce((sum, item) => {
@@ -427,7 +426,7 @@ export class SalesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
       const transactionType = sign === 1 ? 'Venta' : 'Nota Crédito/Débito';
 
       for (const item of doc.document_items) {
@@ -505,7 +504,7 @@ export class SalesService {
     for (const doc of documents) {
       if (!doc.document_types) continue;
 
-      const sign = this.getDocumentSign(doc.document_types.code);
+      const sign = this.getDocumentSign(doc.document_types.category);
       const subtotal = Number(doc.subtotal) * sign;
       const taxes =
         doc.document_taxes.reduce((sum, t) => sum + Number(t.tax_amount), 0) *
@@ -553,7 +552,7 @@ export class SalesService {
               document_types: {
                 // Solo productos que aparecen en documentos de venta activos
                 active: true,
-                code: { in: this.salesCodes },
+                direction: 1,
               },
             },
           },
@@ -571,26 +570,104 @@ export class SalesService {
   }
 
   // ---------------------------------------------------------------------------
+  // VENTAS POR PUNTO DE VENTA
+  // ---------------------------------------------------------------------------
+
+  async getByPointOfSale(query: QuerySalesDto) {
+    const whereCondition = this.buildWhereCondition(query);
+
+    const documents = await this.prisma.documents.findMany({
+      where: {
+        ...whereCondition,
+        document_types: {
+          active: true,
+          ...(whereCondition.document_types ?? {}),
+        },
+      },
+      include: {
+        document_types: {
+          include: { document_sequences: true },
+        },
+        document_sequences: true,
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    const pvMap = new Map<string, {
+      point_of_sale: string;
+      count: number;
+      total: number;
+      docTypeCounts: Map<string, number>;
+    }>();
+
+    for (const doc of documents) {
+      // El PV del documento es la secuencia asignada al documento al momento
+      // de emitirlo; la secuencia del tipo de documento es solo el fallback.
+      const pv =
+        doc.document_sequences?.point_of_sale ??
+        doc.document_types?.document_sequences?.point_of_sale ??
+        'S/PV';
+      const existing = pvMap.get(pv);
+
+      if (existing) {
+        existing.count += 1;
+        existing.total += Number(doc.total);
+
+        const docTypeCode = doc.document_types?.code ?? 'N/A';
+        const prev = existing.docTypeCounts.get(docTypeCode) ?? 0;
+        existing.docTypeCounts.set(docTypeCode, prev + 1);
+      } else {
+        const docTypeCounts = new Map<string, number>();
+        docTypeCounts.set(doc.document_types?.code ?? 'N/A', 1);
+        pvMap.set(pv, {
+          point_of_sale: pv,
+          count: 1,
+          total: Number(doc.total),
+          docTypeCounts,
+        });
+      }
+    }
+
+    const results = Array.from(pvMap.values())
+      .map((entry) => ({
+        point_of_sale: entry.point_of_sale,
+        count: entry.count,
+        total: entry.total,
+        byDocumentType: Array.from(entry.docTypeCounts.entries()).map(
+          ([code, cnt]) => ({ code, count: cnt }),
+        ),
+      }))
+      .sort((a, b) => a.point_of_sale.localeCompare(b.point_of_sale));
+
+    const grandTotal = results.reduce((sum, r) => sum + r.total, 0);
+    const totalCount = results.reduce((sum, r) => sum + r.count, 0);
+
+    return {
+      grandTotal,
+      totalCount,
+      totalPV: results.length,
+      data: results,
+    };
+  }
+
+  // ---------------------------------------------------------------------------
   // HELPERS PRIVADOS
   // ---------------------------------------------------------------------------
 
   /**
    * Construye el objeto `where` para Prisma según los filtros del query.
    *
-   * Siempre aplica un whitelist de códigos de venta (salesCodes) para
-   * garantizar que nunca se devuelvan documentos de compra u otros módulos.
-   * Si se pasa un `documentTypeFilter` específico, filtra por ese código puntual.
+   * Siempre filtra por direction: 1 (ventas).
+   * Si se pasa un `documentTypeFilter` específico, filtra por category.
    */
   private buildWhereCondition(query: QuerySalesDto): any {
     const where: any = {};
 
     if (query.documentTypeFilter) {
-      // Filtro específico: un solo tipo de documento de venta
-      const internalCode = this.documentTypeCodeMap[query.documentTypeFilter];
-      where.document_types = { code: internalCode };
+      const category = this.categoryMap[query.documentTypeFilter];
+      where.document_types = { direction: 1, category };
     } else {
-      // Sin filtro: traer todos los tipos de venta (whitelist)
-      where.document_types = { code: { in: this.salesCodes } };
+      where.document_types = { direction: 1 };
     }
 
     if (query.startDate || query.endDate) {
@@ -613,16 +690,12 @@ export class SalesService {
   }
 
   /**
-   * Retorna el signo contable del documento:
-   *  1 → suma (VEN, NDV)
-   * -1 → resta (NCV)
+   * Retorna el signo contable del documento según su categoría:
+   *  1 → suma (INVOICE, DEBIT_NOTE)
+   * -1 → resta (CREDIT_NOTE)
    */
-  private getDocumentSign(documentCode: string): number {
-    const positiveDocuments = ['VEN', 'NDV'];
-    const negativeDocuments = ['NCV'];
-
-    if (positiveDocuments.includes(documentCode)) return 1;
-    if (negativeDocuments.includes(documentCode)) return -1;
+  private getDocumentSign(category: string | null): number {
+    if (category === 'CREDIT_NOTE') return -1;
     return 1;
   }
 }

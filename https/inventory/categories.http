@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:3000/api
+@categoryId = 82c69d92-bdeb-4de8-8d69-57064e2edac6
+@parentCategoryId = 82c69d92-bdeb-4de8-8d69-57064e2edac6
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###  <-- este separador es clave
+
+@accessToken = {{login.response.body.accessToken}}
+
+### Crear categoría raíz
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Muebles",
+  "slug": "muebles",
+  "active": true
+}
+
+###
+
+### Crear subcategoría
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Sillas",
+  "slug": "sillas",
+  "parent_id": "{{parentCategoryId}}",
+  "active": true
+}
+
+###
+
+### Obtener todas las categorías
+GET {{baseUrl}}/categories
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener árbol de categorías
+GET {{baseUrl}}/categories/tree
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener categoría por ID
+GET {{baseUrl}}/categories/{{categoryId}}
+
+###
+
+### Actualizar categoría
+PATCH {{baseUrl}}/categories/{{categoryId}}
+Content-Type: application/json
+
+{
+  "name": "Sillas Premium",
+  "slug": "sillas-premium",
+  "parent_id": "{{parentCategoryId}}",
+  "active": true
+}
+
+###
+
+### Eliminar categoría (soft delete)
+DELETE {{baseUrl}}/categories/{{categoryId}}
+
+###

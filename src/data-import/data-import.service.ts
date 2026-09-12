@@ -18,11 +18,20 @@ import { NotaTransformer } from './compras/transformer/notas.transformer';
 import { VentasTransformer } from './sales/transformer/sales.transformer';
 import { FacturaVentaParser } from './sales/parsers/sales.parser';
 
+import { ProductParser } from './products/product.parser';
+import { ProductTransformer } from './products/product.transformer';
+import { ProductSink } from './products/product.sink';
+
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class DataImportService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async importArticuloPrecio(file: Express.Multer.File) {
     const pipeline = new ImportPipeline(
@@ -38,8 +47,8 @@ export class DataImportService {
     const pipeline = new ImportPipeline(
       new ExcelSource(file),
       new FacturaCompraParser(),
-      new ComprasTransformer(this.prisma),
-      new FacturaSink(this.prisma),
+      new ComprasTransformer(this.db),
+      new FacturaSink(this.db),
     );
     return pipeline.run();
   }
@@ -47,8 +56,8 @@ export class DataImportService {
     const pipeline = new ImportPipeline(
       new ExcelSource(file),
       new FacturaVentaParser(),
-      new VentasTransformer(this.prisma),
-      new VentasSink(this.prisma),
+      new VentasTransformer(this.db),
+      new VentasSink(this.db),
     );
     return pipeline.run();
   }
@@ -56,8 +65,8 @@ export class DataImportService {
     const pipeline = new ImportPipeline(
       new ExcelSource(file),
       new NotaParser(),
-      new NotaTransformer(this.prisma, 'NC'),
-      new FacturaSink(this.prisma), // reutilizamos el mismo sink
+      new NotaTransformer(this.db, 'NC'),
+      new FacturaSink(this.db), // reutilizamos el mismo sink
     );
     return pipeline.run();
   }
@@ -66,8 +75,18 @@ export class DataImportService {
     const pipeline = new ImportPipeline(
       new ExcelSource(file),
       new NotaParser(),
-      new NotaTransformer(this.prisma, 'ND'),
-      new FacturaSink(this.prisma),
+      new NotaTransformer(this.db, 'ND'),
+      new FacturaSink(this.db),
+    );
+    return pipeline.run();
+  }
+
+  async importProducts(file: Express.Multer.File) {
+    const pipeline = new ImportPipeline(
+      new ExcelSource(file),
+      new ProductParser(),
+      new ProductTransformer(),
+      new ProductSink(this.db),
     );
     return pipeline.run();
   }

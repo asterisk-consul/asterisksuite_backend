@@ -277,7 +277,7 @@ export type TripsGroupByOutputType = {
   status: $Enums.TripStatus
   notes: string | null
   created_at: Date
-  updated_at: Date
+  updated_at: Date | null
   deleted_at: Date | null
   created_by: string | null
   updated_by: string | null
@@ -322,7 +322,7 @@ export type tripsWhereInput = {
   status?: Prisma.EnumTripStatusFilter<"trips"> | $Enums.TripStatus
   notes?: Prisma.StringNullableFilter<"trips"> | string | null
   created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"trips"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"trips"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"trips"> | string | null
@@ -335,7 +335,6 @@ export type tripsWhereInput = {
   trip_cargo?: Prisma.Trip_cargoListRelationFilter
   trip_stops?: Prisma.Trip_stopsListRelationFilter
   trip_temperature_logs?: Prisma.Trip_temperature_logsListRelationFilter
-  users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   locations_trips_destination_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.XOR<Prisma.WarehousesNullableScalarRelationFilter, Prisma.warehousesWhereInput> | null
   locations_trips_origin_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
@@ -357,7 +356,7 @@ export type tripsOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -370,7 +369,6 @@ export type tripsOrderByWithRelationInput = {
   trip_cargo?: Prisma.trip_cargoOrderByRelationAggregateInput
   trip_stops?: Prisma.trip_stopsOrderByRelationAggregateInput
   trip_temperature_logs?: Prisma.trip_temperature_logsOrderByRelationAggregateInput
-  users?: Prisma.usersOrderByWithRelationInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsOrderByWithRelationInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesOrderByWithRelationInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsOrderByWithRelationInput
@@ -395,7 +393,7 @@ export type tripsWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumTripStatusFilter<"trips"> | $Enums.TripStatus
   notes?: Prisma.StringNullableFilter<"trips"> | string | null
   created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"trips"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"trips"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"trips"> | string | null
@@ -408,7 +406,6 @@ export type tripsWhereUniqueInput = Prisma.AtLeast<{
   trip_cargo?: Prisma.Trip_cargoListRelationFilter
   trip_stops?: Prisma.Trip_stopsListRelationFilter
   trip_temperature_logs?: Prisma.Trip_temperature_logsListRelationFilter
-  users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   locations_trips_destination_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.XOR<Prisma.WarehousesNullableScalarRelationFilter, Prisma.warehousesWhereInput> | null
   locations_trips_origin_location_idTolocations?: Prisma.XOR<Prisma.LocationsNullableScalarRelationFilter, Prisma.locationsWhereInput> | null
@@ -430,7 +427,7 @@ export type tripsOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -460,7 +457,7 @@ export type tripsScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumTripStatusWithAggregatesFilter<"trips"> | $Enums.TripStatus
   notes?: Prisma.StringNullableWithAggregatesFilter<"trips"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"trips"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"trips"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"trips"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"trips"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"trips"> | string | null
@@ -477,8 +474,9 @@ export type tripsCreateInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -489,7 +487,6 @@ export type tripsCreateInput = {
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -511,7 +508,7 @@ export type tripsUncheckedCreateInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -535,8 +532,9 @@ export type tripsUpdateInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -547,7 +545,6 @@ export type tripsUpdateInput = {
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -569,7 +566,7 @@ export type tripsUncheckedUpdateInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -598,7 +595,7 @@ export type tripsCreateManyInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -615,8 +612,9 @@ export type tripsUpdateManyMutationInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -636,7 +634,7 @@ export type tripsUncheckedUpdateManyInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -647,16 +645,6 @@ export type tripsUncheckedUpdateManyInput = {
 export type TripsNullableScalarRelationFilter = {
   is?: Prisma.tripsWhereInput | null
   isNot?: Prisma.tripsWhereInput | null
-}
-
-export type TripsListRelationFilter = {
-  every?: Prisma.tripsWhereInput
-  some?: Prisma.tripsWhereInput
-  none?: Prisma.tripsWhereInput
-}
-
-export type tripsOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type TripsScalarRelationFilter = {
@@ -738,6 +726,16 @@ export type tripsSumOrderByAggregateInput = {
   kilometers?: Prisma.SortOrder
 }
 
+export type TripsListRelationFilter = {
+  every?: Prisma.tripsWhereInput
+  some?: Prisma.tripsWhereInput
+  none?: Prisma.tripsWhereInput
+}
+
+export type tripsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type tripsCreateNestedOneWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput = {
   create?: Prisma.XOR<Prisma.tripsCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput, Prisma.tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput>
   connectOrCreate?: Prisma.tripsCreateOrConnectWithoutCargo_transfers_cargo_transfers_from_trip_idTotripsInput
@@ -784,6 +782,110 @@ export type tripsUpdateOneWithoutDelivery_notesNestedInput = {
   delete?: Prisma.tripsWhereInput | boolean
   connect?: Prisma.tripsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutDelivery_notesInput, Prisma.tripsUpdateWithoutDelivery_notesInput>, Prisma.tripsUncheckedUpdateWithoutDelivery_notesInput>
+}
+
+export type tripsCreateNestedOneWithoutPicking_ordersInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutPicking_ordersInput, Prisma.tripsUncheckedCreateWithoutPicking_ordersInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutPicking_ordersInput
+  connect?: Prisma.tripsWhereUniqueInput
+}
+
+export type tripsUpdateOneWithoutPicking_ordersNestedInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutPicking_ordersInput, Prisma.tripsUncheckedCreateWithoutPicking_ordersInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutPicking_ordersInput
+  upsert?: Prisma.tripsUpsertWithoutPicking_ordersInput
+  disconnect?: Prisma.tripsWhereInput | boolean
+  delete?: Prisma.tripsWhereInput | boolean
+  connect?: Prisma.tripsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutPicking_ordersInput, Prisma.tripsUpdateWithoutPicking_ordersInput>, Prisma.tripsUncheckedUpdateWithoutPicking_ordersInput>
+}
+
+export type tripsCreateNestedOneWithoutTrip_cargoInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_cargoInput, Prisma.tripsUncheckedCreateWithoutTrip_cargoInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_cargoInput
+  connect?: Prisma.tripsWhereUniqueInput
+}
+
+export type tripsUpdateOneRequiredWithoutTrip_cargoNestedInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_cargoInput, Prisma.tripsUncheckedCreateWithoutTrip_cargoInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_cargoInput
+  upsert?: Prisma.tripsUpsertWithoutTrip_cargoInput
+  connect?: Prisma.tripsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutTrip_cargoInput, Prisma.tripsUpdateWithoutTrip_cargoInput>, Prisma.tripsUncheckedUpdateWithoutTrip_cargoInput>
+}
+
+export type tripsCreateNestedOneWithoutTrip_temperature_logsInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_temperature_logsInput, Prisma.tripsUncheckedCreateWithoutTrip_temperature_logsInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_temperature_logsInput
+  connect?: Prisma.tripsWhereUniqueInput
+}
+
+export type tripsUpdateOneRequiredWithoutTrip_temperature_logsNestedInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_temperature_logsInput, Prisma.tripsUncheckedCreateWithoutTrip_temperature_logsInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_temperature_logsInput
+  upsert?: Prisma.tripsUpsertWithoutTrip_temperature_logsInput
+  connect?: Prisma.tripsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutTrip_temperature_logsInput, Prisma.tripsUpdateWithoutTrip_temperature_logsInput>, Prisma.tripsUncheckedUpdateWithoutTrip_temperature_logsInput>
+}
+
+export type EnumTripStatusFieldUpdateOperationsInput = {
+  set?: $Enums.TripStatus
+}
+
+export type tripsCreateNestedOneWithoutTrip_stopsInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_stopsInput, Prisma.tripsUncheckedCreateWithoutTrip_stopsInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_stopsInput
+  connect?: Prisma.tripsWhereUniqueInput
+}
+
+export type tripsUpdateOneRequiredWithoutTrip_stopsNestedInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_stopsInput, Prisma.tripsUncheckedCreateWithoutTrip_stopsInput>
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_stopsInput
+  upsert?: Prisma.tripsUpsertWithoutTrip_stopsInput
+  connect?: Prisma.tripsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutTrip_stopsInput, Prisma.tripsUpdateWithoutTrip_stopsInput>, Prisma.tripsUncheckedUpdateWithoutTrip_stopsInput>
+}
+
+export type tripsCreateNestedManyWithoutVehicle_combinationInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
+  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
+  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+}
+
+export type tripsUncheckedCreateNestedManyWithoutVehicle_combinationInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
+  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
+  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+}
+
+export type tripsUpdateManyWithoutVehicle_combinationNestedInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
+  upsert?: Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput[]
+  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
+  set?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  disconnect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  delete?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  update?: Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput[]
+  updateMany?: Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput | Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput[]
+  deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
+}
+
+export type tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput = {
+  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
+  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
+  upsert?: Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput[]
+  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
+  set?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  disconnect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  delete?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
+  update?: Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput[]
+  updateMany?: Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput | Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput[]
+  deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
 }
 
 export type tripsCreateNestedManyWithoutLocations_trips_destination_location_idTolocationsInput = {
@@ -867,152 +969,6 @@ export type tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTol
   connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
   update?: Prisma.tripsUpdateWithWhereUniqueWithoutLocations_trips_origin_location_idTolocationsInput | Prisma.tripsUpdateWithWhereUniqueWithoutLocations_trips_origin_location_idTolocationsInput[]
   updateMany?: Prisma.tripsUpdateManyWithWhereWithoutLocations_trips_origin_location_idTolocationsInput | Prisma.tripsUpdateManyWithWhereWithoutLocations_trips_origin_location_idTolocationsInput[]
-  deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
-}
-
-export type tripsCreateNestedOneWithoutPicking_ordersInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutPicking_ordersInput, Prisma.tripsUncheckedCreateWithoutPicking_ordersInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutPicking_ordersInput
-  connect?: Prisma.tripsWhereUniqueInput
-}
-
-export type tripsUpdateOneWithoutPicking_ordersNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutPicking_ordersInput, Prisma.tripsUncheckedCreateWithoutPicking_ordersInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutPicking_ordersInput
-  upsert?: Prisma.tripsUpsertWithoutPicking_ordersInput
-  disconnect?: Prisma.tripsWhereInput | boolean
-  delete?: Prisma.tripsWhereInput | boolean
-  connect?: Prisma.tripsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutPicking_ordersInput, Prisma.tripsUpdateWithoutPicking_ordersInput>, Prisma.tripsUncheckedUpdateWithoutPicking_ordersInput>
-}
-
-export type tripsCreateNestedOneWithoutTrip_cargoInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_cargoInput, Prisma.tripsUncheckedCreateWithoutTrip_cargoInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_cargoInput
-  connect?: Prisma.tripsWhereUniqueInput
-}
-
-export type tripsUpdateOneRequiredWithoutTrip_cargoNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_cargoInput, Prisma.tripsUncheckedCreateWithoutTrip_cargoInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_cargoInput
-  upsert?: Prisma.tripsUpsertWithoutTrip_cargoInput
-  connect?: Prisma.tripsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutTrip_cargoInput, Prisma.tripsUpdateWithoutTrip_cargoInput>, Prisma.tripsUncheckedUpdateWithoutTrip_cargoInput>
-}
-
-export type tripsCreateNestedOneWithoutTrip_temperature_logsInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_temperature_logsInput, Prisma.tripsUncheckedCreateWithoutTrip_temperature_logsInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_temperature_logsInput
-  connect?: Prisma.tripsWhereUniqueInput
-}
-
-export type tripsUpdateOneRequiredWithoutTrip_temperature_logsNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_temperature_logsInput, Prisma.tripsUncheckedCreateWithoutTrip_temperature_logsInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_temperature_logsInput
-  upsert?: Prisma.tripsUpsertWithoutTrip_temperature_logsInput
-  connect?: Prisma.tripsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutTrip_temperature_logsInput, Prisma.tripsUpdateWithoutTrip_temperature_logsInput>, Prisma.tripsUncheckedUpdateWithoutTrip_temperature_logsInput>
-}
-
-export type EnumTripStatusFieldUpdateOperationsInput = {
-  set?: $Enums.TripStatus
-}
-
-export type tripsCreateNestedOneWithoutTrip_stopsInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_stopsInput, Prisma.tripsUncheckedCreateWithoutTrip_stopsInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_stopsInput
-  connect?: Prisma.tripsWhereUniqueInput
-}
-
-export type tripsUpdateOneRequiredWithoutTrip_stopsNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutTrip_stopsInput, Prisma.tripsUncheckedCreateWithoutTrip_stopsInput>
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutTrip_stopsInput
-  upsert?: Prisma.tripsUpsertWithoutTrip_stopsInput
-  connect?: Prisma.tripsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.tripsUpdateToOneWithWhereWithoutTrip_stopsInput, Prisma.tripsUpdateWithoutTrip_stopsInput>, Prisma.tripsUncheckedUpdateWithoutTrip_stopsInput>
-}
-
-export type tripsCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutUsersInput, Prisma.tripsUncheckedCreateWithoutUsersInput> | Prisma.tripsCreateWithoutUsersInput[] | Prisma.tripsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutUsersInput | Prisma.tripsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.tripsCreateManyUsersInputEnvelope
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-}
-
-export type tripsUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutUsersInput, Prisma.tripsUncheckedCreateWithoutUsersInput> | Prisma.tripsCreateWithoutUsersInput[] | Prisma.tripsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutUsersInput | Prisma.tripsCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.tripsCreateManyUsersInputEnvelope
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-}
-
-export type tripsUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutUsersInput, Prisma.tripsUncheckedCreateWithoutUsersInput> | Prisma.tripsCreateWithoutUsersInput[] | Prisma.tripsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutUsersInput | Prisma.tripsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.tripsUpsertWithWhereUniqueWithoutUsersInput | Prisma.tripsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.tripsCreateManyUsersInputEnvelope
-  set?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  disconnect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  delete?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  update?: Prisma.tripsUpdateWithWhereUniqueWithoutUsersInput | Prisma.tripsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.tripsUpdateManyWithWhereWithoutUsersInput | Prisma.tripsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
-}
-
-export type tripsUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutUsersInput, Prisma.tripsUncheckedCreateWithoutUsersInput> | Prisma.tripsCreateWithoutUsersInput[] | Prisma.tripsUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutUsersInput | Prisma.tripsCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.tripsUpsertWithWhereUniqueWithoutUsersInput | Prisma.tripsUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.tripsCreateManyUsersInputEnvelope
-  set?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  disconnect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  delete?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  update?: Prisma.tripsUpdateWithWhereUniqueWithoutUsersInput | Prisma.tripsUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.tripsUpdateManyWithWhereWithoutUsersInput | Prisma.tripsUpdateManyWithWhereWithoutUsersInput[]
-  deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
-}
-
-export type tripsCreateNestedManyWithoutVehicle_combinationInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
-  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-}
-
-export type tripsUncheckedCreateNestedManyWithoutVehicle_combinationInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
-  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-}
-
-export type tripsUpdateManyWithoutVehicle_combinationNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
-  upsert?: Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput[]
-  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
-  set?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  disconnect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  delete?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  update?: Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput[]
-  updateMany?: Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput | Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput[]
-  deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
-}
-
-export type tripsUncheckedUpdateManyWithoutVehicle_combinationNestedInput = {
-  create?: Prisma.XOR<Prisma.tripsCreateWithoutVehicle_combinationInput, Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput> | Prisma.tripsCreateWithoutVehicle_combinationInput[] | Prisma.tripsUncheckedCreateWithoutVehicle_combinationInput[]
-  connectOrCreate?: Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput | Prisma.tripsCreateOrConnectWithoutVehicle_combinationInput[]
-  upsert?: Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpsertWithWhereUniqueWithoutVehicle_combinationInput[]
-  createMany?: Prisma.tripsCreateManyVehicle_combinationInputEnvelope
-  set?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  disconnect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  delete?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  connect?: Prisma.tripsWhereUniqueInput | Prisma.tripsWhereUniqueInput[]
-  update?: Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput | Prisma.tripsUpdateWithWhereUniqueWithoutVehicle_combinationInput[]
-  updateMany?: Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput | Prisma.tripsUpdateManyWithWhereWithoutVehicle_combinationInput[]
   deleteMany?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
 }
 
@@ -1109,8 +1065,9 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1120,7 +1077,6 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -1142,7 +1098,7 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_from_trip
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1170,8 +1126,9 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1181,7 +1138,6 @@ export type tripsCreateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -1203,7 +1159,7 @@ export type tripsUncheckedCreateWithoutCargo_transfers_cargo_transfers_to_trip_i
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1242,8 +1198,9 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1253,7 +1210,6 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_from_trip_idTotrip
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -1275,7 +1231,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_from_trip
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1309,8 +1265,9 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1320,7 +1277,6 @@ export type tripsUpdateWithoutCargo_transfers_cargo_transfers_to_trip_idTotripsI
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -1342,7 +1298,7 @@ export type tripsUncheckedUpdateWithoutCargo_transfers_cargo_transfers_to_trip_i
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1365,8 +1321,9 @@ export type tripsCreateWithoutDelivery_notesInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1376,7 +1333,6 @@ export type tripsCreateWithoutDelivery_notesInput = {
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -1398,7 +1354,7 @@ export type tripsUncheckedCreateWithoutDelivery_notesInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1437,8 +1393,9 @@ export type tripsUpdateWithoutDelivery_notesInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1448,7 +1405,6 @@ export type tripsUpdateWithoutDelivery_notesInput = {
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -1470,7 +1426,7 @@ export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1484,195 +1440,6 @@ export type tripsUncheckedUpdateWithoutDelivery_notesInput = {
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
-export type tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
-  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
-  locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
-  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
-  vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-}
-
-export type tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  vehicle_combination_id?: string | null
-  origin_warehouse_id?: string | null
-  destination_warehouse_id?: string | null
-  origin_location_id?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
-}
-
-export type tripsCreateOrConnectWithoutLocations_trips_destination_location_idTolocationsInput = {
-  where: Prisma.tripsWhereUniqueInput
-  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput>
-}
-
-export type tripsCreateManyLocations_trips_destination_location_idTolocationsInputEnvelope = {
-  data: Prisma.tripsCreateManyLocations_trips_destination_location_idTolocationsInput | Prisma.tripsCreateManyLocations_trips_destination_location_idTolocationsInput[]
-  skipDuplicates?: boolean
-}
-
-export type tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
-  locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
-  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
-  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
-  vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-}
-
-export type tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  vehicle_combination_id?: string | null
-  origin_warehouse_id?: string | null
-  destination_warehouse_id?: string | null
-  destination_location_id?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
-}
-
-export type tripsCreateOrConnectWithoutLocations_trips_origin_location_idTolocationsInput = {
-  where: Prisma.tripsWhereUniqueInput
-  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput>
-}
-
-export type tripsCreateManyLocations_trips_origin_location_idTolocationsInputEnvelope = {
-  data: Prisma.tripsCreateManyLocations_trips_origin_location_idTolocationsInput | Prisma.tripsCreateManyLocations_trips_origin_location_idTolocationsInput[]
-  skipDuplicates?: boolean
-}
-
-export type tripsUpsertWithWhereUniqueWithoutLocations_trips_destination_location_idTolocationsInput = {
-  where: Prisma.tripsWhereUniqueInput
-  update: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput>
-  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput>
-}
-
-export type tripsUpdateWithWhereUniqueWithoutLocations_trips_destination_location_idTolocationsInput = {
-  where: Prisma.tripsWhereUniqueInput
-  data: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput>
-}
-
-export type tripsUpdateManyWithWhereWithoutLocations_trips_destination_location_idTolocationsInput = {
-  where: Prisma.tripsScalarWhereInput
-  data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsInput>
-}
-
-export type tripsScalarWhereInput = {
-  AND?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
-  OR?: Prisma.tripsScalarWhereInput[]
-  NOT?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
-  id?: Prisma.UuidFilter<"trips"> | string
-  reference_number?: Prisma.StringNullableFilter<"trips"> | string | null
-  week?: Prisma.StringNullableFilter<"trips"> | string | null
-  vehicle_combination_id?: Prisma.UuidNullableFilter<"trips"> | string | null
-  origin_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
-  destination_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
-  origin_location_id?: Prisma.UuidNullableFilter<"trips"> | string | null
-  destination_location_id?: Prisma.UuidNullableFilter<"trips"> | string | null
-  departure_time?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
-  arrival_time?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
-  status?: Prisma.EnumTripStatusFilter<"trips"> | $Enums.TripStatus
-  notes?: Prisma.StringNullableFilter<"trips"> | string | null
-  created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"trips"> | Date | string
-  deleted_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
-  created_by?: Prisma.UuidNullableFilter<"trips"> | string | null
-  updated_by?: Prisma.UuidNullableFilter<"trips"> | string | null
-  deleted_by?: Prisma.UuidNullableFilter<"trips"> | string | null
-  kilometers?: Prisma.DecimalNullableFilter<"trips"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type tripsUpsertWithWhereUniqueWithoutLocations_trips_origin_location_idTolocationsInput = {
-  where: Prisma.tripsWhereUniqueInput
-  update: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput>
-  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput>
-}
-
-export type tripsUpdateWithWhereUniqueWithoutLocations_trips_origin_location_idTolocationsInput = {
-  where: Prisma.tripsWhereUniqueInput
-  data: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput>
-}
-
-export type tripsUpdateManyWithWhereWithoutLocations_trips_origin_location_idTolocationsInput = {
-  where: Prisma.tripsScalarWhereInput
-  data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsInput>
-}
-
 export type tripsCreateWithoutPicking_ordersInput = {
   id?: string
   reference_number?: string | null
@@ -1682,8 +1449,9 @@ export type tripsCreateWithoutPicking_ordersInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1693,7 +1461,6 @@ export type tripsCreateWithoutPicking_ordersInput = {
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -1715,7 +1482,7 @@ export type tripsUncheckedCreateWithoutPicking_ordersInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1754,8 +1521,9 @@ export type tripsUpdateWithoutPicking_ordersInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1765,7 +1533,6 @@ export type tripsUpdateWithoutPicking_ordersInput = {
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -1787,7 +1554,7 @@ export type tripsUncheckedUpdateWithoutPicking_ordersInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1810,8 +1577,9 @@ export type tripsCreateWithoutTrip_cargoInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1821,7 +1589,6 @@ export type tripsCreateWithoutTrip_cargoInput = {
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -1843,7 +1610,7 @@ export type tripsUncheckedCreateWithoutTrip_cargoInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -1882,8 +1649,9 @@ export type tripsUpdateWithoutTrip_cargoInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1893,7 +1661,6 @@ export type tripsUpdateWithoutTrip_cargoInput = {
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -1915,7 +1682,7 @@ export type tripsUncheckedUpdateWithoutTrip_cargoInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1938,8 +1705,9 @@ export type tripsCreateWithoutTrip_temperature_logsInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1949,7 +1717,6 @@ export type tripsCreateWithoutTrip_temperature_logsInput = {
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -1971,7 +1738,7 @@ export type tripsUncheckedCreateWithoutTrip_temperature_logsInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2010,8 +1777,9 @@ export type tripsUpdateWithoutTrip_temperature_logsInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2021,7 +1789,6 @@ export type tripsUpdateWithoutTrip_temperature_logsInput = {
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -2043,7 +1810,7 @@ export type tripsUncheckedUpdateWithoutTrip_temperature_logsInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2066,8 +1833,9 @@ export type tripsCreateWithoutTrip_stopsInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2077,7 +1845,6 @@ export type tripsCreateWithoutTrip_stopsInput = {
   picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -2099,7 +1866,7 @@ export type tripsUncheckedCreateWithoutTrip_stopsInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2138,8 +1905,9 @@ export type tripsUpdateWithoutTrip_stopsInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2149,7 +1917,6 @@ export type tripsUpdateWithoutTrip_stopsInput = {
   picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -2171,7 +1938,7 @@ export type tripsUncheckedUpdateWithoutTrip_stopsInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2185,88 +1952,6 @@ export type tripsUncheckedUpdateWithoutTrip_stopsInput = {
   trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
 }
 
-export type tripsCreateWithoutUsersInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
-  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
-  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
-  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
-  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
-  locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
-  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
-  vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
-}
-
-export type tripsUncheckedCreateWithoutUsersInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  vehicle_combination_id?: string | null
-  origin_warehouse_id?: string | null
-  destination_warehouse_id?: string | null
-  origin_location_id?: string | null
-  destination_location_id?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
-  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
-  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
-  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
-  trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
-}
-
-export type tripsCreateOrConnectWithoutUsersInput = {
-  where: Prisma.tripsWhereUniqueInput
-  create: Prisma.XOR<Prisma.tripsCreateWithoutUsersInput, Prisma.tripsUncheckedCreateWithoutUsersInput>
-}
-
-export type tripsCreateManyUsersInputEnvelope = {
-  data: Prisma.tripsCreateManyUsersInput | Prisma.tripsCreateManyUsersInput[]
-  skipDuplicates?: boolean
-}
-
-export type tripsUpsertWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.tripsWhereUniqueInput
-  update: Prisma.XOR<Prisma.tripsUpdateWithoutUsersInput, Prisma.tripsUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.tripsCreateWithoutUsersInput, Prisma.tripsUncheckedCreateWithoutUsersInput>
-}
-
-export type tripsUpdateWithWhereUniqueWithoutUsersInput = {
-  where: Prisma.tripsWhereUniqueInput
-  data: Prisma.XOR<Prisma.tripsUpdateWithoutUsersInput, Prisma.tripsUncheckedUpdateWithoutUsersInput>
-}
-
-export type tripsUpdateManyWithWhereWithoutUsersInput = {
-  where: Prisma.tripsScalarWhereInput
-  data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutUsersInput>
-}
-
 export type tripsCreateWithoutVehicle_combinationInput = {
   id?: string
   reference_number?: string | null
@@ -2276,8 +1961,9 @@ export type tripsCreateWithoutVehicle_combinationInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2288,7 +1974,6 @@ export type tripsCreateWithoutVehicle_combinationInput = {
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -2308,7 +1993,7 @@ export type tripsUncheckedCreateWithoutVehicle_combinationInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2349,7 +2034,32 @@ export type tripsUpdateManyWithWhereWithoutVehicle_combinationInput = {
   data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutVehicle_combinationInput>
 }
 
-export type tripsCreateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
+export type tripsScalarWhereInput = {
+  AND?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
+  OR?: Prisma.tripsScalarWhereInput[]
+  NOT?: Prisma.tripsScalarWhereInput | Prisma.tripsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"trips"> | string
+  reference_number?: Prisma.StringNullableFilter<"trips"> | string | null
+  week?: Prisma.StringNullableFilter<"trips"> | string | null
+  vehicle_combination_id?: Prisma.UuidNullableFilter<"trips"> | string | null
+  origin_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
+  destination_warehouse_id?: Prisma.UuidNullableFilter<"trips"> | string | null
+  origin_location_id?: Prisma.UuidNullableFilter<"trips"> | string | null
+  destination_location_id?: Prisma.UuidNullableFilter<"trips"> | string | null
+  departure_time?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
+  arrival_time?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
+  status?: Prisma.EnumTripStatusFilter<"trips"> | $Enums.TripStatus
+  notes?: Prisma.StringNullableFilter<"trips"> | string | null
+  created_at?: Prisma.DateTimeFilter<"trips"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
+  deleted_at?: Prisma.DateTimeNullableFilter<"trips"> | Date | string | null
+  created_by?: Prisma.UuidNullableFilter<"trips"> | string | null
+  updated_by?: Prisma.UuidNullableFilter<"trips"> | string | null
+  deleted_by?: Prisma.UuidNullableFilter<"trips"> | string | null
+  kilometers?: Prisma.DecimalNullableFilter<"trips"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
   id?: string
   reference_number?: string | null
   week?: string | null
@@ -2358,8 +2068,9 @@ export type tripsCreateWithoutWarehouses_trips_destination_warehouse_idTowarehou
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2370,7 +2081,170 @@ export type tripsCreateWithoutWarehouses_trips_destination_warehouse_idTowarehou
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
+  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
+  locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
+  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
+  vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
+}
+
+export type tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput = {
+  id?: string
+  reference_number?: string | null
+  week?: string | null
+  vehicle_combination_id?: string | null
+  origin_warehouse_id?: string | null
+  destination_warehouse_id?: string | null
+  origin_location_id?: string | null
+  departure_time?: Date | string | null
+  arrival_time?: Date | string | null
+  status: $Enums.TripStatus
+  notes?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
+}
+
+export type tripsCreateOrConnectWithoutLocations_trips_destination_location_idTolocationsInput = {
+  where: Prisma.tripsWhereUniqueInput
+  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput>
+}
+
+export type tripsCreateManyLocations_trips_destination_location_idTolocationsInputEnvelope = {
+  data: Prisma.tripsCreateManyLocations_trips_destination_location_idTolocationsInput | Prisma.tripsCreateManyLocations_trips_destination_location_idTolocationsInput[]
+  skipDuplicates?: boolean
+}
+
+export type tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput = {
+  id?: string
+  reference_number?: string | null
+  week?: string | null
+  departure_time?: Date | string | null
+  arrival_time?: Date | string | null
+  status: $Enums.TripStatus
+  notes?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
+  locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
+  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
+  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
+  vehicle_combination?: Prisma.vehicle_combinationsCreateNestedOneWithoutTripsInput
+}
+
+export type tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput = {
+  id?: string
+  reference_number?: string | null
+  week?: string | null
+  vehicle_combination_id?: string | null
+  origin_warehouse_id?: string | null
+  destination_warehouse_id?: string | null
+  destination_location_id?: string | null
+  departure_time?: Date | string | null
+  arrival_time?: Date | string | null
+  status: $Enums.TripStatus
+  notes?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
+  delivery_notes?: Prisma.delivery_notesUncheckedCreateNestedManyWithoutTripsInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutTripsInput
+  trip_cargo?: Prisma.trip_cargoUncheckedCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsUncheckedCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedCreateNestedManyWithoutTripsInput
+}
+
+export type tripsCreateOrConnectWithoutLocations_trips_origin_location_idTolocationsInput = {
+  where: Prisma.tripsWhereUniqueInput
+  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput>
+}
+
+export type tripsCreateManyLocations_trips_origin_location_idTolocationsInputEnvelope = {
+  data: Prisma.tripsCreateManyLocations_trips_origin_location_idTolocationsInput | Prisma.tripsCreateManyLocations_trips_origin_location_idTolocationsInput[]
+  skipDuplicates?: boolean
+}
+
+export type tripsUpsertWithWhereUniqueWithoutLocations_trips_destination_location_idTolocationsInput = {
+  where: Prisma.tripsWhereUniqueInput
+  update: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput>
+  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_destination_location_idTolocationsInput>
+}
+
+export type tripsUpdateWithWhereUniqueWithoutLocations_trips_destination_location_idTolocationsInput = {
+  where: Prisma.tripsWhereUniqueInput
+  data: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput>
+}
+
+export type tripsUpdateManyWithWhereWithoutLocations_trips_destination_location_idTolocationsInput = {
+  where: Prisma.tripsScalarWhereInput
+  data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsInput>
+}
+
+export type tripsUpsertWithWhereUniqueWithoutLocations_trips_origin_location_idTolocationsInput = {
+  where: Prisma.tripsWhereUniqueInput
+  update: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput>
+  create: Prisma.XOR<Prisma.tripsCreateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedCreateWithoutLocations_trips_origin_location_idTolocationsInput>
+}
+
+export type tripsUpdateWithWhereUniqueWithoutLocations_trips_origin_location_idTolocationsInput = {
+  where: Prisma.tripsWhereUniqueInput
+  data: Prisma.XOR<Prisma.tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput, Prisma.tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput>
+}
+
+export type tripsUpdateManyWithWhereWithoutLocations_trips_origin_location_idTolocationsInput = {
+  where: Prisma.tripsScalarWhereInput
+  data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsInput>
+}
+
+export type tripsCreateWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput = {
+  id?: string
+  reference_number?: string | null
+  week?: string | null
+  departure_time?: Date | string | null
+  arrival_time?: Date | string | null
+  status: $Enums.TripStatus
+  notes?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_from_trip_idTotripsInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersCreateNestedManyWithoutTrips_cargo_transfers_to_trip_idTotripsInput
+  delivery_notes?: Prisma.delivery_notesCreateNestedManyWithoutTripsInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutTripsInput
+  trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
+  trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_origin_warehouse_idTowarehousesInput
@@ -2390,7 +2264,7 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_destination_warehouse_id
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2424,8 +2298,9 @@ export type tripsCreateWithoutWarehouses_trips_origin_warehouse_idTowarehousesIn
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
+  created_by?: string | null
   updated_by?: string | null
   deleted_by?: string | null
   kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2436,7 +2311,6 @@ export type tripsCreateWithoutWarehouses_trips_origin_warehouse_idTowarehousesIn
   trip_cargo?: Prisma.trip_cargoCreateNestedManyWithoutTripsInput
   trip_stops?: Prisma.trip_stopsCreateNestedManyWithoutTripInput
   trip_temperature_logs?: Prisma.trip_temperature_logsCreateNestedManyWithoutTripsInput
-  users?: Prisma.usersCreateNestedOneWithoutTripsInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_destination_location_idTolocationsInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesCreateNestedOneWithoutTrips_trips_destination_warehouse_idTowarehousesInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsCreateNestedOneWithoutTrips_trips_origin_location_idTolocationsInput
@@ -2456,7 +2330,7 @@ export type tripsUncheckedCreateWithoutWarehouses_trips_origin_warehouse_idTowar
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2513,300 +2387,6 @@ export type tripsUpdateManyWithWhereWithoutWarehouses_trips_origin_warehouse_idT
   data: Prisma.XOR<Prisma.tripsUpdateManyMutationInput, Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput>
 }
 
-export type tripsCreateManyLocations_trips_destination_location_idTolocationsInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  vehicle_combination_id?: string | null
-  origin_warehouse_id?: string | null
-  destination_warehouse_id?: string | null
-  origin_location_id?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type tripsCreateManyLocations_trips_origin_location_idTolocationsInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  vehicle_combination_id?: string | null
-  origin_warehouse_id?: string | null
-  destination_warehouse_id?: string | null
-  destination_location_id?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  created_by?: string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
-  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
-  picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
-  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
-  locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
-  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
-  vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-}
-
-export type tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
-  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
-  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
-}
-
-export type tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
-  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
-  picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
-  locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
-  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
-  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
-  vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-}
-
-export type tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
-  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
-  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
-}
-
-export type tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type tripsCreateManyUsersInput = {
-  id?: string
-  reference_number?: string | null
-  week?: string | null
-  vehicle_combination_id?: string | null
-  origin_warehouse_id?: string | null
-  destination_warehouse_id?: string | null
-  origin_location_id?: string | null
-  destination_location_id?: string | null
-  departure_time?: Date | string | null
-  arrival_time?: Date | string | null
-  status: $Enums.TripStatus
-  notes?: string | null
-  created_at?: Date | string
-  updated_at?: Date | string
-  deleted_at?: Date | string | null
-  updated_by?: string | null
-  deleted_by?: string | null
-  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type tripsUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
-  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
-  picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
-  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
-  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
-  locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
-  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
-  vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
-}
-
-export type tripsUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
-  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
-  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
-  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
-  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
-  trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
-  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
-}
-
-export type tripsUncheckedUpdateManyWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
 export type tripsCreateManyVehicle_combinationInput = {
   id?: string
   reference_number?: string | null
@@ -2820,7 +2400,7 @@ export type tripsCreateManyVehicle_combinationInput = {
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2837,8 +2417,9 @@ export type tripsUpdateWithoutVehicle_combinationInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2849,7 +2430,6 @@ export type tripsUpdateWithoutVehicle_combinationInput = {
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -2869,7 +2449,7 @@ export type tripsUncheckedUpdateWithoutVehicle_combinationInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2897,7 +2477,203 @@ export type tripsUncheckedUpdateManyWithoutVehicle_combinationInput = {
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type tripsCreateManyLocations_trips_destination_location_idTolocationsInput = {
+  id?: string
+  reference_number?: string | null
+  week?: string | null
+  vehicle_combination_id?: string | null
+  origin_warehouse_id?: string | null
+  destination_warehouse_id?: string | null
+  origin_location_id?: string | null
+  departure_time?: Date | string | null
+  arrival_time?: Date | string | null
+  status: $Enums.TripStatus
+  notes?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type tripsCreateManyLocations_trips_origin_location_idTolocationsInput = {
+  id?: string
+  reference_number?: string | null
+  week?: string | null
+  vehicle_combination_id?: string | null
+  origin_warehouse_id?: string | null
+  destination_warehouse_id?: string | null
+  destination_location_id?: string | null
+  departure_time?: Date | string | null
+  arrival_time?: Date | string | null
+  status: $Enums.TripStatus
+  notes?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  kilometers?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type tripsUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
+  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
+  locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
+  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
+  vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
+}
+
+export type tripsUncheckedUpdateWithoutLocations_trips_destination_location_idTolocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
+}
+
+export type tripsUncheckedUpdateManyWithoutLocations_trips_destination_location_idTolocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type tripsUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
+  delivery_notes?: Prisma.delivery_notesUpdateManyWithoutTripsNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutTripsNestedInput
+  trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
+  locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
+  warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
+  warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
+  vehicle_combination?: Prisma.vehicle_combinationsUpdateOneWithoutTripsNestedInput
+}
+
+export type tripsUncheckedUpdateWithoutLocations_trips_origin_location_idTolocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  cargo_transfers_cargo_transfers_from_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_from_trip_idTotripsNestedInput
+  cargo_transfers_cargo_transfers_to_trip_idTotrips?: Prisma.cargo_transfersUncheckedUpdateManyWithoutTrips_cargo_transfers_to_trip_idTotripsNestedInput
+  delivery_notes?: Prisma.delivery_notesUncheckedUpdateManyWithoutTripsNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutTripsNestedInput
+  trip_cargo?: Prisma.trip_cargoUncheckedUpdateManyWithoutTripsNestedInput
+  trip_stops?: Prisma.trip_stopsUncheckedUpdateManyWithoutTripNestedInput
+  trip_temperature_logs?: Prisma.trip_temperature_logsUncheckedUpdateManyWithoutTripsNestedInput
+}
+
+export type tripsUncheckedUpdateManyWithoutLocations_trips_origin_location_idTolocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  week?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicle_combination_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destination_location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departure_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  arrival_time?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2918,7 +2694,7 @@ export type tripsCreateManyWarehouses_trips_destination_warehouse_idTowarehouses
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2939,7 +2715,7 @@ export type tripsCreateManyWarehouses_trips_origin_warehouse_idTowarehousesInput
   status: $Enums.TripStatus
   notes?: string | null
   created_at?: Date | string
-  updated_at?: Date | string
+  updated_at?: Date | string | null
   deleted_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
@@ -2956,8 +2732,9 @@ export type tripsUpdateWithoutWarehouses_trips_destination_warehouse_idTowarehou
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -2968,7 +2745,6 @@ export type tripsUpdateWithoutWarehouses_trips_destination_warehouse_idTowarehou
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
   warehouses_trips_origin_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_origin_warehouse_idTowarehousesNestedInput
@@ -2988,7 +2764,7 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_destination_warehouse_id
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3016,7 +2792,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehous
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3033,8 +2809,9 @@ export type tripsUpdateWithoutWarehouses_trips_origin_warehouse_idTowarehousesIn
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kilometers?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -3045,7 +2822,6 @@ export type tripsUpdateWithoutWarehouses_trips_origin_warehouse_idTowarehousesIn
   trip_cargo?: Prisma.trip_cargoUpdateManyWithoutTripsNestedInput
   trip_stops?: Prisma.trip_stopsUpdateManyWithoutTripNestedInput
   trip_temperature_logs?: Prisma.trip_temperature_logsUpdateManyWithoutTripsNestedInput
-  users?: Prisma.usersUpdateOneWithoutTripsNestedInput
   locations_trips_destination_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_destination_location_idTolocationsNestedInput
   warehouses_trips_destination_warehouse_idTowarehouses?: Prisma.warehousesUpdateOneWithoutTrips_trips_destination_warehouse_idTowarehousesNestedInput
   locations_trips_origin_location_idTolocations?: Prisma.locationsUpdateOneWithoutTrips_trips_origin_location_idTolocationsNestedInput
@@ -3065,7 +2841,7 @@ export type tripsUncheckedUpdateWithoutWarehouses_trips_origin_warehouse_idTowar
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3093,7 +2869,7 @@ export type tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idT
   status?: Prisma.EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3213,7 +2989,6 @@ export type tripsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   trip_cargo?: boolean | Prisma.trips$trip_cargoArgs<ExtArgs>
   trip_stops?: boolean | Prisma.trips$trip_stopsArgs<ExtArgs>
   trip_temperature_logs?: boolean | Prisma.trips$trip_temperature_logsArgs<ExtArgs>
-  users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_destination_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
@@ -3242,7 +3017,6 @@ export type tripsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   updated_by?: boolean
   deleted_by?: boolean
   kilometers?: boolean
-  users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_destination_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
@@ -3270,7 +3044,6 @@ export type tripsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   updated_by?: boolean
   deleted_by?: boolean
   kilometers?: boolean
-  users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_destination_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
@@ -3309,7 +3082,6 @@ export type tripsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   trip_cargo?: boolean | Prisma.trips$trip_cargoArgs<ExtArgs>
   trip_stops?: boolean | Prisma.trips$trip_stopsArgs<ExtArgs>
   trip_temperature_logs?: boolean | Prisma.trips$trip_temperature_logsArgs<ExtArgs>
-  users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_destination_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
@@ -3318,7 +3090,6 @@ export type tripsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   _count?: boolean | Prisma.TripsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type tripsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_destination_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
@@ -3326,7 +3097,6 @@ export type tripsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   vehicle_combination?: boolean | Prisma.trips$vehicle_combinationArgs<ExtArgs>
 }
 export type tripsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.trips$usersArgs<ExtArgs>
   locations_trips_destination_location_idTolocations?: boolean | Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>
   warehouses_trips_destination_warehouse_idTowarehouses?: boolean | Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>
   locations_trips_origin_location_idTolocations?: boolean | Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>
@@ -3344,7 +3114,6 @@ export type $tripsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     trip_cargo: Prisma.$trip_cargoPayload<ExtArgs>[]
     trip_stops: Prisma.$trip_stopsPayload<ExtArgs>[]
     trip_temperature_logs: Prisma.$trip_temperature_logsPayload<ExtArgs>[]
-    users: Prisma.$usersPayload<ExtArgs> | null
     locations_trips_destination_location_idTolocations: Prisma.$locationsPayload<ExtArgs> | null
     warehouses_trips_destination_warehouse_idTowarehouses: Prisma.$warehousesPayload<ExtArgs> | null
     locations_trips_origin_location_idTolocations: Prisma.$locationsPayload<ExtArgs> | null
@@ -3365,7 +3134,7 @@ export type $tripsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.TripStatus
     notes: string | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     deleted_at: Date | null
     created_by: string | null
     updated_by: string | null
@@ -3772,7 +3541,6 @@ export interface Prisma__tripsClient<T, Null = never, ExtArgs extends runtime.Ty
   trip_cargo<T extends Prisma.trips$trip_cargoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_cargoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_cargoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trip_stops<T extends Prisma.trips$trip_stopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_stopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_stopsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trip_temperature_logs<T extends Prisma.trips$trip_temperature_logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$trip_temperature_logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$trip_temperature_logsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  users<T extends Prisma.trips$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   locations_trips_destination_location_idTolocations<T extends Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$locations_trips_destination_location_idTolocationsArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   warehouses_trips_destination_warehouse_idTowarehouses<T extends Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$warehouses_trips_destination_warehouse_idTowarehousesArgs<ExtArgs>>): Prisma.Prisma__warehousesClient<runtime.Types.Result.GetResult<Prisma.$warehousesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   locations_trips_origin_location_idTolocations<T extends Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.trips$locations_trips_origin_location_idTolocationsArgs<ExtArgs>>): Prisma.Prisma__locationsClient<runtime.Types.Result.GetResult<Prisma.$locationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -4392,25 +4160,6 @@ export type trips$trip_temperature_logsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.Trip_temperature_logsScalarFieldEnum | Prisma.Trip_temperature_logsScalarFieldEnum[]
-}
-
-/**
- * trips.users
- */
-export type trips$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the users
-   */
-  select?: Prisma.usersSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the users
-   */
-  omit?: Prisma.usersOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.usersInclude<ExtArgs> | null
-  where?: Prisma.usersWhereInput
 }
 
 /**

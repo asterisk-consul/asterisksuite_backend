@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
 
 export class RegisterDto {
   @IsString()
@@ -14,4 +14,12 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   role?: string;
+
+  @IsOptional()
+  @IsUUID()
+  link_employee_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  link_partner_id?: string;
 }

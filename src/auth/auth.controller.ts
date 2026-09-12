@@ -38,16 +38,17 @@ export class AuthController {
   @Post('change-password')
   @UseGuards(JwtAuthGuard)
   changePassword(@Req() req: RequestWithUser, @Body() body: ChangePasswordDto) {
-    return this.authService.changePassword(
-      req.user.id,
-      body.currentPassword,
-      body.newPassword,
-    );
+    return this.authService.changePassword(req.user.id, body.currentPassword, body.newPassword);
+  }
+  @Get('my-companies')
+  @UseGuards(JwtAuthGuard)
+  myCompanies(@Req() req: RequestWithUser) {
+    return this.authService.getMyCompanies(req.user.id);
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
   me(@Req() req: RequestWithUser) {
-    return req.user;
+    return this.authService.getCurrentUser(req.user.id);
   }
 }

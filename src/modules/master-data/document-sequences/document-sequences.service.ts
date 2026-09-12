@@ -9,7 +9,12 @@ import { CreateDocumentSequenceDto } from './dto/create-document-sequences.dto';
 import { UpdateDocumentSequenceDto } from './dto/update-document-sequences.dto';
 @Injectable()
 export class DocumentSequencesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   // ── Validaciones internas ──────────────────────────────────────────────────
 
@@ -47,8 +52,9 @@ export class DocumentSequencesService {
       );
     }
 
-    // Si el usuario define el rango, current_number arranca en range_start
-    const initialCurrentNumber = !dto.automatic ? dto.range_start : 0;
+    // Si el usuario define el rango, current_number arranca en range_start - 1
+    // (porque getNextNumber incrementa primero)
+    const initialCurrentNumber = !dto.automatic ? dto.range_start! - 1 : 0;
 
     return this.prisma.document_sequences.create({
       data: {
@@ -157,8 +163,8 @@ export class DocumentSequencesService {
   async reset(id: string) {
     const sequence = await this.findOne(id);
 
-    // Automático vuelve a 0, con rango vuelve a range_start
-    const resetValue = !sequence.automatic ? sequence.range_start! : 0;
+    // Automático vuelve a 0, con rango vuelve a range_start - 1
+    const resetValue = !sequence.automatic ? sequence.range_start! - 1 : 0;
 
     return this.prisma.document_sequences.update({
       where: { id },

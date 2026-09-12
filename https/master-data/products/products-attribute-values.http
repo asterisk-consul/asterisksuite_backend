@@ -1,0 +1,88 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+@valueId = REEMPLAZAR_ID
+@productId = REEMPLAZAR_PRODUCT_ID
+@variantId = REEMPLAZAR_VARIANT_ID
+@attributeId = REEMPLAZAR_ATTRIBUTE_ID
+
+### Crear valor de atributo tipo TEXT
+POST {{baseUrl}}/product-attribute-values
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "attribute_id": "{{attributeId}}",
+  "text_value": "Rojo"
+}
+
+###
+
+### Crear valor de atributo tipo NUMBER
+POST {{baseUrl}}/product-attribute-values
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "variant_id": "{{variantId}}",
+  "attribute_id": "{{attributeId}}",
+  "number_value": 42
+}
+
+###
+
+### Crear valor de atributo tipo BOOLEAN
+POST {{baseUrl}}/product-attribute-values
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "{{productId}}",
+  "attribute_id": "{{attributeId}}",
+  "boolean_value": true
+}
+
+###
+
+### Obtener todos los valores de atributos
+GET {{baseUrl}}/product-attribute-values
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener valor de atributo por ID
+GET {{baseUrl}}/product-attribute-values/{{valueId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Actualizar valor de atributo
+PATCH {{baseUrl}}/product-attribute-values/{{valueId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "text_value": "Azul"
+}
+
+###
+
+### Eliminar valor de atributo (soft delete)
+DELETE {{baseUrl}}/product-attribute-values/{{valueId}}
+Authorization: Bearer {{accessToken}}
+
+###

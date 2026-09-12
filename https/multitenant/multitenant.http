@@ -1,0 +1,87 @@
+@baseUrl = http://localhost:3008/api
+
+########################################################
+
+# USUARIO A
+
+########################################################
+
+# @name registerA
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+tenant: dev
+
+{
+"name": "Administrador Dyfma",
+"email": "admindyfma@test.com",
+"password": "123456",
+"role": "PLATFORM_OWNER"
+}
+
+###
+
+# @name loginA
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+"email": "camidev@mail.com",
+"password": "123456"
+}
+
+###
+
+@tokenA = {{loginA.response.body.accessToken}}
+
+########################################################
+
+# EMPRESA A
+
+########################################################
+
+# @name companyA
+
+POST {{baseUrl}}/companies
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+"name": "AsteriskConsul",
+"subdomain": "asteriskconsul",
+"schemaName": "asteriskconsul"
+}
+
+########################################################
+
+# PRODUCTO EMPRESA A
+
+########################################################
+
+# @name createProductA
+
+GET {{baseUrl}}/access-control/users/me/permissions
+Authorization: Bearer {{tokenA}}
+x-tenant: dev
+
+
+########################################################
+
+# CONSULTAR PRODUCTOS EMPRESA A
+
+########################################################
+
+GET {{baseUrl}}/master-data/products
+Authorization: Bearer {{tokenA}}
+x-tenant: empresaa
+
+###
+
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{tokenA}}
+x-tenant: empresaa
+
+###

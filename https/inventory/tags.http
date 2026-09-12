@@ -1,0 +1,60 @@
+@baseUrl = http://localhost:3000/api
+@tagId = 016988f8-efaf-4105-aaac-7ac3a588efb6
+
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###  <-- este separador es clave
+
+@accessToken = {{login.response.body.accessToken}}
+
+### Crear tag
+POST {{baseUrl}}/erp/tags
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "Lista",
+  "active": true
+}
+
+###
+
+### Obtener todos los tags
+GET {{baseUrl}}/erp/tags
+Authorization: Bearer {{accessToken}}
+###
+
+### Obtener tag por ID
+GET {{baseUrl}}/erp/tags/{{tagId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Actualizar tag
+PATCH {{baseUrl}}/erp/tags/{{tagId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Oferta",
+  "active": true
+}
+
+###
+
+### Eliminar tag (soft delete)
+DELETE {{baseUrl}}/erp/tags/{{tagId}}
+
+###

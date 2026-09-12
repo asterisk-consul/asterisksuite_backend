@@ -1,0 +1,106 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+@table = employees
+@recordId = REEMPLAZAR_RECORD_ID
+@userId = REEMPLAZAR_USER_ID
+
+### =========================================================
+### GET ALL AUDIT LOGS (paginado)
+### GET /erp/audit
+### =========================================================
+
+GET {{baseUrl}}/erp/audit?limit=20&offset=0
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET AUDIT LOGS - Filtrar por tabla
+### =========================================================
+
+GET {{baseUrl}}/erp/audit?table={{table}}&limit=20
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET AUDIT LOGS - Filtrar por accion
+### =========================================================
+
+GET {{baseUrl}}/erp/audit?action=CREATE&limit=20
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET AUDIT LOGS - Filtrar por ultimos N dias
+### =========================================================
+
+GET {{baseUrl}}/erp/audit?days=7&limit=20
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET AUDIT LOGS - Filtrar por usuario
+### =========================================================
+
+GET {{baseUrl}}/erp/audit?user_id={{userId}}&limit=20
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET HISTORY OF A RECORD
+### GET /erp/audit/:table/:recordId
+### =========================================================
+
+GET {{baseUrl}}/erp/audit/{{table}}/{{recordId}}
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET USER ACTIVITY
+### GET /erp/audit/user/:userId
+### =========================================================
+
+GET {{baseUrl}}/erp/audit/user/{{userId}}?days=30
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###
+
+### =========================================================
+### GET ACTIVITY STATS
+### GET /erp/audit/stats
+### =========================================================
+
+GET {{baseUrl}}/erp/audit/stats?days=7
+Authorization: Bearer {{accessToken}}
+x-tenant: dev
+
+###

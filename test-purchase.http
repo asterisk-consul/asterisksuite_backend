@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:3000/api
+
+###
+# ==============================
+# 🔐 LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+###
+@accessToken = {{login.response.body.accessToken}}
+### Purchase Document - Test with same payload as frontend
+POST http://localhost:3000/api/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "fb116f60-204d-493b-936c-b40fdff1bc6d",
+  "party_id": "4297aad1-7559-4e51-8eb6-b1c6673f3a7e",
+  "date": "2026-07-29",
+  "descrip": "",
+  "ref": "",
+  "currency_code": "ARS",
+  "items": [
+    {
+      "product_id": "e3211ab0-65ed-4fb8-930f-a1ca25788f45",
+      "quantity": 1,
+      "unit_price": 100,
+      "taxes": [
+        {
+          "tax_id": "0a034f1f-9be2-4eaf-b48d-98fbdc94009d",
+          "tax_rate": 21,
+          "tax_amount": 21
+        }
+      ]
+    }
+  ]
+}
+
+### Purchase Document - Minimal (no taxes)
+POST http://localhost:3000/api/documents/purchases-documents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "fb116f60-204d-493b-936c-b40fdff1bc6d",
+  "party_id": "4297aad1-7559-4e51-8eb6-b1c6673f3a7e",
+  "date": "2026-07-29",
+  "currency_code": "ARS",
+  "items": [
+    {
+      "product_id": "e3211ab0-65ed-4fb8-930f-a1ca25788f45",
+      "quantity": 1,
+      "unit_price": 100
+    }
+  ]
+}
+
+### Purchase Document - No party_id
+POST http://localhost:3000/api/documents/purchases-documents
+Content-Type: application/json
+x-tenant: dev
+
+{
+  "document_type_id": "fb116f60-204d-493b-936c-b40fdff1bc6d",
+  "date": "2026-07-29",
+  "currency_code": "ARS",
+  "items": [
+    {
+      "product_id": "e3211ab0-65ed-4fb8-930f-a1ca25788f45",
+      "quantity": 1,
+      "unit_price": 100
+    }
+  ]
+}

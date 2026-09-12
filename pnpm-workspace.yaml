@@ -1,0 +1,10 @@
+allowBuilds:
+  '@nestjs/core': true
+  '@prisma/engines': true
+  bcrypt: true
+  cpu-features: true
+  esbuild: true
+  prisma: true
+  puppeteer: true
+  ssh2: true
+  unrs-resolver: true

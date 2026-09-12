@@ -8,7 +8,12 @@ import { Decimal } from '@/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
 export class CorridorsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   private async getRoutePoints(
     originId: string,

@@ -3,7 +3,12 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { ComprasTransformado } from '../transformer/compras.transformer';
 
 export class FacturaSink implements Sink<ComprasTransformado> {
-  constructor(private prisma: PrismaService) {}
+  constructor(private db: PrismaService) {}
+
+  // Getter privado para reutilizar en todos los métodos
+  private get prisma() {
+    return this.db.getClientForCurrentContext();
+  }
 
   async send(data: ComprasTransformado[]): Promise<void> {
     for (const doc of data) {

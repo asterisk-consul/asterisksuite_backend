@@ -1,0 +1,73 @@
+@baseUrl = http://localhost:3000/api
+
+### 🔐 LOGIN
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+@variantId = REEMPLAZAR_VARIANT_ID
+@productId = REEMPLAZAR_PRODUCT_ID
+
+### Crear variante de producto
+POST {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "product_id": "10000",
+  "name": "Chapa SAE 1010 N°20",
+  "sku": "10001",
+  "thickness_mm": 0.9,
+  "weight_kg": 7.065,
+  "cost_price": 0,
+  "sale_price": 0,
+  "active": true
+}
+
+###
+
+### Obtener todas las variantes
+GET {{baseUrl}}/erp/product-variants
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener variante por ID
+GET {{baseUrl}}/erp/product-variants/{{variantId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Obtener variantes por producto
+GET {{baseUrl}}/erp/product-variants/product/{{productId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Actualizar variante
+PATCH {{baseUrl}}/erp/product-variants/{{variantId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Espuma Premium 35kg",
+  "sku": "ESP-35KG-001",
+  "density_kg_m3": 35,
+  "sale_price": 9500
+}
+
+###
+
+### Eliminar variante (soft delete)
+DELETE {{baseUrl}}/erp/product-variants/{{variantId}}
+Authorization: Bearer {{accessToken}}
+
+###
