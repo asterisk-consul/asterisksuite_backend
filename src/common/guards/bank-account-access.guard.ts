@@ -25,14 +25,14 @@ export class BankAccountAccessGuard implements CanActivate {
       },
     });
 
-    // OWNER siempre pasa
-    if (request.companyUserRole === 'OWNER') {
-      request.bankAccountRole = userRole?.role ?? 'VIEWER';
+    // OWNER y ADMIN administran todas las cuentas sin asociación individual.
+    if (request.companyUserRole === 'OWNER' || request.companyUserRole === 'ADMIN') {
+      request.bankAccountRole = userRole?.role ?? 'RESPONSIBLE';
       return true;
     }
 
-    // Sin rol asignado → denegar
-    if (!userRole) {
+    // Los usuarios comunes solo acceden a cuentas asociadas y activas para ellos.
+    if (!userRole || userRole.deleted_at) {
       throw new ForbiddenException('No tienes acceso a esta cuenta bancaria');
     }
 

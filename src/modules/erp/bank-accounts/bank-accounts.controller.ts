@@ -7,6 +7,7 @@ import type { Request } from 'express';
 import { BankAccountsService } from './bank-accounts.service';
 import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
+import { BankAccountAccessGuard } from '@/common/guards/bank-account-access.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/bank-accounts')
@@ -29,24 +30,28 @@ export class BankAccountsController {
   }
 
   @Get(':id')
+  @UseGuards(BankAccountAccessGuard)
   @RequirePermissions('treasury.bank_accounts.read')
   findOne(@Param('id') id: string) {
     return this.bankAccountsService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(BankAccountAccessGuard)
   @RequirePermissions('treasury.bank_accounts.update')
   update(@Param('id') id: string, @Body() dto: UpdateBankAccountDto, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.update(id, dto, user.id);
   }
 
   @Delete(':id')
+  @UseGuards(BankAccountAccessGuard)
   @RequirePermissions('treasury.bank_accounts.delete')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.remove(id, user.id);
   }
 
   @Get(':id/movements')
+  @UseGuards(BankAccountAccessGuard)
   @RequirePermissions('treasury.bank_accounts.read')
   getMovements(@Param('id') id: string) {
     return this.bankAccountsService.getMovements(id);
@@ -57,11 +62,15 @@ export class BankAccountsController {
   // ═══════════════════════════════════════════
 
   @Get(':id/user-roles')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.read')
   getUserRoles(@Param('id') id: string) {
     return this.bankAccountsService.getUserRoles(id);
   }
 
   @Post(':id/user-roles')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.update')
   addUserRole(
     @Param('id') id: string,
     @Body() body: { user_id: string; role: string },
@@ -70,6 +79,8 @@ export class BankAccountsController {
   }
 
   @Delete(':id/user-roles/:userId')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.update')
   removeUserRole(@Param('id') id: string, @Param('userId') userId: string) {
     return this.bankAccountsService.removeUserRole(id, userId);
   }
