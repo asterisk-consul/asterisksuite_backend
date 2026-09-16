@@ -74,7 +74,9 @@ export class CurrentAccountsService {
     // ─── Calculate balance change in base currency ────────────
     // balanceAfter = balance + (isDebit ? -convertedAmount : +convertedAmount)
     const currentBalance = account.balance.toNumber();
-    const isDebit = this.resolveIsDebit(dto.type, dto.party_type);
+    const isDebit = dto.balance_effect
+      ? dto.balance_effect === 'DECREASE'
+      : this.resolveIsDebit(dto.type, dto.party_type);
     const balanceChange = convertedAmount ?? dto.amount;
     const balanceAfter = isDebit ? currentBalance - balanceChange : currentBalance + balanceChange;
 
@@ -112,6 +114,36 @@ export class CurrentAccountsService {
     });
 
     return entry;
+  }
+
+  async deleteOpeningBalance(partyId: string, userId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const account = await tx.current_accounts.findFirst({
+        where: { party_id: partyId, deleted_at: null },
+      });
+      if (!account) throw new NotFoundException('Cuenta corriente no encontrada');
+
+      const entries = await tx.current_account_entries.findMany({
+        where: { current_account_id: account.id, deleted_at: null },
+        select: { id: true, type: true },
+      });
+      if (entries.length !== 1 || entries[0].type !== 'OPENING_BALANCE') {
+        throw new BadRequestException(
+          'El saldo inicial solo puede eliminarse cuando es el único movimiento de la cuenta corriente',
+        );
+      }
+
+      const now = new Date();
+      await tx.current_account_entries.update({
+        where: { id: entries[0].id },
+        data: { deleted_at: now, deleted_by: userId },
+      });
+      await tx.current_accounts.update({
+        where: { id: account.id },
+        data: { balance: 0, last_entry_date: null, updated_by: userId },
+      });
+      return { success: true, balance: 0 };
+    });
   }
 
   async findByParty(partyId: string) {
@@ -164,7 +196,10 @@ export class CurrentAccountsService {
       include: {
         party: { select: { id: true, name: true } },
         entries: {
-          where: userId ? { created_by: userId } : undefined,
+          where: {
+            deleted_at: null,
+            ...(userId ? { created_by: userId } : {}),
+          },
           orderBy: { created_at: 'asc' },
         },
       },

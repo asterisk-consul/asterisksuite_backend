@@ -3,6 +3,8 @@ import { AppModule } from './app.module.js';
 import { ValidationPipe, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RequestContextInterceptor } from './common/interceptors/request-context.interceptor.js';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { apiReference } from '@scalar/nestjs-api-reference';
 import * as express from 'express';
 import * as path from 'path';
 
@@ -51,6 +53,25 @@ async function bootstrap() {
   );
 
   app.useGlobalInterceptors(new RequestContextInterceptor());
+
+  // ✅ Swagger + Scalar API docs
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Asterisk Suite API')
+    .setDescription('Multi-tenant ERP/Logistics API for Argentina')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+
+  app.use(
+    '/api/docs',
+    apiReference({
+      content: document,
+      theme: 'purple',
+      layout: 'modern',
+    }),
+  );
 
   const config = app.get(ConfigService);
   const port = config.get<number>('PORT') ?? 3008;

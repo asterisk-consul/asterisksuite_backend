@@ -30,6 +30,10 @@ export class CreateCurrentAccountEntryDto {
   ] as const)
   type!: string;
 
+  @IsEnum(['INCREASE', 'DECREASE'] as const)
+  @IsOptional()
+  balance_effect?: 'INCREASE' | 'DECREASE';
+
   @IsNumber()
   amount!: number;
 
