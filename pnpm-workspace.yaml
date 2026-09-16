@@ -1,9 +1,11 @@
 allowBuilds:
   '@nestjs/core': true
   '@prisma/engines': true
-  '@scarf/scarf': set this to true or false
+  '@scarf/scarf': false
   bcrypt: true
-  cpu-features: true
+  # Optimización nativa opcional de ssh2. En Alpine requiere compilador;
+  # ssh2 utiliza automáticamente su implementación JavaScript si se omite.
+  cpu-features: false
   esbuild: true
   prisma: true
   puppeteer: true
