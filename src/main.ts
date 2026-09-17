@@ -11,6 +11,7 @@ import * as path from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Main');
+  const config = app.get(ConfigService);
 
   app.setGlobalPrefix('api');
 
@@ -54,26 +55,23 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new RequestContextInterceptor());
 
-  // ✅ Swagger + Scalar API docs
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Asterisk Suite API')
-    .setDescription('Multi-tenant ERP/Logistics API for Argentina')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  const enableApiDocs = config.get<string>('ENABLE_API_DOCS') === 'true'
+    || config.get<string>('NODE_ENV') !== 'production';
+  if (enableApiDocs) {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Asterisk Suite API')
+      .setDescription('Multi-tenant ERP/Logistics API for Argentina')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    app.use(
+      '/api/docs',
+      apiReference({ content: document, theme: 'purple', layout: 'modern' }),
+    );
+  }
 
-  app.use(
-    '/api/docs',
-    apiReference({
-      content: document,
-      theme: 'purple',
-      layout: 'modern',
-    }),
-  );
-
-  const config = app.get(ConfigService);
   const port = config.get<number>('PORT') ?? 3008;
 
   await app.listen(port, '0.0.0.0');
