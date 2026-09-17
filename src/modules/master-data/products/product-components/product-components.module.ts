@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { PrismaService } from '@/prisma/prisma.service';
 
 import { ProductComponentsController } from './product-components.controller';
 import { ProductComponentsService } from './product-components.service';
@@ -10,7 +9,7 @@ import { ProductStructureVersionModule } from '../engineering/product-structure-
 @Module({
   imports: [ProductStructureVersionModule],
   controllers: [ProductComponentsController],
-  providers: [ProductComponentsService, PrismaService],
+  providers: [ProductComponentsService],
   exports: [ProductComponentsService],
 })
 export class ProductComponentsModule {}

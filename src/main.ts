@@ -3,8 +3,6 @@ import { AppModule } from './app.module.js';
 import { ValidationPipe, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RequestContextInterceptor } from './common/interceptors/request-context.interceptor.js';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { apiReference } from '@scalar/nestjs-api-reference';
 import * as express from 'express';
 import * as path from 'path';
 
@@ -55,9 +53,15 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new RequestContextInterceptor());
 
-  const enableApiDocs = config.get<string>('ENABLE_API_DOCS') === 'true'
-    || config.get<string>('NODE_ENV') !== 'production';
+  const apiDocsSetting = config.get<string>('ENABLE_API_DOCS');
+  const enableApiDocs = apiDocsSetting == null
+    ? config.get<string>('NODE_ENV') !== 'production'
+    : apiDocsSetting === 'true';
   if (enableApiDocs) {
+    const [{ SwaggerModule, DocumentBuilder }, { apiReference }] = await Promise.all([
+      import('@nestjs/swagger'),
+      import('@scalar/nestjs-api-reference'),
+    ]);
     const swaggerConfig = new DocumentBuilder()
       .setTitle('Asterisk Suite API')
       .setDescription('Multi-tenant ERP/Logistics API for Argentina')
