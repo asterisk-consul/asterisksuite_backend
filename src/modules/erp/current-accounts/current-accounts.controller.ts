@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -15,6 +15,12 @@ export class CurrentAccountsController {
   @RequirePermissions('treasury.current_accounts.create')
   addEntry(@Body() dto: CreateCurrentAccountEntryDto, @CurrentUser() user: AuthUser) {
     return this.currentAccountsService.addEntry(dto, user.id);
+  }
+
+  @Delete('party/:partyId/opening-balance')
+  @RequirePermissions('treasury.current_accounts.create')
+  deleteOpeningBalance(@Param('partyId') partyId: string, @CurrentUser() user: AuthUser) {
+    return this.currentAccountsService.deleteOpeningBalance(partyId, user.id);
   }
 
   @Get('party/:partyId')

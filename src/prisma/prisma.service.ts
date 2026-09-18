@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client';
@@ -25,6 +25,9 @@ function createPublicClient() {
   const pool = new Pool({
     connectionString: DATABASE_URL_PUBLIC,
     options: `-c search_path="public"`,
+    max: Number(process.env.PUBLIC_DB_POOL_MAX ?? 2),
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 5_000,
   });
 
   const adapter = new PrismaPg(pool, { schema: 'public' });
@@ -46,7 +49,9 @@ function createTenantClient(tenantDb: string) {
   const pool = new Pool({
     connectionString,
     options: `-c search_path="tenant",public`,
-    max: 5, // límite de conexiones por tenant
+    max: Number(process.env.TENANT_DB_POOL_MAX ?? 2),
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 5_000,
   });
 
   // ✅ "tenant" coincide con @@schema("tenant") en tenant.prisma
@@ -70,9 +75,13 @@ export type PrismaTransactionClient = Omit<
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(PrismaService.name);
   // Cache de clientes tenant — key es el nombre de la DB (ej: "empresaa_db")
   private readonly tenantClientCache = new Map<string, ExtendedClient>();
   private readonly tenantPoolCache = new Map<string, Pool>();
+  private readonly tenantLastUsed = new Map<string, number>();
+  private readonly tenantIdleTtlMs = Number(process.env.TENANT_CLIENT_IDLE_TTL_MS ?? 15 * 60 * 1000);
+  private cleanupTimer?: NodeJS.Timeout;
 
   // Cliente fijo para public
   private readonly defaultClient: ExtendedClient;
@@ -121,14 +130,41 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
       this.tenantPoolCache.set(tenantDb, pool);
     }
 
+    this.tenantLastUsed.set(tenantDb, Date.now());
+
     return this.tenantClientCache.get(tenantDb)!;
   }
 
   async onModuleInit() {
     await (this.defaultClient as unknown as PrismaClient).$connect();
+    this.cleanupTimer = setInterval(() => {
+      void this.releaseIdleTenantClients();
+    }, 60_000);
+    this.cleanupTimer.unref();
+  }
+
+  private async releaseIdleTenantClients() {
+    const expiration = Date.now() - this.tenantIdleTtlMs;
+    for (const [tenantDb, lastUsed] of this.tenantLastUsed.entries()) {
+      const pool = this.tenantPoolCache.get(tenantDb);
+      if (lastUsed > expiration || !pool || pool.waitingCount > 0 || pool.idleCount !== pool.totalCount) continue;
+
+      const client = this.tenantClientCache.get(tenantDb);
+      this.tenantClientCache.delete(tenantDb);
+      this.tenantPoolCache.delete(tenantDb);
+      this.tenantLastUsed.delete(tenantDb);
+
+      try {
+        if (client) await (client as unknown as PrismaClient).$disconnect();
+        await pool.end();
+      } catch (error) {
+        this.logger.warn(`No se pudo liberar completamente el cliente inactivo ${tenantDb}: ${String(error)}`);
+      }
+    }
   }
 
   async onModuleDestroy() {
+    if (this.cleanupTimer) clearInterval(this.cleanupTimer);
     // ✅ Desconectar cliente public
     await (this.defaultClient as unknown as PrismaClient).$disconnect();
     await this.defaultPool.end();
@@ -144,5 +180,6 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
       await pool.end();
     }
     this.tenantPoolCache.clear();
+    this.tenantLastUsed.clear();
   }
 }

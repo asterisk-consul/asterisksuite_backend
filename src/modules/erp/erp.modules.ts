@@ -36,6 +36,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ProductSuppliersModule } from './pricing/product-suppliers/product-suppliers.module';
 import { PriceListsModule } from './pricing/price-lists/price-lists.module';
 import { ListPricesModule } from './pricing/list-prices/list-prices.module';
+import { ManagementReportsModule } from './management-reports/management-reports.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { ListPricesModule } from './pricing/list-prices/list-prices.module';
     ProductSuppliersModule,
     PriceListsModule,
     ListPricesModule,
+    ManagementReportsModule,
   ],
   exports: [
     AccountsModule,
@@ -107,6 +109,7 @@ import { ListPricesModule } from './pricing/list-prices/list-prices.module';
     ProductSuppliersModule,
     PriceListsModule,
     ListPricesModule,
+    ManagementReportsModule,
   ],
 })
 export class ErpModulesModule {}

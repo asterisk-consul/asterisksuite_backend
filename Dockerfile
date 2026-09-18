@@ -24,6 +24,7 @@ RUN npm install -g pnpm@11.5.2
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV ENABLE_API_DOCS=false
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 RUN pnpm install --prod --frozen-lockfile
