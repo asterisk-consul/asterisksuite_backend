@@ -752,6 +752,8 @@ export const FilesScalarFieldEnum = {
   file_name: 'file_name',
   mime_type: 'mime_type',
   file_size: 'file_size',
+  content_hash: 'content_hash',
+  purge_after: 'purge_after',
   uploaded_by: 'uploaded_by',
   created_at: 'created_at',
   updated_at: 'updated_at',

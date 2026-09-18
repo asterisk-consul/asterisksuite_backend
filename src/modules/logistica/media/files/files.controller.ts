@@ -23,6 +23,7 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { PermissionContextBuilder } from '@/access-control/authorization/permission-context.builder';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
@@ -143,6 +144,12 @@ export class FilesController {
     @Param('entityId') entityId: string,
   ) {
     return this.filesService.findByEntity(entityType, entityId);
+  }
+
+  @Get('storage/usage')
+  @RequirePermissions('media.upload')
+  getStorageUsage() {
+    return this.filesService.getStorageUsage();
   }
 
   // ─── Delete photo ────────────────────────────────────
