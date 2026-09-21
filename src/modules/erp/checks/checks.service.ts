@@ -11,7 +11,21 @@ export class ChecksService {
     return this.db.getClientForCurrentContext();
   }
 
+  private async validateBankAccount(bankAccountId: string | undefined, currencyCode: string) {
+    if (!bankAccountId) return;
+    const account = await this.prisma.bank_accounts.findFirst({
+      where: { id: bankAccountId, deleted_at: null },
+      select: { active: true, currency_code: true },
+    });
+    if (!account) throw new NotFoundException('Cuenta bancaria no encontrada');
+    if (!account.active) throw new BadRequestException('La cuenta bancaria seleccionada está inactiva');
+    if (account.currency_code !== currencyCode) {
+      throw new BadRequestException('La moneda del cheque debe coincidir con la moneda de la cuenta bancaria');
+    }
+  }
+
   async create(dto: CreateCheckDto, userId: string) {
+    await this.validateBankAccount(dto.bank_account_id, dto.currency_code);
     return this.prisma.checks.create({
       data: {
         payment_id: dto.payment_id,
@@ -118,6 +132,11 @@ export class ChecksService {
 
   async update(id: string, dto: UpdateCheckDto, userId: string) {
     const check = await this.findOne(id);
+
+    await this.validateBankAccount(
+      dto.bank_account_id ?? check.bank_account_id ?? undefined,
+      dto.currency_code ?? check.currency_code,
+    );
 
     const data: Record<string, any> = {
       updated_at: new Date(),
@@ -388,45 +407,24 @@ export class ChecksService {
       throw new NotFoundException('Cuenta bancaria no encontrada');
     }
 
-    const currentBalance = Number(bankAccount.balance);
-    const balanceAfter = currentBalance - Number(check.amount);
+    if (!bankAccount.active) {
+      throw new BadRequestException('La cuenta bancaria seleccionada está inactiva');
+    }
+    if (bankAccount.currency_code !== check.currency_code) {
+      throw new BadRequestException('La moneda del cheque debe coincidir con la moneda de la cuenta bancaria');
+    }
 
-    await this.prisma.$transaction(async (tx) => {
-      await tx.checks.update({
-        where: { id },
-        data: {
-          status: 'CONFIRMED',
-          confirmed_by: userId,
-          confirmed_at: new Date(),
-          updated_at: new Date(),
-          updated_by: userId,
-        },
-      });
-
-      await tx.bank_account_movements.create({
-        data: {
-          bank_account_id: check.bank_account_id!,
-          type: 'CHECK_ISSUED',
-          amount: -Number(check.amount),
-          currency_code: check.currency_code,
-          exchange_rate: check.exchange_rate,
-          rate_type: check.rate_type,
-          converted_amount: check.converted_amount,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
-          description: `Cheque #${check.check_number} procesado`,
-          reference_type: 'check',
-          reference_id: check.id,
-          payment_id: check.payment_id,
-          date: new Date(),
-          created_by: userId,
-        },
-      });
-
-      await tx.bank_accounts.update({
-        where: { id: check.bank_account_id! },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
+    // Confirmar programa el cheque. El débito bancario se registra al llegar
+    // la fecha de vencimiento mediante CheckProcessingScheduler.
+    await this.prisma.checks.update({
+      where: { id },
+      data: {
+        status: 'CONFIRMED',
+        confirmed_by: userId,
+        confirmed_at: new Date(),
+        updated_at: new Date(),
+        updated_by: userId,
+      },
     });
 
     return this.findOne(id);
@@ -476,7 +474,7 @@ export class ChecksService {
         deleted_at: null,
         status: 'PENDING',
         is_own: true,
-        payment_date: { lte: twoDaysFromNow },
+        due_date: { lte: twoDaysFromNow, gte: today },
         notification_sent: false,
       },
     });

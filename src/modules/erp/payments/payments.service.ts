@@ -739,66 +739,43 @@ export class PaymentsService {
       const applied = allocation ? allocation.amount_applied.toNumber() : Number(check.amount);
 
       if (check.is_own) {
-        // Cheque propio: CONFIRMED + debita banco asignado al cheque (siempre por el total)
+        // Cheque propio: queda programado. El banco se debita al vencimiento
+        // mediante CheckProcessingScheduler.
         if (check.bank_account_id) {
           const bankAccount = await prisma.bank_accounts.findUnique({
             where: { id: check.bank_account_id },
           });
-
-          if (bankAccount && Number(bankAccount.balance) >= Number(check.amount)) {
-            const currentBalance = Number(bankAccount.balance);
-            const balanceAfter = currentBalance - Number(check.amount);
-
-            await prisma.checks.update({
-              where: { id: check.id },
-              data: {
-                status: 'CONFIRMED',
-                confirmed_by: userId,
-                confirmed_at: new Date(),
-                updated_at: new Date(),
-                updated_by: userId,
-              },
-            });
-
-            await prisma.bank_account_movements.create({
-              data: {
-                bank_account_id: check.bank_account_id,
-                type: 'CHECK_ISSUED',
-                amount: -Number(check.amount),
-                currency_code: check.currency_code,
-                exchange_rate: check.exchange_rate,
-                rate_type: check.rate_type,
-                converted_amount: check.converted_amount,
-                balance_before: currentBalance,
-                balance_after: balanceAfter,
-                description: `Cheque propio #${check.check_number} confirmado en pago #${payment.number}`,
-                reference_type: 'check',
-                reference_id: check.id,
-                payment_id: payment.id,
-                date: new Date(),
-                created_by: userId,
-              },
-            });
-
-            await prisma.bank_accounts.update({
-              where: { id: check.bank_account_id },
-              data: { balance: balanceAfter, updated_at: new Date() },
-            });
+          if (!bankAccount?.active) {
+            throw new BadRequestException(`La cuenta del cheque propio #${check.check_number} no está activa`);
+          }
+          if (bankAccount.currency_code !== check.currency_code) {
+            throw new BadRequestException(`La moneda del cheque propio #${check.check_number} no coincide con su cuenta bancaria`);
           }
         } else {
-          // Sin cuenta bancaria: solo marca como CONFIRMED
+          throw new BadRequestException(`El cheque propio #${check.check_number} no tiene cuenta bancaria a debitar`);
+        }
+
+        await prisma.checks.update({
+          where: { id: check.id },
+          data: {
+            status: 'CONFIRMED',
+            confirmed_by: userId,
+            confirmed_at: new Date(),
+            updated_at: new Date(),
+            updated_by: userId,
+          },
+        });
+      } else {
+        if (payment.type === 'COLLECTION') {
+          // Un cheque recibido cancela la deuda del cliente, pero permanece en
+          // cartera hasta ser depositado o entregado en otro pago.
           await prisma.checks.update({
             where: { id: check.id },
-            data: {
-              status: 'CONFIRMED',
-              confirmed_by: userId,
-              confirmed_at: new Date(),
-              updated_at: new Date(),
-              updated_by: userId,
-            },
+            data: { status: 'PENDING', updated_at: new Date(), updated_by: userId },
           });
+          continue;
         }
-      } else {
+
         // Cheque de tercero: aplicación parcial — descuenta el saldo disponible.
         // Queda PENDING (en cartera) mientras le quede saldo; CLEARED al agotarse.
         const currentAvailable = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);

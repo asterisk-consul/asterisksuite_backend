@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsOptional, MinLength, IsIn } from 'class-validator';
+import { IsString, IsEmail, IsOptional, MinLength, IsIn, IsUUID } from 'class-validator';
 
 export class CreateCompanyUserDto {
   @IsString()
@@ -15,4 +15,12 @@ export class CreateCompanyUserDto {
   @IsString()
   @IsIn(['OWNER', 'ADMIN', 'USER'])
   role?: string = 'USER';
+
+  @IsOptional()
+  @IsUUID()
+  link_employee_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  link_partner_id?: string;
 }
