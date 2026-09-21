@@ -15,9 +15,10 @@ import { CommonErpModule } from '@/common/common-erp.module';
 import { MySalesModule } from './my-sales/my-sales.module';
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { SalesCommercialFlowController } from './sales-commercial-flow.controller';
+import { FiscalAuthorizationsModule } from '../fiscal-authorizations/fiscal-authorizations.module';
 
 @Module({
-  imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule],
+  imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule, FiscalAuthorizationsModule],
   controllers: [DocumentsSalesController, DocumentAssignmentController, SalesCommercialFlowController],
   providers: [
     DocumentsSalesService,

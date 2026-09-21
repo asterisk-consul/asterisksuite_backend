@@ -403,6 +403,9 @@ export const ModelName = {
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
   documents: 'documents',
+  fiscal_authorizations: 'fiscal_authorizations',
+  fiscal_authorization_settings: 'fiscal_authorization_settings',
+  fiscal_authorization_alerts: 'fiscal_authorization_alerts',
   presupuesto_documents: 'presupuesto_documents',
   orden_venta_documents: 'orden_venta_documents',
   orden_compra_documents: 'orden_compra_documents',
@@ -431,6 +434,7 @@ export const ModelName = {
   container_events: 'container_events',
   international_operation_documents: 'international_operation_documents',
   international_operation_payments: 'international_operation_payments',
+  international_operation_settings: 'international_operation_settings',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -550,7 +554,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1957,6 +1961,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.documentsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DocumentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    fiscal_authorizations: {
+      payload: Prisma.$fiscal_authorizationsPayload<ExtArgs>
+      fields: Prisma.fiscal_authorizationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.fiscal_authorizationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.fiscal_authorizationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>
+        }
+        findFirst: {
+          args: Prisma.fiscal_authorizationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.fiscal_authorizationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>
+        }
+        findMany: {
+          args: Prisma.fiscal_authorizationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>[]
+        }
+        create: {
+          args: Prisma.fiscal_authorizationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>
+        }
+        createMany: {
+          args: Prisma.fiscal_authorizationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.fiscal_authorizationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>[]
+        }
+        delete: {
+          args: Prisma.fiscal_authorizationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>
+        }
+        update: {
+          args: Prisma.fiscal_authorizationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.fiscal_authorizationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.fiscal_authorizationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.fiscal_authorizationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.fiscal_authorizationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorizationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Fiscal_authorizationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFiscal_authorizations>
+        }
+        groupBy: {
+          args: Prisma.fiscal_authorizationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Fiscal_authorizationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.fiscal_authorizationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Fiscal_authorizationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    fiscal_authorization_settings: {
+      payload: Prisma.$fiscal_authorization_settingsPayload<ExtArgs>
+      fields: Prisma.fiscal_authorization_settingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.fiscal_authorization_settingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.fiscal_authorization_settingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>
+        }
+        findFirst: {
+          args: Prisma.fiscal_authorization_settingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.fiscal_authorization_settingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>
+        }
+        findMany: {
+          args: Prisma.fiscal_authorization_settingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>[]
+        }
+        create: {
+          args: Prisma.fiscal_authorization_settingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>
+        }
+        createMany: {
+          args: Prisma.fiscal_authorization_settingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.fiscal_authorization_settingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>[]
+        }
+        delete: {
+          args: Prisma.fiscal_authorization_settingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>
+        }
+        update: {
+          args: Prisma.fiscal_authorization_settingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.fiscal_authorization_settingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.fiscal_authorization_settingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.fiscal_authorization_settingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.fiscal_authorization_settingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_settingsPayload>
+        }
+        aggregate: {
+          args: Prisma.Fiscal_authorization_settingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFiscal_authorization_settings>
+        }
+        groupBy: {
+          args: Prisma.fiscal_authorization_settingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Fiscal_authorization_settingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.fiscal_authorization_settingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Fiscal_authorization_settingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    fiscal_authorization_alerts: {
+      payload: Prisma.$fiscal_authorization_alertsPayload<ExtArgs>
+      fields: Prisma.fiscal_authorization_alertsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.fiscal_authorization_alertsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.fiscal_authorization_alertsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>
+        }
+        findFirst: {
+          args: Prisma.fiscal_authorization_alertsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.fiscal_authorization_alertsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>
+        }
+        findMany: {
+          args: Prisma.fiscal_authorization_alertsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>[]
+        }
+        create: {
+          args: Prisma.fiscal_authorization_alertsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>
+        }
+        createMany: {
+          args: Prisma.fiscal_authorization_alertsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.fiscal_authorization_alertsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>[]
+        }
+        delete: {
+          args: Prisma.fiscal_authorization_alertsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>
+        }
+        update: {
+          args: Prisma.fiscal_authorization_alertsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>
+        }
+        deleteMany: {
+          args: Prisma.fiscal_authorization_alertsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.fiscal_authorization_alertsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.fiscal_authorization_alertsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>[]
+        }
+        upsert: {
+          args: Prisma.fiscal_authorization_alertsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$fiscal_authorization_alertsPayload>
+        }
+        aggregate: {
+          args: Prisma.Fiscal_authorization_alertsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFiscal_authorization_alerts>
+        }
+        groupBy: {
+          args: Prisma.fiscal_authorization_alertsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Fiscal_authorization_alertsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.fiscal_authorization_alertsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Fiscal_authorization_alertsCountAggregateOutputType> | number
         }
       }
     }
@@ -4029,6 +4255,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.international_operation_paymentsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.International_operation_paymentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    international_operation_settings: {
+      payload: Prisma.$international_operation_settingsPayload<ExtArgs>
+      fields: Prisma.international_operation_settingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.international_operation_settingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.international_operation_settingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>
+        }
+        findFirst: {
+          args: Prisma.international_operation_settingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.international_operation_settingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>
+        }
+        findMany: {
+          args: Prisma.international_operation_settingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>[]
+        }
+        create: {
+          args: Prisma.international_operation_settingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>
+        }
+        createMany: {
+          args: Prisma.international_operation_settingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.international_operation_settingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>[]
+        }
+        delete: {
+          args: Prisma.international_operation_settingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>
+        }
+        update: {
+          args: Prisma.international_operation_settingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.international_operation_settingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.international_operation_settingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.international_operation_settingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.international_operation_settingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$international_operation_settingsPayload>
+        }
+        aggregate: {
+          args: Prisma.International_operation_settingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInternational_operation_settings>
+        }
+        groupBy: {
+          args: Prisma.international_operation_settingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_settingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.international_operation_settingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.International_operation_settingsCountAggregateOutputType> | number
         }
       }
     }
@@ -12148,10 +12448,74 @@ export const DocumentsScalarFieldEnum = {
   updated_by: 'updated_by',
   deleted_by: 'deleted_by',
   source: 'source',
-  dispatch_order_id: 'dispatch_order_id'
+  dispatch_order_id: 'dispatch_order_id',
+  fiscal_authorization_id: 'fiscal_authorization_id',
+  fiscal_authorization_type: 'fiscal_authorization_type',
+  fiscal_authorization_code: 'fiscal_authorization_code',
+  fiscal_authorization_expires_at: 'fiscal_authorization_expires_at',
+  fiscal_authorization_range_from: 'fiscal_authorization_range_from',
+  fiscal_authorization_range_to: 'fiscal_authorization_range_to'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Fiscal_authorizationsScalarFieldEnum = {
+  id: 'id',
+  authorization_type: 'authorization_type',
+  code: 'code',
+  document_type_id: 'document_type_id',
+  document_sequence_id: 'document_sequence_id',
+  valid_from: 'valid_from',
+  valid_to: 'valid_to',
+  range_from: 'range_from',
+  range_to: 'range_to',
+  status: 'status',
+  replacement_date: 'replacement_date',
+  observations: 'observations',
+  attachment_file_id: 'attachment_file_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Fiscal_authorizationsScalarFieldEnum = (typeof Fiscal_authorizationsScalarFieldEnum)[keyof typeof Fiscal_authorizationsScalarFieldEnum]
+
+
+export const Fiscal_authorization_settingsScalarFieldEnum = {
+  id: 'id',
+  settings_key: 'settings_key',
+  alerts_enabled: 'alerts_enabled',
+  day_thresholds: 'day_thresholds',
+  number_thresholds: 'number_thresholds',
+  expired_policy: 'expired_policy',
+  missing_policy: 'missing_policy',
+  daily_after_expiration: 'daily_after_expiration',
+  notify_roles: 'notify_roles',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by'
+} as const
+
+export type Fiscal_authorization_settingsScalarFieldEnum = (typeof Fiscal_authorization_settingsScalarFieldEnum)[keyof typeof Fiscal_authorization_settingsScalarFieldEnum]
+
+
+export const Fiscal_authorization_alertsScalarFieldEnum = {
+  id: 'id',
+  fiscal_authorization_id: 'fiscal_authorization_id',
+  alert_key: 'alert_key',
+  severity: 'severity',
+  title: 'title',
+  message: 'message',
+  is_read: 'is_read',
+  created_at: 'created_at',
+  read_at: 'read_at'
+} as const
+
+export type Fiscal_authorization_alertsScalarFieldEnum = (typeof Fiscal_authorization_alertsScalarFieldEnum)[keyof typeof Fiscal_authorization_alertsScalarFieldEnum]
 
 
 export const Presupuesto_documentsScalarFieldEnum = {
@@ -12637,6 +13001,9 @@ export const International_operationsScalarFieldEnum = {
   currency_code: 'currency_code',
   incoterm: 'incoterm',
   responsible_user_id: 'responsible_user_id',
+  customs_broker_op_number: 'customs_broker_op_number',
+  sim_number: 'sim_number',
+  supplier_purchase_order: 'supplier_purchase_order',
   notes: 'notes',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -12685,6 +13052,7 @@ export const International_containersScalarFieldEnum = {
   estimated_arrival_date: 'estimated_arrival_date',
   actual_arrival_date: 'actual_arrival_date',
   status: 'status',
+  transit_warehouse_id: 'transit_warehouse_id',
   weight: 'weight',
   volume: 'volume',
   notes: 'notes',
@@ -12735,6 +13103,22 @@ export const International_operation_paymentsScalarFieldEnum = {
 } as const
 
 export type International_operation_paymentsScalarFieldEnum = (typeof International_operation_paymentsScalarFieldEnum)[keyof typeof International_operation_paymentsScalarFieldEnum]
+
+
+export const International_operation_settingsScalarFieldEnum = {
+  id: 'id',
+  settings_key: 'settings_key',
+  container_fields: 'container_fields',
+  operation_fields: 'operation_fields',
+  operation_statuses: 'operation_statuses',
+  container_statuses: 'container_statuses',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type International_operation_settingsScalarFieldEnum = (typeof International_operation_settingsScalarFieldEnum)[keyof typeof International_operation_settingsScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {
@@ -14763,6 +15147,7 @@ export const WarehousesScalarFieldEnum = {
   name: 'name',
   code: 'code',
   active: 'active',
+  is_virtual: 'is_virtual',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -15928,6 +16313,9 @@ export type GlobalOmitConfig = {
   document_types?: Prisma.document_typesOmit
   document_type_taxes?: Prisma.document_type_taxesOmit
   documents?: Prisma.documentsOmit
+  fiscal_authorizations?: Prisma.fiscal_authorizationsOmit
+  fiscal_authorization_settings?: Prisma.fiscal_authorization_settingsOmit
+  fiscal_authorization_alerts?: Prisma.fiscal_authorization_alertsOmit
   presupuesto_documents?: Prisma.presupuesto_documentsOmit
   orden_venta_documents?: Prisma.orden_venta_documentsOmit
   orden_compra_documents?: Prisma.orden_compra_documentsOmit
@@ -15956,6 +16344,7 @@ export type GlobalOmitConfig = {
   container_events?: Prisma.container_eventsOmit
   international_operation_documents?: Prisma.international_operation_documentsOmit
   international_operation_payments?: Prisma.international_operation_paymentsOmit
+  international_operation_settings?: Prisma.international_operation_settingsOmit
   cargo_transfer_items?: Prisma.cargo_transfer_itemsOmit
   cargo_transfers?: Prisma.cargo_transfersOmit
   delivery_notes?: Prisma.delivery_notesOmit

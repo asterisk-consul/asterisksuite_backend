@@ -4,11 +4,13 @@ import { InternationalOperationsController } from './international-operations.co
 import { InternationalOperationsService } from './international-operations.service';
 import { ContainersService } from './containers/containers.service';
 import { EventsService } from './events/events.service';
+import { IntlOpsSettingsController } from './settings/settings.controller';
+import { IntlOpsSettingsService } from './settings/settings.service';
 
 @Module({
   imports: [DocumentSequencesModule],
-  controllers: [InternationalOperationsController],
-  providers: [InternationalOperationsService, ContainersService, EventsService],
+  controllers: [IntlOpsSettingsController, InternationalOperationsController],
+  providers: [InternationalOperationsService, ContainersService, EventsService, IntlOpsSettingsService],
   exports: [InternationalOperationsService],
 })
 export class InternationalOperationsModule {}

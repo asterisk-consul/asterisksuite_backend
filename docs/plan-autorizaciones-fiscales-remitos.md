@@ -1,5 +1,9 @@
 # Plan de autorizaciones fiscales para remitos
 
+> Estado: implementado el 18/09/2026. La migración queda disponible en
+> `prisma/migrations/20260918_fiscal_authorizations/migration.sql` y debe aplicarse
+> en cada base tenant antes de habilitar la pantalla y la validación.
+
 ## Objetivo
 
 Administrar las autorizaciones fiscales utilizadas por los documentos, comenzando por el CAI de los remitos, conservar el dato histórico impreso y avisar antes de su vencimiento.
@@ -101,4 +105,3 @@ Las alertas aparecerán en la campana, el panel administrativo, la configuració
 8. Crear configuración de alertas y tarea diaria.
 9. Probar renovaciones, vencimientos, rangos y múltiples puntos de venta.
 10. Extender el modelo a CAE o CAEA cuando se implemente su circuito específico.
-

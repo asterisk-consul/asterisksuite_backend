@@ -17,6 +17,7 @@ model document_sequences {
   document_types          document_types[]
   document_type_sequences document_type_sequences[]
   documents               documents[]
+  fiscal_authorizations   fiscal_authorizations[]
 
   @@unique([point_of_sale, prefix])
   @@schema("tenant")
@@ -148,6 +149,7 @@ model document_types {
   system_modules          system_modules?           @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   documents               documents[]
   document_type_sequences document_type_sequences[]
+  fiscal_authorizations   fiscal_authorizations[]
 
   @@schema("tenant")
 }
@@ -206,6 +208,12 @@ model documents {
   deleted_by                   String?                             @db.Uuid
   source                       String                              @default("manual")
   dispatch_order_id            String?                             @db.Uuid
+  fiscal_authorization_id      String?                             @db.Uuid
+  fiscal_authorization_type    String?                             @db.VarChar(10)
+  fiscal_authorization_code    String?                             @db.VarChar(50)
+  fiscal_authorization_expires_at DateTime?                        @db.Date
+  fiscal_authorization_range_from Int?
+  fiscal_authorization_range_to   Int?
   document_items               document_items[]
   document_taxes               document_taxes[]
   document_types               document_types                      @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -228,12 +236,79 @@ model documents {
   withholding_allocations      withholding_allocations[]
   maintenance_services         maintenance_services[]
   purchase_tires               tires[]
+  fiscal_authorization         fiscal_authorizations?              @relation(fields: [fiscal_authorization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
   @@index([assigned_to])
   @@index([commercial_operation_id])
   @@index([warehouse_id])
+  @@schema("tenant")
+}
+
+model fiscal_authorizations {
+  id                    String    @id @default(uuid()) @db.Uuid
+  authorization_type    String    @default("CAI") @db.VarChar(10)
+  code                  String    @db.VarChar(50)
+  document_type_id      String    @db.Uuid
+  document_sequence_id  String    @db.Uuid
+  valid_from            DateTime  @db.Date
+  valid_to              DateTime  @db.Date
+  range_from            Int
+  range_to              Int
+  status                String    @default("ACTIVE") @db.VarChar(20)
+  replacement_date      DateTime? @db.Date
+  observations          String?   @db.Text
+  attachment_file_id    String?   @db.Uuid
+  created_at            DateTime  @default(now()) @db.Timestamp(6)
+  updated_at            DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at            DateTime?
+  created_by            String?   @db.Uuid
+  updated_by            String?   @db.Uuid
+  deleted_by            String?   @db.Uuid
+
+  document_type         document_types     @relation(fields: [document_type_id], references: [id], onDelete: NoAction)
+  document_sequence     document_sequences @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction)
+  documents             documents[]
+  alerts                fiscal_authorization_alerts[]
+
+  @@unique([authorization_type, code, document_type_id, document_sequence_id])
+  @@index([document_type_id, document_sequence_id, valid_from, valid_to])
+  @@schema("tenant")
+}
+
+model fiscal_authorization_settings {
+  id                         String   @id @default(uuid()) @db.Uuid
+  settings_key               String   @unique @default("default") @db.VarChar(30)
+  alerts_enabled             Boolean  @default(true)
+  day_thresholds             Json     @default("[30,15,7,3,1]")
+  number_thresholds          Json     @default("[100,50,20,10]")
+  expired_policy             String   @default("BLOCK") @db.VarChar(20)
+  missing_policy             String   @default("BLOCK") @db.VarChar(20)
+  daily_after_expiration     Boolean  @default(false)
+  notify_roles               Json?
+  created_at                 DateTime @default(now()) @db.Timestamp(6)
+  updated_at                 DateTime? @updatedAt @db.Timestamp(6)
+  updated_by                 String?  @db.Uuid
+
+  @@schema("tenant")
+}
+
+model fiscal_authorization_alerts {
+  id                       String   @id @default(uuid()) @db.Uuid
+  fiscal_authorization_id  String   @db.Uuid
+  alert_key                String   @db.VarChar(80)
+  severity                 String   @default("WARNING") @db.VarChar(20)
+  title                    String   @db.VarChar(180)
+  message                  String   @db.Text
+  is_read                  Boolean  @default(false)
+  created_at               DateTime @default(now()) @db.Timestamp(6)
+  read_at                  DateTime? @db.Timestamp(6)
+
+  authorization fiscal_authorizations @relation(fields: [fiscal_authorization_id], references: [id], onDelete: Cascade)
+
+  @@unique([fiscal_authorization_id, alert_key])
+  @@index([is_read, created_at])
   @@schema("tenant")
 }
 

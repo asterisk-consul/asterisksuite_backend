@@ -113,6 +113,21 @@ export type document_type_taxes = Prisma.document_type_taxesModel
  */
 export type documents = Prisma.documentsModel
 /**
+ * Model fiscal_authorizations
+ * 
+ */
+export type fiscal_authorizations = Prisma.fiscal_authorizationsModel
+/**
+ * Model fiscal_authorization_settings
+ * 
+ */
+export type fiscal_authorization_settings = Prisma.fiscal_authorization_settingsModel
+/**
+ * Model fiscal_authorization_alerts
+ * 
+ */
+export type fiscal_authorization_alerts = Prisma.fiscal_authorization_alertsModel
+/**
  * Model presupuesto_documents
  * 
  */
@@ -252,6 +267,11 @@ export type international_operation_documents = Prisma.international_operation_d
  * 
  */
 export type international_operation_payments = Prisma.international_operation_paymentsModel
+/**
+ * Model international_operation_settings
+ * 
+ */
+export type international_operation_settings = Prisma.international_operation_settingsModel
 /**
  * Model cargo_transfer_items
  * 

@@ -19,6 +19,9 @@ import { UpdateOperationDto } from './dto/update-operation.dto';
 import { UpdateOperationStatusDto } from './dto/update-status.dto';
 import { CreateContainerDto } from './containers/dto/create-container.dto';
 import { UpdateContainerDto } from './containers/dto/update-container.dto';
+import { DeliverContainerDto } from './containers/dto/deliver-container.dto';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { CreateEventDto } from './events/dto/create-event.dto';
 import { AssociateDocumentDto } from './dto/associate-document.dto';
 import { AssociateQuoteDto } from './dto/associate-quote.dto';
@@ -170,6 +173,16 @@ export class InternationalOperationsController {
   @RequirePermissions('international_operations.delete')
   removeContainer(@Param('containerId') containerId: string) {
     return this.containersService.remove(containerId);
+  }
+
+  @Post('containers/:containerId/deliver')
+  @RequirePermissions('international_operations.update')
+  deliverContainer(
+    @Param('containerId') containerId: string,
+    @Body() dto: DeliverContainerDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.containersService.deliver(containerId, dto.destination_warehouse_id, user.id);
   }
 
   @Post('containers/:containerId/events')

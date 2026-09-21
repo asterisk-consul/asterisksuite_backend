@@ -70,6 +70,9 @@ export const ModelName = {
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
   documents: 'documents',
+  fiscal_authorizations: 'fiscal_authorizations',
+  fiscal_authorization_settings: 'fiscal_authorization_settings',
+  fiscal_authorization_alerts: 'fiscal_authorization_alerts',
   presupuesto_documents: 'presupuesto_documents',
   orden_venta_documents: 'orden_venta_documents',
   orden_compra_documents: 'orden_compra_documents',
@@ -98,6 +101,7 @@ export const ModelName = {
   container_events: 'container_events',
   international_operation_documents: 'international_operation_documents',
   international_operation_payments: 'international_operation_payments',
+  international_operation_settings: 'international_operation_settings',
   cargo_transfer_items: 'cargo_transfer_items',
   cargo_transfers: 'cargo_transfers',
   delivery_notes: 'delivery_notes',
@@ -601,10 +605,74 @@ export const DocumentsScalarFieldEnum = {
   updated_by: 'updated_by',
   deleted_by: 'deleted_by',
   source: 'source',
-  dispatch_order_id: 'dispatch_order_id'
+  dispatch_order_id: 'dispatch_order_id',
+  fiscal_authorization_id: 'fiscal_authorization_id',
+  fiscal_authorization_type: 'fiscal_authorization_type',
+  fiscal_authorization_code: 'fiscal_authorization_code',
+  fiscal_authorization_expires_at: 'fiscal_authorization_expires_at',
+  fiscal_authorization_range_from: 'fiscal_authorization_range_from',
+  fiscal_authorization_range_to: 'fiscal_authorization_range_to'
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Fiscal_authorizationsScalarFieldEnum = {
+  id: 'id',
+  authorization_type: 'authorization_type',
+  code: 'code',
+  document_type_id: 'document_type_id',
+  document_sequence_id: 'document_sequence_id',
+  valid_from: 'valid_from',
+  valid_to: 'valid_to',
+  range_from: 'range_from',
+  range_to: 'range_to',
+  status: 'status',
+  replacement_date: 'replacement_date',
+  observations: 'observations',
+  attachment_file_id: 'attachment_file_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Fiscal_authorizationsScalarFieldEnum = (typeof Fiscal_authorizationsScalarFieldEnum)[keyof typeof Fiscal_authorizationsScalarFieldEnum]
+
+
+export const Fiscal_authorization_settingsScalarFieldEnum = {
+  id: 'id',
+  settings_key: 'settings_key',
+  alerts_enabled: 'alerts_enabled',
+  day_thresholds: 'day_thresholds',
+  number_thresholds: 'number_thresholds',
+  expired_policy: 'expired_policy',
+  missing_policy: 'missing_policy',
+  daily_after_expiration: 'daily_after_expiration',
+  notify_roles: 'notify_roles',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by'
+} as const
+
+export type Fiscal_authorization_settingsScalarFieldEnum = (typeof Fiscal_authorization_settingsScalarFieldEnum)[keyof typeof Fiscal_authorization_settingsScalarFieldEnum]
+
+
+export const Fiscal_authorization_alertsScalarFieldEnum = {
+  id: 'id',
+  fiscal_authorization_id: 'fiscal_authorization_id',
+  alert_key: 'alert_key',
+  severity: 'severity',
+  title: 'title',
+  message: 'message',
+  is_read: 'is_read',
+  created_at: 'created_at',
+  read_at: 'read_at'
+} as const
+
+export type Fiscal_authorization_alertsScalarFieldEnum = (typeof Fiscal_authorization_alertsScalarFieldEnum)[keyof typeof Fiscal_authorization_alertsScalarFieldEnum]
 
 
 export const Presupuesto_documentsScalarFieldEnum = {
@@ -1090,6 +1158,9 @@ export const International_operationsScalarFieldEnum = {
   currency_code: 'currency_code',
   incoterm: 'incoterm',
   responsible_user_id: 'responsible_user_id',
+  customs_broker_op_number: 'customs_broker_op_number',
+  sim_number: 'sim_number',
+  supplier_purchase_order: 'supplier_purchase_order',
   notes: 'notes',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -1138,6 +1209,7 @@ export const International_containersScalarFieldEnum = {
   estimated_arrival_date: 'estimated_arrival_date',
   actual_arrival_date: 'actual_arrival_date',
   status: 'status',
+  transit_warehouse_id: 'transit_warehouse_id',
   weight: 'weight',
   volume: 'volume',
   notes: 'notes',
@@ -1188,6 +1260,22 @@ export const International_operation_paymentsScalarFieldEnum = {
 } as const
 
 export type International_operation_paymentsScalarFieldEnum = (typeof International_operation_paymentsScalarFieldEnum)[keyof typeof International_operation_paymentsScalarFieldEnum]
+
+
+export const International_operation_settingsScalarFieldEnum = {
+  id: 'id',
+  settings_key: 'settings_key',
+  container_fields: 'container_fields',
+  operation_fields: 'operation_fields',
+  operation_statuses: 'operation_statuses',
+  container_statuses: 'container_statuses',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type International_operation_settingsScalarFieldEnum = (typeof International_operation_settingsScalarFieldEnum)[keyof typeof International_operation_settingsScalarFieldEnum]
 
 
 export const Cargo_transfer_itemsScalarFieldEnum = {
@@ -3216,6 +3304,7 @@ export const WarehousesScalarFieldEnum = {
   name: 'name',
   code: 'code',
   active: 'active',
+  is_virtual: 'is_virtual',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

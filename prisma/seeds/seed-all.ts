@@ -62,8 +62,9 @@ async function runSql(label: string, sql: string) {
 async function main() {
   const startTime = Date.now()
 
-  // Estos catálogos también alimentan document-permissions.seed.ts y
-  // data-transfer-permissions.seed.ts. seed-all los registra mediante rbac.seed.ts,
+  // Estos catálogos también alimentan document-permissions.seed.ts,
+  // data-transfer-permissions.seed.ts y fiscal-authorizations-permissions.seed.ts.
+  // seed-all los registra mediante rbac.seed.ts,
   // por lo que no es necesario ejecutar esos scripts por separado.
   const documentPermissions = RBAC_PERMISSIONS.filter(({ code }) =>
     /^(sales|purchases)\.[^.]+\.(read|create|update|confirm|cancel|delete)$/.test(code),

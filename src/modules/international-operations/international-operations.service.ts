@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
-import { convertWithMarketRate } from '@/common/utils/currency-conversion';
+import { convertWithMarketRate, normalizeMarketRate } from '@/common/utils/currency-conversion';
 import { DocumentSequencesService } from '@/modules/erp/document-sequences/document-sequences.service';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
@@ -55,6 +55,9 @@ export class InternationalOperationsService {
         currency_code: dto.currency_code,
         incoterm: dto.incoterm,
         responsible_user_id: dto.responsible_user_id,
+        customs_broker_op_number: dto.customs_broker_op_number,
+        sim_number: dto.sim_number,
+        supplier_purchase_order: dto.supplier_purchase_order,
         notes: dto.notes,
       },
       include: {
@@ -87,6 +90,7 @@ export class InternationalOperationsService {
       where.OR = [
         { number: { contains: params.search, mode: 'insensitive' } },
         { name: { contains: params.search, mode: 'insensitive' } },
+        { customs_broker_op_number: { contains: params.search, mode: 'insensitive' } },
       ];
     }
 
@@ -126,12 +130,15 @@ export class InternationalOperationsService {
           include: {
             document: {
               include: {
-                document_types: { select: { code: true, description: true, category: true } },
+                document_types: { select: { code: true, description: true, category: true, direction: true } },
                 business_parties: { select: { id: true, name: true } },
                 payment_documents: {
                   include: {
                     payment: { select: { id: true, number: true, amount: true, currency_code: true, status: true, date: true, payment_method: true } },
                   },
+                },
+                document_items: {
+                  include: { products: { select: { id: true, name: true, sku: true } } },
                 },
               },
             },
@@ -227,6 +234,13 @@ export class InternationalOperationsService {
         ...(dto.incoterm !== undefined && { incoterm: dto.incoterm }),
         ...(dto.responsible_user_id !== undefined && {
           responsible_user_id: dto.responsible_user_id,
+        }),
+        ...(dto.customs_broker_op_number !== undefined && {
+          customs_broker_op_number: dto.customs_broker_op_number,
+        }),
+        ...(dto.sim_number !== undefined && { sim_number: dto.sim_number }),
+        ...(dto.supplier_purchase_order !== undefined && {
+          supplier_purchase_order: dto.supplier_purchase_order,
         }),
         ...(dto.notes !== undefined && { notes: dto.notes }),
       },
@@ -480,12 +494,20 @@ export class InternationalOperationsService {
   }
 
   async associateDocument(operationId: string, documentId: string, expenseType?: InternationalExpenseType, containerId?: string, customExpenseDescription?: string, exchangeRate?: number) {
-    await this.findOne(operationId);
+    const operation = await this.findOne(operationId);
 
     const doc = await this.prisma.documents.findFirst({
       where: { id: documentId, deleted_at: null },
     });
     if (!doc) throw new NotFoundException('Documento no encontrado');
+
+    const documentCurrency = doc.currency_code ?? operation.currency_code ?? 'ARS';
+    const operationCurrency = operation.currency_code ?? documentCurrency;
+    const normalizedExchangeRate = normalizeMarketRate(exchangeRate, documentCurrency, operationCurrency);
+
+    if (documentCurrency !== operationCurrency && !normalizedExchangeRate) {
+      throw new BadRequestException('Debe ingresar una cotización válida para asociar monedas diferentes');
+    }
 
     const existing = await this.prisma.international_operation_documents.findUnique({
       where: { operation_id_document_id: { operation_id: operationId, document_id: documentId } },
@@ -510,7 +532,7 @@ export class InternationalOperationsService {
         expense_type: expenseType ?? 'MERCHANDISE',
         custom_expense_description: customExpenseDescription ?? null,
         container_id: containerId ?? null,
-        exchange_rate: exchangeRate ?? null,
+        exchange_rate: normalizedExchangeRate,
       },
     });
   }

@@ -22,6 +22,7 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
+import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -60,6 +61,8 @@ export class DocumentsSalesService {
     private readonly fiscalValidation: FiscalValidationService,
 
     private readonly productPartyPricing: ProductPartyPricingService,
+
+    private readonly fiscalAuthorizations: FiscalAuthorizationsService,
   ) {}
 
   private get prisma() {
@@ -1524,6 +1527,10 @@ export class DocumentsSalesService {
 
       const category = doc.document_types?.category;
 
+      const fiscalAuthorizationSnapshot = category === 'REMITO'
+        ? await this.fiscalAuthorizations.resolveForDocument(doc, tx)
+        : null;
+
       if (!doc.document_items.length && category !== 'OPENING_BALANCE') {
         throw new BadRequestException('El documento no tiene ítems');
       }
@@ -1533,6 +1540,7 @@ export class DocumentsSalesService {
         data: {
           status: STATUS_CONFIRMED,
           updated_at: new Date(),
+          ...(fiscalAuthorizationSnapshot ?? {}),
         },
       });
 

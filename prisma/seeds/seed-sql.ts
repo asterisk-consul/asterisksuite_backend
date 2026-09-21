@@ -54,6 +54,13 @@ export const RBAC_PERMISSIONS = [
   { code: 'taxes.update', description: 'Editar impuestos' },
   { code: 'taxes.delete', description: 'Eliminar impuestos' },
 
+  // ─── ERP - Autorizaciones fiscales (CAI/CAE/CAEA) ─────────
+  { code: 'fiscal-authorizations.read', description: 'Ver autorizaciones fiscales y alertas' },
+  { code: 'fiscal-authorizations.create', description: 'Crear autorizaciones fiscales' },
+  { code: 'fiscal-authorizations.update', description: 'Editar, renovar o anular autorizaciones fiscales' },
+  { code: 'fiscal-authorizations.delete', description: 'Eliminar autorizaciones fiscales sin uso' },
+  { code: 'fiscal-authorizations.configure-alerts', description: 'Configurar alertas y políticas de autorizaciones fiscales' },
+
   // ─── ERP - Accounts ───────────────────────────────────────
   { code: 'accounts.read', description: 'Ver cuentas contables' },
   { code: 'accounts.create', description: 'Crear cuentas contables' },

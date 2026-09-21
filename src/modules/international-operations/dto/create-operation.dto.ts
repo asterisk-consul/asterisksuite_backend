@@ -1,4 +1,5 @@
 import { IsString, IsOptional, IsEnum, IsDateString, MaxLength, IsUUID } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { OperationType, TransportType, Incoterm } from '@/generated/prisma/enums';
 
 export class CreateOperationDto {
@@ -53,10 +54,12 @@ export class CreateOperationDto {
   destination_location_id?: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' || value === null || value === undefined ? undefined : value))
   @IsDateString()
   estimated_departure_date?: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' || value === null || value === undefined ? undefined : value))
   @IsDateString()
   estimated_arrival_date?: string;
 
@@ -72,6 +75,21 @@ export class CreateOperationDto {
   @IsOptional()
   @IsUUID()
   responsible_user_id?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  customs_broker_op_number?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  sim_number?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  supplier_purchase_order?: string;
 
   @IsOptional()
   @IsString()

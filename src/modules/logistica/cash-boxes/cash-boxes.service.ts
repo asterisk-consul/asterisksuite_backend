@@ -26,34 +26,46 @@ export class CashBoxesService {
       });
     }
 
-    const box = await this.prisma.cash_boxes.create({
-      data: {
-        name: dto.name,
-        type: dto.type as any ?? 'FIXED',
-        currency_code: dto.currency_code,
-        status: 'CLOSED',
-        responsible_id: dto.responsible_id,
-        opening_balance: dto.opening_balance ?? 0,
-        max_limit: dto.max_limit,
-        active: dto.active ?? true,
-        is_main: dto.is_main ?? false,
-        created_by: userId,
-      },
-    });
-
-    // Crear balance inicial con la currency seleccionada
-    if (dto.opening_balance && dto.opening_balance > 0) {
-      await this.prisma.cash_box_balances.create({
+    return this.prisma.$transaction(async (tx) => {
+      const openingBalance = Number(dto.opening_balance ?? 0);
+      const box = await tx.cash_boxes.create({
         data: {
-          cash_box_id: box.id,
+          name: dto.name,
+          type: dto.type as any ?? 'FIXED',
           currency_code: dto.currency_code,
-          balance: dto.opening_balance,
+          status: 'CLOSED',
+          responsible_id: dto.responsible_id,
+          opening_balance: openingBalance,
+          max_limit: dto.max_limit,
+          active: dto.active ?? true,
+          is_main: dto.is_main ?? false,
           created_by: userId,
         },
       });
-    }
 
-    return box;
+      if (openingBalance > 0) {
+        await tx.cash_box_balances.create({
+          data: { cash_box_id: box.id, currency_code: dto.currency_code, balance: openingBalance, created_by: userId },
+        });
+        await tx.cash_box_movements.create({
+          data: {
+            cash_box_id: box.id,
+            type: 'OPENING_BALANCE',
+            amount: openingBalance,
+            currency_code: dto.currency_code,
+            balance_before: 0,
+            balance_after: openingBalance,
+            description: 'Saldo inicial de la caja',
+            reference_type: 'cash_box_initial_balance',
+            reference_id: box.id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+      }
+
+      return box;
+    });
   }
 
   async findAll(userId?: string) {
@@ -88,14 +100,28 @@ export class CashBoxesService {
         balances: true,
         user_roles: true,
         current_session: true,
+        _count: { select: { movements: true, sessions: true } },
       },
     });
     if (!box) throw new NotFoundException('Caja no encontrada');
-    return box;
+    const hasBalance = box.balances.some(balance => !balance.deleted_at && Number(balance.balance) !== 0);
+    return {
+      ...box,
+      can_set_initial_balance:
+        box._count.movements === 0 &&
+        box._count.sessions === 0 &&
+        !box.current_session_id &&
+        Number(box.opening_balance) === 0 &&
+        !hasBalance,
+    };
   }
 
   async update(id: string, dto: UpdateCashBoxDto, userId: string) {
-    await this.findOne(id);
+    const box = await this.findOne(id);
+
+    if (dto.opening_balance != null && Number(dto.opening_balance) !== Number(box.opening_balance)) {
+      throw new BadRequestException('El saldo inicial se registra con la acción "Establecer saldo inicial" y sólo antes del primer movimiento');
+    }
 
     if (dto.is_main) {
       await this.prisma.cash_boxes.updateMany({
@@ -104,14 +130,61 @@ export class CashBoxesService {
       });
     }
 
+    const { opening_balance: _openingBalance, currency_code: _currencyCode, ...editableData } = dto;
     return this.prisma.cash_boxes.update({
       where: { id },
       data: {
-        ...dto,
+        ...editableData,
         type: dto.type as any,
         updated_at: new Date(),
         updated_by: userId,
       },
+    });
+  }
+
+  async setInitialBalance(id: string, amount: number, userId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const box = await tx.cash_boxes.findFirst({
+        where: { id, deleted_at: null },
+        include: { balances: { where: { deleted_at: null } }, _count: { select: { movements: true, sessions: true } } },
+      });
+      if (!box) throw new NotFoundException('Caja no encontrada');
+
+      const hasBalance = box.balances.some(balance => Number(balance.balance) !== 0);
+      if (box._count.movements > 0 || box._count.sessions > 0 || box.current_session_id || Number(box.opening_balance) !== 0 || hasBalance) {
+        throw new BadRequestException('El saldo inicial sólo puede establecerse antes de registrar movimientos o abrir la primera sesión');
+      }
+
+      const initialBalance = Number(amount);
+      const currencyCode = box.currency_code ?? 'ARS';
+      const balance = await tx.cash_box_balances.upsert({
+        where: { cash_box_id_currency_code: { cash_box_id: id, currency_code: currencyCode } },
+        create: { cash_box_id: id, currency_code: currencyCode, balance: initialBalance, created_by: userId },
+        update: { balance: initialBalance, deleted_at: null, updated_at: new Date(), updated_by: userId },
+      });
+
+      const movement = await tx.cash_box_movements.create({
+        data: {
+          cash_box_id: id,
+          type: 'OPENING_BALANCE',
+          amount: initialBalance,
+          currency_code: currencyCode,
+          balance_before: 0,
+          balance_after: initialBalance,
+          description: 'Saldo inicial de la caja',
+          reference_type: 'cash_box_initial_balance',
+          reference_id: id,
+          date: new Date(),
+          created_by: userId,
+        },
+      });
+
+      await tx.cash_boxes.update({
+        where: { id },
+        data: { opening_balance: initialBalance, updated_at: new Date(), updated_by: userId },
+      });
+
+      return { balance, movement };
     });
   }
 
