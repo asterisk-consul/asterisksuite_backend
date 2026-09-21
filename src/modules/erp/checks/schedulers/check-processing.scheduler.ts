@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '@/prisma/prisma.service';
+import { recalculateBankAccountLedger } from '../../bank-accounts/bank-account-ledger';
 
 @Injectable()
 export class CheckProcessingScheduler {
@@ -41,7 +42,7 @@ export class CheckProcessingScheduler {
     const prisma = this.db.getTenantClient(tenantDb);
     const boundary = this.argentinaDateBoundary();
     const ownChecks = await prisma.checks.findMany({
-      where: { is_own: true, status: { in: ['PENDING', 'CONFIRMED'] }, due_date: { lte: boundary.end }, deleted_at: null },
+      where: { is_own: true, status: 'CONFIRMED', due_date: { lte: boundary.end }, deleted_at: null },
       orderBy: { due_date: 'asc' },
     });
     const thirdPartyChecks = await prisma.checks.findMany({
@@ -67,8 +68,9 @@ export class CheckProcessingScheduler {
   }
 
   private async debitOwnCheck(prisma: any, check: any, companyName: string, processDate: Date) {
+    const effectiveDate = check.payment_date ?? check.due_date ?? processDate;
     if (await this.existingMovement(prisma, check.id)) {
-      await prisma.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', clearing_date: check.clearing_date ?? processDate } });
+      await prisma.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', clearing_date: check.clearing_date ?? effectiveDate } });
       return;
     }
     if (!check.bank_account_id) {
@@ -102,16 +104,18 @@ export class CheckProcessingScheduler {
         converted_amount: check.converted_amount, balance_before: before, balance_after: before - amount,
         description: `Débito automático cheque propio #${check.check_number}`,
         reference_type: 'check', reference_id: check.id, payment_id: check.payment_id,
-        date: processDate, created_by: check.created_by,
+        date: effectiveDate, created_by: check.created_by,
       } });
       await tx.bank_accounts.update({ where: { id: check.bank_account_id }, data: { balance: before - amount, updated_at: new Date() } });
-      await tx.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', payment_date: processDate, clearing_date: processDate, updated_at: new Date() } });
+      await recalculateBankAccountLedger(tx, check.bank_account_id);
+      await tx.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', payment_date: effectiveDate, clearing_date: effectiveDate, updated_at: new Date() } });
     });
   }
 
   private async depositThirdPartyCheck(prisma: any, check: any, companyName: string, processDate: Date) {
+    const effectiveDate = check.deposit_date ?? check.due_date ?? processDate;
     if (await this.existingMovement(prisma, check.id)) {
-      await prisma.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', clearing_date: check.clearing_date ?? processDate } });
+      await prisma.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', clearing_date: check.clearing_date ?? effectiveDate } });
       return;
     }
     const account = await prisma.bank_accounts.findUnique({ where: { id: check.bank_account_id } });
@@ -136,10 +140,11 @@ export class CheckProcessingScheduler {
         converted_amount: check.converted_amount, balance_before: before, balance_after: before + amount,
         description: `Depósito automático cheque tercero #${check.check_number}`,
         reference_type: 'check', reference_id: check.id, payment_id: check.payment_id,
-        date: processDate, created_by: check.created_by,
+        date: effectiveDate, created_by: check.created_by,
       } });
       await tx.bank_accounts.update({ where: { id: check.bank_account_id }, data: { balance: before + amount, updated_at: new Date() } });
-      await tx.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', available_amount: 0, deposit_date: processDate, clearing_date: processDate, updated_at: new Date() } });
+      await recalculateBankAccountLedger(tx, check.bank_account_id);
+      await tx.checks.update({ where: { id: check.id }, data: { status: 'CLEARED', available_amount: 0, deposit_date: effectiveDate, clearing_date: effectiveDate, updated_at: new Date() } });
     });
   }
 }

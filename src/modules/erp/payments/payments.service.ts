@@ -8,6 +8,7 @@ import { CurrentAccountsService } from '../current-accounts/current-accounts.ser
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { SalesCommercialFlowService } from '../documents-sales/sales-commercial-flow.service';
 import { DocumentsSalesService } from '../documents-sales/documents_sales.services';
+import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 
 @Injectable()
 export class PaymentsService {
@@ -909,6 +910,7 @@ export class PaymentsService {
       where: { id: payment.bank_account_id },
       data: { balance: bankBalanceAfter, updated_at: new Date() },
     });
+    await recalculateBankAccountLedger(prisma, payment.bank_account_id);
   }
 
   private async createCurrentAccountEntry(payment: any, userId: string, tx?: any, entryType?: string) {
@@ -1056,6 +1058,7 @@ export class PaymentsService {
           where: { id: payment.bank_account_id },
           data: { balance: bankBalanceAfter, updated_at: new Date() },
         });
+        await recalculateBankAccountLedger(this.prisma, payment.bank_account_id);
       }
     }
 
@@ -1103,21 +1106,33 @@ export class PaymentsService {
 
     for (const check of checks) {
       if (check.is_own) {
-        // Revertir movimiento bancario del cheque propio
-        if (check.bank_account_id && check.status === 'CONFIRMED') {
+        // Revertir únicamente si el cheque llegó a generar un débito real. Un
+        // cheque confirmado pero todavía no vencido no afectó el banco.
+        if (check.bank_account_id) {
+          const issuedMovement = await this.prisma.bank_account_movements.findFirst({
+            where: {
+              reference_type: 'check',
+              reference_id: check.id,
+              type: 'CHECK_ISSUED',
+              deleted_at: null,
+            },
+            orderBy: { created_at: 'desc' },
+          });
           const bankAccount = await this.prisma.bank_accounts.findUnique({
             where: { id: check.bank_account_id },
           });
 
-          if (bankAccount) {
+          if (bankAccount && issuedMovement) {
             const currentBalance = Number(bankAccount.balance);
-            const balanceAfter = currentBalance + Number(check.amount);
+            const originalDelta = Number(issuedMovement.balance_after) - Number(issuedMovement.balance_before);
+            const reversalAmount = -originalDelta;
+            const balanceAfter = currentBalance + reversalAmount;
 
             await this.prisma.bank_account_movements.create({
               data: {
                 bank_account_id: check.bank_account_id,
-                type: 'CHECK_ISSUED',
-                amount: Number(check.amount),
+                type: 'ADJUSTMENT',
+                amount: reversalAmount,
                 currency_code: check.currency_code,
                 exchange_rate: check.exchange_rate,
                 rate_type: check.rate_type,
@@ -1137,6 +1152,7 @@ export class PaymentsService {
               where: { id: check.bank_account_id },
               data: { balance: balanceAfter, updated_at: new Date() },
             });
+            await recalculateBankAccountLedger(this.prisma, check.bank_account_id);
           }
         }
 

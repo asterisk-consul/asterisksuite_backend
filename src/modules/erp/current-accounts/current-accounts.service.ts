@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
+import { recalculateCurrentAccountLedger } from './current-account-ledger';
 
 @Injectable()
 export class CurrentAccountsService {
@@ -112,6 +113,7 @@ export class CurrentAccountsService {
         updated_at: new Date(),
       },
     });
+    await recalculateCurrentAccountLedger(this.prisma, account.id);
 
     return entry;
   }
@@ -142,6 +144,7 @@ export class CurrentAccountsService {
         where: { id: account.id },
         data: { balance: 0, last_entry_date: null, updated_by: userId },
       });
+      await recalculateCurrentAccountLedger(tx, account.id);
       return { success: true, balance: 0 };
     });
   }
@@ -169,7 +172,7 @@ export class CurrentAccountsService {
         deleted_at: null,
         ...(userId ? { created_by: userId } : {}),
       },
-      orderBy: [{ created_at: 'desc' }],
+      orderBy: [{ date: 'desc' }, { created_at: 'desc' }, { id: 'desc' }],
     });
 
     const userIds = [...new Set(entries.map((e) => e.created_by).filter(Boolean))] as string[];
@@ -200,7 +203,7 @@ export class CurrentAccountsService {
             deleted_at: null,
             ...(userId ? { created_by: userId } : {}),
           },
-          orderBy: { created_at: 'asc' },
+          orderBy: [{ date: 'asc' }, { created_at: 'asc' }, { id: 'asc' }],
         },
       },
     });

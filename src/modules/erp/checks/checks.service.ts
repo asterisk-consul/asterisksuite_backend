@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
+import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 
 @Injectable()
 export class ChecksService {
@@ -247,6 +248,7 @@ export class ChecksService {
         where: { id: check.bank_account_id! },
         data: { balance: balanceAfter, updated_at: new Date() },
       });
+      await recalculateBankAccountLedger(tx, check.bank_account_id!);
     });
 
     return this.findOne(id);
@@ -310,6 +312,7 @@ export class ChecksService {
         where: { id: dto.bank_account_id },
         data: { balance: balanceAfter, updated_at: new Date() },
       });
+      await recalculateBankAccountLedger(tx, dto.bank_account_id);
     });
 
     return this.findOne(id);
@@ -370,6 +373,7 @@ export class ChecksService {
         where: { id: check.bank_account_id! },
         data: { balance: balanceAfter, updated_at: new Date() },
       });
+      await recalculateBankAccountLedger(tx, check.bank_account_id!);
     });
 
     return this.findOne(id);

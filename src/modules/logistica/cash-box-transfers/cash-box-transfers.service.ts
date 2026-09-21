@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCashBoxTransferDto } from './dto/create-cash-box-transfer.dto';
+import { recalculateBankAccountLedger } from '@/modules/erp/bank-accounts/bank-account-ledger';
 
 @Injectable()
 export class CashBoxTransfersService {
@@ -172,6 +173,7 @@ export class CashBoxTransfersService {
         created_by: userId,
       },
     });
+    await recalculateBankAccountLedger(this.prisma, bankAccountId);
   }
 
   private async updateCashBoxBalance(cashBoxId: string, currencyCode: string, delta: number) {
