@@ -888,6 +888,10 @@ export class PaymentsService {
     const amount = payment.amount.toNumber();
     const bankBalanceAfter = isOutflow ? currentBankBalance - amount : currentBankBalance + amount;
 
+    if (isOutflow && bankBalanceAfter < 0) {
+      throw new BadRequestException('Saldo insuficiente en la cuenta bancaria');
+    }
+
     await prisma.bank_account_movements.create({
       data: {
         bank_account_id: payment.bank_account_id,
