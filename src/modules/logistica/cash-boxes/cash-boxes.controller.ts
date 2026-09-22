@@ -12,6 +12,7 @@ import { OpenSessionDto } from './dto/open-session.dto';
 import { CloseSessionDto } from './dto/close-session.dto';
 import { ForceCloseSessionDto } from './dto/force-close-session.dto';
 import { SetInitialBalanceDto } from './dto/set-initial-balance.dto';
+import { DeleteCashBoxDto } from './dto/delete-cash-box.dto';
 import type { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
@@ -57,8 +58,8 @@ export class CashBoxesController {
   @Delete(':id')
   @UseGuards(CashBoxAccessGuard)
   @RequirePermissions('treasury.cash_boxes.delete')
-  remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.cashBoxesService.remove(id, user.id);
+  remove(@Param('id') id: string, @Body() dto: DeleteCashBoxDto, @CurrentUser() user: AuthUser) {
+    return this.cashBoxesService.remove(id, dto, user.id);
   }
 
   // ═══════════════════════════════════════════

@@ -5,6 +5,7 @@ import { UpdateCashBoxDto } from './dto/update-cash-box.dto';
 import { OpenSessionDto } from './dto/open-session.dto';
 import { CloseSessionDto } from './dto/close-session.dto';
 import { ForceCloseSessionDto } from './dto/force-close-session.dto';
+import { DeleteCashBoxDto } from './dto/delete-cash-box.dto';
 
 @Injectable()
 export class CashBoxesService {
@@ -188,24 +189,58 @@ export class CashBoxesService {
     });
   }
 
-  async remove(id: string, userId: string) {
+  async remove(id: string, dto: DeleteCashBoxDto, userId: string) {
+    if (dto.confirmation !== 'ELIMINAR') throw new BadRequestException('Escribí ELIMINAR para confirmar');
     const box = await this.findOne(id);
     if (box.current_session) {
       throw new BadRequestException('No se puede eliminar una caja con sesión abierta');
     }
 
-    // Check if box has any balance
-    const balances = await this.prisma.cash_box_balances.findMany({
-      where: { cash_box_id: id, deleted_at: null },
-    });
-    const hasBalance = balances.some(b => Number(b.balance) !== 0);
-    if (hasBalance) {
-      throw new BadRequestException('No se puede eliminar una caja con saldo. Transferí el saldo a otra caja primero.');
-    }
+    return this.prisma.$transaction(async (tx) => {
+      const balances = await tx.cash_box_balances.findMany({ where: { cash_box_id: id, deleted_at: null } });
+      const nonZeroBalances = balances.filter((balance) => Number(balance.balance) !== 0);
+      if ((nonZeroBalances.length || box.is_main) && !dto.target_cash_box_id) {
+        throw new BadRequestException(box.is_main
+          ? 'Seleccioná otra caja para recibir el saldo y reemplazar la caja principal'
+          : 'Seleccioná una caja destino para transferir el saldo');
+      }
+      if (dto.target_cash_box_id === id) throw new BadRequestException('La caja destino debe ser diferente');
 
-    return this.prisma.cash_boxes.update({
-      where: { id },
-      data: { deleted_at: new Date(), deleted_by: userId, active: false },
+      if (dto.target_cash_box_id) {
+        const target = await tx.cash_boxes.findFirst({ where: { id: dto.target_cash_box_id, active: true, deleted_at: null } });
+        if (!target) throw new BadRequestException('La caja destino no existe o está inactiva');
+        if (target.currency_code !== box.currency_code) throw new BadRequestException('La caja destino debe usar la misma moneda');
+        const now = new Date();
+        for (const sourceBalance of nonZeroBalances) {
+          const amount = Number(sourceBalance.balance);
+          const targetBalance = await tx.cash_box_balances.upsert({
+            where: { cash_box_id_currency_code: { cash_box_id: target.id, currency_code: sourceBalance.currency_code } },
+            create: { cash_box_id: target.id, currency_code: sourceBalance.currency_code, balance: amount, created_by: userId },
+            update: { balance: { increment: amount }, deleted_at: null, updated_at: now, updated_by: userId },
+          });
+          const targetAfter = Number(targetBalance.balance);
+          await tx.cash_box_movements.createMany({ data: [
+            { cash_box_id: id, type: 'TRANSFER', amount: -amount, currency_code: sourceBalance.currency_code, balance_before: amount, balance_after: 0, description: `Transferencia por baja de ${box.name}`, reference_type: 'cash_box_closure', reference_id: id, date: now, created_by: userId },
+            { cash_box_id: target.id, session_id: target.current_session_id, type: 'TRANSFER', amount, currency_code: sourceBalance.currency_code, balance_before: targetAfter - amount, balance_after: targetAfter, description: `Saldo recibido por baja de ${box.name}`, reference_type: 'cash_box_closure', reference_id: id, date: now, created_by: userId },
+          ] });
+          await tx.cash_box_balances.update({ where: { id: sourceBalance.id }, data: { balance: 0, updated_at: now, updated_by: userId } });
+          if (target.current_session_id) {
+            await tx.cash_box_sessions.update({
+              where: { id: target.current_session_id },
+              data: {
+                movement_count: { increment: 1 },
+                ...(amount >= 0 ? { total_income: { increment: amount } } : { total_expenses: { increment: Math.abs(amount) } }),
+              },
+            });
+          }
+        }
+        if (box.is_main) await tx.cash_boxes.update({ where: { id: target.id }, data: { is_main: true, updated_at: now, updated_by: userId } });
+      }
+
+      return tx.cash_boxes.update({
+        where: { id },
+        data: { deleted_at: new Date(), deleted_by: userId, active: false, is_main: false },
+      });
     });
   }
 

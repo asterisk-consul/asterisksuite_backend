@@ -1,7 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
+import { DeleteBankAccountDto } from './dto/delete-bank-account.dto';
+import { recalculateBankAccountLedger } from './bank-account-ledger';
 
 @Injectable()
 export class BankAccountsService {
@@ -66,15 +68,50 @@ export class BankAccountsService {
     });
   }
 
-  async remove(id: string, userId: string) {
-    await this.findOne(id);
-    return this.prisma.bank_accounts.update({
-      where: { id },
-      data: {
-        deleted_at: new Date(),
-        deleted_by: userId,
-        active: false,
-      },
+  async remove(id: string, dto: DeleteBankAccountDto, userId: string) {
+    if (dto.confirmation !== 'ELIMINAR') throw new BadRequestException('Escribí ELIMINAR para confirmar');
+    return this.prisma.$transaction(async (tx) => {
+      const account = await tx.bank_accounts.findFirst({ where: { id, deleted_at: null } });
+      if (!account) throw new NotFoundException('Cuenta bancaria no encontrada');
+      const balance = Number(account.balance);
+      const linkedChecks = await tx.checks.count({
+        where: { bank_account_id: id, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
+      });
+      if ((balance !== 0 || linkedChecks > 0) && !dto.target_bank_account_id) {
+        throw new BadRequestException(linkedChecks > 0
+          ? 'Seleccioná una cuenta destino para reasignar los cheques pendientes'
+          : 'Seleccioná una cuenta bancaria destino para transferir el saldo');
+      }
+      if (dto.target_bank_account_id === id) throw new BadRequestException('La cuenta destino debe ser diferente');
+      const target = dto.target_bank_account_id
+        ? await tx.bank_accounts.findFirst({ where: { id: dto.target_bank_account_id, active: true, deleted_at: null } })
+        : null;
+      if (dto.target_bank_account_id && !target) throw new BadRequestException('La cuenta bancaria destino no existe o está inactiva');
+      if (target && target.currency_code !== account.currency_code) throw new BadRequestException('La cuenta destino debe usar la misma moneda');
+
+      if (balance !== 0) {
+        if (!target) throw new BadRequestException('Seleccioná una cuenta bancaria destino para transferir el saldo');
+        const targetBefore = Number(target.balance);
+        const now = new Date();
+        await tx.bank_account_movements.createMany({ data: [
+          { bank_account_id: id, type: 'TRANSFER', amount: -balance, currency_code: account.currency_code, balance_before: balance, balance_after: 0, description: `Transferencia por baja de ${account.name}`, reference_type: 'bank_account_closure', reference_id: id, date: now, created_by: userId },
+          { bank_account_id: target.id, type: 'TRANSFER', amount: balance, currency_code: account.currency_code, balance_before: targetBefore, balance_after: targetBefore + balance, description: `Saldo recibido por baja de ${account.name}`, reference_type: 'bank_account_closure', reference_id: id, date: now, created_by: userId },
+        ] });
+        await tx.bank_accounts.update({ where: { id }, data: { balance: 0 } });
+        await tx.bank_accounts.update({ where: { id: target.id }, data: { balance: targetBefore + balance } });
+        await recalculateBankAccountLedger(tx, id);
+        await recalculateBankAccountLedger(tx, target.id);
+      }
+      if (linkedChecks > 0 && dto.target_bank_account_id) {
+        await tx.checks.updateMany({
+          where: { bank_account_id: id, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
+          data: { bank_account_id: dto.target_bank_account_id, updated_at: new Date(), updated_by: userId },
+        });
+      }
+      return tx.bank_accounts.update({
+        where: { id },
+        data: { deleted_at: new Date(), deleted_by: userId, active: false },
+      });
     });
   }
 

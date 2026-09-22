@@ -17,7 +17,10 @@ export class TreasuryReportsService {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const checksAhead = new Date(today);
-    checksAhead.setDate(checksAhead.getDate() + (checksDays ?? 30));
+    const safeChecksDays = Number.isFinite(checksDays)
+      ? Math.min(365, Math.max(1, Math.trunc(checksDays!)))
+      : 30;
+    checksAhead.setDate(checksAhead.getDate() + safeChecksDays);
 
     const isOwnerOrAdmin = companyUserRole === 'OWNER' || companyUserRole === 'ADMIN';
 
@@ -81,7 +84,7 @@ export class TreasuryReportsService {
       this.prisma.checks.findMany({
         where: {
           is_own: true,
-          status: 'PENDING',
+          status: { in: ['PENDING', 'CONFIRMED'] },
           due_date: { gte: today, lte: checksAhead },
           deleted_at: null,
         },
@@ -150,6 +153,7 @@ export class TreasuryReportsService {
         total_collections_count: totalCollections._count,
       },
       upcoming_checks: upcomingChecks,
+      checks_alert_days: safeChecksDays,
     };
   }
 
