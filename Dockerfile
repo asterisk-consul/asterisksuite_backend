@@ -52,6 +52,9 @@ RUN pnpm install --prod --frozen-lockfile
 COPY --from=backend-builder /app/dist ./dist
 COPY --from=frontend-builder /app/frontend/.output/public ./public
 
+# Verifica que el cliente compilado carga con las dependencias de produccion.
+RUN node -e "require('./dist/src/generated/prisma/client.js'); require('./dist/src/prisma/prisma.service.js')"
+
 EXPOSE 3008
 
 CMD ["node", "dist/src/main.js"]

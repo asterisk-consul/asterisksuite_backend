@@ -1,7 +1,7 @@
 // src/prisma/prisma.service.ts
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../generated/prisma/client.js';
 import { SshService } from '../ssh/ssh.service';
 @Injectable()
 export class PrismaService
