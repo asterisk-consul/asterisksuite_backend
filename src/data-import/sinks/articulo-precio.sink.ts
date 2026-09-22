@@ -1,10 +1,11 @@
 import { Sink } from '../core/interfaces';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ArticuloPrecioTransformed } from '../transformers/articulo-precio.transformer';
 
-export class ArticuloPrecioSink implements Sink<any> {
+export class ArticuloPrecioSink implements Sink<ArticuloPrecioTransformed> {
   constructor(private prismaService: PrismaService) {}
 
-  async send(data: any[]) {
+  async send(data: ArticuloPrecioTransformed[]) {
     const batchSize = 20;
 
     for (let i = 0; i < data.length; i += batchSize) {

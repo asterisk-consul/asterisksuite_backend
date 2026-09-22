@@ -9,14 +9,17 @@ async function bootstrap() {
   const logger = new Logger('Main');
 
   app.setGlobalPrefix('api');
+
+  const config = app.get(ConfigService);
+
+  const corsOrigins = (config.get<string>('CORS_ORIGINS') ?? '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: [
-      'http://localhost:3008',
-      'http://localhost:3001',
-      'http://192.168.18.3:3008',
-      'https://alona.asterisksuite.cloud',
-      'http://alona.asterisksuite.cloud',
-    ],
+    origin: corsOrigins.length > 0 ? corsOrigins : true,
+    credentials: true,
   });
 
   app.useGlobalPipes(
@@ -29,9 +32,6 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new BigIntInterceptor());
 
-  app.enableCors({ origin: true, credentials: true });
-
-  const config = app.get(ConfigService);
   const port = config.get<number>('PORT') ?? 3008;
 
   // 🔑 CLAVE PARA DOCKER / DOCKPLOY
@@ -40,4 +40,4 @@ async function bootstrap() {
   logger.log(`Server running on port ${port}`);
 }
 
-bootstrap();
+void bootstrap();

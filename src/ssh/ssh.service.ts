@@ -2,13 +2,13 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTunnel } from 'tunnel-ssh';
 import * as net from 'net';
+import { resolveSshPrivateKey } from '../config/ssh-key.loader';
 
 @Injectable()
 export class SshService implements OnModuleDestroy {
   private readonly logger = new Logger(SshService.name);
 
-  private server: net.Server | null = null;
-  private conn: any = null;
+  private conn: net.Socket | null = null;
 
   private reconnecting = false;
   private isConnecting = false;
@@ -16,9 +16,12 @@ export class SshService implements OnModuleDestroy {
   // ===============================
   // READY STATE
   // ===============================
+  private readySettled = false;
   private readyResolver!: () => void;
-  private readyPromise = new Promise<void>((resolve) => {
+  private readyRejecter!: (err: Error) => void;
+  private readyPromise = new Promise<void>((resolve, reject) => {
     this.readyResolver = resolve;
+    this.readyRejecter = reject;
   });
 
   constructor(private readonly config: ConfigService) {}
@@ -40,16 +43,16 @@ export class SshService implements OnModuleDestroy {
 
     const sshHost = this.config.get<string>('SSH_HOST');
     const sshUser = this.config.get<string>('SSH_USER');
-    const sshKey = this.config
-      .get<string>('SSH_PRIVATE_KEY')
-      ?.replace(/\\n/g, '\n');
+    const sshKey = resolveSshPrivateKey();
 
     if (!sshHost || !sshUser || !sshKey) {
-      throw new Error('Variables de entorno SSH incompletas');
+      const err = new Error('Variables de entorno SSH incompletas');
+      this.settleReady(err);
+      throw err;
     }
 
     try {
-      const [, sshConn] = await createTunnel(
+      const tunnel = (await createTunnel(
         {
           autoClose: true,
           reconnectOnError: false,
@@ -60,7 +63,7 @@ export class SshService implements OnModuleDestroy {
         },
         {
           host: sshHost,
-          port: this.config.get('SSH_PORT', 22),
+          port: this.config.get<number>('SSH_PORT', 22),
           username: sshUser,
           privateKey: sshKey,
           keepaliveInterval: 10000,
@@ -70,21 +73,29 @@ export class SshService implements OnModuleDestroy {
           dstAddr: '127.0.0.1',
           dstPort: 5432,
         },
-      );
+      )) as unknown as [net.Server, net.Socket];
 
+      const sshConn = tunnel[1];
       this.conn = sshConn;
 
-      sshConn.on('error', (e) => this.handleTunnelClose(localPort, e));
-      sshConn.on('end', () => this.handleTunnelClose(localPort, 'end'));
-      sshConn.on('close', () => this.handleTunnelClose(localPort, 'close'));
+      sshConn.on('error', (e: Error) => {
+        void this.handleTunnelClose(localPort, e);
+      });
+      sshConn.on('end', () => {
+        void this.handleTunnelClose(localPort, 'end');
+      });
+      sshConn.on('close', () => {
+        void this.handleTunnelClose(localPort, 'close');
+      });
 
       this.logger.log(
         `Túnel SSH activo en localhost:${localPort} → ${sshHost}:5432`,
       );
 
-      this.readyResolver();
+      this.settleReady();
     } catch (err) {
       this.cleanup();
+      this.settleReady(err instanceof Error ? err : new Error(String(err)));
       throw err;
     } finally {
       this.isConnecting = false;
@@ -92,13 +103,27 @@ export class SshService implements OnModuleDestroy {
   }
 
   // ============================================================
+  // READY HELPERS
+  // ============================================================
+  private settleReady(error?: Error) {
+    if (this.readySettled) return;
+    this.readySettled = true;
+
+    if (error) {
+      this.readyRejecter(error);
+    } else {
+      this.readyResolver();
+    }
+  }
+
+  // ============================================================
   // MANEJO DE CAÍDA Y RECONEXIÓN
   // ============================================================
-  private async handleTunnelClose(localPort: number, reason: any) {
+  private async handleTunnelClose(localPort: number, reason: unknown) {
     if (this.reconnecting) return;
     this.reconnecting = true;
 
-    this.logger.warn(`Túnel SSH caído: ${reason}`);
+    this.logger.warn(`Túnel SSH caído: ${String(reason)}`);
 
     this.cleanup();
 
@@ -124,8 +149,7 @@ export class SshService implements OnModuleDestroy {
   // ============================================================
   private cleanup() {
     try {
-      this.conn?.close?.();
-      this.conn?.end?.();
+      this.conn?.destroy();
     } catch {}
     this.conn = null;
   }
@@ -133,7 +157,7 @@ export class SshService implements OnModuleDestroy {
   // ============================================================
   // NEST HOOK
   // ============================================================
-  async onModuleDestroy() {
+  onModuleDestroy() {
     this.cleanup();
   }
 }

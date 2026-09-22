@@ -1,27 +1,23 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppConfigModule } from './config/config.module.js';
-// Assuming you have a module that provides PrismaService
-import { PrismaModule } from './prisma/prisma.module'; // <-- Add/identify this
+import { PrismaModule } from './prisma/prisma.module';
 import { SshModule } from './ssh/ssh.module';
-// import { BootstrapModule } from './bootstrap/bootstrap.module';
-import { AuthModule } from './auth/auth.module';
-import { ArticulosModule } from './articulos/articulos.module';
-import { CategoriasModule } from './categorias/categorias.module';
-import { TableModule } from './tables/table.module';
 import { DataImportModule } from './data-import/data-import.module.js';
 
 @Module({
   imports: [
-    // 1. Load the configuration FIRST.
+    // 1. Cargar la configuración primero.
     AppConfigModule,
+    // 2. Servir el frontend (SPA) sin interceptar /api.
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public'),
+      exclude: ['/api/{*path}'],
+    }),
     SshModule,
     PrismaModule,
-    // BootstrapModule,
-    AuthModule,
-    TableModule,
-    ArticulosModule,
-    CategoriasModule,
     DataImportModule,
   ],
 })

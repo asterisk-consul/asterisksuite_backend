@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+**/.nuxt
+**/.output
+**/.data
+**/.nitro
+**/.cache
+**/generated
+coverage
+uploads
+public
+*.log
+.git
+.gitignore
+.env
+.env.*

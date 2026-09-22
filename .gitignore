@@ -56,3 +56,7 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 **/generated/prisma
+
+# Static frontend build (se genera en el Docker build)
+/public/*
+!/public/.gitkeep

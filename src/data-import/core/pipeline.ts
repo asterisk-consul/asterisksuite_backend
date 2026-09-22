@@ -1,10 +1,4 @@
-import {
-  DataSource,
-  Parser,
-  Transformer,
-  Sink,
-  ParseResult,
-} from './interfaces';
+import { DataSource, Parser, Transformer, Sink } from './interfaces';
 
 export class ImportPipeline<TRaw, TTransformed> {
   constructor(
@@ -50,14 +44,15 @@ export class ImportPipeline<TRaw, TTransformed> {
       };
     } catch (error) {
       console.error('❌ Error en pipeline:', error);
+      const err = error instanceof Error ? error : new Error(String(error));
       return {
         success: false,
         total: 0,
         parsed: 0,
         saved: 0,
         failed: 0,
-        message: error.message,
-        error: error.stack,
+        message: err.message,
+        error: err.stack,
       };
     }
   }
