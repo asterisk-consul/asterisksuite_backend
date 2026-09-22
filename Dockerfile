@@ -3,14 +3,14 @@
 # ============================================================
 # 1. Build del frontend (Nuxt SPA)
 # ============================================================
-FROM node:20-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 WORKDIR /app/frontend
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11.24.0
 
 COPY frontend/ ./
 
-# PUBLIC_API_BASE vacío => el front llama a /api en el mismo origen
+# PUBLIC_API_BASE vacio => el front llama a /api en el mismo origen
 ARG PUBLIC_API_BASE=""
 ENV PUBLIC_API_BASE=${PUBLIC_API_BASE}
 
@@ -20,10 +20,10 @@ RUN pnpm run build
 # ============================================================
 # 2. Build del backend (NestJS)
 # ============================================================
-FROM node:20-alpine AS backend-builder
+FROM node:22-alpine AS backend-builder
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11.24.0
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
@@ -39,10 +39,10 @@ RUN pnpm run build
 # ============================================================
 # 3. Runtime: backend + frontend en una sola imagen
 # ============================================================
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11.24.0
 
 ENV NODE_ENV=production
 
