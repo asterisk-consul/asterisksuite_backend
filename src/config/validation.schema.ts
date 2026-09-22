@@ -10,7 +10,9 @@ export const validationSchema = Joi.object({
 
   DATABASE_URL: Joi.string().required(),
 
-  NODE_ENV: Joi.string().valid('dev', 'prod', 'test').default('dev'),
+  NODE_ENV: Joi.string()
+    .valid('development', 'production', 'test', 'dev', 'prod')
+    .default('dev'),
   PORT: Joi.number().default(3008),
   CORS_ORIGINS: Joi.string().optional(),
 }).or('SSH_PRIVATE_KEY', 'SSH_PRIVATE_KEY_PATH');
