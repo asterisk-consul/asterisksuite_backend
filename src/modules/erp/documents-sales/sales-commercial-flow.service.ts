@@ -11,11 +11,33 @@ export class SalesCommercialFlowService {
   }
 
   async getSettings() {
-    return this.prisma.sales_flow_settings.upsert({
-      where: { settings_key: 'default' },
-      update: {},
-      create: { settings_key: 'default' },
+    return this.prisma.$transaction(async (tx) => {
+      const settings = await tx.sales_flow_settings.upsert({
+        where: { settings_key: 'default' },
+        update: {},
+        create: { settings_key: 'default' },
+      });
+      await this.syncDocumentTypes(tx, settings.accounting_basis, settings.payment_document_basis);
+      return settings;
     });
+  }
+
+  private async syncDocumentTypes(tx: any, accountingBasis: string, paymentDocumentBasis: string) {
+    const orderAffectsAccounting = ['ORDER', 'ORDER_THEN_INVOICE'].includes(accountingBasis);
+    const invoiceAffectsAccounting = ['INVOICE', 'ORDER_THEN_INVOICE'].includes(accountingBasis);
+    const orderAffectsPayment = ['ORDER', 'BOTH'].includes(paymentDocumentBasis);
+    const invoiceAffectsPayment = ['INVOICE', 'BOTH'].includes(paymentDocumentBasis);
+
+    await Promise.all([
+      tx.document_types.updateMany({
+        where: { direction: 1, category: 'ORDER' },
+        data: { affects_accounting: orderAffectsAccounting, affects_payment: orderAffectsPayment },
+      }),
+      tx.document_types.updateMany({
+        where: { direction: 1, category: 'INVOICE' },
+        data: { affects_accounting: invoiceAffectsAccounting, affects_payment: invoiceAffectsPayment },
+      }),
+    ]);
   }
 
   async updateSettings(dto: UpdateSalesFlowSettingsDto, userId: string) {
@@ -29,21 +51,7 @@ export class SalesCommercialFlowService {
         create: { settings_key: 'default', ...dto, created_by: userId, updated_by: userId },
       });
 
-      const orderAffectsAccounting = ['ORDER', 'ORDER_THEN_INVOICE'].includes(dto.accounting_basis);
-      const invoiceAffectsAccounting = ['INVOICE', 'ORDER_THEN_INVOICE'].includes(dto.accounting_basis);
-      const orderAffectsPayment = ['ORDER', 'BOTH'].includes(dto.payment_document_basis);
-      const invoiceAffectsPayment = ['INVOICE', 'BOTH'].includes(dto.payment_document_basis);
-
-      await Promise.all([
-        tx.document_types.updateMany({
-          where: { direction: 1, category: 'ORDER' },
-          data: { affects_accounting: orderAffectsAccounting, affects_payment: orderAffectsPayment },
-        }),
-        tx.document_types.updateMany({
-          where: { direction: 1, category: 'INVOICE' },
-          data: { affects_accounting: invoiceAffectsAccounting, affects_payment: invoiceAffectsPayment },
-        }),
-      ]);
+      await this.syncDocumentTypes(tx, dto.accounting_basis, dto.payment_document_basis);
 
       return settings;
     });
@@ -53,6 +61,7 @@ export class SalesCommercialFlowService {
     const settings = await tx.sales_flow_settings.upsert({
       where: { settings_key: 'default' }, update: {}, create: { settings_key: 'default' },
     });
+    await this.syncDocumentTypes(tx, settings.accounting_basis, settings.payment_document_basis);
     const operation = await tx.commercial_operations.create({
       data: {
         root_document_id: document.id,

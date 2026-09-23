@@ -9,6 +9,7 @@ import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { SalesCommercialFlowService } from '../documents-sales/sales-commercial-flow.service';
 import { DocumentsSalesService } from '../documents-sales/documents_sales.services';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
+import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 
 @Injectable()
 export class PaymentsService {
@@ -27,6 +28,21 @@ export class PaymentsService {
     return getCurrentCompanyId();
   }
 
+  private validatePaymentInstrument(
+    method: string,
+    options: { cashBoxId?: string | null; bankAccountId?: string | null; hasChecks?: boolean },
+  ) {
+    if (method === 'CASH' && !options.cashBoxId) {
+      throw new BadRequestException('Seleccioná una caja para registrar el pago o cobro');
+    }
+    if (method === 'BANK_TRANSFER' && !options.bankAccountId) {
+      throw new BadRequestException('Seleccioná una cuenta bancaria para registrar el pago o cobro');
+    }
+    if (method === 'CHECK' && !options.hasChecks) {
+      throw new BadRequestException('Seleccioná al menos un cheque para registrar el pago o cobro');
+    }
+  }
+
   // ═══════════════════════════════════════════
   // CREATE (DRAFT — no side effects)
   // ═══════════════════════════════════════════
@@ -42,6 +58,12 @@ export class PaymentsService {
     if (dto.payment_mode === 'ADVANCE' && !dto.party_id) {
       throw new BadRequestException('party_id es requerido para anticipos');
     }
+
+    this.validatePaymentInstrument(dto.payment_method, {
+      cashBoxId: dto.cash_box_id,
+      bankAccountId: dto.bank_account_id,
+      hasChecks: Boolean(dto.checks?.length || dto.check_ids?.length),
+    });
 
     const party = dto.party_id
       ? await this.prisma.business_parties.findFirst({
@@ -232,6 +254,15 @@ export class PaymentsService {
     if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden confirmar pagos en borrador');
     }
+
+    const checkCount = payment.payment_method === 'CHECK'
+      ? await this.prisma.payment_checks.count({ where: { payment_id: id } })
+      : 0;
+    this.validatePaymentInstrument(payment.payment_method, {
+      cashBoxId: payment.cash_box_id,
+      bankAccountId: payment.bank_account_id,
+      hasChecks: checkCount > 0,
+    });
 
     // Validate documents if present
     const paymentDocs = await this.prisma.payment_documents.findMany({
@@ -647,6 +678,16 @@ export class PaymentsService {
     if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden editar pagos en borrador');
     }
+
+    const effectiveMethod = dto.payment_method ?? payment.payment_method;
+    const checkCount = effectiveMethod === 'CHECK'
+      ? await this.prisma.payment_checks.count({ where: { payment_id: id } })
+      : 0;
+    this.validatePaymentInstrument(effectiveMethod, {
+      cashBoxId: dto.cash_box_id ?? payment.cash_box_id,
+      bankAccountId: dto.bank_account_id ?? payment.bank_account_id,
+      hasChecks: checkCount > 0,
+    });
 
     const data: Record<string, any> = {
       updated_at: new Date(),
@@ -1071,34 +1112,41 @@ export class PaymentsService {
       await this.reverseLinkedChecks(payment, userId);
     }
 
-    // Revert ALL current account entries for this payment
-    // (could be multiple: the initial ADVANCE/PAYMENT + entries from applyAdvance)
+    // Quitar de la cuenta corriente todas las entradas vinculadas al pago.
+    // El pago anulado conserva la trazabilidad; la cuenta muestra sólo deuda real.
     if (payment.party_id) {
-      // Find all entries for this payment
       const entries = await this.prisma.current_account_entries.findMany({
-        where: { payment_id: payment.id },
+        where: { payment_id: payment.id, deleted_at: null },
         orderBy: { created_at: 'asc' },
       });
 
-      // Reverse each entry using CurrentAccountsService
+      const entriesByAccount = new Map<string, typeof entries>();
       for (const entry of entries) {
-        await this.currentAccountsService.addEntry(
-          {
-            party_id: payment.party_id,
-            party_type: payment.party_type ?? 'CUSTOMER',
-            currency_code: entry.currency_code,
-            type: entry.type as any,
-            amount: entry.amount.toNumber(),
-            exchange_rate: entry.exchange_rate ? Number(entry.exchange_rate) : undefined,
-            rate_type: entry.rate_type ?? undefined,
-            description: `Reversión de pago #${payment.number}`,
-            reference_type: referenceType,
-            reference_id: payment.id,
-            payment_id: payment.id,
-            date: new Date().toISOString(),
-          },
-          userId,
+        const accountEntries = entriesByAccount.get(entry.current_account_id) ?? [];
+        accountEntries.push(entry);
+        entriesByAccount.set(entry.current_account_id, accountEntries);
+      }
+
+      for (const [accountId, accountEntries] of entriesByAccount) {
+        const removedDelta = accountEntries.reduce(
+          (sum, entry) => sum + Number(entry.balance_after) - Number(entry.balance_before),
+          0,
         );
+        const account = await this.prisma.current_accounts.findUnique({
+          where: { id: accountId },
+          select: { balance: true },
+        });
+        if (!account) continue;
+
+        await this.prisma.current_account_entries.updateMany({
+          where: { id: { in: accountEntries.map(entry => entry.id) } },
+          data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
+        });
+        await this.prisma.current_accounts.update({
+          where: { id: accountId },
+          data: { balance: Number(account.balance) - removedDelta, updated_at: new Date() },
+        });
+        await recalculateCurrentAccountLedger(this.prisma, accountId);
       }
     }
   }

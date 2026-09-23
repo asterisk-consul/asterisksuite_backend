@@ -1618,7 +1618,14 @@ export class DocumentsSalesService {
         }
       }
 
-      const operationBasis = doc.commercial_operation?.accounting_basis;
+      const defaultFlowSettings = ['ORDER', 'INVOICE'].includes(category)
+        ? await tx.sales_flow_settings.upsert({
+            where: { settings_key: 'default' },
+            update: {},
+            create: { settings_key: 'default' },
+          })
+        : null;
+      const operationBasis = doc.commercial_operation?.accounting_basis ?? defaultFlowSettings?.accounting_basis;
       const operationControlsAccounting = Boolean(operationBasis && ['ORDER', 'INVOICE'].includes(category));
       const affectsAccounting = operationControlsAccounting
         ? (category === 'ORDER'
@@ -1799,7 +1806,14 @@ export class DocumentsSalesService {
       }
 
       const category = doc.document_types?.category;
-      const operationBasis = doc.commercial_operation?.accounting_basis;
+      const defaultFlowSettings = ['ORDER', 'INVOICE'].includes(category)
+        ? await tx.sales_flow_settings.upsert({
+            where: { settings_key: 'default' },
+            update: {},
+            create: { settings_key: 'default' },
+          })
+        : null;
+      const operationBasis = doc.commercial_operation?.accounting_basis ?? defaultFlowSettings?.accounting_basis;
       const operationControlsAccounting = Boolean(operationBasis && ['ORDER', 'INVOICE'].includes(category));
       const affectsAccounting = operationControlsAccounting
         ? (category === 'ORDER'

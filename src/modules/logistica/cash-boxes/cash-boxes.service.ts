@@ -346,39 +346,63 @@ export class CashBoxesService {
   // ═══════════════════════════════════════════
 
   async openSession(cashBoxId: string, dto: OpenSessionDto, userId: string) {
-    const box = await this.findOne(cashBoxId);
+    return this.prisma.$transaction(async (tx) => {
+      const box = await tx.cash_boxes.findFirst({
+        where: { id: cashBoxId, deleted_at: null },
+        include: {
+          balances: { where: { deleted_at: null } },
+          current_session: true,
+          _count: { select: { movements: true, sessions: true } },
+        },
+      });
+      if (!box) throw new NotFoundException('Caja no encontrada');
+      if (box.current_session) throw new BadRequestException('Ya hay una sesión abierta en esta caja');
 
-    console.log('[openSession] box.current_session_id:', box.current_session_id, 'current_session:', box.current_session ? 'EXISTS' : 'null');
+      const currencyCode = box.currency_code ?? 'ARS';
+      const currentBalance = box.balances.find((balance) => balance.currency_code === currencyCode);
+      const isFirstOpening = box._count.movements === 0 && box._count.sessions === 0;
+      let openingBalance = currentBalance?.balance.toNumber() ?? 0;
 
-    // Verificar que no haya sesión abierta
-    if (box.current_session) {
-      throw new BadRequestException('Ya hay una sesión abierta en esta caja');
-    }
+      if (isFirstOpening && openingBalance === 0) {
+        openingBalance = Number(dto.opening_balance ?? 0);
 
-    const currencyCode = box.currency_code ?? 'ARS';
-    const currentBalance = box.balances.find((balance) => balance.currency_code === currencyCode);
-    const openingBalance = currentBalance?.balance.toNumber() ?? 0;
+        if (openingBalance > 0) {
+          await tx.cash_box_balances.upsert({
+            where: { cash_box_id_currency_code: { cash_box_id: cashBoxId, currency_code: currencyCode } },
+            create: { cash_box_id: cashBoxId, currency_code: currencyCode, balance: openingBalance, created_by: userId },
+            update: { balance: openingBalance, deleted_at: null, updated_at: new Date(), updated_by: userId },
+          });
+          await tx.cash_box_movements.create({
+            data: {
+              cash_box_id: cashBoxId,
+              type: 'OPENING_BALANCE',
+              amount: openingBalance,
+              currency_code: currencyCode,
+              balance_before: 0,
+              balance_after: openingBalance,
+              description: 'Saldo inicial de la caja',
+              reference_type: 'cash_box_initial_balance',
+              reference_id: cashBoxId,
+              date: new Date(),
+              created_by: userId,
+            },
+          });
+          await tx.cash_boxes.update({
+            where: { id: cashBoxId },
+            data: { opening_balance: openingBalance, updated_at: new Date(), updated_by: userId },
+          });
+        }
+      }
 
-    const session = await this.prisma.cash_box_sessions.create({
-      data: {
-        cash_box_id: cashBoxId,
-        user_id: userId,
-        opening_balance: openingBalance,
-        status: 'OPEN',
-        created_by: userId,
-      },
+      const session = await tx.cash_box_sessions.create({
+        data: { cash_box_id: cashBoxId, user_id: userId, opening_balance: openingBalance, status: 'OPEN', created_by: userId },
+      });
+      await tx.cash_boxes.update({
+        where: { id: cashBoxId },
+        data: { current_session_id: session.id, status: 'OPEN' },
+      });
+      return session;
     });
-
-    // Actualizar caja con sesión actual
-    await this.prisma.cash_boxes.update({
-      where: { id: cashBoxId },
-      data: {
-        current_session_id: session.id,
-        status: 'OPEN',
-      },
-    });
-
-    return session;
   }
 
   async closeSession(cashBoxId: string, dto: CloseSessionDto, userId: string) {
