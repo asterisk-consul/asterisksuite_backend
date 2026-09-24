@@ -1,4 +1,5 @@
 import { IsString, IsUUID, IsOptional, IsEnum, MaxLength, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
 import { InternationalExpenseType } from '@/generated/prisma/enums';
 
 export class AssociateDocumentDto {
@@ -19,6 +20,7 @@ export class AssociateDocumentDto {
   custom_expense_description?: string;
 
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   exchange_rate?: number;
 }

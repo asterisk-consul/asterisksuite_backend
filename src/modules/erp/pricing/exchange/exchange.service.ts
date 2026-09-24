@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 
-import { Prisma } from '@/generated/prisma/client';
+import { Prisma, type currency_rates } from '@/generated/prisma/client';
 
 import { PrismaService, PrismaTransactionClient } from '@/prisma/prisma.service';
 import { CurrencyRateType } from '@/generated/prisma/enums';
@@ -77,7 +77,7 @@ export class ExchangeService {
       prisma,
     );
 
-    const results: Prisma.currency_ratesGetPayload<{}>[] = [];
+    const results: currency_rates[] = [];
 
     // =====================================================
     // TRAER ÚLTIMAS COTIZACIONES
@@ -186,7 +186,7 @@ export class ExchangeService {
       prisma,
     );
 
-    const results: Prisma.currency_ratesGetPayload<{}>[] = [];
+    const results: currency_rates[] = [];
 
     for (const item of data) {
       // Ya viene desde cotizaciones oficiales

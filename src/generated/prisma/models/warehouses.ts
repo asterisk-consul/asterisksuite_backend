@@ -31,6 +31,7 @@ export type WarehousesMinAggregateOutputType = {
   name: string | null
   code: string | null
   active: boolean | null
+  is_virtual: boolean | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -46,6 +47,7 @@ export type WarehousesMaxAggregateOutputType = {
   name: string | null
   code: string | null
   active: boolean | null
+  is_virtual: boolean | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -61,6 +63,7 @@ export type WarehousesCountAggregateOutputType = {
   name: number
   code: number
   active: number
+  is_virtual: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -78,6 +81,7 @@ export type WarehousesMinAggregateInputType = {
   name?: true
   code?: true
   active?: true
+  is_virtual?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -93,6 +97,7 @@ export type WarehousesMaxAggregateInputType = {
   name?: true
   code?: true
   active?: true
+  is_virtual?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -108,6 +113,7 @@ export type WarehousesCountAggregateInputType = {
   name?: true
   code?: true
   active?: true
+  is_virtual?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -196,6 +202,7 @@ export type WarehousesGroupByOutputType = {
   name: string
   code: string | null
   active: boolean
+  is_virtual: boolean
   created_at: Date
   updated_at: Date | null
   deleted_at: Date | null
@@ -232,6 +239,7 @@ export type warehousesWhereInput = {
   name?: Prisma.StringFilter<"warehouses"> | string
   code?: Prisma.StringNullableFilter<"warehouses"> | string | null
   active?: Prisma.BoolFilter<"warehouses"> | boolean
+  is_virtual?: Prisma.BoolFilter<"warehouses"> | boolean
   created_at?: Prisma.DateTimeFilter<"warehouses"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"warehouses"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"warehouses"> | Date | string | null
@@ -259,6 +267,7 @@ export type warehousesOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
+  is_virtual?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -289,6 +298,7 @@ export type warehousesWhereUniqueInput = Prisma.AtLeast<{
   unit_id?: Prisma.UuidNullableFilter<"warehouses"> | string | null
   name?: Prisma.StringFilter<"warehouses"> | string
   active?: Prisma.BoolFilter<"warehouses"> | boolean
+  is_virtual?: Prisma.BoolFilter<"warehouses"> | boolean
   created_at?: Prisma.DateTimeFilter<"warehouses"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"warehouses"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"warehouses"> | Date | string | null
@@ -316,6 +326,7 @@ export type warehousesOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
+  is_virtual?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -337,6 +348,7 @@ export type warehousesScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"warehouses"> | string
   code?: Prisma.StringNullableWithAggregatesFilter<"warehouses"> | string | null
   active?: Prisma.BoolWithAggregatesFilter<"warehouses"> | boolean
+  is_virtual?: Prisma.BoolWithAggregatesFilter<"warehouses"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"warehouses"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"warehouses"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"warehouses"> | Date | string | null
@@ -350,6 +362,7 @@ export type warehousesCreateInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -377,6 +390,7 @@ export type warehousesUncheckedCreateInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -400,6 +414,7 @@ export type warehousesUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -427,6 +442,7 @@ export type warehousesUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -452,6 +468,7 @@ export type warehousesCreateManyInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -465,6 +482,7 @@ export type warehousesUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -480,6 +498,7 @@ export type warehousesUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -515,6 +534,7 @@ export type warehousesCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  is_virtual?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -530,6 +550,7 @@ export type warehousesMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  is_virtual?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -545,6 +566,7 @@ export type warehousesMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  is_virtual?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -794,6 +816,7 @@ export type warehousesCreateWithoutDocument_itemsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -820,6 +843,7 @@ export type warehousesUncheckedCreateWithoutDocument_itemsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -858,6 +882,7 @@ export type warehousesUpdateWithoutDocument_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -884,6 +909,7 @@ export type warehousesUncheckedUpdateWithoutDocument_itemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -906,6 +932,7 @@ export type warehousesCreateWithoutDocumentsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -932,6 +959,7 @@ export type warehousesUncheckedCreateWithoutDocumentsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -970,6 +998,7 @@ export type warehousesUpdateWithoutDocumentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -996,6 +1025,7 @@ export type warehousesUncheckedUpdateWithoutDocumentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1018,6 +1048,7 @@ export type warehousesCreateWithoutPicking_ordersInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1044,6 +1075,7 @@ export type warehousesUncheckedCreateWithoutPicking_ordersInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1082,6 +1114,7 @@ export type warehousesUpdateWithoutPicking_ordersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1108,6 +1141,7 @@ export type warehousesUncheckedUpdateWithoutPicking_ordersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1130,6 +1164,7 @@ export type warehousesCreateWithoutTrips_trips_destination_warehouse_idTowarehou
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1156,6 +1191,7 @@ export type warehousesUncheckedCreateWithoutTrips_trips_destination_warehouse_id
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1183,6 +1219,7 @@ export type warehousesCreateWithoutTrips_trips_origin_warehouse_idTowarehousesIn
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1209,6 +1246,7 @@ export type warehousesUncheckedCreateWithoutTrips_trips_origin_warehouse_idTowar
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1247,6 +1285,7 @@ export type warehousesUpdateWithoutTrips_trips_destination_warehouse_idTowarehou
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1273,6 +1312,7 @@ export type warehousesUncheckedUpdateWithoutTrips_trips_destination_warehouse_id
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1306,6 +1346,7 @@ export type warehousesUpdateWithoutTrips_trips_origin_warehouse_idTowarehousesIn
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1332,6 +1373,7 @@ export type warehousesUncheckedUpdateWithoutTrips_trips_origin_warehouse_idTowar
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1354,6 +1396,7 @@ export type warehousesCreateWithoutMaintenance_partsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1380,6 +1423,7 @@ export type warehousesUncheckedCreateWithoutMaintenance_partsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1418,6 +1462,7 @@ export type warehousesUpdateWithoutMaintenance_partsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1444,6 +1489,7 @@ export type warehousesUncheckedUpdateWithoutMaintenance_partsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1466,6 +1512,7 @@ export type warehousesCreateWithoutCurrent_tiresInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1492,6 +1539,7 @@ export type warehousesUncheckedCreateWithoutCurrent_tiresInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1530,6 +1578,7 @@ export type warehousesUpdateWithoutCurrent_tiresInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1556,6 +1605,7 @@ export type warehousesUncheckedUpdateWithoutCurrent_tiresInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1578,6 +1628,7 @@ export type warehousesCreateWithoutLocationsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1603,6 +1654,7 @@ export type warehousesUncheckedCreateWithoutLocationsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1657,6 +1709,7 @@ export type warehousesScalarWhereInput = {
   name?: Prisma.StringFilter<"warehouses"> | string
   code?: Prisma.StringNullableFilter<"warehouses"> | string | null
   active?: Prisma.BoolFilter<"warehouses"> | boolean
+  is_virtual?: Prisma.BoolFilter<"warehouses"> | boolean
   created_at?: Prisma.DateTimeFilter<"warehouses"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"warehouses"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"warehouses"> | Date | string | null
@@ -1670,6 +1723,7 @@ export type warehousesCreateWithoutPalletsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1696,6 +1750,7 @@ export type warehousesUncheckedCreateWithoutPalletsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1734,6 +1789,7 @@ export type warehousesUpdateWithoutPalletsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1760,6 +1816,7 @@ export type warehousesUncheckedUpdateWithoutPalletsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1782,6 +1839,7 @@ export type warehousesCreateWithoutUnitsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1807,6 +1865,7 @@ export type warehousesUncheckedCreateWithoutUnitsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1856,6 +1915,7 @@ export type warehousesCreateWithoutWarehouse_stockInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1882,6 +1942,7 @@ export type warehousesUncheckedCreateWithoutWarehouse_stockInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1920,6 +1981,7 @@ export type warehousesUpdateWithoutWarehouse_stockInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1946,6 +2008,7 @@ export type warehousesUncheckedUpdateWithoutWarehouse_stockInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1968,6 +2031,7 @@ export type warehousesCreateWithoutWarehouse_stock_movementsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -1994,6 +2058,7 @@ export type warehousesUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -2032,6 +2097,7 @@ export type warehousesUpdateWithoutWarehouse_stock_movementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2058,6 +2124,7 @@ export type warehousesUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2081,6 +2148,7 @@ export type warehousesCreateManyLocationsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -2094,6 +2162,7 @@ export type warehousesUpdateWithoutLocationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2119,6 +2188,7 @@ export type warehousesUncheckedUpdateWithoutLocationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2143,6 +2213,7 @@ export type warehousesUncheckedUpdateManyWithoutLocationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2157,6 +2228,7 @@ export type warehousesCreateManyUnitsInput = {
   name: string
   code?: string | null
   active?: boolean
+  is_virtual?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -2170,6 +2242,7 @@ export type warehousesUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2195,6 +2268,7 @@ export type warehousesUncheckedUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2219,6 +2293,7 @@ export type warehousesUncheckedUpdateManyWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2346,6 +2421,7 @@ export type warehousesSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   name?: boolean
   code?: boolean
   active?: boolean
+  is_virtual?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2374,6 +2450,7 @@ export type warehousesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   code?: boolean
   active?: boolean
+  is_virtual?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2391,6 +2468,7 @@ export type warehousesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   code?: boolean
   active?: boolean
+  is_virtual?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2408,6 +2486,7 @@ export type warehousesSelectScalar = {
   name?: boolean
   code?: boolean
   active?: boolean
+  is_virtual?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -2416,7 +2495,7 @@ export type warehousesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type warehousesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "location_id" | "unit_id" | "name" | "code" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["warehouses"]>
+export type warehousesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "location_id" | "unit_id" | "name" | "code" | "active" | "is_virtual" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["warehouses"]>
 export type warehousesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pallets?: boolean | Prisma.warehouses$palletsArgs<ExtArgs>
   picking_orders?: boolean | Prisma.warehouses$picking_ordersArgs<ExtArgs>
@@ -2464,6 +2543,7 @@ export type $warehousesPayload<ExtArgs extends runtime.Types.Extensions.Internal
     name: string
     code: string | null
     active: boolean
+    is_virtual: boolean
     created_at: Date
     updated_at: Date | null
     deleted_at: Date | null
@@ -2911,6 +2991,7 @@ export interface warehousesFieldRefs {
   readonly name: Prisma.FieldRef<"warehouses", 'String'>
   readonly code: Prisma.FieldRef<"warehouses", 'String'>
   readonly active: Prisma.FieldRef<"warehouses", 'Boolean'>
+  readonly is_virtual: Prisma.FieldRef<"warehouses", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"warehouses", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"warehouses", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"warehouses", 'DateTime'>

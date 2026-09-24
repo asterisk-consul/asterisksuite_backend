@@ -350,6 +350,37 @@ export class CompaniesService {
     await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
     await this.findOne(companyId);
 
+    if (dto.link_employee_id && dto.link_partner_id) {
+      throw new BadRequestException('No se puede vincular el usuario a un empleado y a un socio al mismo tiempo');
+    }
+
+    const tenantPrisma = this.db.getClientForCurrentContext();
+    const employee = dto.link_employee_id
+      ? await tenantPrisma.employees.findUnique({
+          where: { id: dto.link_employee_id },
+          select: { id: true, user_id: true },
+        })
+      : null;
+    const partner = dto.link_partner_id
+      ? await tenantPrisma.partners.findUnique({
+          where: { id: dto.link_partner_id },
+          select: { id: true, user_id: true },
+        })
+      : null;
+
+    if (dto.link_employee_id && !employee) {
+      throw new NotFoundException('Empleado no encontrado en la empresa actual');
+    }
+    if (employee?.user_id) {
+      throw new ConflictException('El empleado ya tiene un usuario vinculado');
+    }
+    if (dto.link_partner_id && !partner) {
+      throw new NotFoundException('Socio no encontrado en la empresa actual');
+    }
+    if (partner?.user_id) {
+      throw new ConflictException('El socio ya tiene un usuario vinculado');
+    }
+
     const existing = await this.prisma.users.findUnique({
       where: { email: dto.email },
     });
@@ -376,10 +407,34 @@ export class CompaniesService {
       },
     });
 
+    if (employee) {
+      await tenantPrisma.employees.update({
+        where: { id: employee.id },
+        data: { user_id: user.id },
+      });
+      await this.prisma.users.update({
+        where: { id: user.id },
+        data: { employee_id: employee.id },
+      });
+    }
+
+    if (partner) {
+      await tenantPrisma.partners.update({
+        where: { id: partner.id },
+        data: { user_id: user.id },
+      });
+      await this.prisma.users.update({
+        where: { id: user.id },
+        data: { partner_id: partner.id },
+      });
+    }
+
     return {
       id: user.id,
       name: user.name,
       email: user.email,
+      linked_employee_id: employee?.id ?? null,
+      linked_partner_id: partner?.id ?? null,
     };
   }
 

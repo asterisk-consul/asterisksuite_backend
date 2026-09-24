@@ -24,6 +24,8 @@ model files {
   file_name        String?         @db.VarChar(255)
   mime_type        String?         @db.VarChar(100)
   file_size        Int?
+  content_hash     String?         @unique @db.VarChar(64)
+  purge_after      DateTime?       @db.Timestamp(6)
   uploaded_by      String?         @db.Uuid
   created_at       DateTime        @default(now()) @db.Timestamp(6)
   updated_at       DateTime?       @updatedAt @db.Timestamp(6)
@@ -33,6 +35,7 @@ model files {
   deleted_by       String?         @db.Uuid
   entity_photos    entity_photos[]
 
+  @@index([deleted_at, purge_after], map: "idx_files_purge")
   @@schema("tenant")
 }
 

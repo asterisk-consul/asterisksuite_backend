@@ -8,6 +8,7 @@ import { BankAccountsService } from './bank-accounts.service';
 import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
 import { BankAccountAccessGuard } from '@/common/guards/bank-account-access.guard';
+import { DeleteBankAccountDto } from './dto/delete-bank-account.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/bank-accounts')
@@ -46,8 +47,8 @@ export class BankAccountsController {
   @Delete(':id')
   @UseGuards(BankAccountAccessGuard)
   @RequirePermissions('treasury.bank_accounts.delete')
-  remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.bankAccountsService.remove(id, user.id);
+  remove(@Param('id') id: string, @Body() dto: DeleteBankAccountDto, @CurrentUser() user: AuthUser) {
+    return this.bankAccountsService.remove(id, dto, user.id);
   }
 
   @Get(':id/movements')

@@ -19,8 +19,12 @@ export class TreasuryReportsController {
     @CurrentUser() user: AuthUser,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
+    const parsedChecksDays = Number(checksDays);
+    const safeChecksDays = Number.isFinite(parsedChecksDays)
+      ? Math.min(365, Math.max(1, Math.trunc(parsedChecksDays)))
+      : undefined;
     return this.reportsService.dashboard(
-      checksDays ? parseInt(checksDays, 10) : undefined,
+      safeChecksDays,
       user.id,
       companyRole,
     );

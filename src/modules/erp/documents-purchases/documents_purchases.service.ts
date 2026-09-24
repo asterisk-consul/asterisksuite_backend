@@ -23,6 +23,7 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
+import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -57,6 +58,8 @@ export class DocumentsPurchasesService {
     private readonly fiscalValidation: FiscalValidationService,
 
     private readonly productPartyPricing: ProductPartyPricingService,
+
+    private readonly fiscalAuthorizations: FiscalAuthorizationsService,
   ) {}
 
   private get prisma() {
@@ -1177,6 +1180,10 @@ export class DocumentsPurchasesService {
 
       const category = doc.document_types?.category;
 
+      const fiscalAuthorizationSnapshot = category === 'REMITO'
+        ? await this.fiscalAuthorizations.resolveForDocument(doc, tx)
+        : null;
+
       if (!doc.document_items.length && category !== 'OPENING_BALANCE') {
         throw new BadRequestException('El documento no tiene ítems');
       }
@@ -1186,15 +1193,31 @@ export class DocumentsPurchasesService {
         data: {
           status: STATUS_CONFIRMED,
           updated_at: new Date(),
+          ...(fiscalAuthorizationSnapshot ?? {}),
         },
       });
 
       // Los remitos de compra ingresan stock al depósito elegido.
+      // Si el documento está asociado a un contenedor de operación internacional,
+      // el stock va al almacén virtual "En Tránsito" del contenedor.
       if (doc.document_types?.affects_stock) {
+        const containerLink = await tx.international_operation_documents.findFirst({
+          where: { document_id: doc.id, container_id: { not: null } },
+          select: { container_id: true },
+        });
+        let transitWarehouseId: string | null = null;
+        if (containerLink?.container_id) {
+          const container = await tx.international_containers.findUnique({
+            where: { id: containerLink.container_id },
+            select: { transit_warehouse_id: true },
+          });
+          transitWarehouseId = container?.transit_warehouse_id ?? null;
+        }
+
         for (const item of doc.document_items) {
           if (!item.product_id) continue;
 
-          const warehouseId = item.warehouse_id ?? doc.warehouse_id;
+          const warehouseId = transitWarehouseId ?? item.warehouse_id ?? doc.warehouse_id;
           if (!warehouseId) {
             throw new BadRequestException('Seleccioná el depósito receptor antes de confirmar el remito');
           }
@@ -1212,6 +1235,7 @@ export class DocumentsPurchasesService {
               quantity: qty,
               reference_type: 'document',
               reference_id: doc.id,
+              notes: transitWarehouseId ? 'Stock en tránsito (op. internacional)' : undefined,
               created_by: userId,
             },
           });

@@ -32,6 +32,7 @@ import { TreasuryReportsModule } from './treasury-reports/treasury-reports.modul
 import { HrModule } from './hr/hr.module';
 import { TaxEngineModule } from './tax-engine/tax-engine.module';
 import { FiscalModule } from './fiscal/fiscal.module';
+import { FiscalAuthorizationsModule } from './fiscal-authorizations/fiscal-authorizations.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ProductSuppliersModule } from './pricing/product-suppliers/product-suppliers.module';
 import { PriceListsModule } from './pricing/price-lists/price-lists.module';
@@ -69,6 +70,7 @@ import { ManagementReportsModule } from './management-reports/management-reports
     HrModule,
     TaxEngineModule,
     FiscalModule,
+    FiscalAuthorizationsModule,
     DashboardModule,
     ProductSuppliersModule,
     PriceListsModule,
@@ -105,6 +107,7 @@ import { ManagementReportsModule } from './management-reports/management-reports
     HrModule,
     TaxEngineModule,
     FiscalModule,
+    FiscalAuthorizationsModule,
     DashboardModule,
     ProductSuppliersModule,
     PriceListsModule,

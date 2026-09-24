@@ -3,6 +3,8 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
 import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
 import { parseLocalDateTime } from '@/common/utils/dates';
+import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
+import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 
 @Injectable()
 export class HrService {
@@ -349,6 +351,7 @@ export class HrService {
       data: { ...commonData, bank_account_id: bank.id, balance_before: before, balance_after: after },
     });
     await prisma.bank_accounts.update({ where: { id: bank.id }, data: { balance: after } });
+    await recalculateBankAccountLedger(prisma, bank.id);
   }
 
   async cancelVale(id: string, userId: string) {
@@ -492,6 +495,7 @@ export class HrService {
         },
       });
       await this.prisma.bank_accounts.update({ where: { id: bank.id }, data: { balance: after } });
+      await recalculateBankAccountLedger(this.prisma, bank.id);
     }
   }
 
@@ -617,6 +621,7 @@ export class HrService {
       where: { id: account.id },
       data: { balance: balanceAfter, updated_at: new Date() },
     });
+    await recalculateCurrentAccountLedger(prisma, account.id);
 
     this.logger.log(`Current account entry creada para vale #${vale.number}`);
   }
@@ -681,6 +686,7 @@ export class HrService {
           where: { id: account.id },
           data: { balance: balanceAfter, updated_at: new Date() },
         });
+        await recalculateCurrentAccountLedger(this.prisma, account.id);
       }
     }
 

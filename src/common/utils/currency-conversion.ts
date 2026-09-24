@@ -17,8 +17,21 @@ export function convertWithMarketRate(
   rate: number | null | undefined
 ): number | null {
   if (from === to) return amount;
-  if (rate == null || rate <= 0) return null;
-  if (from === 'ARS') return amount / rate;
-  if (to === 'ARS') return amount * rate;
+  const marketRate = normalizeMarketRate(rate, from, to);
+  if (!marketRate) return null;
+  if (from === 'ARS') return amount / marketRate;
+  if (to === 'ARS') return amount * marketRate;
   return null;
+}
+
+export function normalizeMarketRate(
+  rate: number | null | undefined,
+  from: string,
+  to: string,
+): number | null {
+  if (from === to) return 1;
+  const numericRate = Number(rate);
+  if (rate == null || !Number.isFinite(numericRate) || numericRate <= 0) return null;
+  if (from !== 'ARS' && to !== 'ARS') return numericRate;
+  return numericRate < 1 ? 1 / numericRate : numericRate;
 }

@@ -56,18 +56,22 @@ export class UpdateContainerDto {
   destination_port_id?: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' || value === null || value === undefined ? undefined : value))
   @IsDateString()
   estimated_departure_date?: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' || value === null || value === undefined ? undefined : value))
   @IsDateString()
   actual_departure_date?: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' || value === null || value === undefined ? undefined : value))
   @IsDateString()
   estimated_arrival_date?: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' || value === null || value === undefined ? undefined : value))
   @IsDateString()
   actual_arrival_date?: string;
 
