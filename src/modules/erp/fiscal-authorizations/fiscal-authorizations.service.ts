@@ -66,6 +66,16 @@ export class FiscalAuthorizationsService {
 
   private async ensureNoOverlap(dto: CreateFiscalAuthorizationDto, excludeId?: string) {
     this.validatePeriod(dto);
+    const linkedSequence = await this.prisma.document_type_sequences.findFirst({
+      where: {
+        document_type_id: dto.document_type_id,
+        sequence_id: dto.document_sequence_id,
+        document_sequences: { deleted_at: null, active: true },
+      },
+    });
+    if (!linkedSequence) {
+      throw new BadRequestException('La serie seleccionada no está habilitada para el tipo de remito');
+    }
     const overlap = await this.prisma.fiscal_authorizations.findFirst({
       where: {
         id: excludeId ? { not: excludeId } : undefined,

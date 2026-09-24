@@ -1,5 +1,5 @@
 // documents-types.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { CreateDocumentsTypeDto } from './dto/create-documents-type.dto';
@@ -17,10 +17,27 @@ export class DocumentsTypesService {
     return this.db.getClientForCurrentContext();
   }
 
+  private async ensureSequencesAreAvailable(sequenceIds: string[], documentTypeId?: string) {
+    if (!sequenceIds.length) return;
+    const occupied = await this.prisma.document_type_sequences.findFirst({
+      where: {
+        sequence_id: { in: sequenceIds },
+        document_type_id: documentTypeId ? { not: documentTypeId } : undefined,
+      },
+      include: { document_sequences: true, document_types: true },
+    });
+    if (occupied) {
+      throw new BadRequestException(
+        `La serie PV ${occupied.document_sequences.point_of_sale} · ${occupied.document_sequences.name} ya pertenece a ${occupied.document_types.code}`,
+      );
+    }
+  }
+
   async create(dto: CreateDocumentsTypeDto) {
     const { document_sequence_id, document_sequence_ids, ...rest } = dto;
 
     const sequenceIds = [...new Set(document_sequence_ids ?? (document_sequence_id ? [document_sequence_id] : []))];
+    await this.ensureSequencesAreAvailable(sequenceIds);
 
     return this.prisma.$transaction(async (tx) => {
       const docType = await tx.document_types.create({
@@ -117,6 +134,10 @@ export class DocumentsTypesService {
       });
 
       if (document_sequence_ids !== undefined) {
+        await this.ensureSequencesAreAvailable(
+          Array.from(new Set<string>(document_sequence_ids as string[])),
+          id,
+        );
         await tx.document_type_sequences.deleteMany({
           where: { document_type_id: id },
         });

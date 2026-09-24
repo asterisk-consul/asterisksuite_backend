@@ -19,7 +19,9 @@ model document_sequences {
   documents               documents[]
   fiscal_authorizations   fiscal_authorizations[]
 
-  @@unique([point_of_sale, prefix])
+  // Un mismo punto de venta puede tener series independientes por tipo de
+  // documento. El servicio valida el ámbito contra document_type_sequences.
+  @@index([point_of_sale, prefix])
   @@schema("tenant")
 }
 

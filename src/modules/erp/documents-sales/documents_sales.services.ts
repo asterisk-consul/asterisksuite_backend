@@ -1521,11 +1521,13 @@ export class DocumentsSalesService {
     const confirmed = await this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
-      if (doc.status !== STATUS_DRAFT) {
-        throw new BadRequestException('Solo se puede confirmar un documento en borrador');
-      }
-
       const category = doc.document_types?.category;
+
+      const canConfirm = doc.status === STATUS_DRAFT
+        || (category === 'REMITO' && doc.status === STATUS_PENDING);
+      if (!canConfirm) {
+        throw new BadRequestException('El documento no se encuentra en un estado que permita confirmarlo');
+      }
 
       const fiscalAuthorizationSnapshot = category === 'REMITO'
         ? await this.fiscalAuthorizations.resolveForDocument(doc, tx)
@@ -2416,13 +2418,16 @@ export class DocumentsSalesService {
       );
     }
 
-    await this.prisma.documents.update({
-      where: { id },
-      data: { status: newStatus, updated_at: new Date() },
-    });
-
-    if (category === 'REMITO' && newStatus === STATUS_CONFIRMED && doc.parent_document_id) {
-      await this.refreshOrderDeliveredQuantities(doc.parent_document_id, this.prisma);
+    // Entregar un remito debe atravesar el mismo cierre que la confirmación:
+    // asigna el CAI histórico, valida depósitos y registra la salida de stock.
+    const closesRemito = category === 'REMITO' && newStatus === STATUS_CONFIRMED;
+    if (closesRemito) {
+      await this.confirm(id, userId);
+    } else {
+      await this.prisma.documents.update({
+        where: { id },
+        data: { status: newStatus, updated_at: new Date() },
+      });
     }
 
     // El remito entregado es el evento operativo que cierra despacho/viaje

@@ -11,31 +11,60 @@ export class DocumentSequencesService {
     return this.db.getClientForCurrentContext();
   }
 
-  async create(dto: CreateDocumentSequenceDto) {
-    const existing = await this.prisma.document_sequences.findFirst({
+  private normalizedPrefix(prefix?: string | null) {
+    return prefix?.trim() || null;
+  }
+
+  private async assertAvailableScope(
+    pointOfSale: string,
+    prefix: string | null,
+    documentTypeIds: string[],
+    excludeId?: string,
+  ) {
+    const sameSeries = await this.prisma.document_sequences.findMany({
       where: {
-        point_of_sale: dto.point_of_sale,
-        prefix: dto.prefix || null,
+        point_of_sale: pointOfSale,
+        prefix,
+        id: excludeId ? { not: excludeId } : undefined,
       },
+      include: { document_type_sequences: true },
     });
 
-    if (existing) {
-      if (existing.deleted_at) {
-        throw new BadRequestException(
-          `Ya existe una secuencia eliminada para el punto de venta ${dto.point_of_sale} con prefijo "${dto.prefix || ''}". Recuperá la secuencia existente o usá otro punto de venta/prefijo.`,
-        );
-      }
+    const active = sameSeries.filter(sequence => !sequence.deleted_at);
+    const deleted = sameSeries.find(sequence => sequence.deleted_at);
+    const requested = new Set(documentTypeIds);
+    const conflicting = active.find(sequence => {
+      const linkedTypes = sequence.document_type_sequences.map(link => link.document_type_id);
+      // Una serie histórica sin tipos vinculados se considera de alcance general.
+      return linkedTypes.length === 0 || requested.size === 0 || linkedTypes.some(id => requested.has(id));
+    });
+
+    if (conflicting) {
       throw new BadRequestException(
-        `Ya existe una secuencia para el punto de venta ${dto.point_of_sale} con prefijo "${dto.prefix || ''}"`,
+        `Ya existe una secuencia para el punto de venta ${pointOfSale} y alguno de los tipos de documento seleccionados`,
       );
     }
+    if (deleted && active.length === 0) {
+      throw new BadRequestException(
+        `Existe una secuencia eliminada para el punto de venta ${pointOfSale}. Recuperala o usá otra serie.`,
+      );
+    }
+  }
+
+  async create(dto: CreateDocumentSequenceDto) {
+    const documentTypeIds = [...new Set(dto.document_type_ids ?? [])];
+    if (documentTypeIds.length !== 1) {
+      throw new BadRequestException('Seleccioná un único tipo de documento para la serie');
+    }
+    const prefix = this.normalizedPrefix(dto.prefix);
+    await this.assertAvailableScope(dto.point_of_sale, prefix, documentTypeIds);
 
     return this.prisma.$transaction(async (tx) => {
       const sequence = await tx.document_sequences.create({
         data: {
           name: dto.name,
           point_of_sale: dto.point_of_sale,
-          prefix: dto.prefix,
+          prefix,
           range_start: dto.range_start,
           range_end: dto.range_end,
           current_number: dto.range_start != null ? dto.range_start - 1 : 0,
@@ -44,9 +73,9 @@ export class DocumentSequencesService {
         },
       });
 
-      if (dto.document_type_ids?.length) {
+      if (documentTypeIds.length) {
         await tx.document_type_sequences.createMany({
-          data: dto.document_type_ids.map((dtId) => ({
+          data: documentTypeIds.map((dtId) => ({
             document_type_id: dtId,
             sequence_id: sequence.id,
             is_default: false,
@@ -99,27 +128,22 @@ export class DocumentSequencesService {
   }
 
   async update(id: string, dto: UpdateDocumentSequenceDto) {
-    await this.findOne(id);
-
-    if (dto.point_of_sale || dto.prefix) {
-      const existing = await this.prisma.document_sequences.findFirst({
-        where: {
-          point_of_sale: dto.point_of_sale || undefined,
-          prefix: dto.prefix || null,
-          NOT: { id },
-        },
-      });
-      if (existing) {
-        throw new BadRequestException('Ya existe una secuencia con ese punto de venta y prefijo');
-      }
+    const current = await this.findOne(id);
+    const pointOfSale = dto.point_of_sale ?? current.point_of_sale;
+    const prefix = dto.prefix !== undefined ? this.normalizedPrefix(dto.prefix) : current.prefix;
+    const documentTypeIds = Array.from(new Set<string>((dto.document_type_ids
+      ?? current.document_type_sequences.map(link => link.document_type_id)) as string[]));
+    if (documentTypeIds.length !== 1) {
+      throw new BadRequestException('Cada serie debe pertenecer a un único tipo de documento');
     }
+    await this.assertAvailableScope(pointOfSale, prefix, documentTypeIds, id);
 
     return this.prisma.$transaction(async (tx) => {
       const { document_type_ids, ...sequenceData } = dto;
 
       const sequence = await tx.document_sequences.update({
         where: { id },
-        data: sequenceData,
+        data: { ...sequenceData, ...(dto.prefix !== undefined ? { prefix } : {}) },
       });
 
       if (document_type_ids !== undefined) {
