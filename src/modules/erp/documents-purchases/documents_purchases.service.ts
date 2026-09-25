@@ -24,6 +24,10 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
+import {
+  receiveInternationalRemitoFromTransit,
+  registerInternationalInvoiceInTransit,
+} from '@/modules/international-operations/international-stock';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -1197,27 +1201,42 @@ export class DocumentsPurchasesService {
         },
       });
 
-      // Los remitos de compra ingresan stock al depósito elegido.
-      // Si el documento está asociado a un contenedor de operación internacional,
-      // el stock va al almacén virtual "En Tránsito" del contenedor.
-      if (doc.document_types?.affects_stock) {
-        const containerLink = await tx.international_operation_documents.findFirst({
-          where: { document_id: doc.id, container_id: { not: null } },
-          select: { container_id: true },
-        });
-        let transitWarehouseId: string | null = null;
-        if (containerLink?.container_id) {
-          const container = await tx.international_containers.findUnique({
-            where: { id: containerLink.container_id },
-            select: { transit_warehouse_id: true },
-          });
-          transitWarehouseId = container?.transit_warehouse_id ?? null;
-        }
+      const internationalMerchandiseLink = await tx.international_operation_documents.findFirst({
+        where: {
+          document_id: doc.id,
+          container_id: { not: null },
+          expense_type: 'MERCHANDISE',
+        },
+        select: { container_id: true },
+      });
+
+      // La factura internacional representa mercadería que ya pertenece a la
+      // empresa pero todavía está viajando. Este ingreso es excepcional y no
+      // depende de affects_stock del tipo de factura.
+      if (category === 'INVOICE' && internationalMerchandiseLink?.container_id) {
+        await registerInternationalInvoiceInTransit(
+          tx,
+          doc.id,
+          internationalMerchandiseLink.container_id,
+          userId,
+        );
+      } else if (category === 'REMITO' && internationalMerchandiseLink?.container_id) {
+        // El remito acredita la recepción física y transfiere únicamente sus
+        // cantidades desde el depósito virtual al depósito real seleccionado.
+        await receiveInternationalRemitoFromTransit(
+          tx,
+          doc,
+          internationalMerchandiseLink.container_id,
+          userId,
+        );
+      } else if (doc.document_types?.affects_stock) {
+        // Circuito local habitual: sólo los tipos configurados para afectar
+        // stock ingresan directamente al depósito elegido.
 
         for (const item of doc.document_items) {
           if (!item.product_id) continue;
 
-          const warehouseId = transitWarehouseId ?? item.warehouse_id ?? doc.warehouse_id;
+          const warehouseId = item.warehouse_id ?? doc.warehouse_id;
           if (!warehouseId) {
             throw new BadRequestException('Seleccioná el depósito receptor antes de confirmar el remito');
           }
@@ -1235,7 +1254,6 @@ export class DocumentsPurchasesService {
               quantity: qty,
               reference_type: 'document',
               reference_id: doc.id,
-              notes: transitWarehouseId ? 'Stock en tránsito (op. internacional)' : undefined,
               created_by: userId,
             },
           });
