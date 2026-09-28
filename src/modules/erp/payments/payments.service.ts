@@ -48,8 +48,8 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async create(dto: CreatePaymentDto, userId: string) {
-    console.log('[payments] create DTO:', JSON.stringify(dto, null, 2))
-    console.log('[payments] create userId:', userId)
+    console.log('[payments] create DTO:', JSON.stringify(dto, null, 2));
+    console.log('[payments] create userId:', userId);
 
     if (dto.documents && dto.documents.length > 0 && !dto.party_id) {
       throw new BadRequestException('party_id es requerido cuando se aplican documentos');
@@ -76,20 +76,22 @@ export class PaymentsService {
       throw new BadRequestException('La parte interesada seleccionada no existe');
     }
 
-    const lastPayment = await this.prisma.payments.findFirst({
-      where: { deleted_at: null },
-      orderBy: { number: 'desc' },
+    const paymentNumber = await this.prisma.payments.aggregate({
+      _max: {
+        number: true,
+      },
     });
-    const nextNumber = (lastPayment?.number ?? 0) + 1;
+
+    const nextNumber = (paymentNumber._max.number ?? 0) + 1;
 
     // ─── Auto-calculate converted_amount if not provided ─────────
-    let convertedAmount = dto.converted_amount ?? null
-    let exchangeRate = dto.exchange_rate ?? null
-    let rateType = (dto.rate_type as any) ?? null
+    let convertedAmount = dto.converted_amount ?? null;
+    let exchangeRate = dto.exchange_rate ?? null;
+    let rateType = (dto.rate_type as any) ?? null;
 
     if (dto.currency_code && !convertedAmount) {
       try {
-        const baseCurrency = await this.conversionService.getBaseCurrency()
+        const baseCurrency = await this.conversionService.getBaseCurrency();
         if (dto.currency_code.toUpperCase() !== baseCurrency.code.toUpperCase()) {
           if (!exchangeRate) {
             const resolved = await this.conversionService.resolveRate(
@@ -97,11 +99,11 @@ export class PaymentsService {
               baseCurrency.code,
               parseLocalDateTime(dto.date),
               rateType,
-            )
-            exchangeRate = resolved.rate
-            rateType = resolved.rateType
+            );
+            exchangeRate = resolved.rate;
+            rateType = resolved.rateType;
           }
-          convertedAmount = this.conversionService.convertAmount(dto.amount, exchangeRate)
+          convertedAmount = this.conversionService.convertAmount(dto.amount, exchangeRate);
         }
       } catch {
         // If rate not found, leave as null
@@ -109,7 +111,7 @@ export class PaymentsService {
     }
 
     try {
-      console.log('[payments] create dto.date:', dto.date, '→ parsed:', parseLocalDateTime(dto.date).toISOString())
+      console.log('[payments] create dto.date:', dto.date, '→ parsed:', parseLocalDateTime(dto.date).toISOString());
       const payment = await this.prisma.payments.create({
         data: {
           number: nextNumber,
@@ -135,113 +137,116 @@ export class PaymentsService {
         },
       });
 
-    // Store documents for later confirmation
-    if (dto.documents && dto.documents.length > 0) {
-      for (const doc of dto.documents) {
-        await this.prisma.payment_documents.create({
-          data: {
+      // Store documents for later confirmation
+      if (dto.documents && dto.documents.length > 0) {
+        for (const doc of dto.documents) {
+          await this.prisma.payment_documents.create({
+            data: {
+              payment_id: payment.id,
+              document_id: doc.document_id,
+              amount_applied: doc.amount_applied,
+              created_by: userId,
+            },
+          });
+        }
+      }
+
+      // Store withholdings (retenciones) — status CALCULATED until confirm
+      if (dto.withholdings && dto.withholdings.length > 0) {
+        if (!dto.party_id) {
+          throw new BadRequestException('party_id es requerido cuando se registran retenciones');
+        }
+        for (const wh of dto.withholdings) {
+          await this.prisma.withholdings.create({
+            data: {
+              company_id: this.getCompanyId() ?? payment.id,
+              business_party_id: payment.party_id!,
+              direction: payment.type === 'PAYMENT' || payment.type === 'EXPENSE' ? 'PRACTICADA' : 'SUFRIDA',
+              payment_id: payment.id,
+              tax_type: wh.tax_type,
+              jurisdiction_id: wh.jurisdiction_id ?? null,
+              withholding_concept_id: wh.withholding_concept_id ?? null,
+              tax_rule_id: wh.tax_rule_id ?? null,
+              base_amount: wh.base_amount,
+              rate: wh.rate ?? null,
+              withheld_amount: wh.withheld_amount,
+              automatic_amount: wh.withheld_amount,
+              currency_code: payment.currency_code,
+              exchange_rate: payment.exchange_rate,
+              certificate_number: wh.certificate_number ?? null,
+              certificate_date: wh.certificate_date ? new Date(wh.certificate_date) : null,
+              status: 'CALCULATED',
+              date: payment.date,
+              observations: wh.observations ?? null,
+              created_by: userId,
+              ...(wh.allocations?.length
+                ? {
+                    allocations: {
+                      create: wh.allocations.map((al) => ({
+                        document_id: al.document_id,
+                        allocated_amount: al.allocated_amount,
+                        created_by: userId,
+                      })),
+                    },
+                  }
+                : {}),
+            },
+          });
+        }
+      }
+
+      // Link checks to this payment (con aplicación parcial opcional)
+      const checkAllocations: { check_id: string; amount_applied: number }[] = [];
+      if (dto.checks && dto.checks.length > 0) {
+        for (const c of dto.checks) {
+          const check = await this.prisma.checks.findFirst({ where: { id: c.check_id, deleted_at: null } });
+          if (!check) throw new NotFoundException(`Cheque ${c.check_id} no encontrado`);
+          const available = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
+          if (c.amount_applied > available + 0.01) {
+            throw new BadRequestException(
+              `El cheque #${check.check_number} tiene saldo disponible ${available} y se intenta aplicar ${c.amount_applied}`,
+            );
+          }
+          if (check.is_own && Math.abs(c.amount_applied - Number(check.amount)) > 0.01) {
+            throw new BadRequestException(
+              `El cheque propio #${check.check_number} se aplica por su monto total (${check.amount}). Usá un anticipo para el resto.`,
+            );
+          }
+          checkAllocations.push({ check_id: c.check_id, amount_applied: c.amount_applied });
+        }
+      } else if (dto.check_ids && dto.check_ids.length > 0) {
+        // Legacy: check_ids se aplican por su monto completo
+        for (const checkId of dto.check_ids) {
+          const check = await this.prisma.checks.findFirst({ where: { id: checkId, deleted_at: null } });
+          if (!check) throw new NotFoundException(`Cheque ${checkId} no encontrado`);
+          checkAllocations.push({
+            check_id: checkId,
+            amount_applied: check.available_amount != null ? Number(check.available_amount) : Number(check.amount),
+          });
+        }
+      }
+
+      for (const alloc of checkAllocations) {
+        await this.prisma.checks.update({
+          where: { id: alloc.check_id },
+          data: { payment_id: payment.id, updated_at: new Date(), updated_by: userId },
+        });
+        await this.prisma.payment_checks.upsert({
+          where: { payment_id_check_id: { payment_id: payment.id, check_id: alloc.check_id } },
+          update: { amount_applied: alloc.amount_applied },
+          create: {
             payment_id: payment.id,
-            document_id: doc.document_id,
-            amount_applied: doc.amount_applied,
+            check_id: alloc.check_id,
+            amount_applied: alloc.amount_applied,
             created_by: userId,
           },
         });
       }
-    }
 
-    // Store withholdings (retenciones) — status CALCULATED until confirm
-    if (dto.withholdings && dto.withholdings.length > 0) {
-      if (!dto.party_id) {
-        throw new BadRequestException('party_id es requerido cuando se registran retenciones');
-      }
-      for (const wh of dto.withholdings) {
-        await this.prisma.withholdings.create({
-          data: {
-            company_id: this.getCompanyId() ?? payment.id,
-            business_party_id: payment.party_id!,
-            direction: (payment.type === 'PAYMENT' || payment.type === 'EXPENSE') ? 'PRACTICADA' : 'SUFRIDA',
-            payment_id: payment.id,
-            tax_type: wh.tax_type,
-            jurisdiction_id: wh.jurisdiction_id ?? null,
-            withholding_concept_id: wh.withholding_concept_id ?? null,
-            tax_rule_id: wh.tax_rule_id ?? null,
-            base_amount: wh.base_amount,
-            rate: wh.rate ?? null,
-            withheld_amount: wh.withheld_amount,
-            automatic_amount: wh.withheld_amount,
-            currency_code: payment.currency_code,
-            exchange_rate: payment.exchange_rate,
-            certificate_number: wh.certificate_number ?? null,
-            certificate_date: wh.certificate_date ? new Date(wh.certificate_date) : null,
-            status: 'CALCULATED',
-            date: payment.date,
-            observations: wh.observations ?? null,
-            created_by: userId,
-            ...(wh.allocations?.length
-              ? {
-                  allocations: {
-                    create: wh.allocations.map((al) => ({
-                      document_id: al.document_id,
-                      allocated_amount: al.allocated_amount,
-                      created_by: userId,
-                    })),
-                  },
-                }
-              : {}),
-          },
-        });
-      }
-    }
-
-    // Link checks to this payment (con aplicación parcial opcional)
-    const checkAllocations: { check_id: string; amount_applied: number }[] = [];
-    if (dto.checks && dto.checks.length > 0) {
-      for (const c of dto.checks) {
-        const check = await this.prisma.checks.findFirst({ where: { id: c.check_id, deleted_at: null } });
-        if (!check) throw new NotFoundException(`Cheque ${c.check_id} no encontrado`);
-        const available = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
-        if (c.amount_applied > available + 0.01) {
-          throw new BadRequestException(
-            `El cheque #${check.check_number} tiene saldo disponible ${available} y se intenta aplicar ${c.amount_applied}`,
-          );
-        }
-        if (check.is_own && Math.abs(c.amount_applied - Number(check.amount)) > 0.01) {
-          throw new BadRequestException(
-            `El cheque propio #${check.check_number} se aplica por su monto total (${check.amount}). Usá un anticipo para el resto.`,
-          );
-        }
-        checkAllocations.push({ check_id: c.check_id, amount_applied: c.amount_applied });
-      }
-    } else if (dto.check_ids && dto.check_ids.length > 0) {
-      // Legacy: check_ids se aplican por su monto completo
-      for (const checkId of dto.check_ids) {
-        const check = await this.prisma.checks.findFirst({ where: { id: checkId, deleted_at: null } });
-        if (!check) throw new NotFoundException(`Cheque ${checkId} no encontrado`);
-        checkAllocations.push({ check_id: checkId, amount_applied: check.available_amount != null ? Number(check.available_amount) : Number(check.amount) });
-      }
-    }
-
-    for (const alloc of checkAllocations) {
-      await this.prisma.checks.update({
-        where: { id: alloc.check_id },
-        data: { payment_id: payment.id, updated_at: new Date(), updated_by: userId },
-      });
-      await this.prisma.payment_checks.upsert({
-        where: { payment_id_check_id: { payment_id: payment.id, check_id: alloc.check_id } },
-        update: { amount_applied: alloc.amount_applied },
-        create: {
-          payment_id: payment.id,
-          check_id: alloc.check_id,
-          amount_applied: alloc.amount_applied,
-          created_by: userId,
-        },
-      });
-    }
-
-    return payment;
+      return payment;
     } catch (error) {
-      console.error('[payments] create ERROR:', error)
-      throw error
+      console.error('[payments] create ERROR:', error);
+      throw error;
     }
   }
 
@@ -255,9 +260,8 @@ export class PaymentsService {
       throw new BadRequestException('Solo se pueden confirmar pagos en borrador');
     }
 
-    const checkCount = payment.payment_method === 'CHECK'
-      ? await this.prisma.payment_checks.count({ where: { payment_id: id } })
-      : 0;
+    const checkCount =
+      payment.payment_method === 'CHECK' ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
     this.validatePaymentInstrument(payment.payment_method, {
       cashBoxId: payment.cash_box_id,
       bankAccountId: payment.bank_account_id,
@@ -293,9 +297,7 @@ export class PaymentsService {
         }
         const pending = document.total.toNumber() - document.paid_amount.toNumber();
         if (pending <= 0) {
-          throw new BadRequestException(
-            `El documento ${document.number} ya está saldado`,
-          );
+          throw new BadRequestException(`El documento ${document.number} ya está saldado`);
         }
         // Convertir pending a la moneda de pago si es cross-currency
         const docCurrency = document.currency_code?.toUpperCase();
@@ -312,12 +314,12 @@ export class PaymentsService {
       }
 
       const linkedDocs = await this.prisma.documents.findMany({
-        where: { id: { in: paymentDocs.map(pd => pd.document_id) } },
+        where: { id: { in: paymentDocs.map((pd) => pd.document_id) } },
         select: { id: true, commercial_operation_id: true },
       });
       const applicationsByOperation = new Map<string, number>();
       for (const pd of paymentDocs) {
-        const operationId = linkedDocs.find(doc => doc.id === pd.document_id)?.commercial_operation_id;
+        const operationId = linkedDocs.find((doc) => doc.id === pd.document_id)?.commercial_operation_id;
         if (!operationId) continue;
         applicationsByOperation.set(
           operationId,
@@ -465,14 +467,26 @@ export class PaymentsService {
       });
     });
 
-    const operationIds = [...new Set((await this.prisma.documents.findMany({
-      where: { id: { in: paymentDocs.map(pd => pd.document_id) }, commercial_operation_id: { not: null } },
-      select: { commercial_operation_id: true },
-    })).map(doc => doc.commercial_operation_id).filter(Boolean))] as string[];
+    const operationIds = [
+      ...new Set(
+        (
+          await this.prisma.documents.findMany({
+            where: { id: { in: paymentDocs.map((pd) => pd.document_id) }, commercial_operation_id: { not: null } },
+            select: { commercial_operation_id: true },
+          })
+        )
+          .map((doc) => doc.commercial_operation_id)
+          .filter(Boolean),
+      ),
+    ] as string[];
 
     for (const operationId of operationIds) {
       const operation = await this.commercialFlow.refresh(operationId);
-      if (operation?.delivery_status === 'ELIGIBLE' && operation.auto_create_delivery_note && !operation.delivery_note_id) {
+      if (
+        operation?.delivery_status === 'ELIGIBLE' &&
+        operation.auto_create_delivery_note &&
+        !operation.delivery_note_id
+      ) {
         const remito = await this.documentsSales.deliver(operation.root_document_id, userId);
         await this.prisma.commercial_operations.update({
           where: { id: operation.id },
@@ -560,7 +574,14 @@ export class PaymentsService {
   // FIND ALL / ONE
   // ═══════════════════════════════════════════
 
-  async findAll(filters?: { party_id?: string; type?: string; payment_method?: string; status?: string; account_id?: string; user_id?: string }) {
+  async findAll(filters?: {
+    party_id?: string;
+    type?: string;
+    payment_method?: string;
+    status?: string;
+    account_id?: string;
+    user_id?: string;
+  }) {
     const where: Record<string, any> = { deleted_at: null };
     if (filters?.party_id) where.party_id = filters.party_id;
     if (filters?.type) where.type = filters.type;
@@ -587,19 +608,19 @@ export class PaymentsService {
       },
     });
 
-    const creatorIds = [...new Set(payments.map(p => p.created_by).filter(Boolean))] as string[];
+    const creatorIds = [...new Set(payments.map((p) => p.created_by).filter(Boolean))] as string[];
     let userMap: Record<string, { name: string; email: string }> = {};
     if (creatorIds.length > 0) {
       const users = await this.db.getDefaultClient().users.findMany({
         where: { id: { in: creatorIds } },
         select: { id: true, name: true, email: true },
       });
-      userMap = Object.fromEntries(users.map(u => [u.id, { name: u.name, email: u.email }]));
+      userMap = Object.fromEntries(users.map((u) => [u.id, { name: u.name, email: u.email }]));
     }
 
-    return payments.map(p => ({
+    return payments.map((p) => ({
       ...p,
-      creator: p.created_by ? userMap[p.created_by] ?? null : null,
+      creator: p.created_by ? (userMap[p.created_by] ?? null) : null,
     }));
   }
 
@@ -680,9 +701,8 @@ export class PaymentsService {
     }
 
     const effectiveMethod = dto.payment_method ?? payment.payment_method;
-    const checkCount = effectiveMethod === 'CHECK'
-      ? await this.prisma.payment_checks.count({ where: { payment_id: id } })
-      : 0;
+    const checkCount =
+      effectiveMethod === 'CHECK' ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
     this.validatePaymentInstrument(effectiveMethod, {
       cashBoxId: dto.cash_box_id ?? payment.cash_box_id,
       bankAccountId: dto.bank_account_id ?? payment.bank_account_id,
@@ -758,9 +778,9 @@ export class PaymentsService {
       where: { payment_id: paymentId, deleted_at: null },
       select: { document: { select: { commercial_operation_id: true } } },
     });
-    const operationIds = [...new Set(links
-      .map(link => link.document.commercial_operation_id)
-      .filter(Boolean))] as string[];
+    const operationIds = [
+      ...new Set(links.map((link) => link.document.commercial_operation_id).filter(Boolean)),
+    ] as string[];
     for (const operationId of operationIds) {
       await this.commercialFlow.refresh(operationId);
     }
@@ -791,7 +811,9 @@ export class PaymentsService {
             throw new BadRequestException(`La cuenta del cheque propio #${check.check_number} no está activa`);
           }
           if (bankAccount.currency_code !== check.currency_code) {
-            throw new BadRequestException(`La moneda del cheque propio #${check.check_number} no coincide con su cuenta bancaria`);
+            throw new BadRequestException(
+              `La moneda del cheque propio #${check.check_number} no coincide con su cuenta bancaria`,
+            );
           }
         } else {
           throw new BadRequestException(`El cheque propio #${check.check_number} no tiene cuenta bancaria a debitar`);
@@ -845,7 +867,9 @@ export class PaymentsService {
     });
     if (!cashBox) throw new BadRequestException('Caja no encontrada');
     if (cashBox.currency_code !== payment.currency_code) {
-      throw new BadRequestException(`La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`);
+      throw new BadRequestException(
+        `La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`,
+      );
     }
 
     const balance = await prisma.cash_box_balances.findUnique({
@@ -870,7 +894,7 @@ export class PaymentsService {
       data: {
         cash_box_id: payment.cash_box_id,
         session_id: cashBox.current_session_id,
-        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
+        type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
@@ -892,9 +916,7 @@ export class PaymentsService {
         where: { id: cashBox.current_session_id },
         data: {
           movement_count: { increment: 1 },
-          ...(isOutflow
-            ? { total_expenses: { increment: amount } }
-            : { total_income: { increment: amount } }),
+          ...(isOutflow ? { total_expenses: { increment: amount } } : { total_income: { increment: amount } }),
         },
       });
     }
@@ -936,7 +958,7 @@ export class PaymentsService {
     await prisma.bank_account_movements.create({
       data: {
         bank_account_id: payment.bank_account_id,
-        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
+        type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
         amount: payment.amount,
         currency_code: payment.currency_code,
         exchange_rate: payment.exchange_rate,
@@ -1012,7 +1034,9 @@ export class PaymentsService {
       });
       if (!cashBox) throw new BadRequestException('Caja no encontrada');
       if (cashBox.currency_code !== payment.currency_code) {
-        throw new BadRequestException(`La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`);
+        throw new BadRequestException(
+          `La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`,
+        );
       }
       const balance = await this.prisma.cash_box_balances.findUnique({
         where: {
@@ -1055,9 +1079,7 @@ export class PaymentsService {
             where: { id: cashBox.current_session_id },
             data: {
               movement_count: { increment: 1 },
-              ...(isOutflow
-                ? { total_income: { increment: amount } }
-                : { total_expenses: { increment: amount } }),
+              ...(isOutflow ? { total_income: { increment: amount } } : { total_expenses: { increment: amount } }),
             },
           });
         }
@@ -1084,7 +1106,7 @@ export class PaymentsService {
         await this.prisma.bank_account_movements.create({
           data: {
             bank_account_id: payment.bank_account_id,
-            type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
+            type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
             amount: payment.amount,
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
@@ -1139,7 +1161,7 @@ export class PaymentsService {
         if (!account) continue;
 
         await this.prisma.current_account_entries.updateMany({
-          where: { id: { in: accountEntries.map(entry => entry.id) } },
+          where: { id: { in: accountEntries.map((entry) => entry.id) } },
           data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
         });
         await this.prisma.current_accounts.update({
@@ -1455,16 +1477,17 @@ export class PaymentsService {
     }> = [];
 
     // Batch aggregate to avoid N+1 queries
-    const paymentIds = payments.map(p => p.id);
-    const aggregates = paymentIds.length > 0
-      ? await this.prisma.payment_documents.groupBy({
-          by: ['payment_id'],
-          _sum: { amount_applied: true },
-          where: { payment_id: { in: paymentIds }, deleted_at: null },
-        })
-      : [];
+    const paymentIds = payments.map((p) => p.id);
+    const aggregates =
+      paymentIds.length > 0
+        ? await this.prisma.payment_documents.groupBy({
+            by: ['payment_id'],
+            _sum: { amount_applied: true },
+            where: { payment_id: { in: paymentIds }, deleted_at: null },
+          })
+        : [];
     const appliedMap = new Map<string, number>(
-      aggregates.map(a => [a.payment_id, a._sum.amount_applied?.toNumber() ?? 0])
+      aggregates.map((a) => [a.payment_id, a._sum.amount_applied?.toNumber() ?? 0]),
     );
 
     for (const p of payments) {
