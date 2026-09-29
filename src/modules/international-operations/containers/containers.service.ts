@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateContainerDto } from './dto/create-container.dto';
 import { UpdateContainerDto } from './dto/update-container.dto';
+import { relocateTransitReservations } from '../transit-reservations';
 
 @Injectable()
 export class ContainersService {
@@ -165,84 +166,94 @@ export class ContainersService {
       throw new BadRequestException('El almacén de destino debe ser distinto al almacén de tránsito');
     }
 
-    const destination = await this.prisma.warehouses.findFirst({
-      where: { id: destinationWarehouseId, active: true, deleted_at: null },
-    });
-    if (!destination) {
-      throw new BadRequestException('El depósito de destino no existe o está inactivo');
-    }
-
-    const transitStock = await this.prisma.warehouse_stock.findMany({
-      where: {
-        warehouse_id: container.transit_warehouse_id,
-        deleted_at: null,
-        quantity: { gt: 0 },
-      },
-      select: { product_id: true, quantity: true },
-    });
-
-    if (!transitStock.length) {
-      throw new BadRequestException('No hay stock en tránsito para transferir');
-    }
-
-    const moved: { product_id: string; quantity: string }[] = [];
-    for (const row of transitStock) {
-      const qty = row.quantity;
-      await this.prisma.warehouse_stock_movements.create({
-        data: {
-          warehouse_id: container.transit_warehouse_id,
-          product_id: row.product_id,
-          movement_type: 'TRANSIT_TRANSFER',
-          direction: 'OUT',
-          quantity: qty,
-          reference_type: 'container_deliver',
-          reference_id: container.id,
-          notes: `Entrega contenedor ${container.container_number ?? ''} → ${destination.name}`,
-          created_by: userId,
-        },
+    return this.prisma.$transaction(async (tx) => {
+      const destination = await tx.warehouses.findFirst({
+        where: { id: destinationWarehouseId, active: true, deleted_at: null, is_virtual: false },
       });
-      await this.prisma.warehouse_stock.updateMany({
-        where: { warehouse_id: container.transit_warehouse_id, product_id: row.product_id },
-        data: { quantity: { decrement: qty }, updated_at: new Date() },
-      });
-      await this.prisma.warehouse_stock_movements.create({
-        data: {
-          warehouse_id: destinationWarehouseId,
-          product_id: row.product_id,
-          movement_type: 'TRANSIT_TRANSFER',
-          direction: 'IN',
-          quantity: qty,
-          reference_type: 'container_deliver',
-          reference_id: container.id,
-          notes: `Entrega contenedor ${container.container_number ?? ''} desde tránsito`,
-          created_by: userId,
-        },
-      });
-      await this.prisma.warehouse_stock.upsert({
+      if (!destination) {
+        throw new BadRequestException('El depósito real de destino no existe o está inactivo');
+      }
+
+      const transitStock = await tx.warehouse_stock.findMany({
         where: {
-          warehouse_id_product_id: {
+          warehouse_id: container.transit_warehouse_id,
+          deleted_at: null,
+          quantity: { gt: 0 },
+        },
+        select: { product_id: true, quantity: true },
+      });
+
+      if (!transitStock.length) {
+        throw new BadRequestException('No hay stock en tránsito para transferir');
+      }
+
+      const moved: { product_id: string; quantity: string }[] = [];
+      for (const row of transitStock) {
+        const qty = row.quantity;
+        await tx.warehouse_stock_movements.create({
+          data: {
+            warehouse_id: container.transit_warehouse_id,
+            product_id: row.product_id,
+            movement_type: 'TRANSIT_TRANSFER',
+            direction: 'OUT',
+            quantity: qty,
+            reference_type: 'container_deliver',
+            reference_id: container.id,
+            notes: `Entrega contenedor ${container.container_number ?? ''} → ${destination.name}`,
+            created_by: userId,
+          },
+        });
+        await tx.warehouse_stock.updateMany({
+          where: { warehouse_id: container.transit_warehouse_id, product_id: row.product_id },
+          data: { quantity: { decrement: qty }, updated_at: new Date() },
+        });
+        await tx.warehouse_stock_movements.create({
+          data: {
             warehouse_id: destinationWarehouseId,
             product_id: row.product_id,
+            movement_type: 'TRANSIT_TRANSFER',
+            direction: 'IN',
+            quantity: qty,
+            reference_type: 'container_deliver',
+            reference_id: container.id,
+            notes: `Entrega contenedor ${container.container_number ?? ''} desde tránsito`,
+            created_by: userId,
           },
-        },
-        create: { warehouse_id: destinationWarehouseId, product_id: row.product_id, quantity: qty },
-        update: { quantity: { increment: qty }, updated_at: new Date() },
+        });
+        await tx.warehouse_stock.upsert({
+          where: {
+            warehouse_id_product_id: {
+              warehouse_id: destinationWarehouseId,
+              product_id: row.product_id,
+            },
+          },
+          create: { warehouse_id: destinationWarehouseId, product_id: row.product_id, quantity: qty },
+          update: { quantity: { increment: qty }, updated_at: new Date() },
+        });
+        await relocateTransitReservations(
+          tx,
+          container.transit_warehouse_id,
+          destinationWarehouseId,
+          row.product_id,
+          qty,
+          userId,
+        );
+        moved.push({ product_id: row.product_id, quantity: qty.toString() });
+      }
+
+      await tx.international_containers.update({
+        where: { id },
+        data: { status: 'DELIVERED' },
       });
-      moved.push({ product_id: row.product_id, quantity: qty.toString() });
-    }
 
-    await this.prisma.international_containers.update({
-      where: { id },
-      data: { status: 'DELIVERED' },
+      return {
+        container_id: container.id,
+        container_number: container.container_number,
+        destination_warehouse_id: destinationWarehouseId,
+        destination_warehouse_name: destination.name,
+        moved,
+      };
     });
-
-    return {
-      container_id: container.id,
-      container_number: container.container_number,
-      destination_warehouse_id: destinationWarehouseId,
-      destination_warehouse_name: destination.name,
-      moved,
-    };
   }
 
   async remove(id: string) {

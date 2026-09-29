@@ -1,5 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { Prisma } from '@/generated/prisma/client';
+import { relocateTransitReservations } from './transit-reservations';
 
 const TRANSIT_ENTRY_REFERENCE = 'intl_invoice_transit';
 const TRANSIT_RECEIPT_REFERENCE = 'intl_remito_receipt';
@@ -169,6 +170,14 @@ export async function receiveInternationalRemitoFromTransit(
       create: { warehouse_id: destinationWarehouseId, product_id: item.product_id, quantity },
       update: { quantity: { increment: quantity }, updated_at: new Date() },
     });
+    await relocateTransitReservations(
+      tx,
+      container.transit_warehouse_id,
+      destinationWarehouseId,
+      item.product_id,
+      quantity,
+      userId,
+    );
   }
 
   const remainingProducts = await tx.warehouse_stock.count({

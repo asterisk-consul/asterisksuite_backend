@@ -36,18 +36,38 @@ export class CheckNotificationScheduler {
 
   private async notifyTenant(tenantDb: string, companyName: string) {
     const prisma = this.db.getTenantClient(tenantDb);
-    const checks = await prisma.checks.findMany({
+    const today = this.argentinaDate();
+    const upcomingChecks = await prisma.checks.findMany({
       where: {
-        is_own: true,
         status: { in: ['PENDING', 'CONFIRMED'] },
-        due_date: { gte: this.argentinaDate(), lte: this.argentinaDate(2) },
+        due_date: { gt: today, lte: this.argentinaDate(2) },
         notification_sent: false,
+        deleted_at: null,
+      },
+    });
+    for (const check of upcomingChecks) {
+      this.logger.log(
+        `[${companyName}] Aviso preventivo: cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number} vence ${check.due_date.toISOString().slice(0, 10)}`,
+      );
+      await prisma.checks.update({ where: { id: check.id }, data: { notification_sent: true } });
+    }
+
+    const overdueChecks = await prisma.checks.findMany({
+      where: {
+        status: { in: ['PENDING', 'CONFIRMED'] },
+        due_date: { lte: today },
         deleted_at: null,
       },
       include: { bank_account: { select: { balance: true, active: true, currency_code: true } } },
     });
-    if (checks.length) this.logger.log(`[${companyName}] ${checks.length} cheque(s) propio(s) próximos a vencer`);
-    for (const check of checks) {
+    if (overdueChecks.length) this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) vencidos requieren una acción`);
+    for (const check of overdueChecks) {
+      if (!check.is_own) {
+        this.logger.log(
+          `[${companyName}] Aviso operativo: cheque de tercero #${check.check_number} vencido; requiere decidir depósito, cobro por caja o entrega a proveedor`,
+        );
+        continue;
+      }
       const account = check.bank_account;
       const hasEnoughFunds = Boolean(
         account?.active &&
@@ -55,10 +75,9 @@ export class CheckNotificationScheduler {
         Number(account.balance) >= Number(check.amount),
       );
       this.logger.log(
-        `[${companyName}] Cheque #${check.check_number}: vence ${check.due_date.toISOString().slice(0, 10)}; ` +
+        `[${companyName}] Aviso operativo: cheque propio #${check.check_number} vencido; ` +
         `${hasEnoughFunds ? 'fondos suficientes' : 'requiere revisión de cuenta o fondos'}`,
       );
-      await prisma.checks.update({ where: { id: check.id }, data: { notification_sent: true } });
     }
   }
 }

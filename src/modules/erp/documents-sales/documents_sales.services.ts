@@ -23,6 +23,7 @@ import { FiscalValidationService } from '@/common/services/fiscal-validation.ser
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
+import { StockReservationsService } from './stock-reservations.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -63,6 +64,8 @@ export class DocumentsSalesService {
     private readonly productPartyPricing: ProductPartyPricingService,
 
     private readonly fiscalAuthorizations: FiscalAuthorizationsService,
+
+    private readonly stockReservations: StockReservationsService,
   ) {}
 
   private get prisma() {
@@ -1546,6 +1549,14 @@ export class DocumentsSalesService {
         },
       });
 
+      if (category === 'ORDER' && doc.document_types?.direction === 1) {
+        await this.stockReservations.reserveSalesOrder(tx, doc.id, userId);
+      }
+
+      if (category === 'REMITO' && doc.document_types?.direction === 1) {
+        await this.stockReservations.consumeForRemito(tx, doc, userId);
+      }
+
       if (category === 'REMITO' && doc.parent_document_id) {
         await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
       }
@@ -1564,6 +1575,9 @@ export class DocumentsSalesService {
 
           const warehouse = await tx.warehouses.findFirst({ where: { id: warehouseId, active: true } });
           if (!warehouse) throw new BadRequestException('El depósito seleccionado no existe o está inactivo');
+          if (direction === 'OUT' && warehouse.is_virtual) {
+            throw new BadRequestException('La mercadería reservada continúa en tránsito. Recibí el contenedor en un depósito real antes de confirmar el remito');
+          }
 
           const qty = new Prisma.Decimal(item.quantity);
           const signedQty = direction === 'IN' ? qty : qty.neg();
@@ -1805,9 +1819,13 @@ export class DocumentsSalesService {
 
       if (doc.document_types?.category === 'REMITO' && doc.parent_document_id) {
         await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
+        await this.stockReservations.restoreRemitoConsumption(tx, doc.id, userId);
       }
 
       const category = doc.document_types?.category;
+      if (category === 'ORDER' && doc.document_types?.direction === 1) {
+        await this.stockReservations.releaseOrder(tx, doc.id, userId);
+      }
       const defaultFlowSettings = ['ORDER', 'INVOICE'].includes(category)
         ? await tx.sales_flow_settings.upsert({
             where: { settings_key: 'default' },
@@ -2140,6 +2158,7 @@ export class DocumentsSalesService {
       const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
       return {
         product_id: sourceItem.product_id,
+        warehouse_id: sourceItem.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: req.quantity,
         currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
         exchange_rate: Number(sourceItem.exchange_rate ?? 1),

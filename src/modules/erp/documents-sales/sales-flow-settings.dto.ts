@@ -1,4 +1,4 @@
-import { IsBoolean, IsIn, IsNumber, Max, Min } from 'class-validator';
+import { IsBoolean, IsIn, IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class UpdateSalesFlowSettingsDto {
   @IsIn(['INVOICE', 'ORDER', 'ORDER_THEN_INVOICE'])
@@ -23,4 +23,16 @@ export class UpdateSalesFlowSettingsDto {
 
   @IsBoolean()
   allow_partial_delivery!: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  reserve_stock_on_order_confirmation?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  allow_partial_stock_reservation?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  allow_backorder_without_stock?: boolean;
 }
