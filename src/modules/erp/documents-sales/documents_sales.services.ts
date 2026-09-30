@@ -72,6 +72,27 @@ export class DocumentsSalesService {
     return this.db.getClientForCurrentContext();
   }
 
+  private deliveryBlockedMessage(operation: any) {
+    const missing: string[] = [];
+    const orderedTotal = Number(operation?.ordered_total ?? 0);
+    const paidTotal = Number(operation?.paid_total ?? 0);
+    const requiredPercentage = Number(operation?.delivery_payment_percentage ?? 0);
+    const paidPercentage = orderedTotal > 0 ? (paidTotal / orderedTotal) * 100 : 100;
+
+    if (operation?.require_payment_for_delivery && paidPercentage + 0.0001 < requiredPercentage) {
+      const current = paidPercentage.toLocaleString('es-AR', { maximumFractionDigits: 2 });
+      const required = requiredPercentage.toLocaleString('es-AR', { maximumFractionDigits: 2 });
+      missing.push(`se cobró el ${current}% y se requiere el ${required}%`);
+    }
+    if (operation?.require_invoice_for_delivery && Number(operation?.invoiced_total ?? 0) <= 0) {
+      missing.push('todavía no hay una factura asociada');
+    }
+
+    return missing.length
+      ? `No se puede crear el remito: ${missing.join(' y ')}.`
+      : 'No se puede crear el remito porque la operación todavía no está habilitada para entregar.';
+  }
+
   // ─────────────────────────────────────────────
   // RESOLVE SEQUENCE (3-tier: user override > junction table > legacy FK)
   // ─────────────────────────────────────────────
@@ -2024,7 +2045,7 @@ export class DocumentsSalesService {
     if (doc.commercial_operation_id) {
       const operation = await this.commercialFlow.refresh(doc.commercial_operation_id);
       if (operation?.delivery_status === 'PENDING') {
-        throw new BadRequestException('La operación todavía no cumple la condición configurada para remitir');
+        throw new BadRequestException(this.deliveryBlockedMessage(operation));
       }
       if (operation?.delivery_note_id) return this.findOne(operation.delivery_note_id);
     }
@@ -2120,7 +2141,7 @@ export class DocumentsSalesService {
     if (doc.commercial_operation_id) {
       const operation = await this.commercialFlow.refresh(doc.commercial_operation_id);
       if (operation?.delivery_status === 'PENDING') {
-        throw new BadRequestException('La operación todavía no cumple la condición configurada para remitir');
+        throw new BadRequestException(this.deliveryBlockedMessage(operation));
       }
       if (operation && !operation.allow_partial_delivery) {
         throw new BadRequestException('La política de esta operación no permite entregas parciales');

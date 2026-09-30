@@ -4,6 +4,14 @@ import { relocateTransitReservations } from './transit-reservations';
 
 const TRANSIT_ENTRY_REFERENCE = 'intl_invoice_transit';
 const TRANSIT_RECEIPT_REFERENCE = 'intl_remito_receipt';
+const TRANSIT_STOCK_STATUSES = new Set([
+  'SHIPPED',
+  'IN_TRANSIT',
+  'ARRIVED',
+  'CUSTOMS',
+  'RELEASED',
+  'RECEIVING',
+]);
 
 function quantitiesByProduct(items: Array<{ product_id: string | null; quantity: unknown }>) {
   const quantities = new Map<string, Prisma.Decimal>();
@@ -18,7 +26,7 @@ function quantitiesByProduct(items: Array<{ product_id: string | null; quantity:
 async function getTransitWarehouse(tx: any, containerId: string) {
   const container = await tx.international_containers.findFirst({
     where: { id: containerId, deleted_at: null },
-    select: { id: true, container_number: true, transit_warehouse_id: true },
+    select: { id: true, container_number: true, transit_warehouse_id: true, status: true },
   });
   if (!container) throw new BadRequestException('El contenedor asociado no existe');
   if (!container.transit_warehouse_id) {
@@ -53,6 +61,7 @@ export async function registerInternationalInvoiceInTransit(
       },
     }),
   ]);
+  if (!TRANSIT_STOCK_STATUSES.has(container.status)) return false;
   if (!document) throw new BadRequestException('La factura asociada no existe');
   if (document.document_types?.category !== 'INVOICE' || document.document_types?.direction !== -1) return false;
 
