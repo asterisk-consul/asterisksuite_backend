@@ -5,6 +5,8 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { recalculateCurrentAccountLedger } from './current-account-ledger';
 
+const STATUS_CANCELLED = 3;
+
 @Injectable()
 export class CurrentAccountsService {
   constructor(
@@ -149,6 +151,57 @@ export class CurrentAccountsService {
     });
   }
 
+  async removeDocumentEffects(documentId: string, userId: string, tx?: any) {
+    const prisma = tx ?? this.prisma;
+    const entries = await prisma.current_account_entries.findMany({
+      where: {
+        reference_id: documentId,
+        reference_type: {
+          in: [
+            'document',
+            'document_reversal',
+            'order_invoice_replacement',
+            'order_invoice_replacement_reversal',
+          ],
+        },
+        deleted_at: null,
+      },
+      orderBy: { created_at: 'asc' },
+    });
+
+    const entriesByAccount = new Map<string, typeof entries>();
+    for (const entry of entries) {
+      const accountEntries = entriesByAccount.get(entry.current_account_id) ?? [];
+      accountEntries.push(entry);
+      entriesByAccount.set(entry.current_account_id, accountEntries);
+    }
+
+    for (const [accountId, accountEntries] of entriesByAccount) {
+      const removedDelta = accountEntries.reduce(
+        (sum, entry) => sum + Number(entry.balance_after) - Number(entry.balance_before),
+        0,
+      );
+      const account = await prisma.current_accounts.findUnique({
+        where: { id: accountId },
+        select: { balance: true },
+      });
+      if (!account) continue;
+
+      const now = new Date();
+      await prisma.current_account_entries.updateMany({
+        where: { id: { in: accountEntries.map(entry => entry.id) } },
+        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+      });
+      await prisma.current_accounts.update({
+        where: { id: accountId },
+        data: { balance: Number(account.balance) - removedDelta, updated_at: now, updated_by: userId },
+      });
+      await recalculateCurrentAccountLedger(prisma, accountId);
+    }
+
+    return entries.length;
+  }
+
   async findByParty(partyId: string) {
     // Return single account per party (always base currency)
     return this.prisma.current_accounts.findMany({
@@ -175,7 +228,8 @@ export class CurrentAccountsService {
       orderBy: [{ date: 'desc' }, { created_at: 'desc' }, { id: 'desc' }],
     });
 
-    const userIds = [...new Set(entries.map((e) => e.created_by).filter(Boolean))] as string[];
+    const visibleEntries = await this.excludeCancelledDocumentEntries(entries);
+    const userIds = [...new Set(visibleEntries.map((e) => e.created_by).filter(Boolean))] as string[];
     const users =
       userIds.length > 0
         ? await this.db.getDefaultClient().users.findMany({
@@ -185,7 +239,7 @@ export class CurrentAccountsService {
         : [];
     const userMap = new Map(users.map((u) => [u.id, u.name]));
 
-    const entriesWithUser = entries.map((e) => ({
+    const entriesWithUser = visibleEntries.map((e) => ({
       ...e,
       user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
     }));
@@ -210,7 +264,8 @@ export class CurrentAccountsService {
 
     if (!account) throw new NotFoundException('Cuenta corriente no encontrada');
 
-    const userIds = [...new Set(account.entries.map((e) => e.created_by).filter(Boolean))] as string[];
+    const visibleEntries = await this.excludeCancelledDocumentEntries(account.entries);
+    const userIds = [...new Set(visibleEntries.map((e) => e.created_by).filter(Boolean))] as string[];
     const users =
       userIds.length > 0
         ? await this.db.getDefaultClient().users.findMany({
@@ -220,7 +275,7 @@ export class CurrentAccountsService {
         : [];
     const userMap = new Map(users.map((u) => [u.id, u.name]));
 
-    const entriesWithUser = account.entries.map((e) => ({
+    const entriesWithUser = visibleEntries.map((e) => ({
       ...e,
       user_name: e.created_by ? (userMap.get(e.created_by) ?? null) : null,
     }));
@@ -312,6 +367,30 @@ export class CurrentAccountsService {
       return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION', 'WITHHOLDING'].includes(type);
     }
     return ['CREDIT_NOTE', 'PAYMENT', 'ADVANCE', 'WITHHOLDING'].includes(type);
+  }
+
+  private async excludeCancelledDocumentEntries<T extends {
+    reference_type: string | null;
+    reference_id: string | null;
+    created_by: string | null;
+  }>(entries: T[]): Promise<T[]> {
+    const documentReferenceTypes = new Set([
+      'document',
+      'document_reversal',
+      'order_invoice_replacement',
+      'order_invoice_replacement_reversal',
+    ]);
+    const documentIds = [...new Set(entries
+      .filter(entry => entry.reference_id && documentReferenceTypes.has(entry.reference_type ?? ''))
+      .map(entry => entry.reference_id!))];
+    if (documentIds.length === 0) return entries;
+
+    const cancelledDocuments = await this.prisma.documents.findMany({
+      where: { id: { in: documentIds }, status: STATUS_CANCELLED },
+      select: { id: true },
+    });
+    const cancelledIds = new Set(cancelledDocuments.map(document => document.id));
+    return entries.filter(entry => !entry.reference_id || !cancelledIds.has(entry.reference_id));
   }
 
   // ─── Document chain builder ────────────────────────────────

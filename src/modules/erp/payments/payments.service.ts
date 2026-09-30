@@ -736,24 +736,13 @@ export class PaymentsService {
       throw new BadRequestException('No se puede eliminar un pago confirmado o pagado. Anúlelo primero.');
     }
 
-    // Remove linked payment_documents
-    await this.prisma.payment_documents.deleteMany({
-      where: { payment_id: id },
-    });
-
-    // Remove linked withholdings + allocations
-    await this.prisma.withholding_allocations.deleteMany({
-      where: { withholding: { payment_id: id } },
-    });
-    await this.prisma.withholdings.deleteMany({
-      where: { payment_id: id },
-    });
-
     return this.prisma.payments.update({
       where: { id },
       data: {
         deleted_at: new Date(),
         deleted_by: userId,
+        updated_at: new Date(),
+        updated_by: userId,
       },
     });
   }

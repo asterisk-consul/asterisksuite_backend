@@ -989,6 +989,8 @@ export class DocumentsSalesService {
   ) {
     return this.prisma.documents.findMany({
       where: {
+        deleted_at: null,
+
         document_types: {
           direction: direction ?? 1,
 
@@ -1125,8 +1127,8 @@ export class DocumentsSalesService {
       throw new BadRequestException('ID inválido');
     }
 
-    const doc = await this.prisma.documents.findUnique({
-      where: { id },
+    const doc = await this.prisma.documents.findFirst({
+      where: { id, deleted_at: null },
 
       include: {
         document_types: true,
@@ -1783,22 +1785,26 @@ export class DocumentsSalesService {
       const doc = await this.findOne(id);
 
       if (doc.status === STATUS_CANCELLED) {
-        throw new BadRequestException('El documento ya está anulado');
+        await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
+        return tx.documents.findUnique({ where: { id } });
       }
 
       // Validar que no existan pagos activos asociados al documento
       const associatedPayments = await tx.payment_documents.findMany({
-        where: { document_id: id },
-        include: { payments: true },
+        where: { document_id: id, payment: { deleted_at: null } },
+        include: { payment: true },
       });
 
       const activePayments = associatedPayments.filter(
-        ap => ap.payments.status === 'CONFIRMED' || ap.payments.status === 'PAID'
+        ap => !['CANCELLED', 'REVERSED'].includes(ap.payment.status)
       );
 
       if (activePayments.length > 0) {
+        const paymentList = activePayments
+          .map(({ payment }) => `#${payment.number} (${payment.status})`)
+          .join(', ');
         throw new BadRequestException(
-          'No se puede anular el documento porque tiene pagos asociados. Primero anule los pagos.'
+          `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`
         );
       }
 
@@ -1863,52 +1869,7 @@ export class DocumentsSalesService {
         : doc.document_types?.affects_accounting;
 
       if (doc.party_id && affectsAccounting) {
-        const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
-        const docTotal = doc.total.toNumber();
-
-        // La reversión siempre es CREDIT_NOTE para ventas
-        const docTypeName = doc.document_types?.description ?? 'Documento';
-        const docRef = doc.descrip;
-        const baseDesc = docRef
-          ? `${docTypeName} #${doc.number} - ${docRef}`
-          : `${docTypeName} #${doc.number}`;
-        const description = `Anulación ${baseDesc}`;
-
-        await this.currentAccountsService.addEntry(
-          {
-            party_id: doc.party_id,
-            party_type: partyType,
-            currency_code: doc.currency_code,
-            type: 'CREDIT_NOTE',
-            amount: docTotal,
-            exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
-            rate_type: doc.rate_type ?? undefined,
-            description,
-            reference_type: 'document_reversal',
-            reference_id: doc.id,
-          },
-          userId,
-        );
-
-        // Al anular una factura del modo combinado también se revierte el asiento
-        // que había reemplazado la deuda provisoria de la OV.
-        if (category === 'INVOICE' && operationBasis === 'ORDER_THEN_INVOICE') {
-          await this.currentAccountsService.addEntry(
-            {
-              party_id: doc.party_id,
-              party_type: partyType,
-              currency_code: doc.currency_code,
-              type: 'DEBIT_NOTE',
-              amount: docTotal,
-              exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
-              rate_type: doc.rate_type ?? undefined,
-              description: `Restitución de deuda provisoria por anulación ${baseDesc}`,
-              reference_type: 'order_invoice_replacement_reversal',
-              reference_id: doc.id,
-            },
-            userId,
-          );
-        }
+        await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
       }
 
       return tx.documents.findUnique({ where: { id } });
@@ -1918,37 +1879,15 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // REMOVE
   // ─────────────────────────────────────────────
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     const doc = await this.findOne(id);
 
-    if (doc.status !== STATUS_DRAFT) {
-      throw new BadRequestException('Solo se pueden eliminar borradores');
+    if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
+      throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados');
     }
-
-    return this.prisma.$transaction(async (tx) => {
-      await tx.document_item_taxes.deleteMany({
-        where: {
-          document_items: {
-            document_id: id,
-          },
-        },
-      });
-
-      await tx.document_taxes.deleteMany({
-        where: {
-          document_id: id,
-        },
-      });
-
-      await tx.document_items.deleteMany({
-        where: {
-          document_id: id,
-        },
-      });
-
-      return tx.documents.delete({
-        where: { id },
-      });
+    return this.prisma.documents.update({
+      where: { id },
+      data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
     });
   }
 

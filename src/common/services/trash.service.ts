@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class TrashService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private readonly domainProtectedModels = new Set(['documents', 'payments']);
 
   // 🔥 1. TODA LA PAPELERA (multi-tabla)
   async findAllTrash(days?: number, table?: string) {
@@ -57,6 +59,9 @@ export class TrashService {
 
   // 🗑️ soft delete
   softDelete(model: string, id: string, userId: string) {
+    if (this.domainProtectedModels.has(model)) {
+      throw new BadRequestException('El registro debe enviarse a la papelera desde su módulo para validar sus efectos');
+    }
     return this.prisma.getClientForCurrentContext()[model].update({
       where: { id },
       data: {
@@ -79,6 +84,9 @@ export class TrashService {
 
   // 🗑️ soft delete BULK
   softDeleteMany(model: string, ids: string[], userId: string) {
+    if (this.domainProtectedModels.has(model)) {
+      throw new BadRequestException('Los documentos y pagos deben enviarse a la papelera desde su módulo');
+    }
     return this.prisma.getClientForCurrentContext()[model].updateMany({
       where: { id: { in: ids } },
       data: {
@@ -101,6 +109,9 @@ export class TrashService {
 
   // 💀 hard delete BULK (elimina físicamente)
   hardDeleteMany(model: string, ids: string[]) {
+    if (this.domainProtectedModels.has(model)) {
+      throw new BadRequestException('Los documentos y pagos conservan trazabilidad y no admiten eliminación definitiva');
+    }
     return this.prisma.getClientForCurrentContext()[model].deleteMany({
       where: { id: { in: ids } },
     });
@@ -154,6 +165,7 @@ export class TrashService {
       'units',
       'currency_rates',
       'currencies',
+      'payments',
     ];
   }
 }
