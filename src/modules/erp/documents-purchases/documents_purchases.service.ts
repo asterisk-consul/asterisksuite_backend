@@ -221,11 +221,33 @@ export class DocumentsPurchasesService {
       }
     }
 
+    // Congelar la conversión usada por cada renglón. La cantidad y el precio
+    // del comprobante permanecen en unidad de compra; stock y costo se
+    // normalizan a la unidad base del producto.
+    const productIds = [...new Set((dto.items ?? []).map(item => item.product_id).filter(Boolean))] as string[]
+    const purchaseProducts = productIds.length ? await this.prisma.products.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true, purchase_unit_id: true, purchase_to_stock_factor: true },
+    }) : []
+    const purchaseProductMap = new Map<string, {
+      id: string
+      purchase_unit_id: string | null
+      purchase_to_stock_factor: Prisma.Decimal
+    }>(purchaseProducts.map(product => [product.id, product]))
+
     // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
     const items: ItemInput[] = calculation.document.items.map((item, idx) => ({
       product_id: item.productId ?? null,
       warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? null,
       quantity: item.quantity,
+      purchase_unit_id: dto.items?.[idx]?.purchase_unit_id
+        ?? (item.productId ? purchaseProductMap.get(item.productId)?.purchase_unit_id : null),
+      unit_conversion_factor: Number(dto.items?.[idx]?.unit_conversion_factor
+        ?? (item.productId ? purchaseProductMap.get(item.productId)?.purchase_to_stock_factor : 1)
+        ?? 1),
+      stock_quantity: item.quantity * Number(dto.items?.[idx]?.unit_conversion_factor
+        ?? (item.productId ? purchaseProductMap.get(item.productId)?.purchase_to_stock_factor : 1)
+        ?? 1),
       currency: currencyCode,
       exchange_rate: exchangeRate,
       original_unit_price: item.unitPrice,
@@ -465,11 +487,29 @@ export class DocumentsPurchasesService {
 
       const resolution = await this.taxResolution.resolve(taxContext);
       const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+      const updateProductIds = [...new Set(dto.items.map(item => item.product_id).filter(Boolean))] as string[]
+      const updateProducts = updateProductIds.length ? await this.prisma.products.findMany({
+        where: { id: { in: updateProductIds } },
+        select: { id: true, purchase_unit_id: true, purchase_to_stock_factor: true },
+      }) : []
+      const updateProductMap = new Map<string, {
+        id: string
+        purchase_unit_id: string | null
+        purchase_to_stock_factor: Prisma.Decimal
+      }>(updateProducts.map(product => [product.id, product]))
 
       items = calculation.document.items.map((item, idx) => ({
         product_id: item.productId ?? null,
         warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: item.quantity,
+        purchase_unit_id: dto.items?.[idx]?.purchase_unit_id
+          ?? (item.productId ? updateProductMap.get(item.productId)?.purchase_unit_id : null),
+        unit_conversion_factor: Number(dto.items?.[idx]?.unit_conversion_factor
+          ?? (item.productId ? updateProductMap.get(item.productId)?.purchase_to_stock_factor : 1)
+          ?? 1),
+        stock_quantity: item.quantity * Number(dto.items?.[idx]?.unit_conversion_factor
+          ?? (item.productId ? updateProductMap.get(item.productId)?.purchase_to_stock_factor : 1)
+          ?? 1),
         currency: updateCurrencyCode,
         exchange_rate: updateExchangeRate,
         original_unit_price: item.unitPrice,
@@ -655,6 +695,12 @@ export class DocumentsPurchasesService {
           variant_id: item.variant_id ?? null,
 
           quantity: item.quantity,
+
+          purchase_unit_id: item.purchase_unit_id ?? null,
+
+          unit_conversion_factor: item.unit_conversion_factor ?? 1,
+
+          stock_quantity: item.stock_quantity ?? item.quantity,
 
           unit_price: item.unit_price,
 
@@ -1246,7 +1292,7 @@ export class DocumentsPurchasesService {
           const warehouse = await tx.warehouses.findFirst({ where: { id: warehouseId, active: true } });
           if (!warehouse) throw new BadRequestException('El depósito seleccionado no existe o está inactivo');
 
-          const qty = new Prisma.Decimal(item.quantity);
+          const qty = new Prisma.Decimal(item.stock_quantity ?? item.quantity);
           await tx.warehouse_stock_movements.create({
             data: {
               warehouse_id: warehouseId,
@@ -1364,7 +1410,8 @@ export class DocumentsPurchasesService {
         continue;
       }
 
-      const itemPrice = Number(item.unit_price);
+      const conversionFactor = Math.max(Number(item.unit_conversion_factor ?? 1), 0.000001);
+      const itemPrice = Number(item.unit_price) / conversionFactor;
       console.log('[syncProductPrices] itemPrice:', itemPrice);
 
       if (product.product_type === 'FINISHED_PRODUCT' || product.product_type === 'SERVICE') {

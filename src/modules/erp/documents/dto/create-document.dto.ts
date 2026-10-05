@@ -25,6 +25,17 @@ export class CreateDocumentItemDto {
   @Min(0)
   quantity!: number;
 
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
+  purchase_unit_id?: string;
+
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.000001)
+  @IsOptional()
+  unit_conversion_factor?: number;
+
   @IsNumber()
   @Min(0)
   unit_price!: number;

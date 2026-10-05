@@ -56,6 +56,8 @@ model products {
   last_cost_calculated_at  DateTime?
   cost_template_id         String?           @db.Uuid
   unit_id                  String?           @db.Uuid
+    purchase_unit_id         String?           @db.Uuid
+    purchase_to_stock_factor Decimal           @default(1) @db.Decimal(18, 6)
 
   // RELACIONES 
   product_variants            product_variants[]

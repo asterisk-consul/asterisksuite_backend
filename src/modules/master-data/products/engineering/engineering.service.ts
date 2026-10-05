@@ -134,6 +134,7 @@ export class EngineeringService {
 
     const tree = await this.engineeringTreeService.buildTree(productId);
 
-    return this.engineeringCalculationService.calculateTree(tree);
+    const mode = product.cost_source === 'BOM' ? 'BOM' : 'ENGINEERING';
+    return this.engineeringCalculationService.calculateTree(tree, mode);
   }
 }

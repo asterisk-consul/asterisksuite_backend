@@ -28,6 +28,8 @@ export type AggregateDocument_items = {
 
 export type Document_itemsAvgAggregateOutputType = {
   quantity: runtime.Decimal | null
+  unit_conversion_factor: runtime.Decimal | null
+  stock_quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
   discount_percentage: runtime.Decimal | null
@@ -41,6 +43,8 @@ export type Document_itemsAvgAggregateOutputType = {
 
 export type Document_itemsSumAggregateOutputType = {
   quantity: runtime.Decimal | null
+  unit_conversion_factor: runtime.Decimal | null
+  stock_quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
   discount_percentage: runtime.Decimal | null
@@ -59,6 +63,9 @@ export type Document_itemsMinAggregateOutputType = {
   variant_id: string | null
   warehouse_id: string | null
   quantity: runtime.Decimal | null
+  purchase_unit_id: string | null
+  unit_conversion_factor: runtime.Decimal | null
+  stock_quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
   discount_percentage: runtime.Decimal | null
@@ -85,6 +92,9 @@ export type Document_itemsMaxAggregateOutputType = {
   variant_id: string | null
   warehouse_id: string | null
   quantity: runtime.Decimal | null
+  purchase_unit_id: string | null
+  unit_conversion_factor: runtime.Decimal | null
+  stock_quantity: runtime.Decimal | null
   price: runtime.Decimal | null
   unit_price: runtime.Decimal | null
   discount_percentage: runtime.Decimal | null
@@ -111,6 +121,9 @@ export type Document_itemsCountAggregateOutputType = {
   variant_id: number
   warehouse_id: number
   quantity: number
+  purchase_unit_id: number
+  unit_conversion_factor: number
+  stock_quantity: number
   price: number
   unit_price: number
   discount_percentage: number
@@ -134,6 +147,8 @@ export type Document_itemsCountAggregateOutputType = {
 
 export type Document_itemsAvgAggregateInputType = {
   quantity?: true
+  unit_conversion_factor?: true
+  stock_quantity?: true
   price?: true
   unit_price?: true
   discount_percentage?: true
@@ -147,6 +162,8 @@ export type Document_itemsAvgAggregateInputType = {
 
 export type Document_itemsSumAggregateInputType = {
   quantity?: true
+  unit_conversion_factor?: true
+  stock_quantity?: true
   price?: true
   unit_price?: true
   discount_percentage?: true
@@ -165,6 +182,9 @@ export type Document_itemsMinAggregateInputType = {
   variant_id?: true
   warehouse_id?: true
   quantity?: true
+  purchase_unit_id?: true
+  unit_conversion_factor?: true
+  stock_quantity?: true
   price?: true
   unit_price?: true
   discount_percentage?: true
@@ -191,6 +211,9 @@ export type Document_itemsMaxAggregateInputType = {
   variant_id?: true
   warehouse_id?: true
   quantity?: true
+  purchase_unit_id?: true
+  unit_conversion_factor?: true
+  stock_quantity?: true
   price?: true
   unit_price?: true
   discount_percentage?: true
@@ -217,6 +240,9 @@ export type Document_itemsCountAggregateInputType = {
   variant_id?: true
   warehouse_id?: true
   quantity?: true
+  purchase_unit_id?: true
+  unit_conversion_factor?: true
+  stock_quantity?: true
   price?: true
   unit_price?: true
   discount_percentage?: true
@@ -330,6 +356,9 @@ export type Document_itemsGroupByOutputType = {
   variant_id: string | null
   warehouse_id: string | null
   quantity: runtime.Decimal
+  purchase_unit_id: string | null
+  unit_conversion_factor: runtime.Decimal
+  stock_quantity: runtime.Decimal | null
   price: runtime.Decimal
   unit_price: runtime.Decimal
   discount_percentage: runtime.Decimal
@@ -379,6 +408,9 @@ export type document_itemsWhereInput = {
   variant_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   warehouse_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  unit_conversion_factor?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -410,6 +442,9 @@ export type document_itemsOrderByWithRelationInput = {
   variant_id?: Prisma.SortOrderInput | Prisma.SortOrder
   warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -444,6 +479,9 @@ export type document_itemsWhereUniqueInput = Prisma.AtLeast<{
   variant_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   warehouse_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  unit_conversion_factor?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -475,6 +513,9 @@ export type document_itemsOrderByWithAggregationInput = {
   variant_id?: Prisma.SortOrderInput | Prisma.SortOrder
   warehouse_id?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -509,6 +550,9 @@ export type document_itemsScalarWhereWithAggregatesInput = {
   variant_id?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
   warehouse_id?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.UuidNullableWithAggregatesFilter<"document_items"> | string | null
+  unit_conversion_factor?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.DecimalNullableWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalWithAggregatesFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -531,6 +575,9 @@ export type document_itemsScalarWhereWithAggregatesInput = {
 export type document_itemsCreateInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -562,6 +609,9 @@ export type document_itemsUncheckedCreateInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -585,6 +635,9 @@ export type document_itemsUncheckedCreateInput = {
 export type document_itemsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -616,6 +669,9 @@ export type document_itemsUncheckedUpdateInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -643,6 +699,9 @@ export type document_itemsCreateManyInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -665,6 +724,9 @@ export type document_itemsCreateManyInput = {
 export type document_itemsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -691,6 +753,9 @@ export type document_itemsUncheckedUpdateManyInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -722,6 +787,9 @@ export type document_itemsCountOrderByAggregateInput = {
   variant_id?: Prisma.SortOrder
   warehouse_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -743,6 +811,8 @@ export type document_itemsCountOrderByAggregateInput = {
 
 export type document_itemsAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -761,6 +831,9 @@ export type document_itemsMaxOrderByAggregateInput = {
   variant_id?: Prisma.SortOrder
   warehouse_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -787,6 +860,9 @@ export type document_itemsMinOrderByAggregateInput = {
   variant_id?: Prisma.SortOrder
   warehouse_id?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -808,6 +884,8 @@ export type document_itemsMinOrderByAggregateInput = {
 
 export type document_itemsSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
+  unit_conversion_factor?: Prisma.SortOrder
+  stock_quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit_price?: Prisma.SortOrder
   discount_percentage?: Prisma.SortOrder
@@ -1018,6 +1096,9 @@ export type document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput = {
 export type document_itemsCreateWithoutDocument_item_taxesInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1048,6 +1129,9 @@ export type document_itemsUncheckedCreateWithoutDocument_item_taxesInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1086,6 +1170,9 @@ export type document_itemsUpdateToOneWithWhereWithoutDocument_item_taxesInput = 
 export type document_itemsUpdateWithoutDocument_item_taxesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1116,6 +1203,9 @@ export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1138,6 +1228,9 @@ export type document_itemsUncheckedUpdateWithoutDocument_item_taxesInput = {
 export type document_itemsCreateWithoutDocumentsInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1167,6 +1260,9 @@ export type document_itemsUncheckedCreateWithoutDocumentsInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1223,6 +1319,9 @@ export type document_itemsScalarWhereInput = {
   variant_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   warehouse_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
   quantity?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.UuidNullableFilter<"document_items"> | string | null
+  unit_conversion_factor?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.DecimalNullableFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFilter<"document_items"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1245,6 +1344,9 @@ export type document_itemsScalarWhereInput = {
 export type document_itemsCreateWithoutProductsInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1274,6 +1376,9 @@ export type document_itemsUncheckedCreateWithoutProductsInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1323,6 +1428,9 @@ export type document_itemsUpdateManyWithWhereWithoutProductsInput = {
 export type document_itemsCreateWithoutProduct_variantsInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1352,6 +1460,9 @@ export type document_itemsUncheckedCreateWithoutProduct_variantsInput = {
   product_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1401,6 +1512,9 @@ export type document_itemsUpdateManyWithWhereWithoutProduct_variantsInput = {
 export type document_itemsCreateWithoutWarehouseInput = {
   id?: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1430,6 +1544,9 @@ export type document_itemsUncheckedCreateWithoutWarehouseInput = {
   product_id?: string | null
   variant_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1482,6 +1599,9 @@ export type document_itemsCreateManyDocumentsInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1504,6 +1624,9 @@ export type document_itemsCreateManyDocumentsInput = {
 export type document_itemsUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1533,6 +1656,9 @@ export type document_itemsUncheckedUpdateWithoutDocumentsInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1559,6 +1685,9 @@ export type document_itemsUncheckedUpdateManyWithoutDocumentsInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1584,6 +1713,9 @@ export type document_itemsCreateManyProductsInput = {
   variant_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1606,6 +1738,9 @@ export type document_itemsCreateManyProductsInput = {
 export type document_itemsUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1635,6 +1770,9 @@ export type document_itemsUncheckedUpdateWithoutProductsInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1661,6 +1799,9 @@ export type document_itemsUncheckedUpdateManyWithoutProductsInput = {
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1686,6 +1827,9 @@ export type document_itemsCreateManyProduct_variantsInput = {
   product_id?: string | null
   warehouse_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1708,6 +1852,9 @@ export type document_itemsCreateManyProduct_variantsInput = {
 export type document_itemsUpdateWithoutProduct_variantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1737,6 +1884,9 @@ export type document_itemsUncheckedUpdateWithoutProduct_variantsInput = {
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1763,6 +1913,9 @@ export type document_itemsUncheckedUpdateManyWithoutProduct_variantsInput = {
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1788,6 +1941,9 @@ export type document_itemsCreateManyWarehouseInput = {
   product_id?: string | null
   variant_id?: string | null
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: string | null
+  unit_conversion_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1810,6 +1966,9 @@ export type document_itemsCreateManyWarehouseInput = {
 export type document_itemsUpdateWithoutWarehouseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1839,6 +1998,9 @@ export type document_itemsUncheckedUpdateWithoutWarehouseInput = {
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1865,6 +2027,9 @@ export type document_itemsUncheckedUpdateManyWithoutWarehouseInput = {
   product_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variant_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_conversion_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stock_quantity?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   unit_price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   discount_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1922,6 +2087,9 @@ export type document_itemsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   variant_id?: boolean
   warehouse_id?: boolean
   quantity?: boolean
+  purchase_unit_id?: boolean
+  unit_conversion_factor?: boolean
+  stock_quantity?: boolean
   price?: boolean
   unit_price?: boolean
   discount_percentage?: boolean
@@ -1954,6 +2122,9 @@ export type document_itemsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   variant_id?: boolean
   warehouse_id?: boolean
   quantity?: boolean
+  purchase_unit_id?: boolean
+  unit_conversion_factor?: boolean
+  stock_quantity?: boolean
   price?: boolean
   unit_price?: boolean
   discount_percentage?: boolean
@@ -1984,6 +2155,9 @@ export type document_itemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   variant_id?: boolean
   warehouse_id?: boolean
   quantity?: boolean
+  purchase_unit_id?: boolean
+  unit_conversion_factor?: boolean
+  stock_quantity?: boolean
   price?: boolean
   unit_price?: boolean
   discount_percentage?: boolean
@@ -2014,6 +2188,9 @@ export type document_itemsSelectScalar = {
   variant_id?: boolean
   warehouse_id?: boolean
   quantity?: boolean
+  purchase_unit_id?: boolean
+  unit_conversion_factor?: boolean
+  stock_quantity?: boolean
   price?: boolean
   unit_price?: boolean
   discount_percentage?: boolean
@@ -2033,7 +2210,7 @@ export type document_itemsSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "variant_id" | "warehouse_id" | "quantity" | "price" | "unit_price" | "discount_percentage" | "exchange_rate" | "currency_code" | "rate_type" | "original_unit_price" | "converted_unit_price" | "converted_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
+export type document_itemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_id" | "product_id" | "variant_id" | "warehouse_id" | "quantity" | "purchase_unit_id" | "unit_conversion_factor" | "stock_quantity" | "price" | "unit_price" | "discount_percentage" | "exchange_rate" | "currency_code" | "rate_type" | "original_unit_price" | "converted_unit_price" | "converted_price" | "quantity_delivered" | "quantity_invoiced" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_items"]>
 export type document_itemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_item_taxes?: boolean | Prisma.document_items$document_item_taxesArgs<ExtArgs>
   documents?: boolean | Prisma.documentsDefaultArgs<ExtArgs>
@@ -2071,6 +2248,9 @@ export type $document_itemsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     variant_id: string | null
     warehouse_id: string | null
     quantity: runtime.Decimal
+    purchase_unit_id: string | null
+    unit_conversion_factor: runtime.Decimal
+    stock_quantity: runtime.Decimal | null
     price: runtime.Decimal
     unit_price: runtime.Decimal
     discount_percentage: runtime.Decimal
@@ -2522,6 +2702,9 @@ export interface document_itemsFieldRefs {
   readonly variant_id: Prisma.FieldRef<"document_items", 'String'>
   readonly warehouse_id: Prisma.FieldRef<"document_items", 'String'>
   readonly quantity: Prisma.FieldRef<"document_items", 'Decimal'>
+  readonly purchase_unit_id: Prisma.FieldRef<"document_items", 'String'>
+  readonly unit_conversion_factor: Prisma.FieldRef<"document_items", 'Decimal'>
+  readonly stock_quantity: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly price: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly unit_price: Prisma.FieldRef<"document_items", 'Decimal'>
   readonly discount_percentage: Prisma.FieldRef<"document_items", 'Decimal'>

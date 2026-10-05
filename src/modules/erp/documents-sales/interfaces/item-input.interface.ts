@@ -21,6 +21,12 @@ export interface ItemInput {
 
   quantity: number;
 
+  purchase_unit_id?: string | null;
+
+  unit_conversion_factor?: number;
+
+  stock_quantity?: number;
+
   currency: string;
 
   exchange_rate: number;
