@@ -81,6 +81,7 @@ model products {
   tax_category                tax_categories?               @relation(fields: [tax_category_id], references: [id])
   transfer_rate               transfer_rates?               @relation(fields: [rate_id], references: [id])
   warehouse_stock             warehouse_stock[]
+  stock_reservations          stock_reservations[]
   warehouse_stock_movements   warehouse_stock_movements[]
   product_costs               product_costs[]
   productCostBreakdowns       product_cost_breakdowns[]

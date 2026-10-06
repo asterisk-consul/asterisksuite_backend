@@ -770,17 +770,37 @@ ON CONFLICT DO NOTHING;
 // ════════════════════════════════════════════════════════════════
 
 export const SQL_DOCUMENT_SEQUENCES = `
-INSERT INTO document_sequences (id, name, automatic, point_of_sale, current_number, prefix, active)
-VALUES
-  (gen_random_uuid(), 'Ventas A', true, '0001', 0, 'A', true),
-  (gen_random_uuid(), 'Ventas B', true, '0001', 0, 'B', true),
-  (gen_random_uuid(), 'Ventas C', true, '0001', 0, 'C', true),
-  (gen_random_uuid(), 'Compras A', true, '0002', 0, 'A', true),
-  (gen_random_uuid(), 'Compras B', true, '0002', 0, 'B', true),
-  (gen_random_uuid(), 'Compras C', true, '0002', 0, 'C', true),
-  (gen_random_uuid(), 'Operaciones Internacionales', true, '0003', 0, 'IMP', true),
-  (gen_random_uuid(), 'MAINTENANCE_ORDER', true, '0000', 0, 'MO', true)
-ON CONFLICT DO NOTHING;
+INSERT INTO document_sequences (
+  id, name, automatic, range_start, range_end, point_of_sale, current_number, prefix, active
+)
+SELECT gen_random_uuid(), seed.name, true, 0, 9999999, seed.point_of_sale, 0, seed.prefix, true
+FROM (VALUES
+  ('Ventas A', '0001', 'A'),
+  ('Ventas B', '0001', 'B'),
+  ('Ventas C', '0001', 'C'),
+  ('Compras A', '0002', 'A'),
+  ('Compras B', '0002', 'B'),
+  ('Compras C', '0002', 'C'),
+  ('Operaciones Internacionales', '0003', 'IMP'),
+  ('MAINTENANCE_ORDER', '0000', 'MO')
+) AS seed(name, point_of_sale, prefix)
+WHERE NOT EXISTS (
+  SELECT 1 FROM document_sequences existing
+  WHERE existing.name = seed.name
+    AND existing.point_of_sale = seed.point_of_sale
+    AND existing.prefix IS NOT DISTINCT FROM seed.prefix
+    AND existing.deleted_at IS NULL
+);
+
+UPDATE document_sequences
+SET range_start = COALESCE(range_start, 0),
+    range_end = COALESCE(range_end, 9999999)
+WHERE name IN (
+  'Ventas A', 'Ventas B', 'Ventas C',
+  'Compras A', 'Compras B', 'Compras C',
+  'Operaciones Internacionales', 'MAINTENANCE_ORDER'
+)
+  AND deleted_at IS NULL;
 `
 
 // ════════════════════════════════════════════════════════════════
@@ -813,6 +833,13 @@ UPDATE document_types SET document_sequence_id = (
 UPDATE document_types SET document_sequence_id = (
   SELECT id FROM document_sequences WHERE name = 'Compras C' AND point_of_sale = '0002' LIMIT 1
 ) WHERE code IN ('FC-C', 'NCC-C', 'NDC-C');
+
+INSERT INTO document_type_sequences (id, document_type_id, sequence_id, is_default, created_at)
+SELECT gen_random_uuid(), doc_type.id, doc_type.document_sequence_id, true, CURRENT_TIMESTAMP
+FROM document_types doc_type
+WHERE doc_type.document_sequence_id IS NOT NULL
+  AND doc_type.deleted_at IS NULL
+ON CONFLICT (document_type_id, sequence_id) DO UPDATE SET is_default = true;
 `
 
 // ════════════════════════════════════════════════════════════════

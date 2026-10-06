@@ -23,6 +23,7 @@ import { FiscalValidationService } from '@/common/services/fiscal-validation.ser
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
+import { StockReservationsService } from './stock-reservations.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -63,10 +64,33 @@ export class DocumentsSalesService {
     private readonly productPartyPricing: ProductPartyPricingService,
 
     private readonly fiscalAuthorizations: FiscalAuthorizationsService,
+
+    private readonly stockReservations: StockReservationsService,
   ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  private deliveryBlockedMessage(operation: any) {
+    const missing: string[] = [];
+    const orderedTotal = Number(operation?.ordered_total ?? 0);
+    const paidTotal = Number(operation?.paid_total ?? 0);
+    const requiredPercentage = Number(operation?.delivery_payment_percentage ?? 0);
+    const paidPercentage = orderedTotal > 0 ? (paidTotal / orderedTotal) * 100 : 100;
+
+    if (operation?.require_payment_for_delivery && paidPercentage + 0.0001 < requiredPercentage) {
+      const current = paidPercentage.toLocaleString('es-AR', { maximumFractionDigits: 2 });
+      const required = requiredPercentage.toLocaleString('es-AR', { maximumFractionDigits: 2 });
+      missing.push(`se cobró el ${current}% y se requiere el ${required}%`);
+    }
+    if (operation?.require_invoice_for_delivery && Number(operation?.invoiced_total ?? 0) <= 0) {
+      missing.push('todavía no hay una factura asociada');
+    }
+
+    return missing.length
+      ? `No se puede crear el remito: ${missing.join(' y ')}.`
+      : 'No se puede crear el remito porque la operación todavía no está habilitada para entregar.';
   }
 
   // ─────────────────────────────────────────────
@@ -965,6 +989,8 @@ export class DocumentsSalesService {
   ) {
     return this.prisma.documents.findMany({
       where: {
+        deleted_at: null,
+
         document_types: {
           direction: direction ?? 1,
 
@@ -1101,8 +1127,8 @@ export class DocumentsSalesService {
       throw new BadRequestException('ID inválido');
     }
 
-    const doc = await this.prisma.documents.findUnique({
-      where: { id },
+    const doc = await this.prisma.documents.findFirst({
+      where: { id, deleted_at: null },
 
       include: {
         document_types: true,
@@ -1521,11 +1547,13 @@ export class DocumentsSalesService {
     const confirmed = await this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
-      if (doc.status !== STATUS_DRAFT) {
-        throw new BadRequestException('Solo se puede confirmar un documento en borrador');
-      }
-
       const category = doc.document_types?.category;
+
+      const canConfirm = doc.status === STATUS_DRAFT
+        || (category === 'REMITO' && doc.status === STATUS_PENDING);
+      if (!canConfirm) {
+        throw new BadRequestException('El documento no se encuentra en un estado que permita confirmarlo');
+      }
 
       const fiscalAuthorizationSnapshot = category === 'REMITO'
         ? await this.fiscalAuthorizations.resolveForDocument(doc, tx)
@@ -1543,6 +1571,14 @@ export class DocumentsSalesService {
           ...(fiscalAuthorizationSnapshot ?? {}),
         },
       });
+
+      if (category === 'ORDER' && doc.document_types?.direction === 1) {
+        await this.stockReservations.reserveSalesOrder(tx, doc.id, userId);
+      }
+
+      if (category === 'REMITO' && doc.document_types?.direction === 1) {
+        await this.stockReservations.consumeForRemito(tx, doc, userId);
+      }
 
       if (category === 'REMITO' && doc.parent_document_id) {
         await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
@@ -1562,6 +1598,9 @@ export class DocumentsSalesService {
 
           const warehouse = await tx.warehouses.findFirst({ where: { id: warehouseId, active: true } });
           if (!warehouse) throw new BadRequestException('El depósito seleccionado no existe o está inactivo');
+          if (direction === 'OUT' && warehouse.is_virtual) {
+            throw new BadRequestException('La mercadería reservada continúa en tránsito. Recibí el contenedor en un depósito real antes de confirmar el remito');
+          }
 
           const qty = new Prisma.Decimal(item.quantity);
           const signedQty = direction === 'IN' ? qty : qty.neg();
@@ -1746,22 +1785,26 @@ export class DocumentsSalesService {
       const doc = await this.findOne(id);
 
       if (doc.status === STATUS_CANCELLED) {
-        throw new BadRequestException('El documento ya está anulado');
+        await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
+        return tx.documents.findUnique({ where: { id } });
       }
 
       // Validar que no existan pagos activos asociados al documento
       const associatedPayments = await tx.payment_documents.findMany({
-        where: { document_id: id },
-        include: { payments: true },
+        where: { document_id: id, payment: { deleted_at: null } },
+        include: { payment: true },
       });
 
       const activePayments = associatedPayments.filter(
-        ap => ap.payments.status === 'CONFIRMED' || ap.payments.status === 'PAID'
+        ap => !['CANCELLED', 'REVERSED'].includes(ap.payment.status)
       );
 
       if (activePayments.length > 0) {
+        const paymentList = activePayments
+          .map(({ payment }) => `#${payment.number} (${payment.status})`)
+          .join(', ');
         throw new BadRequestException(
-          'No se puede anular el documento porque tiene pagos asociados. Primero anule los pagos.'
+          `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`
         );
       }
 
@@ -1803,9 +1846,13 @@ export class DocumentsSalesService {
 
       if (doc.document_types?.category === 'REMITO' && doc.parent_document_id) {
         await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
+        await this.stockReservations.restoreRemitoConsumption(tx, doc.id, userId);
       }
 
       const category = doc.document_types?.category;
+      if (category === 'ORDER' && doc.document_types?.direction === 1) {
+        await this.stockReservations.releaseOrder(tx, doc.id, userId);
+      }
       const defaultFlowSettings = ['ORDER', 'INVOICE'].includes(category)
         ? await tx.sales_flow_settings.upsert({
             where: { settings_key: 'default' },
@@ -1822,52 +1869,7 @@ export class DocumentsSalesService {
         : doc.document_types?.affects_accounting;
 
       if (doc.party_id && affectsAccounting) {
-        const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
-        const docTotal = doc.total.toNumber();
-
-        // La reversión siempre es CREDIT_NOTE para ventas
-        const docTypeName = doc.document_types?.description ?? 'Documento';
-        const docRef = doc.descrip;
-        const baseDesc = docRef
-          ? `${docTypeName} #${doc.number} - ${docRef}`
-          : `${docTypeName} #${doc.number}`;
-        const description = `Anulación ${baseDesc}`;
-
-        await this.currentAccountsService.addEntry(
-          {
-            party_id: doc.party_id,
-            party_type: partyType,
-            currency_code: doc.currency_code,
-            type: 'CREDIT_NOTE',
-            amount: docTotal,
-            exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
-            rate_type: doc.rate_type ?? undefined,
-            description,
-            reference_type: 'document_reversal',
-            reference_id: doc.id,
-          },
-          userId,
-        );
-
-        // Al anular una factura del modo combinado también se revierte el asiento
-        // que había reemplazado la deuda provisoria de la OV.
-        if (category === 'INVOICE' && operationBasis === 'ORDER_THEN_INVOICE') {
-          await this.currentAccountsService.addEntry(
-            {
-              party_id: doc.party_id,
-              party_type: partyType,
-              currency_code: doc.currency_code,
-              type: 'DEBIT_NOTE',
-              amount: docTotal,
-              exchange_rate: doc.exchange_rate ? Number(doc.exchange_rate) : undefined,
-              rate_type: doc.rate_type ?? undefined,
-              description: `Restitución de deuda provisoria por anulación ${baseDesc}`,
-              reference_type: 'order_invoice_replacement_reversal',
-              reference_id: doc.id,
-            },
-            userId,
-          );
-        }
+        await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
       }
 
       return tx.documents.findUnique({ where: { id } });
@@ -1877,37 +1879,15 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // REMOVE
   // ─────────────────────────────────────────────
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     const doc = await this.findOne(id);
 
-    if (doc.status !== STATUS_DRAFT) {
-      throw new BadRequestException('Solo se pueden eliminar borradores');
+    if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
+      throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados');
     }
-
-    return this.prisma.$transaction(async (tx) => {
-      await tx.document_item_taxes.deleteMany({
-        where: {
-          document_items: {
-            document_id: id,
-          },
-        },
-      });
-
-      await tx.document_taxes.deleteMany({
-        where: {
-          document_id: id,
-        },
-      });
-
-      await tx.document_items.deleteMany({
-        where: {
-          document_id: id,
-        },
-      });
-
-      return tx.documents.delete({
-        where: { id },
-      });
+    return this.prisma.documents.update({
+      where: { id },
+      data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
     });
   }
 
@@ -2004,7 +1984,7 @@ export class DocumentsSalesService {
     if (doc.commercial_operation_id) {
       const operation = await this.commercialFlow.refresh(doc.commercial_operation_id);
       if (operation?.delivery_status === 'PENDING') {
-        throw new BadRequestException('La operación todavía no cumple la condición configurada para remitir');
+        throw new BadRequestException(this.deliveryBlockedMessage(operation));
       }
       if (operation?.delivery_note_id) return this.findOne(operation.delivery_note_id);
     }
@@ -2100,7 +2080,7 @@ export class DocumentsSalesService {
     if (doc.commercial_operation_id) {
       const operation = await this.commercialFlow.refresh(doc.commercial_operation_id);
       if (operation?.delivery_status === 'PENDING') {
-        throw new BadRequestException('La operación todavía no cumple la condición configurada para remitir');
+        throw new BadRequestException(this.deliveryBlockedMessage(operation));
       }
       if (operation && !operation.allow_partial_delivery) {
         throw new BadRequestException('La política de esta operación no permite entregas parciales');
@@ -2138,6 +2118,7 @@ export class DocumentsSalesService {
       const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
       return {
         product_id: sourceItem.product_id,
+        warehouse_id: sourceItem.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: req.quantity,
         currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
         exchange_rate: Number(sourceItem.exchange_rate ?? 1),
@@ -2416,13 +2397,16 @@ export class DocumentsSalesService {
       );
     }
 
-    await this.prisma.documents.update({
-      where: { id },
-      data: { status: newStatus, updated_at: new Date() },
-    });
-
-    if (category === 'REMITO' && newStatus === STATUS_CONFIRMED && doc.parent_document_id) {
-      await this.refreshOrderDeliveredQuantities(doc.parent_document_id, this.prisma);
+    // Entregar un remito debe atravesar el mismo cierre que la confirmación:
+    // asigna el CAI histórico, valida depósitos y registra la salida de stock.
+    const closesRemito = category === 'REMITO' && newStatus === STATUS_CONFIRMED;
+    if (closesRemito) {
+      await this.confirm(id, userId);
+    } else {
+      await this.prisma.documents.update({
+        where: { id },
+        data: { status: newStatus, updated_at: new Date() },
+      });
     }
 
     // El remito entregado es el evento operativo que cierra despacho/viaje

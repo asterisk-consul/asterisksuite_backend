@@ -53,6 +53,7 @@ enum ContainerStatus {
   ARRIVED
   CUSTOMS
   RELEASED
+  RECEIVING
   DELIVERED
   CLOSED
 

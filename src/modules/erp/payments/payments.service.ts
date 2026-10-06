@@ -76,6 +76,43 @@ export class PaymentsService {
       throw new BadRequestException('La parte interesada seleccionada no existe');
     }
 
+    // Resolver los cheques antes de crear el pago o cobro. El instrumento
+    // físico se recibe o entrega por su valor completo: no es fraccionable.
+    const checkAllocations: { check_id: string; amount_applied: number }[] = [];
+    if (dto.checks?.length) {
+      for (const requested of dto.checks) {
+        const check = await this.prisma.checks.findFirst({
+          where: { id: requested.check_id, deleted_at: null },
+        });
+        if (!check) throw new NotFoundException(`Cheque ${requested.check_id} no encontrado`);
+        const available = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
+        if (requested.amount_applied > available + 0.01) {
+          throw new BadRequestException(
+            `El cheque #${check.check_number} tiene saldo disponible ${available} y se intenta aplicar ${requested.amount_applied}`,
+          );
+        }
+        const amountApplied = available;
+        if (check.is_own && Math.abs(amountApplied - Number(check.amount)) > 0.01) {
+          throw new BadRequestException(
+            `El cheque propio #${check.check_number} se aplica por su monto total (${check.amount}).`,
+          );
+        }
+        checkAllocations.push({ check_id: requested.check_id, amount_applied: amountApplied });
+      }
+    } else if (dto.check_ids?.length) {
+      for (const checkId of dto.check_ids) {
+        const check = await this.prisma.checks.findFirst({ where: { id: checkId, deleted_at: null } });
+        if (!check) throw new NotFoundException(`Cheque ${checkId} no encontrado`);
+        checkAllocations.push({
+          check_id: checkId,
+          amount_applied: check.available_amount != null ? Number(check.available_amount) : Number(check.amount),
+        });
+      }
+    }
+    const effectiveAmount = dto.payment_method === 'CHECK' && checkAllocations.length > 0
+      ? Number(checkAllocations.reduce((sum, allocation) => sum + allocation.amount_applied, 0).toFixed(2))
+      : dto.amount;
+
     const lastPayment = await this.prisma.payments.findFirst({
       where: { deleted_at: null },
       orderBy: { number: 'desc' },
@@ -83,7 +120,7 @@ export class PaymentsService {
     const nextNumber = (lastPayment?.number ?? 0) + 1;
 
     // ─── Auto-calculate converted_amount if not provided ─────────
-    let convertedAmount = dto.converted_amount ?? null
+    let convertedAmount = effectiveAmount === dto.amount ? dto.converted_amount ?? null : null
     let exchangeRate = dto.exchange_rate ?? null
     let rateType = (dto.rate_type as any) ?? null
 
@@ -101,7 +138,7 @@ export class PaymentsService {
             exchangeRate = resolved.rate
             rateType = resolved.rateType
           }
-          convertedAmount = this.conversionService.convertAmount(dto.amount, exchangeRate)
+          convertedAmount = this.conversionService.convertAmount(effectiveAmount, exchangeRate)
         }
       } catch {
         // If rate not found, leave as null
@@ -119,7 +156,7 @@ export class PaymentsService {
           party_id: dto.party_id,
           party_type: party?.type ?? dto.party_type,
           payment_method: dto.payment_method as any,
-          amount: dto.amount,
+          amount: effectiveAmount,
           currency_code: dto.currency_code,
           exchange_rate: exchangeRate,
           rate_type: rateType,
@@ -190,34 +227,6 @@ export class PaymentsService {
               : {}),
           },
         });
-      }
-    }
-
-    // Link checks to this payment (con aplicación parcial opcional)
-    const checkAllocations: { check_id: string; amount_applied: number }[] = [];
-    if (dto.checks && dto.checks.length > 0) {
-      for (const c of dto.checks) {
-        const check = await this.prisma.checks.findFirst({ where: { id: c.check_id, deleted_at: null } });
-        if (!check) throw new NotFoundException(`Cheque ${c.check_id} no encontrado`);
-        const available = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
-        if (c.amount_applied > available + 0.01) {
-          throw new BadRequestException(
-            `El cheque #${check.check_number} tiene saldo disponible ${available} y se intenta aplicar ${c.amount_applied}`,
-          );
-        }
-        if (check.is_own && Math.abs(c.amount_applied - Number(check.amount)) > 0.01) {
-          throw new BadRequestException(
-            `El cheque propio #${check.check_number} se aplica por su monto total (${check.amount}). Usá un anticipo para el resto.`,
-          );
-        }
-        checkAllocations.push({ check_id: c.check_id, amount_applied: c.amount_applied });
-      }
-    } else if (dto.check_ids && dto.check_ids.length > 0) {
-      // Legacy: check_ids se aplican por su monto completo
-      for (const checkId of dto.check_ids) {
-        const check = await this.prisma.checks.findFirst({ where: { id: checkId, deleted_at: null } });
-        if (!check) throw new NotFoundException(`Cheque ${checkId} no encontrado`);
-        checkAllocations.push({ check_id: checkId, amount_applied: check.available_amount != null ? Number(check.available_amount) : Number(check.amount) });
       }
     }
 
@@ -727,24 +736,13 @@ export class PaymentsService {
       throw new BadRequestException('No se puede eliminar un pago confirmado o pagado. Anúlelo primero.');
     }
 
-    // Remove linked payment_documents
-    await this.prisma.payment_documents.deleteMany({
-      where: { payment_id: id },
-    });
-
-    // Remove linked withholdings + allocations
-    await this.prisma.withholding_allocations.deleteMany({
-      where: { withholding: { payment_id: id } },
-    });
-    await this.prisma.withholdings.deleteMany({
-      where: { payment_id: id },
-    });
-
     return this.prisma.payments.update({
       where: { id },
       data: {
         deleted_at: new Date(),
         deleted_by: userId,
+        updated_at: new Date(),
+        updated_by: userId,
       },
     });
   }
@@ -772,17 +770,10 @@ export class PaymentsService {
     const checks = await prisma.checks.findMany({
       where: { payment_id: payment.id, deleted_at: null },
     });
-    const allocations = await prisma.payment_checks.findMany({
-      where: { payment_id: payment.id },
-    });
-
     for (const check of checks) {
-      const allocation = allocations.find((a: any) => a.check_id === check.id);
-      const applied = allocation ? allocation.amount_applied.toNumber() : Number(check.amount);
-
       if (check.is_own) {
-        // Cheque propio: queda programado. El banco se debita al vencimiento
-        // mediante CheckProcessingScheduler.
+        // Cheque propio: queda confirmado y pendiente de conciliación.
+        // Tesorería registra el débito cuando aparece en el extracto bancario.
         if (check.bank_account_id) {
           const bankAccount = await prisma.bank_accounts.findUnique({
             where: { id: check.bank_account_id },
@@ -818,17 +809,14 @@ export class PaymentsService {
           continue;
         }
 
-        // Cheque de tercero: aplicación parcial — descuenta el saldo disponible.
-        // Queda PENDING (en cartera) mientras le quede saldo; CLEARED al agotarse.
-        const currentAvailable = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
-        const remaining = Math.max(0, Number((currentAvailable - applied).toFixed(2)));
-        const fullyUsed = remaining <= 0.01;
-
+        // Al entregarlo a un proveedor, el cheque físico sale completo de
+        // cartera aunque una parte quede como saldo a favor.
         await prisma.checks.update({
           where: { id: check.id },
           data: {
-            available_amount: fullyUsed ? 0 : remaining,
-            ...(fullyUsed ? { status: 'CLEARED', clearing_date: new Date() } : {}),
+            available_amount: 0,
+            status: 'CLEARED',
+            clearing_date: new Date(),
             updated_at: new Date(),
             updated_by: userId,
           },

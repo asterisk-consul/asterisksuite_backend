@@ -334,7 +334,6 @@ export type document_sequencesOrderByWithRelationInput = {
 
 export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  point_of_sale_prefix?: Prisma.document_sequencesPoint_of_salePrefixCompoundUniqueInput
   AND?: Prisma.document_sequencesWhereInput | Prisma.document_sequencesWhereInput[]
   OR?: Prisma.document_sequencesWhereInput[]
   NOT?: Prisma.document_sequencesWhereInput | Prisma.document_sequencesWhereInput[]
@@ -356,7 +355,7 @@ export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   document_type_sequences?: Prisma.Document_type_sequencesListRelationFilter
   documents?: Prisma.DocumentsListRelationFilter
   fiscal_authorizations?: Prisma.Fiscal_authorizationsListRelationFilter
-}, "id" | "point_of_sale_prefix">
+}, "id">
 
 export type document_sequencesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -542,11 +541,6 @@ export type document_sequencesUncheckedUpdateManyInput = {
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type document_sequencesPoint_of_salePrefixCompoundUniqueInput = {
-  point_of_sale: string
-  prefix: string
 }
 
 export type document_sequencesCountOrderByAggregateInput = {

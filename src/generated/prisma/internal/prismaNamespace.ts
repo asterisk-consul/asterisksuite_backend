@@ -537,6 +537,8 @@ export const ModelName = {
   current_accounts: 'current_accounts',
   current_account_entries: 'current_account_entries',
   warehouse_stock: 'warehouse_stock',
+  stock_reservations: 'stock_reservations',
+  stock_reservation_allocations: 'stock_reservation_allocations',
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses'
 } as const
@@ -554,7 +556,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -11880,6 +11882,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    stock_reservations: {
+      payload: Prisma.$stock_reservationsPayload<ExtArgs>
+      fields: Prisma.stock_reservationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.stock_reservationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.stock_reservationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>
+        }
+        findFirst: {
+          args: Prisma.stock_reservationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.stock_reservationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>
+        }
+        findMany: {
+          args: Prisma.stock_reservationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>[]
+        }
+        create: {
+          args: Prisma.stock_reservationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>
+        }
+        createMany: {
+          args: Prisma.stock_reservationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.stock_reservationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>[]
+        }
+        delete: {
+          args: Prisma.stock_reservationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>
+        }
+        update: {
+          args: Prisma.stock_reservationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.stock_reservationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.stock_reservationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.stock_reservationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.stock_reservationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Stock_reservationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStock_reservations>
+        }
+        groupBy: {
+          args: Prisma.stock_reservationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Stock_reservationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.stock_reservationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Stock_reservationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    stock_reservation_allocations: {
+      payload: Prisma.$stock_reservation_allocationsPayload<ExtArgs>
+      fields: Prisma.stock_reservation_allocationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.stock_reservation_allocationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.stock_reservation_allocationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>
+        }
+        findFirst: {
+          args: Prisma.stock_reservation_allocationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.stock_reservation_allocationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>
+        }
+        findMany: {
+          args: Prisma.stock_reservation_allocationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>[]
+        }
+        create: {
+          args: Prisma.stock_reservation_allocationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>
+        }
+        createMany: {
+          args: Prisma.stock_reservation_allocationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.stock_reservation_allocationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>[]
+        }
+        delete: {
+          args: Prisma.stock_reservation_allocationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>
+        }
+        update: {
+          args: Prisma.stock_reservation_allocationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.stock_reservation_allocationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.stock_reservation_allocationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.stock_reservation_allocationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.stock_reservation_allocationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_reservation_allocationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Stock_reservation_allocationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStock_reservation_allocations>
+        }
+        groupBy: {
+          args: Prisma.stock_reservation_allocationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Stock_reservation_allocationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.stock_reservation_allocationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Stock_reservation_allocationsCountAggregateOutputType> | number
+        }
+      }
+    }
     warehouse_stock_movements: {
       payload: Prisma.$warehouse_stock_movementsPayload<ExtArgs>
       fields: Prisma.warehouse_stock_movementsFieldRefs
@@ -14479,6 +14629,9 @@ export const Sales_flow_settingsScalarFieldEnum = {
   require_invoice_for_delivery: 'require_invoice_for_delivery',
   auto_create_delivery_note: 'auto_create_delivery_note',
   allow_partial_delivery: 'allow_partial_delivery',
+  reserve_stock_on_order_confirmation: 'reserve_stock_on_order_confirmation',
+  allow_partial_stock_reservation: 'allow_partial_stock_reservation',
+  allow_backorder_without_stock: 'allow_backorder_without_stock',
   active_from: 'active_from',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -15117,6 +15270,45 @@ export const Warehouse_stockScalarFieldEnum = {
 } as const
 
 export type Warehouse_stockScalarFieldEnum = (typeof Warehouse_stockScalarFieldEnum)[keyof typeof Warehouse_stockScalarFieldEnum]
+
+
+export const Stock_reservationsScalarFieldEnum = {
+  id: 'id',
+  warehouse_id: 'warehouse_id',
+  product_id: 'product_id',
+  quantity_reserved: 'quantity_reserved',
+  quantity_consumed: 'quantity_consumed',
+  quantity_released: 'quantity_released',
+  status: 'status',
+  reservation_type: 'reservation_type',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  source_item_id: 'source_item_id',
+  party_id: 'party_id',
+  reason: 'reason',
+  expires_at: 'expires_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Stock_reservationsScalarFieldEnum = (typeof Stock_reservationsScalarFieldEnum)[keyof typeof Stock_reservationsScalarFieldEnum]
+
+
+export const Stock_reservation_allocationsScalarFieldEnum = {
+  id: 'id',
+  reservation_id: 'reservation_id',
+  document_id: 'document_id',
+  quantity: 'quantity',
+  status: 'status',
+  created_at: 'created_at',
+  reversed_at: 'reversed_at',
+  created_by: 'created_by'
+} as const
+
+export type Stock_reservation_allocationsScalarFieldEnum = (typeof Stock_reservation_allocationsScalarFieldEnum)[keyof typeof Stock_reservation_allocationsScalarFieldEnum]
 
 
 export const Warehouse_stock_movementsScalarFieldEnum = {
@@ -16447,6 +16639,8 @@ export type GlobalOmitConfig = {
   current_accounts?: Prisma.current_accountsOmit
   current_account_entries?: Prisma.current_account_entriesOmit
   warehouse_stock?: Prisma.warehouse_stockOmit
+  stock_reservations?: Prisma.stock_reservationsOmit
+  stock_reservation_allocations?: Prisma.stock_reservation_allocationsOmit
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOmit
   warehouses?: Prisma.warehousesOmit
 }

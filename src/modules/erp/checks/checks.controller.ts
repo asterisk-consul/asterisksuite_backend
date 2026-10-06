@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import type { Request } from 'express';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -22,20 +21,16 @@ export class ChecksController {
   @Get()
   @RequirePermissions('treasury.checks.read')
   findAll(
-    @Req() req: Request,
-    @CurrentUser() user: AuthUser,
     @Query('status') status?: string,
     @Query('is_own') isOwn?: string,
     @Query('bank_name') bankName?: string,
     @Query('due_before') dueBefore?: string,
   ) {
-    const companyRole = req['companyUserRole'] as string | undefined;
     return this.checksService.findAll({
       status,
       is_own: isOwn !== undefined ? isOwn === 'true' : undefined,
       bank_name: bankName,
       due_before: dueBefore,
-      user_id: companyRole === 'USER' ? user.id : undefined,
     });
   }
 
@@ -82,10 +77,20 @@ export class ChecksController {
   @RequirePermissions('treasury.checks.update')
   deposit(
     @Param('id') id: string,
-    @Body() body: { bank_account_id: string; amount?: number },
+    @Body() body: { bank_account_id: string; amount?: number; date?: string },
     @CurrentUser() user: AuthUser,
   ) {
     return this.checksService.deposit(id, body, user.id);
+  }
+
+  @Patch(':id/collect-cash')
+  @RequirePermissions('treasury.checks.update')
+  collectInCashBox(
+    @Param('id') id: string,
+    @Body() body: { cash_box_id: string; date?: string },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.checksService.collectInCashBox(id, body.cash_box_id, user.id, body.date);
   }
 
   @Patch(':id/revert')
@@ -110,6 +115,16 @@ export class ChecksController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.checksService.confirm(id, user.id);
+  }
+
+  @Patch(':id/debit')
+  @RequirePermissions('treasury.checks.update')
+  debitOwnCheck(
+    @Param('id') id: string,
+    @Body() body: { date: string },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.checksService.debitOwnCheck(id, body.date, user.id);
   }
 
   @Patch(':id/reject')

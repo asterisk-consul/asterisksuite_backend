@@ -805,6 +805,16 @@ export type current_account_entries = Prisma.current_account_entriesModel
  */
 export type warehouse_stock = Prisma.warehouse_stockModel
 /**
+ * Model stock_reservations
+ * 
+ */
+export type stock_reservations = Prisma.stock_reservationsModel
+/**
+ * Model stock_reservation_allocations
+ * 
+ */
+export type stock_reservation_allocations = Prisma.stock_reservation_allocationsModel
+/**
  * Model warehouse_stock_movements
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  */

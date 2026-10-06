@@ -492,6 +492,7 @@ export const ContainerStatus = {
   ARRIVED: 'ARRIVED',
   CUSTOMS: 'CUSTOMS',
   RELEASED: 'RELEASED',
+  RECEIVING: 'RECEIVING',
   DELIVERED: 'DELIVERED',
   CLOSED: 'CLOSED'
 } as const

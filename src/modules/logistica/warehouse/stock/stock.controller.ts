@@ -1,14 +1,30 @@
-import { Controller, Get, Post, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { CreateStockMovementDto } from './dto/create-stock-movement.dto';
 import { TransferStockDto } from './dto/transfer-stock.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequireAnyPermission, RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('warehouse/stock')
 @UseGuards(JwtAuthGuard)
 export class StockController {
   constructor(private readonly service: StockService) {}
+
+  @RequireAnyPermission('stock.read', 'sales.read', 'sales.orders.read', 'sales.quotes.read', 'sales.invoices.read')
+  @Get('reports/availability')
+  getCommercialAvailability(
+    @Query('search') search?: string,
+    @Query('days') days?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.service.getCommercialAvailability({
+      search,
+      days: Number(days),
+      page: Number(page),
+      limit: Number(limit),
+    });
+  }
 
   @RequirePermissions('stock.read')
   @Get('product/:productId')
