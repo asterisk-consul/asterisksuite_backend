@@ -56,6 +56,7 @@ async function runSql(label: string, sql: string) {
     console.log(`  OK`)
   } catch (e: any) {
     console.error(`  ERROR: ${e.message}`)
+    throw e
   }
 }
 

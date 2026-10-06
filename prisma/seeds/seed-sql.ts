@@ -522,8 +522,7 @@ WITH defaults(name, symbol, unit_type) AS (
     ('Mililitro', 'ml', 'VOLUME'::tenant."UnitType"),
     ('Metro cúbico', 'm³', 'VOLUME'::tenant."UnitType"),
     ('Metro cuadrado', 'm²', 'AREA'::tenant."UnitType"),
-    ('Centímetro cuadrado', 'cm²', 'AREA'::tenant."UnitType"),
-    ('Hora', 'h', 'TIME'::tenant."UnitType")
+    ('Centímetro cuadrado', 'cm²', 'AREA'::tenant."UnitType")
 )
 INSERT INTO tenant.units (id, name, symbol, unit_type, active)
 SELECT gen_random_uuid(), d.name, d.symbol, d.unit_type, true
