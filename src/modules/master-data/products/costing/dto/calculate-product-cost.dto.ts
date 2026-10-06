@@ -8,6 +8,10 @@ export class CalculateProductCostDto {
   currency_id!: string;
 
   @IsOptional()
+  @IsUUID()
+  variant_id?: string;
+
+  @IsOptional()
   @IsBoolean()
   save_snapshot?: boolean = true;
 }

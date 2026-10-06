@@ -155,6 +155,9 @@ export class ProductComponentsService {
 
     const child = await this.prisma.products.findUnique({ where: { id: data.child_product_id } });
     if (!child) throw new NotFoundException('Producto hijo no encontrado');
+    if (!['RAW_MATERIAL', 'SEMI_FINISHED'].includes(child.product_type)) {
+      throw new BadRequestException('El BOM solo admite materias primas y productos intermedios');
+    }
 
     if (data.child_variant_id) {
       const variant = await this.prisma.product_variants.findUnique({ where: { id: data.child_variant_id } });

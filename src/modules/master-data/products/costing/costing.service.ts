@@ -72,7 +72,7 @@ export class CostingService {
   // CALCULATE
   // ─────────────────────────────────────────────────────────────
 
-  async calculateProductCost(productId: string, currencyId: string, saveSnapshot = true): Promise<CalculatedCost> {
+  async calculateProductCost(productId: string, currencyId: string, saveSnapshot = true, variantId?: string): Promise<CalculatedCost> {
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
       include: {
@@ -88,6 +88,14 @@ export class CostingService {
     });
 
     if (!product) throw new NotFoundException('Producto no encontrado');
+
+    if (variantId) {
+      const variant = await this.prisma.product_variants.findFirst({
+        where: { id: variantId, product_id: productId, deleted_at: null, active: true },
+        select: { id: true },
+      });
+      if (!variant) throw new NotFoundException('La variante no pertenece al producto');
+    }
 
     const rawComponents = product.cost_template?.components ?? (await this.getRawDefaultTemplateComponents());
 
@@ -123,7 +131,17 @@ export class CostingService {
         break;
     }
 
-    if (saveSnapshot) {
+    if (saveSnapshot && variantId) {
+      await this.prisma.product_variant_costs.create({
+        data: {
+          variant_id: variantId,
+          currency_id: currencyId,
+          source: 'ENGINEERING',
+          cost: result.total_cost,
+          notes: 'Costo calculado desde BOM y plantilla',
+        },
+      });
+    } else if (saveSnapshot) {
       // Pasar el árbol jerárquico directamente — el history service
       // se encarga de insertar con parent_breakdown_id
       await this.historyService.saveSnapshot({

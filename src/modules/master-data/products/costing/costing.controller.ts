@@ -27,7 +27,7 @@ export class CostingController {
     @Body()
     dto: CalculateProductCostDto,
   ) {
-    return this.costingService.calculateProductCost(dto.product_id, dto.currency_id, dto.save_snapshot);
+    return this.costingService.calculateProductCost(dto.product_id, dto.currency_id, dto.save_snapshot, dto.variant_id);
   }
 
   @RequirePermissions('cost_templates.read')

@@ -52,7 +52,10 @@ export class CostingTreeService {
     const result: CostBreakdownItem[] = [];
 
     for (const component of components) {
-      const children = await this.buildTree(component.child_product_id, currencyId, level + 1, effectiveMode);
+      const isIntermediate = component.child_product.product_type === 'SEMI_FINISHED';
+      const children = isIntermediate
+        ? []
+        : await this.buildTree(component.child_product_id, currencyId, level + 1, effectiveMode);
 
       let unitCost = 0;
       let source: string | undefined;
