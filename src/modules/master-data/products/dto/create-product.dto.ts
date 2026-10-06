@@ -68,6 +68,11 @@ export class CreateProductDto {
   auto_calculate_cost?: boolean;
 
   @IsOptional()
+  @IsNumber()
+  @Min(0)
+  sale_margin_percentage?: number;
+
+  @IsOptional()
   @IsBoolean()
   has_engineering?: boolean;
 

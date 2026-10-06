@@ -21,6 +21,7 @@ model currencies {
   priceLists               price_lists[]
   productPartyPrices       product_party_prices[]
   productPartyPriceHistory product_party_price_history[]
+  productsCurrentCost      products[]                    @relation("product_current_cost_currency")
 
   @@schema("tenant")
 }

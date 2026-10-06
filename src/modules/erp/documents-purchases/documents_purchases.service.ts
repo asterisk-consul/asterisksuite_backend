@@ -1220,9 +1220,7 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string, options?: { updateProductPrices?: boolean | string }) {
-    const updateProductPrices = options?.updateProductPrices === true || options?.updateProductPrices === 'true';
-    console.log('[confirm-purchases] options:', JSON.stringify(options), '→ updateProductPrices:', updateProductPrices);
+  async confirm(id: string, userId: string, _options?: { updateProductPrices?: boolean | string }) {
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
@@ -1348,13 +1346,13 @@ export class DocumentsPurchasesService {
         );
       }
 
-      // ─── Sync product prices from purchase invoice ───
-      if (updateProductPrices) {
-        await this.syncProductPricesFromPurchase(tx, doc);
+      // Toda compra confirmada actualiza el costo unitario. El precio de venta
+      // se administra por separado y nunca debe sobrescribirse con una compra.
+      if (category === 'INVOICE') {
+        await this.syncProductCostsFromPurchase(tx, doc);
       }
 
-      // Siempre conserva el precio negociado con este proveedor. La opción
-      // anterior sigue controlando únicamente la actualización del precio general.
+      // Siempre conserva el precio negociado con este proveedor.
       await this.productPartyPricing.captureDocumentPrices(tx, doc, 'PURCHASE', userId);
 
       return tx.documents.findUnique({ where: { id } });
@@ -1362,31 +1360,20 @@ export class DocumentsPurchasesService {
   }
 
   /**
-   * Sync product prices/costs from purchase invoice items.
-   * - FINISHED_PRODUCT / SERVICE → product_price
-   * - RAW_MATERIAL (with variants) → product_variant_costs
-   * - RAW_MATERIAL (without variants) → products.current_cost
+   * Sincroniza el costo unitario desde los items de una compra confirmada.
+   * Con variantes actualiza product_variant_costs; sin variantes, current_cost.
+   * El factor convierte el precio de la unidad de compra a la unidad de stock.
    */
-  private async syncProductPricesFromPurchase(tx: any, doc: any) {
-    console.log('[syncProductPrices] INICIO - updateProductPrices=true');
-    console.log('[syncProductPrices] doc.currency_code:', doc.currency_code);
-    console.log('[syncProductPrices] items count:', doc.document_items?.length);
+  private async syncProductCostsFromPurchase(tx: any, doc: any) {
 
     const currencies = await tx.currencies.findMany({
       where: { deleted_at: null },
       select: { id: true, code: true },
     });
     const currencyMap = Object.fromEntries(currencies.map((c: any) => [c.code, c.id]));
-    console.log('[syncProductPrices] currencies:', Object.keys(currencyMap));
 
     for (const item of doc.document_items) {
-      console.log('[syncProductPrices] ─── item ───');
-      console.log('[syncProductPrices] item.product_id:', item.product_id);
-      console.log('[syncProductPrices] item.unit_price:', item.unit_price);
-      console.log('[syncProductPrices] item.currency_code:', item.currency_code);
-
       if (!item.product_id) {
-        console.log('[syncProductPrices] SKIP: no product_id');
         continue;
       }
 
@@ -1395,104 +1382,66 @@ export class DocumentsPurchasesService {
         select: { id: true, product_type: true, price_enabled: true, current_cost: true },
       });
 
-      console.log('[syncProductPrices] product:', product?.id, product?.product_type);
-
       if (!product) {
-        console.log('[syncProductPrices] SKIP: product not found');
         continue;
       }
 
       const currencyId = currencyMap[item.currency_code ?? doc.currency_code];
-      console.log('[syncProductPrices] currencyId resolved:', currencyId);
-
       if (!currencyId) {
-        console.log('[syncProductPrices] SKIP: no currencyId');
         continue;
       }
 
       const conversionFactor = Math.max(Number(item.unit_conversion_factor ?? 1), 0.000001);
       const itemPrice = Number(item.unit_price) / conversionFactor;
-      console.log('[syncProductPrices] itemPrice:', itemPrice);
+      let variantId = item.variant_id;
 
-      if (product.product_type === 'FINISHED_PRODUCT' || product.product_type === 'SERVICE') {
-        const existing = await tx.product_price.findUnique({
-          where: { product_id_currency_id: { product_id: item.product_id, currency_id: currencyId } },
+      if (!variantId) {
+        const variants = await tx.product_variants.findMany({
+          where: { product_id: item.product_id, deleted_at: null },
+          select: { id: true },
         });
-        console.log('[syncProductPrices] existing price:', existing?.id, existing?.price?.toString());
 
-        if (!existing) {
-          console.log('[syncProductPrices] CREANDO precio nuevo');
-          await tx.product_price.create({
+        if (variants.length === 1) {
+          variantId = variants[0].id;
+        }
+      }
+
+      if (variantId) {
+        const existingCost = await tx.product_variant_costs.findFirst({
+          where: { variant_id: variantId, currency_id: currencyId, deleted_at: null },
+        });
+
+        if (!existingCost) {
+          await tx.product_variant_costs.create({
             data: {
-              product_id: item.product_id,
+              variant_id: variantId,
               currency_id: currencyId,
-              price: itemPrice,
-              exemption_rate: 0,
+              cost: itemPrice,
+              source: 'PURCHASE',
             },
           });
-        } else if (Number(existing.price) !== itemPrice) {
-          console.log('[syncProductPrices] ACTUALIZANDO precio:', existing.price?.toString(), '->', itemPrice);
-          await tx.product_price.update({
-            where: { id: existing.id },
-            data: { price: itemPrice, updated_at: new Date() },
+        } else if (Number(existingCost.cost) !== itemPrice) {
+          await tx.product_variant_costs.update({
+            where: { id: existingCost.id },
+            data: { cost: itemPrice, source: 'PURCHASE', updated_at: new Date() },
           });
-        } else {
-          console.log('[syncProductPrices] SKIP: precio ya es igual');
-        }
-      } else if (product.product_type === 'RAW_MATERIAL') {
-        console.log('[syncProductPrices] procesando RAW_MATERIAL');
-
-        let variantId = item.variant_id;
-
-        if (!variantId) {
-          const variants = await tx.product_variants.findMany({
-            where: { product_id: item.product_id, deleted_at: null },
-            select: { id: true },
-          });
-          console.log('[syncProductPrices] variants:', variants.length);
-
-          if (variants.length > 0) {
-            variantId = variants[0].id;
-          }
-        }
-
-        if (variantId) {
-          const existingCost = await tx.product_variant_costs.findFirst({
-            where: { variant_id: variantId, currency_id: currencyId, deleted_at: null },
-          });
-
-          if (!existingCost) {
-            console.log('[syncProductPrices] CREANDO variant cost para variante:', variantId);
-            await tx.product_variant_costs.create({
-              data: {
-                variant_id: variantId,
-                currency_id: currencyId,
-                cost: itemPrice,
-                source: 'PURCHASE',
-              },
-            });
-          } else if (Number(existingCost.cost) !== itemPrice) {
-            console.log('[syncProductPrices] ACTUALIZANDO variant cost:', existingCost.cost?.toString(), '->', itemPrice);
-            await tx.product_variant_costs.update({
-              where: { id: existingCost.id },
-              data: { cost: itemPrice, updated_at: new Date() },
-            });
-          }
-        } else {
-          const currentCost = product.current_cost ? Number(product.current_cost) : null;
-          if (currentCost === null || currentCost !== itemPrice) {
-            console.log('[syncProductPrices] ACTUALIZANDO current_cost');
-            await tx.products.update({
-              where: { id: item.product_id },
-              data: { current_cost: itemPrice, updated_at: new Date() },
-            });
-          }
         }
       } else {
-        console.log('[syncProductPrices] SKIP: tipo no soportado:', product.product_type);
+        const currentCost = product.current_cost ? Number(product.current_cost) : null;
+        if (currentCost === null || currentCost !== itemPrice) {
+          await tx.products.update({
+            where: { id: item.product_id },
+            data: {
+              current_cost: itemPrice,
+              current_cost_currency_id: currencyId,
+              cost_source: 'PURCHASE',
+              last_cost_calculated_at: new Date(),
+              updated_at: new Date(),
+            },
+          });
+        }
       }
     }
-    console.log('[syncProductPrices] FIN');
   }
 
   // ─────────────────────────────────────────────

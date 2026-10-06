@@ -53,6 +53,7 @@ export class ProductsService {
 
       include: {
         transfer_rate: true,
+        current_cost_currency: true,
 
         income_account: true,
         expense_account: true,
@@ -153,6 +154,7 @@ export class ProductsService {
 
       include: {
         transfer_rate: true,
+        current_cost_currency: true,
 
         income_account: true,
         expense_account: true,

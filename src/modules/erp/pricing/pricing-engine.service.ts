@@ -61,6 +61,7 @@ export class PricingEngineService {
   async resolveProductPrice(productId: string, targetCurrencyCode: string) {
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
+      include: { current_cost_currency: true },
     });
 
     if (!product) {
@@ -84,8 +85,9 @@ export class PricingEngineService {
       },
     });
 
-    // Si no hay precio manual Y auto_calculate_cost está activo, usar product_costs
-    if (!productPrice && product.auto_calculate_cost) {
+    // En modo automático el precio se deriva del costo, aunque exista un precio
+    // manual anterior. Así una nueva compra actualiza el valor de venta esperado.
+    if (product.auto_calculate_cost) {
       const latestCost = await this.prisma.product_costs.findFirst({
         where: {
           product_id: productId,
@@ -96,9 +98,13 @@ export class PricingEngineService {
         orderBy: { created_at: 'desc' },
       });
 
-      if (latestCost) {
-        const sourceCurrency = latestCost.currencies.code;
-        const originalPrice = Number(latestCost.total_cost);
+      const marginFactor = 1 + Number(product.sale_margin_percentage ?? 0) / 100;
+      const currentCostCurrency = product.current_cost_currency?.code ?? targetCurrencyCode;
+      const sourceCurrency = latestCost?.currencies.code ?? currentCostCurrency;
+      const baseCost = latestCost ? Number(latestCost.total_cost) : Number(product.current_cost ?? 0);
+
+      if (baseCost > 0) {
+        const originalPrice = baseCost * marginFactor;
 
         let convertedPrice = originalPrice;
         let exchangeRate = 1;

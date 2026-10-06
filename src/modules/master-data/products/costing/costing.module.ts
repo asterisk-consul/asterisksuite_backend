@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { EngineeringModule } from '../engineering/engineering.module';
 import { VariantCostsModule } from '../variant-costs/variant-costs.module';
+import { ExchangeModule } from '@/modules/erp/pricing/exchange/exchange.module';
 
 import { CostingController } from './costing.controller';
 import { CostingService } from './costing.service';
@@ -20,7 +21,7 @@ import { PurchaseCostStrategy } from './strategies/purchase-cost.strategy';
 import { RateCostStrategy } from './strategies/rate-cost.strategy';
 
 @Module({
-  imports: [PrismaModule, EngineeringModule, VariantCostsModule],
+  imports: [PrismaModule, EngineeringModule, VariantCostsModule, ExchangeModule],
 
   controllers: [CostingController, CostTemplatesController],
 
