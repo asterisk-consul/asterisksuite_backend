@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -345,7 +345,17 @@ export class ProductsService {
   // ─────────────────────────────
 
   async update(id: string, data: UpdateProductDto) {
-    await this.findOne(id);
+    const current = await this.findOne(id);
+
+    if (
+      data.cost_source
+      && data.cost_source !== current.cost_source
+      && current.parent_components?.length
+    ) {
+      throw new BadRequestException(
+        'No se puede cambiar el método de cálculo mientras el producto tenga componentes. Eliminá la estructura o creá una nueva versión.',
+      );
+    }
 
     if (data.sku) {
       const existing = await this.prisma.products.findFirst({
