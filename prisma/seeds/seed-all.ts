@@ -23,6 +23,7 @@ import {
   SQL_BANK_CONCEPTS,
   SQL_DOCUMENT_SEQUENCES,
   SQL_LINK_SEQUENCES,
+  SQL_UNITS,
   RBAC_PERMISSIONS,
   executeSeedSql,
 } from './seed-sql'
@@ -76,7 +77,10 @@ async function main() {
     throw new Error('El catálogo RBAC no incluye los permisos documentales o de importación/exportación')
   }
 
-  // 1. Impuestos
+  // 1. Unidades de medida
+  await runSql('Unidades de medida', SQL_UNITS)
+
+  // 2. Impuestos
   await runSql('Impuestos (IVA, percepciones, retenciones)', SQL_TAXES)
 
   // 2. Categorías fiscales

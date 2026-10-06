@@ -500,6 +500,41 @@ export const RBAC_ROLES = [
 ]
 
 // ════════════════════════════════════════════════════════════════
+// SQL — UNIDADES DE MEDIDA
+// ════════════════════════════════════════════════════════════════
+
+export const SQL_UNITS = `
+WITH defaults(name, symbol, unit_type) AS (
+  VALUES
+    ('Unidad', 'u', 'UNIT'::tenant."UnitType"),
+    ('Pieza', 'pza', 'UNIT'::tenant."UnitType"),
+    ('Barra', 'barra', 'UNIT'::tenant."UnitType"),
+    ('Rollo', 'rollo', 'UNIT'::tenant."UnitType"),
+    ('Caja', 'caja', 'UNIT'::tenant."UnitType"),
+    ('Metro', 'm', 'LENGTH'::tenant."UnitType"),
+    ('Centímetro', 'cm', 'LENGTH'::tenant."UnitType"),
+    ('Milímetro', 'mm', 'LENGTH'::tenant."UnitType"),
+    ('Kilómetro', 'km', 'LENGTH'::tenant."UnitType"),
+    ('Kilogramo', 'kg', 'WEIGHT'::tenant."UnitType"),
+    ('Gramo', 'g', 'WEIGHT'::tenant."UnitType"),
+    ('Tonelada', 't', 'WEIGHT'::tenant."UnitType"),
+    ('Litro', 'l', 'VOLUME'::tenant."UnitType"),
+    ('Mililitro', 'ml', 'VOLUME'::tenant."UnitType"),
+    ('Metro cúbico', 'm³', 'VOLUME'::tenant."UnitType"),
+    ('Metro cuadrado', 'm²', 'AREA'::tenant."UnitType"),
+    ('Centímetro cuadrado', 'cm²', 'AREA'::tenant."UnitType"),
+    ('Hora', 'h', 'TIME'::tenant."UnitType")
+)
+INSERT INTO tenant.units (id, name, symbol, unit_type, active)
+SELECT gen_random_uuid(), d.name, d.symbol, d.unit_type, true
+FROM defaults d
+WHERE NOT EXISTS (
+  SELECT 1 FROM tenant.units u
+  WHERE lower(u.name) = lower(d.name) OR lower(u.symbol) = lower(d.symbol)
+);
+`
+
+// ════════════════════════════════════════════════════════════════
 // SQL — IMPUESTOS
 // ════════════════════════════════════════════════════════════════
 
