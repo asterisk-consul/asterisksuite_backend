@@ -27,6 +27,18 @@ export class StockController {
   }
 
   @RequirePermissions('stock.read')
+  @Post('production/preview')
+  previewProduction(@Body() body: { product_id: string; warehouse_id: string; quantity: number }) {
+    return this.service.previewProduction(body.product_id, body.warehouse_id, Number(body.quantity));
+  }
+
+  @RequirePermissions('stock.create')
+  @Post('production/execute')
+  executeProduction(@Body() body: { product_id: string; warehouse_id: string; quantity: number }) {
+    return this.service.executeProduction(body.product_id, body.warehouse_id, Number(body.quantity));
+  }
+
+  @RequirePermissions('stock.read')
   @Get('product/:productId')
   getStockByProduct(@Param('productId') productId: string) {
     return this.service.getStockByProduct(productId);
