@@ -238,6 +238,12 @@ export class StockService {
             estimated_arrival_date: true,
             actual_arrival_date: true,
             transit_warehouse_id: true,
+            operation: {
+              select: {
+                estimated_arrival_date: true,
+                actual_arrival_date: true,
+              },
+            },
           },
         })
       : [];
@@ -259,18 +265,30 @@ export class StockService {
       const available = (row: any) => Math.max(number(row.quantity) - number(row.reserved_quantity), 0);
       const physicalStock = physicalRows.reduce((sum, row) => sum + number(row.quantity), 0);
       const transitStock = transitRows.reduce((sum, row) => sum + number(row.quantity), 0);
-      const reservedTotal = activeStock.reduce((sum, row) => sum + number(row.reserved_quantity), 0);
+      const reservedPhysical = physicalRows.reduce((sum, row) => sum + number(row.reserved_quantity), 0);
+      const reservedTransit = transitRows.reduce((sum, row) => sum + number(row.reserved_quantity), 0);
+      const reservedTotal = reservedPhysical + reservedTransit;
       const availableNow = physicalRows.reduce((sum, row) => sum + available(row), 0);
       const arrivals = transitRows.map(row => {
         const container = containerByWarehouse.get(row.warehouse_id)!;
-        const arrivalDate = container.actual_arrival_date ?? container.estimated_arrival_date;
+        const hasContainerArrivalDate = Boolean(
+          container.actual_arrival_date ?? container.estimated_arrival_date,
+        );
+        const actualArrivalDate = container.actual_arrival_date
+          ?? (!hasContainerArrivalDate ? container.operation.actual_arrival_date : null);
+        const estimatedArrivalDate = container.estimated_arrival_date
+          ?? (!hasContainerArrivalDate ? container.operation.estimated_arrival_date : null);
+        const arrivalDate = actualArrivalDate ?? estimatedArrivalDate;
         return {
           container_id: container.id,
           operation_id: container.operation_id,
           container_number: container.container_number,
           status: container.status,
-          estimated_arrival_date: container.estimated_arrival_date,
-          actual_arrival_date: container.actual_arrival_date,
+          estimated_arrival_date: estimatedArrivalDate,
+          actual_arrival_date: actualArrivalDate,
+          arrival_date_source: arrivalDate
+            ? (hasContainerArrivalDate ? 'CONTAINER' : 'OPERATION')
+            : null,
           quantity: number(row.quantity),
           reserved: number(row.reserved_quantity),
           available_on_arrival: available(row),
@@ -284,6 +302,10 @@ export class StockService {
         return new Date(aDate).getTime() - new Date(bDate).getTime();
       });
 
+      const arrivingWithinDays = arrivals
+        .filter(arrival => arrival.within_window)
+        .reduce((sum, arrival) => sum + arrival.available_on_arrival, 0);
+
       return {
         id: product.id,
         name: product.name,
@@ -291,11 +313,12 @@ export class StockService {
         unit: product.unit?.symbol ?? 'u.',
         physical_stock: physicalStock,
         reserved_total: reservedTotal,
+        reserved_physical: reservedPhysical,
+        reserved_transit: reservedTransit,
         available_now: availableNow,
         transit_stock: transitStock,
-        available_within_days: availableNow + arrivals
-          .filter(arrival => arrival.within_window)
-          .reduce((sum, arrival) => sum + arrival.available_on_arrival, 0),
+        arriving_within_days: arrivingWithinDays,
+        available_within_days: availableNow + arrivingWithinDays,
         warehouses: physicalRows.map(row => ({
           id: row.warehouses.id,
           name: row.warehouses.name,

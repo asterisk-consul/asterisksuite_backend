@@ -111,15 +111,15 @@ model business_party_iibb_registrations {
 // plano sin FK cross-schema (aislamiento por DB ya garantizado).
 
 model company_tax_jurisdictions {
-  id                   String  @id @default(uuid()) @db.Uuid
-  company_id           String  @db.Uuid
-  jurisdiction_id      String  @db.Uuid
-  tax_type             String  @db.VarChar(30) // GANANCIAS, IIBB, SUSS, IVA
-  is_withholding_agent Boolean @default(false)
-  is_perception_agent  Boolean @default(false)
-  registration_number  String? @db.VarChar(50)
-  default_perception_rate Decimal? @db.Decimal(8, 4)
-  default_retention_rate  Decimal? @db.Decimal(8, 4)
+  id                      String    @id @default(uuid()) @db.Uuid
+  company_id              String    @db.Uuid
+  jurisdiction_id         String    @db.Uuid
+  tax_type                String    @db.VarChar(30) // GANANCIAS, IIBB, SUSS, IVA
+  is_withholding_agent    Boolean   @default(false)
+  is_perception_agent     Boolean   @default(false)
+  registration_number     String?   @db.VarChar(50)
+  default_perception_rate Decimal?  @db.Decimal(8, 4)
+  default_retention_rate  Decimal?  @db.Decimal(8, 4)
   valid_from              DateTime? @db.Date
   valid_to                DateTime? @db.Date
 

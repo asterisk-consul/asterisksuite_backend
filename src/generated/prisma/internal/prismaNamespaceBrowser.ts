@@ -182,6 +182,8 @@ export const ModelName = {
   tax_category_taxes: 'tax_category_taxes',
   product_taxes: 'product_taxes',
   taxes: 'taxes',
+  treasury_obligation_templates: 'treasury_obligation_templates',
+  treasury_obligations: 'treasury_obligations',
   bank_accounts: 'bank_accounts',
   bank_account_user_roles: 'bank_account_user_roles',
   bank_account_movements: 'bank_account_movements',
@@ -2162,6 +2164,7 @@ export const ProductsScalarFieldEnum = {
   usage_type: 'usage_type',
   is_composed: 'is_composed',
   auto_calculate_cost: 'auto_calculate_cost',
+  sale_margin_percentage: 'sale_margin_percentage',
   has_engineering: 'has_engineering',
   manages_stock: 'manages_stock',
   income_account_id: 'income_account_id',
@@ -2181,7 +2184,8 @@ export const ProductsScalarFieldEnum = {
   unit_id: 'unit_id',
   purchase_unit_id: 'purchase_unit_id',
   purchase_to_stock_factor: 'purchase_to_stock_factor',
-  current_cost: 'current_cost'
+  current_cost: 'current_cost',
+  current_cost_currency_id: 'current_cost_currency_id'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
@@ -2746,6 +2750,76 @@ export const TaxesScalarFieldEnum = {
 export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
 
 
+export const Treasury_obligation_templatesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  party_id: 'party_id',
+  category: 'category',
+  treatment: 'treatment',
+  service_product_id: 'service_product_id',
+  expense_account_id: 'expense_account_id',
+  frequency: 'frequency',
+  interval_months: 'interval_months',
+  start_date: 'start_date',
+  end_date: 'end_date',
+  occurrences: 'occurrences',
+  due_day: 'due_day',
+  estimated_amount: 'estimated_amount',
+  net_amount: 'net_amount',
+  currency_code: 'currency_code',
+  variable_amount: 'variable_amount',
+  notification_days: 'notification_days',
+  description: 'description',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Treasury_obligation_templatesScalarFieldEnum = (typeof Treasury_obligation_templatesScalarFieldEnum)[keyof typeof Treasury_obligation_templatesScalarFieldEnum]
+
+
+export const Treasury_obligationsScalarFieldEnum = {
+  id: 'id',
+  template_id: 'template_id',
+  party_id: 'party_id',
+  category: 'category',
+  treatment: 'treatment',
+  service_product_id: 'service_product_id',
+  expense_account_id: 'expense_account_id',
+  net_amount: 'net_amount',
+  period_key: 'period_key',
+  description: 'description',
+  issue_date: 'issue_date',
+  due_date: 'due_date',
+  second_due_date: 'second_due_date',
+  estimated_amount: 'estimated_amount',
+  amount: 'amount',
+  second_due_amount: 'second_due_amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  reference: 'reference',
+  document_id: 'document_id',
+  payment_id: 'payment_id',
+  status: 'status',
+  notification_days: 'notification_days',
+  notes: 'notes',
+  confirmed_at: 'confirmed_at',
+  paid_at: 'paid_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Treasury_obligationsScalarFieldEnum = (typeof Treasury_obligationsScalarFieldEnum)[keyof typeof Treasury_obligationsScalarFieldEnum]
+
+
 export const Bank_accountsScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -3130,6 +3204,9 @@ export const Credit_card_transactionsScalarFieldEnum = {
   converted_amount: 'converted_amount',
   commission_rate: 'commission_rate',
   commission_amount: 'commission_amount',
+  tax_amount: 'tax_amount',
+  withholding_amount: 'withholding_amount',
+  other_deductions: 'other_deductions',
   net_amount: 'net_amount',
   net_currency_code: 'net_currency_code',
   net_exchange_rate: 'net_exchange_rate',
@@ -3140,6 +3217,9 @@ export const Credit_card_transactionsScalarFieldEnum = {
   installment_amount: 'installment_amount',
   description: 'description',
   authorization: 'authorization',
+  settlement_reference: 'settlement_reference',
+  settlement_notes: 'settlement_notes',
+  settlement_bank_id: 'settlement_bank_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

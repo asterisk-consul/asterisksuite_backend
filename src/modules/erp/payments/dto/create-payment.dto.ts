@@ -10,6 +10,15 @@ export class PaymentDocumentDto {
   amount_applied!: number;
 }
 
+export class PaymentObligationDto {
+  @IsString()
+  obligation_id!: string;
+
+  @IsNumber()
+  @Min(0.01)
+  amount_applied!: number;
+}
+
 export class PaymentWithholdingAllocationDto {
   @IsString()
   document_id!: string;
@@ -140,6 +149,23 @@ export class CreatePaymentDto {
   @IsOptional()
   account_id?: string;
 
+  @IsString()
+  @IsOptional()
+  credit_card_id?: string;
+
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  installments_total?: number;
+
+  @IsString()
+  @IsOptional()
+  card_authorization?: string;
+
+  @IsDateString()
+  @IsOptional()
+  expected_clearing_date?: string;
+
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
@@ -156,6 +182,12 @@ export class CreatePaymentDto {
   @Type(() => PaymentDocumentDto)
   @IsOptional()
   documents?: PaymentDocumentDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentObligationDto)
+  @IsOptional()
+  obligations?: PaymentObligationDto[];
 
   @IsArray()
   @ValidateNested({ each: true })

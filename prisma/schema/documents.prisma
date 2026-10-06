@@ -72,7 +72,7 @@ model document_items {
   stock_quantity       Decimal?              @db.Decimal(18, 6)
   price                Decimal               @db.Decimal(15, 2)
   unit_price           Decimal               @default(0) @db.Decimal(15, 2)
-  discount_percentage Decimal               @default(0) @db.Decimal(8, 4)
+  discount_percentage  Decimal               @default(0) @db.Decimal(8, 4)
   exchange_rate        Decimal?              @db.Decimal(18, 6)
   currency_code        String?               @db.VarChar(10)
   rate_type            CurrencyRateType?
@@ -142,7 +142,7 @@ model document_types {
   requires_cae            Boolean                   @default(false)
   is_electronic           Boolean                   @default(false)
   custom_fields_config    Json?
-  enabled_statuses        Json?                       // Array de enteros: [0,1,2,3] o null = todos
+  enabled_statuses        Json? // Array de enteros: [0,1,2,3] o null = todos
   created_at              DateTime                  @default(now()) @db.Timestamp(6)
   updated_at              DateTime?                 @updatedAt @db.Timestamp(6)
   deleted_at              DateTime?
@@ -173,75 +173,75 @@ model document_type_taxes {
 }
 
 model documents {
-  id                           String                              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  document_type_id             String                              @db.Uuid
-  document_sequence_id         String?                             @db.Uuid
-  party_id                     String?                             @db.Uuid
-  parent_document_id           String?                             @db.Uuid
-  commercial_operation_id      String?                             @db.Uuid
-  warehouse_id                 String?                             @db.Uuid
-  fiscal_jurisdiction_id       String?                             @db.Uuid
-  number                       Int
-  date                         DateTime                            @db.Date
-  status                       Int                                 @default(0) @db.SmallInt
-  subtotal                     Decimal                             @default(0) @db.Decimal(15, 2)
-  exempt_amount                Decimal                             @default(0) @db.Decimal(15, 2)
-  total_taxes                  Decimal                             @default(0) @db.Decimal(15, 2)
-  total                        Decimal                             @default(0) @db.Decimal(15, 2)
-  paid_amount                  Decimal                             @default(0) @db.Decimal(15, 2)
-  descrip                      String?                             @db.VarChar(50)
-  ref                          String?                             @db.VarChar(50)
-  currency_code                String?                             @db.VarChar(10)
-  exchange_rate                Decimal?                            @db.Decimal(18, 6)
-  rate_type                    CurrencyRateType?
-  taxable_base                 Decimal?                            @db.Decimal(15, 2)
-  converted_subtotal           Decimal?                            @db.Decimal(18, 2)
-  converted_exempt_amount      Decimal?                            @db.Decimal(18, 2)
-  converted_total_taxes        Decimal?                            @db.Decimal(18, 2)
-  converted_total              Decimal?                            @db.Decimal(18, 2)
-  converted_taxable_base       Decimal?                            @db.Decimal(18, 2)
-  converted_paid_amount        Decimal?                            @db.Decimal(18, 2)
-  custom_fields                Json?
-  assigned_to                  String?                             @db.Uuid
-  validity_date                DateTime?                           @db.Date
-  delivery_date                DateTime?                           @db.Date
-  created_at                   DateTime?                           @default(now()) @db.Timestamp(6)
-  updated_at                   DateTime?                           @updatedAt @db.Timestamp(6)
-  deleted_at                   DateTime?
-  created_by                   String?                             @db.Uuid
-  updated_by                   String?                             @db.Uuid
-  deleted_by                   String?                             @db.Uuid
-  source                       String                              @default("manual")
-  dispatch_order_id            String?                             @db.Uuid
-  fiscal_authorization_id      String?                             @db.Uuid
-  fiscal_authorization_type    String?                             @db.VarChar(10)
-  fiscal_authorization_code    String?                             @db.VarChar(50)
-  fiscal_authorization_expires_at DateTime?                        @db.Date
+  id                              String                              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_type_id                String                              @db.Uuid
+  document_sequence_id            String?                             @db.Uuid
+  party_id                        String?                             @db.Uuid
+  parent_document_id              String?                             @db.Uuid
+  commercial_operation_id         String?                             @db.Uuid
+  warehouse_id                    String?                             @db.Uuid
+  fiscal_jurisdiction_id          String?                             @db.Uuid
+  number                          Int
+  date                            DateTime                            @db.Date
+  status                          Int                                 @default(0) @db.SmallInt
+  subtotal                        Decimal                             @default(0) @db.Decimal(15, 2)
+  exempt_amount                   Decimal                             @default(0) @db.Decimal(15, 2)
+  total_taxes                     Decimal                             @default(0) @db.Decimal(15, 2)
+  total                           Decimal                             @default(0) @db.Decimal(15, 2)
+  paid_amount                     Decimal                             @default(0) @db.Decimal(15, 2)
+  descrip                         String?                             @db.VarChar(50)
+  ref                             String?                             @db.VarChar(50)
+  currency_code                   String?                             @db.VarChar(10)
+  exchange_rate                   Decimal?                            @db.Decimal(18, 6)
+  rate_type                       CurrencyRateType?
+  taxable_base                    Decimal?                            @db.Decimal(15, 2)
+  converted_subtotal              Decimal?                            @db.Decimal(18, 2)
+  converted_exempt_amount         Decimal?                            @db.Decimal(18, 2)
+  converted_total_taxes           Decimal?                            @db.Decimal(18, 2)
+  converted_total                 Decimal?                            @db.Decimal(18, 2)
+  converted_taxable_base          Decimal?                            @db.Decimal(18, 2)
+  converted_paid_amount           Decimal?                            @db.Decimal(18, 2)
+  custom_fields                   Json?
+  assigned_to                     String?                             @db.Uuid
+  validity_date                   DateTime?                           @db.Date
+  delivery_date                   DateTime?                           @db.Date
+  created_at                      DateTime?                           @default(now()) @db.Timestamp(6)
+  updated_at                      DateTime?                           @updatedAt @db.Timestamp(6)
+  deleted_at                      DateTime?
+  created_by                      String?                             @db.Uuid
+  updated_by                      String?                             @db.Uuid
+  deleted_by                      String?                             @db.Uuid
+  source                          String                              @default("manual")
+  dispatch_order_id               String?                             @db.Uuid
+  fiscal_authorization_id         String?                             @db.Uuid
+  fiscal_authorization_type       String?                             @db.VarChar(10)
+  fiscal_authorization_code       String?                             @db.VarChar(50)
+  fiscal_authorization_expires_at DateTime?                           @db.Date
   fiscal_authorization_range_from Int?
   fiscal_authorization_range_to   Int?
-  document_items               document_items[]
-  document_taxes               document_taxes[]
-  document_types               document_types                      @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  document_sequences           document_sequences?                 @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  business_parties             business_parties?                   @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  warehouse                    warehouses?                         @relation("DocumentWarehouse", fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  payment_documents            payment_documents[]
-  parent_document              documents?                          @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  child_documents              documents[]                         @relation("DocumentChain")
-  commercial_operation         commercial_operations?              @relation("CommercialOperationDocuments", fields: [commercial_operation_id], references: [id], onDelete: SetNull)
-  rooted_commercial_operation  commercial_operations?              @relation("CommercialOperationRoot")
-  dispatch_order               dispatch_orders?                    @relation("DispatchDocuments", fields: [dispatch_order_id], references: [id], onDelete: SetNull)
-  source_dispatch_orders       dispatch_orders[]                   @relation("DispatchSourceDocument")
-  presupuesto_doc              presupuesto_documents?
-  orden_venta_doc              orden_venta_documents?
-  orden_compra_doc             orden_compra_documents?
-  hr_vale_commission_details   hr_vale_commission_details[]
-  international_operation_docs international_operation_documents[]
-  international_operation_quotes international_operation_quotes[]
-  withholding_allocations      withholding_allocations[]
-  maintenance_services         maintenance_services[]
-  purchase_tires               tires[]
-  fiscal_authorization         fiscal_authorizations?              @relation(fields: [fiscal_authorization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  document_items                  document_items[]
+  document_taxes                  document_taxes[]
+  document_types                  document_types                      @relation(fields: [document_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  document_sequences              document_sequences?                 @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  business_parties                business_parties?                   @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouse                       warehouses?                         @relation("DocumentWarehouse", fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_documents               payment_documents[]
+  parent_document                 documents?                          @relation("DocumentChain", fields: [parent_document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child_documents                 documents[]                         @relation("DocumentChain")
+  commercial_operation            commercial_operations?              @relation("CommercialOperationDocuments", fields: [commercial_operation_id], references: [id], onDelete: SetNull)
+  rooted_commercial_operation     commercial_operations?              @relation("CommercialOperationRoot")
+  dispatch_order                  dispatch_orders?                    @relation("DispatchDocuments", fields: [dispatch_order_id], references: [id], onDelete: SetNull)
+  source_dispatch_orders          dispatch_orders[]                   @relation("DispatchSourceDocument")
+  presupuesto_doc                 presupuesto_documents?
+  orden_venta_doc                 orden_venta_documents?
+  orden_compra_doc                orden_compra_documents?
+  hr_vale_commission_details      hr_vale_commission_details[]
+  international_operation_docs    international_operation_documents[]
+  international_operation_quotes  international_operation_quotes[]
+  withholding_allocations         withholding_allocations[]
+  maintenance_services            maintenance_services[]
+  purchase_tires                  tires[]
+  fiscal_authorization            fiscal_authorizations?              @relation(fields: [fiscal_authorization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
@@ -252,30 +252,30 @@ model documents {
 }
 
 model fiscal_authorizations {
-  id                    String    @id @default(uuid()) @db.Uuid
-  authorization_type    String    @default("CAI") @db.VarChar(10)
-  code                  String    @db.VarChar(50)
-  document_type_id      String    @db.Uuid
-  document_sequence_id  String    @db.Uuid
-  valid_from            DateTime  @db.Date
-  valid_to              DateTime  @db.Date
-  range_from            Int
-  range_to              Int
-  status                String    @default("ACTIVE") @db.VarChar(20)
-  replacement_date      DateTime? @db.Date
-  observations          String?   @db.Text
-  attachment_file_id    String?   @db.Uuid
-  created_at            DateTime  @default(now()) @db.Timestamp(6)
-  updated_at            DateTime? @updatedAt @db.Timestamp(6)
-  deleted_at            DateTime?
-  created_by            String?   @db.Uuid
-  updated_by            String?   @db.Uuid
-  deleted_by            String?   @db.Uuid
+  id                   String    @id @default(uuid()) @db.Uuid
+  authorization_type   String    @default("CAI") @db.VarChar(10)
+  code                 String    @db.VarChar(50)
+  document_type_id     String    @db.Uuid
+  document_sequence_id String    @db.Uuid
+  valid_from           DateTime  @db.Date
+  valid_to             DateTime  @db.Date
+  range_from           Int
+  range_to             Int
+  status               String    @default("ACTIVE") @db.VarChar(20)
+  replacement_date     DateTime? @db.Date
+  observations         String?   @db.Text
+  attachment_file_id   String?   @db.Uuid
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+  updated_at           DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at           DateTime?
+  created_by           String?   @db.Uuid
+  updated_by           String?   @db.Uuid
+  deleted_by           String?   @db.Uuid
 
-  document_type         document_types     @relation(fields: [document_type_id], references: [id], onDelete: NoAction)
-  document_sequence     document_sequences @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction)
-  documents             documents[]
-  alerts                fiscal_authorization_alerts[]
+  document_type     document_types                @relation(fields: [document_type_id], references: [id], onDelete: NoAction)
+  document_sequence document_sequences            @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction)
+  documents         documents[]
+  alerts            fiscal_authorization_alerts[]
 
   @@unique([authorization_type, code, document_type_id, document_sequence_id])
   @@index([document_type_id, document_sequence_id, valid_from, valid_to])
@@ -283,32 +283,32 @@ model fiscal_authorizations {
 }
 
 model fiscal_authorization_settings {
-  id                         String   @id @default(uuid()) @db.Uuid
-  settings_key               String   @unique @default("default") @db.VarChar(30)
-  alerts_enabled             Boolean  @default(true)
-  day_thresholds             Json     @default("[30,15,7,3,1]")
-  number_thresholds          Json     @default("[100,50,20,10]")
-  expired_policy             String   @default("BLOCK") @db.VarChar(20)
-  missing_policy             String   @default("BLOCK") @db.VarChar(20)
-  daily_after_expiration     Boolean  @default(false)
-  notify_roles               Json?
-  created_at                 DateTime @default(now()) @db.Timestamp(6)
-  updated_at                 DateTime? @updatedAt @db.Timestamp(6)
-  updated_by                 String?  @db.Uuid
+  id                     String    @id @default(uuid()) @db.Uuid
+  settings_key           String    @unique @default("default") @db.VarChar(30)
+  alerts_enabled         Boolean   @default(true)
+  day_thresholds         Json      @default("[30,15,7,3,1]")
+  number_thresholds      Json      @default("[100,50,20,10]")
+  expired_policy         String    @default("BLOCK") @db.VarChar(20)
+  missing_policy         String    @default("BLOCK") @db.VarChar(20)
+  daily_after_expiration Boolean   @default(false)
+  notify_roles           Json?
+  created_at             DateTime  @default(now()) @db.Timestamp(6)
+  updated_at             DateTime? @updatedAt @db.Timestamp(6)
+  updated_by             String?   @db.Uuid
 
   @@schema("tenant")
 }
 
 model fiscal_authorization_alerts {
-  id                       String   @id @default(uuid()) @db.Uuid
-  fiscal_authorization_id  String   @db.Uuid
-  alert_key                String   @db.VarChar(80)
-  severity                 String   @default("WARNING") @db.VarChar(20)
-  title                    String   @db.VarChar(180)
-  message                  String   @db.Text
-  is_read                  Boolean  @default(false)
-  created_at               DateTime @default(now()) @db.Timestamp(6)
-  read_at                  DateTime? @db.Timestamp(6)
+  id                      String    @id @default(uuid()) @db.Uuid
+  fiscal_authorization_id String    @db.Uuid
+  alert_key               String    @db.VarChar(80)
+  severity                String    @default("WARNING") @db.VarChar(20)
+  title                   String    @db.VarChar(180)
+  message                 String    @db.Text
+  is_read                 Boolean   @default(false)
+  created_at              DateTime  @default(now()) @db.Timestamp(6)
+  read_at                 DateTime? @db.Timestamp(6)
 
   authorization fiscal_authorizations @relation(fields: [fiscal_authorization_id], references: [id], onDelete: Cascade)
 

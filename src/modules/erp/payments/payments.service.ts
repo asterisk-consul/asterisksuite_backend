@@ -30,7 +30,7 @@ export class PaymentsService {
 
   private validatePaymentInstrument(
     method: string,
-    options: { cashBoxId?: string | null; bankAccountId?: string | null; hasChecks?: boolean },
+    options: { cashBoxId?: string | null; bankAccountId?: string | null; hasChecks?: boolean; creditCardId?: string | null },
   ) {
     if (method === 'CASH' && !options.cashBoxId) {
       throw new BadRequestException('Seleccioná una caja para registrar el pago o cobro');
@@ -41,6 +41,9 @@ export class PaymentsService {
     if (method === 'CHECK' && !options.hasChecks) {
       throw new BadRequestException('Seleccioná al menos un cheque para registrar el pago o cobro');
     }
+    if (method === 'CREDIT_CARD' && !options.creditCardId) {
+      throw new BadRequestException('Seleccioná una tarjeta corporativa o canal de cobro');
+    }
   }
 
   // ═══════════════════════════════════════════
@@ -48,6 +51,9 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async create(dto: CreatePaymentDto, userId: string) {
+    if (dto.obligations?.length && dto.type !== 'PAYMENT') {
+      throw new BadRequestException('Los servicios e impuestos pendientes solo pueden asociarse a un pago');
+    }
     console.log('[payments] create DTO:', JSON.stringify(dto, null, 2))
     console.log('[payments] create userId:', userId)
 
@@ -63,6 +69,7 @@ export class PaymentsService {
       cashBoxId: dto.cash_box_id,
       bankAccountId: dto.bank_account_id,
       hasChecks: Boolean(dto.checks?.length || dto.check_ids?.length),
+      creditCardId: dto.credit_card_id,
     });
 
     const party = dto.party_id
@@ -186,6 +193,70 @@ export class PaymentsService {
       }
     }
 
+    await this.syncTreasuryObligations(payment.id, dto.obligations, dto.party_id, dto.currency_code, userId);
+
+    if (dto.payment_method === 'CREDIT_CARD' && dto.credit_card_id) {
+      const card = await this.prisma.credit_cards.findFirst({
+        where: { id: dto.credit_card_id, active: true, deleted_at: null },
+      });
+      if (!card) throw new BadRequestException('La tarjeta o canal de cobro seleccionado no existe o está inactivo');
+      const expectedType = dto.type === 'COLLECTION' ? 'CUSTOMER' : 'COMPANY';
+      if (card.type !== expectedType) {
+        throw new BadRequestException(dto.type === 'COLLECTION'
+          ? 'Seleccioná un canal de cobro para registrar una venta con tarjeta'
+          : 'Seleccioná una tarjeta corporativa para pagar una compra');
+      }
+      const installments = Math.max(1, dto.installments_total ?? 1);
+      const commissionRate = dto.type === 'COLLECTION' ? Number(card.commission_rate ?? 0) : 0;
+      const commissionAmount = Number((effectiveAmount * commissionRate / 100).toFixed(2));
+      const transaction = await this.prisma.credit_card_transactions.create({
+        data: {
+          credit_card_id: card.id,
+          payment_id: payment.id,
+          type: dto.type === 'COLLECTION' ? 'COLLECTION' : 'PURCHASE',
+          date: parseLocalDateTime(dto.date),
+          amount: effectiveAmount,
+          currency_code: dto.currency_code,
+          exchange_rate: exchangeRate,
+          rate_type: rateType,
+          converted_amount: convertedAmount,
+          commission_rate: commissionRate || null,
+          commission_amount: commissionAmount || null,
+          net_amount: dto.type === 'COLLECTION' ? effectiveAmount - commissionAmount : effectiveAmount,
+          net_currency_code: dto.currency_code,
+          expected_clearing_date: dto.expected_clearing_date
+            ? parseLocalDateTime(dto.expected_clearing_date)
+            : dto.type === 'COLLECTION' && card.clearing_days
+              ? new Date(parseLocalDateTime(dto.date).getTime() + card.clearing_days * 86400000)
+              : null,
+          installments_total: installments,
+          installment_amount: Number((effectiveAmount / installments).toFixed(2)),
+          description: dto.description,
+          authorization: dto.card_authorization,
+          created_by: userId,
+        },
+      });
+      if (dto.type !== 'COLLECTION') {
+        const baseDate = parseLocalDateTime(dto.date);
+        for (let installment = 1; installment <= installments; installment += 1) {
+          const dueDate = new Date(baseDate);
+          dueDate.setMonth(dueDate.getMonth() + installment);
+          await this.prisma.credit_card_installments.create({
+            data: {
+              transaction_id: transaction.id,
+              installment_number: installment,
+              total_installments: installments,
+              amount: Number((effectiveAmount / installments).toFixed(2)),
+              currency_code: dto.currency_code,
+              exchange_rate: exchangeRate,
+              due_date: dueDate,
+              created_by: userId,
+            },
+          });
+        }
+      }
+    }
+
     // Store withholdings (retenciones) — status CALCULATED until confirm
     if (dto.withholdings && dto.withholdings.length > 0) {
       if (!dto.party_id) {
@@ -271,10 +342,14 @@ export class PaymentsService {
       cashBoxId: payment.cash_box_id,
       bankAccountId: payment.bank_account_id,
       hasChecks: checkCount > 0,
+      creditCardId: payment.credit_card_transactions?.[0]?.credit_card_id,
     });
 
     // Validate documents if present
     const paymentDocs = await this.prisma.payment_documents.findMany({
+      where: { payment_id: id, deleted_at: null },
+    });
+    const paymentObligations = await this.prisma.treasury_obligations.findMany({
       where: { payment_id: id, deleted_at: null },
     });
 
@@ -372,6 +447,7 @@ export class PaymentsService {
     // ADVANCE without docs → NO current account entry (pendiente de factura)
     // Otherwise → PAYMENT/COLLECTION/EXPENSE (como siempre)
     const isAdvanceNoDocs = payment.payment_mode === 'ADVANCE' && paymentDocs.length === 0;
+    const isDirectObligationPayment = paymentObligations.length > 0 && paymentDocs.length === 0;
 
     const confirmed = await this.prisma.$transaction(async (tx) => {
       // Apply to documents
@@ -430,7 +506,7 @@ export class PaymentsService {
 
       // Update current account — NOT for advance without documents
       // (the advance impacts CC only when applied to an invoice)
-      if (payment.party_id && !isAdvanceNoDocs) {
+      if (payment.party_id && !isAdvanceNoDocs && !isDirectObligationPayment) {
         await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
       }
 
@@ -490,6 +566,17 @@ export class PaymentsService {
       }
     }
 
+    await this.prisma.treasury_obligations.updateMany({
+      where: { payment_id: id, deleted_at: null },
+      data: { status: 'PAID', paid_at: payment.date, updated_at: new Date(), updated_by: userId },
+    });
+    if (paymentDocs.length) {
+      await this.prisma.treasury_obligations.updateMany({
+        where: { document_id: { in: paymentDocs.map(item => item.document_id) }, deleted_at: null },
+        data: { payment_id: id, status: 'PAID', paid_at: payment.date, updated_at: new Date(), updated_by: userId },
+      });
+    }
+
     return confirmed;
   }
 
@@ -503,7 +590,7 @@ export class PaymentsService {
       throw new BadRequestException('Solo se pueden marcar como pagados pagos confirmados');
     }
 
-    return this.prisma.payments.update({
+    const paid = await this.prisma.payments.update({
       where: { id },
       data: {
         status: 'PAID',
@@ -512,6 +599,11 @@ export class PaymentsService {
         updated_by: userId,
       },
     });
+    await this.prisma.treasury_obligations.updateMany({
+      where: { payment_id: id, deleted_at: null },
+      data: { status: 'PAID', paid_at: new Date(), updated_at: new Date(), updated_by: userId },
+    });
+    return paid;
   }
 
   // ═══════════════════════════════════════════
@@ -525,6 +617,10 @@ export class PaymentsService {
     }
 
     await this.reverseSideEffects(payment, userId, 'payment_rejection');
+    await this.prisma.treasury_obligations.updateMany({
+      where: { payment_id: id, deleted_at: null },
+      data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
+    });
 
     const rejected = await this.prisma.payments.update({
       where: { id },
@@ -542,7 +638,7 @@ export class PaymentsService {
   // REVERSE (cancel confirmed payment)
   // ═══════════════════════════════════════════
 
-  async reverse(id: string, userId: string) {
+  async reverse(id: string, userId: string, checkAction: 'RETURN_TO_PORTFOLIO' | 'CANCEL' = 'RETURN_TO_PORTFOLIO') {
     const payment = await this.findOne(id);
     if (payment.status === 'DRAFT') {
       throw new BadRequestException('No se puede anular un pago en borrador. Use eliminar.');
@@ -551,7 +647,22 @@ export class PaymentsService {
       throw new BadRequestException('El pago ya está anulado');
     }
 
-    await this.reverseSideEffects(payment, userId, 'payment_reversal');
+    const cardTransactions = payment.credit_card_transactions ?? [];
+    for (const transaction of cardTransactions) {
+      if (transaction.clearing_status === 'CLEARED') {
+        throw new BadRequestException('La operación de tarjeta ya impactó en banco y debe revertirse primero desde su liquidación');
+      }
+    }
+
+    await this.reverseSideEffects(payment, userId, 'payment_reversal', checkAction);
+    await this.prisma.treasury_obligations.updateMany({
+      where: { payment_id: id, deleted_at: null },
+      data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
+    });
+    for (const transaction of cardTransactions) {
+      await this.prisma.credit_card_installments.updateMany({ where: { transaction_id: transaction.id, deleted_at: null }, data: { deleted_at: new Date(), deleted_by: userId } });
+      await this.prisma.credit_card_transactions.update({ where: { id: transaction.id }, data: { clearing_status: 'FAILED', updated_by: userId } });
+    }
 
     const reversed = await this.prisma.payments.update({
       where: { id },
@@ -672,10 +783,21 @@ export class PaymentsService {
             },
           },
         },
+        credit_card_transactions: {
+          where: { deleted_at: null },
+          include: {
+            credit_card: true,
+            installments: { where: { deleted_at: null }, orderBy: { installment_number: 'asc' } },
+          },
+        },
       },
     });
     if (!payment) throw new NotFoundException('Pago no encontrado');
-    return payment;
+    const obligations = await this.prisma.treasury_obligations.findMany({
+      where: { payment_id: id, deleted_at: null },
+      orderBy: { due_date: 'asc' },
+    });
+    return { ...payment, obligations };
   }
 
   // ═══════════════════════════════════════════
@@ -687,6 +809,9 @@ export class PaymentsService {
     if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden editar pagos en borrador');
     }
+    if (dto.obligations?.length && payment.type !== 'PAYMENT') {
+      throw new BadRequestException('Los servicios e impuestos pendientes solo pueden asociarse a un pago');
+    }
 
     const effectiveMethod = dto.payment_method ?? payment.payment_method;
     const checkCount = effectiveMethod === 'CHECK'
@@ -696,6 +821,7 @@ export class PaymentsService {
       cashBoxId: dto.cash_box_id ?? payment.cash_box_id,
       bankAccountId: dto.bank_account_id ?? payment.bank_account_id,
       hasChecks: checkCount > 0,
+      creditCardId: dto.credit_card_id ?? payment.credit_card_transactions?.[0]?.credit_card_id,
     });
 
     const data: Record<string, any> = {
@@ -720,10 +846,44 @@ export class PaymentsService {
     if (dto.account_id !== undefined) data.account_id = dto.account_id || null;
     if (dto.payment_mode) data.payment_mode = dto.payment_mode;
 
-    return this.prisma.payments.update({
+    const updated = await this.prisma.payments.update({
       where: { id },
       data,
     });
+    if (dto.obligations !== undefined) {
+      await this.syncTreasuryObligations(
+        id,
+        dto.obligations,
+        dto.party_id ?? payment.party_id ?? undefined,
+        dto.currency_code ?? payment.currency_code,
+        userId,
+      );
+    }
+    if (effectiveMethod === 'CREDIT_CARD') {
+      const transaction = payment.credit_card_transactions?.[0];
+      const cardId = dto.credit_card_id ?? transaction?.credit_card_id;
+      if (!cardId) throw new BadRequestException('Seleccioná una tarjeta corporativa o canal de cobro');
+      const card = await this.prisma.credit_cards.findFirst({ where: { id: cardId, active: true, deleted_at: null } });
+      if (!card) throw new BadRequestException('La tarjeta o canal de cobro no está disponible');
+      const expectedType = payment.type === 'COLLECTION' ? 'CUSTOMER' : 'COMPANY';
+      if (card.type !== expectedType) throw new BadRequestException('La tarjeta seleccionada no corresponde al tipo de operación');
+      const amount = Number(dto.amount ?? payment.amount);
+      const installments = Math.max(1, dto.installments_total ?? transaction?.installments_total ?? 1);
+      const commissionRate = payment.type === 'COLLECTION' ? Number(card.commission_rate ?? 0) : 0;
+      const txData: any = {
+        credit_card_id: cardId, date: dto.date ? parseLocalDateTime(dto.date) : payment.date,
+        amount, currency_code: dto.currency_code ?? payment.currency_code,
+        installments_total: installments, installment_amount: Number((amount / installments).toFixed(2)),
+        authorization: dto.card_authorization ?? transaction?.authorization,
+        commission_rate: commissionRate || null,
+        commission_amount: commissionRate ? Number((amount * commissionRate / 100).toFixed(2)) : null,
+        net_amount: payment.type === 'COLLECTION' ? Number((amount * (1 - commissionRate / 100)).toFixed(2)) : amount,
+        expected_clearing_date: dto.expected_clearing_date ? parseLocalDateTime(dto.expected_clearing_date) : transaction?.expected_clearing_date,
+        updated_at: new Date(), updated_by: userId,
+      };
+      if (transaction) await this.prisma.credit_card_transactions.update({ where: { id: transaction.id }, data: txData });
+    }
+    return this.findOne(updated.id);
   }
 
   // ═══════════════════════════════════════════
@@ -736,6 +896,16 @@ export class PaymentsService {
       throw new BadRequestException('No se puede eliminar un pago confirmado o pagado. Anúlelo primero.');
     }
 
+    await this.prisma.treasury_obligations.updateMany({
+      where: { payment_id: id, deleted_at: null },
+      data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
+    });
+    const cardTransactions = payment.credit_card_transactions ?? [];
+    for (const transaction of cardTransactions) {
+      if (transaction.clearing_status === 'CLEARED') throw new BadRequestException('La operación de tarjeta ya impactó en banco y debe revertirse desde su liquidación');
+      await this.prisma.credit_card_installments.updateMany({ where: { transaction_id: transaction.id, deleted_at: null }, data: { deleted_at: new Date(), deleted_by: userId } });
+      await this.prisma.credit_card_transactions.update({ where: { id: transaction.id }, data: { clearing_status: 'FAILED', updated_by: userId } });
+    }
     return this.prisma.payments.update({
       where: { id },
       data: {
@@ -750,6 +920,48 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
   // PRIVATE HELPERS
   // ═══════════════════════════════════════════
+
+  private async syncTreasuryObligations(
+    paymentId: string,
+    obligations: Array<{ obligation_id: string; amount_applied: number }> | undefined,
+    partyId: string | undefined,
+    currencyCode: string,
+    userId: string,
+  ) {
+    if (obligations === undefined) return;
+    const ids = [...new Set(obligations.map(item => item.obligation_id))];
+    const rows = ids.length ? await this.prisma.treasury_obligations.findMany({
+      where: { id: { in: ids }, deleted_at: null },
+    }) : [];
+    if (rows.length !== ids.length) throw new BadRequestException('Una de las obligaciones seleccionadas ya no existe');
+    for (const row of rows) {
+      if (!['READY', 'PLANNED', 'REVIEW'].includes(row.status)) {
+        throw new BadRequestException(`La obligación ${row.description} ya no está disponible para pagar`);
+      }
+      if (row.payment_id && row.payment_id !== paymentId) {
+        throw new BadRequestException(`La obligación ${row.description} ya está asociada a otro pago`);
+      }
+      if (partyId && row.party_id !== partyId) {
+        throw new BadRequestException('Todas las obligaciones deben pertenecer al tercero seleccionado');
+      }
+      if (row.currency_code !== currencyCode) {
+        throw new BadRequestException('La moneda de la obligación debe coincidir con la moneda del pago');
+      }
+      if (row.treatment !== 'DIRECT_EXPENSE' || !row.expense_account_id) {
+        throw new BadRequestException(`La obligación ${row.description} debe pagarse mediante su factura fiscal o tener una cuenta de gasto configurada`);
+      }
+    }
+    await this.prisma.treasury_obligations.updateMany({
+      where: { payment_id: paymentId, id: { notIn: ids }, deleted_at: null },
+      data: { payment_id: null, status: 'READY', paid_at: null, updated_by: userId },
+    });
+    if (ids.length) {
+      await this.prisma.treasury_obligations.updateMany({
+        where: { id: { in: ids } },
+        data: { payment_id: paymentId, status: 'READY', paid_at: null, updated_by: userId },
+      });
+    }
+  }
 
   private async refreshPaymentOperations(paymentId: string) {
     const links = await this.prisma.payment_documents.findMany({
@@ -968,7 +1180,12 @@ export class PaymentsService {
     );
   }
 
-  private async reverseSideEffects(payment: any, userId: string, referenceType: string) {
+  private async reverseSideEffects(
+    payment: any,
+    userId: string,
+    referenceType: string,
+    checkAction: 'RETURN_TO_PORTFOLIO' | 'CANCEL' = 'RETURN_TO_PORTFOLIO',
+  ) {
     // Anular retenciones asociadas
     await this.prisma.withholdings.updateMany({
       where: { payment_id: payment.id, deleted_at: null },
@@ -1097,7 +1314,7 @@ export class PaymentsService {
 
     // Revert linked checks
     if (payment.payment_method === 'CHECK') {
-      await this.reverseLinkedChecks(payment, userId);
+      await this.reverseLinkedChecks(payment, userId, checkAction);
     }
 
     // Quitar de la cuenta corriente todas las entradas vinculadas al pago.
@@ -1139,7 +1356,11 @@ export class PaymentsService {
     }
   }
 
-  private async reverseLinkedChecks(payment: any, userId: string) {
+  private async reverseLinkedChecks(
+    payment: any,
+    userId: string,
+    checkAction: 'RETURN_TO_PORTFOLIO' | 'CANCEL' = 'RETURN_TO_PORTFOLIO',
+  ) {
     const checks = await this.prisma.checks.findMany({
       where: { payment_id: payment.id, deleted_at: null },
     });
@@ -1196,11 +1417,12 @@ export class PaymentsService {
           }
         }
 
-        // Revertir estado del cheque propio
+        // El usuario decide si el cheque vuelve a estar disponible o queda
+        // cancelado junto con el pago ingresado por error.
         await this.prisma.checks.update({
           where: { id: check.id },
           data: {
-            status: 'PENDING',
+            status: checkAction === 'CANCEL' ? 'CANCELLED' : 'PENDING',
             confirmed_by: null,
             confirmed_at: null,
             updated_at: new Date(),
@@ -1208,19 +1430,17 @@ export class PaymentsService {
           },
         });
       } else {
-        // Revertir estado del cheque de tercero: devuelve el saldo aplicado
+        // Revertir estado del cheque de tercero según la decisión tomada al
+        // anular. Al devolverlo a cartera recupera el valor físico completo.
         const allocation = await this.prisma.payment_checks.findUnique({
           where: { payment_id_check_id: { payment_id: payment.id, check_id: check.id } },
         });
-        const applied = allocation ? allocation.amount_applied.toNumber() : Number(check.amount);
-        const currentAvailable = check.available_amount != null ? Number(check.available_amount) : 0;
-
         await this.prisma.checks.update({
           where: { id: check.id },
           data: {
-            status: 'PENDING',
+            status: checkAction === 'CANCEL' ? 'CANCELLED' : 'PENDING',
             clearing_date: null,
-            available_amount: Number((currentAvailable + applied).toFixed(2)),
+            available_amount: checkAction === 'CANCEL' ? 0 : Number(check.amount),
             updated_at: new Date(),
             updated_by: userId,
           },

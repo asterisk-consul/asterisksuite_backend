@@ -5,6 +5,8 @@ import { PartnersModule } from '../partners/partners.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { BankAccountsModule } from '../bank-accounts/bank-accounts.module';
 import { CurrentAccountsModule } from '../current-accounts/current-accounts.module';
+import { TreasuryObligationsModule } from '../treasury-obligations/treasury-obligations.module';
+import { CreditCardsModule } from '../credit-cards/credit-cards.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { CurrentAccountsModule } from '../current-accounts/current-accounts.modu
     PaymentsModule,
     BankAccountsModule,
     CurrentAccountsModule,
+    TreasuryObligationsModule,
+    CreditCardsModule,
   ],
   exports: [
     EmployeesModule,
@@ -20,6 +24,8 @@ import { CurrentAccountsModule } from '../current-accounts/current-accounts.modu
     PaymentsModule,
     BankAccountsModule,
     CurrentAccountsModule,
+    TreasuryObligationsModule,
+    CreditCardsModule,
   ],
 })
 export class TesoreriaModule {}

@@ -268,9 +268,9 @@ model international_operation_payments {
   container_id String?  @db.Uuid
   created_at   DateTime @default(now()) @db.Timestamp(6)
 
-  operation international_operations    @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  payment   payments                    @relation(fields: [payment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  container international_containers?   @relation(fields: [container_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  operation international_operations  @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  payment   payments                  @relation(fields: [payment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  container international_containers? @relation(fields: [container_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   @@id([operation_id, payment_id])
   @@index([container_id], map: "idx_iop_container")
