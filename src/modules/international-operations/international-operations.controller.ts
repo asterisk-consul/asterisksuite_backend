@@ -165,8 +165,21 @@ export class InternationalOperationsController {
 
   @Patch('containers/:containerId')
   @RequirePermissions('international_operations.update')
-  updateContainer(@Param('containerId') containerId: string, @Body() dto: UpdateContainerDto) {
-    return this.containersService.update(containerId, dto);
+  updateContainer(
+    @Param('containerId') containerId: string,
+    @Body() dto: UpdateContainerDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.containersService.update(containerId, dto, user.id);
+  }
+
+  @Post('containers/:containerId/sync-transit-stock')
+  @RequirePermissions('international_operations.update')
+  syncContainerTransitStock(
+    @Param('containerId') containerId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.containersService.syncTransitStock(containerId, user.id);
   }
 
   @Delete('containers/:containerId')

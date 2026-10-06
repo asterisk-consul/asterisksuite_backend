@@ -5,6 +5,11 @@ import { DocumentSequencesService } from '@/modules/erp/document-sequences/docum
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
 import { OperationStatus, InternationalExpenseType, QuoteStatus } from '@/generated/prisma/enums';
+import {
+  hasInternationalTransitMovements,
+  receiveInternationalRemitoFromTransit,
+  registerInternationalInvoiceInTransit,
+} from './international-stock';
 
 @Injectable()
 export class InternationalOperationsService {
@@ -498,6 +503,10 @@ export class InternationalOperationsService {
 
     const doc = await this.prisma.documents.findFirst({
       where: { id: documentId, deleted_at: null },
+      include: {
+        document_types: { select: { category: true, direction: true } },
+        document_items: { where: { deleted_at: null } },
+      },
     });
     if (!doc) throw new NotFoundException('Documento no encontrado');
 
@@ -525,15 +534,27 @@ export class InternationalOperationsService {
       }
     }
 
-    return this.prisma.international_operation_documents.create({
-      data: {
-        operation_id: operationId,
-        document_id: documentId,
-        expense_type: expenseType ?? 'MERCHANDISE',
-        custom_expense_description: customExpenseDescription ?? null,
-        container_id: containerId ?? null,
-        exchange_rate: normalizedExchangeRate,
-      },
+    return this.prisma.$transaction(async (tx) => {
+      const relation = await tx.international_operation_documents.create({
+        data: {
+          operation_id: operationId,
+          document_id: documentId,
+          expense_type: expenseType ?? 'MERCHANDISE',
+          custom_expense_description: customExpenseDescription ?? null,
+          container_id: containerId ?? null,
+          exchange_rate: normalizedExchangeRate,
+        },
+      });
+
+      if ((expenseType ?? 'MERCHANDISE') === 'MERCHANDISE' && containerId && doc.status === 2) {
+        if (doc.document_types?.category === 'INVOICE') {
+          await registerInternationalInvoiceInTransit(tx, documentId, containerId);
+        } else if (doc.document_types?.category === 'REMITO') {
+          await receiveInternationalRemitoFromTransit(tx, doc, containerId);
+        }
+      }
+
+      return relation;
     });
   }
 
@@ -545,6 +566,10 @@ export class InternationalOperationsService {
     });
     if (!existing) {
       throw new NotFoundException('El documento no está asociado a esta operación');
+    }
+
+    if (await hasInternationalTransitMovements(this.prisma, documentId)) {
+      throw new BadRequestException('No se puede desasociar el documento porque ya generó movimientos de stock en tránsito');
     }
 
     return this.prisma.international_operation_documents.delete({

@@ -204,6 +204,8 @@ export const ModelName = {
   current_accounts: 'current_accounts',
   current_account_entries: 'current_account_entries',
   warehouse_stock: 'warehouse_stock',
+  stock_reservations: 'stock_reservations',
+  stock_reservation_allocations: 'stock_reservation_allocations',
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses'
 } as const
@@ -2636,6 +2638,9 @@ export const Sales_flow_settingsScalarFieldEnum = {
   require_invoice_for_delivery: 'require_invoice_for_delivery',
   auto_create_delivery_note: 'auto_create_delivery_note',
   allow_partial_delivery: 'allow_partial_delivery',
+  reserve_stock_on_order_confirmation: 'reserve_stock_on_order_confirmation',
+  allow_partial_stock_reservation: 'allow_partial_stock_reservation',
+  allow_backorder_without_stock: 'allow_backorder_without_stock',
   active_from: 'active_from',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -3274,6 +3279,45 @@ export const Warehouse_stockScalarFieldEnum = {
 } as const
 
 export type Warehouse_stockScalarFieldEnum = (typeof Warehouse_stockScalarFieldEnum)[keyof typeof Warehouse_stockScalarFieldEnum]
+
+
+export const Stock_reservationsScalarFieldEnum = {
+  id: 'id',
+  warehouse_id: 'warehouse_id',
+  product_id: 'product_id',
+  quantity_reserved: 'quantity_reserved',
+  quantity_consumed: 'quantity_consumed',
+  quantity_released: 'quantity_released',
+  status: 'status',
+  reservation_type: 'reservation_type',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  source_item_id: 'source_item_id',
+  party_id: 'party_id',
+  reason: 'reason',
+  expires_at: 'expires_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Stock_reservationsScalarFieldEnum = (typeof Stock_reservationsScalarFieldEnum)[keyof typeof Stock_reservationsScalarFieldEnum]
+
+
+export const Stock_reservation_allocationsScalarFieldEnum = {
+  id: 'id',
+  reservation_id: 'reservation_id',
+  document_id: 'document_id',
+  quantity: 'quantity',
+  status: 'status',
+  created_at: 'created_at',
+  reversed_at: 'reversed_at',
+  created_by: 'created_by'
+} as const
+
+export type Stock_reservation_allocationsScalarFieldEnum = (typeof Stock_reservation_allocationsScalarFieldEnum)[keyof typeof Stock_reservation_allocationsScalarFieldEnum]
 
 
 export const Warehouse_stock_movementsScalarFieldEnum = {

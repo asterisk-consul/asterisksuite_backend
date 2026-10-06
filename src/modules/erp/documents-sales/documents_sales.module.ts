@@ -16,15 +16,20 @@ import { MySalesModule } from './my-sales/my-sales.module';
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { SalesCommercialFlowController } from './sales-commercial-flow.controller';
 import { FiscalAuthorizationsModule } from '../fiscal-authorizations/fiscal-authorizations.module';
+import { StockReservationsService } from './stock-reservations.service';
+import { StockReservationsController } from './stock-reservations.controller';
+import { StockReservationsScheduler } from './stock-reservations.scheduler';
 
 @Module({
   imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule, FiscalAuthorizationsModule],
-  controllers: [DocumentsSalesController, DocumentAssignmentController, SalesCommercialFlowController],
+  controllers: [DocumentsSalesController, DocumentAssignmentController, SalesCommercialFlowController, StockReservationsController],
   providers: [
     DocumentsSalesService,
     DocumentsSalesItemsService,
     DocumentsSalesTotalsService,
     SalesCommercialFlowService,
+    StockReservationsService,
+    StockReservationsScheduler,
   ],
   exports: [DocumentsSalesService, SalesCommercialFlowService, MySalesModule],
 })

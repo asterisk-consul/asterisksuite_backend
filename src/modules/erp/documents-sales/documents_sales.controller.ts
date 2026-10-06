@@ -186,6 +186,6 @@ export class DocumentsSalesController {
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'delete');
-    return this.service.remove(id);
+    return this.service.remove(id, user.id);
   }
 }

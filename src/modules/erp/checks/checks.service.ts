@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
+import { parseLocalDateTime } from '@/common/utils/dates';
 
 @Injectable()
 export class ChecksService {
@@ -26,6 +27,9 @@ export class ChecksService {
   }
 
   async create(dto: CreateCheckDto, userId: string) {
+    if (dto.is_own && !dto.bank_account_id) {
+      throw new BadRequestException('Seleccioná la cuenta bancaria que se debitará para el cheque propio');
+    }
     await this.validateBankAccount(dto.bank_account_id, dto.currency_code);
     return this.prisma.checks.create({
       data: {
@@ -84,7 +88,6 @@ export class ChecksService {
     is_own?: boolean;
     bank_name?: string;
     due_before?: string;
-    user_id?: string;
   }) {
     const where: Record<string, any> = { deleted_at: null };
 
@@ -94,8 +97,6 @@ export class ChecksService {
     if (filters?.due_before) {
       where.due_date = { lte: new Date(filters.due_before) };
     }
-    if (filters?.user_id) where.created_by = filters.user_id;
-
     return this.prisma.checks.findMany({
       where,
       orderBy: { due_date: 'asc' },
@@ -125,6 +126,9 @@ export class ChecksService {
         payment: {
           select: { id: true, number: true, type: true, amount: true, party_id: true },
         },
+        bank_account: {
+          select: { id: true, name: true, bank_name: true, currency_code: true },
+        },
       },
     });
     if (!check) throw new NotFoundException('Cheque no encontrado');
@@ -133,6 +137,10 @@ export class ChecksService {
 
   async update(id: string, dto: UpdateCheckDto, userId: string) {
     const check = await this.findOne(id);
+
+    if (check.is_own && !(dto.bank_account_id ?? check.bank_account_id)) {
+      throw new BadRequestException('El cheque propio debe tener una cuenta bancaria a debitar');
+    }
 
     await this.validateBankAccount(
       dto.bank_account_id ?? check.bank_account_id ?? undefined,
@@ -153,7 +161,10 @@ export class ChecksService {
     if (dto.account_number !== undefined) data.account_number = dto.account_number;
     if (dto.issuer_name !== undefined && dto.issuer_name !== '') data.issuer_name = dto.issuer_name;
     if (dto.issuer_id !== undefined) data.issuer_id = dto.issuer_id;
-    if (dto.due_date) data.due_date = new Date(dto.due_date);
+    if (dto.due_date) {
+      data.due_date = new Date(dto.due_date);
+      data.notification_sent = false;
+    }
     if (dto.status) data.status = dto.status;
     if (dto.notes !== undefined) data.notes = dto.notes;
     if (dto.payment_date) data.payment_date = new Date(dto.payment_date);
@@ -194,7 +205,7 @@ export class ChecksService {
   async clear(id: string, userId: string) {
     const check = await this.findOne(id);
     if (check.is_own) {
-      throw new BadRequestException('Los cheques propios se procesan por scheduler');
+      throw new BadRequestException('Los cheques propios se debitan manualmente desde la cuenta asociada');
     }
     if (!['PENDING', 'CONFIRMED'].includes(check.status)) {
       throw new BadRequestException('Solo se pueden cobrar cheques pendientes o confirmados');
@@ -254,10 +265,10 @@ export class ChecksService {
     return this.findOne(id);
   }
 
-  async deposit(id: string, dto: { bank_account_id: string; amount?: number }, userId: string) {
+  async deposit(id: string, dto: { bank_account_id: string; amount?: number; date?: string }, userId: string) {
     const check = await this.findOne(id);
     if (check.is_own) {
-      throw new BadRequestException('Los cheques propios se procesan por scheduler');
+      throw new BadRequestException('Los cheques propios se debitan manualmente desde la cuenta asociada');
     }
     if (!['PENDING', 'CONFIRMED'].includes(check.status)) {
       throw new BadRequestException('Solo se pueden depositar cheques pendientes o confirmados');
@@ -270,7 +281,8 @@ export class ChecksService {
       throw new NotFoundException('Cuenta bancaria destino no encontrada');
     }
 
-    const depositAmount = dto.amount ?? Number(check.amount);
+    const depositAmount = Number(check.available_amount ?? check.amount);
+    const effectiveDate = dto.date ? parseLocalDateTime(dto.date) : new Date();
 
     const currentBalance = Number(bankAccount.balance);
     const balanceAfter = currentBalance + depositAmount;
@@ -280,9 +292,10 @@ export class ChecksService {
         where: { id },
         data: {
           status: 'CLEARED',
+          available_amount: 0,
           bank_account_id: dto.bank_account_id,
-          deposit_date: new Date(),
-          clearing_date: new Date(),
+          deposit_date: effectiveDate,
+          clearing_date: effectiveDate,
           updated_at: new Date(),
           updated_by: userId,
         },
@@ -303,7 +316,7 @@ export class ChecksService {
           reference_type: 'check',
           reference_id: check.id,
           payment_id: check.payment_id,
-          date: new Date(),
+          date: effectiveDate,
           created_by: userId,
         },
       });
@@ -313,6 +326,84 @@ export class ChecksService {
         data: { balance: balanceAfter, updated_at: new Date() },
       });
       await recalculateBankAccountLedger(tx, dto.bank_account_id);
+    });
+
+    return this.findOne(id);
+  }
+
+  async collectInCashBox(id: string, cashBoxId: string, userId: string, date?: string) {
+    const check = await this.findOne(id);
+    if (check.is_own) {
+      throw new BadRequestException('Los cheques propios se debitan desde su cuenta bancaria');
+    }
+    if (!['PENDING', 'CONFIRMED'].includes(check.status)) {
+      throw new BadRequestException('Solo se pueden cobrar cheques pendientes o confirmados');
+    }
+
+    const cashBox = await this.prisma.cash_boxes.findFirst({
+      where: { id: cashBoxId, active: true, deleted_at: null },
+      select: { id: true, currency_code: true, current_session_id: true, status: true },
+    });
+    if (!cashBox) throw new NotFoundException('Caja no encontrada o inactiva');
+    if (cashBox.status !== 'OPEN' || !cashBox.current_session_id) {
+      throw new BadRequestException('La caja debe tener una sesión abierta');
+    }
+    if (cashBox.currency_code !== check.currency_code) {
+      throw new BadRequestException('La moneda del cheque no coincide con la moneda de la caja');
+    }
+
+    const amount = Number(check.available_amount ?? check.amount);
+    const effectiveDate = date ? parseLocalDateTime(date) : new Date();
+    const balance = await this.prisma.cash_box_balances.findUnique({
+      where: { cash_box_id_currency_code: { cash_box_id: cashBox.id, currency_code: check.currency_code } },
+    });
+    const before = Number(balance?.balance ?? 0);
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.cash_box_movements.create({
+        data: {
+          cash_box_id: cashBox.id,
+          session_id: cashBox.current_session_id,
+          type: 'COLLECTION',
+          amount,
+          currency_code: check.currency_code,
+          exchange_rate: check.exchange_rate,
+          rate_type: check.rate_type,
+          converted_amount: check.converted_amount,
+          balance_before: before,
+          balance_after: before + amount,
+          description: `Cobro por caja del cheque #${check.check_number}`,
+          reference_type: 'check',
+          reference_id: check.id,
+          payment_id: check.payment_id,
+          date: effectiveDate,
+          created_by: userId,
+        },
+      });
+      if (balance) {
+        await tx.cash_box_balances.update({
+          where: { id: balance.id },
+          data: { balance: before + amount, updated_at: new Date() },
+        });
+      } else {
+        await tx.cash_box_balances.create({
+          data: { cash_box_id: cashBox.id, currency_code: check.currency_code, balance: amount, created_by: userId },
+        });
+      }
+      await tx.cash_box_sessions.update({
+        where: { id: cashBox.current_session_id! },
+        data: { total_income: { increment: amount }, movement_count: { increment: 1 } },
+      });
+      await tx.checks.update({
+        where: { id: check.id },
+        data: {
+          status: 'CLEARED',
+          available_amount: 0,
+          clearing_date: effectiveDate,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
     });
 
     return this.findOne(id);
@@ -352,6 +443,7 @@ export class ChecksService {
         where: { id },
         data: {
           status: 'PENDING',
+          available_amount: revertAmount,
           deposit_date: null,
           clearing_date: null,
           updated_at: new Date(),
@@ -418,8 +510,8 @@ export class ChecksService {
       throw new BadRequestException('La moneda del cheque debe coincidir con la moneda de la cuenta bancaria');
     }
 
-    // Confirmar programa el cheque. El débito bancario se registra al llegar
-    // la fecha de vencimiento mediante CheckProcessingScheduler.
+    // Confirmar autoriza el cheque, pero no mueve el banco. La fecha efectiva
+    // se registra manualmente cuando el débito aparece en el extracto.
     await this.prisma.checks.update({
       where: { id },
       data: {
@@ -431,6 +523,60 @@ export class ChecksService {
       },
     });
 
+    return this.findOne(id);
+  }
+
+  async debitOwnCheck(id: string, debitDate: string, userId: string) {
+    const check = await this.findOne(id);
+    if (!check.is_own || check.status !== 'CONFIRMED') {
+      throw new BadRequestException('Solo se pueden debitar cheques propios confirmados');
+    }
+    if (!check.bank_account_id) throw new BadRequestException('El cheque no tiene cuenta bancaria asociada');
+
+    const effectiveDate = parseLocalDateTime(debitDate);
+    if (effectiveDate < new Date(check.due_date)) {
+      throw new BadRequestException('La fecha efectiva del débito no puede ser anterior al vencimiento del cheque');
+    }
+    if (effectiveDate > new Date()) {
+      throw new BadRequestException('No se puede registrar un débito bancario con fecha futura');
+    }
+    const amount = Number(check.amount);
+    await this.prisma.$transaction(async (tx) => {
+      const existing = await tx.bank_account_movements.findFirst({
+        where: { reference_type: 'check', reference_id: check.id, deleted_at: null },
+        select: { id: true },
+      });
+      if (existing) throw new BadRequestException('El cheque ya tiene un débito bancario registrado');
+
+      const account = await tx.bank_accounts.findUnique({ where: { id: check.bank_account_id! } });
+      if (!account?.active) throw new BadRequestException('La cuenta bancaria está inactiva o no existe');
+      if (account.currency_code !== check.currency_code) {
+        throw new BadRequestException('La moneda del cheque no coincide con la cuenta bancaria');
+      }
+      const before = Number(account.balance);
+      if (before < amount) throw new BadRequestException('Saldo insuficiente para registrar el débito');
+
+      await tx.bank_account_movements.create({ data: {
+        bank_account_id: check.bank_account_id!, type: 'CHECK_ISSUED', amount: -amount,
+        currency_code: check.currency_code, exchange_rate: check.exchange_rate, rate_type: check.rate_type,
+        converted_amount: check.converted_amount, balance_before: before, balance_after: before - amount,
+        description: `Débito cheque propio #${check.check_number}`,
+        reference_type: 'check', reference_id: check.id, payment_id: check.payment_id,
+        date: effectiveDate, created_by: userId,
+      } });
+      await tx.bank_accounts.update({
+        where: { id: check.bank_account_id! },
+        data: { balance: before - amount, updated_at: new Date() },
+      });
+      await recalculateBankAccountLedger(tx, check.bank_account_id!);
+      await tx.checks.update({
+        where: { id },
+        data: {
+          status: 'CLEARED', payment_date: effectiveDate, clearing_date: effectiveDate,
+          updated_at: new Date(), updated_by: userId,
+        },
+      });
+    });
     return this.findOne(id);
   }
 
@@ -460,8 +606,7 @@ export class ChecksService {
     return this.prisma.checks.findMany({
       where: {
         deleted_at: null,
-        status: 'PENDING',
-        is_own: true,
+        status: { in: ['PENDING', 'CONFIRMED'] },
         due_date: { gte: today, lte: futureDate },
       },
       orderBy: { due_date: 'asc' },
@@ -469,17 +614,14 @@ export class ChecksService {
   }
 
   async findPendingNotification() {
-    const today = new Date();
-    const twoDaysFromNow = new Date();
-    twoDaysFromNow.setDate(today.getDate() + 2);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
 
     return this.prisma.checks.findMany({
       where: {
         deleted_at: null,
-        status: 'PENDING',
-        is_own: true,
-        due_date: { lte: twoDaysFromNow, gte: today },
-        notification_sent: false,
+        status: { in: ['PENDING', 'CONFIRMED'] },
+        due_date: { lte: endOfToday },
       },
     });
   }
