@@ -346,6 +346,13 @@ export const RBAC_PERMISSIONS = [
   { code: 'stock.movements', description: 'Ver movimientos de stock' },
   { code: 'stock.create', description: 'Crear movimientos de stock' },
 
+  // ─── Fabricación ──────────────────────────────────────────
+  { code: 'production.read', description: 'Acceder a fabricación y consultar materiales' },
+  { code: 'production.execute', description: 'Registrar fabricaciones y movimientos de materiales' },
+  { code: 'production.history', description: 'Ver el historial de fabricación' },
+  { code: 'production.manage_bom', description: 'Configurar BOM e ingeniería de productos' },
+  { code: 'production.view_costs', description: 'Ver costos de fabricación' },
+
   // ─── Media ────────────────────────────────────────────────
   { code: 'media.read', description: 'Ver archivos' },
   { code: 'media.upload', description: 'Subir archivos' },

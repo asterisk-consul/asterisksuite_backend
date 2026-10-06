@@ -46,22 +46,27 @@ export class StockService {
     return materials;
   }
 
-  async previewProduction(productId: string, warehouseId: string, quantity: number) {
+  async previewProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number) {
     if (!Number.isFinite(quantity) || quantity <= 0) {
       throw new BadRequestException('La cantidad a fabricar debe ser mayor que cero');
     }
-    const [product, warehouse, engineering] = await Promise.all([
+    if (!materialWarehouseId || !outputWarehouseId) {
+      throw new BadRequestException('Seleccioná los depósitos de materiales y producto terminado');
+    }
+    const [product, materialWarehouse, outputWarehouse, engineering] = await Promise.all([
       this.prisma.products.findFirst({ where: { id: productId, deleted_at: null, active: true } }),
-      this.prisma.warehouses.findFirst({ where: { id: warehouseId, deleted_at: null, active: true } }),
+      this.prisma.warehouses.findFirst({ where: { id: materialWarehouseId, deleted_at: null, active: true } }),
+      this.prisma.warehouses.findFirst({ where: { id: outputWarehouseId, deleted_at: null, active: true } }),
       this.engineeringService.calculate(productId),
     ]);
     if (!product) throw new BadRequestException('Producto no encontrado');
-    if (!warehouse) throw new BadRequestException('Depósito no encontrado o inactivo');
+    if (!materialWarehouse) throw new BadRequestException('El depósito de materiales no existe o está inactivo');
+    if (!outputWarehouse) throw new BadRequestException('El depósito de producto terminado no existe o está inactivo');
     if (!engineering.tree.length) throw new BadRequestException('El producto no tiene componentes para fabricar');
 
     const requirements = this.collectProductionMaterials(engineering.tree, new Prisma.Decimal(quantity));
     const stocks = await this.prisma.warehouse_stock.findMany({
-      where: { warehouse_id: warehouseId, product_id: { in: [...requirements.keys()] }, deleted_at: null },
+      where: { warehouse_id: materialWarehouseId, product_id: { in: [...requirements.keys()] }, deleted_at: null },
     });
     const stockMap = new Map<string, any>(stocks.map(stock => [stock.product_id, stock]));
     const materials = [...requirements.values()].map(item => {
@@ -81,15 +86,16 @@ export class StockService {
     });
     return {
       product: { id: product.id, name: product.name, sku: product.sku },
-      warehouse: { id: warehouse.id, name: warehouse.name },
+      material_warehouse: { id: materialWarehouse.id, name: materialWarehouse.name },
+      output_warehouse: { id: outputWarehouse.id, name: outputWarehouse.name },
       quantity,
       can_produce: materials.every(item => item.sufficient),
       materials,
     };
   }
 
-  async executeProduction(productId: string, warehouseId: string, quantity: number) {
-    const preview = await this.previewProduction(productId, warehouseId, quantity);
+  async executeProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number) {
+    const preview = await this.previewProduction(productId, materialWarehouseId, outputWarehouseId, quantity);
     if (!preview.can_produce) {
       const missing = preview.materials.filter(item => !item.sufficient).map(item => item.name).join(', ');
       throw new BadRequestException(`Stock insuficiente para fabricar. Faltan: ${missing}`);
@@ -98,7 +104,7 @@ export class StockService {
     return this.prisma.$transaction(async tx => {
       for (const material of preview.materials) {
         const stock = await tx.warehouse_stock.findUnique({
-          where: { warehouse_id_product_id: { warehouse_id: warehouseId, product_id: material.product_id } },
+          where: { warehouse_id_product_id: { warehouse_id: materialWarehouseId, product_id: material.product_id } },
         });
         const required = new Prisma.Decimal(material.quantity);
         const available = stock ? stock.quantity.minus(stock.reserved_quantity) : new Prisma.Decimal(0);
@@ -107,7 +113,7 @@ export class StockService {
         }
         await tx.warehouse_stock.update({ where: { id: stock.id }, data: { quantity: stock.quantity.minus(required) } });
         await tx.warehouse_stock_movements.create({ data: {
-          warehouse_id: warehouseId,
+          warehouse_id: materialWarehouseId,
           product_id: material.product_id,
           movement_type: 'PRODUCTION_CONSUME',
           direction: 'OUT',
@@ -121,12 +127,12 @@ export class StockService {
 
       const outputQuantity = new Prisma.Decimal(quantity);
       await tx.warehouse_stock.upsert({
-        where: { warehouse_id_product_id: { warehouse_id: warehouseId, product_id: productId } },
-        create: { warehouse_id: warehouseId, product_id: productId, quantity: outputQuantity, created_by: this.userId },
+        where: { warehouse_id_product_id: { warehouse_id: outputWarehouseId, product_id: productId } },
+        create: { warehouse_id: outputWarehouseId, product_id: productId, quantity: outputQuantity, created_by: this.userId },
         update: { quantity: { increment: outputQuantity }, updated_by: this.userId },
       });
       await tx.warehouse_stock_movements.create({ data: {
-        warehouse_id: warehouseId,
+        warehouse_id: outputWarehouseId,
         product_id: productId,
         movement_type: 'PRODUCTION_OUTPUT',
         direction: 'IN',
@@ -138,6 +144,31 @@ export class StockService {
       }});
       return { ...preview, production_id: productionId, completed_at: new Date() };
     });
+  }
+
+  async getProductionHistory(limit = 25) {
+    const take = Number.isFinite(limit) ? Math.min(Math.max(limit, 1), 100) : 25;
+    const outputs = await this.prisma.warehouse_stock_movements.findMany({
+      where: {
+        reference_type: 'PRODUCTION_ORDER',
+        movement_type: 'PRODUCTION_OUTPUT',
+        deleted_at: null,
+      },
+      include: {
+        products: { select: { id: true, name: true, sku: true } },
+        warehouses: { select: { id: true, name: true, code: true } },
+      },
+      orderBy: { created_at: 'desc' },
+      take,
+    });
+    return outputs.map(output => ({
+      id: output.reference_id,
+      product: output.products,
+      warehouse: output.warehouses,
+      quantity: Number(output.quantity),
+      created_at: output.created_at,
+      created_by: output.created_by,
+    }));
   }
 
   // Getter privado para reutilizar en todos los métodos
