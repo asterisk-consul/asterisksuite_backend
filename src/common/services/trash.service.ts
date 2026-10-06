@@ -166,6 +166,8 @@ export class TrashService {
       'currency_rates',
       'currencies',
       'payments',
+      'bank_accounts',
+      'bank_account_movements',
     ];
   }
 }

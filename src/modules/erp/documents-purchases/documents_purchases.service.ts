@@ -1349,7 +1349,7 @@ export class DocumentsPurchasesService {
       // Toda compra confirmada actualiza el costo unitario. El precio de venta
       // se administra por separado y nunca debe sobrescribirse con una compra.
       if (category === 'INVOICE') {
-        await this.syncProductCostsFromPurchase(tx, doc);
+        await this.syncProductCostsFromPurchase(tx, doc, userId);
       }
 
       // Siempre conserva el precio negociado con este proveedor.
@@ -1364,7 +1364,7 @@ export class DocumentsPurchasesService {
    * Con variantes actualiza product_variant_costs; sin variantes, current_cost.
    * El factor convierte el precio de la unidad de compra a la unidad de stock.
    */
-  private async syncProductCostsFromPurchase(tx: any, doc: any) {
+  private async syncProductCostsFromPurchase(tx: any, doc: any, userId?: string) {
 
     const currencies = await tx.currencies.findMany({
       where: { deleted_at: null },
@@ -1393,6 +1393,49 @@ export class DocumentsPurchasesService {
 
       const conversionFactor = Math.max(Number(item.unit_conversion_factor ?? 1), 0.000001);
       const itemPrice = Number(item.unit_price) / conversionFactor;
+
+      // Mantiene sincronizada la ficha comercial del proveedor con la última
+      // compra confirmada. El precio del proveedor conserva la unidad de compra;
+      // current_cost queda normalizado a la unidad de stock para BOM/ingeniería.
+      if (doc.party_id) {
+        const supplierLink = await tx.product_suppliers.findUnique({
+          where: {
+            product_id_supplier_id: {
+              product_id: item.product_id,
+              supplier_id: doc.party_id,
+            },
+          },
+        });
+
+        if (supplierLink) {
+          await tx.product_suppliers.update({
+            where: { id: supplierLink.id },
+            data: {
+              purchase_price: Number(item.unit_price),
+              currency_id: currencyId,
+              active: true,
+              deleted_at: null,
+              updated_by: userId ?? null,
+            },
+          });
+        } else {
+          const supplierCount = await tx.product_suppliers.count({
+            where: { product_id: item.product_id, deleted_at: null, active: true },
+          });
+          await tx.product_suppliers.create({
+            data: {
+              product_id: item.product_id,
+              supplier_id: doc.party_id,
+              purchase_price: Number(item.unit_price),
+              currency_id: currencyId,
+              is_primary: supplierCount === 0,
+              active: true,
+              created_by: userId ?? null,
+            },
+          });
+        }
+      }
+
       let variantId = item.variant_id;
 
       if (!variantId) {
@@ -1437,6 +1480,22 @@ export class DocumentsPurchasesService {
               cost_source: 'PURCHASE',
               last_cost_calculated_at: new Date(),
               updated_at: new Date(),
+            },
+          });
+
+          const version = await tx.product_costs.count({
+            where: { product_id: item.product_id },
+          });
+          await tx.product_costs.create({
+            data: {
+              product_id: item.product_id,
+              currency_id: currencyId,
+              cost_source: 'PURCHASE',
+              material_cost: itemPrice,
+              total_cost: itemPrice,
+              version: version + 1,
+              notes: `Compra confirmada${doc.number ? ` #${doc.number}` : ''}`,
+              created_by: userId ?? null,
             },
           });
         }

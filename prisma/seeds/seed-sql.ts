@@ -528,8 +528,10 @@ INSERT INTO tenant.units (id, name, symbol, unit_type, active)
 SELECT gen_random_uuid(), d.name, d.symbol, d.unit_type, true
 FROM defaults d
 WHERE NOT EXISTS (
-  SELECT 1 FROM tenant.units u
-  WHERE lower(u.name) = lower(d.name) OR lower(u.symbol) = lower(d.symbol)
+  SELECT 1
+  FROM tenant.units u
+  WHERE lower(u.name) = lower(d.name)
+     OR lower(u.symbol) = lower(d.symbol)
 );
 `
 

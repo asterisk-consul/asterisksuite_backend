@@ -67,9 +67,26 @@ export class BankAccountsService {
       orderBy: { name: 'asc' },
       include: { _count: { select: { movements: true } } },
     });
+
+    const pendingChecks = accounts.length
+      ? await this.prisma.checks.groupBy({
+          by: ['bank_account_id'],
+          where: {
+            bank_account_id: { in: accounts.map((account) => account.id) },
+            status: { in: ['PENDING', 'CONFIRMED'] },
+            deleted_at: null,
+          },
+          _count: { _all: true },
+        })
+      : [];
+    const pendingChecksMap = new Map(
+      pendingChecks.map((row) => [row.bank_account_id, row._count._all]),
+    );
+
     return accounts.map(account => ({
       ...account,
       can_set_initial_balance: account._count.movements === 0 && Number(account.balance) === 0,
+      pending_checks_count: pendingChecksMap.get(account.id) ?? 0,
     }));
   }
 
@@ -82,9 +99,13 @@ export class BankAccountsService {
       },
     });
     if (!account) throw new NotFoundException('Cuenta bancaria no encontrada');
+    const pendingChecks = await this.prisma.checks.count({
+      where: { bank_account_id: id, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
+    });
     return {
       ...account,
       can_set_initial_balance: account._count.movements === 0 && Number(account.balance) === 0,
+      pending_checks_count: pendingChecks,
     };
   }
 
@@ -138,15 +159,18 @@ export class BankAccountsService {
 
   async remove(id: string, dto: DeleteBankAccountDto, userId: string) {
     if (dto.confirmation !== 'ELIMINAR') throw new BadRequestException('Escribí ELIMINAR para confirmar');
+    const mode = dto.mode ?? 'TRANSFER';
     return this.prisma.$transaction(async (tx) => {
       const account = await tx.bank_accounts.findFirst({ where: { id, deleted_at: null } });
       if (!account) throw new NotFoundException('Cuenta bancaria no encontrada');
       const balance = Number(account.balance);
-      const linkedChecks = await tx.checks.count({
+      const pendingChecks = await tx.checks.count({
         where: { bank_account_id: id, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
       });
-      if ((balance !== 0 || linkedChecks > 0) && !dto.target_bank_account_id) {
-        throw new BadRequestException(linkedChecks > 0
+
+      const needsTarget = pendingChecks > 0 || (mode === 'TRANSFER' && balance !== 0);
+      if (needsTarget && !dto.target_bank_account_id) {
+        throw new BadRequestException(pendingChecks > 0
           ? 'Seleccioná una cuenta destino para reasignar los cheques pendientes'
           : 'Seleccioná una cuenta bancaria destino para transferir el saldo');
       }
@@ -157,10 +181,11 @@ export class BankAccountsService {
       if (dto.target_bank_account_id && !target) throw new BadRequestException('La cuenta bancaria destino no existe o está inactiva');
       if (target && target.currency_code !== account.currency_code) throw new BadRequestException('La cuenta destino debe usar la misma moneda');
 
-      if (balance !== 0) {
+      const now = new Date();
+
+      if (mode === 'TRANSFER' && balance !== 0) {
         if (!target) throw new BadRequestException('Seleccioná una cuenta bancaria destino para transferir el saldo');
         const targetBefore = Number(target.balance);
-        const now = new Date();
         await tx.bank_account_movements.createMany({ data: [
           { bank_account_id: id, type: 'TRANSFER', amount: -balance, currency_code: account.currency_code, balance_before: balance, balance_after: 0, description: `Transferencia por baja de ${account.name}`, reference_type: 'bank_account_closure', reference_id: id, date: now, created_by: userId },
           { bank_account_id: target.id, type: 'TRANSFER', amount: balance, currency_code: account.currency_code, balance_before: targetBefore, balance_after: targetBefore + balance, description: `Saldo recibido por baja de ${account.name}`, reference_type: 'bank_account_closure', reference_id: id, date: now, created_by: userId },
@@ -170,15 +195,39 @@ export class BankAccountsService {
         await recalculateBankAccountLedger(tx, id);
         await recalculateBankAccountLedger(tx, target.id);
       }
-      if (linkedChecks > 0 && dto.target_bank_account_id) {
-        await tx.checks.updateMany({
-          where: { bank_account_id: id, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
-          data: { bank_account_id: dto.target_bank_account_id, updated_at: new Date(), updated_by: userId },
+
+      if (mode === 'DISCARD') {
+        if (balance !== 0) {
+          await tx.bank_accounts.update({ where: { id }, data: { balance: 0 } });
+        }
+        if (dto.delete_movements) {
+          await tx.bank_account_movements.updateMany({
+            where: { bank_account_id: id, deleted_at: null },
+            data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+          });
+        }
+      }
+
+      if (target) {
+        if (pendingChecks > 0) {
+          await tx.checks.updateMany({
+            where: { bank_account_id: id, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
+            data: { bank_account_id: target.id, updated_at: now, updated_by: userId },
+          });
+        }
+        await tx.payments.updateMany({
+          where: { bank_account_id: id, deleted_at: null },
+          data: { bank_account_id: target.id, updated_at: now, updated_by: userId },
+        });
+        await tx.cash_box_movements.updateMany({
+          where: { bank_account_id: id, deleted_at: null },
+          data: { bank_account_id: target.id, updated_at: now, updated_by: userId },
         });
       }
+
       return tx.bank_accounts.update({
         where: { id },
-        data: { deleted_at: new Date(), deleted_by: userId, active: false },
+        data: { deleted_at: now, deleted_by: userId, active: false },
       });
     });
   }

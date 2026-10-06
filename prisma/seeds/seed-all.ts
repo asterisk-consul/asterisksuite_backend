@@ -78,10 +78,10 @@ async function main() {
     throw new Error('El catálogo RBAC no incluye los permisos documentales o de importación/exportación')
   }
 
-  // 1. Unidades de medida
+  // 1. Impuestos
   await runSql('Unidades de medida', SQL_UNITS)
 
-  // 2. Impuestos
+  // 1. Impuestos
   await runSql('Impuestos (IVA, percepciones, retenciones)', SQL_TAXES)
 
   // 2. Categorías fiscales

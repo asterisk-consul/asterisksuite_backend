@@ -164,8 +164,18 @@ export class ProductsService {
         // Costos
         // ─────────────
         product_costs: {
+          where: { deleted_at: null },
+          orderBy: { created_at: 'desc' },
           select: {
+            id: true,
+            version: true,
+            cost_source: true,
+            material_cost: true,
+            labor_cost: true,
+            overhead_cost: true,
             total_cost: true,
+            notes: true,
+            created_at: true,
             currencies: {
               select: {
                 id: true,
