@@ -494,6 +494,11 @@ export class StockService {
     return this.prisma.warehouse_stock.findMany({
       where: { product_id: productId },
       include: {
+        products: {
+          include: {
+            unit: true,
+          },
+        },
         warehouses: {
           include: {
             units: true,
