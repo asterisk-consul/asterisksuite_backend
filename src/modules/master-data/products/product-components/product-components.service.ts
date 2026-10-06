@@ -37,6 +37,11 @@ export class ProductComponentsService {
 
     await this.productStructureVersionService.createVersion(component.parent_product_id);
 
+    await this.prisma.products.update({
+      where: { id: component.parent_product_id },
+      data: { is_composed: true },
+    });
+
     return component;
   }
 
@@ -104,6 +109,15 @@ export class ProductComponentsService {
     });
 
     await this.productStructureVersionService.createVersion(component.parent_product_id);
+
+    const remaining = await this.prisma.product_components.count({
+      where: { parent_product_id: component.parent_product_id, deleted_at: null },
+    });
+
+    await this.prisma.products.update({
+      where: { id: component.parent_product_id },
+      data: { is_composed: remaining > 0 },
+    });
 
     return deleted;
   }
