@@ -45,7 +45,7 @@ export class StockReservationsService {
       if (!warehouse) throw new BadRequestException('El depósito de la reserva no existe o está inactivo');
       if (warehouse.is_virtual) {
         const transitContainer = await tx.international_containers.findFirst({
-          where: { transit_warehouse_id: requested, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED', 'CANCELLED'] } },
+          where: { transit_warehouse_id: requested, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
           select: { id: true },
         });
         if (!transitContainer) throw new BadRequestException('El depósito virtual seleccionado no corresponde a mercadería en tránsito activa');
@@ -70,7 +70,7 @@ export class StockReservationsService {
     if (realWithAvailability.length) return realWithAvailability[0].warehouse_id;
 
     const transitWarehouseIds = (await tx.international_containers.findMany({
-      where: { transit_warehouse_id: { not: null }, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED', 'CANCELLED'] } },
+      where: { transit_warehouse_id: { not: null }, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
       select: { transit_warehouse_id: true },
     })).map((container: any) => container.transit_warehouse_id).filter(Boolean);
     if (!transitWarehouseIds.length) return null;
@@ -282,7 +282,7 @@ export class StockReservationsService {
       if (!warehouse) throw new BadRequestException('El depósito no existe o está inactivo');
       if (warehouse.is_virtual) {
         const transitContainer = await tx.international_containers.findFirst({
-          where: { transit_warehouse_id: dto.warehouse_id, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED', 'CANCELLED'] } },
+          where: { transit_warehouse_id: dto.warehouse_id, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
           select: { id: true },
         });
         if (!transitContainer) throw new BadRequestException('Solo se puede reservar un depósito virtual asociado a un contenedor activo');
