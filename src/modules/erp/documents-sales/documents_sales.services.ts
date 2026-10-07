@@ -1,6 +1,6 @@
 // src/modules/erp/documents-sales/documents_sales.service.ts
 
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
@@ -43,6 +43,8 @@ const STATUS_CANCELLED = 3;
 
 @Injectable()
 export class DocumentsSalesService {
+
+  private readonly logger = new Logger(DocumentsSalesService.name);
 
   constructor(
     private readonly db: PrismaService,
@@ -1730,10 +1732,6 @@ export class DocumentsSalesService {
         );
       }
 
-      // El precio confirmado pasa a ser el precio vigente de este producto
-      // para este cliente, sin modificar la lista general ni otros clientes.
-      await this.productPartyPricing.captureDocumentPrices(tx, doc, 'SALE', userId);
-
       return tx.documents.findUnique({
         where: { id },
       include: {
@@ -1752,25 +1750,39 @@ export class DocumentsSalesService {
 
     });
 
+    // La actualización de precios acordados es complementaria: un problema en
+    // su historial no debe revertir una factura que ya pasó todas las validaciones.
+    try {
+      await this.prisma.$transaction((tx) =>
+        this.productPartyPricing.captureDocumentPrices(tx, confirmed, 'SALE', userId),
+      );
+    } catch (error) {
+      this.logger.warn(`No se pudo actualizar el precio por cliente al confirmar ${id}: ${String(error)}`);
+    }
+
     if (confirmed?.commercial_operation_id) {
-      if (confirmed.document_types?.category === 'REMITO') {
-        const operation = await this.prisma.commercial_operations.update({
-          where: { id: confirmed.commercial_operation_id },
-          data: { delivery_status: 'DELIVERED', updated_by: userId },
-        });
-        await this.prisma.documents.update({
-          where: { id: operation.root_document_id },
-          data: { status: 5, updated_at: new Date(), updated_by: userId },
-        });
-        return confirmed;
-      }
-      const operation = await this.commercialFlow.refresh(confirmed.commercial_operation_id);
-      if (operation?.delivery_status === 'ELIGIBLE' && operation.auto_create_delivery_note && !operation.delivery_note_id) {
-        const remito = await this.deliver(operation.root_document_id, userId);
-        await this.prisma.commercial_operations.update({
-          where: { id: operation.id },
-          data: { delivery_note_id: remito.id, delivery_status: 'DRAFT_CREATED', updated_by: userId },
-        });
+      try {
+        if (confirmed.document_types?.category === 'REMITO') {
+          const operation = await this.prisma.commercial_operations.update({
+            where: { id: confirmed.commercial_operation_id },
+            data: { delivery_status: 'DELIVERED', updated_by: userId },
+          });
+          await this.prisma.documents.update({
+            where: { id: operation.root_document_id },
+            data: { status: 5, updated_at: new Date(), updated_by: userId },
+          });
+          return confirmed;
+        }
+        const operation = await this.commercialFlow.refresh(confirmed.commercial_operation_id);
+        if (operation?.delivery_status === 'ELIGIBLE' && operation.auto_create_delivery_note && !operation.delivery_note_id) {
+          const remito = await this.deliver(operation.root_document_id, userId);
+          await this.prisma.commercial_operations.update({
+            where: { id: operation.id },
+            data: { delivery_note_id: remito.id, delivery_status: 'DRAFT_CREATED', updated_by: userId },
+          });
+        }
+      } catch (error) {
+        this.logger.warn(`El documento ${id} se confirmó, pero no se pudo sincronizar su circuito comercial: ${String(error)}`);
       }
     }
 

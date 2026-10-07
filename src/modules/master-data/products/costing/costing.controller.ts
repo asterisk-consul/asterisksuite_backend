@@ -6,6 +6,7 @@ import { RequirePermissions } from '@/access-control/decorators/require-permissi
 import { CostingService } from './costing.service';
 
 import { CalculateProductCostDto } from './dto/calculate-product-cost.dto';
+import { UpdateManualCostDto } from './dto/update-manual-cost.dto';
 
 @Controller('products/costing')
 export class CostingController {
@@ -27,7 +28,13 @@ export class CostingController {
     @Body()
     dto: CalculateProductCostDto,
   ) {
-    return this.costingService.calculateProductCost(dto.product_id, dto.currency_id, dto.save_snapshot);
+    return this.costingService.calculateProductCost(dto.product_id, dto.currency_id, dto.save_snapshot, dto.variant_id);
+  }
+
+  @RequirePermissions('products.update')
+  @Post(':productId/manual-cost')
+  setManualCost(@Param('productId') productId: string, @Body() dto: UpdateManualCostDto) {
+    return this.costingService.setManualCost(productId, dto);
   }
 
   @RequirePermissions('cost_templates.read')

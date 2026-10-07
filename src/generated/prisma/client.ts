@@ -695,6 +695,16 @@ export type product_taxes = Prisma.product_taxesModel
  */
 export type taxes = Prisma.taxesModel
 /**
+ * Model treasury_obligation_templates
+ * 
+ */
+export type treasury_obligation_templates = Prisma.treasury_obligation_templatesModel
+/**
+ * Model treasury_obligations
+ * 
+ */
+export type treasury_obligations = Prisma.treasury_obligationsModel
+/**
  * Model bank_accounts
  * 
  */
@@ -824,3 +834,8 @@ export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
  * 
  */
 export type warehouses = Prisma.warehousesModel
+/**
+ * Model stock_replenishment_policies
+ * 
+ */
+export type stock_replenishment_policies = Prisma.stock_replenishment_policiesModel

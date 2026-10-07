@@ -10,8 +10,15 @@ export class CheckNotificationScheduler {
 
   @Cron('0 9 * * *', { timeZone: 'America/Argentina/Buenos_Aires' })
   async sendCheckNotifications() {
+    const allowedTenants = (process.env.SCHEDULER_TENANT_DATABASES ?? '')
+      .split(',')
+      .map(value => value.trim())
+      .filter(Boolean);
     const companies = await this.db.getDefaultClient().companies.findMany({
-      where: { deleted_at: null },
+      where: {
+        deleted_at: null,
+        ...(allowedTenants.length ? { schema_name: { in: allowedTenants } } : {}),
+      },
       select: { schema_name: true, name: true },
     });
     for (const company of companies) {
@@ -19,6 +26,13 @@ export class CheckNotificationScheduler {
       try {
         await this.notifyTenant(company.schema_name, company.name);
       } catch (error) {
+        const code = (error as { code?: string })?.code;
+        if (code === 'P2021' || code === 'P2022') {
+          this.logger.warn(
+            `Avisos de cheques omitidos para ${company.name}: la base requiere la migración 20260901_checks_partial_application`,
+          );
+          continue;
+        }
         this.logger.error(`Error revisando vencimientos en ${company.name}`, error);
       }
     }
@@ -44,6 +58,7 @@ export class CheckNotificationScheduler {
         notification_sent: false,
         deleted_at: null,
       },
+      select: { id: true, is_own: true, check_number: true, due_date: true },
     });
     for (const check of upcomingChecks) {
       this.logger.log(
@@ -58,7 +73,15 @@ export class CheckNotificationScheduler {
         due_date: { lte: today },
         deleted_at: null,
       },
-      include: { bank_account: { select: { balance: true, active: true, currency_code: true } } },
+      select: {
+        id: true,
+        is_own: true,
+        check_number: true,
+        due_date: true,
+        currency_code: true,
+        amount: true,
+        bank_account: { select: { balance: true, active: true, currency_code: true } },
+      },
     });
     if (overdueChecks.length) this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) vencidos requieren una acción`);
     for (const check of overdueChecks) {

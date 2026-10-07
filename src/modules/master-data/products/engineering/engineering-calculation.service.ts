@@ -12,9 +12,9 @@ export class EngineeringCalculationService {
   // ENTRY POINT
   // ─────────────────────────────────────────────
 
-  calculateTree(tree: any[]) {
+  calculateTree(tree: any[], mode: 'BOM' | 'ENGINEERING' = 'ENGINEERING') {
     // Filtrar nodos vacíos del root y resolver bottom-up
-    const resolvedNodes = tree.filter((node) => node && node.child_product_id).map((node) => this.resolveNode(node));
+    const resolvedNodes = tree.filter((node) => node && node.child_product_id).map((node) => this.resolveNode(node, mode));
 
     const totalWeightKg = resolvedNodes.reduce((acc, n) => acc + n.calculated_weight_kg, 0);
 
@@ -32,14 +32,14 @@ export class EngineeringCalculationService {
   // RESOLVER RECURSIVO (bottom-up)
   // ─────────────────────────────────────────────
 
-  private resolveNode(node: any): EngineeringCalculatedComponent {
+  private resolveNode(node: any, mode: 'BOM' | 'ENGINEERING'): EngineeringCalculatedComponent {
     // 1. Resolver hijos primero (recursivo), ignorando objetos vacíos {}
     const resolvedChildren: EngineeringCalculatedComponent[] = (node.children ?? [])
       .filter((c: any) => c && c.child_product_id)
-      .map((child: any) => this.resolveNode(child));
+      .map((child: any) => this.resolveNode(child, mode));
 
     // 2. Calcular este nodo según su tipo de cálculo
-    const calc = this.calculateComponent(node);
+    const calc = this.calculateComponent(node, mode);
 
     // 3. Acumular costo de hijos
     const childrenCost = resolvedChildren.reduce((acc, child) => acc + child.total_cost, 0);
@@ -90,7 +90,8 @@ export class EngineeringCalculationService {
   // DISPATCH POR TIPO
   // ─────────────────────────────────────────────
 
-  private calculateComponent(component: any): EngineeringCalculatedComponent {
+  private calculateComponent(component: any, mode: 'BOM' | 'ENGINEERING'): EngineeringCalculatedComponent {
+    if (mode === 'BOM') return this.calculateUnitComponent(component);
     const calculationType = component.child_product?.calculation_type ?? 'UNIT';
 
     switch (calculationType) {
@@ -156,11 +157,13 @@ export class EngineeringCalculationService {
     const thicknessM = Number(variant?.thickness_mm || 0) / 1000;
     const densityKgM3 = Number(variant?.density_kg_m3 || 0);
     const wastePercentage = Number(component.waste_percentage || 0);
+    const pieces = Number(component.quantity || 0);
 
     const areaM2 = calculateSurfaceM2(Number(component.length_mm || 0), Number(component.width_mm || 0));
 
-    const volumeM3 = areaM2 * thicknessM;
-    const rawWeightKg = volumeM3 * densityKgM3;
+    const totalAreaM2 = areaM2 * pieces;
+    const totalVolumeM3 = totalAreaM2 * thicknessM;
+    const rawWeightKg = totalVolumeM3 * densityKgM3;
     const finalWeightKg = rawWeightKg * (1 + wastePercentage / 100);
 
     // current_cost en materiales de tipo SURFACE se espera en $/kg
@@ -171,8 +174,8 @@ export class EngineeringCalculationService {
       ...this.getCommonFields(component),
       quantity: Number(component.quantity),
       calculated_quantity: finalWeightKg,
-      surface_m2: areaM2,
-      volume_m3: volumeM3,
+      surface_m2: totalAreaM2,
+      volume_m3: totalVolumeM3,
       calculated_weight_kg: finalWeightKg,
       waste_percentage: wastePercentage,
       unit_cost: unitCost,
@@ -190,8 +193,9 @@ export class EngineeringCalculationService {
     const variant = component.child_variant;
 
     const wastePercentage = Number(component.waste_percentage || 0);
+    const pieces = Number(component.quantity || 0);
     const lengthM = Number(component.length_mm || 0) / 1000;
-    const finalLength = lengthM * (1 + wastePercentage / 100);
+    const finalLength = lengthM * pieces * (1 + wastePercentage / 100);
 
     const weightPerMeterKg = Number(variant?.weight_per_meter_kg || 0);
     const finalWeightKg = finalLength * weightPerMeterKg;
@@ -221,6 +225,7 @@ export class EngineeringCalculationService {
 
   private calculateVolumeComponent(component: any): EngineeringCalculatedComponent {
     const wastePercentage = Number(component.waste_percentage || 0);
+    const pieces = Number(component.quantity || 0);
 
     const volumeM3 = calculateVolumeM3(
       Number(component.length_mm || 0),
@@ -228,7 +233,7 @@ export class EngineeringCalculationService {
       Number(component.height_mm || 0),
     );
 
-    const finalVolume = volumeM3 * (1 + wastePercentage / 100);
+    const finalVolume = volumeM3 * pieces * (1 + wastePercentage / 100);
 
     // current_cost en $/m3
     const unitCost = this.resolveUnitCost(component);

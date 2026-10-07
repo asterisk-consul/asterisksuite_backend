@@ -9,6 +9,7 @@ import { CalculatedCost } from '../interfaces/calculated-cost.interface';
 import { CostBreakdownItem } from '../interfaces/cost-breakdown.interface';
 import { round2 } from '../utils/costing.utils';
 import { EngineeringCalculatedComponent } from '../../engineering/interface/engineering-calculated-component.interface';
+import { ExchangeService } from '@/modules/erp/pricing/exchange/exchange.service';
 
 @Injectable()
 export class EngineeringCostStrategy implements ICostStrategy {
@@ -18,6 +19,7 @@ export class EngineeringCostStrategy implements ICostStrategy {
     private readonly variantCostResolver: VariantCostResolverService,
     private readonly calculatorService: CostingCalculatorService,
     private readonly treeService: CostingTreeService,
+    private readonly exchangeService: ExchangeService,
   ) {}
 
   private get prisma() {
@@ -29,12 +31,17 @@ export class EngineeringCostStrategy implements ICostStrategy {
     currencyId,
     templateComponents,
     costTemplateId,
+    variantId,
   }: CostStrategyOptions): Promise<CalculatedCost> {
     // 1. Obtener árbol de ingeniería (pesos/cantidades calculados)
-    const engineering = await this.engineeringService.calculate(productId);
+    const engineering = await this.engineeringService.calculate(productId, variantId);
 
     // 2. Resolver costos reales en las hojas y propagar hacia arriba
-    await this.resolveLeafCosts(engineering.tree, currencyId);
+    const targetCurrency = await this.prisma.currencies.findUnique({
+      where: { id: currencyId },
+      select: { code: true },
+    });
+    await this.resolveLeafCosts(engineering.tree, currencyId, targetCurrency?.code);
 
     // 3. Armar breakdown jerárquico (compatible con flattenTree)
     const breakdown: CostBreakdownItem[] = this.toBreakdown(engineering.tree, currencyId);
@@ -62,11 +69,15 @@ export class EngineeringCostStrategy implements ICostStrategy {
   // Resolver costos bottom-up
   // ─────────────────────────────────────────────
 
-  private async resolveLeafCosts(nodes: EngineeringCalculatedComponent[], currencyId: string): Promise<void> {
+  private async resolveLeafCosts(
+    nodes: EngineeringCalculatedComponent[],
+    currencyId: string,
+    targetCurrencyCode?: string,
+  ): Promise<void> {
     for (const node of nodes) {
       if (node.children?.length) {
         // Primero resolver hijos recursivamente
-        await this.resolveLeafCosts(node.children, currencyId);
+        await this.resolveLeafCosts(node.children, currencyId, targetCurrencyCode);
 
         // Padre acumula lo que vienen de abajo
         node.children_cost = round2(node.children.reduce((acc, child) => acc + child.total_cost, 0));
@@ -82,9 +93,19 @@ export class EngineeringCostStrategy implements ICostStrategy {
         } else {
           const product = await this.prisma.products.findUnique({
             where: { id: node.product_id },
-            select: { current_cost: true },
+            select: { current_cost: true, current_cost_currency: { select: { code: true } } },
           });
           unitCost = Number(product?.current_cost || 0);
+          if (unitCost > 0 && product?.current_cost_currency && targetCurrencyCode) {
+            if (targetCurrencyCode !== product.current_cost_currency.code) {
+              const conversion = await this.exchangeService.convertAmount(
+                unitCost,
+                product.current_cost_currency.code,
+                targetCurrencyCode,
+              );
+              unitCost = conversion.converted_amount;
+            }
+          }
         }
 
         const qty = node.calculated_quantity > 0 ? node.calculated_quantity : node.quantity;

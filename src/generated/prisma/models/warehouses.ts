@@ -253,6 +253,7 @@ export type warehousesWhereInput = {
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   stock_reservations?: Prisma.Stock_reservationsListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  stock_replenishment_policies?: Prisma.Stock_replenishment_policiesListRelationFilter
   documents?: Prisma.DocumentsListRelationFilter
   document_items?: Prisma.Document_itemsListRelationFilter
   maintenance_parts?: Prisma.Maintenance_partsListRelationFilter
@@ -282,6 +283,7 @@ export type warehousesOrderByWithRelationInput = {
   warehouse_stock?: Prisma.warehouse_stockOrderByRelationAggregateInput
   stock_reservations?: Prisma.stock_reservationsOrderByRelationAggregateInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesOrderByRelationAggregateInput
   documents?: Prisma.documentsOrderByRelationAggregateInput
   document_items?: Prisma.document_itemsOrderByRelationAggregateInput
   maintenance_parts?: Prisma.maintenance_partsOrderByRelationAggregateInput
@@ -314,6 +316,7 @@ export type warehousesWhereUniqueInput = Prisma.AtLeast<{
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   stock_reservations?: Prisma.Stock_reservationsListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  stock_replenishment_policies?: Prisma.Stock_replenishment_policiesListRelationFilter
   documents?: Prisma.DocumentsListRelationFilter
   document_items?: Prisma.Document_itemsListRelationFilter
   maintenance_parts?: Prisma.Maintenance_partsListRelationFilter
@@ -379,6 +382,7 @@ export type warehousesCreateInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -408,6 +412,7 @@ export type warehousesUncheckedCreateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -433,6 +438,7 @@ export type warehousesUpdateInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -462,6 +468,7 @@ export type warehousesUncheckedUpdateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -832,6 +839,20 @@ export type warehousesUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.warehousesUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.warehousesUpdateWithoutWarehouse_stock_movementsInput>, Prisma.warehousesUncheckedUpdateWithoutWarehouse_stock_movementsInput>
 }
 
+export type warehousesCreateNestedOneWithoutStock_replenishment_policiesInput = {
+  create?: Prisma.XOR<Prisma.warehousesCreateWithoutStock_replenishment_policiesInput, Prisma.warehousesUncheckedCreateWithoutStock_replenishment_policiesInput>
+  connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutStock_replenishment_policiesInput
+  connect?: Prisma.warehousesWhereUniqueInput
+}
+
+export type warehousesUpdateOneRequiredWithoutStock_replenishment_policiesNestedInput = {
+  create?: Prisma.XOR<Prisma.warehousesCreateWithoutStock_replenishment_policiesInput, Prisma.warehousesUncheckedCreateWithoutStock_replenishment_policiesInput>
+  connectOrCreate?: Prisma.warehousesCreateOrConnectWithoutStock_replenishment_policiesInput
+  upsert?: Prisma.warehousesUpsertWithoutStock_replenishment_policiesInput
+  connect?: Prisma.warehousesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.warehousesUpdateToOneWithWhereWithoutStock_replenishment_policiesInput, Prisma.warehousesUpdateWithoutStock_replenishment_policiesInput>, Prisma.warehousesUncheckedUpdateWithoutStock_replenishment_policiesInput>
+}
+
 export type warehousesCreateWithoutDocument_itemsInput = {
   id?: string
   name: string
@@ -851,6 +872,7 @@ export type warehousesCreateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
   current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
@@ -879,6 +901,7 @@ export type warehousesUncheckedCreateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
   current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
@@ -919,6 +942,7 @@ export type warehousesUpdateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
   current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
@@ -947,6 +971,7 @@ export type warehousesUncheckedUpdateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
   current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
@@ -971,6 +996,7 @@ export type warehousesCreateWithoutDocumentsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
   current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
@@ -999,6 +1025,7 @@ export type warehousesUncheckedCreateWithoutDocumentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
   current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
@@ -1039,6 +1066,7 @@ export type warehousesUpdateWithoutDocumentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
   current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
@@ -1067,6 +1095,7 @@ export type warehousesUncheckedUpdateWithoutDocumentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
   current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
@@ -1090,6 +1119,7 @@ export type warehousesCreateWithoutPicking_ordersInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1118,6 +1148,7 @@ export type warehousesUncheckedCreateWithoutPicking_ordersInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1158,6 +1189,7 @@ export type warehousesUpdateWithoutPicking_ordersInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -1186,6 +1218,7 @@ export type warehousesUncheckedUpdateWithoutPicking_ordersInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -1210,6 +1243,7 @@ export type warehousesCreateWithoutTrips_trips_destination_warehouse_idTowarehou
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1238,6 +1272,7 @@ export type warehousesUncheckedCreateWithoutTrips_trips_destination_warehouse_id
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1267,6 +1302,7 @@ export type warehousesCreateWithoutTrips_trips_origin_warehouse_idTowarehousesIn
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1295,6 +1331,7 @@ export type warehousesUncheckedCreateWithoutTrips_trips_origin_warehouse_idTowar
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1335,6 +1372,7 @@ export type warehousesUpdateWithoutTrips_trips_destination_warehouse_idTowarehou
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -1363,6 +1401,7 @@ export type warehousesUncheckedUpdateWithoutTrips_trips_destination_warehouse_id
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -1398,6 +1437,7 @@ export type warehousesUpdateWithoutTrips_trips_origin_warehouse_idTowarehousesIn
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -1426,6 +1466,7 @@ export type warehousesUncheckedUpdateWithoutTrips_trips_origin_warehouse_idTowar
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -1451,6 +1492,7 @@ export type warehousesCreateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
@@ -1479,6 +1521,7 @@ export type warehousesUncheckedCreateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
@@ -1519,6 +1562,7 @@ export type warehousesUpdateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
@@ -1547,6 +1591,7 @@ export type warehousesUncheckedUpdateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
@@ -1571,6 +1616,7 @@ export type warehousesCreateWithoutCurrent_tiresInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1599,6 +1645,7 @@ export type warehousesUncheckedCreateWithoutCurrent_tiresInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1639,6 +1686,7 @@ export type warehousesUpdateWithoutCurrent_tiresInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -1667,6 +1715,7 @@ export type warehousesUncheckedUpdateWithoutCurrent_tiresInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -1691,6 +1740,7 @@ export type warehousesCreateWithoutLocationsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1718,6 +1768,7 @@ export type warehousesUncheckedCreateWithoutLocationsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1787,6 +1838,7 @@ export type warehousesCreateWithoutPalletsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1815,6 +1867,7 @@ export type warehousesUncheckedCreateWithoutPalletsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1855,6 +1908,7 @@ export type warehousesUpdateWithoutPalletsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -1883,6 +1937,7 @@ export type warehousesUncheckedUpdateWithoutPalletsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -1908,6 +1963,7 @@ export type warehousesCreateWithoutUnitsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -1935,6 +1991,7 @@ export type warehousesUncheckedCreateWithoutUnitsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -1985,6 +2042,7 @@ export type warehousesCreateWithoutWarehouse_stockInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -2013,6 +2071,7 @@ export type warehousesUncheckedCreateWithoutWarehouse_stockInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -2053,6 +2112,7 @@ export type warehousesUpdateWithoutWarehouse_stockInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -2081,6 +2141,7 @@ export type warehousesUncheckedUpdateWithoutWarehouse_stockInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -2105,6 +2166,7 @@ export type warehousesCreateWithoutStock_reservationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -2133,6 +2195,7 @@ export type warehousesUncheckedCreateWithoutStock_reservationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -2173,6 +2236,7 @@ export type warehousesUpdateWithoutStock_reservationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -2201,6 +2265,7 @@ export type warehousesUncheckedUpdateWithoutStock_reservationsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -2225,6 +2290,7 @@ export type warehousesCreateWithoutWarehouse_stock_movementsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
@@ -2253,6 +2319,7 @@ export type warehousesUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutWarehouseInput
   documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
   document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
@@ -2293,6 +2360,7 @@ export type warehousesUpdateWithoutWarehouse_stock_movementsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -2321,6 +2389,131 @@ export type warehousesUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
+  documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUncheckedUpdateManyWithoutCurrent_warehouseNestedInput
+}
+
+export type warehousesCreateWithoutStock_replenishment_policiesInput = {
+  id?: string
+  name: string
+  code?: string | null
+  active?: boolean
+  is_virtual?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallets?: Prisma.palletsCreateNestedManyWithoutWarehousesInput
+  picking_orders?: Prisma.picking_ordersCreateNestedManyWithoutWarehousesInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutWarehousesInput
+  stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutWarehouseInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutWarehousesInput
+  documents?: Prisma.documentsCreateNestedManyWithoutWarehouseInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutWarehouseInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresCreateNestedManyWithoutCurrent_warehouseInput
+  locations?: Prisma.locationsCreateNestedOneWithoutWarehousesInput
+  units?: Prisma.unitsCreateNestedOneWithoutWarehousesInput
+}
+
+export type warehousesUncheckedCreateWithoutStock_replenishment_policiesInput = {
+  id?: string
+  location_id?: string | null
+  unit_id?: string | null
+  name: string
+  code?: string | null
+  active?: boolean
+  is_virtual?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  pallets?: Prisma.palletsUncheckedCreateNestedManyWithoutWarehousesInput
+  picking_orders?: Prisma.picking_ordersUncheckedCreateNestedManyWithoutWarehousesInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedCreateNestedManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutWarehousesInput
+  stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutWarehouseInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutWarehousesInput
+  documents?: Prisma.documentsUncheckedCreateNestedManyWithoutWarehouseInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutWarehouseInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutWarehouseInput
+  current_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutCurrent_warehouseInput
+}
+
+export type warehousesCreateOrConnectWithoutStock_replenishment_policiesInput = {
+  where: Prisma.warehousesWhereUniqueInput
+  create: Prisma.XOR<Prisma.warehousesCreateWithoutStock_replenishment_policiesInput, Prisma.warehousesUncheckedCreateWithoutStock_replenishment_policiesInput>
+}
+
+export type warehousesUpsertWithoutStock_replenishment_policiesInput = {
+  update: Prisma.XOR<Prisma.warehousesUpdateWithoutStock_replenishment_policiesInput, Prisma.warehousesUncheckedUpdateWithoutStock_replenishment_policiesInput>
+  create: Prisma.XOR<Prisma.warehousesCreateWithoutStock_replenishment_policiesInput, Prisma.warehousesUncheckedCreateWithoutStock_replenishment_policiesInput>
+  where?: Prisma.warehousesWhereInput
+}
+
+export type warehousesUpdateToOneWithWhereWithoutStock_replenishment_policiesInput = {
+  where?: Prisma.warehousesWhereInput
+  data: Prisma.XOR<Prisma.warehousesUpdateWithoutStock_replenishment_policiesInput, Prisma.warehousesUncheckedUpdateWithoutStock_replenishment_policiesInput>
+}
+
+export type warehousesUpdateWithoutStock_replenishment_policiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallets?: Prisma.palletsUpdateManyWithoutWarehousesNestedInput
+  picking_orders?: Prisma.picking_ordersUpdateManyWithoutWarehousesNestedInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
+  stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
+  current_tires?: Prisma.tiresUpdateManyWithoutCurrent_warehouseNestedInput
+  locations?: Prisma.locationsUpdateOneWithoutWarehousesNestedInput
+  units?: Prisma.unitsUpdateOneWithoutWarehousesNestedInput
+}
+
+export type warehousesUncheckedUpdateWithoutStock_replenishment_policiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  location_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_virtual?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pallets?: Prisma.palletsUncheckedUpdateManyWithoutWarehousesNestedInput
+  picking_orders?: Prisma.picking_ordersUncheckedUpdateManyWithoutWarehousesNestedInput
+  trips_trips_destination_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_destination_warehouse_idTowarehousesNestedInput
+  trips_trips_origin_warehouse_idTowarehouses?: Prisma.tripsUncheckedUpdateManyWithoutWarehouses_trips_origin_warehouse_idTowarehousesNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -2361,6 +2554,7 @@ export type warehousesUpdateWithoutLocationsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -2388,6 +2582,7 @@ export type warehousesUncheckedUpdateWithoutLocationsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -2443,6 +2638,7 @@ export type warehousesUpdateWithoutUnitsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutWarehouseNestedInput
@@ -2470,6 +2666,7 @@ export type warehousesUncheckedUpdateWithoutUnitsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutWarehousesNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutWarehouseNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutWarehousesNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutWarehouseNestedInput
   documents?: Prisma.documentsUncheckedUpdateManyWithoutWarehouseNestedInput
   document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutWarehouseNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -2504,6 +2701,7 @@ export type WarehousesCountOutputType = {
   warehouse_stock: number
   stock_reservations: number
   warehouse_stock_movements: number
+  stock_replenishment_policies: number
   documents: number
   document_items: number
   maintenance_parts: number
@@ -2518,6 +2716,7 @@ export type WarehousesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   warehouse_stock?: boolean | WarehousesCountOutputTypeCountWarehouse_stockArgs
   stock_reservations?: boolean | WarehousesCountOutputTypeCountStock_reservationsArgs
   warehouse_stock_movements?: boolean | WarehousesCountOutputTypeCountWarehouse_stock_movementsArgs
+  stock_replenishment_policies?: boolean | WarehousesCountOutputTypeCountStock_replenishment_policiesArgs
   documents?: boolean | WarehousesCountOutputTypeCountDocumentsArgs
   document_items?: boolean | WarehousesCountOutputTypeCountDocument_itemsArgs
   maintenance_parts?: boolean | WarehousesCountOutputTypeCountMaintenance_partsArgs
@@ -2586,6 +2785,13 @@ export type WarehousesCountOutputTypeCountWarehouse_stock_movementsArgs<ExtArgs 
 /**
  * WarehousesCountOutputType without action
  */
+export type WarehousesCountOutputTypeCountStock_replenishment_policiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.stock_replenishment_policiesWhereInput
+}
+
+/**
+ * WarehousesCountOutputType without action
+ */
 export type WarehousesCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.documentsWhereInput
 }
@@ -2633,6 +2839,7 @@ export type warehousesSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   warehouse_stock?: boolean | Prisma.warehouses$warehouse_stockArgs<ExtArgs>
   stock_reservations?: boolean | Prisma.warehouses$stock_reservationsArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs>
+  stock_replenishment_policies?: boolean | Prisma.warehouses$stock_replenishment_policiesArgs<ExtArgs>
   documents?: boolean | Prisma.warehouses$documentsArgs<ExtArgs>
   document_items?: boolean | Prisma.warehouses$document_itemsArgs<ExtArgs>
   maintenance_parts?: boolean | Prisma.warehouses$maintenance_partsArgs<ExtArgs>
@@ -2703,6 +2910,7 @@ export type warehousesInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   warehouse_stock?: boolean | Prisma.warehouses$warehouse_stockArgs<ExtArgs>
   stock_reservations?: boolean | Prisma.warehouses$stock_reservationsArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs>
+  stock_replenishment_policies?: boolean | Prisma.warehouses$stock_replenishment_policiesArgs<ExtArgs>
   documents?: boolean | Prisma.warehouses$documentsArgs<ExtArgs>
   document_items?: boolean | Prisma.warehouses$document_itemsArgs<ExtArgs>
   maintenance_parts?: boolean | Prisma.warehouses$maintenance_partsArgs<ExtArgs>
@@ -2730,6 +2938,7 @@ export type $warehousesPayload<ExtArgs extends runtime.Types.Extensions.Internal
     warehouse_stock: Prisma.$warehouse_stockPayload<ExtArgs>[]
     stock_reservations: Prisma.$stock_reservationsPayload<ExtArgs>[]
     warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
+    stock_replenishment_policies: Prisma.$stock_replenishment_policiesPayload<ExtArgs>[]
     documents: Prisma.$documentsPayload<ExtArgs>[]
     document_items: Prisma.$document_itemsPayload<ExtArgs>[]
     maintenance_parts: Prisma.$maintenance_partsPayload<ExtArgs>[]
@@ -3152,6 +3361,7 @@ export interface Prisma__warehousesClient<T, Null = never, ExtArgs extends runti
   warehouse_stock<T extends Prisma.warehouses$warehouse_stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$warehouse_stockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stock_reservations<T extends Prisma.warehouses$stock_reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$stock_reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$stock_reservationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock_movements<T extends Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stock_replenishment_policies<T extends Prisma.warehouses$stock_replenishment_policiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$stock_replenishment_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$stock_replenishment_policiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.warehouses$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   document_items<T extends Prisma.warehouses$document_itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$document_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   maintenance_parts<T extends Prisma.warehouses$maintenance_partsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.warehouses$maintenance_partsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$maintenance_partsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3766,6 +3976,30 @@ export type warehouses$warehouse_stock_movementsArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
+}
+
+/**
+ * warehouses.stock_replenishment_policies
+ */
+export type warehouses$stock_replenishment_policiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the stock_replenishment_policies
+   */
+  select?: Prisma.stock_replenishment_policiesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the stock_replenishment_policies
+   */
+  omit?: Prisma.stock_replenishment_policiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.stock_replenishment_policiesInclude<ExtArgs> | null
+  where?: Prisma.stock_replenishment_policiesWhereInput
+  orderBy?: Prisma.stock_replenishment_policiesOrderByWithRelationInput | Prisma.stock_replenishment_policiesOrderByWithRelationInput[]
+  cursor?: Prisma.stock_replenishment_policiesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Stock_replenishment_policiesScalarFieldEnum | Prisma.Stock_replenishment_policiesScalarFieldEnum[]
 }
 
 /**

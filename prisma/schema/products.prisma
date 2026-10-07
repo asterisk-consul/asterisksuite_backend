@@ -37,6 +37,7 @@ model products {
   usage_type               UsageType         @default(BOTH)
   is_composed              Boolean           @default(false)
   auto_calculate_cost      Boolean           @default(false)
+  sale_margin_percentage   Decimal           @default(0) @db.Decimal(7, 2)
   has_engineering          Boolean           @default(false)
   manages_stock            Boolean           @default(true)
   //ver como impactan con lo que ya tenemos
@@ -56,6 +57,8 @@ model products {
   last_cost_calculated_at  DateTime?
   cost_template_id         String?           @db.Uuid
   unit_id                  String?           @db.Uuid
+    purchase_unit_id         String?           @db.Uuid
+    purchase_to_stock_factor Decimal           @default(1) @db.Decimal(18, 6)
 
   // RELACIONES 
   product_variants            product_variants[]
@@ -67,6 +70,8 @@ model products {
   product_attribute_values    product_attribute_values[]
   //
   current_cost                Decimal?                      @db.Decimal(15, 2)
+  current_cost_currency_id    String?                       @db.Uuid
+  current_cost_currency       currencies?                   @relation("product_current_cost_currency", fields: [current_cost_currency_id], references: [id])
   income_account              accounts?                     @relation("product_income_account", fields: [income_account_id], references: [id])
   expense_account             accounts?                     @relation("product_expense_account", fields: [expense_account_id], references: [id])
   inventory_account           accounts?                     @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
@@ -83,6 +88,7 @@ model products {
   warehouse_stock             warehouse_stock[]
   stock_reservations          stock_reservations[]
   warehouse_stock_movements   warehouse_stock_movements[]
+  stock_replenishment_policies stock_replenishment_policies[]
   product_costs               product_costs[]
   productCostBreakdowns       product_cost_breakdowns[]
   cost_template               cost_templates?               @relation(fields: [cost_template_id], references: [id])
@@ -93,6 +99,7 @@ model products {
   product_suppliers           product_suppliers[]
   product_list_prices         product_list_prices[]
 
+  @@index([current_cost_currency_id])
   @@schema("tenant")
 }
 
@@ -133,7 +140,8 @@ model product_variants {
   updated_by               String?                    @db.Uuid
   deleted_by               String?                    @db.Uuid
   products                 products                   @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  product_components       product_components[]
+  product_components       product_components[] @relation("component_input_variant")
+  structure_components     product_components[] @relation("component_structure_variant")
   product_attribute_values product_attribute_values[]
   productCostBreakdowns    product_cost_breakdowns[]
   productVariantPrices     product_variant_prices[]
@@ -150,6 +158,7 @@ model product_components {
   parent_product_id    String            @db.Uuid
   child_product_id     String            @db.Uuid
   child_variant_id     String?           @db.Uuid
+  structure_variant_id String?           @db.Uuid
   quantity             Decimal           @db.Decimal(12, 3)
   unit_id              String?           @db.Uuid
   length_mm            Decimal?          @db.Decimal(12, 3)
@@ -167,12 +176,14 @@ model product_components {
   deleted_by           String?           @db.Uuid
   parent_product       products          @relation("parent_product", fields: [parent_product_id], references: [id], onDelete: Cascade)
   child_product        products          @relation("child_product", fields: [child_product_id], references: [id])
-  child_variant        product_variants? @relation(fields: [child_variant_id], references: [id])
+  child_variant        product_variants? @relation("component_input_variant", fields: [child_variant_id], references: [id])
+  structure_variant    product_variants? @relation("component_structure_variant", fields: [structure_variant_id], references: [id], onDelete: Cascade)
   units                units?            @relation(fields: [unit_id], references: [id])
 
   @@index([parent_product_id, order])
   @@index([child_product_id])
   @@index([child_variant_id])
+  @@index([parent_product_id, structure_variant_id, order])
   @@schema("tenant")
 }
 

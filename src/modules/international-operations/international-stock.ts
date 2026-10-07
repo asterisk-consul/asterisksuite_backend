@@ -13,12 +13,15 @@ const TRANSIT_STOCK_STATUSES = new Set([
   'RECEIVING',
 ]);
 
-function quantitiesByProduct(items: Array<{ product_id: string | null; quantity: unknown }>) {
+function quantitiesByProduct(
+  items: Array<{ product_id: string | null; quantity: unknown; stock_quantity?: unknown }>,
+) {
   const quantities = new Map<string, Prisma.Decimal>();
   for (const item of items) {
     if (!item.product_id) continue;
     const current = quantities.get(item.product_id) ?? new Prisma.Decimal(0);
-    quantities.set(item.product_id, current.add(new Prisma.Decimal(item.quantity as any)));
+    const stockQuantity = item.stock_quantity ?? item.quantity;
+    quantities.set(item.product_id, current.add(new Prisma.Decimal(stockQuantity as any)));
   }
   return quantities;
 }
@@ -57,7 +60,10 @@ export async function registerInternationalInvoiceInTransit(
       where: { id: documentId },
       include: {
         document_types: { select: { category: true, direction: true } },
-        document_items: { where: { deleted_at: null }, select: { product_id: true, quantity: true } },
+        document_items: {
+          where: { deleted_at: null },
+          select: { product_id: true, quantity: true, stock_quantity: true },
+        },
       },
     }),
   ]);
@@ -125,7 +131,7 @@ export async function receiveInternationalRemitoFromTransit(
       throw new BadRequestException('El depósito real seleccionado no existe o está inactivo');
     }
 
-    const quantity = new Prisma.Decimal(item.quantity);
+    const quantity = new Prisma.Decimal(item.stock_quantity ?? item.quantity);
     const transitStock = await tx.warehouse_stock.findUnique({
       where: {
         warehouse_id_product_id: {

@@ -7,6 +7,7 @@ export interface CostStrategyOptions {
   currencyId: string;
   templateComponents: TemplateComponent[];
   costTemplateId: string | null;
+  variantId?: string;
 }
 
 export interface ICostStrategy {

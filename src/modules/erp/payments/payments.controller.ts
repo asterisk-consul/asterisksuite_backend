@@ -10,18 +10,25 @@ import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApplyAdvanceDto } from './dto/apply-advance.dto';
+import { ReversePaymentDto } from './dto/reverse-payment.dto';
 import type { Request } from 'express';
+import { ForbiddenException } from '@nestjs/common';
+import { PermissionContextBuilder } from '@/access-control/authorization/permission-context.builder';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/payments')
 export class PaymentsController {
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    private readonly permissionContextBuilder: PermissionContextBuilder,
+  ) {}
 
   @Post()
   @RequirePermissions('treasury.payments.create')
-  create(@Body() dto: CreatePaymentDto, @CurrentUser() user: AuthUser) {
+  async create(@Body() dto: CreatePaymentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     console.log('[payments-controller] create called, dto:', JSON.stringify(dto, null, 2))
     console.log('[payments-controller] user.id:', user.id)
+    await this.assertCardPermission(dto.payment_method, dto.type, user.id, req['companyUserRole'] as string | undefined);
     return this.paymentsService.create(dto, user.id);
   }
 
@@ -55,13 +62,17 @@ export class PaymentsController {
 
   @Patch(':id')
   @RequirePermissions('treasury.payments.update')
-  update(@Param('id') id: string, @Body() dto: UpdatePaymentDto, @CurrentUser() user: AuthUser) {
+  async update(@Param('id') id: string, @Body() dto: UpdatePaymentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const payment = await this.paymentsService.findOne(id);
+    await this.assertCardPermission(dto.payment_method ?? payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'create');
     return this.paymentsService.update(id, dto, user.id);
   }
 
   @Post(':id/confirm')
   @RequirePermissions('treasury.payments.confirm')
-  confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+  async confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const payment = await this.paymentsService.findOne(id);
+    await this.assertCardPermission(payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'confirm');
     return this.paymentsService.confirm(id, user.id);
   }
 
@@ -79,13 +90,24 @@ export class PaymentsController {
 
   @Post(':id/reverse')
   @RequirePermissions('treasury.payments.reverse')
-  reverse(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.paymentsService.reverse(id, user.id);
+  async reverse(@Param('id') id: string, @Body() dto: ReversePaymentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const payment = await this.paymentsService.findOne(id);
+    await this.assertCardPermission(payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'reverse');
+    return this.paymentsService.reverse(id, user.id, dto.check_action);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.remove(id, user.id);
+  }
+
+  private async assertCardPermission(method: string, type: string, userId: string, companyRole?: string, action: 'create' | 'confirm' | 'reverse' = 'create') {
+    if (method !== 'CREDIT_CARD' || companyRole === 'OWNER') return;
+    const context = await this.permissionContextBuilder.build(userId);
+    const permission = type === 'COLLECTION'
+      ? `card_collections.${action}`
+      : action === 'reverse' ? 'credit_cards.company.reverse' : 'credit_cards.company.use';
+    if (!context.can(permission)) throw new ForbiddenException('No tenés permisos para operar con este tipo de tarjeta');
   }
 
   // ═══════════════════════════════════════════

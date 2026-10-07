@@ -14,6 +14,7 @@ import {
   SQL_DOCUMENT_TYPES,
   SQL_DOCUMENT_SEQUENCES,
   SQL_LINK_SEQUENCES,
+  SQL_UNITS,
   executeSeedSql,
 } from '../../../../prisma/seeds/seed-sql';
 
@@ -91,11 +92,12 @@ export class CompaniesService {
         this.logger.log(`Tenant "${tenantDb}": Rol "${role.name}" → ${perms.length} permisos`);
       }
 
-      // 3. Document types, sequences, and links (SQL from seed-sql.ts)
+      // 3. Base catalogs for a new tenant (SQL from seed-sql.ts)
+      await executeSeedSql(connectionString, SQL_UNITS);
       await executeSeedSql(connectionString, SQL_DOCUMENT_TYPES);
       await executeSeedSql(connectionString, SQL_DOCUMENT_SEQUENCES);
       await executeSeedSql(connectionString, SQL_LINK_SEQUENCES);
-      this.logger.log(`Tenant "${tenantDb}": Document types + sequences seed OK`);
+      this.logger.log(`Tenant "${tenantDb}": Units + document types + sequences seed OK`);
     } finally {
       await prisma.$disconnect();
       await pool.end();

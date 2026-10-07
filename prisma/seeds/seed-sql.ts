@@ -84,6 +84,9 @@ export const RBAC_PERMISSIONS = [
   { code: 'warehouses.create', description: 'Crear almacenes' },
   { code: 'warehouses.update', description: 'Editar almacenes' },
   { code: 'warehouses.delete', description: 'Eliminar almacenes' },
+  { code: 'stock.replenishment.read', description: 'Ver necesidades de reposición' },
+  { code: 'stock.replenishment.configure', description: 'Configurar políticas de reposición' },
+  { code: 'stock.replenishment.execute', description: 'Ejecutar sugerencias de reposición' },
 
   // ─── Logística - Trips ────────────────────────────────────
   { code: 'trips.read', description: 'Ver viajes' },
@@ -139,6 +142,30 @@ export const RBAC_PERMISSIONS = [
   { code: 'payments.reverse', description: 'Anular pagos' },
   { code: 'payments.reject', description: 'Rechazar pagos' },
   { code: 'payments.mark_as_paid', description: 'Marcar pagos como pagados' },
+
+  // ─── Treasury - Credit cards and settlements ─────────────
+  { code: 'credit_cards.company.read', description: 'Ver tarjetas corporativas y sus consumos' },
+  { code: 'credit_cards.company.create', description: 'Crear tarjetas corporativas' },
+  { code: 'credit_cards.company.update', description: 'Editar tarjetas corporativas' },
+  { code: 'credit_cards.company.use', description: 'Utilizar tarjetas corporativas en pagos' },
+  { code: 'credit_cards.company.reverse', description: 'Anular consumos de tarjetas corporativas' },
+  { code: 'credit_cards.company.pay_statement', description: 'Pagar cuotas y resúmenes de tarjetas corporativas' },
+  { code: 'card_collections.read', description: 'Ver cobros realizados con tarjeta' },
+  { code: 'card_collections.create', description: 'Registrar cobros con tarjeta' },
+  { code: 'card_collections.confirm', description: 'Confirmar cobros con tarjeta' },
+  { code: 'card_collections.reverse', description: 'Anular cobros con tarjeta' },
+  { code: 'card_settlements.read', description: 'Ver liquidaciones de tarjetas' },
+  { code: 'card_settlements.confirm', description: 'Registrar acreditaciones de tarjetas' },
+  { code: 'card_settlements.reconcile', description: 'Conciliar liquidaciones de tarjetas' },
+  { code: 'card_settlements.reverse', description: 'Revertir liquidaciones de tarjetas' },
+  { code: 'card_settings.read', description: 'Ver configuración de tarjetas y canales' },
+  { code: 'card_settings.manage', description: 'Administrar tarjetas, adquirentes y canales de cobro' },
+  { code: 'card_reports.read', description: 'Ver reportes de tarjetas' },
+  { code: 'card_reports.sales', description: 'Ver reporte de cobros con tarjeta' },
+  { code: 'card_reports.settlements', description: 'Ver reporte de liquidaciones de tarjeta' },
+  { code: 'card_reports.corporate_cards', description: 'Ver reporte de tarjetas corporativas' },
+  { code: 'card_reports.cash_flow', description: 'Ver proyección financiera de tarjetas' },
+  { code: 'card_reports.export', description: 'Exportar reportes de tarjetas' },
 
   // ─── Capturas de comprobantes ───────────────────────────────
   { code: 'intake.read', description: 'Ver menú y bandeja de capturas' },
@@ -346,6 +373,13 @@ export const RBAC_PERMISSIONS = [
   { code: 'stock.movements', description: 'Ver movimientos de stock' },
   { code: 'stock.create', description: 'Crear movimientos de stock' },
 
+  // ─── Fabricación ──────────────────────────────────────────
+  { code: 'production.read', description: 'Acceder a fabricación y consultar materiales' },
+  { code: 'production.execute', description: 'Registrar fabricaciones y movimientos de materiales' },
+  { code: 'production.history', description: 'Ver el historial de fabricación' },
+  { code: 'production.manage_bom', description: 'Configurar BOM e ingeniería de productos' },
+  { code: 'production.view_costs', description: 'Ver costos de fabricación' },
+
   // ─── Media ────────────────────────────────────────────────
   { code: 'media.read', description: 'Ver archivos' },
   { code: 'media.upload', description: 'Subir archivos' },
@@ -467,6 +501,42 @@ export const RBAC_ROLES = [
     permissionCodes: ['intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete'],
   },
 ]
+
+// ════════════════════════════════════════════════════════════════
+// SQL — UNIDADES DE MEDIDA
+// ════════════════════════════════════════════════════════════════
+
+export const SQL_UNITS = `
+WITH defaults(name, symbol, unit_type) AS (
+  VALUES
+    ('Unidad', 'u', 'UNIT'::tenant."UnitType"),
+    ('Pieza', 'pza', 'UNIT'::tenant."UnitType"),
+    ('Barra', 'barra', 'UNIT'::tenant."UnitType"),
+    ('Rollo', 'rollo', 'UNIT'::tenant."UnitType"),
+    ('Caja', 'caja', 'UNIT'::tenant."UnitType"),
+    ('Metro', 'm', 'LENGTH'::tenant."UnitType"),
+    ('Centímetro', 'cm', 'LENGTH'::tenant."UnitType"),
+    ('Milímetro', 'mm', 'LENGTH'::tenant."UnitType"),
+    ('Kilómetro', 'km', 'LENGTH'::tenant."UnitType"),
+    ('Kilogramo', 'kg', 'WEIGHT'::tenant."UnitType"),
+    ('Gramo', 'g', 'WEIGHT'::tenant."UnitType"),
+    ('Tonelada', 't', 'WEIGHT'::tenant."UnitType"),
+    ('Litro', 'l', 'VOLUME'::tenant."UnitType"),
+    ('Mililitro', 'ml', 'VOLUME'::tenant."UnitType"),
+    ('Metro cúbico', 'm³', 'VOLUME'::tenant."UnitType"),
+    ('Metro cuadrado', 'm²', 'AREA'::tenant."UnitType"),
+    ('Centímetro cuadrado', 'cm²', 'AREA'::tenant."UnitType")
+)
+INSERT INTO tenant.units (id, name, symbol, unit_type, active)
+SELECT gen_random_uuid(), d.name, d.symbol, d.unit_type, true
+FROM defaults d
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM tenant.units u
+  WHERE lower(u.name) = lower(d.name)
+     OR lower(u.symbol) = lower(d.symbol)
+);
+`
 
 // ════════════════════════════════════════════════════════════════
 // SQL — IMPUESTOS

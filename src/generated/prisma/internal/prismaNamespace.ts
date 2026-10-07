@@ -515,6 +515,8 @@ export const ModelName = {
   tax_category_taxes: 'tax_category_taxes',
   product_taxes: 'product_taxes',
   taxes: 'taxes',
+  treasury_obligation_templates: 'treasury_obligation_templates',
+  treasury_obligations: 'treasury_obligations',
   bank_accounts: 'bank_accounts',
   bank_account_user_roles: 'bank_account_user_roles',
   bank_account_movements: 'bank_account_movements',
@@ -540,7 +542,8 @@ export const ModelName = {
   stock_reservations: 'stock_reservations',
   stock_reservation_allocations: 'stock_reservation_allocations',
   warehouse_stock_movements: 'warehouse_stock_movements',
-  warehouses: 'warehouses'
+  warehouses: 'warehouses',
+  stock_replenishment_policies: 'stock_replenishment_policies'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -556,7 +559,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_account_user_roles" | "bank_account_movements" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -10254,6 +10257,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    treasury_obligation_templates: {
+      payload: Prisma.$treasury_obligation_templatesPayload<ExtArgs>
+      fields: Prisma.treasury_obligation_templatesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.treasury_obligation_templatesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.treasury_obligation_templatesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>
+        }
+        findFirst: {
+          args: Prisma.treasury_obligation_templatesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.treasury_obligation_templatesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>
+        }
+        findMany: {
+          args: Prisma.treasury_obligation_templatesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>[]
+        }
+        create: {
+          args: Prisma.treasury_obligation_templatesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>
+        }
+        createMany: {
+          args: Prisma.treasury_obligation_templatesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.treasury_obligation_templatesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>[]
+        }
+        delete: {
+          args: Prisma.treasury_obligation_templatesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>
+        }
+        update: {
+          args: Prisma.treasury_obligation_templatesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>
+        }
+        deleteMany: {
+          args: Prisma.treasury_obligation_templatesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.treasury_obligation_templatesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.treasury_obligation_templatesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>[]
+        }
+        upsert: {
+          args: Prisma.treasury_obligation_templatesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligation_templatesPayload>
+        }
+        aggregate: {
+          args: Prisma.Treasury_obligation_templatesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTreasury_obligation_templates>
+        }
+        groupBy: {
+          args: Prisma.treasury_obligation_templatesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Treasury_obligation_templatesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.treasury_obligation_templatesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Treasury_obligation_templatesCountAggregateOutputType> | number
+        }
+      }
+    }
+    treasury_obligations: {
+      payload: Prisma.$treasury_obligationsPayload<ExtArgs>
+      fields: Prisma.treasury_obligationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.treasury_obligationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.treasury_obligationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>
+        }
+        findFirst: {
+          args: Prisma.treasury_obligationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.treasury_obligationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>
+        }
+        findMany: {
+          args: Prisma.treasury_obligationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>[]
+        }
+        create: {
+          args: Prisma.treasury_obligationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>
+        }
+        createMany: {
+          args: Prisma.treasury_obligationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.treasury_obligationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>[]
+        }
+        delete: {
+          args: Prisma.treasury_obligationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>
+        }
+        update: {
+          args: Prisma.treasury_obligationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.treasury_obligationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.treasury_obligationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.treasury_obligationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.treasury_obligationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$treasury_obligationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Treasury_obligationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTreasury_obligations>
+        }
+        groupBy: {
+          args: Prisma.treasury_obligationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Treasury_obligationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.treasury_obligationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Treasury_obligationsCountAggregateOutputType> | number
+        }
+      }
+    }
     bank_accounts: {
       payload: Prisma.$bank_accountsPayload<ExtArgs>
       fields: Prisma.bank_accountsFieldRefs
@@ -12178,6 +12329,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    stock_replenishment_policies: {
+      payload: Prisma.$stock_replenishment_policiesPayload<ExtArgs>
+      fields: Prisma.stock_replenishment_policiesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.stock_replenishment_policiesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.stock_replenishment_policiesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>
+        }
+        findFirst: {
+          args: Prisma.stock_replenishment_policiesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.stock_replenishment_policiesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>
+        }
+        findMany: {
+          args: Prisma.stock_replenishment_policiesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>[]
+        }
+        create: {
+          args: Prisma.stock_replenishment_policiesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>
+        }
+        createMany: {
+          args: Prisma.stock_replenishment_policiesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.stock_replenishment_policiesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>[]
+        }
+        delete: {
+          args: Prisma.stock_replenishment_policiesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>
+        }
+        update: {
+          args: Prisma.stock_replenishment_policiesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>
+        }
+        deleteMany: {
+          args: Prisma.stock_replenishment_policiesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.stock_replenishment_policiesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.stock_replenishment_policiesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>[]
+        }
+        upsert: {
+          args: Prisma.stock_replenishment_policiesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$stock_replenishment_policiesPayload>
+        }
+        aggregate: {
+          args: Prisma.Stock_replenishment_policiesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStock_replenishment_policies>
+        }
+        groupBy: {
+          args: Prisma.stock_replenishment_policiesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Stock_replenishment_policiesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.stock_replenishment_policiesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Stock_replenishment_policiesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -12469,6 +12694,9 @@ export const Document_itemsScalarFieldEnum = {
   variant_id: 'variant_id',
   warehouse_id: 'warehouse_id',
   quantity: 'quantity',
+  purchase_unit_id: 'purchase_unit_id',
+  unit_conversion_factor: 'unit_conversion_factor',
+  stock_quantity: 'stock_quantity',
   price: 'price',
   unit_price: 'unit_price',
   discount_percentage: 'discount_percentage',
@@ -14150,6 +14378,7 @@ export const ProductsScalarFieldEnum = {
   usage_type: 'usage_type',
   is_composed: 'is_composed',
   auto_calculate_cost: 'auto_calculate_cost',
+  sale_margin_percentage: 'sale_margin_percentage',
   has_engineering: 'has_engineering',
   manages_stock: 'manages_stock',
   income_account_id: 'income_account_id',
@@ -14167,7 +14396,10 @@ export const ProductsScalarFieldEnum = {
   last_cost_calculated_at: 'last_cost_calculated_at',
   cost_template_id: 'cost_template_id',
   unit_id: 'unit_id',
-  current_cost: 'current_cost'
+  purchase_unit_id: 'purchase_unit_id',
+  purchase_to_stock_factor: 'purchase_to_stock_factor',
+  current_cost: 'current_cost',
+  current_cost_currency_id: 'current_cost_currency_id'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
@@ -14217,6 +14449,7 @@ export const Product_componentsScalarFieldEnum = {
   parent_product_id: 'parent_product_id',
   child_product_id: 'child_product_id',
   child_variant_id: 'child_variant_id',
+  structure_variant_id: 'structure_variant_id',
   quantity: 'quantity',
   unit_id: 'unit_id',
   length_mm: 'length_mm',
@@ -14732,6 +14965,76 @@ export const TaxesScalarFieldEnum = {
 export type TaxesScalarFieldEnum = (typeof TaxesScalarFieldEnum)[keyof typeof TaxesScalarFieldEnum]
 
 
+export const Treasury_obligation_templatesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  party_id: 'party_id',
+  category: 'category',
+  treatment: 'treatment',
+  service_product_id: 'service_product_id',
+  expense_account_id: 'expense_account_id',
+  frequency: 'frequency',
+  interval_months: 'interval_months',
+  start_date: 'start_date',
+  end_date: 'end_date',
+  occurrences: 'occurrences',
+  due_day: 'due_day',
+  estimated_amount: 'estimated_amount',
+  net_amount: 'net_amount',
+  currency_code: 'currency_code',
+  variable_amount: 'variable_amount',
+  notification_days: 'notification_days',
+  description: 'description',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Treasury_obligation_templatesScalarFieldEnum = (typeof Treasury_obligation_templatesScalarFieldEnum)[keyof typeof Treasury_obligation_templatesScalarFieldEnum]
+
+
+export const Treasury_obligationsScalarFieldEnum = {
+  id: 'id',
+  template_id: 'template_id',
+  party_id: 'party_id',
+  category: 'category',
+  treatment: 'treatment',
+  service_product_id: 'service_product_id',
+  expense_account_id: 'expense_account_id',
+  net_amount: 'net_amount',
+  period_key: 'period_key',
+  description: 'description',
+  issue_date: 'issue_date',
+  due_date: 'due_date',
+  second_due_date: 'second_due_date',
+  estimated_amount: 'estimated_amount',
+  amount: 'amount',
+  second_due_amount: 'second_due_amount',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  reference: 'reference',
+  document_id: 'document_id',
+  payment_id: 'payment_id',
+  status: 'status',
+  notification_days: 'notification_days',
+  notes: 'notes',
+  confirmed_at: 'confirmed_at',
+  paid_at: 'paid_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Treasury_obligationsScalarFieldEnum = (typeof Treasury_obligationsScalarFieldEnum)[keyof typeof Treasury_obligationsScalarFieldEnum]
+
+
 export const Bank_accountsScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -15116,6 +15419,9 @@ export const Credit_card_transactionsScalarFieldEnum = {
   converted_amount: 'converted_amount',
   commission_rate: 'commission_rate',
   commission_amount: 'commission_amount',
+  tax_amount: 'tax_amount',
+  withholding_amount: 'withholding_amount',
+  other_deductions: 'other_deductions',
   net_amount: 'net_amount',
   net_currency_code: 'net_currency_code',
   net_exchange_rate: 'net_exchange_rate',
@@ -15126,6 +15432,9 @@ export const Credit_card_transactionsScalarFieldEnum = {
   installment_amount: 'installment_amount',
   description: 'description',
   authorization: 'authorization',
+  settlement_reference: 'settlement_reference',
+  settlement_notes: 'settlement_notes',
+  settlement_bank_id: 'settlement_bank_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -15349,6 +15658,26 @@ export const WarehousesScalarFieldEnum = {
 } as const
 
 export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof typeof WarehousesScalarFieldEnum]
+
+
+export const Stock_replenishment_policiesScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  warehouse_id: 'warehouse_id',
+  preferred_supplier_id: 'preferred_supplier_id',
+  reorder_point: 'reorder_point',
+  target_stock: 'target_stock',
+  lead_time_days: 'lead_time_days',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Stock_replenishment_policiesScalarFieldEnum = (typeof Stock_replenishment_policiesScalarFieldEnum)[keyof typeof Stock_replenishment_policiesScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -16617,6 +16946,8 @@ export type GlobalOmitConfig = {
   tax_category_taxes?: Prisma.tax_category_taxesOmit
   product_taxes?: Prisma.product_taxesOmit
   taxes?: Prisma.taxesOmit
+  treasury_obligation_templates?: Prisma.treasury_obligation_templatesOmit
+  treasury_obligations?: Prisma.treasury_obligationsOmit
   bank_accounts?: Prisma.bank_accountsOmit
   bank_account_user_roles?: Prisma.bank_account_user_rolesOmit
   bank_account_movements?: Prisma.bank_account_movementsOmit
@@ -16643,6 +16974,7 @@ export type GlobalOmitConfig = {
   stock_reservation_allocations?: Prisma.stock_reservation_allocationsOmit
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOmit
   warehouses?: Prisma.warehousesOmit
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesOmit
 }
 
 /* Types for Logging */

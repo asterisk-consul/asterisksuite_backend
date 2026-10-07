@@ -1,6 +1,6 @@
 import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PaymentDocumentDto } from './create-payment.dto';
+import { PaymentDocumentDto, PaymentObligationDto } from './create-payment.dto';
 
 export class UpdatePaymentDto {
   @IsDateString()
@@ -63,6 +63,22 @@ export class UpdatePaymentDto {
   @IsOptional()
   account_id?: string;
 
+  @IsString()
+  @IsOptional()
+  credit_card_id?: string;
+
+  @IsNumber()
+  @IsOptional()
+  installments_total?: number;
+
+  @IsString()
+  @IsOptional()
+  card_authorization?: string;
+
+  @IsDateString()
+  @IsOptional()
+  expected_clearing_date?: string;
+
   @IsEnum(['NORMAL', 'ADVANCE'] as const)
   @IsOptional()
   payment_mode?: string;
@@ -72,4 +88,10 @@ export class UpdatePaymentDto {
   @Type(() => PaymentDocumentDto)
   @IsOptional()
   documents?: PaymentDocumentDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentObligationDto)
+  @IsOptional()
+  obligations?: PaymentObligationDto[];
 }

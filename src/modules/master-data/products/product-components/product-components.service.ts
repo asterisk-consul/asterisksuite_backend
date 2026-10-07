@@ -37,6 +37,11 @@ export class ProductComponentsService {
 
     await this.productStructureVersionService.createVersion(component.parent_product_id);
 
+    await this.prisma.products.update({
+      where: { id: component.parent_product_id },
+      data: { is_composed: true },
+    });
+
     return component;
   }
 
@@ -105,6 +110,15 @@ export class ProductComponentsService {
 
     await this.productStructureVersionService.createVersion(component.parent_product_id);
 
+    const remaining = await this.prisma.product_components.count({
+      where: { parent_product_id: component.parent_product_id, deleted_at: null },
+    });
+
+    await this.prisma.products.update({
+      where: { id: component.parent_product_id },
+      data: { is_composed: remaining > 0 },
+    });
+
     return deleted;
   }
 
@@ -134,6 +148,7 @@ export class ProductComponentsService {
     parent_product_id: string;
     child_product_id: string;
     child_variant_id?: string | null;
+    structure_variant_id?: string | null;
     unit_id?: string | null;
   }) {
     const parent = await this.prisma.products.findUnique({ where: { id: data.parent_product_id } });
@@ -141,10 +156,18 @@ export class ProductComponentsService {
 
     const child = await this.prisma.products.findUnique({ where: { id: data.child_product_id } });
     if (!child) throw new NotFoundException('Producto hijo no encontrado');
+    if (!['RAW_MATERIAL', 'SEMI_FINISHED'].includes(child.product_type)) {
+      throw new BadRequestException('El BOM solo admite materias primas y productos intermedios');
+    }
 
     if (data.child_variant_id) {
       const variant = await this.prisma.product_variants.findUnique({ where: { id: data.child_variant_id } });
       if (!variant) throw new NotFoundException('Variante no encontrada');
+    }
+
+    if (data.structure_variant_id) {
+      const structureVariant = await this.prisma.product_variants.findUnique({ where: { id: data.structure_variant_id } });
+      if (!structureVariant) throw new NotFoundException('Variante de estructura no encontrada');
     }
 
     if (data.unit_id) {

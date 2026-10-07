@@ -27,10 +27,14 @@ export type AggregateProducts = {
 }
 
 export type ProductsAvgAggregateOutputType = {
+  sale_margin_percentage: runtime.Decimal | null
+  purchase_to_stock_factor: runtime.Decimal | null
   current_cost: runtime.Decimal | null
 }
 
 export type ProductsSumAggregateOutputType = {
+  sale_margin_percentage: runtime.Decimal | null
+  purchase_to_stock_factor: runtime.Decimal | null
   current_cost: runtime.Decimal | null
 }
 
@@ -49,6 +53,7 @@ export type ProductsMinAggregateOutputType = {
   usage_type: $Enums.UsageType | null
   is_composed: boolean | null
   auto_calculate_cost: boolean | null
+  sale_margin_percentage: runtime.Decimal | null
   has_engineering: boolean | null
   manages_stock: boolean | null
   income_account_id: string | null
@@ -66,7 +71,10 @@ export type ProductsMinAggregateOutputType = {
   last_cost_calculated_at: Date | null
   cost_template_id: string | null
   unit_id: string | null
+  purchase_unit_id: string | null
+  purchase_to_stock_factor: runtime.Decimal | null
   current_cost: runtime.Decimal | null
+  current_cost_currency_id: string | null
 }
 
 export type ProductsMaxAggregateOutputType = {
@@ -84,6 +92,7 @@ export type ProductsMaxAggregateOutputType = {
   usage_type: $Enums.UsageType | null
   is_composed: boolean | null
   auto_calculate_cost: boolean | null
+  sale_margin_percentage: runtime.Decimal | null
   has_engineering: boolean | null
   manages_stock: boolean | null
   income_account_id: string | null
@@ -101,7 +110,10 @@ export type ProductsMaxAggregateOutputType = {
   last_cost_calculated_at: Date | null
   cost_template_id: string | null
   unit_id: string | null
+  purchase_unit_id: string | null
+  purchase_to_stock_factor: runtime.Decimal | null
   current_cost: runtime.Decimal | null
+  current_cost_currency_id: string | null
 }
 
 export type ProductsCountAggregateOutputType = {
@@ -119,6 +131,7 @@ export type ProductsCountAggregateOutputType = {
   usage_type: number
   is_composed: number
   auto_calculate_cost: number
+  sale_margin_percentage: number
   has_engineering: number
   manages_stock: number
   income_account_id: number
@@ -136,16 +149,23 @@ export type ProductsCountAggregateOutputType = {
   last_cost_calculated_at: number
   cost_template_id: number
   unit_id: number
+  purchase_unit_id: number
+  purchase_to_stock_factor: number
   current_cost: number
+  current_cost_currency_id: number
   _all: number
 }
 
 
 export type ProductsAvgAggregateInputType = {
+  sale_margin_percentage?: true
+  purchase_to_stock_factor?: true
   current_cost?: true
 }
 
 export type ProductsSumAggregateInputType = {
+  sale_margin_percentage?: true
+  purchase_to_stock_factor?: true
   current_cost?: true
 }
 
@@ -164,6 +184,7 @@ export type ProductsMinAggregateInputType = {
   usage_type?: true
   is_composed?: true
   auto_calculate_cost?: true
+  sale_margin_percentage?: true
   has_engineering?: true
   manages_stock?: true
   income_account_id?: true
@@ -181,7 +202,10 @@ export type ProductsMinAggregateInputType = {
   last_cost_calculated_at?: true
   cost_template_id?: true
   unit_id?: true
+  purchase_unit_id?: true
+  purchase_to_stock_factor?: true
   current_cost?: true
+  current_cost_currency_id?: true
 }
 
 export type ProductsMaxAggregateInputType = {
@@ -199,6 +223,7 @@ export type ProductsMaxAggregateInputType = {
   usage_type?: true
   is_composed?: true
   auto_calculate_cost?: true
+  sale_margin_percentage?: true
   has_engineering?: true
   manages_stock?: true
   income_account_id?: true
@@ -216,7 +241,10 @@ export type ProductsMaxAggregateInputType = {
   last_cost_calculated_at?: true
   cost_template_id?: true
   unit_id?: true
+  purchase_unit_id?: true
+  purchase_to_stock_factor?: true
   current_cost?: true
+  current_cost_currency_id?: true
 }
 
 export type ProductsCountAggregateInputType = {
@@ -234,6 +262,7 @@ export type ProductsCountAggregateInputType = {
   usage_type?: true
   is_composed?: true
   auto_calculate_cost?: true
+  sale_margin_percentage?: true
   has_engineering?: true
   manages_stock?: true
   income_account_id?: true
@@ -251,7 +280,10 @@ export type ProductsCountAggregateInputType = {
   last_cost_calculated_at?: true
   cost_template_id?: true
   unit_id?: true
+  purchase_unit_id?: true
+  purchase_to_stock_factor?: true
   current_cost?: true
+  current_cost_currency_id?: true
   _all?: true
 }
 
@@ -356,6 +388,7 @@ export type ProductsGroupByOutputType = {
   usage_type: $Enums.UsageType
   is_composed: boolean
   auto_calculate_cost: boolean
+  sale_margin_percentage: runtime.Decimal
   has_engineering: boolean
   manages_stock: boolean
   income_account_id: string | null
@@ -373,7 +406,10 @@ export type ProductsGroupByOutputType = {
   last_cost_calculated_at: Date | null
   cost_template_id: string | null
   unit_id: string | null
+  purchase_unit_id: string | null
+  purchase_to_stock_factor: runtime.Decimal
   current_cost: runtime.Decimal | null
+  current_cost_currency_id: string | null
   _count: ProductsCountAggregateOutputType | null
   _avg: ProductsAvgAggregateOutputType | null
   _sum: ProductsSumAggregateOutputType | null
@@ -414,6 +450,7 @@ export type productsWhereInput = {
   usage_type?: Prisma.EnumUsageTypeFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolFilter<"products"> | boolean
+  sale_margin_percentage?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFilter<"products"> | boolean
   manages_stock?: Prisma.BoolFilter<"products"> | boolean
   income_account_id?: Prisma.UuidNullableFilter<"products"> | string | null
@@ -431,13 +468,17 @@ export type productsWhereInput = {
   last_cost_calculated_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
   cost_template_id?: Prisma.UuidNullableFilter<"products"> | string | null
   unit_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  purchase_unit_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.DecimalNullableFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.UuidNullableFilter<"products"> | string | null
   product_variants?: Prisma.Product_variantsListRelationFilter
   parent_components?: Prisma.Product_componentsListRelationFilter
   child_components?: Prisma.Product_componentsListRelationFilter
   product_categories?: Prisma.Product_categoriesListRelationFilter
   product_tags?: Prisma.Product_tagsListRelationFilter
   product_attribute_values?: Prisma.Product_attribute_valuesListRelationFilter
+  current_cost_currency?: Prisma.XOR<Prisma.CurrenciesNullableScalarRelationFilter, Prisma.currenciesWhereInput> | null
   income_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   expense_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   inventory_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
@@ -454,6 +495,7 @@ export type productsWhereInput = {
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   stock_reservations?: Prisma.Stock_reservationsListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  stock_replenishment_policies?: Prisma.Stock_replenishment_policiesListRelationFilter
   product_costs?: Prisma.Product_costsListRelationFilter
   productCostBreakdowns?: Prisma.Product_cost_breakdownsListRelationFilter
   cost_template?: Prisma.XOR<Prisma.Cost_templatesNullableScalarRelationFilter, Prisma.cost_templatesWhereInput> | null
@@ -480,6 +522,7 @@ export type productsOrderByWithRelationInput = {
   usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
+  sale_margin_percentage?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
   manages_stock?: Prisma.SortOrder
   income_account_id?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -497,13 +540,17 @@ export type productsOrderByWithRelationInput = {
   last_cost_calculated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   cost_template_id?: Prisma.SortOrderInput | Prisma.SortOrder
   unit_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrderInput | Prisma.SortOrder
+  current_cost_currency_id?: Prisma.SortOrderInput | Prisma.SortOrder
   product_variants?: Prisma.product_variantsOrderByRelationAggregateInput
   parent_components?: Prisma.product_componentsOrderByRelationAggregateInput
   child_components?: Prisma.product_componentsOrderByRelationAggregateInput
   product_categories?: Prisma.product_categoriesOrderByRelationAggregateInput
   product_tags?: Prisma.product_tagsOrderByRelationAggregateInput
   product_attribute_values?: Prisma.product_attribute_valuesOrderByRelationAggregateInput
+  current_cost_currency?: Prisma.currenciesOrderByWithRelationInput
   income_account?: Prisma.accountsOrderByWithRelationInput
   expense_account?: Prisma.accountsOrderByWithRelationInput
   inventory_account?: Prisma.accountsOrderByWithRelationInput
@@ -520,6 +567,7 @@ export type productsOrderByWithRelationInput = {
   warehouse_stock?: Prisma.warehouse_stockOrderByRelationAggregateInput
   stock_reservations?: Prisma.stock_reservationsOrderByRelationAggregateInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOrderByRelationAggregateInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesOrderByRelationAggregateInput
   product_costs?: Prisma.product_costsOrderByRelationAggregateInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsOrderByRelationAggregateInput
   cost_template?: Prisma.cost_templatesOrderByWithRelationInput
@@ -549,6 +597,7 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   usage_type?: Prisma.EnumUsageTypeFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolFilter<"products"> | boolean
+  sale_margin_percentage?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFilter<"products"> | boolean
   manages_stock?: Prisma.BoolFilter<"products"> | boolean
   income_account_id?: Prisma.UuidNullableFilter<"products"> | string | null
@@ -566,13 +615,17 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   last_cost_calculated_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
   cost_template_id?: Prisma.UuidNullableFilter<"products"> | string | null
   unit_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  purchase_unit_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.DecimalNullableFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.UuidNullableFilter<"products"> | string | null
   product_variants?: Prisma.Product_variantsListRelationFilter
   parent_components?: Prisma.Product_componentsListRelationFilter
   child_components?: Prisma.Product_componentsListRelationFilter
   product_categories?: Prisma.Product_categoriesListRelationFilter
   product_tags?: Prisma.Product_tagsListRelationFilter
   product_attribute_values?: Prisma.Product_attribute_valuesListRelationFilter
+  current_cost_currency?: Prisma.XOR<Prisma.CurrenciesNullableScalarRelationFilter, Prisma.currenciesWhereInput> | null
   income_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   expense_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   inventory_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
@@ -589,6 +642,7 @@ export type productsWhereUniqueInput = Prisma.AtLeast<{
   warehouse_stock?: Prisma.Warehouse_stockListRelationFilter
   stock_reservations?: Prisma.Stock_reservationsListRelationFilter
   warehouse_stock_movements?: Prisma.Warehouse_stock_movementsListRelationFilter
+  stock_replenishment_policies?: Prisma.Stock_replenishment_policiesListRelationFilter
   product_costs?: Prisma.Product_costsListRelationFilter
   productCostBreakdowns?: Prisma.Product_cost_breakdownsListRelationFilter
   cost_template?: Prisma.XOR<Prisma.Cost_templatesNullableScalarRelationFilter, Prisma.cost_templatesWhereInput> | null
@@ -615,6 +669,7 @@ export type productsOrderByWithAggregationInput = {
   usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
+  sale_margin_percentage?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
   manages_stock?: Prisma.SortOrder
   income_account_id?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -632,7 +687,10 @@ export type productsOrderByWithAggregationInput = {
   last_cost_calculated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   cost_template_id?: Prisma.SortOrderInput | Prisma.SortOrder
   unit_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrderInput | Prisma.SortOrder
+  current_cost_currency_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.productsCountOrderByAggregateInput
   _avg?: Prisma.productsAvgOrderByAggregateInput
   _max?: Prisma.productsMaxOrderByAggregateInput
@@ -658,6 +716,7 @@ export type productsScalarWhereWithAggregatesInput = {
   usage_type?: Prisma.EnumUsageTypeWithAggregatesFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
+  sale_margin_percentage?: Prisma.DecimalWithAggregatesFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   manages_stock?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   income_account_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
@@ -675,7 +734,10 @@ export type productsScalarWhereWithAggregatesInput = {
   last_cost_calculated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"products"> | Date | string | null
   cost_template_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
   unit_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  purchase_unit_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
+  purchase_to_stock_factor?: Prisma.DecimalWithAggregatesFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.DecimalNullableWithAggregatesFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.UuidNullableWithAggregatesFilter<"products"> | string | null
 }
 
 export type productsCreateInput = {
@@ -691,6 +753,7 @@ export type productsCreateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -703,6 +766,8 @@ export type productsCreateInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -710,6 +775,7 @@ export type productsCreateInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -726,6 +792,7 @@ export type productsCreateInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -752,6 +819,7 @@ export type productsUncheckedCreateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -769,7 +837,10 @@ export type productsUncheckedCreateInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -787,6 +858,7 @@ export type productsUncheckedCreateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -809,6 +881,7 @@ export type productsUpdateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -821,6 +894,8 @@ export type productsUpdateInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -828,6 +903,7 @@ export type productsUpdateInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -844,6 +920,7 @@ export type productsUpdateInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -870,6 +947,7 @@ export type productsUncheckedUpdateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -887,7 +965,10 @@ export type productsUncheckedUpdateInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -905,6 +986,7 @@ export type productsUncheckedUpdateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -929,6 +1011,7 @@ export type productsCreateManyInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -946,7 +1029,10 @@ export type productsCreateManyInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsUpdateManyMutationInput = {
@@ -962,6 +1048,7 @@ export type productsUpdateManyMutationInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -974,6 +1061,8 @@ export type productsUpdateManyMutationInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
@@ -992,6 +1081,7 @@ export type productsUncheckedUpdateManyInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1009,7 +1099,10 @@ export type productsUncheckedUpdateManyInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductsListRelationFilter = {
@@ -1047,6 +1140,7 @@ export type productsCountOrderByAggregateInput = {
   usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
+  sale_margin_percentage?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
   manages_stock?: Prisma.SortOrder
   income_account_id?: Prisma.SortOrder
@@ -1064,10 +1158,15 @@ export type productsCountOrderByAggregateInput = {
   last_cost_calculated_at?: Prisma.SortOrder
   cost_template_id?: Prisma.SortOrder
   unit_id?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrder
+  current_cost_currency_id?: Prisma.SortOrder
 }
 
 export type productsAvgOrderByAggregateInput = {
+  sale_margin_percentage?: Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrder
 }
 
@@ -1086,6 +1185,7 @@ export type productsMaxOrderByAggregateInput = {
   usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
+  sale_margin_percentage?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
   manages_stock?: Prisma.SortOrder
   income_account_id?: Prisma.SortOrder
@@ -1103,7 +1203,10 @@ export type productsMaxOrderByAggregateInput = {
   last_cost_calculated_at?: Prisma.SortOrder
   cost_template_id?: Prisma.SortOrder
   unit_id?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrder
+  current_cost_currency_id?: Prisma.SortOrder
 }
 
 export type productsMinOrderByAggregateInput = {
@@ -1121,6 +1224,7 @@ export type productsMinOrderByAggregateInput = {
   usage_type?: Prisma.SortOrder
   is_composed?: Prisma.SortOrder
   auto_calculate_cost?: Prisma.SortOrder
+  sale_margin_percentage?: Prisma.SortOrder
   has_engineering?: Prisma.SortOrder
   manages_stock?: Prisma.SortOrder
   income_account_id?: Prisma.SortOrder
@@ -1138,10 +1242,15 @@ export type productsMinOrderByAggregateInput = {
   last_cost_calculated_at?: Prisma.SortOrder
   cost_template_id?: Prisma.SortOrder
   unit_id?: Prisma.SortOrder
+  purchase_unit_id?: Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrder
+  current_cost_currency_id?: Prisma.SortOrder
 }
 
 export type productsSumOrderByAggregateInput = {
+  sale_margin_percentage?: Prisma.SortOrder
+  purchase_to_stock_factor?: Prisma.SortOrder
   current_cost?: Prisma.SortOrder
 }
 
@@ -1338,6 +1447,48 @@ export type productsUncheckedUpdateManyWithoutCost_templateNestedInput = {
   connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
   update?: Prisma.productsUpdateWithWhereUniqueWithoutCost_templateInput | Prisma.productsUpdateWithWhereUniqueWithoutCost_templateInput[]
   updateMany?: Prisma.productsUpdateManyWithWhereWithoutCost_templateInput | Prisma.productsUpdateManyWithWhereWithoutCost_templateInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
+export type productsCreateNestedManyWithoutCurrent_cost_currencyInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput> | Prisma.productsCreateWithoutCurrent_cost_currencyInput[] | Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput | Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput[]
+  createMany?: Prisma.productsCreateManyCurrent_cost_currencyInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUncheckedCreateNestedManyWithoutCurrent_cost_currencyInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput> | Prisma.productsCreateWithoutCurrent_cost_currencyInput[] | Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput | Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput[]
+  createMany?: Prisma.productsCreateManyCurrent_cost_currencyInputEnvelope
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+}
+
+export type productsUpdateManyWithoutCurrent_cost_currencyNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput> | Prisma.productsCreateWithoutCurrent_cost_currencyInput[] | Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput | Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutCurrent_cost_currencyInput | Prisma.productsUpsertWithWhereUniqueWithoutCurrent_cost_currencyInput[]
+  createMany?: Prisma.productsCreateManyCurrent_cost_currencyInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutCurrent_cost_currencyInput | Prisma.productsUpdateWithWhereUniqueWithoutCurrent_cost_currencyInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutCurrent_cost_currencyInput | Prisma.productsUpdateManyWithWhereWithoutCurrent_cost_currencyInput[]
+  deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
+}
+
+export type productsUncheckedUpdateManyWithoutCurrent_cost_currencyNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput> | Prisma.productsCreateWithoutCurrent_cost_currencyInput[] | Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput[]
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput | Prisma.productsCreateOrConnectWithoutCurrent_cost_currencyInput[]
+  upsert?: Prisma.productsUpsertWithWhereUniqueWithoutCurrent_cost_currencyInput | Prisma.productsUpsertWithWhereUniqueWithoutCurrent_cost_currencyInput[]
+  createMany?: Prisma.productsCreateManyCurrent_cost_currencyInputEnvelope
+  set?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  disconnect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  delete?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  connect?: Prisma.productsWhereUniqueInput | Prisma.productsWhereUniqueInput[]
+  update?: Prisma.productsUpdateWithWhereUniqueWithoutCurrent_cost_currencyInput | Prisma.productsUpdateWithWhereUniqueWithoutCurrent_cost_currencyInput[]
+  updateMany?: Prisma.productsUpdateManyWithWhereWithoutCurrent_cost_currencyInput | Prisma.productsUpdateManyWithWhereWithoutCurrent_cost_currencyInput[]
   deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
 }
 
@@ -1793,6 +1944,20 @@ export type productsUpdateOneRequiredWithoutWarehouse_stock_movementsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutWarehouse_stock_movementsInput, Prisma.productsUpdateWithoutWarehouse_stock_movementsInput>, Prisma.productsUncheckedUpdateWithoutWarehouse_stock_movementsInput>
 }
 
+export type productsCreateNestedOneWithoutStock_replenishment_policiesInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutStock_replenishment_policiesInput, Prisma.productsUncheckedCreateWithoutStock_replenishment_policiesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutStock_replenishment_policiesInput
+  connect?: Prisma.productsWhereUniqueInput
+}
+
+export type productsUpdateOneRequiredWithoutStock_replenishment_policiesNestedInput = {
+  create?: Prisma.XOR<Prisma.productsCreateWithoutStock_replenishment_policiesInput, Prisma.productsUncheckedCreateWithoutStock_replenishment_policiesInput>
+  connectOrCreate?: Prisma.productsCreateOrConnectWithoutStock_replenishment_policiesInput
+  upsert?: Prisma.productsUpsertWithoutStock_replenishment_policiesInput
+  connect?: Prisma.productsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.productsUpdateToOneWithWhereWithoutStock_replenishment_policiesInput, Prisma.productsUpdateWithoutStock_replenishment_policiesInput>, Prisma.productsUncheckedUpdateWithoutStock_replenishment_policiesInput>
+}
+
 export type productsCreateWithoutIncome_accountInput = {
   id?: string
   name: string
@@ -1806,6 +1971,7 @@ export type productsCreateWithoutIncome_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -1818,6 +1984,8 @@ export type productsCreateWithoutIncome_accountInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -1825,6 +1993,7 @@ export type productsCreateWithoutIncome_accountInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
@@ -1840,6 +2009,7 @@ export type productsCreateWithoutIncome_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -1866,6 +2036,7 @@ export type productsUncheckedCreateWithoutIncome_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   expense_account_id?: string | null
@@ -1882,7 +2053,10 @@ export type productsUncheckedCreateWithoutIncome_accountInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -1900,6 +2074,7 @@ export type productsUncheckedCreateWithoutIncome_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -1932,6 +2107,7 @@ export type productsCreateWithoutExpense_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -1944,6 +2120,8 @@ export type productsCreateWithoutExpense_accountInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -1951,6 +2129,7 @@ export type productsCreateWithoutExpense_accountInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
@@ -1966,6 +2145,7 @@ export type productsCreateWithoutExpense_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -1992,6 +2172,7 @@ export type productsUncheckedCreateWithoutExpense_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -2008,7 +2189,10 @@ export type productsUncheckedCreateWithoutExpense_accountInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -2026,6 +2210,7 @@ export type productsUncheckedCreateWithoutExpense_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -2058,6 +2243,7 @@ export type productsCreateWithoutInventory_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -2070,6 +2256,8 @@ export type productsCreateWithoutInventory_accountInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -2077,6 +2265,7 @@ export type productsCreateWithoutInventory_accountInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
@@ -2092,6 +2281,7 @@ export type productsCreateWithoutInventory_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -2118,6 +2308,7 @@ export type productsUncheckedCreateWithoutInventory_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -2134,7 +2325,10 @@ export type productsUncheckedCreateWithoutInventory_accountInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -2152,6 +2346,7 @@ export type productsUncheckedCreateWithoutInventory_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -2205,6 +2400,7 @@ export type productsScalarWhereInput = {
   usage_type?: Prisma.EnumUsageTypeFilter<"products"> | $Enums.UsageType
   is_composed?: Prisma.BoolFilter<"products"> | boolean
   auto_calculate_cost?: Prisma.BoolFilter<"products"> | boolean
+  sale_margin_percentage?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFilter<"products"> | boolean
   manages_stock?: Prisma.BoolFilter<"products"> | boolean
   income_account_id?: Prisma.UuidNullableFilter<"products"> | string | null
@@ -2222,7 +2418,10 @@ export type productsScalarWhereInput = {
   last_cost_calculated_at?: Prisma.DateTimeNullableFilter<"products"> | Date | string | null
   cost_template_id?: Prisma.UuidNullableFilter<"products"> | string | null
   unit_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  purchase_unit_id?: Prisma.UuidNullableFilter<"products"> | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.DecimalNullableFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.UuidNullableFilter<"products"> | string | null
 }
 
 export type productsUpsertWithWhereUniqueWithoutExpense_accountInput = {
@@ -2270,6 +2469,7 @@ export type productsCreateWithoutProduct_costsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -2282,6 +2482,8 @@ export type productsCreateWithoutProduct_costsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -2289,6 +2491,7 @@ export type productsCreateWithoutProduct_costsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -2305,6 +2508,7 @@ export type productsCreateWithoutProduct_costsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
@@ -2330,6 +2534,7 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -2347,7 +2552,10 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -2365,6 +2573,7 @@ export type productsUncheckedCreateWithoutProduct_costsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
   tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
@@ -2402,6 +2611,7 @@ export type productsUpdateWithoutProduct_costsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -2414,6 +2624,8 @@ export type productsUpdateWithoutProduct_costsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -2421,6 +2633,7 @@ export type productsUpdateWithoutProduct_costsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -2437,6 +2650,7 @@ export type productsUpdateWithoutProduct_costsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
@@ -2462,6 +2676,7 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2479,7 +2694,10 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -2497,6 +2715,7 @@ export type productsUncheckedUpdateWithoutProduct_costsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
   tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
@@ -2518,6 +2737,7 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -2530,6 +2750,8 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -2537,6 +2759,7 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -2553,6 +2776,7 @@ export type productsCreateWithoutProductCostBreakdownsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
@@ -2578,6 +2802,7 @@ export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -2595,7 +2820,10 @@ export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -2613,6 +2841,7 @@ export type productsUncheckedCreateWithoutProductCostBreakdownsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
   tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
@@ -2650,6 +2879,7 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -2662,6 +2892,8 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -2669,6 +2901,7 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -2685,6 +2918,7 @@ export type productsUpdateWithoutProductCostBreakdownsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
@@ -2710,6 +2944,7 @@ export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2727,7 +2962,10 @@ export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -2745,6 +2983,7 @@ export type productsUncheckedUpdateWithoutProductCostBreakdownsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
   tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
@@ -2766,6 +3005,7 @@ export type productsCreateWithoutCost_templateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -2778,6 +3018,8 @@ export type productsCreateWithoutCost_templateInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -2785,6 +3027,7 @@ export type productsCreateWithoutCost_templateInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -2801,6 +3044,7 @@ export type productsCreateWithoutCost_templateInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
@@ -2826,6 +3070,7 @@ export type productsUncheckedCreateWithoutCost_templateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -2842,7 +3087,10 @@ export type productsUncheckedCreateWithoutCost_templateInput = {
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -2860,6 +3108,7 @@ export type productsUncheckedCreateWithoutCost_templateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -2895,6 +3144,158 @@ export type productsUpdateManyWithWhereWithoutCost_templateInput = {
   data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutCost_templateInput>
 }
 
+export type productsCreateWithoutCurrent_cost_currencyInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsCreateNestedManyWithoutProductInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutProductsInput
+  product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+  unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutCurrent_cost_currencyInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  tax_category_id?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsUncheckedCreateNestedManyWithoutProductInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutProductsInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutCurrent_cost_currencyInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput>
+}
+
+export type productsCreateManyCurrent_cost_currencyInputEnvelope = {
+  data: Prisma.productsCreateManyCurrent_cost_currencyInput | Prisma.productsCreateManyCurrent_cost_currencyInput[]
+  skipDuplicates?: boolean
+}
+
+export type productsUpsertWithWhereUniqueWithoutCurrent_cost_currencyInput = {
+  where: Prisma.productsWhereUniqueInput
+  update: Prisma.XOR<Prisma.productsUpdateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedUpdateWithoutCurrent_cost_currencyInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedCreateWithoutCurrent_cost_currencyInput>
+}
+
+export type productsUpdateWithWhereUniqueWithoutCurrent_cost_currencyInput = {
+  where: Prisma.productsWhereUniqueInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutCurrent_cost_currencyInput, Prisma.productsUncheckedUpdateWithoutCurrent_cost_currencyInput>
+}
+
+export type productsUpdateManyWithWhereWithoutCurrent_cost_currencyInput = {
+  where: Prisma.productsScalarWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateManyMutationInput, Prisma.productsUncheckedUpdateManyWithoutCurrent_cost_currencyInput>
+}
+
 export type productsCreateWithoutDocument_itemsInput = {
   id?: string
   name: string
@@ -2908,6 +3309,7 @@ export type productsCreateWithoutDocument_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -2920,6 +3322,8 @@ export type productsCreateWithoutDocument_itemsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -2927,6 +3331,7 @@ export type productsCreateWithoutDocument_itemsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -2942,6 +3347,7 @@ export type productsCreateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -2968,6 +3374,7 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -2985,7 +3392,10 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -3002,6 +3412,7 @@ export type productsUncheckedCreateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -3040,6 +3451,7 @@ export type productsUpdateWithoutDocument_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -3052,6 +3464,8 @@ export type productsUpdateWithoutDocument_itemsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -3059,6 +3473,7 @@ export type productsUpdateWithoutDocument_itemsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -3074,6 +3489,7 @@ export type productsUpdateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -3100,6 +3516,7 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3117,7 +3534,10 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -3134,6 +3554,7 @@ export type productsUncheckedUpdateWithoutDocument_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -3156,6 +3577,7 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -3168,6 +3590,8 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -3175,6 +3599,7 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -3191,6 +3616,7 @@ export type productsCreateWithoutProductStructureVersionsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -3216,6 +3642,7 @@ export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -3233,7 +3660,10 @@ export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -3251,6 +3681,7 @@ export type productsUncheckedCreateWithoutProductStructureVersionsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -3288,6 +3719,7 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -3300,6 +3732,8 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -3307,6 +3741,7 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -3323,6 +3758,7 @@ export type productsUpdateWithoutProductStructureVersionsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -3348,6 +3784,7 @@ export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3365,7 +3802,10 @@ export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -3383,6 +3823,7 @@ export type productsUncheckedUpdateWithoutProductStructureVersionsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -3404,6 +3845,7 @@ export type productsCreateWithoutPicking_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -3416,6 +3858,8 @@ export type productsCreateWithoutPicking_itemsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -3423,6 +3867,7 @@ export type productsCreateWithoutPicking_itemsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -3438,6 +3883,7 @@ export type productsCreateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -3464,6 +3910,7 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -3481,7 +3928,10 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -3498,6 +3948,7 @@ export type productsUncheckedCreateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -3536,6 +3987,7 @@ export type productsUpdateWithoutPicking_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -3548,6 +4000,8 @@ export type productsUpdateWithoutPicking_itemsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -3555,6 +4009,7 @@ export type productsUpdateWithoutPicking_itemsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -3570,6 +4025,7 @@ export type productsUpdateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -3596,6 +4052,7 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3613,7 +4070,10 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -3630,6 +4090,7 @@ export type productsUncheckedUpdateWithoutPicking_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -3652,6 +4113,7 @@ export type productsCreateWithoutDispatch_order_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -3664,6 +4126,8 @@ export type productsCreateWithoutDispatch_order_itemsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -3671,6 +4135,7 @@ export type productsCreateWithoutDispatch_order_itemsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -3686,6 +4151,7 @@ export type productsCreateWithoutDispatch_order_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -3712,6 +4178,7 @@ export type productsUncheckedCreateWithoutDispatch_order_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -3729,7 +4196,10 @@ export type productsUncheckedCreateWithoutDispatch_order_itemsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -3746,6 +4216,7 @@ export type productsUncheckedCreateWithoutDispatch_order_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -3784,6 +4255,7 @@ export type productsUpdateWithoutDispatch_order_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -3796,6 +4268,8 @@ export type productsUpdateWithoutDispatch_order_itemsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -3803,6 +4277,7 @@ export type productsUpdateWithoutDispatch_order_itemsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -3818,6 +4293,7 @@ export type productsUpdateWithoutDispatch_order_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -3844,6 +4320,7 @@ export type productsUncheckedUpdateWithoutDispatch_order_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3861,7 +4338,10 @@ export type productsUncheckedUpdateWithoutDispatch_order_itemsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -3878,6 +4358,7 @@ export type productsUncheckedUpdateWithoutDispatch_order_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -3900,6 +4381,7 @@ export type productsCreateWithoutTransfer_rateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -3912,6 +4394,8 @@ export type productsCreateWithoutTransfer_rateInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -3919,6 +4403,7 @@ export type productsCreateWithoutTransfer_rateInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -3934,6 +4419,7 @@ export type productsCreateWithoutTransfer_rateInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -3959,6 +4445,7 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -3976,7 +4463,10 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -3994,6 +4484,7 @@ export type productsUncheckedCreateWithoutTransfer_rateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -4042,6 +4533,7 @@ export type productsCreateWithoutMaintenance_partsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -4054,6 +4546,8 @@ export type productsCreateWithoutMaintenance_partsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -4061,6 +4555,7 @@ export type productsCreateWithoutMaintenance_partsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -4077,6 +4572,7 @@ export type productsCreateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -4102,6 +4598,7 @@ export type productsUncheckedCreateWithoutMaintenance_partsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -4119,7 +4616,10 @@ export type productsUncheckedCreateWithoutMaintenance_partsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -4137,6 +4637,7 @@ export type productsUncheckedCreateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
@@ -4174,6 +4675,7 @@ export type productsUpdateWithoutMaintenance_partsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -4186,6 +4688,8 @@ export type productsUpdateWithoutMaintenance_partsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -4193,6 +4697,7 @@ export type productsUpdateWithoutMaintenance_partsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -4209,6 +4714,7 @@ export type productsUpdateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -4234,6 +4740,7 @@ export type productsUncheckedUpdateWithoutMaintenance_partsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4251,7 +4758,10 @@ export type productsUncheckedUpdateWithoutMaintenance_partsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -4269,6 +4779,7 @@ export type productsUncheckedUpdateWithoutMaintenance_partsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
@@ -4290,6 +4801,7 @@ export type productsCreateWithoutTiresInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -4302,6 +4814,8 @@ export type productsCreateWithoutTiresInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -4309,6 +4823,7 @@ export type productsCreateWithoutTiresInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -4325,6 +4840,7 @@ export type productsCreateWithoutTiresInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -4350,6 +4866,7 @@ export type productsUncheckedCreateWithoutTiresInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -4367,7 +4884,10 @@ export type productsUncheckedCreateWithoutTiresInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -4385,6 +4905,7 @@ export type productsUncheckedCreateWithoutTiresInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -4422,6 +4943,7 @@ export type productsUpdateWithoutTiresInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -4434,6 +4956,8 @@ export type productsUpdateWithoutTiresInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -4441,6 +4965,7 @@ export type productsUpdateWithoutTiresInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -4457,6 +4982,7 @@ export type productsUpdateWithoutTiresInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -4482,6 +5008,7 @@ export type productsUncheckedUpdateWithoutTiresInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4499,7 +5026,10 @@ export type productsUncheckedUpdateWithoutTiresInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -4517,6 +5047,7 @@ export type productsUncheckedUpdateWithoutTiresInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -4538,6 +5069,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -4550,6 +5082,8 @@ export type productsCreateWithoutPallet_itemsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -4557,6 +5091,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -4572,6 +5107,7 @@ export type productsCreateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -4598,6 +5134,7 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -4615,7 +5152,10 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -4632,6 +5172,7 @@ export type productsUncheckedCreateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -4670,6 +5211,7 @@ export type productsUpdateWithoutPallet_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -4682,6 +5224,8 @@ export type productsUpdateWithoutPallet_itemsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -4689,6 +5233,7 @@ export type productsUpdateWithoutPallet_itemsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -4704,6 +5249,7 @@ export type productsUpdateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -4730,6 +5276,7 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4747,7 +5294,10 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -4764,6 +5314,7 @@ export type productsUncheckedUpdateWithoutPallet_itemsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -4786,6 +5337,7 @@ export type productsCreateWithoutProduct_priceInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -4798,6 +5350,8 @@ export type productsCreateWithoutProduct_priceInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -4805,6 +5359,7 @@ export type productsCreateWithoutProduct_priceInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -4820,6 +5375,7 @@ export type productsCreateWithoutProduct_priceInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -4846,6 +5402,7 @@ export type productsUncheckedCreateWithoutProduct_priceInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -4863,7 +5420,10 @@ export type productsUncheckedCreateWithoutProduct_priceInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -4880,6 +5440,7 @@ export type productsUncheckedCreateWithoutProduct_priceInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -4918,6 +5479,7 @@ export type productsUpdateWithoutProduct_priceInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -4930,6 +5492,8 @@ export type productsUpdateWithoutProduct_priceInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -4937,6 +5501,7 @@ export type productsUpdateWithoutProduct_priceInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -4952,6 +5517,7 @@ export type productsUpdateWithoutProduct_priceInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -4978,6 +5544,7 @@ export type productsUncheckedUpdateWithoutProduct_priceInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4995,7 +5562,10 @@ export type productsUncheckedUpdateWithoutProduct_priceInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -5012,6 +5582,7 @@ export type productsUncheckedUpdateWithoutProduct_priceInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -5034,6 +5605,7 @@ export type productsCreateWithoutUnitInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -5046,6 +5618,8 @@ export type productsCreateWithoutUnitInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -5053,6 +5627,7 @@ export type productsCreateWithoutUnitInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -5069,6 +5644,7 @@ export type productsCreateWithoutUnitInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -5094,6 +5670,7 @@ export type productsUncheckedCreateWithoutUnitInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -5110,7 +5687,10 @@ export type productsUncheckedCreateWithoutUnitInput = {
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -5128,6 +5708,7 @@ export type productsUncheckedCreateWithoutUnitInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -5176,6 +5757,7 @@ export type productsCreateWithoutProduct_variantsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -5188,12 +5770,15 @@ export type productsCreateWithoutProduct_variantsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -5210,6 +5795,7 @@ export type productsCreateWithoutProduct_variantsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -5236,6 +5822,7 @@ export type productsUncheckedCreateWithoutProduct_variantsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -5253,7 +5840,10 @@ export type productsUncheckedCreateWithoutProduct_variantsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
@@ -5270,6 +5860,7 @@ export type productsUncheckedCreateWithoutProduct_variantsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -5308,6 +5899,7 @@ export type productsUpdateWithoutProduct_variantsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -5320,12 +5912,15 @@ export type productsUpdateWithoutProduct_variantsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -5342,6 +5937,7 @@ export type productsUpdateWithoutProduct_variantsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -5368,6 +5964,7 @@ export type productsUncheckedUpdateWithoutProduct_variantsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5385,7 +5982,10 @@ export type productsUncheckedUpdateWithoutProduct_variantsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
@@ -5402,6 +6002,7 @@ export type productsUncheckedUpdateWithoutProduct_variantsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -5424,6 +6025,7 @@ export type productsCreateWithoutParent_componentsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -5436,12 +6038,15 @@ export type productsCreateWithoutParent_componentsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -5458,6 +6063,7 @@ export type productsCreateWithoutParent_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -5484,6 +6090,7 @@ export type productsUncheckedCreateWithoutParent_componentsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -5501,7 +6108,10 @@ export type productsUncheckedCreateWithoutParent_componentsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
@@ -5518,6 +6128,7 @@ export type productsUncheckedCreateWithoutParent_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -5545,6 +6156,7 @@ export type productsCreateWithoutChild_componentsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -5557,12 +6169,15 @@ export type productsCreateWithoutChild_componentsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -5579,6 +6194,7 @@ export type productsCreateWithoutChild_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -5605,6 +6221,7 @@ export type productsUncheckedCreateWithoutChild_componentsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -5622,7 +6239,10 @@ export type productsUncheckedCreateWithoutChild_componentsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
@@ -5639,6 +6259,7 @@ export type productsUncheckedCreateWithoutChild_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -5677,6 +6298,7 @@ export type productsUpdateWithoutParent_componentsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -5689,12 +6311,15 @@ export type productsUpdateWithoutParent_componentsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -5711,6 +6336,7 @@ export type productsUpdateWithoutParent_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -5737,6 +6363,7 @@ export type productsUncheckedUpdateWithoutParent_componentsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5754,7 +6381,10 @@ export type productsUncheckedUpdateWithoutParent_componentsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
@@ -5771,6 +6401,7 @@ export type productsUncheckedUpdateWithoutParent_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -5804,6 +6435,7 @@ export type productsUpdateWithoutChild_componentsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -5816,12 +6448,15 @@ export type productsUpdateWithoutChild_componentsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -5838,6 +6473,7 @@ export type productsUpdateWithoutChild_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -5864,6 +6500,7 @@ export type productsUncheckedUpdateWithoutChild_componentsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5881,7 +6518,10 @@ export type productsUncheckedUpdateWithoutChild_componentsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
@@ -5898,6 +6538,7 @@ export type productsUncheckedUpdateWithoutChild_componentsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -5920,6 +6561,7 @@ export type productsCreateWithoutProduct_categoriesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -5932,12 +6574,15 @@ export type productsCreateWithoutProduct_categoriesInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -5954,6 +6599,7 @@ export type productsCreateWithoutProduct_categoriesInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -5980,6 +6626,7 @@ export type productsUncheckedCreateWithoutProduct_categoriesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -5997,7 +6644,10 @@ export type productsUncheckedCreateWithoutProduct_categoriesInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -6014,6 +6664,7 @@ export type productsUncheckedCreateWithoutProduct_categoriesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -6052,6 +6703,7 @@ export type productsUpdateWithoutProduct_categoriesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -6064,12 +6716,15 @@ export type productsUpdateWithoutProduct_categoriesInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -6086,6 +6741,7 @@ export type productsUpdateWithoutProduct_categoriesInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -6112,6 +6768,7 @@ export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6129,7 +6786,10 @@ export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -6146,6 +6806,7 @@ export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -6168,6 +6829,7 @@ export type productsCreateWithoutProduct_tagsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -6180,12 +6842,15 @@ export type productsCreateWithoutProduct_tagsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -6202,6 +6867,7 @@ export type productsCreateWithoutProduct_tagsInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -6228,6 +6894,7 @@ export type productsUncheckedCreateWithoutProduct_tagsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -6245,7 +6912,10 @@ export type productsUncheckedCreateWithoutProduct_tagsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -6262,6 +6932,7 @@ export type productsUncheckedCreateWithoutProduct_tagsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -6300,6 +6971,7 @@ export type productsUpdateWithoutProduct_tagsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -6312,12 +6984,15 @@ export type productsUpdateWithoutProduct_tagsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -6334,6 +7009,7 @@ export type productsUpdateWithoutProduct_tagsInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -6360,6 +7036,7 @@ export type productsUncheckedUpdateWithoutProduct_tagsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6377,7 +7054,10 @@ export type productsUncheckedUpdateWithoutProduct_tagsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -6394,6 +7074,7 @@ export type productsUncheckedUpdateWithoutProduct_tagsInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -6416,6 +7097,7 @@ export type productsCreateWithoutProduct_attribute_valuesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -6428,12 +7110,15 @@ export type productsCreateWithoutProduct_attribute_valuesInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -6450,6 +7135,7 @@ export type productsCreateWithoutProduct_attribute_valuesInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -6476,6 +7162,7 @@ export type productsUncheckedCreateWithoutProduct_attribute_valuesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -6493,7 +7180,10 @@ export type productsUncheckedCreateWithoutProduct_attribute_valuesInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -6510,6 +7200,7 @@ export type productsUncheckedCreateWithoutProduct_attribute_valuesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -6548,6 +7239,7 @@ export type productsUpdateWithoutProduct_attribute_valuesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -6560,12 +7252,15 @@ export type productsUpdateWithoutProduct_attribute_valuesInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -6582,6 +7277,7 @@ export type productsUpdateWithoutProduct_attribute_valuesInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -6608,6 +7304,7 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6625,7 +7322,10 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -6642,6 +7342,7 @@ export type productsUncheckedUpdateWithoutProduct_attribute_valuesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -6664,6 +7365,7 @@ export type productsCreateWithoutProduct_suppliersInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -6676,6 +7378,8 @@ export type productsCreateWithoutProduct_suppliersInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -6683,6 +7387,7 @@ export type productsCreateWithoutProduct_suppliersInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -6699,6 +7404,7 @@ export type productsCreateWithoutProduct_suppliersInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -6724,6 +7430,7 @@ export type productsUncheckedCreateWithoutProduct_suppliersInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -6741,7 +7448,10 @@ export type productsUncheckedCreateWithoutProduct_suppliersInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -6759,6 +7469,7 @@ export type productsUncheckedCreateWithoutProduct_suppliersInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -6796,6 +7507,7 @@ export type productsUpdateWithoutProduct_suppliersInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -6808,6 +7520,8 @@ export type productsUpdateWithoutProduct_suppliersInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -6815,6 +7529,7 @@ export type productsUpdateWithoutProduct_suppliersInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -6831,6 +7546,7 @@ export type productsUpdateWithoutProduct_suppliersInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -6856,6 +7572,7 @@ export type productsUncheckedUpdateWithoutProduct_suppliersInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6873,7 +7590,10 @@ export type productsUncheckedUpdateWithoutProduct_suppliersInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -6891,6 +7611,7 @@ export type productsUncheckedUpdateWithoutProduct_suppliersInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -6912,6 +7633,7 @@ export type productsCreateWithoutProduct_party_pricesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -6924,6 +7646,8 @@ export type productsCreateWithoutProduct_party_pricesInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -6931,6 +7655,7 @@ export type productsCreateWithoutProduct_party_pricesInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -6946,6 +7671,7 @@ export type productsCreateWithoutProduct_party_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -6972,6 +7698,7 @@ export type productsUncheckedCreateWithoutProduct_party_pricesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -6989,7 +7716,10 @@ export type productsUncheckedCreateWithoutProduct_party_pricesInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -7006,6 +7736,7 @@ export type productsUncheckedCreateWithoutProduct_party_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -7044,6 +7775,7 @@ export type productsUpdateWithoutProduct_party_pricesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -7056,6 +7788,8 @@ export type productsUpdateWithoutProduct_party_pricesInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -7063,6 +7797,7 @@ export type productsUpdateWithoutProduct_party_pricesInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -7078,6 +7813,7 @@ export type productsUpdateWithoutProduct_party_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -7104,6 +7840,7 @@ export type productsUncheckedUpdateWithoutProduct_party_pricesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7121,7 +7858,10 @@ export type productsUncheckedUpdateWithoutProduct_party_pricesInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -7138,6 +7878,7 @@ export type productsUncheckedUpdateWithoutProduct_party_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -7160,6 +7901,7 @@ export type productsCreateWithoutProduct_party_price_historyInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -7172,6 +7914,8 @@ export type productsCreateWithoutProduct_party_price_historyInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -7179,6 +7923,7 @@ export type productsCreateWithoutProduct_party_price_historyInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -7194,6 +7939,7 @@ export type productsCreateWithoutProduct_party_price_historyInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -7220,6 +7966,7 @@ export type productsUncheckedCreateWithoutProduct_party_price_historyInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -7237,7 +7984,10 @@ export type productsUncheckedCreateWithoutProduct_party_price_historyInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -7254,6 +8004,7 @@ export type productsUncheckedCreateWithoutProduct_party_price_historyInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -7292,6 +8043,7 @@ export type productsUpdateWithoutProduct_party_price_historyInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -7304,6 +8056,8 @@ export type productsUpdateWithoutProduct_party_price_historyInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -7311,6 +8065,7 @@ export type productsUpdateWithoutProduct_party_price_historyInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -7326,6 +8081,7 @@ export type productsUpdateWithoutProduct_party_price_historyInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -7352,6 +8108,7 @@ export type productsUncheckedUpdateWithoutProduct_party_price_historyInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7369,7 +8126,10 @@ export type productsUncheckedUpdateWithoutProduct_party_price_historyInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -7386,6 +8146,7 @@ export type productsUncheckedUpdateWithoutProduct_party_price_historyInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -7408,6 +8169,7 @@ export type productsCreateWithoutProduct_list_pricesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -7420,6 +8182,8 @@ export type productsCreateWithoutProduct_list_pricesInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -7427,6 +8191,7 @@ export type productsCreateWithoutProduct_list_pricesInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -7443,6 +8208,7 @@ export type productsCreateWithoutProduct_list_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -7468,6 +8234,7 @@ export type productsUncheckedCreateWithoutProduct_list_pricesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -7485,7 +8252,10 @@ export type productsUncheckedCreateWithoutProduct_list_pricesInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -7503,6 +8273,7 @@ export type productsUncheckedCreateWithoutProduct_list_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -7540,6 +8311,7 @@ export type productsUpdateWithoutProduct_list_pricesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -7552,6 +8324,8 @@ export type productsUpdateWithoutProduct_list_pricesInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -7559,6 +8333,7 @@ export type productsUpdateWithoutProduct_list_pricesInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -7575,6 +8350,7 @@ export type productsUpdateWithoutProduct_list_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -7600,6 +8376,7 @@ export type productsUncheckedUpdateWithoutProduct_list_pricesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7617,7 +8394,10 @@ export type productsUncheckedUpdateWithoutProduct_list_pricesInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -7635,6 +8415,7 @@ export type productsUncheckedUpdateWithoutProduct_list_pricesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -7656,6 +8437,7 @@ export type productsCreateWithoutTax_categoryInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -7668,6 +8450,8 @@ export type productsCreateWithoutTax_categoryInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -7675,6 +8459,7 @@ export type productsCreateWithoutTax_categoryInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -7690,6 +8475,7 @@ export type productsCreateWithoutTax_categoryInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -7715,6 +8501,7 @@ export type productsUncheckedCreateWithoutTax_categoryInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -7732,7 +8519,10 @@ export type productsUncheckedCreateWithoutTax_categoryInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -7750,6 +8540,7 @@ export type productsUncheckedCreateWithoutTax_categoryInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -7798,6 +8589,7 @@ export type productsCreateWithoutProduct_taxesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -7810,6 +8602,8 @@ export type productsCreateWithoutProduct_taxesInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -7817,6 +8611,7 @@ export type productsCreateWithoutProduct_taxesInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -7832,6 +8627,7 @@ export type productsCreateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -7858,6 +8654,7 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -7875,7 +8672,10 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -7892,6 +8692,7 @@ export type productsUncheckedCreateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -7930,6 +8731,7 @@ export type productsUpdateWithoutProduct_taxesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -7942,6 +8744,8 @@ export type productsUpdateWithoutProduct_taxesInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -7949,6 +8753,7 @@ export type productsUpdateWithoutProduct_taxesInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -7964,6 +8769,7 @@ export type productsUpdateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -7990,6 +8796,7 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8007,7 +8814,10 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -8024,6 +8834,7 @@ export type productsUncheckedUpdateWithoutProduct_taxesInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -8046,6 +8857,7 @@ export type productsCreateWithoutWarehouse_stockInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -8058,6 +8870,8 @@ export type productsCreateWithoutWarehouse_stockInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -8065,6 +8879,7 @@ export type productsCreateWithoutWarehouse_stockInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -8080,6 +8895,7 @@ export type productsCreateWithoutWarehouse_stockInput = {
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -8106,6 +8922,7 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -8123,7 +8940,10 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -8140,6 +8960,7 @@ export type productsUncheckedCreateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -8178,6 +8999,7 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -8190,6 +9012,8 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -8197,6 +9021,7 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -8212,6 +9037,7 @@ export type productsUpdateWithoutWarehouse_stockInput = {
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -8238,6 +9064,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8255,7 +9082,10 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -8272,6 +9102,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stockInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -8294,6 +9125,7 @@ export type productsCreateWithoutStock_reservationsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -8306,6 +9138,8 @@ export type productsCreateWithoutStock_reservationsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -8313,6 +9147,7 @@ export type productsCreateWithoutStock_reservationsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -8328,6 +9163,7 @@ export type productsCreateWithoutStock_reservationsInput = {
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -8354,6 +9190,7 @@ export type productsUncheckedCreateWithoutStock_reservationsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -8371,7 +9208,10 @@ export type productsUncheckedCreateWithoutStock_reservationsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -8388,6 +9228,7 @@ export type productsUncheckedCreateWithoutStock_reservationsInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -8426,6 +9267,7 @@ export type productsUpdateWithoutStock_reservationsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -8438,6 +9280,8 @@ export type productsUpdateWithoutStock_reservationsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -8445,6 +9289,7 @@ export type productsUpdateWithoutStock_reservationsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -8460,6 +9305,7 @@ export type productsUpdateWithoutStock_reservationsInput = {
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -8486,6 +9332,7 @@ export type productsUncheckedUpdateWithoutStock_reservationsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8503,7 +9350,10 @@ export type productsUncheckedUpdateWithoutStock_reservationsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -8520,6 +9370,7 @@ export type productsUncheckedUpdateWithoutStock_reservationsInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -8542,6 +9393,7 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   calculation_type?: $Enums.CalculationType | null
@@ -8554,6 +9406,8 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   cost_source?: $Enums.ProductCostSource
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
@@ -8561,6 +9415,7 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
   product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
   product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
   income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
   expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
   inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
@@ -8576,6 +9431,7 @@ export type productsCreateWithoutWarehouse_stock_movementsInput = {
   transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
   cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
@@ -8602,6 +9458,7 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -8619,7 +9476,10 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
   product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
   parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
   child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
@@ -8636,6 +9496,7 @@ export type productsUncheckedCreateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
   stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedCreateNestedManyWithoutProductInput
   product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
@@ -8674,6 +9535,7 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -8686,6 +9548,8 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -8693,6 +9557,7 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -8708,6 +9573,7 @@ export type productsUpdateWithoutWarehouse_stock_movementsInput = {
   transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -8734,6 +9600,7 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8751,7 +9618,10 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -8768,6 +9638,275 @@ export type productsUncheckedUpdateWithoutWarehouse_stock_movementsInput = {
   product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsCreateWithoutStock_replenishment_policiesInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: boolean
+  manages_stock?: boolean
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesCreateNestedManyWithoutProductsInput
+  current_cost_currency?: Prisma.currenciesCreateNestedOneWithoutProductsCurrentCostInput
+  income_account?: Prisma.accountsCreateNestedOneWithoutIncome_productsInput
+  expense_account?: Prisma.accountsCreateNestedOneWithoutExpense_productsInput
+  inventory_account?: Prisma.accountsCreateNestedOneWithoutInventory_productsInput
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutProductsInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsCreateNestedManyWithoutProductInput
+  pallet_items?: Prisma.pallet_itemsCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsCreateNestedManyWithoutProductsInput
+  product_party_prices?: Prisma.product_party_pricesCreateNestedManyWithoutProductsInput
+  product_party_price_history?: Prisma.product_party_price_historyCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesCreateNestedManyWithoutProductsInput
+  tax_category?: Prisma.tax_categoriesCreateNestedOneWithoutProductsInput
+  transfer_rate?: Prisma.transfer_ratesCreateNestedOneWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockCreateNestedManyWithoutProductsInput
+  stock_reservations?: Prisma.stock_reservationsCreateNestedManyWithoutProductInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsCreateNestedManyWithoutComponent_productInput
+  cost_template?: Prisma.cost_templatesCreateNestedOneWithoutProductsInput
+  maintenance_parts?: Prisma.maintenance_partsCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsCreateNestedManyWithoutProductInput
+  unit?: Prisma.unitsCreateNestedOneWithoutProductsInput
+  product_suppliers?: Prisma.product_suppliersCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesCreateNestedManyWithoutProductsInput
+}
+
+export type productsUncheckedCreateWithoutStock_replenishment_policiesInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  rate_id?: string | null
+  taxId?: string | null
+  tax_category_id?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
+  product_variants?: Prisma.product_variantsUncheckedCreateNestedManyWithoutProductsInput
+  parent_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutParent_productInput
+  child_components?: Prisma.product_componentsUncheckedCreateNestedManyWithoutChild_productInput
+  product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutProductsInput
+  product_tags?: Prisma.product_tagsUncheckedCreateNestedManyWithoutProductsInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedCreateNestedManyWithoutProductsInput
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutProductsInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsUncheckedCreateNestedManyWithoutProductInput
+  pallet_items?: Prisma.pallet_itemsUncheckedCreateNestedManyWithoutProductsInput
+  picking_items?: Prisma.picking_itemsUncheckedCreateNestedManyWithoutProductsInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedCreateNestedManyWithoutProductsInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedCreateNestedManyWithoutProductsInput
+  product_price?: Prisma.product_priceUncheckedCreateNestedManyWithoutProductsInput
+  product_taxes?: Prisma.product_taxesUncheckedCreateNestedManyWithoutProductsInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedCreateNestedManyWithoutProductsInput
+  stock_reservations?: Prisma.stock_reservationsUncheckedCreateNestedManyWithoutProductInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedCreateNestedManyWithoutProductsInput
+  product_costs?: Prisma.product_costsUncheckedCreateNestedManyWithoutProductsInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedCreateNestedManyWithoutComponent_productInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedCreateNestedManyWithoutProductInput
+  tires?: Prisma.tiresUncheckedCreateNestedManyWithoutProductInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedCreateNestedManyWithoutProductInput
+  product_suppliers?: Prisma.product_suppliersUncheckedCreateNestedManyWithoutProductsInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedCreateNestedManyWithoutProductsInput
+}
+
+export type productsCreateOrConnectWithoutStock_replenishment_policiesInput = {
+  where: Prisma.productsWhereUniqueInput
+  create: Prisma.XOR<Prisma.productsCreateWithoutStock_replenishment_policiesInput, Prisma.productsUncheckedCreateWithoutStock_replenishment_policiesInput>
+}
+
+export type productsUpsertWithoutStock_replenishment_policiesInput = {
+  update: Prisma.XOR<Prisma.productsUpdateWithoutStock_replenishment_policiesInput, Prisma.productsUncheckedUpdateWithoutStock_replenishment_policiesInput>
+  create: Prisma.XOR<Prisma.productsCreateWithoutStock_replenishment_policiesInput, Prisma.productsUncheckedCreateWithoutStock_replenishment_policiesInput>
+  where?: Prisma.productsWhereInput
+}
+
+export type productsUpdateToOneWithWhereWithoutStock_replenishment_policiesInput = {
+  where?: Prisma.productsWhereInput
+  data: Prisma.XOR<Prisma.productsUpdateWithoutStock_replenishment_policiesInput, Prisma.productsUncheckedUpdateWithoutStock_replenishment_policiesInput>
+}
+
+export type productsUpdateWithoutStock_replenishment_policiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsUpdateManyWithoutProductNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutProductsNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+  unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutStock_replenishment_policiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsUncheckedUpdateManyWithoutProductNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutProductsNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -8792,6 +9931,7 @@ export type productsCreateManyIncome_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   expense_account_id?: string | null
@@ -8808,7 +9948,10 @@ export type productsCreateManyIncome_accountInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsCreateManyExpense_accountInput = {
@@ -8826,6 +9969,7 @@ export type productsCreateManyExpense_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -8842,7 +9986,10 @@ export type productsCreateManyExpense_accountInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsCreateManyInventory_accountInput = {
@@ -8860,6 +10007,7 @@ export type productsCreateManyInventory_accountInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -8876,7 +10024,10 @@ export type productsCreateManyInventory_accountInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsUpdateWithoutIncome_accountInput = {
@@ -8892,6 +10043,7 @@ export type productsUpdateWithoutIncome_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -8904,6 +10056,8 @@ export type productsUpdateWithoutIncome_accountInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -8911,6 +10065,7 @@ export type productsUpdateWithoutIncome_accountInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
@@ -8926,6 +10081,7 @@ export type productsUpdateWithoutIncome_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -8952,6 +10108,7 @@ export type productsUncheckedUpdateWithoutIncome_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8968,7 +10125,10 @@ export type productsUncheckedUpdateWithoutIncome_accountInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -8986,6 +10146,7 @@ export type productsUncheckedUpdateWithoutIncome_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -9010,6 +10171,7 @@ export type productsUncheckedUpdateManyWithoutIncome_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9026,7 +10188,10 @@ export type productsUncheckedUpdateManyWithoutIncome_accountInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type productsUpdateWithoutExpense_accountInput = {
@@ -9042,6 +10207,7 @@ export type productsUpdateWithoutExpense_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -9054,6 +10220,8 @@ export type productsUpdateWithoutExpense_accountInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -9061,6 +10229,7 @@ export type productsUpdateWithoutExpense_accountInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
@@ -9076,6 +10245,7 @@ export type productsUpdateWithoutExpense_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -9102,6 +10272,7 @@ export type productsUncheckedUpdateWithoutExpense_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9118,7 +10289,10 @@ export type productsUncheckedUpdateWithoutExpense_accountInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -9136,6 +10310,7 @@ export type productsUncheckedUpdateWithoutExpense_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -9160,6 +10335,7 @@ export type productsUncheckedUpdateManyWithoutExpense_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9176,7 +10352,10 @@ export type productsUncheckedUpdateManyWithoutExpense_accountInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type productsUpdateWithoutInventory_accountInput = {
@@ -9192,6 +10371,7 @@ export type productsUpdateWithoutInventory_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -9204,6 +10384,8 @@ export type productsUpdateWithoutInventory_accountInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -9211,6 +10393,7 @@ export type productsUpdateWithoutInventory_accountInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
@@ -9226,6 +10409,7 @@ export type productsUpdateWithoutInventory_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -9252,6 +10436,7 @@ export type productsUncheckedUpdateWithoutInventory_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9268,7 +10453,10 @@ export type productsUncheckedUpdateWithoutInventory_accountInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -9286,6 +10474,7 @@ export type productsUncheckedUpdateWithoutInventory_accountInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -9310,6 +10499,7 @@ export type productsUncheckedUpdateManyWithoutInventory_accountInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9326,7 +10516,10 @@ export type productsUncheckedUpdateManyWithoutInventory_accountInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type productsCreateManyCost_templateInput = {
@@ -9344,6 +10537,7 @@ export type productsCreateManyCost_templateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -9360,7 +10554,10 @@ export type productsCreateManyCost_templateInput = {
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsUpdateWithoutCost_templateInput = {
@@ -9376,6 +10573,7 @@ export type productsUpdateWithoutCost_templateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -9388,6 +10586,8 @@ export type productsUpdateWithoutCost_templateInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -9395,6 +10595,7 @@ export type productsUpdateWithoutCost_templateInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -9411,6 +10612,7 @@ export type productsUpdateWithoutCost_templateInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
@@ -9436,6 +10638,7 @@ export type productsUncheckedUpdateWithoutCost_templateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9452,7 +10655,10 @@ export type productsUncheckedUpdateWithoutCost_templateInput = {
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -9470,6 +10676,7 @@ export type productsUncheckedUpdateWithoutCost_templateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -9494,6 +10701,7 @@ export type productsUncheckedUpdateManyWithoutCost_templateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9510,16 +10718,20 @@ export type productsUncheckedUpdateManyWithoutCost_templateInput = {
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type productsCreateManyTransfer_rateInput = {
+export type productsCreateManyCurrent_cost_currencyInput = {
   id?: string
   name: string
   sku?: string | null
   requires_refrigeration?: boolean | null
   price_enabled?: boolean
   is_rate_type?: boolean
+  rate_id?: string | null
   taxId?: string | null
   tax_category_id?: string | null
   active?: boolean | null
@@ -9527,6 +10739,7 @@ export type productsCreateManyTransfer_rateInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -9544,10 +10757,12 @@ export type productsCreateManyTransfer_rateInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
-export type productsUpdateWithoutTransfer_rateInput = {
+export type productsUpdateWithoutCurrent_cost_currencyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9560,6 +10775,7 @@ export type productsUpdateWithoutTransfer_rateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -9572,6 +10788,8 @@ export type productsUpdateWithoutTransfer_rateInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -9591,9 +10809,213 @@ export type productsUpdateWithoutTransfer_rateInput = {
   product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
   product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
   tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
+  transfer_rate?: Prisma.transfer_ratesUpdateOneWithoutProductsNestedInput
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
+  product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
+  cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUpdateManyWithoutProductNestedInput
+  unit?: Prisma.unitsUpdateOneWithoutProductsNestedInput
+  product_suppliers?: Prisma.product_suppliersUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateWithoutCurrent_cost_currencyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUncheckedUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUncheckedUpdateManyWithoutProductsNestedInput
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsUncheckedUpdateManyWithoutProductNestedInput
+  pallet_items?: Prisma.pallet_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUncheckedUpdateManyWithoutProductsNestedInput
+  product_party_prices?: Prisma.product_party_pricesUncheckedUpdateManyWithoutProductsNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUncheckedUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUncheckedUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUncheckedUpdateManyWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
+  stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
+  product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
+  productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
+  maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
+  tires?: Prisma.tiresUncheckedUpdateManyWithoutProductNestedInput
+  productStructureVersions?: Prisma.product_structure_versionsUncheckedUpdateManyWithoutProductNestedInput
+  product_suppliers?: Prisma.product_suppliersUncheckedUpdateManyWithoutProductsNestedInput
+  product_list_prices?: Prisma.product_list_pricesUncheckedUpdateManyWithoutProductsNestedInput
+}
+
+export type productsUncheckedUpdateManyWithoutCurrent_cost_currencyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rate_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tax_category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inventory_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type productsCreateManyTransfer_rateInput = {
+  id?: string
+  name: string
+  sku?: string | null
+  requires_refrigeration?: boolean | null
+  price_enabled?: boolean
+  is_rate_type?: boolean
+  taxId?: string | null
+  tax_category_id?: string | null
+  active?: boolean | null
+  product_type?: $Enums.ProductType
+  usage_type?: $Enums.UsageType
+  is_composed?: boolean
+  auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: boolean
+  manages_stock?: boolean
+  income_account_id?: string | null
+  expense_account_id?: string | null
+  inventory_account_id?: string | null
+  calculation_type?: $Enums.CalculationType | null
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  cost_source?: $Enums.ProductCostSource
+  needs_cost_recalculation?: boolean
+  last_cost_calculated_at?: Date | string | null
+  cost_template_id?: string | null
+  unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
+}
+
+export type productsUpdateWithoutTransfer_rateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requires_refrigeration?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  price_enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_rate_type?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  product_type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
+  usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
+  is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
+  needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
+  parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
+  child_components?: Prisma.product_componentsUpdateManyWithoutChild_productNestedInput
+  product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
+  product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
+  product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
+  income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
+  expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
+  inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
+  document_items?: Prisma.document_itemsUpdateManyWithoutProductsNestedInput
+  dispatch_order_items?: Prisma.dispatch_order_itemsUpdateManyWithoutProductNestedInput
+  pallet_items?: Prisma.pallet_itemsUpdateManyWithoutProductsNestedInput
+  picking_items?: Prisma.picking_itemsUpdateManyWithoutProductsNestedInput
+  product_party_prices?: Prisma.product_party_pricesUpdateManyWithoutProductsNestedInput
+  product_party_price_history?: Prisma.product_party_price_historyUpdateManyWithoutProductsNestedInput
+  product_price?: Prisma.product_priceUpdateManyWithoutProductsNestedInput
+  product_taxes?: Prisma.product_taxesUpdateManyWithoutProductsNestedInput
+  tax_category?: Prisma.tax_categoriesUpdateOneWithoutProductsNestedInput
+  warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
+  stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
+  warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -9619,6 +11041,7 @@ export type productsUncheckedUpdateWithoutTransfer_rateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9636,7 +11059,10 @@ export type productsUncheckedUpdateWithoutTransfer_rateInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -9654,6 +11080,7 @@ export type productsUncheckedUpdateWithoutTransfer_rateInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -9677,6 +11104,7 @@ export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9694,7 +11122,10 @@ export type productsUncheckedUpdateManyWithoutTransfer_rateInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type productsCreateManyUnitInput = {
@@ -9712,6 +11143,7 @@ export type productsCreateManyUnitInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -9728,7 +11160,10 @@ export type productsCreateManyUnitInput = {
   needs_cost_recalculation?: boolean
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsUpdateWithoutUnitInput = {
@@ -9744,6 +11179,7 @@ export type productsUpdateWithoutUnitInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -9756,6 +11192,8 @@ export type productsUpdateWithoutUnitInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -9763,6 +11201,7 @@ export type productsUpdateWithoutUnitInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -9779,6 +11218,7 @@ export type productsUpdateWithoutUnitInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -9804,6 +11244,7 @@ export type productsUncheckedUpdateWithoutUnitInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9820,7 +11261,10 @@ export type productsUncheckedUpdateWithoutUnitInput = {
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -9838,6 +11282,7 @@ export type productsUncheckedUpdateWithoutUnitInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -9862,6 +11307,7 @@ export type productsUncheckedUpdateManyWithoutUnitInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9878,7 +11324,10 @@ export type productsUncheckedUpdateManyWithoutUnitInput = {
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type productsCreateManyTax_categoryInput = {
@@ -9895,6 +11344,7 @@ export type productsCreateManyTax_categoryInput = {
   usage_type?: $Enums.UsageType
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: string | null
@@ -9912,7 +11362,10 @@ export type productsCreateManyTax_categoryInput = {
   last_cost_calculated_at?: Date | string | null
   cost_template_id?: string | null
   unit_id?: string | null
+  purchase_unit_id?: string | null
+  purchase_to_stock_factor?: runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: string | null
 }
 
 export type productsUpdateWithoutTax_categoryInput = {
@@ -9928,6 +11381,7 @@ export type productsUpdateWithoutTax_categoryInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   calculation_type?: Prisma.NullableEnumCalculationTypeFieldUpdateOperationsInput | $Enums.CalculationType | null
@@ -9940,6 +11394,8 @@ export type productsUpdateWithoutTax_categoryInput = {
   cost_source?: Prisma.EnumProductCostSourceFieldUpdateOperationsInput | $Enums.ProductCostSource
   needs_cost_recalculation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   product_variants?: Prisma.product_variantsUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUpdateManyWithoutParent_productNestedInput
@@ -9947,6 +11403,7 @@ export type productsUpdateWithoutTax_categoryInput = {
   product_categories?: Prisma.product_categoriesUpdateManyWithoutProductsNestedInput
   product_tags?: Prisma.product_tagsUpdateManyWithoutProductsNestedInput
   product_attribute_values?: Prisma.product_attribute_valuesUpdateManyWithoutProductsNestedInput
+  current_cost_currency?: Prisma.currenciesUpdateOneWithoutProductsCurrentCostNestedInput
   income_account?: Prisma.accountsUpdateOneWithoutIncome_productsNestedInput
   expense_account?: Prisma.accountsUpdateOneWithoutExpense_productsNestedInput
   inventory_account?: Prisma.accountsUpdateOneWithoutInventory_productsNestedInput
@@ -9962,6 +11419,7 @@ export type productsUpdateWithoutTax_categoryInput = {
   warehouse_stock?: Prisma.warehouse_stockUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUpdateManyWithoutComponent_productNestedInput
   cost_template?: Prisma.cost_templatesUpdateOneWithoutProductsNestedInput
@@ -9987,6 +11445,7 @@ export type productsUncheckedUpdateWithoutTax_categoryInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10004,7 +11463,10 @@ export type productsUncheckedUpdateWithoutTax_categoryInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   product_variants?: Prisma.product_variantsUncheckedUpdateManyWithoutProductsNestedInput
   parent_components?: Prisma.product_componentsUncheckedUpdateManyWithoutParent_productNestedInput
   child_components?: Prisma.product_componentsUncheckedUpdateManyWithoutChild_productNestedInput
@@ -10022,6 +11484,7 @@ export type productsUncheckedUpdateWithoutTax_categoryInput = {
   warehouse_stock?: Prisma.warehouse_stockUncheckedUpdateManyWithoutProductsNestedInput
   stock_reservations?: Prisma.stock_reservationsUncheckedUpdateManyWithoutProductNestedInput
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsUncheckedUpdateManyWithoutProductsNestedInput
+  stock_replenishment_policies?: Prisma.stock_replenishment_policiesUncheckedUpdateManyWithoutProductNestedInput
   product_costs?: Prisma.product_costsUncheckedUpdateManyWithoutProductsNestedInput
   productCostBreakdowns?: Prisma.product_cost_breakdownsUncheckedUpdateManyWithoutComponent_productNestedInput
   maintenance_parts?: Prisma.maintenance_partsUncheckedUpdateManyWithoutProductNestedInput
@@ -10045,6 +11508,7 @@ export type productsUncheckedUpdateManyWithoutTax_categoryInput = {
   usage_type?: Prisma.EnumUsageTypeFieldUpdateOperationsInput | $Enums.UsageType
   is_composed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   auto_calculate_cost?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sale_margin_percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   has_engineering?: Prisma.BoolFieldUpdateOperationsInput | boolean
   manages_stock?: Prisma.BoolFieldUpdateOperationsInput | boolean
   income_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10062,7 +11526,10 @@ export type productsUncheckedUpdateManyWithoutTax_categoryInput = {
   last_cost_calculated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost_template_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_unit_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchase_to_stock_factor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   current_cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  current_cost_currency_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -10088,6 +11555,7 @@ export type ProductsCountOutputType = {
   warehouse_stock: number
   stock_reservations: number
   warehouse_stock_movements: number
+  stock_replenishment_policies: number
   product_costs: number
   productCostBreakdowns: number
   maintenance_parts: number
@@ -10115,6 +11583,7 @@ export type ProductsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   warehouse_stock?: boolean | ProductsCountOutputTypeCountWarehouse_stockArgs
   stock_reservations?: boolean | ProductsCountOutputTypeCountStock_reservationsArgs
   warehouse_stock_movements?: boolean | ProductsCountOutputTypeCountWarehouse_stock_movementsArgs
+  stock_replenishment_policies?: boolean | ProductsCountOutputTypeCountStock_replenishment_policiesArgs
   product_costs?: boolean | ProductsCountOutputTypeCountProduct_costsArgs
   productCostBreakdowns?: boolean | ProductsCountOutputTypeCountProductCostBreakdownsArgs
   maintenance_parts?: boolean | ProductsCountOutputTypeCountMaintenance_partsArgs
@@ -10256,6 +11725,13 @@ export type ProductsCountOutputTypeCountWarehouse_stock_movementsArgs<ExtArgs ex
 /**
  * ProductsCountOutputType without action
  */
+export type ProductsCountOutputTypeCountStock_replenishment_policiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.stock_replenishment_policiesWhereInput
+}
+
+/**
+ * ProductsCountOutputType without action
+ */
 export type ProductsCountOutputTypeCountProduct_costsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.product_costsWhereInput
 }
@@ -10318,6 +11794,7 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: boolean
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: boolean
@@ -10335,13 +11812,17 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   last_cost_calculated_at?: boolean
   cost_template_id?: boolean
   unit_id?: boolean
+  purchase_unit_id?: boolean
+  purchase_to_stock_factor?: boolean
   current_cost?: boolean
+  current_cost_currency_id?: boolean
   product_variants?: boolean | Prisma.products$product_variantsArgs<ExtArgs>
   parent_components?: boolean | Prisma.products$parent_componentsArgs<ExtArgs>
   child_components?: boolean | Prisma.products$child_componentsArgs<ExtArgs>
   product_categories?: boolean | Prisma.products$product_categoriesArgs<ExtArgs>
   product_tags?: boolean | Prisma.products$product_tagsArgs<ExtArgs>
   product_attribute_values?: boolean | Prisma.products$product_attribute_valuesArgs<ExtArgs>
+  current_cost_currency?: boolean | Prisma.products$current_cost_currencyArgs<ExtArgs>
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
@@ -10358,6 +11839,7 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   stock_reservations?: boolean | Prisma.products$stock_reservationsArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
+  stock_replenishment_policies?: boolean | Prisma.products$stock_replenishment_policiesArgs<ExtArgs>
   product_costs?: boolean | Prisma.products$product_costsArgs<ExtArgs>
   productCostBreakdowns?: boolean | Prisma.products$productCostBreakdownsArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
@@ -10385,6 +11867,7 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: boolean
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: boolean
@@ -10402,7 +11885,11 @@ export type productsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   last_cost_calculated_at?: boolean
   cost_template_id?: boolean
   unit_id?: boolean
+  purchase_unit_id?: boolean
+  purchase_to_stock_factor?: boolean
   current_cost?: boolean
+  current_cost_currency_id?: boolean
+  current_cost_currency?: boolean | Prisma.products$current_cost_currencyArgs<ExtArgs>
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
@@ -10427,6 +11914,7 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: boolean
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: boolean
@@ -10444,7 +11932,11 @@ export type productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   last_cost_calculated_at?: boolean
   cost_template_id?: boolean
   unit_id?: boolean
+  purchase_unit_id?: boolean
+  purchase_to_stock_factor?: boolean
   current_cost?: boolean
+  current_cost_currency_id?: boolean
+  current_cost_currency?: boolean | Prisma.products$current_cost_currencyArgs<ExtArgs>
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
@@ -10469,6 +11961,7 @@ export type productsSelectScalar = {
   usage_type?: boolean
   is_composed?: boolean
   auto_calculate_cost?: boolean
+  sale_margin_percentage?: boolean
   has_engineering?: boolean
   manages_stock?: boolean
   income_account_id?: boolean
@@ -10486,10 +11979,13 @@ export type productsSelectScalar = {
   last_cost_calculated_at?: boolean
   cost_template_id?: boolean
   unit_id?: boolean
+  purchase_unit_id?: boolean
+  purchase_to_stock_factor?: boolean
   current_cost?: boolean
+  current_cost_currency_id?: boolean
 }
 
-export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "tax_category_id" | "active" | "product_type" | "usage_type" | "is_composed" | "auto_calculate_cost" | "has_engineering" | "manages_stock" | "income_account_id" | "expense_account_id" | "inventory_account_id" | "calculation_type" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "cost_source" | "needs_cost_recalculation" | "last_cost_calculated_at" | "cost_template_id" | "unit_id" | "current_cost", ExtArgs["result"]["products"]>
+export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sku" | "requires_refrigeration" | "price_enabled" | "is_rate_type" | "rate_id" | "taxId" | "tax_category_id" | "active" | "product_type" | "usage_type" | "is_composed" | "auto_calculate_cost" | "sale_margin_percentage" | "has_engineering" | "manages_stock" | "income_account_id" | "expense_account_id" | "inventory_account_id" | "calculation_type" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "cost_source" | "needs_cost_recalculation" | "last_cost_calculated_at" | "cost_template_id" | "unit_id" | "purchase_unit_id" | "purchase_to_stock_factor" | "current_cost" | "current_cost_currency_id", ExtArgs["result"]["products"]>
 export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product_variants?: boolean | Prisma.products$product_variantsArgs<ExtArgs>
   parent_components?: boolean | Prisma.products$parent_componentsArgs<ExtArgs>
@@ -10497,6 +11993,7 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   product_categories?: boolean | Prisma.products$product_categoriesArgs<ExtArgs>
   product_tags?: boolean | Prisma.products$product_tagsArgs<ExtArgs>
   product_attribute_values?: boolean | Prisma.products$product_attribute_valuesArgs<ExtArgs>
+  current_cost_currency?: boolean | Prisma.products$current_cost_currencyArgs<ExtArgs>
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
@@ -10513,6 +12010,7 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   warehouse_stock?: boolean | Prisma.products$warehouse_stockArgs<ExtArgs>
   stock_reservations?: boolean | Prisma.products$stock_reservationsArgs<ExtArgs>
   warehouse_stock_movements?: boolean | Prisma.products$warehouse_stock_movementsArgs<ExtArgs>
+  stock_replenishment_policies?: boolean | Prisma.products$stock_replenishment_policiesArgs<ExtArgs>
   product_costs?: boolean | Prisma.products$product_costsArgs<ExtArgs>
   productCostBreakdowns?: boolean | Prisma.products$productCostBreakdownsArgs<ExtArgs>
   cost_template?: boolean | Prisma.products$cost_templateArgs<ExtArgs>
@@ -10525,6 +12023,7 @@ export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type productsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  current_cost_currency?: boolean | Prisma.products$current_cost_currencyArgs<ExtArgs>
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
@@ -10534,6 +12033,7 @@ export type productsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   unit?: boolean | Prisma.products$unitArgs<ExtArgs>
 }
 export type productsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  current_cost_currency?: boolean | Prisma.products$current_cost_currencyArgs<ExtArgs>
   income_account?: boolean | Prisma.products$income_accountArgs<ExtArgs>
   expense_account?: boolean | Prisma.products$expense_accountArgs<ExtArgs>
   inventory_account?: boolean | Prisma.products$inventory_accountArgs<ExtArgs>
@@ -10552,6 +12052,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     product_categories: Prisma.$product_categoriesPayload<ExtArgs>[]
     product_tags: Prisma.$product_tagsPayload<ExtArgs>[]
     product_attribute_values: Prisma.$product_attribute_valuesPayload<ExtArgs>[]
+    current_cost_currency: Prisma.$currenciesPayload<ExtArgs> | null
     income_account: Prisma.$accountsPayload<ExtArgs> | null
     expense_account: Prisma.$accountsPayload<ExtArgs> | null
     inventory_account: Prisma.$accountsPayload<ExtArgs> | null
@@ -10568,6 +12069,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     warehouse_stock: Prisma.$warehouse_stockPayload<ExtArgs>[]
     stock_reservations: Prisma.$stock_reservationsPayload<ExtArgs>[]
     warehouse_stock_movements: Prisma.$warehouse_stock_movementsPayload<ExtArgs>[]
+    stock_replenishment_policies: Prisma.$stock_replenishment_policiesPayload<ExtArgs>[]
     product_costs: Prisma.$product_costsPayload<ExtArgs>[]
     productCostBreakdowns: Prisma.$product_cost_breakdownsPayload<ExtArgs>[]
     cost_template: Prisma.$cost_templatesPayload<ExtArgs> | null
@@ -10593,6 +12095,7 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     usage_type: $Enums.UsageType
     is_composed: boolean
     auto_calculate_cost: boolean
+    sale_margin_percentage: runtime.Decimal
     has_engineering: boolean
     manages_stock: boolean
     income_account_id: string | null
@@ -10610,7 +12113,10 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     last_cost_calculated_at: Date | null
     cost_template_id: string | null
     unit_id: string | null
+    purchase_unit_id: string | null
+    purchase_to_stock_factor: runtime.Decimal
     current_cost: runtime.Decimal | null
+    current_cost_currency_id: string | null
   }, ExtArgs["result"]["products"]>
   composites: {}
 }
@@ -11011,6 +12517,7 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
   product_categories<T extends Prisma.products$product_categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_tags<T extends Prisma.products$product_tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_tagsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_attribute_values<T extends Prisma.products$product_attribute_valuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_attribute_valuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_attribute_valuesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  current_cost_currency<T extends Prisma.products$current_cost_currencyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$current_cost_currencyArgs<ExtArgs>>): Prisma.Prisma__currenciesClient<runtime.Types.Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   income_account<T extends Prisma.products$income_accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$income_accountArgs<ExtArgs>>): Prisma.Prisma__accountsClient<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   expense_account<T extends Prisma.products$expense_accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$expense_accountArgs<ExtArgs>>): Prisma.Prisma__accountsClient<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   inventory_account<T extends Prisma.products$inventory_accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$inventory_accountArgs<ExtArgs>>): Prisma.Prisma__accountsClient<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -11027,6 +12534,7 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
   warehouse_stock<T extends Prisma.products$warehouse_stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stock_reservations<T extends Prisma.products$stock_reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$stock_reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$stock_reservationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   warehouse_stock_movements<T extends Prisma.products$warehouse_stock_movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$warehouse_stock_movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warehouse_stock_movementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stock_replenishment_policies<T extends Prisma.products$stock_replenishment_policiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$stock_replenishment_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$stock_replenishment_policiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   product_costs<T extends Prisma.products$product_costsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$product_costsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_costsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productCostBreakdowns<T extends Prisma.products$productCostBreakdownsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$productCostBreakdownsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$product_cost_breakdownsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cost_template<T extends Prisma.products$cost_templateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.products$cost_templateArgs<ExtArgs>>): Prisma.Prisma__cost_templatesClient<runtime.Types.Result.GetResult<Prisma.$cost_templatesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -11079,6 +12587,7 @@ export interface productsFieldRefs {
   readonly usage_type: Prisma.FieldRef<"products", 'UsageType'>
   readonly is_composed: Prisma.FieldRef<"products", 'Boolean'>
   readonly auto_calculate_cost: Prisma.FieldRef<"products", 'Boolean'>
+  readonly sale_margin_percentage: Prisma.FieldRef<"products", 'Decimal'>
   readonly has_engineering: Prisma.FieldRef<"products", 'Boolean'>
   readonly manages_stock: Prisma.FieldRef<"products", 'Boolean'>
   readonly income_account_id: Prisma.FieldRef<"products", 'String'>
@@ -11096,7 +12605,10 @@ export interface productsFieldRefs {
   readonly last_cost_calculated_at: Prisma.FieldRef<"products", 'DateTime'>
   readonly cost_template_id: Prisma.FieldRef<"products", 'String'>
   readonly unit_id: Prisma.FieldRef<"products", 'String'>
+  readonly purchase_unit_id: Prisma.FieldRef<"products", 'String'>
+  readonly purchase_to_stock_factor: Prisma.FieldRef<"products", 'Decimal'>
   readonly current_cost: Prisma.FieldRef<"products", 'Decimal'>
+  readonly current_cost_currency_id: Prisma.FieldRef<"products", 'String'>
 }
     
 
@@ -11642,6 +13154,25 @@ export type products$product_attribute_valuesArgs<ExtArgs extends runtime.Types.
 }
 
 /**
+ * products.current_cost_currency
+ */
+export type products$current_cost_currencyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the currencies
+   */
+  select?: Prisma.currenciesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the currencies
+   */
+  omit?: Prisma.currenciesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.currenciesInclude<ExtArgs> | null
+  where?: Prisma.currenciesWhereInput
+}
+
+/**
  * products.income_account
  */
 export type products$income_accountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11998,6 +13529,30 @@ export type products$warehouse_stock_movementsArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.Warehouse_stock_movementsScalarFieldEnum | Prisma.Warehouse_stock_movementsScalarFieldEnum[]
+}
+
+/**
+ * products.stock_replenishment_policies
+ */
+export type products$stock_replenishment_policiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the stock_replenishment_policies
+   */
+  select?: Prisma.stock_replenishment_policiesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the stock_replenishment_policies
+   */
+  omit?: Prisma.stock_replenishment_policiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.stock_replenishment_policiesInclude<ExtArgs> | null
+  where?: Prisma.stock_replenishment_policiesWhereInput
+  orderBy?: Prisma.stock_replenishment_policiesOrderByWithRelationInput | Prisma.stock_replenishment_policiesOrderByWithRelationInput[]
+  cursor?: Prisma.stock_replenishment_policiesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Stock_replenishment_policiesScalarFieldEnum | Prisma.Stock_replenishment_policiesScalarFieldEnum[]
 }
 
 /**

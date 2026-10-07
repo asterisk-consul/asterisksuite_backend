@@ -32,6 +32,7 @@ export class EngineeringService {
       parent_product_id: dto.parent_product_id,
       child_product_id: dto.child_product_id,
       child_variant_id: dto.child_variant_id,
+      structure_variant_id: dto.structure_variant_id,
       quantity: dto.quantity,
       unit_id: dto.unit_id,
       length_mm: dto.length_mm,
@@ -117,23 +118,61 @@ export class EngineeringService {
   // TREE
   // =========================
 
-  async getEngineeringTree(productId: string) {
-    return this.engineeringTreeService.buildTree(productId);
+  async getEngineeringTree(productId: string, variantId?: string, currencyId?: string) {
+    return this.engineeringTreeService.buildTree(productId, variantId, 0, currencyId);
+  }
+
+  async getVariantStructureStatus(productId: string, variantId: string) {
+    await this.assertVariant(productId, variantId);
+    const componentCount = await this.prisma.product_components.count({
+      where: { parent_product_id: productId, structure_variant_id: variantId, deleted_at: null },
+    });
+    return { customized: componentCount > 0, component_count: componentCount };
+  }
+
+  async customizeVariantStructure(productId: string, variantId: string) {
+    await this.assertVariant(productId, variantId);
+    const existing = await this.getVariantStructureStatus(productId, variantId);
+    if (existing.customized) return existing;
+
+    const base = await this.prisma.product_components.findMany({
+      where: { parent_product_id: productId, structure_variant_id: null, deleted_at: null, active: true },
+      orderBy: { order: 'asc' },
+    });
+    if (base.length) {
+      await this.prisma.product_components.createMany({
+        data: base.map(({ id, created_at, updated_at, deleted_at, created_by, updated_by, deleted_by, ...component }) => ({
+          ...component,
+          structure_variant_id: variantId,
+        })),
+      });
+    }
+    return { customized: true, component_count: base.length };
+  }
+
+  private async assertVariant(productId: string, variantId: string) {
+    const variant = await this.prisma.product_variants.findFirst({
+      where: { id: variantId, product_id: productId, deleted_at: null, active: true },
+      select: { id: true },
+    });
+    if (!variant) throw new NotFoundException('La variante no pertenece al producto');
   }
 
   // =========================
   // CALCULATE
   // =========================
 
-  async calculate(productId: string) {
+  async calculate(productId: string, variantId?: string) {
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
     });
 
     if (!product) throw new NotFoundException('Producto no encontrado');
 
-    const tree = await this.engineeringTreeService.buildTree(productId);
+    if (variantId) await this.assertVariant(productId, variantId);
+    const tree = await this.engineeringTreeService.buildTree(productId, variantId);
 
-    return this.engineeringCalculationService.calculateTree(tree);
+    const mode = product.cost_source === 'BOM' ? 'BOM' : 'ENGINEERING';
+    return this.engineeringCalculationService.calculateTree(tree, mode);
   }
 }

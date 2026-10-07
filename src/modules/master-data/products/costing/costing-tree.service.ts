@@ -33,10 +33,17 @@ export class CostingTreeService {
     return this.db.getClientForCurrentContext();
   }
 
-  async buildTree(productId: string, currencyId: string, level = 0): Promise<CostBreakdownItem[]> {
+  async buildTree(productId: string, currencyId: string, level = 0, mode?: 'BOM' | 'ENGINEERING', structureVariantId?: string): Promise<CostBreakdownItem[]> {
+    const effectiveMode = mode ?? ((await this.prisma.products.findUnique({
+      where: { id: productId }, select: { cost_source: true },
+    }))?.cost_source === 'BOM' ? 'BOM' : 'ENGINEERING');
+    const useVariantStructure = level === 0 && !!structureVariantId && await this.prisma.product_components.count({
+      where: { parent_product_id: productId, structure_variant_id: structureVariantId, deleted_at: null, active: true },
+    }) > 0;
     const components = await this.prisma.product_components.findMany({
       where: {
         parent_product_id: productId,
+        structure_variant_id: useVariantStructure ? structureVariantId : null,
         deleted_at: null,
         active: true,
       },
@@ -49,7 +56,10 @@ export class CostingTreeService {
     const result: CostBreakdownItem[] = [];
 
     for (const component of components) {
-      const children = await this.buildTree(component.child_product_id, currencyId, level + 1);
+      const isIntermediate = component.child_product.product_type === 'SEMI_FINISHED';
+      const children = isIntermediate
+        ? []
+        : await this.buildTree(component.child_product_id, currencyId, level + 1, effectiveMode);
 
       let unitCost = 0;
       let source: string | undefined;
@@ -113,7 +123,9 @@ export class CostingTreeService {
           }
         }
 
-        const quantity = this.calculateEngineeringQuantity(component);
+        const quantity = effectiveMode === 'BOM'
+          ? Number(component.quantity)
+          : this.calculateEngineeringQuantity(component);
         const totalCost = round2(quantity * unitCost);
 
         result.push({
@@ -236,13 +248,13 @@ export class CostingTreeService {
     const widthM = Number(component.width_mm || 0) / 1000;
     const areaM2 = lengthM * widthM;
     const volumeM3 = areaM2 * thicknessM;
-    const weightKg = volumeM3 * densityKgM3;
+    const weightKg = volumeM3 * densityKgM3 * Number(component.quantity || 0);
     return round2(weightKg * (1 + waste / 100));
   }
 
   private calculateLinearQuantity(component: any, waste: number): number {
     const lengthM = Number(component.length_mm || 0) / 1000;
-    return round2(lengthM * (1 + waste / 100));
+    return round2(lengthM * Number(component.quantity || 0) * (1 + waste / 100));
   }
 
   private calculateVolumeQuantity(component: any, waste: number): number {
@@ -250,6 +262,6 @@ export class CostingTreeService {
       (Number(component.length_mm || 0) / 1000) *
       (Number(component.width_mm || 0) / 1000) *
       (Number(component.height_mm || 0) / 1000);
-    return round2(volume * (1 + waste / 100));
+    return round2(volume * Number(component.quantity || 0) * (1 + waste / 100));
   }
 }

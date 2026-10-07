@@ -36,6 +36,12 @@ export class VariantCostsController {
   }
 
   @RequirePermissions('variant_costs.read')
+  @Get('variant/:variantId')
+  findByVariant(@Param('variantId') variantId: string) {
+    return this.service.findByVariant(variantId);
+  }
+
+  @RequirePermissions('variant_costs.read')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 import { CostingTreeService } from './costing-tree.service';
@@ -16,6 +16,7 @@ import { CostStrategyOptions } from './interfaces/cost-strategy.interface';
 import { CostBreakdownItem } from './interfaces/cost-breakdown.interface';
 import { CostParetoResult, ParetoItem } from './interfaces/cost-pareto.interface';
 import { round2 } from './utils/costing.utils';
+import { UpdateManualCostDto } from './dto/update-manual-cost.dto';
 
 import { cost_components, cost_template_components } from '@/generated/prisma/client';
 
@@ -39,6 +40,47 @@ export class CostingService {
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  async setManualCost(productId: string, dto: UpdateManualCostDto) {
+    const [product, currency] = await Promise.all([
+      this.prisma.products.findFirst({ where: { id: productId, deleted_at: null } }),
+      this.prisma.currencies.findUnique({ where: { id: dto.currency_id } }),
+    ]);
+    if (!product) throw new NotFoundException('Producto no encontrado');
+    if (!currency) throw new NotFoundException('Moneda no encontrada');
+    if (product.product_type !== 'RAW_MATERIAL') {
+      throw new BadRequestException('La carga manual desde el producto está disponible para materias primas');
+    }
+
+    const snapshot = await this.historyService.saveSnapshot({
+      product_id: productId,
+      currency_id: dto.currency_id,
+      cost_source: dto.cost_source ?? 'MANUAL',
+      material_cost: dto.current_cost,
+      labor_cost: 0,
+      overhead_cost: 0,
+      total_cost: dto.current_cost,
+      cost_rates_snapshot: {},
+      breakdown: [],
+    });
+
+    await this.prisma.product_costs.update({
+      where: { id: snapshot!.id },
+      data: { notes: dto.notes ?? 'Costo inicial cargado manualmente' },
+    });
+    await this.prisma.products.update({
+      where: { id: productId },
+      data: {
+        current_cost: dto.current_cost,
+        current_cost_currency_id: dto.currency_id,
+        cost_source: dto.cost_source ?? 'MANUAL',
+        last_cost_calculated_at: new Date(),
+        needs_cost_recalculation: false,
+      },
+    });
+
+    return this.getCostHistory(productId);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -72,7 +114,7 @@ export class CostingService {
   // CALCULATE
   // ─────────────────────────────────────────────────────────────
 
-  async calculateProductCost(productId: string, currencyId: string, saveSnapshot = true): Promise<CalculatedCost> {
+  async calculateProductCost(productId: string, currencyId: string, saveSnapshot = true, variantId?: string): Promise<CalculatedCost> {
     const product = await this.prisma.products.findUnique({
       where: { id: productId },
       include: {
@@ -89,6 +131,14 @@ export class CostingService {
 
     if (!product) throw new NotFoundException('Producto no encontrado');
 
+    if (variantId) {
+      const variant = await this.prisma.product_variants.findFirst({
+        where: { id: variantId, product_id: productId, deleted_at: null, active: true },
+        select: { id: true },
+      });
+      if (!variant) throw new NotFoundException('La variante no pertenece al producto');
+    }
+
     const rawComponents = product.cost_template?.components ?? (await this.getRawDefaultTemplateComponents());
 
     const templateComponents: TemplateComponent[] = rawComponents.map((item) => this.mapTemplateComponent(item));
@@ -100,6 +150,7 @@ export class CostingService {
       currencyId,
       templateComponents,
       costTemplateId,
+      variantId,
     };
 
     let result: CalculatedCost;
@@ -123,7 +174,17 @@ export class CostingService {
         break;
     }
 
-    if (saveSnapshot) {
+    if (saveSnapshot && variantId) {
+      await this.prisma.product_variant_costs.create({
+        data: {
+          variant_id: variantId,
+          currency_id: currencyId,
+          source: 'ENGINEERING',
+          cost: result.total_cost,
+          notes: 'Costo calculado desde BOM y plantilla',
+        },
+      });
+    } else if (saveSnapshot) {
       // Pasar el árbol jerárquico directamente — el history service
       // se encarga de insertar con parent_breakdown_id
       await this.historyService.saveSnapshot({

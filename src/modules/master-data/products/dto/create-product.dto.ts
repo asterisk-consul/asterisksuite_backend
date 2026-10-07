@@ -2,6 +2,8 @@ import {
   IsBoolean,
   IsEnum,
   IsOptional,
+  IsNumber,
+  Min,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -66,6 +68,11 @@ export class CreateProductDto {
   auto_calculate_cost?: boolean;
 
   @IsOptional()
+  @IsNumber()
+  @Min(0)
+  sale_margin_percentage?: number;
+
+  @IsOptional()
   @IsBoolean()
   has_engineering?: boolean;
 
@@ -96,4 +103,13 @@ export class CreateProductDto {
   @IsOptional()
   @IsUUID()
   unit_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  purchase_unit_id?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0.000001)
+  purchase_to_stock_factor?: number;
 }

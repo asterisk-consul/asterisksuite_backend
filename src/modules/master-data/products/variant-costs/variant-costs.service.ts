@@ -56,6 +56,14 @@ export class VariantCostsService {
     return cost;
   }
 
+  async findByVariant(variantId: string) {
+    return this.prisma.product_variant_costs.findMany({
+      where: { variant_id: variantId, deleted_at: null, active: true },
+      include: { currency: true, product_variant: true },
+      orderBy: [{ effective_date: 'desc' }, { created_at: 'desc' }],
+    });
+  }
+
   async update(id: string, data: UpdateVariantCostDto) {
     await this.findOne(id);
 
