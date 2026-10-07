@@ -46,20 +46,27 @@ export class StockService {
     return materials;
   }
 
-  async previewProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number) {
+  async previewProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number, variantId?: string) {
     if (!Number.isFinite(quantity) || quantity <= 0) {
       throw new BadRequestException('La cantidad a fabricar debe ser mayor que cero');
     }
     if (!materialWarehouseId || !outputWarehouseId) {
       throw new BadRequestException('Seleccioná los depósitos de materiales y producto terminado');
     }
-    const [product, materialWarehouse, outputWarehouse, engineering] = await Promise.all([
+    const [product, materialWarehouse, outputWarehouse, engineering, variant] = await Promise.all([
       this.prisma.products.findFirst({ where: { id: productId, deleted_at: null, active: true } }),
       this.prisma.warehouses.findFirst({ where: { id: materialWarehouseId, deleted_at: null, active: true } }),
       this.prisma.warehouses.findFirst({ where: { id: outputWarehouseId, deleted_at: null, active: true } }),
-      this.engineeringService.calculate(productId),
+      this.engineeringService.calculate(productId, variantId),
+      variantId
+        ? this.prisma.product_variants.findFirst({
+            where: { id: variantId, product_id: productId, deleted_at: null, active: true },
+            select: { id: true, name: true, sku: true },
+          })
+        : Promise.resolve(null),
     ]);
     if (!product) throw new BadRequestException('Producto no encontrado');
+    if (variantId && !variant) throw new BadRequestException('La variante no existe o no pertenece al producto');
     if (!materialWarehouse) throw new BadRequestException('El depósito de materiales no existe o está inactivo');
     if (!outputWarehouse) throw new BadRequestException('El depósito de producto terminado no existe o está inactivo');
     if (!engineering.tree.length) throw new BadRequestException('El producto no tiene componentes para fabricar');
@@ -86,6 +93,7 @@ export class StockService {
     });
     return {
       product: { id: product.id, name: product.name, sku: product.sku },
+      variant: variant ?? null,
       material_warehouse: { id: materialWarehouse.id, name: materialWarehouse.name },
       output_warehouse: { id: outputWarehouse.id, name: outputWarehouse.name },
       quantity,
@@ -94,13 +102,16 @@ export class StockService {
     };
   }
 
-  async executeProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number) {
-    const preview = await this.previewProduction(productId, materialWarehouseId, outputWarehouseId, quantity);
+  async executeProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number, variantId?: string) {
+    const preview = await this.previewProduction(productId, materialWarehouseId, outputWarehouseId, quantity, variantId);
     if (!preview.can_produce) {
       const missing = preview.materials.filter(item => !item.sufficient).map(item => item.name).join(', ');
       throw new BadRequestException(`Stock insuficiente para fabricar. Faltan: ${missing}`);
     }
     const productionId = randomUUID();
+    const variantLabel = preview.variant
+      ? ` (${preview.variant.name ?? preview.variant.sku ?? 'variante'})`
+      : '';
     return this.prisma.$transaction(async tx => {
       for (const material of preview.materials) {
         const stock = await tx.warehouse_stock.findUnique({
@@ -120,7 +131,7 @@ export class StockService {
           quantity: required,
           reference_type: 'PRODUCTION_ORDER',
           reference_id: productionId,
-          notes: `Consumo para fabricar ${quantity} × ${preview.product.name}`,
+          notes: `Consumo para fabricar ${quantity} × ${preview.product.name}${variantLabel}`,
           created_by: this.userId,
         }});
       }
@@ -139,7 +150,7 @@ export class StockService {
         quantity: outputQuantity,
         reference_type: 'PRODUCTION_ORDER',
         reference_id: productionId,
-        notes: `Fabricación de ${quantity} × ${preview.product.name}`,
+        notes: `Fabricación de ${quantity} × ${preview.product.name}${variantLabel}`,
         created_by: this.userId,
       }});
       return { ...preview, production_id: productionId, completed_at: new Date() };

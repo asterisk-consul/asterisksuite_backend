@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
@@ -17,8 +17,20 @@ export class EngineeringController {
 
   @RequirePermissions('engineering.read')
   @Get('tree/:productId')
-  getEngineeringTree(@Param('productId', ParseUUIDPipe) productId: string) {
-    return this.engineeringService.getEngineeringTree(productId);
+  getEngineeringTree(@Param('productId', ParseUUIDPipe) productId: string, @Query('variantId') variantId?: string, @Query('currencyId') currencyId?: string) {
+    return this.engineeringService.getEngineeringTree(productId, variantId, currencyId);
+  }
+
+  @RequirePermissions('engineering.read')
+  @Get('tree/:productId/variants/:variantId/status')
+  getVariantStructureStatus(@Param('productId', ParseUUIDPipe) productId: string, @Param('variantId', ParseUUIDPipe) variantId: string) {
+    return this.engineeringService.getVariantStructureStatus(productId, variantId);
+  }
+
+  @RequirePermissions('engineering.update')
+  @Post('tree/:productId/variants/:variantId/customize')
+  customizeVariantStructure(@Param('productId', ParseUUIDPipe) productId: string, @Param('variantId', ParseUUIDPipe) variantId: string) {
+    return this.engineeringService.customizeVariantStructure(productId, variantId);
   }
 
   // =========================
@@ -27,8 +39,8 @@ export class EngineeringController {
 
   @RequirePermissions('engineering.create')
   @Post('calculate/:productId')
-  calculate(@Param('productId', ParseUUIDPipe) productId: string) {
-    return this.engineeringService.calculate(productId);
+  calculate(@Param('productId', ParseUUIDPipe) productId: string, @Query('variantId') variantId?: string) {
+    return this.engineeringService.calculate(productId, variantId);
   }
 
   // =========================

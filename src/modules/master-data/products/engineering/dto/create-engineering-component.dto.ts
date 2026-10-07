@@ -11,6 +11,10 @@ export class CreateEngineeringComponentDto {
   @IsUUID()
   child_variant_id?: string;
 
+  @IsOptional()
+  @IsUUID()
+  structure_variant_id?: string;
+
   @IsNumber()
   quantity!: number;
 

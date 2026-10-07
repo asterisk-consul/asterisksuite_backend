@@ -148,6 +148,7 @@ export class ProductComponentsService {
     parent_product_id: string;
     child_product_id: string;
     child_variant_id?: string | null;
+    structure_variant_id?: string | null;
     unit_id?: string | null;
   }) {
     const parent = await this.prisma.products.findUnique({ where: { id: data.parent_product_id } });
@@ -162,6 +163,11 @@ export class ProductComponentsService {
     if (data.child_variant_id) {
       const variant = await this.prisma.product_variants.findUnique({ where: { id: data.child_variant_id } });
       if (!variant) throw new NotFoundException('Variante no encontrada');
+    }
+
+    if (data.structure_variant_id) {
+      const structureVariant = await this.prisma.product_variants.findUnique({ where: { id: data.structure_variant_id } });
+      if (!structureVariant) throw new NotFoundException('Variante de estructura no encontrada');
     }
 
     if (data.unit_id) {

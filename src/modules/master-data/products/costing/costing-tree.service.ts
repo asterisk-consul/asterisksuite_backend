@@ -33,13 +33,17 @@ export class CostingTreeService {
     return this.db.getClientForCurrentContext();
   }
 
-  async buildTree(productId: string, currencyId: string, level = 0, mode?: 'BOM' | 'ENGINEERING'): Promise<CostBreakdownItem[]> {
+  async buildTree(productId: string, currencyId: string, level = 0, mode?: 'BOM' | 'ENGINEERING', structureVariantId?: string): Promise<CostBreakdownItem[]> {
     const effectiveMode = mode ?? ((await this.prisma.products.findUnique({
       where: { id: productId }, select: { cost_source: true },
     }))?.cost_source === 'BOM' ? 'BOM' : 'ENGINEERING');
+    const useVariantStructure = level === 0 && !!structureVariantId && await this.prisma.product_components.count({
+      where: { parent_product_id: productId, structure_variant_id: structureVariantId, deleted_at: null, active: true },
+    }) > 0;
     const components = await this.prisma.product_components.findMany({
       where: {
         parent_product_id: productId,
+        structure_variant_id: useVariantStructure ? structureVariantId : null,
         deleted_at: null,
         active: true,
       },

@@ -209,7 +209,8 @@ export const ModelName = {
   stock_reservations: 'stock_reservations',
   stock_reservation_allocations: 'stock_reservation_allocations',
   warehouse_stock_movements: 'warehouse_stock_movements',
-  warehouses: 'warehouses'
+  warehouses: 'warehouses',
+  stock_replenishment_policies: 'stock_replenishment_policies'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2235,6 +2236,7 @@ export const Product_componentsScalarFieldEnum = {
   parent_product_id: 'parent_product_id',
   child_product_id: 'child_product_id',
   child_variant_id: 'child_variant_id',
+  structure_variant_id: 'structure_variant_id',
   quantity: 'quantity',
   unit_id: 'unit_id',
   length_mm: 'length_mm',
@@ -3443,6 +3445,26 @@ export const WarehousesScalarFieldEnum = {
 } as const
 
 export type WarehousesScalarFieldEnum = (typeof WarehousesScalarFieldEnum)[keyof typeof WarehousesScalarFieldEnum]
+
+
+export const Stock_replenishment_policiesScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  warehouse_id: 'warehouse_id',
+  preferred_supplier_id: 'preferred_supplier_id',
+  reorder_point: 'reorder_point',
+  target_stock: 'target_stock',
+  lead_time_days: 'lead_time_days',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Stock_replenishment_policiesScalarFieldEnum = (typeof Stock_replenishment_policiesScalarFieldEnum)[keyof typeof Stock_replenishment_policiesScalarFieldEnum]
 
 
 export const SortOrder = {

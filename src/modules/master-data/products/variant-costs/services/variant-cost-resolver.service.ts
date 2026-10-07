@@ -20,6 +20,7 @@ export class VariantCostResolverService {
 
         deleted_at: null,
       },
+      include: { currency: true },
       orderBy: {
         effective_date: 'desc',
       },
@@ -36,6 +37,8 @@ export class VariantCostResolverService {
         converted_cost: Number(directCost.cost),
 
         source: directCost.source,
+        original_currency_code: directCost.currency.code,
+        original_currency_symbol: directCost.currency.symbol,
       };
     }
 
@@ -86,6 +89,8 @@ export class VariantCostResolverService {
       converted_cost: converted,
 
       source: fallbackCost.source,
+      original_currency_code: fallbackCost.currency.code,
+      original_currency_symbol: fallbackCost.currency.symbol,
     };
   }
 }

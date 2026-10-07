@@ -84,6 +84,9 @@ export const RBAC_PERMISSIONS = [
   { code: 'warehouses.create', description: 'Crear almacenes' },
   { code: 'warehouses.update', description: 'Editar almacenes' },
   { code: 'warehouses.delete', description: 'Eliminar almacenes' },
+  { code: 'stock.replenishment.read', description: 'Ver necesidades de reposición' },
+  { code: 'stock.replenishment.configure', description: 'Configurar políticas de reposición' },
+  { code: 'stock.replenishment.execute', description: 'Ejecutar sugerencias de reposición' },
 
   // ─── Logística - Trips ────────────────────────────────────
   { code: 'trips.read', description: 'Ver viajes' },

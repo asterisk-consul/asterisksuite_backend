@@ -19,8 +19,9 @@ export class BomCostStrategy implements ICostStrategy {
     currencyId,
     templateComponents,
     costTemplateId,
+    variantId,
   }: CostStrategyOptions): Promise<CalculatedCost> {
-    const breakdown = await this.treeService.buildTree(productId, currencyId);
+    const breakdown = await this.treeService.buildTree(productId, currencyId, 0, 'BOM', variantId);
 
     const materialCost =
       this.calculatorService.calculateMaterialCost(breakdown);

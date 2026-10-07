@@ -11,6 +11,10 @@ export class CreateProductComponentDto {
   @IsUUID()
   child_variant_id?: string;
 
+  @IsOptional()
+  @IsUUID()
+  structure_variant_id?: string;
+
   @IsNumber()
   @Min(0.001)
   quantity!: number;

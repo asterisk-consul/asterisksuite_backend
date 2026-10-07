@@ -834,3 +834,8 @@ export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
  * 
  */
 export type warehouses = Prisma.warehousesModel
+/**
+ * Model stock_replenishment_policies
+ * 
+ */
+export type stock_replenishment_policies = Prisma.stock_replenishment_policiesModel

@@ -31,9 +31,10 @@ export class EngineeringCostStrategy implements ICostStrategy {
     currencyId,
     templateComponents,
     costTemplateId,
+    variantId,
   }: CostStrategyOptions): Promise<CalculatedCost> {
     // 1. Obtener árbol de ingeniería (pesos/cantidades calculados)
-    const engineering = await this.engineeringService.calculate(productId);
+    const engineering = await this.engineeringService.calculate(productId, variantId);
 
     // 2. Resolver costos reales en las hojas y propagar hacia arriba
     const targetCurrency = await this.prisma.currencies.findUnique({
