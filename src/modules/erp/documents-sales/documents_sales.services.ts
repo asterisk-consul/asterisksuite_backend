@@ -74,6 +74,10 @@ export class DocumentsSalesService {
     return this.db.getClientForCurrentContext();
   }
 
+  getSalesOrderAvailability(id: string) {
+    return this.stockReservations.getSalesOrderAvailability(id);
+  }
+
   private deliveryBlockedMessage(operation: any) {
     const missing: string[] = [];
     const orderedTotal = Number(operation?.ordered_total ?? 0);
@@ -1587,7 +1591,7 @@ export class DocumentsSalesService {
       }
 
       // ─── Stock automático si affects_stock ──────────────────────
-      if (doc.document_types?.affects_stock) {
+      if (category === 'REMITO' && doc.document_types?.affects_stock) {
         const direction = doc.document_types.direction === 1 ? 'OUT' : 'IN';
 
         for (const item of doc.document_items) {
@@ -1820,7 +1824,9 @@ export class DocumentsSalesService {
         );
       }
 
-      if (doc.status === STATUS_CONFIRMED && doc.document_types?.affects_stock) {
+      if (doc.status === STATUS_CONFIRMED
+        && doc.document_types?.category === 'REMITO'
+        && doc.document_types?.affects_stock) {
         const movements = await tx.warehouse_stock_movements.findMany({
           where: { reference_type: 'document', reference_id: doc.id, movement_type: 'DOCUMENT' },
         });

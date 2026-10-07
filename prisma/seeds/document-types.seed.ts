@@ -1,6 +1,12 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { PrismaClient } from '@/generated/prisma/client';
+import {
+  executeSeedSql,
+  SQL_DOCUMENT_SEQUENCES,
+  SQL_LINK_SEQUENCES,
+  SQL_REPAIR_DOCUMENT_SEQUENCES,
+} from './seed-sql';
 import 'dotenv/config';
 
 const tenantArg = process.argv[2];
@@ -472,32 +478,6 @@ const documentTypes = [
   },
 ];
 
-// Secuencias por defecto para los nuevos tipos
-const sequences = [
-  { name: 'Presupuestos', point_of_sale: '0001', prefix: 'PRES', forCategory: 'QUOTE' },
-  { name: 'Órdenes de Venta', point_of_sale: '0001', prefix: 'OV', forCategory: 'ORDER', direction: 1 },
-  { name: 'Órdenes de Compra', point_of_sale: '0001', prefix: 'OC', forCategory: 'ORDER', direction: -1 },
-  { name: 'Remitos de Venta', point_of_sale: '0001', prefix: 'REM', forCategory: 'REMITO', direction: 1 },
-  { name: 'Remitos de Compra', point_of_sale: '0001', prefix: 'REMC', forCategory: 'REMITO', direction: -1 },
-  { name: 'Facturas A Venta', point_of_sale: '0001', prefix: 'FA', forCategory: 'INVOICE', direction: 1, letterType: 'A' },
-  { name: 'Facturas B Venta', point_of_sale: '0001', prefix: 'FB', forCategory: 'INVOICE', direction: 1, letterType: 'B' },
-  { name: 'Facturas C Venta', point_of_sale: '0001', prefix: 'FC', forCategory: 'INVOICE', direction: 1, letterType: 'C' },
-  { name: 'Facturas X Venta', point_of_sale: '0001', prefix: 'FX', forCategory: 'INVOICE', direction: 1, letterType: 'X' },
-  { name: 'Facturas A Compra', point_of_sale: '0001', prefix: 'FA-C', forCategory: 'INVOICE', direction: -1, letterType: 'A' },
-  { name: 'Facturas B Compra', point_of_sale: '0001', prefix: 'FB-C', forCategory: 'INVOICE', direction: -1, letterType: 'B' },
-  { name: 'Facturas C Compra', point_of_sale: '0001', prefix: 'FC-C', forCategory: 'INVOICE', direction: -1, letterType: 'C' },
-  { name: 'Notas de Crédito A', point_of_sale: '0001', prefix: 'NCA', forCategory: 'CREDIT_NOTE', direction: 1, letterType: 'A' },
-  { name: 'Saldos Iniciales Clientes', point_of_sale: '0001', prefix: 'SI-C', forCategory: 'OPENING_BALANCE', direction: 1 },
-  { name: 'Saldos Iniciales Proveedores', point_of_sale: '0001', prefix: 'SI-P', forCategory: 'OPENING_BALANCE', direction: -1 },
-  { name: 'Notas de Crédito B', point_of_sale: '0001', prefix: 'NCB', forCategory: 'CREDIT_NOTE', direction: 1, letterType: 'B' },
-  { name: 'Notas de Débito A', point_of_sale: '0001', prefix: 'NDA', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'A' },
-  { name: 'Notas de Débito B', point_of_sale: '0001', prefix: 'NDB', forCategory: 'DEBIT_NOTE', direction: 1, letterType: 'B' },
-  { name: 'Recibos', point_of_sale: '0001', prefix: 'REC', forCategory: 'RECEIPT' },
-  { name: 'VALES', point_of_sale: '0003', prefix: 'V', forCategory: 'VALE' },
-  { name: 'Operaciones Internacionales', point_of_sale: '0003', prefix: 'IMP', forCategory: null },
-  { name: 'MAINTENANCE_ORDER', point_of_sale: '0000', prefix: 'MO', forCategory: null },
-];
-
 async function main() {
   console.log('Seeding document types...');
 
@@ -539,65 +519,22 @@ async function main() {
 
   console.log(`\n${documentTypes.length} tipos de documento creados/actualizados`);
 
-  // 2. Crear secuencias
-  console.log('\nSeeding document sequences...');
+  // Normalizar también tipos históricos que ya no forman parte del catálogo.
+  await prisma.document_types.updateMany({
+    where: { deleted_at: null },
+    data: { affects_stock: false },
+  });
+  await prisma.document_types.updateMany({
+    where: { deleted_at: null, category: 'REMITO' },
+    data: { affects_stock: true },
+  });
 
-  for (const seq of sequences) {
-    const existing = await prisma.document_sequences.findFirst({
-      where: { point_of_sale: seq.point_of_sale, prefix: seq.prefix },
-    });
-
-    if (existing) {
-      console.log(`  → ${seq.prefix} ya existe, vinculando...`);
-    } else {
-      await prisma.document_sequences.create({
-        data: {
-          name: seq.name,
-          point_of_sale: seq.point_of_sale,
-          prefix: seq.prefix,
-          current_number: 0,
-          automatic: true,
-          active: true,
-        },
-      });
-      console.log(`  ✓ ${seq.prefix} - ${seq.name}`);
-    }
-  }
-
-  // 3. Vincular document_types ↔ sequences via junction table
-  console.log('\nLinking document_types ↔ sequences via junction table...');
-
-  for (const seq of sequences) {
-    const sequence = await prisma.document_sequences.findFirst({
-      where: { point_of_sale: seq.point_of_sale, prefix: seq.prefix },
-    });
-
-    if (!sequence) continue;
-
-    // Find matching document types
-    const where: any = { category: seq.forCategory };
-    if (seq.direction) where.direction = seq.direction;
-    if (seq.letterType) where.letter_type = seq.letterType;
-
-    const docTypes = await prisma.document_types.findMany({ where });
-
-    for (const dt of docTypes) {
-      const existingLink = await prisma.document_type_sequences.findFirst({
-        where: { document_type_id: dt.id, sequence_id: sequence.id },
-      });
-
-      if (existingLink) continue;
-
-      await prisma.document_type_sequences.create({
-        data: {
-          document_type_id: dt.id,
-          sequence_id: sequence.id,
-          is_default: true,
-        },
-      });
-      console.log(`  ✓ ${dt.code} → ${seq.prefix}`);
-    }
-  }
+  // 2. Reparar y completar secuencias sin compartir contadores entre tipos.
+  console.log('\nReparando y completando secuencias documentales...');
+  await executeSeedSql(
+    connectionString,
+    [SQL_REPAIR_DOCUMENT_SEQUENCES, SQL_DOCUMENT_SEQUENCES, SQL_LINK_SEQUENCES].join('\n'),
+  );
 
   console.log('\nDocument types seed completado.');
 }

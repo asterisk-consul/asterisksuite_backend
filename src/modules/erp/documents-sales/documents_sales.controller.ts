@@ -106,6 +106,12 @@ export class DocumentsSalesController {
     return this.service.findPending(partyId);
   }
 
+  @Get(':id/stock-availability')
+  async getStockAvailability(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'read');
+    return this.service.getSalesOrderAvailability(id);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'read');

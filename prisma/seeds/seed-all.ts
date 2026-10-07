@@ -22,6 +22,7 @@ import {
   SQL_DOCUMENT_TYPE_TAXES,
   SQL_BANK_CONCEPTS,
   SQL_DOCUMENT_SEQUENCES,
+  SQL_REPAIR_DOCUMENT_SEQUENCES,
   SQL_LINK_SEQUENCES,
   SQL_UNITS,
   RBAC_PERMISSIONS,
@@ -100,6 +101,8 @@ async function main() {
   await runSql('Document types ↔ impuestos', SQL_DOCUMENT_TYPE_TAXES)
 
   // 7. Secuencias de documentos
+  await runSql('Reparar secuencias compartidas existentes', SQL_REPAIR_DOCUMENT_SEQUENCES)
+
   await runSql('Secuencias de documentos', SQL_DOCUMENT_SEQUENCES)
 
   // 8. Vincular document_types ↔ secuencias

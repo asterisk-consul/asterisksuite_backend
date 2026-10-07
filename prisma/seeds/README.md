@@ -36,6 +36,15 @@ npx tsx prisma/seeds/seed-all.ts dev
 npx tsx prisma/seeds/seed-all.ts avanzia
 ```
 
+Para reparar únicamente las secuencias documentales de una base existente:
+
+```bash
+npx tsx prisma/seeds/document-sequences.seed.ts dev
+```
+
+Este seed separa las series compartidas, conserva documentos y autorizaciones
+fiscales, y nunca reduce el contador aunque existan comprobantes eliminados.
+
 El nombre del tenant se usa para construir el nombre de la base de datos: `{tenant}_db`. Por ejemplo, `npx tsx prisma/seeds/seed-all.ts dev` se conecta a `dev_db`.
 
 ## Datos que crea
