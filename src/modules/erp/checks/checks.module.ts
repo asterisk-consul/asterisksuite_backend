@@ -3,9 +3,10 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { ChecksController } from './checks.controller';
 import { ChecksService } from './checks.service';
 import { CheckNotificationScheduler } from './schedulers/check-notification.scheduler';
+import { BankMovementsModule } from '../bank-movements/bank-movements.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, BankMovementsModule],
   controllers: [ChecksController],
   providers: [ChecksService, CheckNotificationScheduler],
   exports: [ChecksService],

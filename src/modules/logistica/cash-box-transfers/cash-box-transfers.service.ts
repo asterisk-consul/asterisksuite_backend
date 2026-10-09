@@ -1,11 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCashBoxTransferDto } from './dto/create-cash-box-transfer.dto';
-import { recalculateBankAccountLedger } from '@/modules/erp/bank-accounts/bank-account-ledger';
+import { BankMovementsService } from '@/modules/erp/bank-movements/bank-movements.service';
 
 @Injectable()
 export class CashBoxTransfersService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private bankMovements: BankMovementsService,
+  ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
   }
@@ -139,8 +142,7 @@ export class CashBoxTransfersService {
       await this.updateCashBoxBalance(transfer.source_id, transfer.currency_code, -sourceAmount);
       await this.createMovement(transfer.source_id, transfer.session_id, 'TRANSFER', -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId, sourceBalanceBefore);
     } else {
-      await this.updateBankAccountBalance(transfer.source_id, -sourceAmount);
-      await this.createBankMovement(transfer.source_id, 'TRANSFER', -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId, sourceBalanceBefore);
+      await this.createBankMovement(transfer.source_id, -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId);
     }
 
     // Sumar al destino
@@ -148,32 +150,20 @@ export class CashBoxTransfersService {
       await this.updateCashBoxBalance(transfer.dest_id, destCurrencyCode, destAmount);
       await this.createMovement(transfer.dest_id, destSessionId, 'TRANSFER', destAmount, destCurrencyCode, 'Transferencia entrante', userId, destBalanceBefore);
     } else {
-      await this.updateBankAccountBalance(transfer.dest_id, destAmount);
-      await this.createBankMovement(transfer.dest_id, 'TRANSFER', destAmount, destCurrencyCode, 'Transferencia entrante', userId, destBalanceBefore);
+      await this.createBankMovement(transfer.dest_id, destAmount, destCurrencyCode, 'Transferencia entrante', userId);
     }
   }
 
-  private async updateBankAccountBalance(accountId: string, delta: number) {
-    await this.prisma.bank_accounts.update({
-      where: { id: accountId },
-      data: { balance: { increment: delta } },
+  private async createBankMovement(bankAccountId: string, amount: number, currencyCode: string, description: string, userId: string) {
+    await this.bankMovements.addMovement({
+      bankAccountId,
+      type: 'TRANSFER',
+      nature: amount < 0 ? 'DEBIT' : 'CREDIT',
+      amount,
+      currencyCode,
+      description,
+      userId,
     });
-  }
-
-  private async createBankMovement(bankAccountId: string, type: string, amount: number, currencyCode: string, description: string, userId: string, balanceBefore: number) {
-    await this.prisma.bank_account_movements.create({
-      data: {
-        bank_account_id: bankAccountId,
-        type: type as any,
-        amount,
-        currency_code: currencyCode,
-        balance_before: balanceBefore,
-        balance_after: balanceBefore + amount,
-        description,
-        created_by: userId,
-      },
-    });
-    await recalculateBankAccountLedger(this.prisma, bankAccountId);
   }
 
   private async updateCashBoxBalance(cashBoxId: string, currencyCode: string, delta: number) {

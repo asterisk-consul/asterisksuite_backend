@@ -3,14 +3,17 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
 import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
 import { parseLocalDateTime } from '@/common/utils/dates';
-import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
+import { BankMovementsService } from '../bank-movements/bank-movements.service';
 
 @Injectable()
 export class HrService {
   private readonly logger = new Logger(HrService.name);
 
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private bankMovements: BankMovementsService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -347,11 +350,24 @@ export class HrService {
     const before = bank.balance.toNumber();
     const after = isOutflow ? before - amount : before + amount;
     if (isOutflow && after < 0) throw new BadRequestException('Saldo insuficiente en la cuenta bancaria');
-    await prisma.bank_account_movements.create({
-      data: { ...commonData, bank_account_id: bank.id, balance_before: before, balance_after: after },
-    });
-    await prisma.bank_accounts.update({ where: { id: bank.id }, data: { balance: after } });
-    await recalculateBankAccountLedger(prisma, bank.id);
+    await this.bankMovements.addMovement(
+      {
+        bankAccountId: bank.id,
+        type: isOutflow ? 'PAYMENT' : 'COLLECTION',
+        nature: isOutflow ? 'DEBIT' : 'CREDIT',
+        amount: isOutflow ? -amount : amount,
+        currencyCode: vale.currency_code,
+        exchangeRate: vale.exchange_rate ? Number(vale.exchange_rate) : null,
+        rateType: vale.rate_type ?? null,
+        convertedAmount: vale.converted_amount ? Number(vale.converted_amount) : null,
+        description: description.substring(0, 255),
+        referenceType: 'hr_vale',
+        referenceId: vale.id,
+        date: vale.date,
+        userId,
+      },
+      prisma,
+    );
   }
 
   async cancelVale(id: string, userId: string) {
@@ -474,28 +490,22 @@ export class HrService {
     if (bankMovement) {
       const bank = await this.prisma.bank_accounts.findUnique({ where: { id: bankMovement.bank_account_id } });
       if (!bank) return;
-      const before = bank.balance.toNumber();
-      const after = originalWasOutflow ? before + amount : before - amount;
-      await this.prisma.bank_account_movements.create({
-        data: {
-          bank_account_id: bank.id,
-          type: reversalType,
-          amount: bankMovement.amount,
-          currency_code: bankMovement.currency_code,
-          exchange_rate: bankMovement.exchange_rate,
-          rate_type: bankMovement.rate_type,
-          converted_amount: bankMovement.converted_amount,
-          balance_before: before,
-          balance_after: after,
-          description,
-          reference_type: 'hr_vale_cancellation',
-          reference_id: vale.id,
-          date: new Date(),
-          created_by: userId,
-        },
+      const reversalAmount = -Number(bankMovement.amount);
+      await this.bankMovements.addMovement({
+        bankAccountId: bank.id,
+        type: reversalType,
+        nature: reversalAmount < 0 ? 'DEBIT' : 'CREDIT',
+        amount: reversalAmount,
+        currencyCode: bankMovement.currency_code,
+        exchangeRate: bankMovement.exchange_rate ? Number(bankMovement.exchange_rate) : null,
+        rateType: bankMovement.rate_type ?? null,
+        convertedAmount: bankMovement.converted_amount ? Number(bankMovement.converted_amount) : null,
+        description,
+        referenceType: 'hr_vale_cancellation',
+        referenceId: vale.id,
+        date: new Date(),
+        userId,
       });
-      await this.prisma.bank_accounts.update({ where: { id: bank.id }, data: { balance: after } });
-      await recalculateBankAccountLedger(this.prisma, bank.id);
     }
   }
 

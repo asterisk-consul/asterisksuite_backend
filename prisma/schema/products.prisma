@@ -57,47 +57,47 @@ model products {
   last_cost_calculated_at  DateTime?
   cost_template_id         String?           @db.Uuid
   unit_id                  String?           @db.Uuid
-    purchase_unit_id         String?           @db.Uuid
-    purchase_to_stock_factor Decimal           @default(1) @db.Decimal(18, 6)
+  purchase_unit_id         String?           @db.Uuid
+  purchase_to_stock_factor Decimal           @default(1) @db.Decimal(18, 6)
 
   // RELACIONES 
-  product_variants            product_variants[]
+  product_variants             product_variants[]
   //articulo raiz no solo el padre
-  parent_components           product_components[]          @relation("parent_product")
-  child_components            product_components[]          @relation("child_product")
-  product_categories          product_categories[]
-  product_tags                product_tags[]
-  product_attribute_values    product_attribute_values[]
+  parent_components            product_components[]           @relation("parent_product")
+  child_components             product_components[]           @relation("child_product")
+  product_categories           product_categories[]
+  product_tags                 product_tags[]
+  product_attribute_values     product_attribute_values[]
   //
-  current_cost                Decimal?                      @db.Decimal(15, 2)
-  current_cost_currency_id    String?                       @db.Uuid
-  current_cost_currency       currencies?                   @relation("product_current_cost_currency", fields: [current_cost_currency_id], references: [id])
-  income_account              accounts?                     @relation("product_income_account", fields: [income_account_id], references: [id])
-  expense_account             accounts?                     @relation("product_expense_account", fields: [expense_account_id], references: [id])
-  inventory_account           accounts?                     @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
-  document_items              document_items[]
-  dispatch_order_items        dispatch_order_items[]
-  pallet_items                pallet_items[]
-  picking_items               picking_items[]
-  product_party_prices        product_party_prices[]
-  product_party_price_history product_party_price_history[]
-  product_price               product_price[]
-  product_taxes               product_taxes[]
-  tax_category                tax_categories?               @relation(fields: [tax_category_id], references: [id])
-  transfer_rate               transfer_rates?               @relation(fields: [rate_id], references: [id])
-  warehouse_stock             warehouse_stock[]
-  stock_reservations          stock_reservations[]
-  warehouse_stock_movements   warehouse_stock_movements[]
+  current_cost                 Decimal?                       @db.Decimal(15, 2)
+  current_cost_currency_id     String?                        @db.Uuid
+  current_cost_currency        currencies?                    @relation("product_current_cost_currency", fields: [current_cost_currency_id], references: [id])
+  income_account               accounts?                      @relation("product_income_account", fields: [income_account_id], references: [id])
+  expense_account              accounts?                      @relation("product_expense_account", fields: [expense_account_id], references: [id])
+  inventory_account            accounts?                      @relation("product_inventory_account", fields: [inventory_account_id], references: [id])
+  document_items               document_items[]
+  dispatch_order_items         dispatch_order_items[]
+  pallet_items                 pallet_items[]
+  picking_items                picking_items[]
+  product_party_prices         product_party_prices[]
+  product_party_price_history  product_party_price_history[]
+  product_price                product_price[]
+  product_taxes                product_taxes[]
+  tax_category                 tax_categories?                @relation(fields: [tax_category_id], references: [id])
+  transfer_rate                transfer_rates?                @relation(fields: [rate_id], references: [id])
+  warehouse_stock              warehouse_stock[]
+  stock_reservations           stock_reservations[]
+  warehouse_stock_movements    warehouse_stock_movements[]
   stock_replenishment_policies stock_replenishment_policies[]
-  product_costs               product_costs[]
-  productCostBreakdowns       product_cost_breakdowns[]
-  cost_template               cost_templates?               @relation(fields: [cost_template_id], references: [id])
-  maintenance_parts           maintenance_parts[]
-  tires                       tires[]
-  productStructureVersions    product_structure_versions[]
-  unit                        units?                        @relation(fields: [unit_id], references: [id])
-  product_suppliers           product_suppliers[]
-  product_list_prices         product_list_prices[]
+  product_costs                product_costs[]
+  productCostBreakdowns        product_cost_breakdowns[]
+  cost_template                cost_templates?                @relation(fields: [cost_template_id], references: [id])
+  maintenance_parts            maintenance_parts[]
+  tires                        tires[]
+  productStructureVersions     product_structure_versions[]
+  unit                         units?                         @relation(fields: [unit_id], references: [id])
+  product_suppliers            product_suppliers[]
+  product_list_prices          product_list_prices[]
 
   @@index([current_cost_currency_id])
   @@schema("tenant")
@@ -140,8 +140,8 @@ model product_variants {
   updated_by               String?                    @db.Uuid
   deleted_by               String?                    @db.Uuid
   products                 products                   @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  product_components       product_components[] @relation("component_input_variant")
-  structure_components     product_components[] @relation("component_structure_variant")
+  product_components       product_components[]       @relation("component_input_variant")
+  structure_components     product_components[]       @relation("component_structure_variant")
   product_attribute_values product_attribute_values[]
   productCostBreakdowns    product_cost_breakdowns[]
   productVariantPrices     product_variant_prices[]

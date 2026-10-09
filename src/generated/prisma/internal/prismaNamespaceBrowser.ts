@@ -82,6 +82,9 @@ export const ModelName = {
   entity_photos: 'entity_photos',
   files: 'files',
   intake_records: 'intake_records',
+  financial_investments: 'financial_investments',
+  financial_investment_valuations: 'financial_investment_valuations',
+  financial_investment_transactions: 'financial_investment_transactions',
   tax_jurisdictions: 'tax_jurisdictions',
   withholding_concepts: 'withholding_concepts',
   business_party_withholding_profiles: 'business_party_withholding_profiles',
@@ -185,8 +188,11 @@ export const ModelName = {
   treasury_obligation_templates: 'treasury_obligation_templates',
   treasury_obligations: 'treasury_obligations',
   bank_accounts: 'bank_accounts',
+  bank_charge_rules: 'bank_charge_rules',
   bank_account_user_roles: 'bank_account_user_roles',
+  bank_operations: 'bank_operations',
   bank_account_movements: 'bank_account_movements',
+  payment_bank_charges: 'payment_bank_charges',
   cash_boxes: 'cash_boxes',
   cash_box_sessions: 'cash_box_sessions',
   cash_box_balances: 'cash_box_balances',
@@ -269,12 +275,18 @@ export const Bank_conceptsScalarFieldEnum = {
   name: 'name',
   description: 'description',
   concept_type: 'concept_type',
+  nature: 'nature',
   accounting_account: 'accounting_account',
   calculates_iva: 'calculates_iva',
   iva_rate: 'iva_rate',
   generates_credit: 'generates_credit',
   impacts_iva_book: 'impacts_iva_book',
   default_percentage: 'default_percentage',
+  affects_balance: 'affects_balance',
+  requires_receipt: 'requires_receipt',
+  available_manual: 'available_manual',
+  available_payments: 'available_payments',
+  available_settlements: 'available_settlements',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -863,6 +875,77 @@ export const Intake_recordsScalarFieldEnum = {
 } as const
 
 export type Intake_recordsScalarFieldEnum = (typeof Intake_recordsScalarFieldEnum)[keyof typeof Intake_recordsScalarFieldEnum]
+
+
+export const Financial_investmentsScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  name: 'name',
+  institution_name: 'institution_name',
+  currency_code: 'currency_code',
+  source_bank_account_id: 'source_bank_account_id',
+  destination_bank_account_id: 'destination_bank_account_id',
+  capital_amount: 'capital_amount',
+  start_date: 'start_date',
+  maturity_date: 'maturity_date',
+  annual_nominal_rate: 'annual_nominal_rate',
+  day_count_basis: 'day_count_basis',
+  liquidity_type: 'liquidity_type',
+  early_cancel_available_from: 'early_cancel_available_from',
+  early_cancel_annual_rate: 'early_cancel_annual_rate',
+  units: 'units',
+  initial_unit_value: 'initial_unit_value',
+  current_unit_value: 'current_unit_value',
+  current_unit_value_date: 'current_unit_value_date',
+  expected_final_amount: 'expected_final_amount',
+  realized_return: 'realized_return',
+  auto_renew: 'auto_renew',
+  reference: 'reference',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Financial_investmentsScalarFieldEnum = (typeof Financial_investmentsScalarFieldEnum)[keyof typeof Financial_investmentsScalarFieldEnum]
+
+
+export const Financial_investment_valuationsScalarFieldEnum = {
+  id: 'id',
+  investment_id: 'investment_id',
+  valuation_date: 'valuation_date',
+  unit_value: 'unit_value',
+  units: 'units',
+  total_value: 'total_value',
+  unrealized_return: 'unrealized_return',
+  notes: 'notes',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Financial_investment_valuationsScalarFieldEnum = (typeof Financial_investment_valuationsScalarFieldEnum)[keyof typeof Financial_investment_valuationsScalarFieldEnum]
+
+
+export const Financial_investment_transactionsScalarFieldEnum = {
+  id: 'id',
+  investment_id: 'investment_id',
+  type: 'type',
+  date: 'date',
+  amount: 'amount',
+  capital_amount: 'capital_amount',
+  return_amount: 'return_amount',
+  bank_account_movement_id: 'bank_account_movement_id',
+  reference: 'reference',
+  notes: 'notes',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Financial_investment_transactionsScalarFieldEnum = (typeof Financial_investment_transactionsScalarFieldEnum)[keyof typeof Financial_investment_transactionsScalarFieldEnum]
 
 
 export const Tax_jurisdictionsScalarFieldEnum = {
@@ -2844,6 +2927,34 @@ export const Bank_accountsScalarFieldEnum = {
 export type Bank_accountsScalarFieldEnum = (typeof Bank_accountsScalarFieldEnum)[keyof typeof Bank_accountsScalarFieldEnum]
 
 
+export const Bank_charge_rulesScalarFieldEnum = {
+  id: 'id',
+  bank_account_id: 'bank_account_id',
+  bank_concept_id: 'bank_concept_id',
+  name: 'name',
+  trigger: 'trigger',
+  calculation_type: 'calculation_type',
+  fixed_amount: 'fixed_amount',
+  percentage: 'percentage',
+  minimum_amount: 'minimum_amount',
+  maximum_amount: 'maximum_amount',
+  currency_code: 'currency_code',
+  valid_from: 'valid_from',
+  valid_until: 'valid_until',
+  priority: 'priority',
+  editable: 'editable',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_charge_rulesScalarFieldEnum = (typeof Bank_charge_rulesScalarFieldEnum)[keyof typeof Bank_charge_rulesScalarFieldEnum]
+
+
 export const Bank_account_user_rolesScalarFieldEnum = {
   id: 'id',
   bank_account_id: 'bank_account_id',
@@ -2860,21 +2971,60 @@ export const Bank_account_user_rolesScalarFieldEnum = {
 export type Bank_account_user_rolesScalarFieldEnum = (typeof Bank_account_user_rolesScalarFieldEnum)[keyof typeof Bank_account_user_rolesScalarFieldEnum]
 
 
+export const Bank_operationsScalarFieldEnum = {
+  id: 'id',
+  bank_account_id: 'bank_account_id',
+  operation_type: 'operation_type',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  date: 'date',
+  currency_code: 'currency_code',
+  gross_amount: 'gross_amount',
+  charges_amount: 'charges_amount',
+  retentions_amount: 'retentions_amount',
+  net_amount: 'net_amount',
+  description: 'description',
+  reference: 'reference',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_operationsScalarFieldEnum = (typeof Bank_operationsScalarFieldEnum)[keyof typeof Bank_operationsScalarFieldEnum]
+
+
 export const Bank_account_movementsScalarFieldEnum = {
   id: 'id',
   bank_account_id: 'bank_account_id',
+  bank_operation_id: 'bank_operation_id',
   type: 'type',
+  nature: 'nature',
   amount: 'amount',
+  base_amount: 'base_amount',
+  tax_amount: 'tax_amount',
+  total_amount: 'total_amount',
   currency_code: 'currency_code',
   exchange_rate: 'exchange_rate',
   rate_type: 'rate_type',
   converted_amount: 'converted_amount',
+  amount_account_currency: 'amount_account_currency',
   balance_before: 'balance_before',
   balance_after: 'balance_after',
   description: 'description',
+  reference: 'reference',
   reference_type: 'reference_type',
   reference_id: 'reference_id',
+  attachment_file_id: 'attachment_file_id',
+  bank_concept_id: 'bank_concept_id',
+  concept_code_snapshot: 'concept_code_snapshot',
+  concept_name_snapshot: 'concept_name_snapshot',
   payment_id: 'payment_id',
+  card_settlement_id: 'card_settlement_id',
+  document_date: 'document_date',
+  effective_date: 'effective_date',
   date: 'date',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -2885,6 +3035,36 @@ export const Bank_account_movementsScalarFieldEnum = {
 } as const
 
 export type Bank_account_movementsScalarFieldEnum = (typeof Bank_account_movementsScalarFieldEnum)[keyof typeof Bank_account_movementsScalarFieldEnum]
+
+
+export const Payment_bank_chargesScalarFieldEnum = {
+  id: 'id',
+  payment_id: 'payment_id',
+  bank_operation_id: 'bank_operation_id',
+  bank_account_movement_id: 'bank_account_movement_id',
+  bank_concept_id: 'bank_concept_id',
+  concept_code_snapshot: 'concept_code_snapshot',
+  concept_name_snapshot: 'concept_name_snapshot',
+  nature: 'nature',
+  base_amount: 'base_amount',
+  percentage_applied: 'percentage_applied',
+  tax_amount: 'tax_amount',
+  total_amount: 'total_amount',
+  affects_balance: 'affects_balance',
+  jurisdiction: 'jurisdiction',
+  tax_code: 'tax_code',
+  certificate_number: 'certificate_number',
+  period: 'period',
+  reference: 'reference',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Payment_bank_chargesScalarFieldEnum = (typeof Payment_bank_chargesScalarFieldEnum)[keyof typeof Payment_bank_chargesScalarFieldEnum]
 
 
 export const Cash_boxesScalarFieldEnum = {

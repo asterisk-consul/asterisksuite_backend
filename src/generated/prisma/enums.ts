@@ -231,6 +231,111 @@ export const AccountEntryType = {
 export type AccountEntryType = (typeof AccountEntryType)[keyof typeof AccountEntryType]
 
 
+export const BankMovementNature = {
+  DEBIT: 'DEBIT',
+  CREDIT: 'CREDIT'
+} as const
+
+export type BankMovementNature = (typeof BankMovementNature)[keyof typeof BankMovementNature]
+
+
+export const BankMovementType = {
+  OPENING_BALANCE: 'OPENING_BALANCE',
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  TRANSFER: 'TRANSFER',
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  CHECK_ISSUED: 'CHECK_ISSUED',
+  CHECK_RECEIVED: 'CHECK_RECEIVED',
+  FEE: 'FEE',
+  INTEREST: 'INTEREST',
+  TAX: 'TAX',
+  RETENTION: 'RETENTION',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type BankMovementType = (typeof BankMovementType)[keyof typeof BankMovementType]
+
+
+export const BankOperationType = {
+  MANUAL: 'MANUAL',
+  PAYMENT: 'PAYMENT',
+  COLLECTION: 'COLLECTION',
+  CARD_SETTLEMENT: 'CARD_SETTLEMENT',
+  CHECK: 'CHECK',
+  CASH_TRANSFER: 'CASH_TRANSFER',
+  HR_VALE: 'HR_VALE',
+  INVESTMENT: 'INVESTMENT'
+} as const
+
+export type BankOperationType = (typeof BankOperationType)[keyof typeof BankOperationType]
+
+
+export const BankChargeRuleTrigger = {
+  BANK_PAYMENT: 'BANK_PAYMENT',
+  BANK_COLLECTION: 'BANK_COLLECTION',
+  CARD_SETTLEMENT: 'CARD_SETTLEMENT',
+  CHECK_DEPOSIT: 'CHECK_DEPOSIT',
+  CHECK_REJECTION: 'CHECK_REJECTION',
+  INVESTMENT_REDEMPTION: 'INVESTMENT_REDEMPTION',
+  FIXED_TERM_EARLY_CANCEL: 'FIXED_TERM_EARLY_CANCEL'
+} as const
+
+export type BankChargeRuleTrigger = (typeof BankChargeRuleTrigger)[keyof typeof BankChargeRuleTrigger]
+
+
+export const BankChargeCalculationType = {
+  FIXED: 'FIXED',
+  PERCENTAGE: 'PERCENTAGE',
+  FIXED_PLUS_PERCENTAGE: 'FIXED_PLUS_PERCENTAGE'
+} as const
+
+export type BankChargeCalculationType = (typeof BankChargeCalculationType)[keyof typeof BankChargeCalculationType]
+
+
+export const FinancialInvestmentType = {
+  FIXED_TERM: 'FIXED_TERM',
+  INVESTMENT_FUND: 'INVESTMENT_FUND',
+  OTHER: 'OTHER'
+} as const
+
+export type FinancialInvestmentType = (typeof FinancialInvestmentType)[keyof typeof FinancialInvestmentType]
+
+
+export const FinancialInvestmentStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  MATURED_PENDING_SETTLEMENT: 'MATURED_PENDING_SETTLEMENT',
+  REDEMPTION_REQUESTED: 'REDEMPTION_REQUESTED',
+  REDEEMED: 'REDEEMED',
+  RENEWED: 'RENEWED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type FinancialInvestmentStatus = (typeof FinancialInvestmentStatus)[keyof typeof FinancialInvestmentStatus]
+
+
+export const FixedTermLiquidityType = {
+  NON_CANCELABLE: 'NON_CANCELABLE',
+  PRE_CANCELABLE: 'PRE_CANCELABLE'
+} as const
+
+export type FixedTermLiquidityType = (typeof FixedTermLiquidityType)[keyof typeof FixedTermLiquidityType]
+
+
+export const InvestmentTransactionType = {
+  SUBSCRIPTION: 'SUBSCRIPTION',
+  VALUATION: 'VALUATION',
+  REDEMPTION: 'REDEMPTION',
+  MATURITY: 'MATURITY',
+  RENEWAL: 'RENEWAL',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type InvestmentTransactionType = (typeof InvestmentTransactionType)[keyof typeof InvestmentTransactionType]
+
+
 export const CashBoxType = {
   MAIN: 'MAIN',
   FIXED: 'FIXED',

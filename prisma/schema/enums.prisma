@@ -204,6 +204,104 @@ enum AccountEntryType {
   @@schema("tenant")
 }
 
+// ── Dominio bancario (movimientos propios, no cuentas corrientes) ──
+
+enum BankMovementNature {
+  DEBIT
+  CREDIT
+
+  @@schema("tenant")
+}
+
+enum BankMovementType {
+  OPENING_BALANCE
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+  PAYMENT
+  COLLECTION
+  CHECK_ISSUED
+  CHECK_RECEIVED
+  FEE
+  INTEREST
+  TAX
+  RETENTION
+  ADJUSTMENT
+
+  @@schema("tenant")
+}
+
+enum BankOperationType {
+  MANUAL
+  PAYMENT
+  COLLECTION
+  CARD_SETTLEMENT
+  CHECK
+  CASH_TRANSFER
+  HR_VALE
+  INVESTMENT
+
+  @@schema("tenant")
+}
+
+enum BankChargeRuleTrigger {
+  BANK_PAYMENT
+  BANK_COLLECTION
+  CARD_SETTLEMENT
+  CHECK_DEPOSIT
+  CHECK_REJECTION
+  INVESTMENT_REDEMPTION
+  FIXED_TERM_EARLY_CANCEL
+
+  @@schema("tenant")
+}
+
+enum BankChargeCalculationType {
+  FIXED
+  PERCENTAGE
+  FIXED_PLUS_PERCENTAGE
+
+  @@schema("tenant")
+}
+
+enum FinancialInvestmentType {
+  FIXED_TERM
+  INVESTMENT_FUND
+  OTHER
+
+  @@schema("tenant")
+}
+
+enum FinancialInvestmentStatus {
+  DRAFT
+  ACTIVE
+  MATURED_PENDING_SETTLEMENT
+  REDEMPTION_REQUESTED
+  REDEEMED
+  RENEWED
+  CANCELLED
+
+  @@schema("tenant")
+}
+
+enum FixedTermLiquidityType {
+  NON_CANCELABLE
+  PRE_CANCELABLE
+
+  @@schema("tenant")
+}
+
+enum InvestmentTransactionType {
+  SUBSCRIPTION
+  VALUATION
+  REDEMPTION
+  MATURITY
+  RENEWAL
+  ADJUSTMENT
+
+  @@schema("tenant")
+}
+
 enum CashBoxType {
   MAIN
   FIXED

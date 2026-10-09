@@ -133,6 +133,18 @@ export const RBAC_PERMISSIONS = [
   { code: 'bank_accounts.update', description: 'Editar cuentas bancarias' },
   { code: 'bank_accounts.delete', description: 'Eliminar cuentas bancarias' },
 
+  // ─── Treasury - Bank Concepts & Movements ─────────────────
+  { code: 'bank_concepts.read', description: 'Ver conceptos bancarios' },
+  { code: 'bank_concepts.manage', description: 'Administrar conceptos bancarios' },
+  { code: 'bank_movements.create', description: 'Registrar movimientos bancarios' },
+  { code: 'bank_movements.cancel', description: 'Anular movimientos bancarios' },
+  { code: 'bank_expenses.read', description: 'Ver reporte de gastos bancarios' },
+  { code: 'bank_expenses.export', description: 'Exportar reporte de gastos bancarios' },
+  { code: 'financial_investments.read', description: 'Ver inversiones financieras' },
+  { code: 'financial_investments.create', description: 'Constituir inversiones financieras' },
+  { code: 'financial_investments.update', description: 'Actualizar valuaciones de inversiones' },
+  { code: 'financial_investments.settle', description: 'Rescatar, liquidar o renovar inversiones' },
+
   // ─── Treasury - Payments ──────────────────────────────────
   { code: 'payments.read', description: 'Ver pagos' },
   { code: 'payments.create', description: 'Crear pagos' },
@@ -478,6 +490,8 @@ export const RBAC_ROLES = [
       'cash_boxes.read', 'cash_boxes.open', 'cash_boxes.close',
       'cash_box_movements.read', 'cash_box_renditions.read', 'cash_box_transfers.read',
       'bank_accounts.read', 'payments.read', 'payments.create', 'payments.update',
+      'bank_concepts.read', 'bank_movements.create', 'bank_expenses.read',
+      'financial_investments.read',
       'intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete', 'intake.process',
       'business_parties.read', 'contacts.read', 'locations.read',
       'product_variants.read', 'product_components.read',
@@ -743,8 +757,8 @@ ON CONFLICT (code) DO UPDATE SET
 -- Saldos iniciales
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
 VALUES
-  (gen_random_uuid(), 'SI-C', 'Saldo Inicial (Cliente)', 1, 'OPENING_BALANCE', null, null, false, false, false, true, false, false, true),
-  (gen_random_uuid(), 'SI-P', 'Saldo Inicial (Proveedor)', -1, 'OPENING_BALANCE', null, null, false, false, false, true, false, false, true)
+  (gen_random_uuid(), 'SI-C', 'Saldo Inicial (Cliente)', 1, 'OPENING_BALANCE', null, null, false, false, false, true, false, true, true),
+  (gen_random_uuid(), 'SI-P', 'Saldo Inicial (Proveedor)', -1, 'OPENING_BALANCE', null, null, false, false, false, true, false, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   affects_payment = EXCLUDED.affects_payment;
@@ -822,23 +836,36 @@ ON CONFLICT DO NOTHING;
 // ════════════════════════════════════════════════════════════════
 
 export const SQL_BANK_CONCEPTS = `
-INSERT INTO tenant.bank_concepts (id, code, name, description, concept_type, accounting_account, calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage, is_active)
+INSERT INTO tenant.bank_concepts (
+  id, code, name, description, concept_type, nature, accounting_account,
+  calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage,
+  affects_balance, requires_receipt, available_manual, available_payments, available_settlements, is_active
+)
 VALUES
-  (gen_random_uuid(), 'COMISION', 'Comisión bancaria', 'Comisión por servicios bancarios', 'COMMISSION', '6201', true, 21.000, true, true, 0.800, true),
-  (gen_random_uuid(), 'COMISION_DEP', 'Comisión por depósito', 'Comisión al depositar cheques o efectivo', 'COMMISSION', '6201', true, 21.000, true, true, 0.500, true),
-  (gen_random_uuid(), 'COMISION_TRANSF', 'Comisión por transferencia', 'Comisión al transferir fondos', 'COMMISSION', '6201', true, 21.000, true, true, 0.500, true),
-  (gen_random_uuid(), 'COMISION_MANT', 'Comisión por mantenimiento', 'Cargo fijo mensual de mantenimiento', 'COMMISSION', '6201', true, 21.000, true, true, NULL, true),
-  (gen_random_uuid(), 'IMP_DEBITOS', 'Imp. Débitos y Créditos', 'Impuesto a los débitos y créditos bancarios', 'TAX', '6202', false, NULL, false, false, 0.600, true),
-  (gen_random_uuid(), 'IMP_SELLOS', 'Imp. Sellos', 'Impuesto de sellos', 'TAX', '6202', false, NULL, false, false, 1.000, true),
-  (gen_random_uuid(), 'IMP_CHEQUE', 'Imp. al Cheque', 'Impuesto a los cheques', 'TAX', '6202', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'GASTO_ADMIN', 'Gasto administrativo', 'Gastos varios de administración bancaria', 'EXPENSE', '6203', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'GASTO_COBRANZA', 'Gasto de cobranza', 'Gastos por cobranza de cheques', 'EXPENSE', '6203', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'INTERES_DESC', 'Interés por descubierto', 'Interés por descubierto bancario', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'INTERES_PUNT', 'Interés punitorio', 'Interés punitorio por mora', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'INTERES_CAP', 'Interés capitalizable', 'Interés que se capitaliza', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'AJUSTE_BCRA', 'Ajuste BCRA', 'Ajuste por resolución BCRA', 'ADJUSTMENT', '6205', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'DIF_CAMBIO', 'Diferencia de cambio', 'Diferencia por tipo de cambio', 'ADJUSTMENT', '6205', false, NULL, false, false, NULL, true)
-ON CONFLICT DO NOTHING;
+  (gen_random_uuid(), 'COMISION', 'Comisión bancaria', 'Comisión por servicios bancarios', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, 0.800, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_DEP', 'Comisión por depósito', 'Comisión al depositar cheques o efectivo', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, 0.500, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_TRANSF', 'Comisión por transferencia', 'Comisión al transferir fondos', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, 0.500, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_MANT', 'Comisión por mantenimiento', 'Cargo fijo mensual de mantenimiento', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, NULL, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_CARD', 'Comisión de acreditación', 'Comisión por acreditación de tarjetas', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, NULL, true, false, true, false, true, true),
+  (gen_random_uuid(), 'IMP_DEBITOS', 'Imp. Débitos y Créditos', 'Impuesto a los débitos y créditos bancarios', 'TAX', 'DEBIT', '6202', false, NULL, false, false, 0.600, true, false, true, true, true, true),
+  (gen_random_uuid(), 'IMP_SELLOS', 'Imp. Sellos', 'Impuesto de sellos', 'TAX', 'DEBIT', '6202', false, NULL, false, false, 1.000, true, false, true, true, true, true),
+  (gen_random_uuid(), 'IMP_CHEQUE', 'Imp. al Cheque', 'Impuesto a los cheques', 'TAX', 'DEBIT', '6202', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'GASTO_ADMIN', 'Gasto administrativo', 'Gastos varios de administración bancaria', 'EXPENSE', 'DEBIT', '6203', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'GASTO_COBRANZA', 'Gasto de cobranza', 'Gastos por cobranza de cheques', 'EXPENSE', 'DEBIT', '6203', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'INTERES_DESC', 'Interés por descubierto', 'Interés por descubierto bancario', 'INTEREST', 'DEBIT', '6204', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'INTERES_PUNT', 'Interés punitorio', 'Interés punitorio por mora', 'INTEREST', 'DEBIT', '6204', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'INTERES_CAP', 'Interés capitalizable', 'Interés que se capitaliza', 'INTEREST', 'DEBIT', '6204', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'RETENCION_BANCARIA', 'Retención bancaria', 'Retención sufrida aplicada por el banco', 'RETENTION', 'DEBIT', '6202', false, NULL, true, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'AJUSTE_BCRA', 'Ajuste BCRA', 'Ajuste por resolución BCRA', 'ADJUSTMENT', 'DEBIT', '6205', false, NULL, false, false, NULL, true, false, true, false, false, true),
+  (gen_random_uuid(), 'DIF_CAMBIO', 'Diferencia de cambio', 'Diferencia por tipo de cambio', 'ADJUSTMENT', 'DEBIT', '6205', false, NULL, false, false, NULL, true, false, true, false, false, true),
+  (gen_random_uuid(), 'ACRED_NO_IDENT', 'Acreditación no identificada', 'Crédito bancario pendiente de identificar', 'OTHER', 'CREDIT', NULL, false, NULL, false, false, NULL, true, false, true, false, false, true)
+ON CONFLICT (code) DO UPDATE SET
+  nature = EXCLUDED.nature,
+  affects_balance = EXCLUDED.affects_balance,
+  requires_receipt = EXCLUDED.requires_receipt,
+  available_manual = EXCLUDED.available_manual,
+  available_payments = EXCLUDED.available_payments,
+  available_settlements = EXCLUDED.available_settlements;
 `
 
 // ════════════════════════════════════════════════════════════════

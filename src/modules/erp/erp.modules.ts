@@ -12,6 +12,7 @@ import { SalesReportModule } from './documents-sales/sales-reports/sales_reports
 import { DocumentsTypesErpModule } from './document_types/documents-types.module';
 import { DocumentSequencesModule } from './document-sequences/document-sequences.module';
 import { BankConceptsModule } from './bank-concepts/bank-concepts.module';
+import { BankMovementsModule } from './bank-movements/bank-movements.module';
 import { PricingEngineModule } from './pricing/pricing-engine.module';
 import { ExchangeModule } from './pricing/exchange/exchange.module';
 import { ProductPricingModule } from './pricing/product-pricing/product-pricing.module';
@@ -38,6 +39,7 @@ import { ProductSuppliersModule } from './pricing/product-suppliers/product-supp
 import { PriceListsModule } from './pricing/price-lists/price-lists.module';
 import { ListPricesModule } from './pricing/list-prices/list-prices.module';
 import { ManagementReportsModule } from './management-reports/management-reports.module';
+import { FinancialInvestmentsModule } from './financial-investments/financial-investments.module';
 
 @Module({
   imports: [
@@ -51,6 +53,7 @@ import { ManagementReportsModule } from './management-reports/management-reports
     DocumentsTypesErpModule,
     DocumentSequencesModule,
     BankConceptsModule,
+    BankMovementsModule,
     PricingEngineModule,
     ExchangeModule,
     ProductPricingModule,
@@ -76,6 +79,7 @@ import { ManagementReportsModule } from './management-reports/management-reports
     PriceListsModule,
     ListPricesModule,
     ManagementReportsModule,
+    FinancialInvestmentsModule,
   ],
   exports: [
     AccountsModule,
@@ -88,6 +92,7 @@ import { ManagementReportsModule } from './management-reports/management-reports
     DocumentsTypesErpModule,
     DocumentSequencesModule,
     BankConceptsModule,
+    BankMovementsModule,
     PricingEngineModule,
     ExchangeModule,
     ProductPricingModule,
@@ -113,6 +118,7 @@ import { ManagementReportsModule } from './management-reports/management-reports
     PriceListsModule,
     ListPricesModule,
     ManagementReportsModule,
+    FinancialInvestmentsModule,
   ],
 })
 export class ErpModulesModule {}

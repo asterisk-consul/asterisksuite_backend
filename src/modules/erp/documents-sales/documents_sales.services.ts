@@ -1067,7 +1067,7 @@ export class DocumentsSalesService {
           { document_types: { direction: 1, affects_payment: true } },
           { commercial_operation_id: { not: null } },
         ],
-        status: 2,
+        status: { in: [2, 5] },
         deleted_at: null,
         ...(partyId ? { party_id: partyId } : {}),
       },
@@ -1087,6 +1087,8 @@ export class DocumentsSalesService {
     });
 
     return docs
+      .filter((d) => d.status === STATUS_CONFIRMED
+        || (d.document_types?.category === 'ORDER' && d.status === 5))
       .filter((d) => {
         const operation = d.commercial_operation;
         if (!operation) return true;
@@ -1569,6 +1571,22 @@ export class DocumentsSalesService {
         throw new BadRequestException('El documento no tiene ítems');
       }
 
+      // La confirmación es la única puerta válida para activar una OV. Sincronizar
+      // aquí evita que una operación creada mientras el total aún era cero deje
+      // la orden sin saldo cobrable.
+      if (category === 'ORDER' && doc.commercial_operation_id) {
+        await tx.commercial_operations.update({
+          where: { id: doc.commercial_operation_id },
+          data: {
+            ordered_total: doc.total,
+            party_id: doc.party_id,
+            currency_code: doc.currency_code,
+            updated_at: new Date(),
+            updated_by: userId,
+          },
+        });
+      }
+
       await tx.documents.update({
         where: { id },
         data: {
@@ -1799,8 +1817,17 @@ export class DocumentsSalesService {
   async cancel(id: string, userId: string) {
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
+      const category = doc.document_types?.category;
+      const cancelledStatus = category === 'ORDER'
+        ? 8
+        : category === 'QUOTE'
+          ? 6
+          : STATUS_CANCELLED;
 
-      if (doc.status === STATUS_CANCELLED) {
+      // La cancelación debe ser idempotente. Esto también repara documentos que
+      // llegaron al estado terminal por una transición histórica sin ejecutar
+      // la reversión contable.
+      if (doc.status === cancelledStatus) {
         await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
         return tx.documents.findUnique({ where: { id } });
       }
@@ -1857,7 +1884,7 @@ export class DocumentsSalesService {
       await tx.documents.update({
         where: { id },
         data: {
-          status: STATUS_CANCELLED,
+          status: cancelledStatus,
           updated_at: new Date(),
         },
       });
@@ -1867,7 +1894,6 @@ export class DocumentsSalesService {
         await this.stockReservations.restoreRemitoConsumption(tx, doc.id, userId);
       }
 
-      const category = doc.document_types?.category;
       if (category === 'ORDER' && doc.document_types?.direction === 1) {
         await this.stockReservations.releaseOrder(tx, doc.id, userId);
       }
@@ -2402,6 +2428,10 @@ export class DocumentsSalesService {
   // CHANGE STATUS (con validación de transiciones)
   // ─────────────────────────────────────────────
   async changeStatus(id: string, newStatus: number, userId: string) {
+    const guardedDocument = await this.findOne(id);
+    if (guardedDocument.document_types?.category === 'ORDER' && newStatus !== guardedDocument.status) {
+      throw new BadRequestException('Las órdenes de venta no permiten cambios manuales de estado. Usá Confirmar, Crear remito o Anular.');
+    }
     const doc = await this.findOne(id);
     const category = doc.document_types?.category;
 

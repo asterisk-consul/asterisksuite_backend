@@ -61,37 +61,37 @@ model document_item_taxes {
 }
 
 model document_items {
-  id                   String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  document_id          String                @db.Uuid
-  product_id           String?               @db.Uuid
-  variant_id           String?               @db.Uuid
-  warehouse_id         String?               @db.Uuid
-  quantity             Decimal               @db.Decimal(15, 3)
-  purchase_unit_id     String?               @db.Uuid
-  unit_conversion_factor Decimal             @default(1) @db.Decimal(18, 6)
-  stock_quantity       Decimal?              @db.Decimal(18, 6)
-  price                Decimal               @db.Decimal(15, 2)
-  unit_price           Decimal               @default(0) @db.Decimal(15, 2)
-  discount_percentage  Decimal               @default(0) @db.Decimal(8, 4)
-  exchange_rate        Decimal?              @db.Decimal(18, 6)
-  currency_code        String?               @db.VarChar(10)
-  rate_type            CurrencyRateType?
-  original_unit_price  Decimal?              @db.Decimal(15, 2)
-  converted_unit_price Decimal?              @db.Decimal(18, 2)
-  converted_price      Decimal?              @db.Decimal(18, 2)
-  quantity_delivered   Decimal?              @db.Decimal(15, 3)
-  quantity_invoiced    Decimal?              @db.Decimal(15, 3)
-  created_at           DateTime              @default(now()) @db.Timestamp(6)
-  updated_at           DateTime?             @updatedAt @db.Timestamp(6)
-  deleted_at           DateTime?
-  created_by           String?               @db.Uuid
-  updated_by           String?               @db.Uuid
-  deleted_by           String?               @db.Uuid
-  document_item_taxes  document_item_taxes[]
-  documents            documents             @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  products             products?             @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  product_variants     product_variants?     @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  warehouse            warehouses?           @relation("DocumentItemWarehouse", fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                     String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document_id            String                @db.Uuid
+  product_id             String?               @db.Uuid
+  variant_id             String?               @db.Uuid
+  warehouse_id           String?               @db.Uuid
+  quantity               Decimal               @db.Decimal(15, 3)
+  purchase_unit_id       String?               @db.Uuid
+  unit_conversion_factor Decimal               @default(1) @db.Decimal(18, 6)
+  stock_quantity         Decimal?              @db.Decimal(18, 6)
+  price                  Decimal               @db.Decimal(15, 2)
+  unit_price             Decimal               @default(0) @db.Decimal(15, 2)
+  discount_percentage    Decimal               @default(0) @db.Decimal(8, 4)
+  exchange_rate          Decimal?              @db.Decimal(18, 6)
+  currency_code          String?               @db.VarChar(10)
+  rate_type              CurrencyRateType?
+  original_unit_price    Decimal?              @db.Decimal(15, 2)
+  converted_unit_price   Decimal?              @db.Decimal(18, 2)
+  converted_price        Decimal?              @db.Decimal(18, 2)
+  quantity_delivered     Decimal?              @db.Decimal(15, 3)
+  quantity_invoiced      Decimal?              @db.Decimal(15, 3)
+  created_at             DateTime              @default(now()) @db.Timestamp(6)
+  updated_at             DateTime?             @updatedAt @db.Timestamp(6)
+  deleted_at             DateTime?
+  created_by             String?               @db.Uuid
+  updated_by             String?               @db.Uuid
+  deleted_by             String?               @db.Uuid
+  document_item_taxes    document_item_taxes[]
+  documents              documents             @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  products               products?             @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  product_variants       product_variants?     @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouse              warehouses?           @relation("DocumentItemWarehouse", fields: [warehouse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([warehouse_id])
   @@schema("tenant")

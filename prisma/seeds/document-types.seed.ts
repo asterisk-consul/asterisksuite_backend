@@ -448,6 +448,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: false,
+    affects_payment: true,
   },
   {
     code: 'SI-P',
@@ -461,6 +462,7 @@ const documentTypes = [
     affects_stock: false,
     affects_accounting: true,
     affects_tax_book: false,
+    affects_payment: true,
   },
   {
     code: 'VALE',

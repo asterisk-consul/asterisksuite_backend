@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -9,6 +9,8 @@ import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
 import { BankAccountAccessGuard } from '@/common/guards/bank-account-access.guard';
 import { DeleteBankAccountDto } from './dto/delete-bank-account.dto';
+import { CreateBankMovementDto } from './dto/create-bank-movement.dto';
+import { CreateBankChargeRuleDto, SuggestedBankChargesQueryDto, UpdateBankChargeRuleDto } from './dto/bank-charge-rule.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/bank-accounts')
@@ -56,6 +58,63 @@ export class BankAccountsController {
   @RequirePermissions('treasury.bank_accounts.read')
   getMovements(@Param('id') id: string) {
     return this.bankAccountsService.getMovements(id);
+  }
+
+  @Post(':id/movements')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('bank_movements.create')
+  createMovement(
+    @Param('id') id: string,
+    @Body() dto: CreateBankMovementDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.bankAccountsService.createMovement(id, dto, user.id);
+  }
+
+  @Post(':id/movements/:movementId/cancel')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('bank_movements.cancel')
+  cancelMovement(
+    @Param('id') id: string,
+    @Param('movementId') movementId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.bankAccountsService.cancelMovement(id, movementId, user.id);
+  }
+
+  @Get(':id/charge-rules')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.read')
+  getChargeRules(@Param('id') id: string) {
+    return this.bankAccountsService.getChargeRules(id);
+  }
+
+  @Get(':id/suggested-charges')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.read')
+  getSuggestedCharges(@Param('id') id: string, @Query() query: SuggestedBankChargesQueryDto) {
+    return this.bankAccountsService.getSuggestedCharges(id, query);
+  }
+
+  @Post(':id/charge-rules')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.update')
+  createChargeRule(@Param('id') id: string, @Body() dto: CreateBankChargeRuleDto, @CurrentUser() user: AuthUser) {
+    return this.bankAccountsService.createChargeRule(id, dto, user.id);
+  }
+
+  @Patch(':id/charge-rules/:ruleId')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.update')
+  updateChargeRule(@Param('id') id: string, @Param('ruleId') ruleId: string, @Body() dto: UpdateBankChargeRuleDto, @CurrentUser() user: AuthUser) {
+    return this.bankAccountsService.updateChargeRule(id, ruleId, dto, user.id);
+  }
+
+  @Delete(':id/charge-rules/:ruleId')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.update')
+  removeChargeRule(@Param('id') id: string, @Param('ruleId') ruleId: string, @CurrentUser() user: AuthUser) {
+    return this.bankAccountsService.removeChargeRule(id, ruleId, user.id);
   }
 
   // ═══════════════════════════════════════════

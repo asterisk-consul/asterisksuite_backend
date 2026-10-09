@@ -84,6 +84,60 @@ export class PaymentCheckDto {
   amount_applied!: number;
 }
 
+export class PaymentBankChargeRetentionDto {
+  @IsString()
+  @IsOptional()
+  jurisdiction?: string;
+
+  @IsString()
+  @IsOptional()
+  tax_code?: string;
+
+  @IsString()
+  @IsOptional()
+  certificate_number?: string;
+
+  @IsString()
+  @IsOptional()
+  period?: string;
+}
+
+export class PaymentBankChargeDto {
+  @IsString()
+  bank_concept_id!: string;
+
+  @IsEnum(['DEBIT', 'CREDIT'] as const)
+  @IsOptional()
+  nature?: string;
+
+  @IsNumber()
+  @Min(0)
+  base_amount!: number;
+
+  @IsNumber()
+  @IsOptional()
+  percentage?: number;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  tax_amount?: number;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  total_amount?: number;
+
+  @IsString()
+  @IsOptional()
+  reference?: string;
+
+  @ValidateNested()
+  @Type(() => PaymentBankChargeRetentionDto)
+  @IsOptional()
+  retention?: PaymentBankChargeRetentionDto;
+}
+
 export class CreatePaymentDto {
   @IsEnum(['PAYMENT', 'COLLECTION', 'EXPENSE'] as const)
   type!: string;
@@ -194,6 +248,12 @@ export class CreatePaymentDto {
   @Type(() => PaymentWithholdingDto)
   @IsOptional()
   withholdings?: PaymentWithholdingDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentBankChargeDto)
+  @IsOptional()
+  bank_charges?: PaymentBankChargeDto[];
 
   @IsEnum(['DRAFT', 'CONFIRMED', 'PAID', 'REVERSED', 'CANCELLED'] as const)
   @IsOptional()

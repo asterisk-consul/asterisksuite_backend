@@ -10,6 +10,7 @@ import { SalesCommercialFlowService } from '../documents-sales/sales-commercial-
 import { DocumentsSalesService } from '../documents-sales/documents_sales.services';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
+import { BankMovementsService } from '../bank-movements/bank-movements.service';
 
 @Injectable()
 export class PaymentsService {
@@ -19,6 +20,7 @@ export class PaymentsService {
     private currentAccountsService: CurrentAccountsService,
     private commercialFlow: SalesCommercialFlowService,
     private documentsSales: DocumentsSalesService,
+    private bankMovements: BankMovementsService,
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -301,6 +303,50 @@ export class PaymentsService {
       }
     }
 
+    // Store bank charges (gastos y retenciones bancarias) — detail until confirm
+    if (dto.bank_charges && dto.bank_charges.length > 0) {
+      if (dto.payment_method !== 'BANK_TRANSFER') {
+        throw new BadRequestException('Los gastos bancarios solo aplican a pagos o cobros por transferencia bancaria');
+      }
+      for (const charge of dto.bank_charges) {
+        const concept = await this.prisma.bank_concepts.findFirst({
+          where: { id: charge.bank_concept_id, deleted_at: null },
+        });
+        if (!concept) throw new NotFoundException('Concepto bancario no encontrado');
+        if (!concept.is_active) throw new BadRequestException('El concepto bancario está inactivo');
+        if (!concept.available_payments) {
+          throw new BadRequestException(`El concepto "${concept.name}" no está disponible para pagos`);
+        }
+        const computed = this.bankMovements.prepareCharge(concept, {
+          baseAmount: charge.base_amount,
+          percentage: charge.percentage,
+          taxAmount: charge.tax_amount,
+          totalAmount: charge.total_amount,
+          nature: (charge.nature as any) ?? null,
+        });
+        await this.prisma.payment_bank_charges.create({
+          data: {
+            payment_id: payment.id,
+            bank_concept_id: concept.id,
+            concept_code_snapshot: concept.code,
+            concept_name_snapshot: concept.name,
+            nature: computed.nature,
+            base_amount: computed.baseAmount,
+            percentage_applied: computed.percentage,
+            tax_amount: computed.taxAmount,
+            total_amount: computed.totalAmount,
+            affects_balance: concept.affects_balance,
+            jurisdiction: charge.retention?.jurisdiction ?? null,
+            tax_code: charge.retention?.tax_code ?? null,
+            certificate_number: charge.retention?.certificate_number ?? null,
+            period: charge.retention?.period ?? null,
+            reference: charge.reference ?? null,
+            created_by: userId,
+          },
+        });
+      }
+    }
+
     for (const alloc of checkAllocations) {
       await this.prisma.checks.update({
         where: { id: alloc.check_id },
@@ -496,7 +542,10 @@ export class PaymentsService {
 
       // Create bank account movement (for non-check payments)
       if (payment.bank_account_id && payment.payment_method !== 'CHECK') {
-        await this.createBankMovement(payment, userId, tx);
+        const bankOperation = await this.createBankMovement(payment, userId, tx);
+        if (bankOperation) {
+          await this.createBankCharges(payment, bankOperation, userId, tx);
+        }
       }
 
       // Process linked checks
@@ -1122,40 +1171,113 @@ export class PaymentsService {
       where: { id: payment.bank_account_id },
     });
 
-    if (!bankAccount) return;
+    if (!bankAccount) return null;
 
-    const currentBankBalance = bankAccount.balance.toNumber();
+    const currentBankBalance = Number(bankAccount.balance);
     const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
     const amount = payment.amount.toNumber();
-    const bankBalanceAfter = isOutflow ? currentBankBalance - amount : currentBankBalance + amount;
 
-    if (isOutflow && bankBalanceAfter < 0) {
+    if (isOutflow && currentBankBalance - amount < 0) {
       throw new BadRequestException('Saldo insuficiente en la cuenta bancaria');
     }
 
-    await prisma.bank_account_movements.create({
-      data: {
-        bank_account_id: payment.bank_account_id,
-        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
-        amount: payment.amount,
-        currency_code: payment.currency_code,
-        exchange_rate: payment.exchange_rate,
-        rate_type: payment.rate_type,
-        converted_amount: payment.converted_amount,
-        balance_before: currentBankBalance,
-        balance_after: bankBalanceAfter,
-        description: payment.description ?? `Pago #${payment.number}`,
-        payment_id: payment.id,
+    const operation = await this.bankMovements.openOperation(
+      {
+        bankAccountId: payment.bank_account_id,
+        operationType: payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT',
+        sourceType: 'payment',
+        sourceId: payment.id,
         date: payment.date,
-        created_by: userId,
+        currencyCode: payment.currency_code,
+        description: payment.description ?? `Pago #${payment.number}`,
+        reference: payment.reference ?? null,
+        userId,
       },
+      prisma,
+    );
+
+    await this.bankMovements.addMovement(
+      {
+        bankAccountId: payment.bank_account_id,
+        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type,
+        nature: isOutflow ? 'DEBIT' : 'CREDIT',
+        amount: isOutflow ? -Math.abs(amount) : Math.abs(amount),
+        currencyCode: payment.currency_code,
+        exchangeRate: payment.exchange_rate ? Number(payment.exchange_rate) : null,
+        rateType: payment.rate_type ?? null,
+        convertedAmount: payment.converted_amount ? Number(payment.converted_amount) : null,
+        operationId: operation.id,
+        description: payment.description ?? `Pago #${payment.number}`,
+        reference: payment.reference ?? null,
+        referenceType: 'payment',
+        referenceId: payment.id,
+        paymentId: payment.id,
+        date: payment.date,
+        userId,
+      },
+      prisma,
+    );
+
+    return operation;
+  }
+
+  private async createBankCharges(payment: any, operation: any, userId: string, tx?: any) {
+    const prisma = tx || this.prisma;
+    const charges = await prisma.payment_bank_charges.findMany({
+      where: { payment_id: payment.id, deleted_at: null },
+      include: { bank_concept: true },
+      orderBy: { created_at: 'asc' },
     });
 
-    await prisma.bank_accounts.update({
-      where: { id: payment.bank_account_id },
-      data: { balance: bankBalanceAfter, updated_at: new Date() },
-    });
-    await recalculateBankAccountLedger(prisma, payment.bank_account_id);
+    for (const charge of charges) {
+      if (!Number(charge.total_amount)) continue;
+      const movement = await this.bankMovements.addMovement(
+        {
+          bankAccountId: payment.bank_account_id,
+          conceptId: charge.bank_concept_id,
+          type: this.resolveChargeMovementType(charge.bank_concept?.concept_type ?? null, charge.nature),
+          nature: charge.nature,
+          amount: charge.nature === 'DEBIT'
+            ? -Math.abs(Number(charge.total_amount))
+            : Math.abs(Number(charge.total_amount)),
+          baseAmount: Number(charge.base_amount),
+          taxAmount: Number(charge.tax_amount),
+          totalAmount: Number(charge.total_amount),
+          currencyCode: payment.currency_code,
+          exchangeRate: payment.exchange_rate ? Number(payment.exchange_rate) : null,
+          rateType: payment.rate_type ?? null,
+          description: charge.concept_name_snapshot ?? payment.description ?? `Gasto pago #${payment.number}`,
+          reference: charge.reference ?? null,
+          referenceType: 'payment_bank_charge',
+          referenceId: charge.id,
+          paymentId: payment.id,
+          operationId: operation.id,
+          date: payment.date,
+          userId,
+          recalculate: false,
+        },
+        prisma,
+      );
+
+      await prisma.payment_bank_charges.update({
+        where: { id: charge.id },
+        data: { bank_operation_id: operation.id, bank_account_movement_id: movement.id },
+      });
+    }
+
+    await this.bankMovements.closeOperation(operation.id, prisma);
+  }
+
+  private resolveChargeMovementType(conceptType: string | null, nature: string): any {
+    if (nature === 'DEBIT') {
+      if (conceptType === 'RETENTION') return 'RETENTION';
+      if (conceptType === 'TAX') return 'TAX';
+      if (conceptType === 'INTEREST') return 'INTEREST';
+      if (conceptType === 'COMMISSION' || conceptType === 'EXPENSE') return 'FEE';
+      if (conceptType === 'ADJUSTMENT') return 'ADJUSTMENT';
+      return 'FEE';
+    }
+    return 'DEPOSIT';
   }
 
   private async createCurrentAccountEntry(payment: any, userId: string, tx?: any, entryType?: string) {
@@ -1290,7 +1412,8 @@ export class PaymentsService {
           data: {
             bank_account_id: payment.bank_account_id,
             type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type as any,
-            amount: payment.amount,
+            nature: isOutflow ? 'CREDIT' : 'DEBIT',
+            amount: isOutflow ? Math.abs(amount) : -Math.abs(amount),
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
             rate_type: payment.rate_type,
@@ -1299,6 +1422,8 @@ export class PaymentsService {
             balance_after: bankBalanceAfter,
             description: `Reversión de pago #${payment.number}`,
             payment_id: payment.id,
+            reference_type: 'payment_reversal',
+            reference_id: payment.id,
             date: new Date(),
             created_by: userId,
           },

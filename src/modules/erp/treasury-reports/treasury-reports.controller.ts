@@ -85,4 +85,28 @@ export class TreasuryReportsController {
       type,
     });
   }
+
+  @Get('bank-expenses')
+  @RequirePermissions('bank_expenses.read')
+  bankExpenses(
+    @Query('date_from') dateFrom?: string,
+    @Query('date_to') dateTo?: string,
+    @Query('account_id') accountId?: string,
+    @Query('currency_code') currencyCode?: string,
+    @Query('concept_id') conceptId?: string,
+    @Query('concept_type') conceptType?: string,
+    @Query('nature') nature?: string,
+    @Query('source') source?: string,
+  ) {
+    return this.reportsService.bankExpenses({
+      date_from: dateFrom,
+      date_to: dateTo,
+      account_id: accountId,
+      currency_code: currencyCode,
+      concept_id: conceptId,
+      concept_type: conceptType,
+      nature,
+      source,
+    });
+  }
 }

@@ -18,6 +18,13 @@ export class CurrentAccountsService {
   }
 
   async addEntry(dto: CreateCurrentAccountEntryDto, userId: string) {
+    // Los saldos iniciales cargados manualmente deben tener un documento
+    // seleccionable en pagos/cobros. Los asientos generados al confirmar un
+    // documento ya llegan vinculados y no deben crear otro documento.
+    if (dto.type === 'OPENING_BALANCE' && !dto.reference_id) {
+      return this.addOpeningBalance(dto, userId);
+    }
+
     const baseCurrency = await this.conversionService.getBaseCurrency();
 
     // Always find/create account by party_id only (single account per party)
@@ -120,6 +127,161 @@ export class CurrentAccountsService {
     return entry;
   }
 
+  private async addOpeningBalance(dto: CreateCurrentAccountEntryDto, userId: string) {
+    if (!['CUSTOMER', 'SUPPLIER'].includes(dto.party_type)) {
+      throw new BadRequestException('El saldo inicial requiere un cliente o proveedor');
+    }
+
+    const baseCurrency = await this.conversionService.getBaseCurrency();
+    const entryDate = dto.date ? parseLocalDateTime(dto.date) : new Date();
+    const isBaseCurrency = dto.currency_code.toUpperCase() === baseCurrency.code.toUpperCase();
+    let exchangeRate = dto.exchange_rate ?? null;
+    let rateType = (dto.rate_type as any) ?? null;
+    let convertedAmount: number | null = isBaseCurrency ? dto.amount : null;
+
+    if (!isBaseCurrency) {
+      if (!exchangeRate) {
+        try {
+          const resolved = await this.conversionService.resolveRate(
+            dto.currency_code,
+            baseCurrency.code,
+            entryDate,
+            rateType,
+          );
+          exchangeRate = resolved.rate;
+          rateType = resolved.rateType;
+        } catch {
+          // La validación siguiente devuelve un mensaje funcional más claro.
+        }
+      }
+      if (!exchangeRate) {
+        throw new BadRequestException('No se pudo determinar el tipo de cambio del saldo inicial');
+      }
+      convertedAmount = this.conversionService.convertAmount(dto.amount, exchangeRate);
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const party = await tx.business_parties.findFirst({
+        where: { id: dto.party_id, deleted_at: null },
+        select: { id: true, type: true },
+      });
+      if (!party) throw new NotFoundException('Cliente o proveedor no encontrado');
+      if (party.type !== dto.party_type) {
+        throw new BadRequestException('El tipo de la parte interesada no coincide con el saldo inicial');
+      }
+
+      let account = await tx.current_accounts.findUnique({
+        where: { party_id: dto.party_id },
+      });
+      if (!account) {
+        account = await tx.current_accounts.create({
+          data: {
+            party_id: dto.party_id,
+            party_type: dto.party_type,
+            balance: 0,
+            created_by: userId,
+          },
+        });
+      }
+
+      const activeEntries = await tx.current_account_entries.count({
+        where: { current_account_id: account.id, deleted_at: null },
+      });
+      if (activeEntries > 0) {
+        throw new BadRequestException('El saldo inicial solo puede cargarse antes del primer movimiento de la cuenta corriente');
+      }
+
+      const documentTypeCode = dto.party_type === 'CUSTOMER' ? 'SI-C' : 'SI-P';
+      const documentType = await tx.document_types.findFirst({
+        where: {
+          code: documentTypeCode,
+          category: 'OPENING_BALANCE',
+          active: true,
+          deleted_at: null,
+        },
+      });
+      if (!documentType) {
+        throw new BadRequestException(`No existe el tipo documental ${documentTypeCode} activo`);
+      }
+      if (!documentType.affects_payment) {
+        throw new BadRequestException(`El tipo documental ${documentTypeCode} debe tener activada la opción Afecta pagos`);
+      }
+
+      const lastDocument = await tx.documents.findFirst({
+        where: { document_type_id: documentType.id },
+        orderBy: { number: 'desc' },
+        select: { number: true },
+      });
+      const isDecrease = dto.balance_effect === 'DECREASE';
+      const signedAmount = isDecrease ? -dto.amount : dto.amount;
+      const signedConvertedAmount = isDecrease
+        ? -(convertedAmount ?? dto.amount)
+        : (convertedAmount ?? dto.amount);
+      const description = (dto.description || 'Saldo inicial').slice(0, 50);
+
+      const document = await tx.documents.create({
+        data: {
+          document_type_id: documentType.id,
+          party_id: dto.party_id,
+          number: (lastDocument?.number ?? 0) + 1,
+          date: entryDate,
+          status: 2,
+          subtotal: signedAmount,
+          exempt_amount: 0,
+          total_taxes: 0,
+          total: signedAmount,
+          taxable_base: signedAmount,
+          paid_amount: 0,
+          currency_code: dto.currency_code,
+          exchange_rate: exchangeRate,
+          rate_type: rateType,
+          converted_subtotal: signedConvertedAmount,
+          converted_total: signedConvertedAmount,
+          converted_taxable_base: signedConvertedAmount,
+          converted_paid_amount: 0,
+          descrip: description,
+          source: 'opening_balance',
+          created_by: userId,
+        },
+      });
+
+      const currentBalance = Number(account.balance);
+      const balanceAfter = currentBalance + signedConvertedAmount;
+      const entry = await tx.current_account_entries.create({
+        data: {
+          current_account_id: account.id,
+          type: 'OPENING_BALANCE',
+          amount: dto.amount,
+          currency_code: dto.currency_code,
+          exchange_rate: exchangeRate,
+          rate_type: rateType,
+          converted_amount: convertedAmount,
+          balance_before: currentBalance,
+          balance_after: balanceAfter,
+          description: dto.description || 'Saldo inicial',
+          reference_type: 'document',
+          reference_id: document.id,
+          date: entryDate,
+          created_by: userId,
+        },
+      });
+
+      await tx.current_accounts.update({
+        where: { id: account.id },
+        data: {
+          party_type: dto.party_type,
+          balance: balanceAfter,
+          last_entry_date: entryDate,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+      await recalculateCurrentAccountLedger(tx, account.id);
+
+      return entry;
+    });
+  }
+
   async deleteOpeningBalance(partyId: string, userId: string) {
     return this.prisma.$transaction(async (tx) => {
       const account = await tx.current_accounts.findFirst({
@@ -129,7 +291,7 @@ export class CurrentAccountsService {
 
       const entries = await tx.current_account_entries.findMany({
         where: { current_account_id: account.id, deleted_at: null },
-        select: { id: true, type: true },
+        select: { id: true, type: true, reference_type: true, reference_id: true },
       });
       if (entries.length !== 1 || entries[0].type !== 'OPENING_BALANCE') {
         throw new BadRequestException(
@@ -142,6 +304,16 @@ export class CurrentAccountsService {
         where: { id: entries[0].id },
         data: { deleted_at: now, deleted_by: userId },
       });
+      if (entries[0].reference_type === 'document' && entries[0].reference_id) {
+        await tx.documents.updateMany({
+          where: {
+            id: entries[0].reference_id,
+            document_types: { category: 'OPENING_BALANCE' },
+            deleted_at: null,
+          },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+      }
       await tx.current_accounts.update({
         where: { id: account.id },
         data: { balance: 0, last_entry_date: null, updated_by: userId },

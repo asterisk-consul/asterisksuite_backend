@@ -4,10 +4,14 @@ import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { parseLocalDateTime } from '@/common/utils/dates';
+import { BankMovementsService } from '../bank-movements/bank-movements.service';
 
 @Injectable()
 export class ChecksService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private bankMovements: BankMovementsService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -221,9 +225,6 @@ export class ChecksService {
       throw new NotFoundException('Cuenta bancaria no encontrada');
     }
 
-    const currentBalance = Number(bankAccount.balance);
-    const balanceAfter = currentBalance + Number(check.amount);
-
     await this.prisma.$transaction(async (tx) => {
       await tx.checks.update({
         where: { id },
@@ -235,31 +236,25 @@ export class ChecksService {
         },
       });
 
-      await tx.bank_account_movements.create({
-        data: {
-          bank_account_id: check.bank_account_id!,
+      await this.bankMovements.addMovement(
+        {
+          bankAccountId: check.bank_account_id!,
           type: 'COLLECTION',
+          nature: 'CREDIT',
           amount: Number(check.amount),
-          currency_code: check.currency_code,
-          exchange_rate: check.exchange_rate,
-          rate_type: check.rate_type,
-          converted_amount: check.converted_amount,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
+          currencyCode: check.currency_code,
+          exchangeRate: check.exchange_rate ? Number(check.exchange_rate) : null,
+          rateType: check.rate_type ?? null,
+          convertedAmount: check.converted_amount ? Number(check.converted_amount) : null,
           description: `Cheque #${check.check_number} acreditado`,
-          reference_type: 'check',
-          reference_id: check.id,
-          payment_id: check.payment_id,
+          referenceType: 'check',
+          referenceId: check.id,
+          paymentId: check.payment_id,
           date: new Date(),
-          created_by: userId,
+          userId,
         },
-      });
-
-      await tx.bank_accounts.update({
-        where: { id: check.bank_account_id! },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
-      await recalculateBankAccountLedger(tx, check.bank_account_id!);
+        tx,
+      );
     });
 
     return this.findOne(id);
@@ -284,9 +279,6 @@ export class ChecksService {
     const depositAmount = Number(check.available_amount ?? check.amount);
     const effectiveDate = dto.date ? parseLocalDateTime(dto.date) : new Date();
 
-    const currentBalance = Number(bankAccount.balance);
-    const balanceAfter = currentBalance + depositAmount;
-
     await this.prisma.$transaction(async (tx) => {
       await tx.checks.update({
         where: { id },
@@ -301,31 +293,25 @@ export class ChecksService {
         },
       });
 
-      await tx.bank_account_movements.create({
-        data: {
-          bank_account_id: dto.bank_account_id,
+      await this.bankMovements.addMovement(
+        {
+          bankAccountId: dto.bank_account_id,
           type: 'COLLECTION',
+          nature: 'CREDIT',
           amount: depositAmount,
-          currency_code: check.currency_code,
-          exchange_rate: check.exchange_rate,
-          rate_type: check.rate_type,
-          converted_amount: check.converted_amount,
-          balance_before: currentBalance,
-          balance_after: balanceAfter,
+          currencyCode: check.currency_code,
+          exchangeRate: check.exchange_rate ? Number(check.exchange_rate) : null,
+          rateType: check.rate_type ?? null,
+          convertedAmount: check.converted_amount ? Number(check.converted_amount) : null,
           description: `Cheque #${check.check_number} depositado`,
-          reference_type: 'check',
-          reference_id: check.id,
-          payment_id: check.payment_id,
+          referenceType: 'check',
+          referenceId: check.id,
+          paymentId: check.payment_id,
           date: effectiveDate,
-          created_by: userId,
+          userId,
         },
-      });
-
-      await tx.bank_accounts.update({
-        where: { id: dto.bank_account_id },
-        data: { balance: balanceAfter, updated_at: new Date() },
-      });
-      await recalculateBankAccountLedger(tx, dto.bank_account_id);
+        tx,
+      );
     });
 
     return this.findOne(id);
@@ -556,19 +542,25 @@ export class ChecksService {
       const before = Number(account.balance);
       if (before < amount) throw new BadRequestException('Saldo insuficiente para registrar el débito');
 
-      await tx.bank_account_movements.create({ data: {
-        bank_account_id: check.bank_account_id!, type: 'CHECK_ISSUED', amount: -amount,
-        currency_code: check.currency_code, exchange_rate: check.exchange_rate, rate_type: check.rate_type,
-        converted_amount: check.converted_amount, balance_before: before, balance_after: before - amount,
-        description: `Débito cheque propio #${check.check_number}`,
-        reference_type: 'check', reference_id: check.id, payment_id: check.payment_id,
-        date: effectiveDate, created_by: userId,
-      } });
-      await tx.bank_accounts.update({
-        where: { id: check.bank_account_id! },
-        data: { balance: before - amount, updated_at: new Date() },
-      });
-      await recalculateBankAccountLedger(tx, check.bank_account_id!);
+      await this.bankMovements.addMovement(
+        {
+          bankAccountId: check.bank_account_id!,
+          type: 'CHECK_ISSUED',
+          nature: 'DEBIT',
+          amount: -amount,
+          currencyCode: check.currency_code,
+          exchangeRate: check.exchange_rate ? Number(check.exchange_rate) : null,
+          rateType: check.rate_type ?? null,
+          convertedAmount: check.converted_amount ? Number(check.converted_amount) : null,
+          description: `Débito cheque propio #${check.check_number}`,
+          referenceType: 'check',
+          referenceId: check.id,
+          paymentId: check.payment_id,
+          date: effectiveDate,
+          userId,
+        },
+        tx,
+      );
       await tx.checks.update({
         where: { id },
         data: {

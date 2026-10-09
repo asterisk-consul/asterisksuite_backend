@@ -3,72 +3,72 @@
 // ══════════════════════════════════════════════════════════
 
 model treasury_obligation_templates {
-  id                String                 @id @default(uuid()) @db.Uuid
-  name              String                 @db.VarChar(150)
-  party_id          String                 @db.Uuid
-  category          String                 @db.VarChar(30)
-  treatment         String                 @default("DIRECT_EXPENSE") @db.VarChar(30)
+  id                 String                 @id @default(uuid()) @db.Uuid
+  name               String                 @db.VarChar(150)
+  party_id           String                 @db.Uuid
+  category           String                 @db.VarChar(30)
+  treatment          String                 @default("DIRECT_EXPENSE") @db.VarChar(30)
   service_product_id String?                @db.Uuid
   expense_account_id String?                @db.Uuid
-  frequency         String                 @default("MONTHLY") @db.VarChar(20)
-  interval_months   Int                    @default(1)
-  start_date        DateTime               @db.Date
-  end_date          DateTime?              @db.Date
-  occurrences       Int?
-  due_day           Int
-  estimated_amount  Decimal                @db.Decimal(15, 2)
-  net_amount        Decimal?               @db.Decimal(15, 2)
-  currency_code     String                 @default("ARS") @db.VarChar(10)
-  variable_amount   Boolean                @default(false)
-  notification_days Json                   @default("[7]")
-  description       String?                @db.VarChar(500)
-  active            Boolean                @default(true)
-  created_at        DateTime               @default(now()) @db.Timestamp(6)
-  updated_at        DateTime?              @updatedAt @db.Timestamp(6)
-  deleted_at        DateTime?
-  created_by        String?                @db.Uuid
-  updated_by        String?                @db.Uuid
-  deleted_by        String?                @db.Uuid
-  obligations       treasury_obligations[]
+  frequency          String                 @default("MONTHLY") @db.VarChar(20)
+  interval_months    Int                    @default(1)
+  start_date         DateTime               @db.Date
+  end_date           DateTime?              @db.Date
+  occurrences        Int?
+  due_day            Int
+  estimated_amount   Decimal                @db.Decimal(15, 2)
+  net_amount         Decimal?               @db.Decimal(15, 2)
+  currency_code      String                 @default("ARS") @db.VarChar(10)
+  variable_amount    Boolean                @default(false)
+  notification_days  Json                   @default("[7]")
+  description        String?                @db.VarChar(500)
+  active             Boolean                @default(true)
+  created_at         DateTime               @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?              @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?                @db.Uuid
+  updated_by         String?                @db.Uuid
+  deleted_by         String?                @db.Uuid
+  obligations        treasury_obligations[]
 
   @@index([party_id, active])
   @@schema("tenant")
 }
 
 model treasury_obligations {
-  id                String                         @id @default(uuid()) @db.Uuid
-  template_id       String?                        @db.Uuid
-  party_id          String                         @db.Uuid
-  category          String                         @db.VarChar(30)
-  treatment         String                         @default("DIRECT_EXPENSE") @db.VarChar(30)
+  id                 String                         @id @default(uuid()) @db.Uuid
+  template_id        String?                        @db.Uuid
+  party_id           String                         @db.Uuid
+  category           String                         @db.VarChar(30)
+  treatment          String                         @default("DIRECT_EXPENSE") @db.VarChar(30)
   service_product_id String?                        @db.Uuid
   expense_account_id String?                        @db.Uuid
-  net_amount        Decimal?                       @db.Decimal(15, 2)
-  period_key        String                         @db.VarChar(20)
-  description       String                         @db.VarChar(250)
-  issue_date        DateTime?                      @db.Date
-  due_date          DateTime                       @db.Date
-  second_due_date   DateTime?                      @db.Date
-  estimated_amount  Decimal                        @default(0) @db.Decimal(15, 2)
-  amount            Decimal?                       @db.Decimal(15, 2)
-  second_due_amount Decimal?                       @db.Decimal(15, 2)
-  currency_code     String                         @default("ARS") @db.VarChar(10)
-  exchange_rate     Decimal?                       @db.Decimal(18, 6)
-  reference         String?                        @db.VarChar(100)
-  document_id       String?                        @db.Uuid
-  payment_id        String?                        @db.Uuid
-  status            String                         @default("PLANNED") @db.VarChar(30)
-  notification_days Json                           @default("[7]")
-  notes             String?                        @db.VarChar(500)
-  confirmed_at      DateTime?
-  paid_at           DateTime?
-  created_at        DateTime                       @default(now()) @db.Timestamp(6)
-  updated_at        DateTime?                      @updatedAt @db.Timestamp(6)
-  deleted_at        DateTime?
-  created_by        String?                        @db.Uuid
-  updated_by        String?                        @db.Uuid
-  deleted_by        String?                        @db.Uuid
-  template          treasury_obligation_templates? @relation(fields: [template_id], references: [id], onDelete: SetNull)
+  net_amount         Decimal?                       @db.Decimal(15, 2)
+  period_key         String                         @db.VarChar(20)
+  description        String                         @db.VarChar(250)
+  issue_date         DateTime?                      @db.Date
+  due_date           DateTime                       @db.Date
+  second_due_date    DateTime?                      @db.Date
+  estimated_amount   Decimal                        @default(0) @db.Decimal(15, 2)
+  amount             Decimal?                       @db.Decimal(15, 2)
+  second_due_amount  Decimal?                       @db.Decimal(15, 2)
+  currency_code      String                         @default("ARS") @db.VarChar(10)
+  exchange_rate      Decimal?                       @db.Decimal(18, 6)
+  reference          String?                        @db.VarChar(100)
+  document_id        String?                        @db.Uuid
+  payment_id         String?                        @db.Uuid
+  status             String                         @default("PLANNED") @db.VarChar(30)
+  notification_days  Json                           @default("[7]")
+  notes              String?                        @db.VarChar(500)
+  confirmed_at       DateTime?
+  paid_at            DateTime?
+  created_at         DateTime                       @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?                      @updatedAt @db.Timestamp(6)
+  deleted_at         DateTime?
+  created_by         String?                        @db.Uuid
+  updated_by         String?                        @db.Uuid
+  deleted_by         String?                        @db.Uuid
+  template           treasury_obligation_templates? @relation(fields: [template_id], references: [id], onDelete: SetNull)
 
   @@unique([template_id, period_key])
   @@index([party_id, status, due_date])
@@ -98,12 +98,49 @@ model bank_accounts {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  payments           payments[]
-  movements          bank_account_movements[]
-  cash_box_movements cash_box_movements[]
-  checks             checks[]
-  user_roles         bank_account_user_roles[]
+  payments                payments[]
+  movements               bank_account_movements[]
+  operations              bank_operations[]
+  cash_box_movements      cash_box_movements[]
+  checks                  checks[]
+  user_roles              bank_account_user_roles[]
+  investments_origin      financial_investments[]   @relation("InvestmentSourceAccount")
+  investments_destination financial_investments[]   @relation("InvestmentDestinationAccount")
+  charge_rules            bank_charge_rules[]
 
+  @@schema("tenant")
+}
+
+model bank_charge_rules {
+  id               String                    @id @default(uuid()) @db.Uuid
+  bank_account_id  String                    @db.Uuid
+  bank_concept_id  String                    @db.Uuid
+  name             String                    @db.VarChar(120)
+  trigger          BankChargeRuleTrigger
+  calculation_type BankChargeCalculationType
+  fixed_amount     Decimal                   @default(0) @db.Decimal(15, 2)
+  percentage       Decimal?                  @db.Decimal(8, 4)
+  minimum_amount   Decimal?                  @db.Decimal(15, 2)
+  maximum_amount   Decimal?                  @db.Decimal(15, 2)
+  currency_code    String?                   @db.VarChar(10)
+  valid_from       DateTime?                 @db.Date
+  valid_until      DateTime?                 @db.Date
+  priority         Int                       @default(0)
+  editable         Boolean                   @default(true)
+  active           Boolean                   @default(true)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  bank_account bank_accounts @relation(fields: [bank_account_id], references: [id])
+  bank_concept bank_concepts @relation(fields: [bank_concept_id], references: [id])
+
+  @@index([bank_account_id, trigger, active])
+  @@index([bank_concept_id])
   @@schema("tenant")
 }
 
@@ -126,22 +163,20 @@ model bank_account_user_roles {
   @@schema("tenant")
 }
 
-model bank_account_movements {
-  id               String            @id @default(uuid()) @db.Uuid
-  bank_account_id  String            @db.Uuid
-  type             AccountEntryType
-  amount           Decimal           @db.Decimal(15, 2)
-  currency_code    String            @db.VarChar(10)
-  exchange_rate    Decimal?          @db.Decimal(18, 6)
-  rate_type        CurrencyRateType?
-  converted_amount Decimal?          @db.Decimal(18, 2)
-  balance_before   Decimal           @db.Decimal(15, 2)
-  balance_after    Decimal           @db.Decimal(15, 2)
-  description      String?           @db.VarChar(255)
-  reference_type   String?           @db.VarChar(50)
-  reference_id     String?           @db.Uuid
-  payment_id       String?           @db.Uuid
-  date             DateTime          @default(now())
+model bank_operations {
+  id                String            @id @default(uuid()) @db.Uuid
+  bank_account_id   String            @db.Uuid
+  operation_type    BankOperationType
+  source_type       String?           @db.VarChar(50)
+  source_id         String?           @db.Uuid
+  date              DateTime          @default(now()) @db.Date
+  currency_code     String            @db.VarChar(10)
+  gross_amount      Decimal           @default(0) @db.Decimal(15, 2)
+  charges_amount    Decimal           @default(0) @db.Decimal(15, 2)
+  retentions_amount Decimal           @default(0) @db.Decimal(15, 2)
+  net_amount        Decimal           @default(0) @db.Decimal(15, 2)
+  description       String?           @db.VarChar(255)
+  reference         String?           @db.VarChar(100)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -150,11 +185,102 @@ model bank_account_movements {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  bank_account bank_accounts @relation(fields: [bank_account_id], references: [id])
-  payment      payments?     @relation(fields: [payment_id], references: [id])
+  bank_account bank_accounts            @relation(fields: [bank_account_id], references: [id])
+  movements    bank_account_movements[]
+  charges      payment_bank_charges[]
 
   @@index([bank_account_id])
+  @@index([source_type, source_id])
+  @@schema("tenant")
+}
+
+model bank_account_movements {
+  id                      String              @id @default(uuid()) @db.Uuid
+  bank_account_id         String              @db.Uuid
+  bank_operation_id       String?             @db.Uuid
+  type                    BankMovementType
+  nature                  BankMovementNature?
+  amount                  Decimal             @db.Decimal(15, 2)
+  base_amount             Decimal?            @db.Decimal(15, 2)
+  tax_amount              Decimal?            @db.Decimal(15, 2)
+  total_amount            Decimal?            @db.Decimal(15, 2)
+  currency_code           String              @db.VarChar(10)
+  exchange_rate           Decimal?            @db.Decimal(18, 6)
+  rate_type               CurrencyRateType?
+  converted_amount        Decimal?            @db.Decimal(18, 2)
+  amount_account_currency Decimal?            @db.Decimal(18, 2)
+  balance_before          Decimal             @db.Decimal(15, 2)
+  balance_after           Decimal             @db.Decimal(15, 2)
+  description             String?             @db.VarChar(255)
+  reference               String?             @db.VarChar(100)
+  reference_type          String?             @db.VarChar(50)
+  reference_id            String?             @db.Uuid
+  attachment_file_id      String?             @db.Uuid
+  bank_concept_id         String?             @db.Uuid
+  concept_code_snapshot   String?             @db.VarChar(30)
+  concept_name_snapshot   String?             @db.VarChar(100)
+  payment_id              String?             @db.Uuid
+  card_settlement_id      String?             @db.Uuid
+  document_date           DateTime?           @db.Date
+  effective_date          DateTime?           @db.Date
+  date                    DateTime            @default(now())
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  bank_account bank_accounts         @relation(fields: [bank_account_id], references: [id])
+  operation    bank_operations?      @relation(fields: [bank_operation_id], references: [id])
+  bank_concept bank_concepts?        @relation(fields: [bank_concept_id], references: [id])
+  payment      payments?             @relation(fields: [payment_id], references: [id])
+  charge       payment_bank_charges?
+
+  @@index([bank_account_id])
+  @@index([bank_operation_id])
+  @@index([bank_concept_id])
   @@index([payment_id])
+  @@index([card_settlement_id])
+  @@schema("tenant")
+}
+
+model payment_bank_charges {
+  id                       String             @id @default(uuid()) @db.Uuid
+  payment_id               String             @db.Uuid
+  bank_operation_id        String?            @db.Uuid
+  bank_account_movement_id String?            @unique @db.Uuid
+  bank_concept_id          String?            @db.Uuid
+  concept_code_snapshot    String?            @db.VarChar(30)
+  concept_name_snapshot    String?            @db.VarChar(100)
+  nature                   BankMovementNature @default(DEBIT)
+  base_amount              Decimal            @default(0) @db.Decimal(15, 2)
+  percentage_applied       Decimal?           @db.Decimal(6, 3)
+  tax_amount               Decimal            @default(0) @db.Decimal(15, 2)
+  total_amount             Decimal            @default(0) @db.Decimal(15, 2)
+  affects_balance          Boolean            @default(true)
+  jurisdiction             String?            @db.VarChar(50)
+  tax_code                 String?            @db.VarChar(30)
+  certificate_number       String?            @db.VarChar(50)
+  period                   String?            @db.VarChar(20)
+  reference                String?            @db.VarChar(100)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  payment      payments                @relation(fields: [payment_id], references: [id])
+  operation    bank_operations?        @relation(fields: [bank_operation_id], references: [id])
+  bank_concept bank_concepts?          @relation(fields: [bank_concept_id], references: [id])
+  movement     bank_account_movements? @relation(fields: [bank_account_movement_id], references: [id])
+
+  @@index([payment_id])
+  @@index([bank_operation_id])
+  @@index([bank_concept_id])
   @@schema("tenant")
 }
 
@@ -429,6 +555,7 @@ model payments {
   credit_card_transactions         credit_card_transactions[]
   account_entries                  current_account_entries[]
   bank_account_movements           bank_account_movements[]
+  bank_charges                     payment_bank_charges[]
   cash_box_movements               cash_box_movements[]
   withholdings                     withholdings[]
   international_operation_payments international_operation_payments[]
@@ -575,9 +702,9 @@ model credit_card_transactions {
   converted_amount       Decimal?                  @db.Decimal(15, 2)
   commission_rate        Decimal?                  @db.Decimal(5, 2)
   commission_amount      Decimal?                  @db.Decimal(15, 2)
-    tax_amount             Decimal?                  @db.Decimal(15, 2)
-    withholding_amount     Decimal?                  @db.Decimal(15, 2)
-    other_deductions       Decimal?                  @db.Decimal(15, 2)
+  tax_amount             Decimal?                  @db.Decimal(15, 2)
+  withholding_amount     Decimal?                  @db.Decimal(15, 2)
+  other_deductions       Decimal?                  @db.Decimal(15, 2)
   net_amount             Decimal?                  @db.Decimal(15, 2)
   net_currency_code      String?                   @db.VarChar(10)
   net_exchange_rate      Decimal?                  @db.Decimal(18, 6)
@@ -588,9 +715,9 @@ model credit_card_transactions {
   installment_amount     Decimal?                  @db.Decimal(15, 2)
   description            String?                   @db.VarChar(255)
   authorization          String?                   @db.VarChar(50)
-    settlement_reference   String?                   @db.VarChar(100)
-    settlement_notes       String?                   @db.VarChar(500)
-    settlement_bank_id     String?                   @db.Uuid
+  settlement_reference   String?                   @db.VarChar(100)
+  settlement_notes       String?                   @db.VarChar(500)
+  settlement_bank_id     String?                   @db.Uuid
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
