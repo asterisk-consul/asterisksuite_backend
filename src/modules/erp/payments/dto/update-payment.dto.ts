@@ -15,7 +15,7 @@ export class UpdatePaymentDto {
   @IsOptional()
   party_type?: string;
 
-  @IsEnum(['CASH', 'CHECK', 'BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'VIRTUAL_WALLET'] as const)
+  @IsEnum(['CASH', 'CHECK', 'BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'VIRTUAL_WALLET', 'PAYROLL_DEDUCTION'] as const)
   @IsOptional()
   payment_method?: string;
 

@@ -29,6 +29,7 @@ enum HrAccountEntryType {
   PAYMENT // Pago registrado
   COLLECTION // Cobro registrado
   ADJUSTMENT // Ajuste manual
+  PAYROLL_DEDUCTION // Compra del empleado a descontar de haberes
 
   @@schema("tenant")
 }

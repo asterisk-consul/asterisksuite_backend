@@ -17,7 +17,7 @@ export class CurrentAccountsService {
     return this.db.getClientForCurrentContext();
   }
 
-  async addEntry(dto: CreateCurrentAccountEntryDto, userId: string) {
+  async addEntry(dto: CreateCurrentAccountEntryDto, userId: string, tx?: any) {
     // Los saldos iniciales cargados manualmente deben tener un documento
     // seleccionable en pagos/cobros. Los asientos generados al confirmar un
     // documento ya llegan vinculados y no deben crear otro documento.
@@ -28,12 +28,13 @@ export class CurrentAccountsService {
     const baseCurrency = await this.conversionService.getBaseCurrency();
 
     // Always find/create account by party_id only (single account per party)
-    let account = await this.prisma.current_accounts.findUnique({
+    const prisma = tx ?? this.prisma;
+    let account = await prisma.current_accounts.findUnique({
       where: { party_id: dto.party_id },
     });
 
     if (!account) {
-      account = await this.prisma.current_accounts.create({
+      account = await prisma.current_accounts.create({
         data: {
           party_id: dto.party_id,
           party_type: dto.party_type,
@@ -44,7 +45,7 @@ export class CurrentAccountsService {
     } else if (account.party_type !== dto.party_type) {
       // Mantener la clasificación sincronizada con la parte interesada.
       // También repara cuentas antiguas creadas genéricamente como SUPPLIER.
-      account = await this.prisma.current_accounts.update({
+      account = await prisma.current_accounts.update({
         where: { id: account.id },
         data: { party_type: dto.party_type },
       });
@@ -91,7 +92,7 @@ export class CurrentAccountsService {
     const balanceAfter = isDebit ? currentBalance - balanceChange : currentBalance + balanceChange;
 
     // ─── Create entry ─────────────────────────────────────────
-    const entry = await this.prisma.current_account_entries.create({
+    const entry = await prisma.current_account_entries.create({
       data: {
         current_account_id: account.id,
         type: dto.type as any,
@@ -114,7 +115,7 @@ export class CurrentAccountsService {
     console.log('[CC] addEntry dto.date:', dto.date, '→ parsed:', entry.date?.toISOString?.() ?? entry.date)
 
     // ─── Update account balance + last entry date ────────────
-    await this.prisma.current_accounts.update({
+    await prisma.current_accounts.update({
       where: { id: account.id },
       data: {
         balance: balanceAfter,
@@ -122,7 +123,7 @@ export class CurrentAccountsService {
         updated_at: new Date(),
       },
     });
-    await recalculateCurrentAccountLedger(this.prisma, account.id);
+    await recalculateCurrentAccountLedger(prisma, account.id);
 
     return entry;
   }

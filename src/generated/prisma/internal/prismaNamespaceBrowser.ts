@@ -147,6 +147,7 @@ export const ModelName = {
   pallet_items: 'pallet_items',
   pallets: 'pallets',
   business_parties: 'business_parties',
+  business_party_roles: 'business_party_roles',
   party_bank_accounts: 'party_bank_accounts',
   party_locations: 'party_locations',
   party_contacts: 'party_contacts',
@@ -2153,6 +2154,20 @@ export const Business_partiesScalarFieldEnum = {
 } as const
 
 export type Business_partiesScalarFieldEnum = (typeof Business_partiesScalarFieldEnum)[keyof typeof Business_partiesScalarFieldEnum]
+
+
+export const Business_party_rolesScalarFieldEnum = {
+  id: 'id',
+  party_id: 'party_id',
+  role: 'role',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Business_party_rolesScalarFieldEnum = (typeof Business_party_rolesScalarFieldEnum)[keyof typeof Business_party_rolesScalarFieldEnum]
 
 
 export const Party_bank_accountsScalarFieldEnum = {

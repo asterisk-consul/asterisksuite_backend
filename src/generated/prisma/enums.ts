@@ -163,7 +163,8 @@ export const PaymentMethod = {
   BANK_TRANSFER: 'BANK_TRANSFER',
   CREDIT_CARD: 'CREDIT_CARD',
   DEBIT_CARD: 'DEBIT_CARD',
-  VIRTUAL_WALLET: 'VIRTUAL_WALLET'
+  VIRTUAL_WALLET: 'VIRTUAL_WALLET',
+  PAYROLL_DEDUCTION: 'PAYROLL_DEDUCTION'
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
@@ -536,7 +537,8 @@ export const HrAccountEntryType = {
   VALE_CREDIT: 'VALE_CREDIT',
   PAYMENT: 'PAYMENT',
   COLLECTION: 'COLLECTION',
-  ADJUSTMENT: 'ADJUSTMENT'
+  ADJUSTMENT: 'ADJUSTMENT',
+  PAYROLL_DEDUCTION: 'PAYROLL_DEDUCTION'
 } as const
 
 export type HrAccountEntryType = (typeof HrAccountEntryType)[keyof typeof HrAccountEntryType]

@@ -156,4 +156,8 @@ export class CreateBusinessPartyDto {
   @IsOptional()
   @IsString()
   commission_base?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  customer_enabled?: boolean;
 }

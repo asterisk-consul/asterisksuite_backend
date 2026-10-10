@@ -161,7 +161,8 @@ export class PaymentsController {
     };
     const methodLabels: Record<string, string> = {
       CASH: 'Efectivo', CHECK: 'Cheque', BANK_TRANSFER: 'Transferencia',
-      CREDIT_CARD: 'Tarjeta crédito', DEBIT_CARD: 'Tarjeta débito', VIRTUAL_WALLET: 'Billetera virtual'
+      CREDIT_CARD: 'Tarjeta crédito', DEBIT_CARD: 'Tarjeta débito', VIRTUAL_WALLET: 'Billetera virtual',
+      PAYROLL_DEDUCTION: 'Descuento de haberes'
     };
 
     const rows = payments.map((p: any) => ({
@@ -218,7 +219,7 @@ export class PaymentsController {
     const notes = [
       [],
       ['TIPOS:', 'PAYMENT = Pago a proveedor, COLLECTION = Cobro de cliente'],
-      ['MÉTODOS:', 'CASH, CHECK, BANK_TRANSFER, CREDIT_CARD, DEBIT_CARD, VIRTUAL_WALLET'],
+      ['MÉTODOS:', 'CASH, CHECK, BANK_TRANSFER, CREDIT_CARD, DEBIT_CARD, VIRTUAL_WALLET, PAYROLL_DEDUCTION'],
       ['MONEDA:', 'ARS, USD'],
       ['NOTA:', 'El tercero se resuelve por nombre o CUIT. Si no existe, se omite la fila.'],
     ];
@@ -263,6 +264,7 @@ export class PaymentsController {
       'tarjeta crédito': 'CREDIT_CARD', 'tarjeta credito': 'CREDIT_CARD', credit_card: 'CREDIT_CARD',
       'tarjeta débito': 'DEBIT_CARD', 'tarjeta debito': 'DEBIT_CARD', debit_card: 'DEBIT_CARD',
       billetera: 'VIRTUAL_WALLET', wallet: 'VIRTUAL_WALLET', virtual_wallet: 'VIRTUAL_WALLET',
+      descuento_haberes: 'PAYROLL_DEDUCTION', payroll_deduction: 'PAYROLL_DEDUCTION',
     };
 
     let created = 0;
@@ -289,7 +291,7 @@ export class PaymentsController {
 
         const rawMethod = String(row['metodo'] ?? row['payment_method'] ?? '').trim().toLowerCase();
         const paymentMethod = methodMap[rawMethod] ?? rawMethod.toUpperCase();
-        if (!['CASH', 'CHECK', 'BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'VIRTUAL_WALLET'].includes(paymentMethod)) {
+        if (!['CASH', 'CHECK', 'BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'VIRTUAL_WALLET', 'PAYROLL_DEDUCTION'].includes(paymentMethod)) {
           errors.push({ row: i + 2, message: `Método inválido: ${rawMethod}` });
           skipped++;
           continue;

@@ -143,6 +143,7 @@ enum PaymentMethod {
   CREDIT_CARD
   DEBIT_CARD
   VIRTUAL_WALLET
+  PAYROLL_DEDUCTION
 
   @@schema("tenant")
 }

@@ -77,13 +77,33 @@ export class PaymentsService {
     const party = dto.party_id
       ? await this.prisma.business_parties.findFirst({
           where: { id: dto.party_id, deleted_at: null },
-          select: { type: true },
+          select: {
+            type: true,
+            roles: { where: { active: true }, select: { role: true } },
+            employees: { where: { is_active: true, deleted_at: null }, select: { id: true } },
+          },
         })
       : null;
 
     if (dto.party_id && !party) {
       throw new BadRequestException('La parte interesada seleccionada no existe');
     }
+
+    if (dto.payment_method === 'PAYROLL_DEDUCTION') {
+      const customerEnabled = party?.type === 'CUSTOMER'
+        || party?.roles.some(role => role.role === 'CUSTOMER');
+      if (dto.type !== 'COLLECTION') {
+        throw new BadRequestException('El descuento de haberes solo puede utilizarse para cobrar una venta');
+      }
+      if (!party?.employees.length || !customerEnabled) {
+        throw new BadRequestException('Seleccioná un empleado habilitado como cliente interno');
+      }
+      if (!dto.documents?.length) {
+        throw new BadRequestException('El descuento de haberes debe aplicarse a un documento de venta');
+      }
+    }
+
+    const paymentPartyType = dto.type === 'COLLECTION' ? 'CUSTOMER' : (party?.type ?? dto.party_type);
 
     // Resolver los cheques antes de crear el pago o cobro. El instrumento
     // físico se recibe o entrega por su valor completo: no es fraccionable.
@@ -163,7 +183,7 @@ export class PaymentsService {
           payment_mode: (dto.payment_mode as any) ?? 'NORMAL',
           date: parseLocalDateTime(dto.date),
           party_id: dto.party_id,
-          party_type: party?.type ?? dto.party_type,
+          party_type: paymentPartyType,
           payment_method: dto.payment_method as any,
           amount: effectiveAmount,
           currency_code: dto.currency_code,
@@ -557,6 +577,10 @@ export class PaymentsService {
       // (the advance impacts CC only when applied to an invoice)
       if (payment.party_id && !isAdvanceNoDocs && !isDirectObligationPayment) {
         await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
+      }
+
+      if (payment.payment_method === 'PAYROLL_DEDUCTION') {
+        await this.createPayrollDeductionEntry(payment, userId, tx);
       }
 
       // Retenciones: entrada de cuenta corriente + marcar APPLIED
@@ -1286,7 +1310,9 @@ export class PaymentsService {
     await this.currentAccountsService.addEntry(
       {
         party_id: payment.party_id,
-        party_type: payment.party_type ?? 'CUSTOMER',
+        party_type: payment.payment_method === 'PAYROLL_DEDUCTION'
+          ? 'CUSTOMER'
+          : (payment.party_type ?? 'CUSTOMER'),
         currency_code: payment.currency_code,
         type,
         amount: payment.amount.toNumber(),
@@ -1299,7 +1325,80 @@ export class PaymentsService {
         date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
       },
       userId,
+      tx,
     );
+  }
+
+  private async createPayrollDeductionEntry(payment: any, userId: string, tx: any) {
+    if (!payment.party_id || payment.type !== 'COLLECTION') {
+      throw new BadRequestException('El descuento de haberes requiere un empleado y un cobro');
+    }
+
+    const [employee, customerRole, appliedDocuments] = await Promise.all([
+      tx.employees.findFirst({
+        where: { party_id: payment.party_id, is_active: true, deleted_at: null },
+        select: { id: true },
+      }),
+      tx.business_party_roles.findFirst({
+        where: { party_id: payment.party_id, role: 'CUSTOMER', active: true },
+        select: { id: true },
+      }),
+      tx.payment_documents.count({
+        where: { payment_id: payment.id, deleted_at: null },
+      }),
+    ]);
+    if (!employee || !customerRole) {
+      throw new BadRequestException('El tercero debe ser un empleado habilitado como cliente interno');
+    }
+    if (appliedDocuments === 0) {
+      throw new BadRequestException('El descuento de haberes debe aplicarse a un documento de venta');
+    }
+
+    let account = await tx.hr_accounts.findUnique({
+      where: {
+        party_id_currency_code: {
+          party_id: payment.party_id,
+          currency_code: payment.currency_code,
+        },
+      },
+    });
+    if (!account) {
+      account = await tx.hr_accounts.create({
+        data: {
+          party_id: payment.party_id,
+          party_type: 'EMPLOYEE',
+          currency_code: payment.currency_code,
+          balance: 0,
+          created_by: userId,
+        },
+      });
+    }
+
+    const currentBalance = Number(account.balance);
+    const amount = Number(payment.amount);
+    const balanceAfter = currentBalance - amount;
+    await tx.hr_account_entries.create({
+      data: {
+        hr_account_id: account.id,
+        type: 'PAYROLL_DEDUCTION',
+        amount,
+        currency_code: payment.currency_code,
+        exchange_rate: payment.exchange_rate,
+        rate_type: payment.rate_type,
+        converted_amount: payment.converted_amount,
+        balance_before: currentBalance,
+        balance_after: balanceAfter,
+        description: `Compra a descontar de haberes - Cobro #${payment.number}`,
+        reference_type: 'payment',
+        reference_id: payment.id,
+        date: payment.date,
+        created_by: userId,
+      },
+    });
+    await tx.hr_accounts.update({
+      where: { id: account.id },
+      data: { balance: balanceAfter, updated_at: new Date(), updated_by: userId },
+    });
   }
 
   private async reverseSideEffects(
@@ -1477,6 +1576,26 @@ export class PaymentsService {
           data: { balance: Number(account.balance) - removedDelta, updated_at: new Date() },
         });
         await recalculateCurrentAccountLedger(this.prisma, accountId);
+      }
+    }
+
+    if (payment.payment_method === 'PAYROLL_DEDUCTION') {
+      const hrEntries = await this.prisma.hr_account_entries.findMany({
+        where: { reference_type: 'payment', reference_id: payment.id, deleted_at: null },
+      });
+      for (const entry of hrEntries) {
+        const account = await this.prisma.hr_accounts.findUnique({ where: { id: entry.hr_account_id } });
+        if (!account) continue;
+        const removedDelta = Number(entry.balance_after) - Number(entry.balance_before);
+        const now = new Date();
+        await this.prisma.hr_account_entries.update({
+          where: { id: entry.id },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+        await this.prisma.hr_accounts.update({
+          where: { id: account.id },
+          data: { balance: Number(account.balance) - removedDelta, updated_at: now, updated_by: userId },
+        });
       }
     }
   }

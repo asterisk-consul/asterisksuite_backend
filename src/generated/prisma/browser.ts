@@ -498,6 +498,11 @@ export type pallets = Prisma.palletsModel
  */
 export type business_parties = Prisma.business_partiesModel
 /**
+ * Model business_party_roles
+ * 
+ */
+export type business_party_roles = Prisma.business_party_rolesModel
+/**
  * Model party_bank_accounts
  * 
  */
