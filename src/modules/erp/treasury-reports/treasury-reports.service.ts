@@ -592,4 +592,156 @@ export class TreasuryReportsService {
       },
     };
   }
+
+  async bankExpenses(filters?: {
+    date_from?: string;
+    date_to?: string;
+    account_id?: string;
+    currency_code?: string;
+    concept_id?: string;
+    concept_type?: string;
+    nature?: string;
+    source?: string;
+  }) {
+    const where: Record<string, any> = { deleted_at: null, bank_concept_id: { not: null } };
+    if (filters?.date_from || filters?.date_to) {
+      where.date = {};
+      if (filters.date_from) where.date.gte = new Date(filters.date_from);
+      if (filters.date_to) where.date.lte = new Date(filters.date_to);
+    }
+    if (filters?.account_id) where.bank_account_id = filters.account_id;
+    if (filters?.currency_code) where.currency_code = filters.currency_code;
+    if (filters?.concept_id) where.bank_concept_id = filters.concept_id;
+    if (filters?.nature) where.nature = filters.nature;
+    if (filters?.concept_type) where.bank_concept = { concept_type: filters.concept_type };
+    if (filters?.source) where.operation = { source_type: filters.source };
+
+    const movements = await this.prisma.bank_account_movements.findMany({
+      where,
+      include: {
+        bank_concept: { select: { id: true, code: true, name: true, concept_type: true, nature: true } },
+        bank_account: { select: { id: true, name: true, bank_name: true, currency_code: true } },
+        operation: { select: { id: true, operation_type: true, source_type: true, source_id: true } },
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    const collectionsWhere: Record<string, any> = { deleted_at: null, date: {} };
+    if (filters?.date_from) collectionsWhere.date.gte = new Date(filters.date_from);
+    if (filters?.date_to) collectionsWhere.date.lte = new Date(filters.date_to);
+    const collectionsAgg = await this.prisma.bank_account_movements.aggregate({
+      _sum: { amount: true },
+      where: { ...collectionsWhere, amount: { gt: 0 } },
+    });
+
+    let totalExpenses = 0;
+    let commissions = 0;
+    let taxes = 0;
+    let iva = 0;
+    let retentions = 0;
+    const byConcept: Record<string, { concept: string; code: string; category: string; count: number; total: number }> = {};
+    const byCategory: Record<string, { category: string; count: number; total: number }> = {};
+    const byBank: Record<string, { bank_account_id: string; name: string; count: number; total: number }> = {};
+    const byMonth: Record<string, number> = {};
+
+    for (const m of movements) {
+      const amount = Number(m.amount);
+      const abs = Math.abs(amount);
+      const category = m.bank_concept?.concept_type ?? 'OTHER';
+      const isRetention = category === 'RETENTION';
+
+      iva += Number(m.tax_amount ?? 0);
+      if (isRetention) {
+        retentions += abs;
+      } else if (amount < 0) {
+        totalExpenses += abs;
+        if (['FEE', 'COMMISSION', 'EXPENSE'].includes(category) || m.type === 'FEE') commissions += abs;
+        if (category === 'TAX' || m.type === 'TAX') taxes += abs;
+      }
+
+      const conceptKey = m.bank_concept?.id ?? 'unknown';
+      const c = (byConcept[conceptKey] ??= {
+        concept: m.bank_concept?.name ?? 'Sin concepto',
+        code: m.bank_concept?.code ?? '-',
+        category,
+        count: 0,
+        total: 0,
+      });
+      c.count += 1;
+      c.total += isRetention ? 0 : abs;
+
+      const cat = (byCategory[category] ??= { category, count: 0, total: 0 });
+      cat.count += 1;
+      cat.total += isRetention ? 0 : abs;
+
+      const bankKey = m.bank_account?.id ?? 'unknown';
+      const b = (byBank[bankKey] ??= {
+        bank_account_id: bankKey,
+        name: m.bank_account ? `${m.bank_account.bank_name} - ${m.bank_account.name}` : 'Sin cuenta',
+        count: 0,
+        total: 0,
+      });
+      b.count += 1;
+      b.total += isRetention ? 0 : abs;
+
+      const month = `${m.date.getFullYear()}-${String(m.date.getMonth() + 1).padStart(2, '0')}`;
+      byMonth[month] = (byMonth[month] ?? 0) + (isRetention ? 0 : abs);
+    }
+
+    const totalCollections = Number(collectionsAgg._sum.amount ?? 0);
+    const expenseRatio = totalCollections > 0 ? (totalExpenses / totalCollections) * 100 : 0;
+
+    const round = (n: number) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+    return {
+      summary: {
+        total_expenses: round(totalExpenses),
+        commissions: round(commissions),
+        taxes: round(taxes),
+        iva: round(iva),
+        retentions: round(retentions),
+        total_collections: round(totalCollections),
+        expense_ratio: round(expenseRatio),
+        count: movements.length,
+      },
+      by_concept: Object.values(byConcept)
+        .map((c) => ({ ...c, total: round(c.total) }))
+        .sort((a, b) => b.total - a.total),
+      by_category: Object.values(byCategory)
+        .map((c) => ({ ...c, total: round(c.total) }))
+        .sort((a, b) => b.total - a.total),
+      by_bank: Object.values(byBank)
+        .map((b) => ({ ...b, total: round(b.total) }))
+        .sort((a, b) => b.total - a.total),
+      monthly: Object.entries(byMonth)
+        .map(([month, total]) => ({ month, total: round(total) }))
+        .sort((a, b) => a.month.localeCompare(b.month)),
+      movements: movements.map((m) => ({
+        id: m.id,
+        date: m.date,
+        type: m.type,
+        nature: m.nature,
+        movement_nature: m.nature,
+        amount: Number(m.amount),
+        base_amount: m.base_amount == null ? null : Number(m.base_amount),
+        tax_amount: m.tax_amount == null ? null : Number(m.tax_amount),
+        total_amount: m.total_amount == null ? null : Number(m.total_amount),
+        currency_code: m.currency_code,
+        description: m.description,
+        concept_id: m.bank_concept?.id ?? null,
+        concept_code: m.bank_concept?.code ?? null,
+        concept_name: m.bank_concept?.name ?? null,
+        concept_type: m.bank_concept?.concept_type ?? null,
+        bank_account_id: m.bank_account_id,
+        bank_account_name: m.bank_account ? `${m.bank_account.bank_name} - ${m.bank_account.name}` : null,
+        source_type: m.operation?.source_type ?? m.reference_type ?? null,
+        source_id: m.operation?.source_id ?? m.reference_id ?? null,
+        reference: m.reference,
+      })),
+      period: {
+        date_from: filters?.date_from ?? null,
+        date_to: filters?.date_to ?? null,
+      },
+    };
+  }
 }

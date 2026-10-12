@@ -1,0 +1,146 @@
+@baseUrl = http://localhost:3000/api
+@tenant = dev
+
+###
+# ==============================
+# LOGIN
+# ==============================
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+x-tenant: {{tenant}}
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+# Ajustar con una cuenta real obtenida de "GET BANK ACCOUNTS"
+@bankAccountId = cb583021-be84-4a43-b52f-fe4db386e6e2
+
+# =========================================================
+# 1) CATALOGO DE CONCEPTOS BANCARIOS
+# =========================================================
+# @name concepts
+GET {{baseUrl}}/erp/bank-concepts
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+###
+@conceptComision = {{concepts.response.body.$.0.id}}
+
+# =========================================================
+# 2) CUENTAS BANCARIAS
+# =========================================================
+GET {{baseUrl}}/erp/bank-accounts
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =========================================================
+# 3) MOVIMIENTO MANUAL CON IVA (comision bancaria)
+#    base 1000 + IVA 21% = total 1210 (debito)
+# =========================================================
+# @name manualMovement
+POST {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+Content-Type: application/json
+
+{
+  "nature": "DEBIT",
+  "bank_concept_id": "{{conceptComision}}",
+  "amount": 1210,
+  "base_amount": 1000,
+  "currency_code": "ARS",
+  "reference": "OP-0001",
+  "description": "Comision transferencia manual",
+  "date": "2026-10-07"
+}
+
+###
+@movementId = {{manualMovement.response.body.id}}
+
+# =========================================================
+# 4) HISTORIAL DE MOVIMIENTOS (incluye concepto y operacion)
+# =========================================================
+GET {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =========================================================
+# 5) ANULAR MOVIMIENTO (soft-delete + recalculo del saldo)
+# =========================================================
+POST {{baseUrl}}/erp/bank-accounts/{{bankAccountId}}/movements/{{movementId}}/cancel
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+Content-Type: application/json
+
+{}
+
+# =========================================================
+# 6) PAGO/COBRO POR TRANSFERENCIA CON GASTOS Y RETENCIONES
+#    Cobro 100000, comision 1210 (iva 210), retencion 500
+#    El banco recibe el neto; la CC del cliente se cancela por el bruto.
+# =========================================================
+# @name payment
+POST {{baseUrl}}/erp/payments
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+Content-Type: application/json
+
+{
+  "type": "COLLECTION",
+  "payment_method": "BANK_TRANSFER",
+  "date": "2026-10-07",
+  "amount": 100000,
+  "currency_code": "ARS",
+  "bank_account_id": "{{bankAccountId}}",
+  "description": "Cobro cliente con gastos bancarios",
+  "bank_charges": [
+    {
+      "bank_concept_id": "{{conceptComision}}",
+      "nature": "DEBIT",
+      "base_amount": 1000
+    },
+    {
+      "bank_concept_id": "{{conceptComision}}",
+      "nature": "DEBIT",
+      "base_amount": 500,
+      "retention": {
+        "jurisdiction": "CABA",
+        "tax_code": "IIBB",
+        "certificate_number": "CERT-001",
+        "period": "2026-10"
+      }
+    }
+  ]
+}
+
+###
+@paymentId = {{payment.response.body.id}}
+
+###
+# Confirmar el pago/cobro -> genera los movimientos y la operacion agrupada
+POST {{baseUrl}}/erp/payments/{{paymentId}}/confirm
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+Content-Type: application/json
+
+{}
+
+# =========================================================
+# 7) REPORTE DE GASTOS BANCARIOS
+# =========================================================
+GET {{baseUrl}}/erp/treasury/bank-expenses?date_from=2026-10-01&date_to=2026-10-31
+Authorization: Bearer {{accessToken}}
+x-tenant: {{tenant}}
+
+# =========================================================
+# 8) PERMISOS REQUERIDOS
+# =========================================================
+# bank_concepts.read / bank_concepts.manage
+# bank_movements.create / bank_movements.cancel
+# bank_expenses.read / bank_expenses.export

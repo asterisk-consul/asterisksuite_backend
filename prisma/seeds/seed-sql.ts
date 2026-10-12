@@ -133,6 +133,18 @@ export const RBAC_PERMISSIONS = [
   { code: 'bank_accounts.update', description: 'Editar cuentas bancarias' },
   { code: 'bank_accounts.delete', description: 'Eliminar cuentas bancarias' },
 
+  // ─── Treasury - Bank Concepts & Movements ─────────────────
+  { code: 'bank_concepts.read', description: 'Ver conceptos bancarios' },
+  { code: 'bank_concepts.manage', description: 'Administrar conceptos bancarios' },
+  { code: 'bank_movements.create', description: 'Registrar movimientos bancarios' },
+  { code: 'bank_movements.cancel', description: 'Anular movimientos bancarios' },
+  { code: 'bank_expenses.read', description: 'Ver reporte de gastos bancarios' },
+  { code: 'bank_expenses.export', description: 'Exportar reporte de gastos bancarios' },
+  { code: 'financial_investments.read', description: 'Ver inversiones financieras' },
+  { code: 'financial_investments.create', description: 'Constituir inversiones financieras' },
+  { code: 'financial_investments.update', description: 'Actualizar valuaciones de inversiones' },
+  { code: 'financial_investments.settle', description: 'Rescatar, liquidar o renovar inversiones' },
+
   // ─── Treasury - Payments ──────────────────────────────────
   { code: 'payments.read', description: 'Ver pagos' },
   { code: 'payments.create', description: 'Crear pagos' },
@@ -478,6 +490,8 @@ export const RBAC_ROLES = [
       'cash_boxes.read', 'cash_boxes.open', 'cash_boxes.close',
       'cash_box_movements.read', 'cash_box_renditions.read', 'cash_box_transfers.read',
       'bank_accounts.read', 'payments.read', 'payments.create', 'payments.update',
+      'bank_concepts.read', 'bank_movements.create', 'bank_expenses.read',
+      'financial_investments.read',
       'intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete', 'intake.process',
       'business_parties.read', 'contacts.read', 'locations.read',
       'product_variants.read', 'product_components.read',
@@ -716,7 +730,8 @@ ON CONFLICT (code) DO UPDATE SET
 -- Presupuestos
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
 VALUES
-  (gen_random_uuid(), 'PRES', 'Presupuesto', 1, 'QUOTE', null, null, false, false, false, false, false, false, true)
+  (gen_random_uuid(), 'PRES', 'Presupuesto', 1, 'QUOTE', null, null, false, false, false, false, false, false, true),
+  (gen_random_uuid(), 'PRE-C', 'Presupuesto de Compra', -1, 'QUOTE', null, null, false, false, false, false, false, false, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   affects_payment = EXCLUDED.affects_payment;
@@ -742,8 +757,8 @@ ON CONFLICT (code) DO UPDATE SET
 -- Saldos iniciales
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
 VALUES
-  (gen_random_uuid(), 'SI-C', 'Saldo Inicial (Cliente)', 1, 'OPENING_BALANCE', null, null, false, false, false, true, false, false, true),
-  (gen_random_uuid(), 'SI-P', 'Saldo Inicial (Proveedor)', -1, 'OPENING_BALANCE', null, null, false, false, false, true, false, false, true)
+  (gen_random_uuid(), 'SI-C', 'Saldo Inicial (Cliente)', 1, 'OPENING_BALANCE', null, null, false, false, false, true, false, true, true),
+  (gen_random_uuid(), 'SI-P', 'Saldo Inicial (Proveedor)', -1, 'OPENING_BALANCE', null, null, false, false, false, true, false, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   affects_payment = EXCLUDED.affects_payment;
@@ -755,6 +770,11 @@ VALUES
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   affects_payment = EXCLUDED.affects_payment;
+
+-- Regla única de inventario: sólo los remitos realizan movimientos físicos.
+UPDATE tenant.document_types
+SET affects_stock = ((category = 'REMITO') IS TRUE)
+WHERE deleted_at IS NULL;
 `
 
 // ════════════════════════════════════════════════════════════════
@@ -816,61 +836,298 @@ ON CONFLICT DO NOTHING;
 // ════════════════════════════════════════════════════════════════
 
 export const SQL_BANK_CONCEPTS = `
-INSERT INTO tenant.bank_concepts (id, code, name, description, concept_type, accounting_account, calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage, is_active)
+INSERT INTO tenant.bank_concepts (
+  id, code, name, description, concept_type, nature, accounting_account,
+  calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage,
+  affects_balance, requires_receipt, available_manual, available_payments, available_settlements, is_active
+)
 VALUES
-  (gen_random_uuid(), 'COMISION', 'Comisión bancaria', 'Comisión por servicios bancarios', 'COMMISSION', '6201', true, 21.000, true, true, 0.800, true),
-  (gen_random_uuid(), 'COMISION_DEP', 'Comisión por depósito', 'Comisión al depositar cheques o efectivo', 'COMMISSION', '6201', true, 21.000, true, true, 0.500, true),
-  (gen_random_uuid(), 'COMISION_TRANSF', 'Comisión por transferencia', 'Comisión al transferir fondos', 'COMMISSION', '6201', true, 21.000, true, true, 0.500, true),
-  (gen_random_uuid(), 'COMISION_MANT', 'Comisión por mantenimiento', 'Cargo fijo mensual de mantenimiento', 'COMMISSION', '6201', true, 21.000, true, true, NULL, true),
-  (gen_random_uuid(), 'IMP_DEBITOS', 'Imp. Débitos y Créditos', 'Impuesto a los débitos y créditos bancarios', 'TAX', '6202', false, NULL, false, false, 0.600, true),
-  (gen_random_uuid(), 'IMP_SELLOS', 'Imp. Sellos', 'Impuesto de sellos', 'TAX', '6202', false, NULL, false, false, 1.000, true),
-  (gen_random_uuid(), 'IMP_CHEQUE', 'Imp. al Cheque', 'Impuesto a los cheques', 'TAX', '6202', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'GASTO_ADMIN', 'Gasto administrativo', 'Gastos varios de administración bancaria', 'EXPENSE', '6203', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'GASTO_COBRANZA', 'Gasto de cobranza', 'Gastos por cobranza de cheques', 'EXPENSE', '6203', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'INTERES_DESC', 'Interés por descubierto', 'Interés por descubierto bancario', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'INTERES_PUNT', 'Interés punitorio', 'Interés punitorio por mora', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'INTERES_CAP', 'Interés capitalizable', 'Interés que se capitaliza', 'INTEREST', '6204', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'AJUSTE_BCRA', 'Ajuste BCRA', 'Ajuste por resolución BCRA', 'ADJUSTMENT', '6205', false, NULL, false, false, NULL, true),
-  (gen_random_uuid(), 'DIF_CAMBIO', 'Diferencia de cambio', 'Diferencia por tipo de cambio', 'ADJUSTMENT', '6205', false, NULL, false, false, NULL, true)
-ON CONFLICT DO NOTHING;
+  (gen_random_uuid(), 'COMISION', 'Comisión bancaria', 'Comisión por servicios bancarios', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, 0.800, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_DEP', 'Comisión por depósito', 'Comisión al depositar cheques o efectivo', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, 0.500, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_TRANSF', 'Comisión por transferencia', 'Comisión al transferir fondos', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, 0.500, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_MANT', 'Comisión por mantenimiento', 'Cargo fijo mensual de mantenimiento', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, NULL, true, false, true, true, true, true),
+  (gen_random_uuid(), 'COMISION_CARD', 'Comisión de acreditación', 'Comisión por acreditación de tarjetas', 'COMMISSION', 'DEBIT', '6201', true, 21.000, true, true, NULL, true, false, true, false, true, true),
+  (gen_random_uuid(), 'IMP_DEBITOS', 'Imp. Débitos y Créditos', 'Impuesto a los débitos y créditos bancarios', 'TAX', 'DEBIT', '6202', false, NULL, false, false, 0.600, true, false, true, true, true, true),
+  (gen_random_uuid(), 'IMP_SELLOS', 'Imp. Sellos', 'Impuesto de sellos', 'TAX', 'DEBIT', '6202', false, NULL, false, false, 1.000, true, false, true, true, true, true),
+  (gen_random_uuid(), 'IMP_CHEQUE', 'Imp. al Cheque', 'Impuesto a los cheques', 'TAX', 'DEBIT', '6202', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'GASTO_ADMIN', 'Gasto administrativo', 'Gastos varios de administración bancaria', 'EXPENSE', 'DEBIT', '6203', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'GASTO_COBRANZA', 'Gasto de cobranza', 'Gastos por cobranza de cheques', 'EXPENSE', 'DEBIT', '6203', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'INTERES_DESC', 'Interés por descubierto', 'Interés por descubierto bancario', 'INTEREST', 'DEBIT', '6204', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'INTERES_PUNT', 'Interés punitorio', 'Interés punitorio por mora', 'INTEREST', 'DEBIT', '6204', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'INTERES_CAP', 'Interés capitalizable', 'Interés que se capitaliza', 'INTEREST', 'DEBIT', '6204', false, NULL, false, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'RETENCION_BANCARIA', 'Retención bancaria', 'Retención sufrida aplicada por el banco', 'RETENTION', 'DEBIT', '6202', false, NULL, true, false, NULL, true, false, true, true, false, true),
+  (gen_random_uuid(), 'AJUSTE_BCRA', 'Ajuste BCRA', 'Ajuste por resolución BCRA', 'ADJUSTMENT', 'DEBIT', '6205', false, NULL, false, false, NULL, true, false, true, false, false, true),
+  (gen_random_uuid(), 'DIF_CAMBIO', 'Diferencia de cambio', 'Diferencia por tipo de cambio', 'ADJUSTMENT', 'DEBIT', '6205', false, NULL, false, false, NULL, true, false, true, false, false, true),
+  (gen_random_uuid(), 'ACRED_NO_IDENT', 'Acreditación no identificada', 'Crédito bancario pendiente de identificar', 'OTHER', 'CREDIT', NULL, false, NULL, false, false, NULL, true, false, true, false, false, true)
+ON CONFLICT (code) DO UPDATE SET
+  nature = EXCLUDED.nature,
+  affects_balance = EXCLUDED.affects_balance,
+  requires_receipt = EXCLUDED.requires_receipt,
+  available_manual = EXCLUDED.available_manual,
+  available_payments = EXCLUDED.available_payments,
+  available_settlements = EXCLUDED.available_settlements;
 `
 
 // ════════════════════════════════════════════════════════════════
 // SQL — SECUENCIAS DE DOCUMENTOS
 // ════════════════════════════════════════════════════════════════
 
+export const SQL_REPAIR_DOCUMENT_SEQUENCES = `
+-- Incorporar asociaciones del campo legado antes de detectar series compartidas.
+INSERT INTO document_type_sequences (id, document_type_id, sequence_id, is_default, created_at)
+SELECT gen_random_uuid(), dt.id, dt.document_sequence_id, true, CURRENT_TIMESTAMP
+FROM document_types dt
+WHERE dt.document_sequence_id IS NOT NULL
+  AND dt.deleted_at IS NULL
+ON CONFLICT (document_type_id, sequence_id) DO NOTHING;
+
+DROP TABLE IF EXISTS seed_sequence_split;
+CREATE TEMP TABLE seed_sequence_split AS
+WITH usage AS (
+  SELECT
+    dts.sequence_id,
+    dts.document_type_id,
+    dts.created_at,
+    dts.id,
+    COUNT(d.id) AS document_count
+  FROM document_type_sequences dts
+  LEFT JOIN documents d
+    ON d.document_sequence_id = dts.sequence_id
+   AND d.document_type_id = dts.document_type_id
+  GROUP BY dts.sequence_id, dts.document_type_id, dts.created_at, dts.id
+), ranked AS (
+  SELECT
+    usage.*,
+    ROW_NUMBER() OVER (
+      PARTITION BY usage.sequence_id
+      ORDER BY usage.document_count DESC, usage.created_at, usage.id
+    ) AS position,
+    COUNT(*) OVER (PARTITION BY usage.sequence_id) AS linked_types
+  FROM usage
+)
+SELECT
+  sequence_id AS old_sequence_id,
+  document_type_id,
+  position,
+  CASE WHEN position = 1 THEN sequence_id ELSE gen_random_uuid() END AS target_sequence_id
+FROM ranked
+WHERE linked_types > 1;
+
+INSERT INTO document_sequences (
+  id, name, automatic, range_start, range_end, point_of_sale, current_number,
+  prefix, active, created_at, updated_at, created_by, updated_by
+)
+SELECT
+  split.target_sequence_id,
+  LEFT(source.name || ' · ' || dt.code, 50),
+  source.automatic,
+  source.range_start,
+  source.range_end,
+  source.point_of_sale,
+  COALESCE(MAX(doc.number), GREATEST(COALESCE(source.range_start, 1), 1) - 1),
+  source.prefix,
+  source.active,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP,
+  source.created_by,
+  source.updated_by
+FROM seed_sequence_split split
+JOIN document_sequences source ON source.id = split.old_sequence_id
+JOIN document_types dt ON dt.id = split.document_type_id
+LEFT JOIN documents doc
+  ON doc.document_sequence_id = split.old_sequence_id
+ AND doc.document_type_id = split.document_type_id
+WHERE split.position > 1
+GROUP BY split.target_sequence_id, source.id, dt.code;
+
+UPDATE documents doc
+SET document_sequence_id = split.target_sequence_id
+FROM seed_sequence_split split
+WHERE split.position > 1
+  AND doc.document_sequence_id = split.old_sequence_id
+  AND doc.document_type_id = split.document_type_id;
+
+UPDATE fiscal_authorizations fiscal_auth
+SET document_sequence_id = split.target_sequence_id
+FROM seed_sequence_split split
+WHERE split.position > 1
+  AND fiscal_auth.document_sequence_id = split.old_sequence_id
+  AND fiscal_auth.document_type_id = split.document_type_id;
+
+UPDATE document_types dt
+SET document_sequence_id = split.target_sequence_id
+FROM seed_sequence_split split
+WHERE split.position > 1
+  AND dt.id = split.document_type_id
+  AND dt.document_sequence_id = split.old_sequence_id;
+
+DELETE FROM document_type_sequences relation
+USING seed_sequence_split split
+WHERE split.position > 1
+  AND relation.sequence_id = split.old_sequence_id
+  AND relation.document_type_id = split.document_type_id;
+
+INSERT INTO document_type_sequences (id, document_type_id, sequence_id, is_default, created_at)
+SELECT gen_random_uuid(), document_type_id, target_sequence_id, true, CURRENT_TIMESTAMP
+FROM seed_sequence_split
+WHERE position > 1
+ON CONFLICT (document_type_id, sequence_id) DO UPDATE SET is_default = true;
+
+-- Quitar únicamente copias vacías generadas por los seeds históricos cuando el
+-- tipo ya posee otra serie. No se tocan series con documentos o autorizaciones.
+DROP TABLE IF EXISTS seed_obsolete_sequence_links;
+CREATE TEMP TABLE seed_obsolete_sequence_links AS
+SELECT link.document_type_id, link.sequence_id
+FROM document_type_sequences link
+JOIN document_types dt ON dt.id = link.document_type_id
+JOIN document_sequences sequence ON sequence.id = link.sequence_id
+WHERE (
+    sequence.name IN ('Ventas A', 'Ventas B', 'Ventas C', 'Compras A', 'Compras B', 'Compras C')
+    OR sequence.name LIKE '% · ' || dt.code
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM documents doc
+    WHERE doc.document_type_id = link.document_type_id
+      AND doc.document_sequence_id = link.sequence_id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM fiscal_authorizations fiscal_auth
+    WHERE fiscal_auth.document_type_id = link.document_type_id
+      AND fiscal_auth.document_sequence_id = link.sequence_id
+  )
+  AND EXISTS (
+    SELECT 1 FROM document_type_sequences alternative
+    WHERE alternative.document_type_id = link.document_type_id
+      AND alternative.sequence_id <> link.sequence_id
+  );
+
+UPDATE document_types dt
+SET document_sequence_id = replacement.sequence_id
+FROM seed_obsolete_sequence_links obsolete
+CROSS JOIN LATERAL (
+  SELECT alternative.sequence_id
+  FROM document_type_sequences alternative
+  LEFT JOIN documents doc
+    ON doc.document_type_id = alternative.document_type_id
+   AND doc.document_sequence_id = alternative.sequence_id
+  WHERE alternative.document_type_id = obsolete.document_type_id
+    AND alternative.sequence_id <> obsolete.sequence_id
+  GROUP BY alternative.sequence_id, alternative.is_default, alternative.created_at
+  ORDER BY COUNT(doc.id) DESC, alternative.is_default DESC, alternative.created_at
+  LIMIT 1
+) replacement
+WHERE dt.id = obsolete.document_type_id
+  AND dt.document_sequence_id = obsolete.sequence_id;
+
+DELETE FROM document_type_sequences link
+USING seed_obsolete_sequence_links obsolete
+WHERE link.document_type_id = obsolete.document_type_id
+  AND link.sequence_id = obsolete.sequence_id;
+
+UPDATE document_sequences sequence
+SET deleted_at = CURRENT_TIMESTAMP,
+    active = false
+WHERE EXISTS (
+    SELECT 1 FROM seed_obsolete_sequence_links obsolete
+    WHERE obsolete.sequence_id = sequence.id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM document_type_sequences link
+    WHERE link.sequence_id = sequence.id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM documents doc
+    WHERE doc.document_sequence_id = sequence.id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM fiscal_authorizations fiscal_auth
+    WHERE fiscal_auth.document_sequence_id = sequence.id
+  );
+
+DROP TABLE IF EXISTS seed_obsolete_sequence_links;
+
+-- Nunca reutilizar números, incluso si el documento fue anulado o eliminado.
+UPDATE document_sequences sequence
+SET current_number = GREATEST(
+  sequence.current_number,
+  0,
+  COALESCE((
+    SELECT MAX(doc.number)
+    FROM documents doc
+    WHERE doc.document_sequence_id = sequence.id
+  ), GREATEST(COALESCE(sequence.range_start, 1), 1) - 1)
+)
+WHERE sequence.deleted_at IS NULL;
+
+DROP TABLE IF EXISTS seed_sequence_split;
+`
+
 export const SQL_DOCUMENT_SEQUENCES = `
 INSERT INTO document_sequences (
   id, name, automatic, range_start, range_end, point_of_sale, current_number, prefix, active
 )
-SELECT gen_random_uuid(), seed.name, true, 0, 9999999, seed.point_of_sale, 0, seed.prefix, true
+SELECT gen_random_uuid(), seed.name, true, 1, 9999999, seed.point_of_sale, 0, seed.prefix, true
 FROM (VALUES
-  ('Ventas A', '0001', 'A'),
-  ('Ventas B', '0001', 'B'),
-  ('Ventas C', '0001', 'C'),
-  ('Compras A', '0002', 'A'),
-  ('Compras B', '0002', 'B'),
-  ('Compras C', '0002', 'C'),
+  ('FA-A', 'Factura A Venta', '0001', 'FA'),
+  ('FB-A', 'Factura B Venta', '0001', 'FB'),
+  ('FC-A', 'Factura C Venta', '0001', 'FC'),
+  ('FX-A', 'Factura X Venta', '0001', 'FX'),
+  ('NCA', 'Nota de Crédito A Venta', '0001', 'NCA'),
+  ('NCB', 'Nota de Crédito B Venta', '0001', 'NCB'),
+  ('NCC-A', 'Nota de Crédito C Venta', '0001', 'NCC'),
+  ('NDA', 'Nota de Débito A Venta', '0001', 'NDA'),
+  ('NDB', 'Nota de Débito B Venta', '0001', 'NDB'),
+  ('NDC-A', 'Nota de Débito C Venta', '0001', 'NDC'),
+  ('FA-C', 'Factura A Compra', '0002', 'FA-C'),
+  ('FB-C', 'Factura B Compra', '0002', 'FB-C'),
+  ('FC-C', 'Factura C Compra', '0002', 'FC-C'),
+  ('NCA-C', 'Nota de Crédito A Compra', '0002', 'NCA-C'),
+  ('NCB-C', 'Nota de Crédito B Compra', '0002', 'NCB-C'),
+  ('NCC-C', 'Nota de Crédito C Compra', '0002', 'NCC-C'),
+  ('NDA-C', 'Nota de Débito A Compra', '0002', 'NDA-C'),
+  ('NDB-C', 'Nota de Débito B Compra', '0002', 'NDB-C'),
+  ('NDC-C', 'Nota de Débito C Compra', '0002', 'NDC-C'),
+  ('OV', 'Órdenes de Venta', '0001', 'OV'),
+  ('OC', 'Órdenes de Compra', '0002', 'OC'),
+  ('PRES', 'Presupuestos', '0001', 'PRES'),
+  ('PRE-C', 'Presupuestos de Compra', '0002', 'PRE-C'),
+  ('REC', 'Recibos', '0001', 'REC'),
+  ('REM-V', 'Remitos de Venta', '0001', 'REM-V'),
+  ('REM-C', 'Remitos de Compra', '0002', 'REM-C'),
+  ('REM-T', 'Remitos de Traslado', '0001', 'REM-T'),
+  ('SI-C', 'Saldos Iniciales Clientes', '0001', 'SI-C'),
+  ('SI-P', 'Saldos Iniciales Proveedores', '0002', 'SI-P'),
+  ('VALE', 'Vales RRHH', '0003', 'VALE')
+) AS seed(code, name, point_of_sale, prefix)
+JOIN document_types dt ON dt.code = seed.code AND dt.deleted_at IS NULL
+WHERE NOT EXISTS (
+  SELECT 1 FROM document_type_sequences current_link
+  WHERE current_link.document_type_id = dt.id
+)
+AND dt.document_sequence_id IS NULL
+AND NOT EXISTS (
+  SELECT 1 FROM document_sequences existing
+  WHERE existing.name = seed.name AND existing.deleted_at IS NULL
+);
+
+INSERT INTO document_sequences (
+  id, name, automatic, range_start, range_end, point_of_sale, current_number, prefix, active
+)
+SELECT gen_random_uuid(), seed.name, true, 1, 9999999, seed.point_of_sale, 0, seed.prefix, true
+FROM (VALUES
   ('Operaciones Internacionales', '0003', 'IMP'),
   ('MAINTENANCE_ORDER', '0000', 'MO')
 ) AS seed(name, point_of_sale, prefix)
 WHERE NOT EXISTS (
   SELECT 1 FROM document_sequences existing
-  WHERE existing.name = seed.name
-    AND existing.point_of_sale = seed.point_of_sale
-    AND existing.prefix IS NOT DISTINCT FROM seed.prefix
-    AND existing.deleted_at IS NULL
+  WHERE existing.name = seed.name AND existing.deleted_at IS NULL
 );
 
 UPDATE document_sequences
-SET range_start = COALESCE(range_start, 0),
+SET range_start = GREATEST(COALESCE(range_start, 1), 1),
     range_end = COALESCE(range_end, 9999999)
-WHERE name IN (
-  'Ventas A', 'Ventas B', 'Ventas C',
-  'Compras A', 'Compras B', 'Compras C',
-  'Operaciones Internacionales', 'MAINTENANCE_ORDER'
-)
-  AND deleted_at IS NULL;
+WHERE deleted_at IS NULL
+;
 `
 
 // ════════════════════════════════════════════════════════════════
@@ -878,31 +1135,38 @@ WHERE name IN (
 // ════════════════════════════════════════════════════════════════
 
 export const SQL_LINK_SEQUENCES = `
--- VENTAS por letra
-UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'Ventas A' AND point_of_sale = '0001' LIMIT 1
-) WHERE code IN ('FA-A', 'NCA', 'NDA', 'NCC-A', 'NDC-A');
+DROP TABLE IF EXISTS seed_document_sequence_defaults;
+CREATE TEMP TABLE seed_document_sequence_defaults (code text, sequence_name text);
+INSERT INTO seed_document_sequence_defaults (code, sequence_name) VALUES
+  ('FA-A', 'Factura A Venta'), ('FB-A', 'Factura B Venta'),
+  ('FC-A', 'Factura C Venta'), ('FX-A', 'Factura X Venta'),
+  ('NCA', 'Nota de Crédito A Venta'), ('NCB', 'Nota de Crédito B Venta'),
+  ('NCC-A', 'Nota de Crédito C Venta'), ('NDA', 'Nota de Débito A Venta'),
+  ('NDB', 'Nota de Débito B Venta'), ('NDC-A', 'Nota de Débito C Venta'),
+  ('FA-C', 'Factura A Compra'), ('FB-C', 'Factura B Compra'),
+  ('FC-C', 'Factura C Compra'), ('NCA-C', 'Nota de Crédito A Compra'),
+  ('NCB-C', 'Nota de Crédito B Compra'), ('NCC-C', 'Nota de Crédito C Compra'),
+  ('NDA-C', 'Nota de Débito A Compra'), ('NDB-C', 'Nota de Débito B Compra'),
+  ('NDC-C', 'Nota de Débito C Compra'), ('OV', 'Órdenes de Venta'),
+  ('OC', 'Órdenes de Compra'), ('PRES', 'Presupuestos'),
+  ('PRE-C', 'Presupuestos de Compra'), ('REC', 'Recibos'),
+  ('REM-V', 'Remitos de Venta'), ('REM-C', 'Remitos de Compra'),
+  ('REM-T', 'Remitos de Traslado'), ('SI-C', 'Saldos Iniciales Clientes'),
+  ('SI-P', 'Saldos Iniciales Proveedores'), ('VALE', 'Vales RRHH');
 
-UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'Ventas B' AND point_of_sale = '0001' LIMIT 1
-) WHERE code IN ('FB-A', 'NCB', 'NDB');
-
-UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'Ventas C' AND point_of_sale = '0001' LIMIT 1
-) WHERE code IN ('FC-A', 'NCC-A', 'NDC-A');
-
--- COMPRAS por letra
-UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'Compras A' AND point_of_sale = '0002' LIMIT 1
-) WHERE code IN ('FA-C', 'NCA-C', 'NDA-C');
-
-UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'Compras B' AND point_of_sale = '0002' LIMIT 1
-) WHERE code IN ('FB-C', 'NCB-C', 'NDB-C');
-
-UPDATE document_types SET document_sequence_id = (
-  SELECT id FROM document_sequences WHERE name = 'Compras C' AND point_of_sale = '0002' LIMIT 1
-) WHERE code IN ('FC-C', 'NCC-C', 'NDC-C');
+-- Sólo completar tipos sin serie. Las configuraciones existentes se conservan.
+UPDATE document_types dt
+SET document_sequence_id = sequence.id
+FROM seed_document_sequence_defaults defaults
+JOIN document_sequences sequence
+  ON sequence.name = defaults.sequence_name AND sequence.deleted_at IS NULL
+WHERE dt.code = defaults.code
+  AND dt.deleted_at IS NULL
+  AND dt.document_sequence_id IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM document_type_sequences current_link
+    WHERE current_link.document_type_id = dt.id
+  );
 
 INSERT INTO document_type_sequences (id, document_type_id, sequence_id, is_default, created_at)
 SELECT gen_random_uuid(), doc_type.id, doc_type.document_sequence_id, true, CURRENT_TIMESTAMP
@@ -910,6 +1174,8 @@ FROM document_types doc_type
 WHERE doc_type.document_sequence_id IS NOT NULL
   AND doc_type.deleted_at IS NULL
 ON CONFLICT (document_type_id, sequence_id) DO UPDATE SET is_default = true;
+
+DROP TABLE IF EXISTS seed_document_sequence_defaults;
 `
 
 // ════════════════════════════════════════════════════════════════
@@ -923,6 +1189,7 @@ export async function executeSeedSql(connectionString: string, sql: string): Pro
     max: 1,
   })
   try {
+    await pool.query('BEGIN')
     const statements = sql
       .split(';')
       .map(s => s.trim())
@@ -932,6 +1199,10 @@ export async function executeSeedSql(connectionString: string, sql: string): Pro
     for (const stmt of statements) {
       await pool.query(stmt)
     }
+    await pool.query('COMMIT')
+  } catch (error) {
+    await pool.query('ROLLBACK')
+    throw error
   } finally {
     await pool.end()
   }

@@ -93,13 +93,178 @@ export class StockReservationsService {
     return transitEnough?.warehouse_id ?? transitAvailable?.warehouse_id ?? null;
   }
 
+  async getSalesOrderAvailability(orderId: string) {
+    const [order, settings] = await Promise.all([
+      this.prisma.documents.findUnique({
+        where: { id: orderId },
+        select: {
+          id: true,
+          number: true,
+          warehouse_id: true,
+          document_types: { select: { category: true, direction: true } },
+          document_items: {
+            where: { deleted_at: null, product_id: { not: null } },
+            select: {
+              id: true,
+              product_id: true,
+              warehouse_id: true,
+              quantity: true,
+              products: {
+                select: {
+                  name: true,
+                  sku: true,
+                  unit: { select: { symbol: true } },
+                },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.sales_flow_settings.upsert({
+        where: { settings_key: 'default' },
+        update: {},
+        create: { settings_key: 'default' },
+      }),
+    ]);
+
+    if (!order) throw new NotFoundException('La Orden de Venta no existe');
+    if (order.document_types?.category !== 'ORDER' || order.document_types.direction !== 1) {
+      throw new BadRequestException('La disponibilidad detallada sólo corresponde a Órdenes de Venta');
+    }
+
+    const productIds = [...new Set(order.document_items.map((item: any) => item.product_id).filter(Boolean))] as string[];
+    const stockRows = productIds.length
+      ? await this.prisma.warehouse_stock.findMany({
+          where: {
+            product_id: { in: productIds },
+            deleted_at: null,
+            warehouses: { active: true, deleted_at: null },
+          },
+          select: {
+            product_id: true,
+            warehouse_id: true,
+            quantity: true,
+            reserved_quantity: true,
+            warehouses: { select: { id: true, name: true, code: true, is_virtual: true } },
+          },
+        })
+      : [];
+
+    const transitWarehouseIds = [...new Set(stockRows
+      .filter((row: any) => row.warehouses.is_virtual)
+      .map((row: any) => row.warehouse_id))] as string[];
+    const containers = transitWarehouseIds.length
+      ? await this.prisma.international_containers.findMany({
+          where: {
+            transit_warehouse_id: { in: transitWarehouseIds },
+            deleted_at: null,
+            status: { notIn: ['DELIVERED', 'CLOSED'] },
+          },
+          select: {
+            id: true,
+            container_number: true,
+            status: true,
+            transit_warehouse_id: true,
+            estimated_arrival_date: true,
+            actual_arrival_date: true,
+            operation: { select: { estimated_arrival_date: true, actual_arrival_date: true } },
+          },
+        })
+      : [];
+    const containerByWarehouse = new Map(containers
+      .filter((container: any) => container.transit_warehouse_id)
+      .map((container: any) => [container.transit_warehouse_id, container]));
+    const number = (value: unknown) => Number(value ?? 0);
+
+    const items = order.document_items.map((item: any) => {
+      const rows = stockRows.filter((row: any) => row.product_id === item.product_id);
+      const physicalRows = rows.filter((row: any) => !row.warehouses.is_virtual);
+      const transitRows = rows.filter((row: any) => row.warehouses.is_virtual);
+      const available = (row: any) => Math.max(number(row.quantity) - number(row.reserved_quantity), 0);
+      const requested = number(item.quantity);
+      const availableNow = physicalRows.reduce((sum: number, row: any) => sum + available(row), 0);
+      const availableTransit = transitRows.reduce((sum: number, row: any) => sum + available(row), 0);
+
+      return {
+        item_id: item.id,
+        product_id: item.product_id,
+        name: item.products?.name ?? 'Producto',
+        sku: item.products?.sku ?? null,
+        unit: item.products?.unit?.symbol ?? 'u.',
+        requested,
+        physical_stock: physicalRows.reduce((sum: number, row: any) => sum + number(row.quantity), 0),
+        reserved_physical: physicalRows.reduce((sum: number, row: any) => sum + number(row.reserved_quantity), 0),
+        available_now: availableNow,
+        transit_available: availableTransit,
+        shortage: Math.max(requested - availableNow, 0),
+        status: availableNow >= requested ? 'AVAILABLE' : availableNow > 0 ? 'PARTIAL' : 'NO_PHYSICAL_STOCK',
+        warehouses: physicalRows.map((row: any) => ({
+          id: row.warehouses.id,
+          name: row.warehouses.name,
+          code: row.warehouses.code,
+          quantity: number(row.quantity),
+          reserved: number(row.reserved_quantity),
+          available: available(row),
+        })),
+        arrivals: transitRows.map((row: any) => {
+          const container: any = containerByWarehouse.get(row.warehouse_id);
+          return {
+            container_id: container?.id ?? null,
+            container_number: container?.container_number ?? null,
+            status: container?.status ?? null,
+            available: available(row),
+            arrival_date: container?.actual_arrival_date
+              ?? container?.estimated_arrival_date
+              ?? container?.operation?.actual_arrival_date
+              ?? container?.operation?.estimated_arrival_date
+              ?? null,
+          };
+        }),
+      };
+    });
+
+    const withoutPhysicalStock = items.filter((item: any) => item.available_now <= 0).length;
+    const withShortage = items.filter((item: any) => item.available_now < item.requested).length;
+    const blocksConfirmation = Boolean(
+      settings.reserve_stock_on_order_confirmation
+      && items.some((item: any) => {
+        const totalReservable = item.available_now + item.transit_available;
+        if (totalReservable <= 0) return !settings.allow_backorder_without_stock;
+        return totalReservable < item.requested
+          && !settings.allow_partial_stock_reservation
+          && !settings.allow_backorder_without_stock;
+      }),
+    );
+
+    return {
+      order_id: order.id,
+      items,
+      summary: {
+        total_items: items.length,
+        available_items: items.length - withShortage,
+        with_shortage: withShortage,
+        without_physical_stock: withoutPhysicalStock,
+        all_available: withShortage === 0,
+      },
+      policy: {
+        reserve_on_confirmation: settings.reserve_stock_on_order_confirmation,
+        allow_partial_reservation: settings.allow_partial_stock_reservation,
+        allow_backorder: settings.allow_backorder_without_stock,
+        blocks_confirmation: blocksConfirmation,
+      },
+    };
+  }
+
   async reserveSalesOrder(tx: Tx, orderId: string, userId: string) {
     const [order, settings] = await Promise.all([
       tx.documents.findUnique({
         where: { id: orderId },
         include: {
           document_types: { select: { category: true, direction: true } },
-          document_items: { where: { deleted_at: null } },
+          document_items: {
+            where: { deleted_at: null },
+            include: { products: { select: { name: true, sku: true } } },
+          },
         },
       }),
       tx.sales_flow_settings.upsert({ where: { settings_key: 'default' }, update: {}, create: { settings_key: 'default' } }),
@@ -111,10 +276,13 @@ export class StockReservationsService {
     for (const item of order.document_items) {
       if (!item.product_id) continue;
       const requested = new Prisma.Decimal(item.quantity);
+      const productLabel = item.products?.sku
+        ? `${item.products.name} (${item.products.sku})`
+        : (item.products?.name ?? 'uno de los productos');
       const warehouseId = await this.resolveWarehouse(tx, item.product_id, item.warehouse_id ?? order.warehouse_id, requested);
       if (!warehouseId) {
         if (settings.allow_backorder_without_stock) continue;
-        throw new BadRequestException('No hay stock disponible en depósitos reales ni en tránsito para reservar uno de los productos');
+        throw new BadRequestException(`No hay stock físico ni en tránsito disponible para ${productLabel}`);
       }
 
       await this.lockStockRow(tx, warehouseId, item.product_id);
@@ -128,7 +296,9 @@ export class StockReservationsService {
       let reserveQty = requested;
       if (available.lessThan(requested)) {
         if (!settings.allow_partial_stock_reservation && !settings.allow_backorder_without_stock) {
-          throw new BadRequestException('Stock disponible insuficiente para confirmar la Orden de Venta');
+          throw new BadRequestException(
+            `Stock insuficiente para ${productLabel}: solicitado ${requested.toString()}, disponible ${available.toString()}`,
+          );
         }
         reserveQty = settings.allow_partial_stock_reservation ? Prisma.Decimal.max(available, 0) : new Prisma.Decimal(0);
       }

@@ -1,0 +1,83 @@
+model financial_investments {
+  id                          String                    @id @default(uuid()) @db.Uuid
+  type                        FinancialInvestmentType
+  status                      FinancialInvestmentStatus @default(ACTIVE)
+  name                        String                    @db.VarChar(120)
+  institution_name            String?                   @db.VarChar(120)
+  currency_code               String                    @db.VarChar(10)
+  source_bank_account_id      String                    @db.Uuid
+  destination_bank_account_id String?                   @db.Uuid
+  capital_amount              Decimal                   @db.Decimal(18, 2)
+  start_date                  DateTime                  @db.Date
+  maturity_date               DateTime?                 @db.Date
+  annual_nominal_rate         Decimal?                  @db.Decimal(9, 4)
+  day_count_basis             Int?                      @default(365)
+  liquidity_type              FixedTermLiquidityType?   @default(NON_CANCELABLE)
+  early_cancel_available_from DateTime?                 @db.Date
+  early_cancel_annual_rate    Decimal?                  @db.Decimal(9, 4)
+  units                       Decimal?                  @db.Decimal(24, 8)
+  initial_unit_value          Decimal?                  @db.Decimal(18, 8)
+  current_unit_value          Decimal?                  @db.Decimal(18, 8)
+  current_unit_value_date     DateTime?                 @db.Date
+  expected_final_amount       Decimal?                  @db.Decimal(18, 2)
+  realized_return             Decimal                   @default(0) @db.Decimal(18, 2)
+  auto_renew                  Boolean                   @default(false)
+  reference                   String?                   @db.VarChar(100)
+  notes                       String?                   @db.VarChar(500)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  source_bank_account      bank_accounts                       @relation("InvestmentSourceAccount", fields: [source_bank_account_id], references: [id])
+  destination_bank_account bank_accounts?                      @relation("InvestmentDestinationAccount", fields: [destination_bank_account_id], references: [id])
+  valuations               financial_investment_valuations[]
+  transactions             financial_investment_transactions[]
+
+  @@index([status, maturity_date])
+  @@index([source_bank_account_id])
+  @@schema("tenant")
+}
+
+model financial_investment_valuations {
+  id                String   @id @default(uuid()) @db.Uuid
+  investment_id     String   @db.Uuid
+  valuation_date    DateTime @db.Date
+  unit_value        Decimal  @db.Decimal(18, 8)
+  units             Decimal  @db.Decimal(24, 8)
+  total_value       Decimal  @db.Decimal(18, 2)
+  unrealized_return Decimal  @db.Decimal(18, 2)
+  notes             String?  @db.VarChar(255)
+  created_at        DateTime @default(now()) @db.Timestamp(6)
+  created_by        String?  @db.Uuid
+
+  investment financial_investments @relation(fields: [investment_id], references: [id])
+
+  @@unique([investment_id, valuation_date])
+  @@index([investment_id, valuation_date])
+  @@schema("tenant")
+}
+
+model financial_investment_transactions {
+  id                       String                    @id @default(uuid()) @db.Uuid
+  investment_id            String                    @db.Uuid
+  type                     InvestmentTransactionType
+  date                     DateTime                  @db.Date
+  amount                   Decimal                   @db.Decimal(18, 2)
+  capital_amount           Decimal?                  @db.Decimal(18, 2)
+  return_amount            Decimal?                  @db.Decimal(18, 2)
+  bank_account_movement_id String?                   @db.Uuid
+  reference                String?                   @db.VarChar(100)
+  notes                    String?                   @db.VarChar(255)
+  created_at               DateTime                  @default(now()) @db.Timestamp(6)
+  created_by               String?                   @db.Uuid
+
+  investment financial_investments @relation(fields: [investment_id], references: [id])
+
+  @@index([investment_id, date])
+  @@index([bank_account_movement_id])
+  @@schema("tenant")
+}

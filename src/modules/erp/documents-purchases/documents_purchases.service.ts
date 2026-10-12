@@ -1275,7 +1275,7 @@ export class DocumentsPurchasesService {
           internationalMerchandiseLink.container_id,
           userId,
         );
-      } else if (doc.document_types?.affects_stock) {
+      } else if (category === 'REMITO' && doc.document_types?.affects_stock) {
         // Circuito local habitual: sólo los tipos configurados para afectar
         // stock ingresan directamente al depósito elegido.
 
@@ -1534,7 +1534,9 @@ export class DocumentsPurchasesService {
         );
       }
 
-      if (doc.status === STATUS_CONFIRMED && doc.document_types?.affects_stock) {
+      if (doc.status === STATUS_CONFIRMED
+        && doc.document_types?.category === 'REMITO'
+        && doc.document_types?.affects_stock) {
         const movements = await tx.warehouse_stock_movements.findMany({
           where: { reference_type: 'document', reference_id: doc.id, movement_type: 'DOCUMENT' },
         });

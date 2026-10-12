@@ -31,7 +31,7 @@ export class BusinessPartiesService {
     validateDocumentNumber(data.document_type, data.tax_id);
 
     const laborData = this.pickLaborFields(data);
-    const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, ...partyData } = data;
+    const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, customer_enabled, ...partyData } = data;
 
     const party = await this.prisma.business_parties.create({
       data: {
@@ -121,13 +121,33 @@ export class BusinessPartiesService {
       });
     }
 
-    return party;
+    await this.prisma.business_party_roles.upsert({
+      where: { party_id_role: { party_id: party.id, role: party.type } },
+      create: { party_id: party.id, role: party.type, active: true, created_by: party.created_by },
+      update: { active: true, updated_by: party.updated_by },
+    });
+    if (party.type === 'EMPLOYEE' && customer_enabled) {
+      await this.prisma.business_party_roles.upsert({
+        where: { party_id_role: { party_id: party.id, role: 'CUSTOMER' } },
+        create: { party_id: party.id, role: 'CUSTOMER', active: true, created_by: party.created_by },
+        update: { active: true, updated_by: party.updated_by },
+      });
+    }
+
+    return this.findOne(party.id);
   }
 
   // ✅ FIND ALL
   async findAll(type?: string) {
     return this.prisma.business_parties.findMany({
-      where: type ? { type: type as any } : undefined,
+      where: type
+        ? {
+            OR: [
+              { type: type as any },
+              { roles: { some: { role: type as any, active: true } } },
+            ],
+          }
+        : undefined,
       orderBy: { created_at: 'desc' },
       include: this.fullInclude(),
     });
@@ -181,7 +201,7 @@ export class BusinessPartiesService {
     await this.findOne(id);
 
     const laborData = this.pickLaborFields(data);
-    const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, ...partyData } = data;
+    const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, customer_enabled, ...partyData } = data;
 
     const updated = await this.prisma.business_parties.update({
       where: { id },
@@ -246,7 +266,21 @@ export class BusinessPartiesService {
           await this.prisma.employees.update({ where: { id: employee.id }, data: employeeData });
         }
       }
+
+      if (customer_enabled !== undefined) {
+        await this.prisma.business_party_roles.upsert({
+          where: { party_id_role: { party_id: id, role: 'CUSTOMER' } },
+          create: { party_id: id, role: 'CUSTOMER', active: customer_enabled },
+          update: { active: customer_enabled },
+        });
+      }
     }
+
+    await this.prisma.business_party_roles.upsert({
+      where: { party_id_role: { party_id: id, role: updated.type } },
+      create: { party_id: id, role: updated.type, active: true },
+      update: { active: true },
+    });
 
     // Devolver findOne para incluir employee + user
     return this.findOne(id);
@@ -272,6 +306,7 @@ export class BusinessPartiesService {
       },
       party_contacts: true,
       party_bank_accounts: true,
+      roles: true,
     };
   }
 

@@ -92,33 +92,33 @@ model warehouse_stock_movements {
 }
 
 model warehouses {
-  id                                               String                      @id @default(uuid()) @db.Uuid
-  location_id                                      String?                     @db.Uuid
-  unit_id                                          String?                     @db.Uuid
-  name                                             String                      @db.VarChar(255)
-  code                                             String?                     @unique @db.VarChar(50)
-  active                                           Boolean                     @default(true)
-  is_virtual                                       Boolean                     @default(false)
-  created_at                                       DateTime                    @default(now()) @db.Timestamp(6)
-  updated_at                                       DateTime?                   @updatedAt @db.Timestamp(6)
+  id                                               String                         @id @default(uuid()) @db.Uuid
+  location_id                                      String?                        @db.Uuid
+  unit_id                                          String?                        @db.Uuid
+  name                                             String                         @db.VarChar(255)
+  code                                             String?                        @unique @db.VarChar(50)
+  active                                           Boolean                        @default(true)
+  is_virtual                                       Boolean                        @default(false)
+  created_at                                       DateTime                       @default(now()) @db.Timestamp(6)
+  updated_at                                       DateTime?                      @updatedAt @db.Timestamp(6)
   deleted_at                                       DateTime?
-  created_by                                       String?                     @db.Uuid
-  updated_by                                       String?                     @db.Uuid
-  deleted_by                                       String?                     @db.Uuid
+  created_by                                       String?                        @db.Uuid
+  updated_by                                       String?                        @db.Uuid
+  deleted_by                                       String?                        @db.Uuid
   pallets                                          pallets[]
   picking_orders                                   picking_orders[]
-  trips_trips_destination_warehouse_idTowarehouses trips[]                     @relation("trips_destination_warehouse_idTowarehouses")
-  trips_trips_origin_warehouse_idTowarehouses      trips[]                     @relation("trips_origin_warehouse_idTowarehouses")
+  trips_trips_destination_warehouse_idTowarehouses trips[]                        @relation("trips_destination_warehouse_idTowarehouses")
+  trips_trips_origin_warehouse_idTowarehouses      trips[]                        @relation("trips_origin_warehouse_idTowarehouses")
   warehouse_stock                                  warehouse_stock[]
   stock_reservations                               stock_reservations[]
   warehouse_stock_movements                        warehouse_stock_movements[]
   stock_replenishment_policies                     stock_replenishment_policies[]
-  documents                                        documents[]                 @relation("DocumentWarehouse")
-  document_items                                   document_items[]            @relation("DocumentItemWarehouse")
+  documents                                        documents[]                    @relation("DocumentWarehouse")
+  document_items                                   document_items[]               @relation("DocumentItemWarehouse")
   maintenance_parts                                maintenance_parts[]
   current_tires                                    tires[]
-  locations                                        locations?                  @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  units                                            units?                      @relation(fields: [unit_id], references: [id])
+  locations                                        locations?                     @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  units                                            units?                         @relation(fields: [unit_id], references: [id])
 
   @@schema("tenant")
 }

@@ -1,6 +1,9 @@
 -- Seed de tipos de documento para tenant
 -- Ejecutar: npx prisma db execute --file prisma/seeds/document-types.seed.sql
 
+-- IMPORTANTE: al finalizar, únicamente los tipos REMITO quedan habilitados
+-- para realizar movimientos físicos de inventario.
+
 -- SECUENCIAS DE DOCUMENTOS por letra
 INSERT INTO tenant.document_sequences (id, name, automatic, point_of_sale, current_number, prefix, active)
 VALUES
@@ -200,3 +203,8 @@ ON CONFLICT (code) DO UPDATE SET
   affects_stock = EXCLUDED.affects_stock,
   affects_accounting = EXCLUDED.affects_accounting,
   affects_tax_book = EXCLUDED.affects_tax_book;
+
+-- Este UPDATE también corrige bases creadas con versiones anteriores del seed.
+UPDATE tenant.document_types
+SET affects_stock = ((category = 'REMITO') IS TRUE)
+WHERE deleted_at IS NULL;

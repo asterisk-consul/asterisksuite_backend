@@ -168,6 +168,8 @@ export class TrashService {
       'payments',
       'bank_accounts',
       'bank_account_movements',
+      'bank_concepts',
+      'payment_bank_charges',
     ];
   }
 }

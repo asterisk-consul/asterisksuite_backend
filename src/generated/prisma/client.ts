@@ -195,6 +195,21 @@ export type files = Prisma.filesModel
  */
 export type intake_records = Prisma.intake_recordsModel
 /**
+ * Model financial_investments
+ * 
+ */
+export type financial_investments = Prisma.financial_investmentsModel
+/**
+ * Model financial_investment_valuations
+ * 
+ */
+export type financial_investment_valuations = Prisma.financial_investment_valuationsModel
+/**
+ * Model financial_investment_transactions
+ * 
+ */
+export type financial_investment_transactions = Prisma.financial_investment_transactionsModel
+/**
  * Model tax_jurisdictions
  * 
  */
@@ -505,6 +520,11 @@ export type pallets = Prisma.palletsModel
  */
 export type business_parties = Prisma.business_partiesModel
 /**
+ * Model business_party_roles
+ * 
+ */
+export type business_party_roles = Prisma.business_party_rolesModel
+/**
  * Model party_bank_accounts
  * 
  */
@@ -710,15 +730,30 @@ export type treasury_obligations = Prisma.treasury_obligationsModel
  */
 export type bank_accounts = Prisma.bank_accountsModel
 /**
+ * Model bank_charge_rules
+ * 
+ */
+export type bank_charge_rules = Prisma.bank_charge_rulesModel
+/**
  * Model bank_account_user_roles
  * 
  */
 export type bank_account_user_roles = Prisma.bank_account_user_rolesModel
 /**
+ * Model bank_operations
+ * 
+ */
+export type bank_operations = Prisma.bank_operationsModel
+/**
  * Model bank_account_movements
  * 
  */
 export type bank_account_movements = Prisma.bank_account_movementsModel
+/**
+ * Model payment_bank_charges
+ * 
+ */
+export type payment_bank_charges = Prisma.payment_bank_chargesModel
 /**
  * Model cash_boxes
  * 

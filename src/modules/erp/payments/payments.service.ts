@@ -10,6 +10,7 @@ import { SalesCommercialFlowService } from '../documents-sales/sales-commercial-
 import { DocumentsSalesService } from '../documents-sales/documents_sales.services';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
+import { BankMovementsService } from '../bank-movements/bank-movements.service';
 
 @Injectable()
 export class PaymentsService {
@@ -19,6 +20,7 @@ export class PaymentsService {
     private currentAccountsService: CurrentAccountsService,
     private commercialFlow: SalesCommercialFlowService,
     private documentsSales: DocumentsSalesService,
+    private bankMovements: BankMovementsService,
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -80,13 +82,32 @@ export class PaymentsService {
     const party = dto.party_id
       ? await this.prisma.business_parties.findFirst({
           where: { id: dto.party_id, deleted_at: null },
-          select: { type: true },
+          select: {
+            type: true,
+            roles: { where: { active: true }, select: { role: true } },
+            employees: { where: { is_active: true, deleted_at: null }, select: { id: true } },
+          },
         })
       : null;
 
     if (dto.party_id && !party) {
       throw new BadRequestException('La parte interesada seleccionada no existe');
     }
+
+    if (dto.payment_method === 'PAYROLL_DEDUCTION') {
+      const customerEnabled = party?.type === 'CUSTOMER' || party?.roles.some((role) => role.role === 'CUSTOMER');
+      if (dto.type !== 'COLLECTION') {
+        throw new BadRequestException('El descuento de haberes solo puede utilizarse para cobrar una venta');
+      }
+      if (!party?.employees.length || !customerEnabled) {
+        throw new BadRequestException('Seleccioná un empleado habilitado como cliente interno');
+      }
+      if (!dto.documents?.length) {
+        throw new BadRequestException('El descuento de haberes debe aplicarse a un documento de venta');
+      }
+    }
+
+    const paymentPartyType = dto.type === 'COLLECTION' ? 'CUSTOMER' : (party?.type ?? dto.party_type);
 
     // Resolver los cheques antes de crear el pago o cobro. El instrumento
     // físico se recibe o entrega por su valor completo: no es fraccionable.
@@ -169,7 +190,7 @@ export class PaymentsService {
           payment_mode: (dto.payment_mode as any) ?? 'NORMAL',
           date: parseLocalDateTime(dto.date),
           party_id: dto.party_id,
-          party_type: party?.type ?? dto.party_type,
+          party_type: paymentPartyType,
           payment_method: dto.payment_method as any,
           amount: effectiveAmount,
           currency_code: dto.currency_code,
@@ -306,6 +327,52 @@ export class PaymentsService {
                     },
                   }
                 : {}),
+            },
+          });
+        }
+      }
+
+      // Store bank charges (gastos y retenciones bancarias) — detail until confirm
+      if (dto.bank_charges && dto.bank_charges.length > 0) {
+        if (dto.payment_method !== 'BANK_TRANSFER') {
+          throw new BadRequestException(
+            'Los gastos bancarios solo aplican a pagos o cobros por transferencia bancaria',
+          );
+        }
+        for (const charge of dto.bank_charges) {
+          const concept = await this.prisma.bank_concepts.findFirst({
+            where: { id: charge.bank_concept_id, deleted_at: null },
+          });
+          if (!concept) throw new NotFoundException('Concepto bancario no encontrado');
+          if (!concept.is_active) throw new BadRequestException('El concepto bancario está inactivo');
+          if (!concept.available_payments) {
+            throw new BadRequestException(`El concepto "${concept.name}" no está disponible para pagos`);
+          }
+          const computed = this.bankMovements.prepareCharge(concept, {
+            baseAmount: charge.base_amount,
+            percentage: charge.percentage,
+            taxAmount: charge.tax_amount,
+            totalAmount: charge.total_amount,
+            nature: (charge.nature as any) ?? null,
+          });
+          await this.prisma.payment_bank_charges.create({
+            data: {
+              payment_id: payment.id,
+              bank_concept_id: concept.id,
+              concept_code_snapshot: concept.code,
+              concept_name_snapshot: concept.name,
+              nature: computed.nature,
+              base_amount: computed.baseAmount,
+              percentage_applied: computed.percentage,
+              tax_amount: computed.taxAmount,
+              total_amount: computed.totalAmount,
+              affects_balance: concept.affects_balance,
+              jurisdiction: charge.retention?.jurisdiction ?? null,
+              tax_code: charge.retention?.tax_code ?? null,
+              certificate_number: charge.retention?.certificate_number ?? null,
+              period: charge.retention?.period ?? null,
+              reference: charge.reference ?? null,
+              created_by: userId,
             },
           });
         }
@@ -503,7 +570,10 @@ export class PaymentsService {
 
       // Create bank account movement (for non-check payments)
       if (payment.bank_account_id && payment.payment_method !== 'CHECK') {
-        await this.createBankMovement(payment, userId, tx);
+        const bankOperation = await this.createBankMovement(payment, userId, tx);
+        if (bankOperation) {
+          await this.createBankCharges(payment, bankOperation, userId, tx);
+        }
       }
 
       // Process linked checks
@@ -515,6 +585,10 @@ export class PaymentsService {
       // (the advance impacts CC only when applied to an invoice)
       if (payment.party_id && !isAdvanceNoDocs && !isDirectObligationPayment) {
         await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
+      }
+
+      if (payment.payment_method === 'PAYROLL_DEDUCTION') {
+        await this.createPayrollDeductionEntry(payment, userId, tx);
       }
 
       // Retenciones: entrada de cuenta corriente + marcar APPLIED
@@ -1178,40 +1252,112 @@ export class PaymentsService {
       where: { id: payment.bank_account_id },
     });
 
-    if (!bankAccount) return;
+    if (!bankAccount) return null;
 
-    const currentBankBalance = bankAccount.balance.toNumber();
+    const currentBankBalance = Number(bankAccount.balance);
     const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
     const amount = payment.amount.toNumber();
-    const bankBalanceAfter = isOutflow ? currentBankBalance - amount : currentBankBalance + amount;
 
-    if (isOutflow && bankBalanceAfter < 0) {
+    if (isOutflow && currentBankBalance - amount < 0) {
       throw new BadRequestException('Saldo insuficiente en la cuenta bancaria');
     }
 
-    await prisma.bank_account_movements.create({
-      data: {
-        bank_account_id: payment.bank_account_id,
-        type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
-        amount: payment.amount,
-        currency_code: payment.currency_code,
-        exchange_rate: payment.exchange_rate,
-        rate_type: payment.rate_type,
-        converted_amount: payment.converted_amount,
-        balance_before: currentBankBalance,
-        balance_after: bankBalanceAfter,
-        description: payment.description ?? `Pago #${payment.number}`,
-        payment_id: payment.id,
+    const operation = await this.bankMovements.openOperation(
+      {
+        bankAccountId: payment.bank_account_id,
+        operationType: payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT',
+        sourceType: 'payment',
+        sourceId: payment.id,
         date: payment.date,
-        created_by: userId,
+        currencyCode: payment.currency_code,
+        description: payment.description ?? `Pago #${payment.number}`,
+        reference: payment.reference ?? null,
+        userId,
       },
+      prisma,
+    );
+
+    await this.bankMovements.addMovement(
+      {
+        bankAccountId: payment.bank_account_id,
+        type: payment.type === 'EXPENSE' ? 'PAYMENT' : payment.type,
+        nature: isOutflow ? 'DEBIT' : 'CREDIT',
+        amount: isOutflow ? -Math.abs(amount) : Math.abs(amount),
+        currencyCode: payment.currency_code,
+        exchangeRate: payment.exchange_rate ? Number(payment.exchange_rate) : null,
+        rateType: payment.rate_type ?? null,
+        convertedAmount: payment.converted_amount ? Number(payment.converted_amount) : null,
+        operationId: operation.id,
+        description: payment.description ?? `Pago #${payment.number}`,
+        reference: payment.reference ?? null,
+        referenceType: 'payment',
+        referenceId: payment.id,
+        paymentId: payment.id,
+        date: payment.date,
+        userId,
+      },
+      prisma,
+    );
+
+    return operation;
+  }
+
+  private async createBankCharges(payment: any, operation: any, userId: string, tx?: any) {
+    const prisma = tx || this.prisma;
+    const charges = await prisma.payment_bank_charges.findMany({
+      where: { payment_id: payment.id, deleted_at: null },
+      include: { bank_concept: true },
+      orderBy: { created_at: 'asc' },
     });
 
-    await prisma.bank_accounts.update({
-      where: { id: payment.bank_account_id },
-      data: { balance: bankBalanceAfter, updated_at: new Date() },
-    });
-    await recalculateBankAccountLedger(prisma, payment.bank_account_id);
+    for (const charge of charges) {
+      if (!Number(charge.total_amount)) continue;
+      const movement = await this.bankMovements.addMovement(
+        {
+          bankAccountId: payment.bank_account_id,
+          conceptId: charge.bank_concept_id,
+          type: this.resolveChargeMovementType(charge.bank_concept?.concept_type ?? null, charge.nature),
+          nature: charge.nature,
+          amount:
+            charge.nature === 'DEBIT' ? -Math.abs(Number(charge.total_amount)) : Math.abs(Number(charge.total_amount)),
+          baseAmount: Number(charge.base_amount),
+          taxAmount: Number(charge.tax_amount),
+          totalAmount: Number(charge.total_amount),
+          currencyCode: payment.currency_code,
+          exchangeRate: payment.exchange_rate ? Number(payment.exchange_rate) : null,
+          rateType: payment.rate_type ?? null,
+          description: charge.concept_name_snapshot ?? payment.description ?? `Gasto pago #${payment.number}`,
+          reference: charge.reference ?? null,
+          referenceType: 'payment_bank_charge',
+          referenceId: charge.id,
+          paymentId: payment.id,
+          operationId: operation.id,
+          date: payment.date,
+          userId,
+          recalculate: false,
+        },
+        prisma,
+      );
+
+      await prisma.payment_bank_charges.update({
+        where: { id: charge.id },
+        data: { bank_operation_id: operation.id, bank_account_movement_id: movement.id },
+      });
+    }
+
+    await this.bankMovements.closeOperation(operation.id, prisma);
+  }
+
+  private resolveChargeMovementType(conceptType: string | null, nature: string): any {
+    if (nature === 'DEBIT') {
+      if (conceptType === 'RETENTION') return 'RETENTION';
+      if (conceptType === 'TAX') return 'TAX';
+      if (conceptType === 'INTEREST') return 'INTEREST';
+      if (conceptType === 'COMMISSION' || conceptType === 'EXPENSE') return 'FEE';
+      if (conceptType === 'ADJUSTMENT') return 'ADJUSTMENT';
+      return 'FEE';
+    }
+    return 'DEPOSIT';
   }
 
   private async createCurrentAccountEntry(payment: any, userId: string, tx?: any, entryType?: string) {
@@ -1220,7 +1366,7 @@ export class PaymentsService {
     await this.currentAccountsService.addEntry(
       {
         party_id: payment.party_id,
-        party_type: payment.party_type ?? 'CUSTOMER',
+        party_type: payment.payment_method === 'PAYROLL_DEDUCTION' ? 'CUSTOMER' : (payment.party_type ?? 'CUSTOMER'),
         currency_code: payment.currency_code,
         type,
         amount: payment.amount.toNumber(),
@@ -1233,7 +1379,80 @@ export class PaymentsService {
         date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
       },
       userId,
+      tx,
     );
+  }
+
+  private async createPayrollDeductionEntry(payment: any, userId: string, tx: any) {
+    if (!payment.party_id || payment.type !== 'COLLECTION') {
+      throw new BadRequestException('El descuento de haberes requiere un empleado y un cobro');
+    }
+
+    const [employee, customerRole, appliedDocuments] = await Promise.all([
+      tx.employees.findFirst({
+        where: { party_id: payment.party_id, is_active: true, deleted_at: null },
+        select: { id: true },
+      }),
+      tx.business_party_roles.findFirst({
+        where: { party_id: payment.party_id, role: 'CUSTOMER', active: true },
+        select: { id: true },
+      }),
+      tx.payment_documents.count({
+        where: { payment_id: payment.id, deleted_at: null },
+      }),
+    ]);
+    if (!employee || !customerRole) {
+      throw new BadRequestException('El tercero debe ser un empleado habilitado como cliente interno');
+    }
+    if (appliedDocuments === 0) {
+      throw new BadRequestException('El descuento de haberes debe aplicarse a un documento de venta');
+    }
+
+    let account = await tx.hr_accounts.findUnique({
+      where: {
+        party_id_currency_code: {
+          party_id: payment.party_id,
+          currency_code: payment.currency_code,
+        },
+      },
+    });
+    if (!account) {
+      account = await tx.hr_accounts.create({
+        data: {
+          party_id: payment.party_id,
+          party_type: 'EMPLOYEE',
+          currency_code: payment.currency_code,
+          balance: 0,
+          created_by: userId,
+        },
+      });
+    }
+
+    const currentBalance = Number(account.balance);
+    const amount = Number(payment.amount);
+    const balanceAfter = currentBalance - amount;
+    await tx.hr_account_entries.create({
+      data: {
+        hr_account_id: account.id,
+        type: 'PAYROLL_DEDUCTION',
+        amount,
+        currency_code: payment.currency_code,
+        exchange_rate: payment.exchange_rate,
+        rate_type: payment.rate_type,
+        converted_amount: payment.converted_amount,
+        balance_before: currentBalance,
+        balance_after: balanceAfter,
+        description: `Compra a descontar de haberes - Cobro #${payment.number}`,
+        reference_type: 'payment',
+        reference_id: payment.id,
+        date: payment.date,
+        created_by: userId,
+      },
+    });
+    await tx.hr_accounts.update({
+      where: { id: account.id },
+      data: { balance: balanceAfter, updated_at: new Date(), updated_by: userId },
+    });
   }
 
   private async reverseSideEffects(
@@ -1346,7 +1565,8 @@ export class PaymentsService {
           data: {
             bank_account_id: payment.bank_account_id,
             type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
-            amount: payment.amount,
+            nature: isOutflow ? 'CREDIT' : 'DEBIT',
+            amount: isOutflow ? Math.abs(amount) : -Math.abs(amount),
             currency_code: payment.currency_code,
             exchange_rate: payment.exchange_rate,
             rate_type: payment.rate_type,
@@ -1355,6 +1575,8 @@ export class PaymentsService {
             balance_after: bankBalanceAfter,
             description: `Reversión de pago #${payment.number}`,
             payment_id: payment.id,
+            reference_type: 'payment_reversal',
+            reference_id: payment.id,
             date: new Date(),
             created_by: userId,
           },
@@ -1408,6 +1630,26 @@ export class PaymentsService {
           data: { balance: Number(account.balance) - removedDelta, updated_at: new Date() },
         });
         await recalculateCurrentAccountLedger(this.prisma, accountId);
+      }
+    }
+
+    if (payment.payment_method === 'PAYROLL_DEDUCTION') {
+      const hrEntries = await this.prisma.hr_account_entries.findMany({
+        where: { reference_type: 'payment', reference_id: payment.id, deleted_at: null },
+      });
+      for (const entry of hrEntries) {
+        const account = await this.prisma.hr_accounts.findUnique({ where: { id: entry.hr_account_id } });
+        if (!account) continue;
+        const removedDelta = Number(entry.balance_after) - Number(entry.balance_before);
+        const now = new Date();
+        await this.prisma.hr_account_entries.update({
+          where: { id: entry.id },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+        await this.prisma.hr_accounts.update({
+          where: { id: account.id },
+          data: { balance: Number(account.balance) - removedDelta, updated_at: now, updated_by: userId },
+        });
       }
     }
   }

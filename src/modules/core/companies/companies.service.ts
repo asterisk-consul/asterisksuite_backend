@@ -15,6 +15,7 @@ import {
   SQL_DOCUMENT_SEQUENCES,
   SQL_LINK_SEQUENCES,
   SQL_UNITS,
+  SQL_BANK_CONCEPTS,
   executeSeedSql,
 } from '../../../../prisma/seeds/seed-sql';
 
@@ -97,7 +98,8 @@ export class CompaniesService {
       await executeSeedSql(connectionString, SQL_DOCUMENT_TYPES);
       await executeSeedSql(connectionString, SQL_DOCUMENT_SEQUENCES);
       await executeSeedSql(connectionString, SQL_LINK_SEQUENCES);
-      this.logger.log(`Tenant "${tenantDb}": Units + document types + sequences seed OK`);
+      await executeSeedSql(connectionString, SQL_BANK_CONCEPTS);
+      this.logger.log(`Tenant "${tenantDb}": Units + document types + sequences + bank concepts seed OK`);
     } finally {
       await prisma.$disconnect();
       await pool.end();

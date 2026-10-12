@@ -2,11 +2,15 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
+import { BankMovementsService } from '../bank-movements/bank-movements.service';
 import { CreateCreditCardDto, PayCardInstallmentDto, SettleCardCollectionDto, UpdateCreditCardDto } from './dto/credit-card.dto';
 
 @Injectable()
 export class CreditCardsService {
-  constructor(private readonly db: PrismaService) {}
+  constructor(
+    private readonly db: PrismaService,
+    private readonly bankMovements: BankMovementsService,
+  ) {}
   private get prisma() { return this.db.getClientForCurrentContext(); }
 
   findAll(type?: string) {
@@ -74,25 +78,74 @@ export class CreditCardsService {
     if (Math.abs(calculatedNet - dto.net_amount) > 0.01 && !dto.notes?.trim()) {
       throw new BadRequestException('Explicá la diferencia entre el neto calculado y el acreditado');
     }
+    const effectiveDate = parseLocalDateTime(dto.date);
     await this.prisma.$transaction(async tx => {
-      const balanceBefore = Number(bank.balance);
-      await tx.bank_account_movements.create({
-        data: {
-          bank_account_id: bank.id,
-          type: 'COLLECTION',
-          amount: dto.net_amount,
-          currency_code: transaction.currency_code,
-          balance_before: balanceBefore,
-          balance_after: balanceBefore + dto.net_amount,
+      const operation = await this.bankMovements.openOperation(
+        {
+          bankAccountId: bank.id,
+          operationType: 'CARD_SETTLEMENT',
+          sourceType: 'credit_card_settlement',
+          sourceId: transaction.id,
+          currencyCode: transaction.currency_code,
+          date: effectiveDate,
           description: `Liquidación ${transaction.credit_card.name}${dto.reference ? ` · ${dto.reference}` : ''}`,
-          reference_type: 'credit_card_settlement',
-          reference_id: transaction.id,
-          payment_id: transaction.payment_id,
-          date: parseLocalDateTime(dto.date),
-          created_by: userId,
+          reference: dto.reference ?? null,
+          userId,
         },
-      });
-      await tx.bank_accounts.update({ where: { id: bank.id }, data: { balance: { increment: dto.net_amount }, updated_at: new Date(), updated_by: userId } });
+        tx,
+      );
+
+      await this.bankMovements.addMovement(
+        {
+          bankAccountId: bank.id,
+          type: 'COLLECTION',
+          nature: 'CREDIT',
+          amount: Number(transaction.amount),
+          currencyCode: transaction.currency_code,
+          description: `Acreditación ${transaction.credit_card.name}${dto.reference ? ` · ${dto.reference}` : ''}`,
+          referenceType: 'credit_card_settlement',
+          referenceId: transaction.id,
+          paymentId: transaction.payment_id,
+          cardSettlementId: transaction.id,
+          date: effectiveDate,
+          operationId: operation.id,
+          userId,
+          recalculate: false,
+        },
+        tx,
+      );
+
+      const chargeLines: { type: any; amount: number; label: string }[] = [
+        { type: 'FEE', amount: Number(dto.commission_amount || 0), label: 'Comisión' },
+        { type: 'TAX', amount: Number(dto.tax_amount || 0), label: 'Impuestos' },
+        { type: 'RETENTION', amount: Number(dto.withholding_amount || 0), label: 'Retenciones' },
+        { type: 'ADJUSTMENT', amount: Number(dto.other_deductions || 0), label: 'Otras deducciones' },
+      ];
+      for (const line of chargeLines) {
+        if (!line.amount) continue;
+        await this.bankMovements.addMovement(
+          {
+            bankAccountId: bank.id,
+            type: line.type,
+            nature: 'DEBIT',
+            amount: -Math.abs(line.amount),
+            currencyCode: transaction.currency_code,
+            description: `${line.label} liquidación ${transaction.credit_card.name}`,
+            referenceType: 'credit_card_settlement',
+            referenceId: transaction.id,
+            paymentId: transaction.payment_id,
+            cardSettlementId: transaction.id,
+            date: effectiveDate,
+            operationId: operation.id,
+            userId,
+            recalculate: false,
+          },
+          tx,
+        );
+      }
+
+      await this.bankMovements.closeOperation(operation.id, tx);
+
       await tx.credit_card_transactions.update({
         where: { id },
         data: {
@@ -101,7 +154,7 @@ export class CreditCardsService {
           withholding_amount: dto.withholding_amount ?? 0,
           other_deductions: dto.other_deductions ?? 0,
           net_amount: dto.net_amount,
-          actual_clearing_date: parseLocalDateTime(dto.date),
+          actual_clearing_date: effectiveDate,
           clearing_status: 'CLEARED',
           settlement_reference: dto.reference,
           settlement_notes: dto.notes,
@@ -133,22 +186,30 @@ export class CreditCardsService {
     if (bank.currency_code !== installment.currency_code) throw new BadRequestException('La moneda del banco debe coincidir con la cuota');
     if (dto.amount <= 0) throw new BadRequestException('El importe pagado debe ser mayor a cero');
     if (Number(bank.balance) < dto.amount) throw new BadRequestException('La cuenta bancaria no tiene saldo suficiente');
+    const effectiveDate = parseLocalDateTime(dto.date);
     await this.prisma.$transaction(async tx => {
-      const balanceBefore = Number(bank.balance);
-      await tx.bank_account_movements.create({ data: {
-        bank_account_id: bank.id, type: 'PAYMENT', amount: dto.amount, currency_code: installment.currency_code,
-        balance_before: balanceBefore, balance_after: balanceBefore - dto.amount,
-        description: `Pago ${installment.transaction.credit_card.name} · cuota ${installment.installment_number}/${installment.total_installments}${dto.reference ? ` · ${dto.reference}` : ''}`,
-        reference_type: 'credit_card_installment', reference_id: installment.id,
-        payment_id: installment.transaction.payment_id, date: parseLocalDateTime(dto.date), created_by: userId,
-      } });
-      await tx.bank_accounts.update({ where: { id: bank.id }, data: { balance: { decrement: dto.amount }, updated_at: new Date(), updated_by: userId } });
+      await this.bankMovements.addMovement(
+        {
+          bankAccountId: bank.id,
+          type: 'PAYMENT',
+          nature: 'DEBIT',
+          amount: -Math.abs(dto.amount),
+          currencyCode: installment.currency_code,
+          description: `Pago ${installment.transaction.credit_card.name} · cuota ${installment.installment_number}/${installment.total_installments}${dto.reference ? ` · ${dto.reference}` : ''}`,
+          referenceType: 'credit_card_installment',
+          referenceId: installment.id,
+          paymentId: installment.transaction.payment_id,
+          date: effectiveDate,
+          userId,
+        },
+        tx,
+      );
       await tx.credit_card_installments.update({ where: { id }, data: {
-        status: 'PAID', paid_date: parseLocalDateTime(dto.date), paid_amount: dto.amount,
+        status: 'PAID', paid_date: effectiveDate, paid_amount: dto.amount,
         paid_currency_code: installment.currency_code, updated_at: new Date(), updated_by: userId,
       } });
       const remaining = await tx.credit_card_installments.count({ where: { transaction_id: installment.transaction_id, status: { not: 'PAID' }, deleted_at: null, id: { not: id } } });
-      if (!remaining) await tx.credit_card_transactions.update({ where: { id: installment.transaction_id }, data: { clearing_status: 'CLEARED', actual_clearing_date: parseLocalDateTime(dto.date), updated_by: userId } });
+      if (!remaining) await tx.credit_card_transactions.update({ where: { id: installment.transaction_id }, data: { clearing_status: 'CLEARED', actual_clearing_date: effectiveDate, updated_by: userId } });
     });
     await recalculateBankAccountLedger(this.prisma, bank.id);
     return this.prisma.credit_card_installments.findUnique({ where: { id }, include: { transaction: { include: { credit_card: true } } } });
