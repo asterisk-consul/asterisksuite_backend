@@ -143,7 +143,7 @@ export class ProductsService {
 
   async search(query: string, usage?: string, requestedLimit = 30) {
     const term = query.trim();
-    if (term.length < 2) return [];
+    if (term.length === 1) return [];
     const limit = Math.min(Math.max(requestedLimit, 1), 50);
     const usageTypes = usage === 'sale'
       ? ['SALE', 'BOTH']
@@ -156,11 +156,13 @@ export class ProductsService {
         deleted_at: null,
         active: true,
         ...(usageTypes ? { usage_type: { in: usageTypes as any } } : {}),
-        OR: [
-          { sku: { contains: term, mode: 'insensitive' } },
-          { name: { contains: term, mode: 'insensitive' } },
-          { description: { contains: term, mode: 'insensitive' } },
-        ],
+        ...(term ? {
+          OR: [
+            { sku: { contains: term, mode: 'insensitive' } },
+            { name: { contains: term, mode: 'insensitive' } },
+            { description: { contains: term, mode: 'insensitive' } },
+          ],
+        } : {}),
       },
       orderBy: { name: 'asc' },
       take: limit,
