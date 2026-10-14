@@ -36,6 +36,15 @@ export class BusinessPartiesController {
     return this.service.findAll(type);
   }
 
+  @Get('search')
+  search(
+    @Query('q') query = '',
+    @Query('types') types?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.service.search(query, types?.split(',').filter(Boolean), Number(limit) || 30);
+  }
+
   // 🔥 Rutas fijas ANTES de @Get(':id') para evitar conflicto
   @Get('export/template')
   @RequirePermissions('business_parties.import')

@@ -141,6 +141,44 @@ export class ProductsService {
     });
   }
 
+  async search(query: string, usage?: string, requestedLimit = 30) {
+    const term = query.trim();
+    if (term.length < 2) return [];
+    const limit = Math.min(Math.max(requestedLimit, 1), 50);
+    const usageTypes = usage === 'sale'
+      ? ['SALE', 'BOTH']
+      : usage === 'purchase'
+        ? ['PURCHASE', 'BOTH']
+        : undefined;
+
+    return this.prisma.products.findMany({
+      where: {
+        deleted_at: null,
+        active: true,
+        ...(usageTypes ? { usage_type: { in: usageTypes as any } } : {}),
+        OR: [
+          { sku: { contains: term, mode: 'insensitive' } },
+          { name: { contains: term, mode: 'insensitive' } },
+          { description: { contains: term, mode: 'insensitive' } },
+        ],
+      },
+      orderBy: { name: 'asc' },
+      take: limit,
+      include: {
+        product_price: {
+          where: { deleted_at: null },
+          include: { currencies: true },
+        },
+        product_taxes: { include: { taxes: true } },
+        product_variants: {
+          select: { id: true },
+          where: { deleted_at: null },
+        },
+        unit: true,
+      },
+    });
+  }
+
   // ─────────────────────────────
   // FIND ONE
   // ─────────────────────────────

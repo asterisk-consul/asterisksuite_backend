@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 
 import { ProductsService } from './products.service';
 
@@ -24,6 +24,16 @@ export class ProductsController {
   @RequirePermissions('products.read')
   findAll() {
     return this.service.findAll();
+  }
+
+  @Get('search')
+  @RequirePermissions('products.read')
+  search(
+    @Query('q') query = '',
+    @Query('usage') usage?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.service.search(query, usage, Number(limit) || 30);
   }
 
   @Get(':id/root-products')

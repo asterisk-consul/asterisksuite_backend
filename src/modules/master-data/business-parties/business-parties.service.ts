@@ -153,6 +153,52 @@ export class BusinessPartiesService {
     });
   }
 
+  async search(query: string, types: string[] = [], requestedLimit = 30) {
+    const term = query.trim();
+    const limit = Math.min(Math.max(requestedLimit, 1), 100);
+    const typeFilter = types.length
+      ? {
+          OR: [
+            { type: { in: types as any } },
+            { roles: { some: { role: { in: types as any }, active: true } } },
+          ],
+        }
+      : undefined;
+
+    return this.prisma.business_parties.findMany({
+      where: {
+        active: true,
+        AND: [
+          ...(typeFilter ? [typeFilter] : []),
+          ...(term
+            ? [{
+                OR: [
+                  { name: { contains: term, mode: 'insensitive' as const } },
+                  { business_names: { contains: term, mode: 'insensitive' as const } },
+                  { tax_id: { contains: term, mode: 'insensitive' as const } },
+                  { email: { contains: term, mode: 'insensitive' as const } },
+                ],
+              }]
+            : []),
+        ],
+      },
+      take: limit,
+      orderBy: { name: 'asc' },
+      select: {
+        id: true,
+        type: true,
+        name: true,
+        business_names: true,
+        tax_id: true,
+        email: true,
+        vat_condition: true,
+        exemption_rate: true,
+        active: true,
+        roles: { select: { id: true, role: true, active: true } },
+      },
+    });
+  }
+
   // ✅ FIND ONE
   async findOne(id: string) {
     const party = await this.prisma.business_parties.findUnique({

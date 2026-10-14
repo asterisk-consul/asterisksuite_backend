@@ -1,6 +1,6 @@
 // src/modules/erp/documents-purchases/documents_purchases.service.ts
 
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 
 import { Prisma } from '@/generated/prisma/client';
 
@@ -431,6 +431,10 @@ export class DocumentsPurchasesService {
     dto: UpdateDocumentDto,
   ) {
     const doc = await this.findOne(id);
+
+    if (dto.expected_updated_at && new Date(dto.expected_updated_at).getTime() !== new Date(doc.updated_at).getTime()) {
+      throw new ConflictException('Este documento fue modificado por otra persona. Recargá la página antes de guardar para no sobrescribir sus cambios.');
+    }
 
     if (doc.status === STATUS_CONFIRMED) {
       throw new BadRequestException('No se puede modificar un documento confirmado');
