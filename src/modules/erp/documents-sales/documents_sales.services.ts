@@ -1231,6 +1231,61 @@ export class DocumentsSalesService {
 
     return { ...doc, orden_venta_doc: ordenVentaDoc };
   }
+
+  applyOrderAmountVisibility(document: any, canViewRestrictedAmounts: boolean) {
+    if (!document || document.document_types?.category !== 'ORDER') return document;
+
+    const configuredStatuses = Array.isArray(document.document_types?.hidden_amount_statuses)
+      ? document.document_types.hidden_amount_statuses.map(Number)
+      : [];
+    const restrictedByStatus = configuredStatuses.includes(Number(document.status));
+    if (!restrictedByStatus || canViewRestrictedAmounts) {
+      return { ...document, amounts_visible: true };
+    }
+
+    const operation = document.commercial_operation;
+    const orderedTotal = Number(operation?.ordered_total ?? document.total ?? 0);
+    const paidTotal = Number(operation?.paid_total ?? document.paid_amount ?? 0);
+    const paidPercentage = orderedTotal > 0
+      ? Math.min((paidTotal / orderedTotal) * 100, 100)
+      : 0;
+
+    const hide = (source: any, fields: string[]) => {
+      if (!source) return source;
+      const result = { ...source };
+      for (const field of fields) result[field] = null;
+      return result;
+    };
+
+    return {
+      ...hide(document, [
+        'subtotal', 'discount_amount', 'tax_amount', 'total', 'paid_amount',
+        'pending_amount', 'converted_subtotal', 'converted_tax_amount', 'converted_total',
+      ]),
+      amounts_visible: false,
+      monetary_visibility: {
+        restricted_by_status: true,
+        paid_percentage: paidPercentage,
+        required_percentage: Number(operation?.delivery_payment_percentage ?? 0),
+      },
+      document_items: (document.document_items ?? []).map((item: any) => hide(item, [
+        'unit_price', 'price', 'subtotal', 'discount_amount', 'tax_amount', 'total',
+        'converted_unit_price', 'converted_price', 'converted_total',
+      ])),
+      document_taxes: (document.document_taxes ?? []).map((tax: any) => hide(tax, [
+        'taxable_base', 'tax_amount', 'converted_taxable_base', 'converted_tax_amount',
+        'automatic_tax_amount',
+      ])),
+      child_documents: (document.child_documents ?? []).map((child: any) => hide(child, ['total'])),
+      commercial_operation: hide(operation, [
+        'ordered_total', 'invoiced_total', 'paid_total', 'pending_invoice_total',
+        'pending_payment_total',
+      ]),
+      orden_venta_doc: hide(document.orden_venta_doc, [
+        'commission_rate', 'commission_base', 'commission_settled_at', 'commission_vale_id',
+      ]),
+    };
+  }
   // ─────────────────────────────────────────────
   // GENERAR BORRADORES DESDE VIAJE
   // ─────────────────────────────────────────────
@@ -1989,6 +2044,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          assigned_to: doc.assigned_to,
           created_by: userId,
           number,
           date: new Date(),
@@ -2081,6 +2137,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          assigned_to: doc.assigned_to,
           created_by: userId,
           number,
           date: new Date(),
@@ -2391,6 +2448,7 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: dispatch.customer_id,
           parent_document_id: dispatch.source_document_id,
+          assigned_to: dispatch.source_document?.assigned_to ?? null,
           dispatch_order_id: dispatch.id,
           number,
           date: new Date(),

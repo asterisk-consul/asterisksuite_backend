@@ -143,6 +143,7 @@ model document_types {
   is_electronic           Boolean                   @default(false)
   custom_fields_config    Json?
   enabled_statuses        Json? // Array de enteros: [0,1,2,3] o null = todos
+  hidden_amount_statuses  Json? // Estados de OV en los que los importes requieren sales.orders.view_amounts
   created_at              DateTime                  @default(now()) @db.Timestamp(6)
   updated_at              DateTime?                 @updatedAt @db.Timestamp(6)
   deleted_at              DateTime?

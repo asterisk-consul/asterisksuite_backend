@@ -13295,6 +13295,7 @@ export const Document_typesScalarFieldEnum = {
   is_electronic: 'is_electronic',
   custom_fields_config: 'custom_fields_config',
   enabled_statuses: 'enabled_statuses',
+  hidden_amount_statuses: 'hidden_amount_statuses',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

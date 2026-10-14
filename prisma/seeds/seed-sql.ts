@@ -206,6 +206,7 @@ export const RBAC_PERMISSIONS = [
   { code: 'sales.delete', description: 'Eliminar ventas' },
   { code: 'sales.confirm', description: 'Confirmar ventas' },
   { code: 'sales.cancel', description: 'Cancelar ventas' },
+  { code: 'sales.orders.view_amounts', description: 'Ver precios, totales y comisiones de órdenes de venta restringidas' },
 
   // ─── ERP - Purchases ──────────────────────────────────────
   { code: 'purchases.read', description: 'Ver compras' },

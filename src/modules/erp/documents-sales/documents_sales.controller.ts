@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import type { Request } from 'express';
 import { DocumentsSalesService } from './documents_sales.services';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
@@ -8,11 +8,22 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { DocumentAccessService } from '@/access-control/services/document-access.service';
+import { PermissionContextBuilder } from '@/access-control/authorization/permission-context.builder';
 
 @UseGuards(JwtAuthGuard)
 @Controller('documents/sales')
 export class DocumentsSalesController {
-  constructor(private readonly service: DocumentsSalesService, private readonly documentAccess: DocumentAccessService) {}
+  constructor(
+    private readonly service: DocumentsSalesService,
+    private readonly documentAccess: DocumentAccessService,
+    private readonly permissionContextBuilder: PermissionContextBuilder,
+  ) {}
+
+  private async canViewOrderAmounts(userId: string, companyRole?: string) {
+    if (companyRole === 'OWNER' || companyRole === 'ADMIN') return true;
+    const context = await this.permissionContextBuilder.build(userId);
+    return context.can('sales.orders.view_amounts');
+  }
 
   @Post('generate-from-all-completed-trips')
   async generateFromAllCompletedTrips(@CurrentUser() user: AuthUser, @Req() req: Request) {
@@ -86,7 +97,7 @@ export class DocumentsSalesController {
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'sales', 'read');
     if (category) await this.documentAccess.assertCategory(user.id, companyRole, 'sales', category, 'read');
-    return this.service.findAll(
+    const documents = await this.service.findAll(
       documentTypeId,
       status !== undefined ? Number(status) : undefined,
       category ?? allowedCategories,
@@ -94,6 +105,8 @@ export class DocumentsSalesController {
       partyId ? undefined : (companyRole === 'USER' ? user.id : undefined),
       partyId,
     );
+    const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
+    return documents.map((document) => this.service.applyOrderAmountVisibility(document, canViewAmounts));
   }
 
   @Get('pending')
@@ -114,13 +127,23 @@ export class DocumentsSalesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'read');
-    return this.service.findOne(id);
+    const companyRole = req['companyUserRole'] as string | undefined;
+    await this.documentAccess.assertDocument(user.id, companyRole, 'sales', id, 'read');
+    const document = await this.service.findOne(id);
+    const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
+    return this.service.applyOrderAmountVisibility(document, canViewAmounts);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'update');
+    const companyRole = req['companyUserRole'] as string | undefined;
+    await this.documentAccess.assertDocument(user.id, companyRole, 'sales', id, 'update');
+    const currentDocument = await this.service.findOne(id);
+    const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
+    const visibleDocument = this.service.applyOrderAmountVisibility(currentDocument, canViewAmounts);
+    if (visibleDocument?.amounts_visible === false) {
+      throw new ForbiddenException('No tenés permiso para editar importes de esta orden en su estado actual');
+    }
     return this.service.update(id, dto);
   }
 

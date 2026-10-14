@@ -80,6 +80,11 @@ export class CreateDocumentsTypeDto {
 
   @IsOptional()
   @IsArray()
+  @IsInt({ each: true })
+  hidden_amount_statuses?: number[];
+
+  @IsOptional()
+  @IsArray()
   @IsUUID('4', { each: true })
   tax_ids?: string[];
 }
