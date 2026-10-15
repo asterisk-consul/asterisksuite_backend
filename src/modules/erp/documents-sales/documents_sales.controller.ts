@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import type { Request } from 'express';
 import { DocumentsSalesService } from './documents_sales.services';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
@@ -27,7 +39,13 @@ export class DocumentsSalesController {
 
   @Post('generate-from-all-completed-trips')
   async generateFromAllCompletedTrips(@CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertCategory(user.id, req['companyUserRole'] as string | undefined, 'sales', 'INVOICE', 'create');
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'create',
+    );
     const tripIds = await this.service.getAllCompletedTripIds();
     const results: { tripId: string; created: number; skipped: number }[] = [];
 
@@ -45,7 +63,13 @@ export class DocumentsSalesController {
 
   @Post('generate-from-trip/:tripId')
   async generateFromTrip(@Param('tripId') tripId: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertCategory(user.id, req['companyUserRole'] as string | undefined, 'sales', 'INVOICE', 'create');
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'create',
+    );
     return this.service.generateDraftsFromTrip(tripId);
   }
 
@@ -55,32 +79,66 @@ export class DocumentsSalesController {
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
   ) {
-    await this.documentAccess.assertDocumentType(user.id, req['companyUserRole'] as string | undefined, 'sales', body.documentTypeId, 'create');
+    await this.documentAccess.assertDocumentType(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      body.documentTypeId,
+      'create',
+    );
     return this.service.generateFromSelectedTrips(body.tripIds, body.documentTypeId);
   }
 
   @Get('completed-trips-pending')
   async getCompletedTripsPending(@CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertCategory(user.id, req['companyUserRole'] as string | undefined, 'sales', 'INVOICE', 'create');
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'create',
+    );
     return this.service.getCompletedTripsPending();
   }
 
   @Post()
   async create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocumentType(user.id, req['companyUserRole'] as string | undefined, 'sales', dto.document_type_id, 'create');
+    await this.documentAccess.assertDocumentType(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      dto.document_type_id,
+      'create',
+    );
     return this.service.create(dto, user.id);
   }
 
   @Post(':id/create-dispatch')
   @RequirePermissions('dispatch_orders.create')
   async createDispatch(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'update');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'update',
+    );
     return this.service.createDispatchFromDocument(id, user.id);
   }
 
   @Post('dispatch/:dispatchId/create-remito')
-  async createRemitoFromDispatch(@Param('dispatchId') dispatchId: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertCategory(user.id, req['companyUserRole'] as string | undefined, 'sales', 'REMITO', 'create');
+  async createRemitoFromDispatch(
+    @Param('dispatchId') dispatchId: string,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'REMITO',
+      'create',
+    );
     return this.service.createRemitoFromDispatch(dispatchId, user.id);
   }
 
@@ -102,26 +160,35 @@ export class DocumentsSalesController {
       status !== undefined ? Number(status) : undefined,
       category ?? allowedCategories,
       direction !== undefined ? Number(direction) : undefined,
-      partyId ? undefined : (companyRole === 'USER' ? user.id : undefined),
+      partyId ? undefined : companyRole === 'USER' ? user.id : undefined,
       partyId,
+      companyRole === 'OWNER' || companyRole === 'ADMIN',
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     return documents.map((document) => this.service.applyOrderAmountVisibility(document, canViewAmounts));
   }
 
   @Get('pending')
-  async findPending(
-    @Query('party_id') partyId?: string,
-    @CurrentUser() user?: AuthUser,
-    @Req() req?: Request,
-  ) {
-    await this.documentAccess.assertCategory(user!.id, req?.['companyUserRole'] as string | undefined, 'sales', 'INVOICE', 'read');
+  async findPending(@Query('party_id') partyId?: string, @CurrentUser() user?: AuthUser, @Req() req?: Request) {
+    await this.documentAccess.assertCategory(
+      user!.id,
+      req?.['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'read',
+    );
     return this.service.findPending(partyId);
   }
 
   @Get(':id/stock-availability')
   async getStockAvailability(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'read');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'read',
+    );
     return this.service.getSalesOrderAvailability(id);
   }
 
@@ -135,7 +202,12 @@ export class DocumentsSalesController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateDocumentDto,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(user.id, companyRole, 'sales', id, 'update');
     const currentDocument = await this.service.findOne(id);
@@ -149,13 +221,25 @@ export class DocumentsSalesController {
 
   @Patch(':id/confirm')
   async confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'confirm');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'confirm',
+    );
     return this.service.confirm(id, user.id);
   }
 
   @Patch(':id/cancel')
   async cancel(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'cancel');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'cancel',
+    );
     return this.service.cancel(id, user.id);
   }
 
@@ -208,13 +292,25 @@ export class DocumentsSalesController {
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
   ) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'update');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'update',
+    );
     return this.service.changeStatus(id, body.status, user.id);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'sales', id, 'delete');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'delete',
+    );
     return this.service.remove(id, user.id);
   }
 }

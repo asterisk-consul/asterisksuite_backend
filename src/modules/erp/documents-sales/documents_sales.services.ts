@@ -43,7 +43,6 @@ const STATUS_CANCELLED = 3;
 
 @Injectable()
 export class DocumentsSalesService {
-
   private readonly logger = new Logger(DocumentsSalesService.name);
 
   constructor(
@@ -135,9 +134,9 @@ export class DocumentsSalesService {
   // CREATE
   // ─────────────────────────────────────────────
   async create(dto: CreateDocumentDto, userId?: string) {
-    console.log('[SalesService] create() called with dto:', JSON.stringify(dto, null, 2))
+    console.log('[SalesService] create() called with dto:', JSON.stringify(dto, null, 2));
 
-    const dtoItems = dto.items ?? []
+    const dtoItems = dto.items ?? [];
 
     const docType = await this.prisma.document_types.findUnique({
       where: {
@@ -158,29 +157,29 @@ export class DocumentsSalesService {
       const parentDoc = await this.prisma.documents.findUnique({
         where: { id: dto.parent_document_id },
         include: { document_types: { select: { category: true, direction: true } } },
-      })
+      });
       if (!parentDoc) {
-        throw new BadRequestException('El documento referenciado no existe')
+        throw new BadRequestException('El documento referenciado no existe');
       }
       if (parentDoc.status < 1) {
-        throw new BadRequestException('El documento referenciado debe estar aprobado')
+        throw new BadRequestException('El documento referenciado debe estar aprobado');
       }
-      const parentCategory = parentDoc.document_types?.category
-      const newCategory = docType.category
-      const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(newCategory)
-      const isInvoice = newCategory === 'INVOICE'
+      const parentCategory = parentDoc.document_types?.category;
+      const newCategory = docType.category;
+      const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(newCategory);
+      const isInvoice = newCategory === 'INVOICE';
 
       if (isNcNd && parentCategory !== 'INVOICE') {
-        throw new BadRequestException('Solo se puede referenciar una factura')
+        throw new BadRequestException('Solo se puede referenciar una factura');
       }
       if (isInvoice && !['ORDER', 'INVOICE'].includes(parentCategory)) {
-        throw new BadRequestException('Por configuración, un remito no puede originar una factura')
+        throw new BadRequestException('Por configuración, un remito no puede originar una factura');
       }
       if (parentDoc.document_types?.direction !== docType.direction) {
-        throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante')
+        throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante');
       }
       if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
-        throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada')
+        throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada');
       }
     }
 
@@ -189,10 +188,10 @@ export class DocumentsSalesService {
       direction: 'SALE',
       partyId: dto.party_id,
       documentLetterType: docType.letter_type ?? undefined,
-    })
+    });
 
     // ─── Tax Engine: resolver impuestos ──────────────────────────
-    console.log('[SalesService] Resolving taxes via Tax Engine...')
+    console.log('[SalesService] Resolving taxes via Tax Engine...');
 
     const taxContext: TaxContext = {
       issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
@@ -205,42 +204,42 @@ export class DocumentsSalesService {
       date: dto.date,
       jurisdictionId: dto.fiscal_jurisdiction_id,
       operationType: 'SALE',
-      items: dtoItems.map(i => ({
+      items: dtoItems.map((i) => ({
         productId: i.product_id,
         quantity: Number(i.quantity),
         unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
       })),
+    };
+
+    const resolution = await this.taxResolution.resolve(taxContext);
+    const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+    if (dto.taxes?.some((t) => t.manual && !t.modification_reason?.trim())) {
+      throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB');
+    }
+    for (const override of dto.taxes?.filter((t) => t.manual) ?? []) {
+      const calculated = calculation.document.documentTaxes.find((t) => t.tax_id === override.tax_id);
+      if (!calculated) continue;
+      const delta = Number(override.tax_amount) - calculated.amount;
+      calculated.amount = Number(override.tax_amount);
+      calculated.rate = Number(override.tax_rate);
+      calculated.taxableBase = Number(override.taxable_base);
+      calculation.document.totalTaxes += delta;
+      calculation.document.total += delta;
     }
 
-    const resolution = await this.taxResolution.resolve(taxContext)
-    const calculation = this.taxCalculation.calculate(resolution, taxContext.items)
-    if (dto.taxes?.some(t => t.manual && !t.modification_reason?.trim())) {
-      throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB')
-    }
-    for (const override of dto.taxes?.filter(t => t.manual) ?? []) {
-      const calculated = calculation.document.documentTaxes.find(t => t.tax_id === override.tax_id)
-      if (!calculated) continue
-      const delta = Number(override.tax_amount) - calculated.amount
-      calculated.amount = Number(override.tax_amount)
-      calculated.rate = Number(override.tax_rate)
-      calculated.taxableBase = Number(override.taxable_base)
-      calculation.document.totalTaxes += delta
-      calculation.document.total += delta
-    }
-
-    console.log('[SalesService] Tax Engine result:', JSON.stringify(calculation.document, null, 2))
+    console.log('[SalesService] Tax Engine result:', JSON.stringify(calculation.document, null, 2));
 
     // ─── Resolver exchange rate ──────────────────────────────────
-    const currencyCode = dto.currency_code ?? 'ARS'
-    const baseCurrency = await this.conversionService.getBaseCurrency()
-    const isBase = currencyCode.toUpperCase() === baseCurrency.code.toUpperCase()
+    const currencyCode = dto.currency_code ?? 'ARS';
+    const baseCurrency = await this.conversionService.getBaseCurrency();
+    const isBase = currencyCode.toUpperCase() === baseCurrency.code.toUpperCase();
 
-    let exchangeRate = dto.exchange_rate ?? 1
-    let rateType = (dto.rate_type as any) ?? null
+    let exchangeRate = dto.exchange_rate ?? 1;
+    let rateType = (dto.rate_type as any) ?? null;
 
     // For fiscal documents (A/B/C), force OFFICIAL
     if (docType.letter_type && ['A', 'B', 'C'].includes(docType.letter_type)) {
-      rateType = 'OFFICIAL'
+      rateType = 'OFFICIAL';
     }
 
     if (!isBase && !dto.exchange_rate) {
@@ -250,19 +249,19 @@ export class DocumentsSalesService {
           baseCurrency.code,
           parseLocalDateTime(dto.date),
           rateType,
-        )
-        exchangeRate = resolved.rate
-        rateType = resolved.rateType
+        );
+        exchangeRate = resolved.rate;
+        rateType = resolved.rateType;
       } catch {
         // If no rate found, default to 1 (will be ARS equivalent)
-        exchangeRate = 1
+        exchangeRate = 1;
       }
     }
 
     // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
     const items: ItemInput[] = calculation.document.items.map((item, idx) => {
-      const convertedUnitPrice = isBase ? null : this.conversionService.convertAmount(item.unitPrice, exchangeRate)
-      const convertedPrice = isBase ? null : this.conversionService.convertAmount(item.total, exchangeRate)
+      const convertedUnitPrice = isBase ? null : this.conversionService.convertAmount(item.unitPrice, exchangeRate);
+      const convertedPrice = isBase ? null : this.conversionService.convertAmount(item.total, exchangeRate);
 
       return {
         product_id: item.productId ?? null,
@@ -280,7 +279,7 @@ export class DocumentsSalesService {
         exempt_amount: item.exemptAmount,
         taxable_base: item.taxableBase,
         total_taxes: item.totalTaxes,
-        taxes: item.taxes.map(t => ({
+        taxes: item.taxes.map((t) => ({
           tax_id: t.tax_id,
           tax_rate: t.rate,
           tax_amount: t.amount,
@@ -288,8 +287,8 @@ export class DocumentsSalesService {
           calculation_level: 'line' as const,
           is_included_in_price: t.isIncludedInPrice,
         })),
-      }
-    })
+      };
+    });
 
     const totals = {
       subtotal: calculation.document.subtotal,
@@ -297,25 +296,28 @@ export class DocumentsSalesService {
       taxable_base: calculation.document.taxableBase,
       total_taxes: calculation.document.totalTaxes,
       total: calculation.document.total,
-      documentTaxes: calculation.document.documentTaxes.map(t => ({
+      documentTaxes: calculation.document.documentTaxes.map((t) => ({
         tax_id: t.tax_id,
         tax_rate: t.rate,
         taxable_base: t.taxableBase,
         tax_amount: t.amount,
-        automatic_tax_amount: this.taxCalculation.calculate(resolution, taxContext.items).document.documentTaxes.find(a => a.tax_id === t.tax_id)?.amount ?? t.amount,
-        is_manual: dto.taxes?.some(o => o.tax_id === t.tax_id && o.manual) ?? false,
-        modification_reason: dto.taxes?.find(o => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
+        automatic_tax_amount:
+          this.taxCalculation
+            .calculate(resolution, taxContext.items)
+            .document.documentTaxes.find((a) => a.tax_id === t.tax_id)?.amount ?? t.amount,
+        is_manual: dto.taxes?.some((o) => o.tax_id === t.tax_id && o.manual) ?? false,
+        modification_reason: dto.taxes?.find((o) => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
       })),
-    }
+    };
 
     // ─── OPENING_BALANCE: usar dto.total directamente ────────────
     if (docType.category === 'OPENING_BALANCE' && dto.total) {
-      totals.subtotal = dto.subtotal ?? dto.total
-      totals.total = dto.total
-      totals.exempt_amount = dto.total
-      totals.taxable_base = 0
-      totals.total_taxes = 0
-      totals.documentTaxes = []
+      totals.subtotal = dto.subtotal ?? dto.total;
+      totals.total = dto.total;
+      totals.exempt_amount = dto.total;
+      totals.taxable_base = 0;
+      totals.total_taxes = 0;
+      totals.documentTaxes = [];
     }
 
     let createdId = '';
@@ -328,11 +330,7 @@ export class DocumentsSalesService {
         tx,
       );
 
-      const number = await this.getNextNumber(
-        dto.document_type_id,
-        sequenceId,
-        tx,
-      );
+      const number = await this.getNextNumber(dto.document_type_id, sequenceId, tx);
 
       const document = await tx.documents.create({
         data: {
@@ -374,19 +372,21 @@ export class DocumentsSalesService {
 
           created_by: userId ?? null,
 
-          ...(!isBase ? await this.conversionService.convertDocumentFields(
-            currencyCode,
-            exchangeRate,
-            rateType,
-            {
-              subtotal: Number(totals.subtotal),
-              exempt_amount: Number(totals.exempt_amount),
-              total_taxes: Number(totals.total_taxes),
-              total: Number(totals.total),
-              taxable_base: Number(totals.taxable_base),
-            },
-            parseLocalDateTime(dto.date),
-          ) : {}),
+          ...(!isBase
+            ? await this.conversionService.convertDocumentFields(
+                currencyCode,
+                exchangeRate,
+                rateType,
+                {
+                  subtotal: Number(totals.subtotal),
+                  exempt_amount: Number(totals.exempt_amount),
+                  total_taxes: Number(totals.total_taxes),
+                  total: Number(totals.total),
+                  taxable_base: Number(totals.taxable_base),
+                },
+                parseLocalDateTime(dto.date),
+              )
+            : {}),
         },
       });
 
@@ -471,7 +471,7 @@ export class DocumentsSalesService {
 
             modification_reason: t.modification_reason,
 
-            manual_override_by: t.is_manual ? userId ?? null : null,
+            manual_override_by: t.is_manual ? (userId ?? null) : null,
 
             converted_taxable_base: isBase ? null : this.conversionService.convertAmount(t.taxable_base, exchangeRate),
 
@@ -482,48 +482,50 @@ export class DocumentsSalesService {
 
       // ─── Tracking: INVOICE referencing ORDER → update quantity_invoiced + status ───
       if (docType.category === 'INVOICE' && dto.parent_document_id) {
-        const parentCategory = (await tx.documents.findUnique({
-          where: { id: dto.parent_document_id },
-          select: { document_types: { select: { category: true } } },
-        }))?.document_types.category
+        const parentCategory = (
+          await tx.documents.findUnique({
+            where: { id: dto.parent_document_id },
+            select: { document_types: { select: { category: true } } },
+          })
+        )?.document_types.category;
 
         if (parentCategory === 'ORDER') {
           const parentItems = await tx.document_items.findMany({
             where: { document_id: dto.parent_document_id },
-          })
+          });
 
           // Match invoice items to parent items by product_id, consuming remaining quantity
           const invoiceItems = await tx.document_items.findMany({
             where: { document_id: document.id },
-          })
+          });
 
-          const parentItemMap = new Map<string, { remaining: number; item: any }>()
+          const parentItemMap = new Map<string, { remaining: number; item: any }>();
           for (const pi of parentItems) {
-            const alreadyInvoiced = Number(pi.quantity_invoiced ?? 0)
-            const remaining = Number(pi.quantity) - alreadyInvoiced
+            const alreadyInvoiced = Number(pi.quantity_invoiced ?? 0);
+            const remaining = Number(pi.quantity) - alreadyInvoiced;
             if (remaining > 0) {
-              const key = pi.product_id ?? `idx-${pi.id}`
-              const existing = parentItemMap.get(key)
+              const key = pi.product_id ?? `idx-${pi.id}`;
+              const existing = parentItemMap.get(key);
               if (existing) {
-                existing.remaining += remaining
+                existing.remaining += remaining;
               } else {
-                parentItemMap.set(key, { remaining, item: pi })
+                parentItemMap.set(key, { remaining, item: pi });
               }
             }
           }
 
           for (const invoiceItem of invoiceItems) {
-            const key = invoiceItem.product_id ?? `idx-${invoiceItem.id}`
-            const match = parentItemMap.get(key)
+            const key = invoiceItem.product_id ?? `idx-${invoiceItem.id}`;
+            const match = parentItemMap.get(key);
             if (match && match.remaining > 0) {
-              const consume = Math.min(Number(invoiceItem.quantity), match.remaining)
-              const newInvoiced = Number(match.item.quantity_invoiced ?? 0) + consume
+              const consume = Math.min(Number(invoiceItem.quantity), match.remaining);
+              const newInvoiced = Number(match.item.quantity_invoiced ?? 0) + consume;
               await tx.document_items.update({
                 where: { id: match.item.id },
                 data: { quantity_invoiced: newInvoiced },
-              })
-              match.remaining -= consume
-              if (match.remaining <= 0) parentItemMap.delete(key)
+              });
+              match.remaining -= consume;
+              if (match.remaining <= 0) parentItemMap.delete(key);
             }
           }
 
@@ -550,7 +552,9 @@ export class DocumentsSalesService {
     const doc = await this.findOne(id);
 
     if (dto.expected_updated_at && new Date(dto.expected_updated_at).getTime() !== new Date(doc.updated_at).getTime()) {
-      throw new ConflictException('Este documento fue modificado por otra persona. Recargá la página antes de guardar para no sobrescribir sus cambios.');
+      throw new ConflictException(
+        'Este documento fue modificado por otra persona. Recargá la página antes de guardar para no sobrescribir sus cambios.',
+      );
     }
 
     if (doc.status === STATUS_CONFIRMED) {
@@ -566,12 +570,12 @@ export class DocumentsSalesService {
     let totals: any = null;
 
     // ─── Resolver exchange rate for update ────────────────────
-    const updateCurrencyCode = dto.currency_code ?? doc.currency_code ?? 'ARS'
-    const updateBaseCurrency = await this.conversionService.getBaseCurrency()
-    const updateIsBase = updateCurrencyCode.toUpperCase() === updateBaseCurrency.code.toUpperCase()
+    const updateCurrencyCode = dto.currency_code ?? doc.currency_code ?? 'ARS';
+    const updateBaseCurrency = await this.conversionService.getBaseCurrency();
+    const updateIsBase = updateCurrencyCode.toUpperCase() === updateBaseCurrency.code.toUpperCase();
 
-    let updateExchangeRate = dto.exchange_rate ?? Number(doc.exchange_rate) ?? 1
-    let updateRateType = (dto.rate_type as any) ?? doc.rate_type ?? null
+    let updateExchangeRate = dto.exchange_rate ?? Number(doc.exchange_rate) ?? 1;
+    let updateRateType = (dto.rate_type as any) ?? doc.rate_type ?? null;
 
     if (dto.items?.length) {
       if (!dto.currency_code) {
@@ -582,12 +586,12 @@ export class DocumentsSalesService {
         where: { id: doc.document_type_id },
       });
 
-      const partnerId = dto.party_id ?? doc.party_id
+      const partnerId = dto.party_id ?? doc.party_id;
       const fiscalCtx = await this.fiscalValidation.resolveFiscalContext({
         direction: 'SALE',
         partyId: partnerId,
         documentLetterType: docType?.letter_type ?? undefined,
-      })
+      });
 
       const taxContext: TaxContext = {
         issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
@@ -600,7 +604,7 @@ export class DocumentsSalesService {
         date: dto.date ?? new Date(doc.date).toISOString(),
         jurisdictionId: dto.fiscal_jurisdiction_id ?? doc.fiscal_jurisdiction_id ?? undefined,
         operationType: 'SALE',
-        items: dto.items.map(i => ({
+        items: dto.items.map((i) => ({
           productId: i.product_id,
           quantity: Number(i.quantity),
           unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
@@ -609,24 +613,24 @@ export class DocumentsSalesService {
 
       const resolution = await this.taxResolution.resolve(taxContext);
       const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
-      const automaticDocumentTaxes = calculation.document.documentTaxes.map(t => ({ ...t }))
-      if (dto.taxes?.some(t => t.manual && !t.modification_reason?.trim())) {
-        throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB')
+      const automaticDocumentTaxes = calculation.document.documentTaxes.map((t) => ({ ...t }));
+      if (dto.taxes?.some((t) => t.manual && !t.modification_reason?.trim())) {
+        throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB');
       }
-      for (const override of dto.taxes?.filter(t => t.manual) ?? []) {
-        const calculated = calculation.document.documentTaxes.find(t => t.tax_id === override.tax_id)
-        if (!calculated) continue
-        const delta = Number(override.tax_amount) - calculated.amount
-        calculated.amount = Number(override.tax_amount)
-        calculated.rate = Number(override.tax_rate)
-        calculated.taxableBase = Number(override.taxable_base)
-        calculation.document.totalTaxes += delta
-        calculation.document.total += delta
+      for (const override of dto.taxes?.filter((t) => t.manual) ?? []) {
+        const calculated = calculation.document.documentTaxes.find((t) => t.tax_id === override.tax_id);
+        if (!calculated) continue;
+        const delta = Number(override.tax_amount) - calculated.amount;
+        calculated.amount = Number(override.tax_amount);
+        calculated.rate = Number(override.tax_rate);
+        calculated.taxableBase = Number(override.taxable_base);
+        calculation.document.totalTaxes += delta;
+        calculation.document.total += delta;
       }
 
       // For fiscal documents (A/B/C), force OFFICIAL
       if (docType?.letter_type && ['A', 'B', 'C'].includes(docType.letter_type)) {
-        updateRateType = 'OFFICIAL'
+        updateRateType = 'OFFICIAL';
       }
 
       if (!updateIsBase && !dto.exchange_rate) {
@@ -636,17 +640,21 @@ export class DocumentsSalesService {
             updateBaseCurrency.code,
             parseLocalDateTime(dto.date ?? doc.date),
             updateRateType,
-          )
-          updateExchangeRate = resolved.rate
-          updateRateType = resolved.rateType
+          );
+          updateExchangeRate = resolved.rate;
+          updateRateType = resolved.rateType;
         } catch {
-          updateExchangeRate = 1
+          updateExchangeRate = 1;
         }
       }
 
       items = calculation.document.items.map((item, idx) => {
-        const convertedUnitPrice = updateIsBase ? null : this.conversionService.convertAmount(item.unitPrice, updateExchangeRate)
-        const convertedPrice = updateIsBase ? null : this.conversionService.convertAmount(item.total, updateExchangeRate)
+        const convertedUnitPrice = updateIsBase
+          ? null
+          : this.conversionService.convertAmount(item.unitPrice, updateExchangeRate);
+        const convertedPrice = updateIsBase
+          ? null
+          : this.conversionService.convertAmount(item.total, updateExchangeRate);
 
         return {
           product_id: item.productId ?? null,
@@ -665,19 +673,21 @@ export class DocumentsSalesService {
           exempt_amount: item.exemptAmount,
           taxable_base: item.taxableBase,
           total_taxes: item.totalTaxes,
-          taxes: item.taxes.map(t => ({
+          taxes: item.taxes.map((t) => ({
             tax_id: t.tax_id,
             tax_rate: t.rate,
             tax_amount: t.amount,
-            converted_tax_amount: updateIsBase ? null : this.conversionService.convertAmount(t.amount, updateExchangeRate),
+            converted_tax_amount: updateIsBase
+              ? null
+              : this.conversionService.convertAmount(t.amount, updateExchangeRate),
             calculation_level: 'line' as const,
             is_included_in_price: t.isIncludedInPrice,
           })),
-        }
+        };
       });
 
       if (docType?.category === 'REMITO') {
-        const missingWarehouse = items.filter(item => !item.warehouse_id);
+        const missingWarehouse = items.filter((item) => !item.warehouse_id);
         if (missingWarehouse.length > 0) {
           throw new BadRequestException('Todos los productos del remito deben tener un depósito de salida');
         }
@@ -689,14 +699,14 @@ export class DocumentsSalesService {
         taxable_base: calculation.document.taxableBase,
         total_taxes: calculation.document.totalTaxes,
         total: calculation.document.total,
-        documentTaxes: calculation.document.documentTaxes.map(t => ({
+        documentTaxes: calculation.document.documentTaxes.map((t) => ({
           tax_id: t.tax_id,
           tax_rate: t.rate,
           taxable_base: t.taxableBase,
           tax_amount: t.amount,
-          automatic_tax_amount: automaticDocumentTaxes.find(a => a.tax_id === t.tax_id)?.amount ?? t.amount,
-          is_manual: dto.taxes?.some(o => o.tax_id === t.tax_id && o.manual) ?? false,
-          modification_reason: dto.taxes?.find(o => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
+          automatic_tax_amount: automaticDocumentTaxes.find((a) => a.tax_id === t.tax_id)?.amount ?? t.amount,
+          is_manual: dto.taxes?.some((o) => o.tax_id === t.tax_id && o.manual) ?? false,
+          modification_reason: dto.taxes?.find((o) => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
         })),
       };
     }
@@ -707,22 +717,10 @@ export class DocumentsSalesService {
 
       // Cambiar de PV implica liberar el último número de la secuencia anterior
       // (cuando todavía es seguro hacerlo) y reservar uno en la nueva.
-      if (
-        dto.document_sequence_id !== undefined &&
-        dto.document_sequence_id !== doc.document_sequence_id
-      ) {
-        updatedSequenceId = await this.resolveSequence(
-          doc.document_type_id,
-          dto.document_sequence_id,
-          null,
-          tx,
-        );
+      if (dto.document_sequence_id !== undefined && dto.document_sequence_id !== doc.document_sequence_id) {
+        updatedSequenceId = await this.resolveSequence(doc.document_type_id, dto.document_sequence_id, null, tx);
 
-        updatedNumber = await this.getNextNumber(
-          doc.document_type_id,
-          updatedSequenceId,
-          tx,
-        );
+        updatedNumber = await this.getNextNumber(doc.document_type_id, updatedSequenceId, tx);
 
         if (doc.document_sequence_id) {
           // Solo retroceder si este documento consumió el último número. Si hay
@@ -787,9 +785,13 @@ export class DocumentsSalesService {
 
               manual_override_by: null,
 
-              converted_taxable_base: updateIsBase ? null : this.conversionService.convertAmount(t.taxable_base, updateExchangeRate),
+              converted_taxable_base: updateIsBase
+                ? null
+                : this.conversionService.convertAmount(t.taxable_base, updateExchangeRate),
 
-              converted_tax_amount: updateIsBase ? null : this.conversionService.convertAmount(t.tax_amount, updateExchangeRate),
+              converted_tax_amount: updateIsBase
+                ? null
+                : this.conversionService.convertAmount(t.tax_amount, updateExchangeRate),
             })),
           });
         }
@@ -835,19 +837,21 @@ export class DocumentsSalesService {
 
           updated_at: new Date(),
 
-          ...(!updateIsBase && totals ? await this.conversionService.convertDocumentFields(
-            updateCurrencyCode,
-            updateExchangeRate,
-            updateRateType,
-            {
-              subtotal: Number(totals.subtotal),
-              exempt_amount: Number(totals.exempt_amount),
-              total_taxes: Number(totals.total_taxes),
-              total: Number(totals.total),
-              taxable_base: Number(totals.taxable_base),
-            },
-            parseLocalDateTime(dto.date ?? doc.date),
-          ) : {}),
+          ...(!updateIsBase && totals
+            ? await this.conversionService.convertDocumentFields(
+                updateCurrencyCode,
+                updateExchangeRate,
+                updateRateType,
+                {
+                  subtotal: Number(totals.subtotal),
+                  exempt_amount: Number(totals.exempt_amount),
+                  total_taxes: Number(totals.total_taxes),
+                  total: Number(totals.total),
+                  taxable_base: Number(totals.taxable_base),
+                },
+                parseLocalDateTime(dto.date ?? doc.date),
+              )
+            : {}),
         },
       });
 
@@ -968,14 +972,17 @@ export class DocumentsSalesService {
     }
 
     for (const item of order.document_items) {
-      const available = item.product_id ? deliveredByProduct.get(item.product_id) ?? 0 : 0;
+      const available = item.product_id ? (deliveredByProduct.get(item.product_id) ?? 0) : 0;
       const delivered = Math.min(Number(item.quantity), available);
       if (item.product_id) deliveredByProduct.set(item.product_id, Math.max(0, available - delivered));
       await tx.document_items.update({ where: { id: item.id }, data: { quantity_delivered: delivered } });
     }
 
     const refreshedItems = await tx.document_items.findMany({ where: { document_id: orderId } });
-    const deliveredTotal = refreshedItems.reduce((sum: number, item: any) => sum + Number(item.quantity_delivered ?? 0), 0);
+    const deliveredTotal = refreshedItems.reduce(
+      (sum: number, item: any) => sum + Number(item.quantity_delivered ?? 0),
+      0,
+    );
     const orderedTotal = refreshedItems.reduce((sum: number, item: any) => sum + Number(item.quantity), 0);
     const status = deliveredTotal <= 0 ? 3 : deliveredTotal + 0.000001 >= orderedTotal ? 5 : 4;
     await tx.documents.update({ where: { id: orderId }, data: { status, updated_at: new Date() } });
@@ -996,8 +1003,10 @@ export class DocumentsSalesService {
     userId?: string,
 
     partyId?: string,
+
+    includeCreator = false,
   ) {
-    return this.prisma.documents.findMany({
+    const documents = await this.prisma.documents.findMany({
       where: {
         deleted_at: null,
 
@@ -1056,6 +1065,22 @@ export class DocumentsSalesService {
         created_at: 'desc',
       },
     });
+
+    if (!includeCreator) return documents;
+
+    const creatorIds = [...new Set(documents.map((document) => document.created_by).filter(Boolean))] as string[];
+    const creators = creatorIds.length
+      ? await this.db.getDefaultClient().users.findMany({
+          where: { id: { in: creatorIds } },
+          select: { id: true, name: true, email: true },
+        })
+      : [];
+    const creatorMap = new Map(creators.map((creator) => [creator.id, creator]));
+
+    return documents.map((document) => ({
+      ...document,
+      creator: document.created_by ? (creatorMap.get(document.created_by) ?? null) : null,
+    }));
   }
 
   // ─────────────────────────────────────────────
@@ -1067,10 +1092,7 @@ export class DocumentsSalesService {
         document_types: {
           direction: 1,
         },
-        OR: [
-          { document_types: { direction: 1, affects_payment: true } },
-          { commercial_operation_id: { not: null } },
-        ],
+        OR: [{ document_types: { direction: 1, affects_payment: true } }, { commercial_operation_id: { not: null } }],
         status: { in: [2, 5] },
         deleted_at: null,
         ...(partyId ? { party_id: partyId } : {}),
@@ -1091,8 +1113,7 @@ export class DocumentsSalesService {
     });
 
     return docs
-      .filter((d) => d.status === STATUS_CONFIRMED
-        || (d.document_types?.category === 'ORDER' && d.status === 5))
+      .filter((d) => d.status === STATUS_CONFIRMED || (d.document_types?.category === 'ORDER' && d.status === 5))
       .filter((d) => {
         const operation = d.commercial_operation;
         if (!operation) return true;
@@ -1216,22 +1237,23 @@ export class DocumentsSalesService {
     // selecciona todas las columnas de una relación incluida aun cuando no
     // exista una fila relacionada; un desfase de schema en OV no debe impedir
     // abrir documentos de otras categorías.
-    const ordenVentaDoc = doc.document_types.category === 'ORDER'
-      ? await this.prisma.orden_venta_documents.findUnique({
-          where: { document_id: id },
-          include: {
-            seller: {
-              select: {
-                id: true,
-                first_name: true,
-                last_name: true,
-                party_id: true,
-                user_id: true,
+    const ordenVentaDoc =
+      doc.document_types.category === 'ORDER'
+        ? await this.prisma.orden_venta_documents.findUnique({
+            where: { document_id: id },
+            include: {
+              seller: {
+                select: {
+                  id: true,
+                  first_name: true,
+                  last_name: true,
+                  party_id: true,
+                  user_id: true,
+                },
               },
             },
-          },
-        })
-      : null;
+          })
+        : null;
 
     return { ...doc, orden_venta_doc: ordenVentaDoc };
   }
@@ -1250,9 +1272,7 @@ export class DocumentsSalesService {
     const operation = document.commercial_operation;
     const orderedTotal = Number(operation?.ordered_total ?? document.total ?? 0);
     const paidTotal = Number(operation?.paid_total ?? document.paid_amount ?? 0);
-    const paidPercentage = orderedTotal > 0
-      ? Math.min((paidTotal / orderedTotal) * 100, 100)
-      : 0;
+    const paidPercentage = orderedTotal > 0 ? Math.min((paidTotal / orderedTotal) * 100, 100) : 0;
 
     const hide = (source: any, fields: string[]) => {
       if (!source) return source;
@@ -1263,8 +1283,15 @@ export class DocumentsSalesService {
 
     return {
       ...hide(document, [
-        'subtotal', 'discount_amount', 'tax_amount', 'total', 'paid_amount',
-        'pending_amount', 'converted_subtotal', 'converted_tax_amount', 'converted_total',
+        'subtotal',
+        'discount_amount',
+        'tax_amount',
+        'total',
+        'paid_amount',
+        'pending_amount',
+        'converted_subtotal',
+        'converted_tax_amount',
+        'converted_total',
       ]),
       amounts_visible: false,
       monetary_visibility: {
@@ -1272,21 +1299,41 @@ export class DocumentsSalesService {
         paid_percentage: paidPercentage,
         required_percentage: Number(operation?.delivery_payment_percentage ?? 0),
       },
-      document_items: (document.document_items ?? []).map((item: any) => hide(item, [
-        'unit_price', 'price', 'subtotal', 'discount_amount', 'tax_amount', 'total',
-        'converted_unit_price', 'converted_price', 'converted_total',
-      ])),
-      document_taxes: (document.document_taxes ?? []).map((tax: any) => hide(tax, [
-        'taxable_base', 'tax_amount', 'converted_taxable_base', 'converted_tax_amount',
-        'automatic_tax_amount',
-      ])),
+      document_items: (document.document_items ?? []).map((item: any) =>
+        hide(item, [
+          'unit_price',
+          'price',
+          'subtotal',
+          'discount_amount',
+          'tax_amount',
+          'total',
+          'converted_unit_price',
+          'converted_price',
+          'converted_total',
+        ]),
+      ),
+      document_taxes: (document.document_taxes ?? []).map((tax: any) =>
+        hide(tax, [
+          'taxable_base',
+          'tax_amount',
+          'converted_taxable_base',
+          'converted_tax_amount',
+          'automatic_tax_amount',
+        ]),
+      ),
       child_documents: (document.child_documents ?? []).map((child: any) => hide(child, ['total'])),
       commercial_operation: hide(operation, [
-        'ordered_total', 'invoiced_total', 'paid_total', 'pending_invoice_total',
+        'ordered_total',
+        'invoiced_total',
+        'paid_total',
+        'pending_invoice_total',
         'pending_payment_total',
       ]),
       orden_venta_doc: hide(document.orden_venta_doc, [
-        'commission_rate', 'commission_base', 'commission_settled_at', 'commission_vale_id',
+        'commission_rate',
+        'commission_base',
+        'commission_settled_at',
+        'commission_vale_id',
       ]),
     };
   }
@@ -1531,18 +1578,9 @@ export class DocumentsSalesService {
       const totals = this.totalsService.calculate(items);
 
       await this.prisma.$transaction(async (tx) => {
-        const sequenceId = await this.resolveSequence(
-          docType.id,
-          null,
-          docType.document_sequences?.id ?? null,
-          tx,
-        );
+        const sequenceId = await this.resolveSequence(docType.id, null, docType.document_sequences?.id ?? null, tx);
 
-        const number = await this.getNextNumber(
-          docType.id,
-          sequenceId,
-          tx,
-        );
+        const number = await this.getNextNumber(docType.id, sequenceId, tx);
 
         const document = await tx.documents.create({
           data: {
@@ -1616,15 +1654,13 @@ export class DocumentsSalesService {
 
       const category = doc.document_types?.category;
 
-      const canConfirm = doc.status === STATUS_DRAFT
-        || (category === 'REMITO' && doc.status === STATUS_PENDING);
+      const canConfirm = doc.status === STATUS_DRAFT || (category === 'REMITO' && doc.status === STATUS_PENDING);
       if (!canConfirm) {
         throw new BadRequestException('El documento no se encuentra en un estado que permita confirmarlo');
       }
 
-      const fiscalAuthorizationSnapshot = category === 'REMITO'
-        ? await this.fiscalAuthorizations.resolveForDocument(doc, tx)
-        : null;
+      const fiscalAuthorizationSnapshot =
+        category === 'REMITO' ? await this.fiscalAuthorizations.resolveForDocument(doc, tx) : null;
 
       if (!doc.document_items.length && category !== 'OPENING_BALANCE') {
         throw new BadRequestException('El documento no tiene ítems');
@@ -1682,7 +1718,9 @@ export class DocumentsSalesService {
           const warehouse = await tx.warehouses.findFirst({ where: { id: warehouseId, active: true } });
           if (!warehouse) throw new BadRequestException('El depósito seleccionado no existe o está inactivo');
           if (direction === 'OUT' && warehouse.is_virtual) {
-            throw new BadRequestException('La mercadería reservada continúa en tránsito. Recibí el contenedor en un depósito real antes de confirmar el remito');
+            throw new BadRequestException(
+              'La mercadería reservada continúa en tránsito. Recibí el contenedor en un depósito real antes de confirmar el remito',
+            );
           }
 
           const qty = new Prisma.Decimal(item.quantity);
@@ -1750,9 +1788,9 @@ export class DocumentsSalesService {
       const operationBasis = doc.commercial_operation?.accounting_basis ?? defaultFlowSettings?.accounting_basis;
       const operationControlsAccounting = Boolean(operationBasis && ['ORDER', 'INVOICE'].includes(category));
       const affectsAccounting = operationControlsAccounting
-        ? (category === 'ORDER'
-            ? ['ORDER', 'ORDER_THEN_INVOICE'].includes(operationBasis)
-            : ['INVOICE', 'ORDER_THEN_INVOICE'].includes(operationBasis))
+        ? category === 'ORDER'
+          ? ['ORDER', 'ORDER_THEN_INVOICE'].includes(operationBasis)
+          : ['INVOICE', 'ORDER_THEN_INVOICE'].includes(operationBasis)
         : doc.document_types?.affects_accounting;
 
       // ─── Cuenta corriente según política copiada en la operación ─────────
@@ -1767,16 +1805,18 @@ export class DocumentsSalesService {
         const partyType = doc.document_types?.direction === 1 ? 'CUSTOMER' : 'SUPPLIER';
         const docTotal = doc.total.toNumber();
 
-        const entryType = category === 'CREDIT_NOTE' ? 'CREDIT_NOTE'
-                        : category === 'DEBIT_NOTE' ? 'DEBIT_NOTE'
-                        : category === 'OPENING_BALANCE' ? 'OPENING_BALANCE'
-                        : 'INVOICE';
+        const entryType =
+          category === 'CREDIT_NOTE'
+            ? 'CREDIT_NOTE'
+            : category === 'DEBIT_NOTE'
+              ? 'DEBIT_NOTE'
+              : category === 'OPENING_BALANCE'
+                ? 'OPENING_BALANCE'
+                : 'INVOICE';
 
         const docTypeName = doc.document_types?.description ?? 'Documento';
         const docRef = doc.descrip;
-        const description = docRef
-          ? `${docTypeName} #${doc.number} - ${docRef}`
-          : `${docTypeName} #${doc.number}`;
+        const description = docRef ? `${docTypeName} #${doc.number} - ${docRef}` : `${docTypeName} #${doc.number}`;
 
         if (category === 'INVOICE' && operationBasis === 'ORDER_THEN_INVOICE') {
           await this.currentAccountsService.addEntry(
@@ -1815,10 +1855,10 @@ export class DocumentsSalesService {
 
       return tx.documents.findUnique({
         where: { id },
-      include: {
-        document_types: true,
-        document_sequences: true,
-        business_parties: true,
+        include: {
+          document_types: true,
+          document_sequences: true,
+          business_parties: true,
           document_items: {
             include: {
               products: true,
@@ -1828,7 +1868,6 @@ export class DocumentsSalesService {
           document_taxes: { include: { taxes: true } },
         },
       });
-
     });
 
     // La actualización de precios acordados es complementaria: un problema en
@@ -1855,7 +1894,11 @@ export class DocumentsSalesService {
           return confirmed;
         }
         const operation = await this.commercialFlow.refresh(confirmed.commercial_operation_id);
-        if (operation?.delivery_status === 'ELIGIBLE' && operation.auto_create_delivery_note && !operation.delivery_note_id) {
+        if (
+          operation?.delivery_status === 'ELIGIBLE' &&
+          operation.auto_create_delivery_note &&
+          !operation.delivery_note_id
+        ) {
           const remito = await this.deliver(operation.root_document_id, userId);
           await this.prisma.commercial_operations.update({
             where: { id: operation.id },
@@ -1863,7 +1906,9 @@ export class DocumentsSalesService {
           });
         }
       } catch (error) {
-        this.logger.warn(`El documento ${id} se confirmó, pero no se pudo sincronizar su circuito comercial: ${String(error)}`);
+        this.logger.warn(
+          `El documento ${id} se confirmó, pero no se pudo sincronizar su circuito comercial: ${String(error)}`,
+        );
       }
     }
 
@@ -1877,11 +1922,7 @@ export class DocumentsSalesService {
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
       const category = doc.document_types?.category;
-      const cancelledStatus = category === 'ORDER'
-        ? 8
-        : category === 'QUOTE'
-          ? 6
-          : STATUS_CANCELLED;
+      const cancelledStatus = category === 'ORDER' ? 8 : category === 'QUOTE' ? 6 : STATUS_CANCELLED;
 
       // La cancelación debe ser idempotente. Esto también repara documentos que
       // llegaron al estado terminal por una transición histórica sin ejecutar
@@ -1897,44 +1938,56 @@ export class DocumentsSalesService {
         include: { payment: true },
       });
 
-      const activePayments = associatedPayments.filter(
-        ap => !['CANCELLED', 'REVERSED'].includes(ap.payment.status)
-      );
+      const activePayments = associatedPayments.filter((ap) => !['CANCELLED', 'REVERSED'].includes(ap.payment.status));
 
       if (activePayments.length > 0) {
-        const paymentList = activePayments
-          .map(({ payment }) => `#${payment.number} (${payment.status})`)
-          .join(', ');
+        const paymentList = activePayments.map(({ payment }) => `#${payment.number} (${payment.status})`).join(', ');
         throw new BadRequestException(
-          `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`
+          `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
         );
       }
 
-      if (doc.status === STATUS_CONFIRMED
-        && doc.document_types?.category === 'REMITO'
-        && doc.document_types?.affects_stock) {
+      if (
+        doc.status === STATUS_CONFIRMED &&
+        doc.document_types?.category === 'REMITO' &&
+        doc.document_types?.affects_stock
+      ) {
         const movements = await tx.warehouse_stock_movements.findMany({
           where: { reference_type: 'document', reference_id: doc.id, movement_type: 'DOCUMENT' },
         });
         for (const movement of movements) {
           const reverseDirection = movement.direction === 'OUT' ? 'IN' : 'OUT';
           const stock = await tx.warehouse_stock.findUnique({
-            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+            where: {
+              warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id },
+            },
           });
           if (reverseDirection === 'OUT' && (!stock || stock.quantity.lessThan(movement.quantity))) {
             throw new BadRequestException('No se puede anular: el stock recibido ya no está disponible');
           }
           await tx.warehouse_stock.upsert({
-            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
-            create: { warehouse_id: movement.warehouse_id, product_id: movement.product_id, quantity: movement.quantity },
-            update: { quantity: reverseDirection === 'IN' ? { increment: movement.quantity } : { decrement: movement.quantity } },
+            where: {
+              warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id },
+            },
+            create: {
+              warehouse_id: movement.warehouse_id,
+              product_id: movement.product_id,
+              quantity: movement.quantity,
+            },
+            update: {
+              quantity: reverseDirection === 'IN' ? { increment: movement.quantity } : { decrement: movement.quantity },
+            },
           });
           await tx.warehouse_stock_movements.create({
             data: {
-              warehouse_id: movement.warehouse_id, product_id: movement.product_id,
-              movement_type: 'DOCUMENT_REVERSAL', direction: reverseDirection,
-              quantity: movement.quantity, reference_type: 'document_reversal',
-              reference_id: doc.id, created_by: userId,
+              warehouse_id: movement.warehouse_id,
+              product_id: movement.product_id,
+              movement_type: 'DOCUMENT_REVERSAL',
+              direction: reverseDirection,
+              quantity: movement.quantity,
+              reference_type: 'document_reversal',
+              reference_id: doc.id,
+              created_by: userId,
             },
           });
         }
@@ -1966,9 +2019,9 @@ export class DocumentsSalesService {
       const operationBasis = doc.commercial_operation?.accounting_basis ?? defaultFlowSettings?.accounting_basis;
       const operationControlsAccounting = Boolean(operationBasis && ['ORDER', 'INVOICE'].includes(category));
       const affectsAccounting = operationControlsAccounting
-        ? (category === 'ORDER'
-            ? ['ORDER', 'ORDER_THEN_INVOICE'].includes(operationBasis)
-            : ['INVOICE', 'ORDER_THEN_INVOICE'].includes(operationBasis))
+        ? category === 'ORDER'
+          ? ['ORDER', 'ORDER_THEN_INVOICE'].includes(operationBasis)
+          : ['INVOICE', 'ORDER_THEN_INVOICE'].includes(operationBasis)
         : doc.document_types?.affects_accounting;
 
       if (doc.party_id && affectsAccounting) {
@@ -2108,7 +2161,9 @@ export class DocumentsSalesService {
     });
 
     if (!remitoType) {
-      throw new NotFoundException('No hay tipo de documento "Remito" configurado. Creelo en Settings → Document Types.');
+      throw new NotFoundException(
+        'No hay tipo de documento "Remito" configurado. Creelo en Settings → Document Types.',
+      );
     }
 
     // Copiar items de la orden
@@ -2209,18 +2264,20 @@ export class DocumentsSalesService {
     // Validar cantidades
     const sourceItems = doc.document_items;
     for (const req of items) {
-      const sourceItem = sourceItems.find(i => i.id === req.document_item_id);
+      const sourceItem = sourceItems.find((i) => i.id === req.document_item_id);
       if (!sourceItem) throw new BadRequestException(`Item ${req.document_item_id} no encontrado en la OV`);
       const alreadyDelivered = Number(sourceItem.quantity_delivered ?? 0);
       const pending = Number(sourceItem.quantity) - alreadyDelivered;
       if (req.quantity > pending) {
-        throw new BadRequestException(`Cantidad ${req.quantity} excede el pendiente (${pending}) para item ${sourceItem.product_id}`);
+        throw new BadRequestException(
+          `Cantidad ${req.quantity} excede el pendiente (${pending}) para item ${sourceItem.product_id}`,
+        );
       }
     }
 
     // Crear remito con solo los items indicados
-    const remitoItems: ItemInput[] = items.map(req => {
-      const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+    const remitoItems: ItemInput[] = items.map((req) => {
+      const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
       return {
         product_id: sourceItem.product_id,
         warehouse_id: sourceItem.warehouse_id ?? doc.warehouse_id ?? null,
@@ -2303,7 +2360,7 @@ export class DocumentsSalesService {
     // Validar cantidades
     const sourceItems = doc.document_items;
     for (const req of items) {
-      const sourceItem = sourceItems.find(i => i.id === req.document_item_id);
+      const sourceItem = sourceItems.find((i) => i.id === req.document_item_id);
       if (!sourceItem) throw new BadRequestException(`Item ${req.document_item_id} no encontrado`);
       const alreadyInvoiced = Number(sourceItem.quantity_invoiced ?? 0);
       const pending = Number(sourceItem.quantity) - alreadyInvoiced;
@@ -2313,8 +2370,8 @@ export class DocumentsSalesService {
     }
 
     // Crear factura con items seleccionados
-    const invoiceItems: ItemInput[] = items.map(req => {
-      const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+    const invoiceItems: ItemInput[] = items.map((req) => {
+      const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
       return {
         product_id: sourceItem.product_id,
         quantity: req.quantity,
@@ -2336,7 +2393,12 @@ export class DocumentsSalesService {
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
-      const sequenceId = await this.resolveSequence(invoiceType.id, null, invoiceType.document_sequences?.id ?? null, tx);
+      const sequenceId = await this.resolveSequence(
+        invoiceType.id,
+        null,
+        invoiceType.document_sequences?.id ?? null,
+        tx,
+      );
       const number = await this.getNextNumber(invoiceType.id, sequenceId, tx);
 
       const newDoc = await tx.documents.create({
@@ -2367,7 +2429,7 @@ export class DocumentsSalesService {
 
       // Actualizar tracking
       for (const req of items) {
-        const sourceItem = sourceItems.find(i => i.id === req.document_item_id)!;
+        const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
         const newInvoiced = Number(sourceItem.quantity_invoiced ?? 0) + req.quantity;
         await tx.document_items.update({
           where: { id: req.document_item_id },
@@ -2377,7 +2439,7 @@ export class DocumentsSalesService {
 
       // Verificar si todos los items fueron facturados
       const allItems = await tx.document_items.findMany({ where: { document_id: id } });
-      const allInvoiced = allItems.every(i => Number(i.quantity_invoiced ?? 0) >= Number(i.quantity));
+      const allInvoiced = allItems.every((i) => Number(i.quantity_invoiced ?? 0) >= Number(i.quantity));
       // Facturación se deriva de child_documents, no de status
     });
 
@@ -2395,10 +2457,11 @@ export class DocumentsSalesService {
     const existing = await this.prisma.dispatch_orders.findFirst({
       where: { source_document_id: id, deleted_at: null },
     });
-    if (existing) return this.prisma.dispatch_orders.findUnique({
-      where: { id: existing.id },
-      include: { customers: true, dispatch_items: { include: { product: true } }, dispatch_rates: true },
-    });
+    if (existing)
+      return this.prisma.dispatch_orders.findUnique({
+        where: { id: existing.id },
+        include: { customers: true, dispatch_items: { include: { product: true } }, dispatch_rates: true },
+      });
 
     return this.prisma.dispatch_orders.create({
       data: {
@@ -2408,7 +2471,7 @@ export class DocumentsSalesService {
         source_document_id: doc.id,
         created_by: userId,
         dispatch_items: {
-          create: doc.document_items.map(item => ({
+          create: doc.document_items.map((item) => ({
             product_id: item.product_id,
             source_document_item_id: item.id,
             quantity: item.quantity,
@@ -2419,7 +2482,6 @@ export class DocumentsSalesService {
       },
       include: { customers: true, dispatch_items: { include: { product: true } }, dispatch_rates: true },
     });
-
   }
 
   async createRemitoFromDispatch(dispatchId: string, userId: string) {
@@ -2442,10 +2504,13 @@ export class DocumentsSalesService {
     if (!dispatch.dispatch_items.length) throw new BadRequestException('La Orden de Despacho no tiene productos');
 
     let createdId = '';
-    await this.prisma.$transaction(async tx => {
+    await this.prisma.$transaction(async (tx) => {
       const sequenceId = await this.resolveSequence(remitoType.id, null, remitoType.document_sequences?.id ?? null, tx);
       const number = await this.getNextNumber(remitoType.id, sequenceId, tx);
-      const subtotal = dispatch.dispatch_items.reduce((sum, item) => sum + Number(item.quantity) * Number(item.unit_price), 0);
+      const subtotal = dispatch.dispatch_items.reduce(
+        (sum, item) => sum + Number(item.quantity) * Number(item.unit_price),
+        0,
+      );
       const created = await tx.documents.create({
         data: {
           document_type_id: remitoType.id,
@@ -2469,7 +2534,7 @@ export class DocumentsSalesService {
       createdId = created.id;
       await this.commercialFlow.inheritFromParent(tx, created.id, dispatch.source_document_id);
       await tx.document_items.createMany({
-        data: dispatch.dispatch_items.map(item => ({
+        data: dispatch.dispatch_items.map((item) => ({
           document_id: created.id,
           product_id: item.product_id,
           quantity: item.quantity,
@@ -2492,7 +2557,9 @@ export class DocumentsSalesService {
   async changeStatus(id: string, newStatus: number, userId: string) {
     const guardedDocument = await this.findOne(id);
     if (guardedDocument.document_types?.category === 'ORDER' && newStatus !== guardedDocument.status) {
-      throw new BadRequestException('Las órdenes de venta no permiten cambios manuales de estado. Usá Confirmar, Crear remito o Anular.');
+      throw new BadRequestException(
+        'Las órdenes de venta no permiten cambios manuales de estado. Usá Confirmar, Crear remito o Anular.',
+      );
     }
     const doc = await this.findOne(id);
     const category = doc.document_types?.category;
@@ -2502,9 +2569,7 @@ export class DocumentsSalesService {
     const valid = getValidTransitions(category, doc.status);
 
     if (!valid.includes(newStatus)) {
-      throw new BadRequestException(
-        `Transición inválida: ${doc.status} → ${newStatus} para categoría ${category}`
-      );
+      throw new BadRequestException(`Transición inválida: ${doc.status} → ${newStatus} para categoría ${category}`);
     }
 
     // Entregar un remito debe atravesar el mismo cierre que la confirmación:
@@ -2523,7 +2588,7 @@ export class DocumentsSalesService {
     // y deja preparada la factura comercial.
     if (category === 'REMITO' && newStatus === 2) {
       if (doc.dispatch_order_id) {
-        await this.prisma.$transaction(async tx => {
+        await this.prisma.$transaction(async (tx) => {
           await tx.dispatch_orders.update({
             where: { id: doc.dispatch_order_id! },
             data: { status: 'COMPLETED', confirmed_at: new Date(), updated_at: new Date() },
@@ -2540,7 +2605,10 @@ export class DocumentsSalesService {
               },
             });
             if (remaining === 0) {
-              await tx.trips.update({ where: { id: row.trip_stop.trip_id }, data: { status: 'COMPLETED', updated_at: new Date() } });
+              await tx.trips.update({
+                where: { id: row.trip_stop.trip_id },
+                data: { status: 'COMPLETED', updated_at: new Date() },
+              });
             }
           }
         });
@@ -2555,11 +2623,7 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // NEXT NUMBER
   // ─────────────────────────────────────────────
-  private async getNextNumber(
-    documentTypeId: string,
-    sequenceId: string | null,
-    tx?: any,
-  ): Promise<number> {
+  private async getNextNumber(documentTypeId: string, sequenceId: string | null, tx?: any): Promise<number> {
     const db = tx ?? this.prisma;
 
     if (!sequenceId) {

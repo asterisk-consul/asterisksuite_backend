@@ -13,21 +13,32 @@ import { DocumentAccessService } from '@/access-control/services/document-access
 @Controller('documents/purchases-documents')
 @UseGuards(JwtAuthGuard)
 export class DocumentsPurchasesController {
-  constructor(private readonly service: DocumentsPurchasesService, private readonly documentAccess: DocumentAccessService) {}
+  constructor(
+    private readonly service: DocumentsPurchasesService,
+    private readonly documentAccess: DocumentAccessService,
+  ) {}
 
   @Post()
   async create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocumentType(user.id, req['companyUserRole'] as string | undefined, 'purchases', dto.document_type_id, 'create');
+    await this.documentAccess.assertDocumentType(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      dto.document_type_id,
+      'create',
+    );
     return this.service.create(dto, user.id);
   }
 
   @Get('pending')
-  async findPending(
-    @Query('party_id') partyId?: string,
-    @CurrentUser() user?: AuthUser,
-    @Req() req?: Request,
-  ) {
-    await this.documentAccess.assertCategory(user!.id, req?.['companyUserRole'] as string | undefined, 'purchases', 'INVOICE', 'read');
+  async findPending(@Query('party_id') partyId?: string, @CurrentUser() user?: AuthUser, @Req() req?: Request) {
+    await this.documentAccess.assertCategory(
+      user!.id,
+      req?.['companyUserRole'] as string | undefined,
+      'purchases',
+      'INVOICE',
+      'read',
+    );
     return this.service.findPending(partyId);
   }
 
@@ -49,36 +60,77 @@ export class DocumentsPurchasesController {
       category ?? allowedCategories,
       direction !== undefined ? Number(direction) : undefined,
       companyRole === 'USER' ? user.id : undefined,
+      companyRole === 'OWNER' || companyRole === 'ADMIN',
     );
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'read');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      id,
+      'read',
+    );
     return this.service.findOne(id);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'update');
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateDocumentDto,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      id,
+      'update',
+    );
     return this.service.update(id, dto);
   }
 
   @Patch(':id/confirm')
-  async confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request, @Query() query?: ConfirmPurchaseDto) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'confirm');
+  async confirm(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+    @Query() query?: ConfirmPurchaseDto,
+  ) {
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      id,
+      'confirm',
+    );
     return this.service.confirm(id, user.id, query);
   }
 
   @Patch(':id/cancel')
   async cancel(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'cancel');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      id,
+      'cancel',
+    );
     return this.service.cancel(id, user.id);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
-    await this.documentAccess.assertDocument(user.id, req['companyUserRole'] as string | undefined, 'purchases', id, 'delete');
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      id,
+      'delete',
+    );
     return this.service.remove(id, user.id);
   }
 }
