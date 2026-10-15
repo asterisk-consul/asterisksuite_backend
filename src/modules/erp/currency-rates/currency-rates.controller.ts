@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 
@@ -29,8 +30,14 @@ export class CurrencyRatesController {
 
   @RequirePermissions('currency-rates.read')
   @Get()
-  findAll() {
-    return this.currencyRatesService.findAll();
+  findAll(
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    return this.currencyRatesService.findAll({
+      page: Number(page) || 1,
+      pageSize: Number(pageSize) || 25,
+    });
   }
 
   @RequirePermissions('currency-rates.read')

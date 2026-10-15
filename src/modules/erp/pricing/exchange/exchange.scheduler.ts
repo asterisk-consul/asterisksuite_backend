@@ -12,11 +12,16 @@ export class ExchangeScheduler {
     private readonly db: PrismaService,
   ) {}
 
-  @Cron('0 13 * * 1-5', {
+  // Por defecto sincroniza dos veces por hora. La expresión puede ajustarse
+  // por ambiente sin recompilar (por ejemplo, para limitar horarios).
+  @Cron(process.env.EXCHANGE_SYNC_CRON ?? '*/30 * * * *', {
     timeZone: 'America/Argentina/Buenos_Aires',
   })
   async handleSyncRates() {
     this.logger.log('Sincronizando cotizaciones...');
+
+    // La cotización es la misma para todos los tenants: se consulta una sola vez.
+    const snapshot = await this.exchangeService.fetchRateSnapshot();
 
     const companies = await this.db.getDefaultClient().companies.findMany({
       where: { deleted_at: null },
@@ -27,8 +32,10 @@ export class ExchangeScheduler {
       if (!company.schema_name) continue;
 
       try {
-        const prisma = this.db.getTenantClient(company.schema_name);
-        await this.exchangeService.syncAllRatesForClient(prisma);
+        await this.db.withTemporaryTenantClient(
+          company.schema_name,
+          (client) => this.exchangeService.syncAllRatesForClient(client, snapshot),
+        );
         this.logger.log(`[${company.name}] Cotizaciones sincronizadas`);
       } catch (error) {
         this.logger.error(`[${company.name}] Error sincronizando cotizaciones`, error);

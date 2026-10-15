@@ -149,23 +149,48 @@ export class DocumentsSalesController {
     @Query('documentTypeId') documentTypeId?: string,
     @Query('status') status?: string,
     @Query('category') category?: string,
+    @Query('categories') categories?: string,
     @Query('direction') direction?: string,
     @Query('party_id') partyId?: string,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('search') search?: string,
+    @Query('sort') sort?: string,
+    @Query('order') order?: 'asc' | 'desc',
+    @Query('excludeCancelled') excludeCancelled?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'sales', 'read');
     if (category) await this.documentAccess.assertCategory(user.id, companyRole, 'sales', category, 'read');
+    const requestedCategories = category ?? (categories ? categories.split(',').filter(Boolean) : allowedCategories);
+    if (Array.isArray(requestedCategories)) {
+      for (const requestedCategory of requestedCategories) {
+        await this.documentAccess.assertCategory(user.id, companyRole, 'sales', requestedCategory, 'read');
+      }
+    }
     const documents = await this.service.findAll(
       documentTypeId,
       status !== undefined ? Number(status) : undefined,
-      category ?? allowedCategories,
+      requestedCategories,
       direction !== undefined ? Number(direction) : undefined,
       partyId ? undefined : companyRole === 'USER' ? user.id : undefined,
       partyId,
       companyRole === 'OWNER' || companyRole === 'ADMIN',
+      page !== undefined ? Number(page) : undefined,
+      pageSize !== undefined ? Number(pageSize) : undefined,
+      search,
+      sort,
+      order,
+      excludeCancelled === 'true',
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
-    return documents.map((document) => this.service.applyOrderAmountVisibility(document, canViewAmounts));
+    if (Array.isArray(documents)) {
+      return documents.map((document) => this.service.applyOrderAmountVisibility(document, canViewAmounts));
+    }
+    return {
+      ...documents,
+      items: documents.items.map((document) => this.service.applyOrderAmountVisibility(document, canViewAmounts)),
+    };
   }
 
   @Get('pending')

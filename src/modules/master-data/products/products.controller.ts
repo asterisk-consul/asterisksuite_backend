@@ -22,8 +22,20 @@ export class ProductsController {
 
   @Get()
   @RequirePermissions('products.read')
-  findAll() {
-    return this.service.findAll();
+  findAll(
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('search') search?: string,
+    @Query('sort') sort?: string,
+    @Query('order') order?: 'asc' | 'desc',
+  ) {
+    return this.service.findAll(
+      page !== undefined ? Number(page) : undefined,
+      pageSize !== undefined ? Number(pageSize) : undefined,
+      search,
+      sort,
+      order,
+    );
   }
 
   @Get('search')

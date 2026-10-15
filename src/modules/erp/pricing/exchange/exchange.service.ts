@@ -8,6 +8,10 @@ import { CurrencyRateType } from '@/generated/prisma/enums';
 import { DolarApiQuote } from './interfaces/dolar-api.interface';
 
 type Tx = Prisma.TransactionClient;
+type ExchangeRateSnapshot = {
+  official: DolarApiQuote[];
+  dollars: DolarApiQuote[];
+};
 
 @Injectable()
 export class ExchangeService {
@@ -25,10 +29,11 @@ export class ExchangeService {
   // =========================================================
 
   async syncAllRates() {
+    const snapshot = await this.fetchRateSnapshot();
     return this.prisma.$transaction(async (tx) => {
-      const official = await this.syncOfficialRates(tx);
+      const official = await this.syncOfficialRates(tx, snapshot.official);
 
-      const dollars = await this.syncDollarRates(tx);
+      const dollars = await this.syncDollarRates(tx, snapshot.dollars);
 
       return {
         success: true,
@@ -39,11 +44,12 @@ export class ExchangeService {
     });
   }
 
-  async syncAllRatesForClient(prisma: any) {
+  async syncAllRatesForClient(prisma: any, snapshot?: ExchangeRateSnapshot) {
+    const rates = snapshot ?? await this.fetchRateSnapshot();
     return prisma.$transaction(async (tx: any) => {
-      const official = await this.syncOfficialRates(tx);
+      const official = await this.syncOfficialRates(tx, rates.official);
 
-      const dollars = await this.syncDollarRates(tx);
+      const dollars = await this.syncDollarRates(tx, rates.dollars);
 
       return {
         success: true,
@@ -52,6 +58,14 @@ export class ExchangeService {
         total_created: official.length + dollars.length,
       };
     });
+  }
+
+  async fetchRateSnapshot(): Promise<ExchangeRateSnapshot> {
+    const [official, dollars] = await Promise.all([
+      this.fetchWithTimeout<DolarApiQuote[]>('https://dolarapi.com/v1/cotizaciones'),
+      this.fetchWithTimeout<DolarApiQuote[]>('https://dolarapi.com/v1/dolares'),
+    ]);
+    return { official, dollars };
   }
 
   // =========================================================
@@ -59,10 +73,10 @@ export class ExchangeService {
   // https://dolarapi.com/v1/cotizaciones
   // =========================================================
 
-  async syncOfficialRates(tx?: Tx) {
+  async syncOfficialRates(tx?: Tx, quotes?: DolarApiQuote[]) {
     const prisma = tx ?? this.prisma;
 
-    const data = await this.fetchWithTimeout<DolarApiQuote[]>('https://dolarapi.com/v1/cotizaciones');
+    const data = quotes ?? await this.fetchWithTimeout<DolarApiQuote[]>('https://dolarapi.com/v1/cotizaciones');
 
     // =====================================================
     // ASEGURAR ARS
@@ -80,30 +94,6 @@ export class ExchangeService {
     const results: currency_rates[] = [];
 
     // =====================================================
-    // TRAER ÚLTIMAS COTIZACIONES
-    // =====================================================
-
-    const latestRates = await prisma.currency_rates.findMany({
-      where: {
-        to_currency_id: ars.id,
-        rate_type: CurrencyRateType.OFFICIAL,
-      },
-      orderBy: {
-        effective_date: 'desc',
-      },
-    });
-
-    const latestMap = new Map<string, number>();
-
-    for (const rate of latestRates) {
-      const key = `${rate.from_currency_id}_${rate.rate_type}`;
-
-      if (!latestMap.has(key)) {
-        latestMap.set(key, Number(rate.rate));
-      }
-    }
-
-    // =====================================================
     // LOOP
     // =====================================================
 
@@ -119,12 +109,21 @@ export class ExchangeService {
 
       const newRate = Number(item.venta);
 
-      const key = `${currency.id}_${CurrencyRateType.OFFICIAL}`;
-
-      const existingRate = latestMap.get(key);
+      // Consultar sólo el último valor de esta moneda. No cargar todo el
+      // historial en memoria, que crece indefinidamente con los años.
+      const latestRate = await prisma.currency_rates.findFirst({
+        where: {
+          from_currency_id: currency.id,
+          to_currency_id: ars.id,
+          rate_type: CurrencyRateType.OFFICIAL,
+          active: true,
+          deleted_at: null,
+        },
+        orderBy: [{ effective_date: 'desc' }, { created_at: 'desc' }],
+      });
 
       // Si la cotización no cambió → no insertar histórico duplicado
-      if (existingRate === newRate) {
+      if (latestRate && Number(latestRate.rate) === newRate) {
         continue;
       }
 
@@ -137,7 +136,9 @@ export class ExchangeService {
             rate_type: CurrencyRateType.OFFICIAL,
           },
         },
-        update: { rate: newRate },
+        // Una cotización histórica es inmutable. Los documentos conservan
+        // además su propio exchange_rate como snapshot de la operación.
+        update: {},
         create: {
           from_currency_id: currency.id,
           to_currency_id: ars.id,
@@ -159,10 +160,10 @@ export class ExchangeService {
   // https://dolarapi.com/v1/dolares
   // =========================================================
 
-  async syncDollarRates(tx?: Tx) {
+  async syncDollarRates(tx?: Tx, quotes?: DolarApiQuote[]) {
     const prisma = tx ?? this.prisma;
 
-    const data = await this.fetchWithTimeout<DolarApiQuote[]>('https://dolarapi.com/v1/dolares');
+    const data = quotes ?? await this.fetchWithTimeout<DolarApiQuote[]>('https://dolarapi.com/v1/dolares');
 
     // =====================================================
     // ASEGURAR MONEDAS
@@ -222,7 +223,7 @@ export class ExchangeService {
             rate_type: rateType,
           },
         },
-        update: { rate: newRate },
+        update: {},
         create: {
           from_currency_id: usd.id,
           to_currency_id: ars.id,
@@ -442,8 +443,6 @@ export class ExchangeService {
         signal: controller.signal,
       });
 
-      clearTimeout(timeout);
-
       if (!response.ok) {
         throw new BadRequestException(`Error consultando ${url}`);
       }
@@ -455,6 +454,8 @@ export class ExchangeService {
       }
 
       throw error;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 

@@ -41,15 +41,31 @@ export class ProductsService {
   // FIND ALL
   // ─────────────────────────────
 
-  async findAll() {
-    return this.prisma.products.findMany({
-      where: {
-        deleted_at: null,
-      },
+  async findAll(page?: number, pageSize?: number, search?: string, sort?: string, order?: 'asc' | 'desc') {
+    const term = search?.trim();
+    const where: any = {
+      deleted_at: null,
+      ...(term ? {
+        OR: [
+          { sku: { contains: term, mode: 'insensitive' } },
+          { name: { contains: term, mode: 'insensitive' } },
+          { description: { contains: term, mode: 'insensitive' } },
+        ],
+      } : {}),
+    };
+    const paginationEnabled = Number.isFinite(page) && Number.isFinite(pageSize);
+    const safePage = Math.max(1, Math.trunc(page ?? 1));
+    const safePageSize = Math.min(100, Math.max(1, Math.trunc(pageSize ?? 25)));
+    const sortableFields = new Set(['sku', 'name', 'product_type', 'last_cost_calculated_at', 'created_at']);
+    const sortField = sortableFields.has(sort ?? '') ? sort! : 'created_at';
+    const query: any = {
+      where,
 
       orderBy: {
-        created_at: 'desc',
+        [sortField]: order === 'asc' ? 'asc' : 'desc',
       },
+
+      ...(paginationEnabled ? { skip: (safePage - 1) * safePageSize, take: safePageSize } : {}),
 
       include: {
         transfer_rate: true,
@@ -138,7 +154,16 @@ export class ProductsService {
           where: { deleted_at: null },
         },
       },
-    });
+    };
+    const [items, total] = await Promise.all([
+      this.prisma.products.findMany(query),
+      paginationEnabled ? this.prisma.products.count({ where }) : Promise.resolve(0),
+    ]);
+    if (!paginationEnabled) return items;
+    return {
+      items,
+      pagination: { page: safePage, pageSize: safePageSize, total, pageCount: Math.ceil(total / safePageSize) },
+    };
   }
 
   async search(query: string, usage?: string, requestedLimit = 30) {

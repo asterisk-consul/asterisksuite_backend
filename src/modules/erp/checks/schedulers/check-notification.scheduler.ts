@@ -49,7 +49,7 @@ export class CheckNotificationScheduler {
   }
 
   private async notifyTenant(tenantDb: string, companyName: string) {
-    const prisma = this.db.getTenantClient(tenantDb);
+    return this.db.withTemporaryTenantClient(tenantDb, async (prisma) => {
     const today = this.argentinaDate();
     const upcomingChecks = await prisma.checks.findMany({
       where: {
@@ -102,5 +102,6 @@ export class CheckNotificationScheduler {
         `${hasEnoughFunds ? 'fondos suficientes' : 'requiere revisión de cuenta o fondos'}`,
       );
     }
+    });
   }
 }

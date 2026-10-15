@@ -243,19 +243,14 @@ export class DocumentsSalesService {
     }
 
     if (!isBase && !dto.exchange_rate) {
-      try {
-        const resolved = await this.conversionService.resolveRate(
-          currencyCode,
-          baseCurrency.code,
-          parseLocalDateTime(dto.date),
-          rateType,
-        );
-        exchangeRate = resolved.rate;
-        rateType = resolved.rateType;
-      } catch {
-        // If no rate found, default to 1 (will be ARS equivalent)
-        exchangeRate = 1;
-      }
+      const resolved = await this.conversionService.resolveRate(
+        currencyCode,
+        baseCurrency.code,
+        parseLocalDateTime(dto.date),
+        rateType,
+      );
+      exchangeRate = resolved.rate;
+      rateType = resolved.rateType;
     }
 
     // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
@@ -634,18 +629,14 @@ export class DocumentsSalesService {
       }
 
       if (!updateIsBase && !dto.exchange_rate) {
-        try {
-          const resolved = await this.conversionService.resolveRate(
-            updateCurrencyCode,
-            updateBaseCurrency.code,
-            parseLocalDateTime(dto.date ?? doc.date),
-            updateRateType,
-          );
-          updateExchangeRate = resolved.rate;
-          updateRateType = resolved.rateType;
-        } catch {
-          updateExchangeRate = 1;
-        }
+        const resolved = await this.conversionService.resolveRate(
+          updateCurrencyCode,
+          updateBaseCurrency.code,
+          parseLocalDateTime(dto.date ?? doc.date),
+          updateRateType,
+        );
+        updateExchangeRate = resolved.rate;
+        updateRateType = resolved.rateType;
       }
 
       items = calculation.document.items.map((item, idx) => {
@@ -1005,9 +996,32 @@ export class DocumentsSalesService {
     partyId?: string,
 
     includeCreator = false,
+
+    page?: number,
+
+    pageSize?: number,
+
+    search?: string,
+
+    sort?: string,
+
+    order?: 'asc' | 'desc',
+
+    excludeCancelled = false,
   ) {
-    const documents = await this.prisma.documents.findMany({
-      where: {
+    const and: any[] = [];
+    if (userId) and.push({ OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] });
+    const normalizedSearch = search?.trim();
+    if (normalizedSearch) {
+      const searchConditions: any[] = [
+        { descrip: { contains: normalizedSearch, mode: 'insensitive' } },
+        { ref: { contains: normalizedSearch, mode: 'insensitive' } },
+        { business_parties: { name: { contains: normalizedSearch, mode: 'insensitive' } } },
+      ];
+      if (/^\d+$/.test(normalizedSearch)) searchConditions.push({ number: Number(normalizedSearch) });
+      and.push({ OR: searchConditions });
+    }
+    const where: any = {
         deleted_at: null,
 
         document_types: {
@@ -1022,14 +1036,18 @@ export class DocumentsSalesService {
             }
           : {}),
 
-        ...(status !== undefined ? { status } : {}),
-
-        ...(userId ? { OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] } : {}),
+        ...(status !== undefined ? { status } : excludeCancelled ? { status: { not: 3 } } : {}),
 
         ...(partyId ? { party_id: partyId } : {}),
-      },
 
-      include: {
+        ...(and.length ? { AND: and } : {}),
+    };
+    const directionOrder = order === 'asc' ? 'asc' : 'desc';
+    const sortableFields = new Set(['number', 'date', 'status', 'total', 'created_at']);
+    const orderBy: any = sort === 'client'
+      ? { business_parties: { name: directionOrder } }
+      : { [sortableFields.has(sort ?? '') ? sort! : 'created_at']: directionOrder };
+    const include = {
         document_types: true,
 
         document_sequences: true,
@@ -1059,28 +1077,49 @@ export class DocumentsSalesService {
             taxes: true,
           },
         },
+    };
+    const paginationEnabled = Number.isFinite(page) && Number.isFinite(pageSize);
+    const safePage = Math.max(1, Math.trunc(page ?? 1));
+    const safePageSize = Math.min(100, Math.max(1, Math.trunc(pageSize ?? 25)));
+    const query: any = {
+      where,
+
+      include,
+      orderBy,
+      ...(paginationEnabled ? { skip: (safePage - 1) * safePageSize, take: safePageSize } : {}),
+    };
+    const [rawDocuments, total] = await Promise.all([
+      this.prisma.documents.findMany(query),
+      paginationEnabled ? this.prisma.documents.count({ where }) : Promise.resolve(0),
+    ]);
+
+    let documents: any[] = rawDocuments;
+
+    if (includeCreator) {
+      const creatorIds = [...new Set(documents.map((document) => document.created_by).filter(Boolean))] as string[];
+      const creators = creatorIds.length
+        ? await this.db.getDefaultClient().users.findMany({
+            where: { id: { in: creatorIds } },
+            select: { id: true, name: true, email: true },
+          })
+        : [];
+      const creatorMap = new Map(creators.map((creator) => [creator.id, creator]));
+      documents = documents.map((document) => ({
+        ...document,
+        creator: document.created_by ? (creatorMap.get(document.created_by) ?? null) : null,
+      }));
+    }
+
+    if (!paginationEnabled) return documents;
+    return {
+      items: documents,
+      pagination: {
+        page: safePage,
+        pageSize: safePageSize,
+        total,
+        pageCount: Math.ceil(total / safePageSize),
       },
-
-      orderBy: {
-        created_at: 'desc',
-      },
-    });
-
-    if (!includeCreator) return documents;
-
-    const creatorIds = [...new Set(documents.map((document) => document.created_by).filter(Boolean))] as string[];
-    const creators = creatorIds.length
-      ? await this.db.getDefaultClient().users.findMany({
-          where: { id: { in: creatorIds } },
-          select: { id: true, name: true, email: true },
-        })
-      : [];
-    const creatorMap = new Map(creators.map((creator) => [creator.id, creator]));
-
-    return documents.map((document) => ({
-      ...document,
-      creator: document.created_by ? (creatorMap.get(document.created_by) ?? null) : null,
-    }));
+    };
   }
 
   // ─────────────────────────────────────────────

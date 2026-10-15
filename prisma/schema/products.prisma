@@ -100,6 +100,9 @@ model products {
   product_list_prices          product_list_prices[]
 
   @@index([current_cost_currency_id])
+  @@index([deleted_at, created_at(sort: Desc)], map: "idx_products_deleted_created")
+  @@index([deleted_at, name], map: "idx_products_deleted_name")
+  @@index([sku], map: "idx_products_sku")
   @@schema("tenant")
 }
 

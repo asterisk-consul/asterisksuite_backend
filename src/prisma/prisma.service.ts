@@ -80,7 +80,8 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   private readonly tenantClientCache = new Map<string, ExtendedClient>();
   private readonly tenantPoolCache = new Map<string, Pool>();
   private readonly tenantLastUsed = new Map<string, number>();
-  private readonly tenantIdleTtlMs = Number(process.env.TENANT_CLIENT_IDLE_TTL_MS ?? 15 * 60 * 1000);
+  private readonly tenantIdleTtlMs = Number(process.env.TENANT_CLIENT_IDLE_TTL_MS ?? 5 * 60 * 1000);
+  private readonly tenantClientCacheMax = Math.max(1, Number(process.env.TENANT_CLIENT_CACHE_MAX ?? 8));
   private cleanupTimer?: NodeJS.Timeout;
 
   // Cliente fijo para public
@@ -135,6 +136,57 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     return this.tenantClientCache.get(tenantDb)!;
   }
 
+  /**
+   * Ejecuta trabajo de background con un cliente que no queda en la caché web.
+   * Evita que un scheduler que recorre todas las empresas mantenga un cliente
+   * Prisma pesado por cada tenant hasta que venza el TTL.
+   */
+  public async withTemporaryTenantClient<T>(
+    tenantDb: string,
+    work: (client: ExtendedClient) => Promise<T>,
+  ): Promise<T> {
+    const { client, pool } = createTenantClient(tenantDb);
+    try {
+      return await work(client);
+    } finally {
+      await (client as unknown as PrismaClient).$disconnect();
+      await pool.end();
+    }
+  }
+
+  /**
+   * Métricas agregadas para diagnosticar consumo de memoria y conexiones.
+   * No expone nombres de bases ni credenciales, por lo que también puede
+   * registrarse temporalmente en producción.
+   */
+  public getPoolDiagnostics() {
+    const tenantPools = [...this.tenantPoolCache.values()];
+    const now = Date.now();
+    const idleSeconds = [...this.tenantLastUsed.values()].map((lastUsed) =>
+      Math.max(0, Math.round((now - lastUsed) / 1000)),
+    );
+    const sum = (selector: (pool: Pool) => number) =>
+      tenantPools.reduce((total, pool) => total + selector(pool), 0);
+
+    return {
+      tenantClients: this.tenantClientCache.size,
+      tenantClientCacheMax: this.tenantClientCacheMax,
+      tenantClientTtlSeconds: Math.round(this.tenantIdleTtlMs / 1000),
+      oldestTenantIdleSeconds: idleSeconds.length ? Math.max(...idleSeconds) : null,
+      newestTenantIdleSeconds: idleSeconds.length ? Math.min(...idleSeconds) : null,
+      publicPool: {
+        total: this.defaultPool.totalCount,
+        idle: this.defaultPool.idleCount,
+        waiting: this.defaultPool.waitingCount,
+      },
+      tenantPools: {
+        total: sum((pool) => pool.totalCount),
+        idle: sum((pool) => pool.idleCount),
+        waiting: sum((pool) => pool.waitingCount),
+      },
+    };
+  }
+
   async onModuleInit() {
     await (this.defaultClient as unknown as PrismaClient).$connect();
     this.cleanupTimer = setInterval(() => {
@@ -145,9 +197,17 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
 
   private async releaseIdleTenantClients() {
     const expiration = Date.now() - this.tenantIdleTtlMs;
-    for (const [tenantDb, lastUsed] of this.tenantLastUsed.entries()) {
+    const tenantsByLastUse = [...this.tenantLastUsed.entries()].sort(
+      ([, left], [, right]) => left - right,
+    );
+    let overflow = Math.max(0, tenantsByLastUse.length - this.tenantClientCacheMax);
+    let released = 0;
+    for (const [tenantDb, lastUsed] of tenantsByLastUse) {
       const pool = this.tenantPoolCache.get(tenantDb);
-      if (lastUsed > expiration || !pool || pool.waitingCount > 0 || pool.idleCount !== pool.totalCount) continue;
+      const expired = lastUsed <= expiration;
+      if ((!expired && overflow === 0) || !pool || pool.waitingCount > 0 || pool.idleCount !== pool.totalCount) {
+        continue;
+      }
 
       const client = this.tenantClientCache.get(tenantDb);
       this.tenantClientCache.delete(tenantDb);
@@ -157,9 +217,15 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
       try {
         if (client) await (client as unknown as PrismaClient).$disconnect();
         await pool.end();
+        released += 1;
+        if (overflow > 0) overflow -= 1;
       } catch (error) {
         this.logger.warn(`No se pudo liberar completamente el cliente inactivo ${tenantDb}: ${String(error)}`);
       }
+    }
+
+    if (released > 0) {
+      this.logger.log(`Clientes Prisma tenant liberados por inactividad: ${released}`);
     }
   }
 

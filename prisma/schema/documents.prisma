@@ -250,6 +250,9 @@ model documents {
   @@index([assigned_to])
   @@index([commercial_operation_id])
   @@index([warehouse_id])
+  @@index([deleted_at, created_at(sort: Desc)], map: "idx_documents_deleted_created")
+  @@index([document_type_id, status, created_at(sort: Desc)], map: "idx_documents_type_status_created")
+  @@index([party_id, date(sort: Desc)], map: "idx_documents_party_date")
   @@schema("tenant")
 }
 

@@ -21,8 +21,9 @@ export class StockReservationsScheduler {
 
     for (const company of companies) {
       try {
-        const released = await this.reservations.releaseExpiredForClient(
-          this.db.getTenantClient(company.schema_name!),
+        const released = await this.db.withTemporaryTenantClient(
+          company.schema_name!,
+          (client) => this.reservations.releaseExpiredForClient(client),
         );
         if (released) this.logger.log(`[${company.name}] ${released} reserva(s) vencida(s) liberada(s)`);
       } catch (error) {

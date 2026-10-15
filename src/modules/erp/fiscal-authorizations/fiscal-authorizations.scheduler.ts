@@ -24,8 +24,10 @@ export class FiscalAuthorizationsScheduler {
     });
     for (const company of companies) {
       try {
-        const client = this.db.getTenantClient(company.schema_name!);
-        await this.service.refreshAlerts(client);
+        await this.db.withTemporaryTenantClient(
+          company.schema_name!,
+          (client) => this.service.refreshAlerts(client),
+        );
       } catch (error) {
         const code = (error as { code?: string })?.code;
         if (code === 'P2021' || code === 'P2022') {

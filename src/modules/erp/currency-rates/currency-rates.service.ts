@@ -62,20 +62,34 @@ export class CurrencyRatesService {
   // ─────────────────────────────────────────────
   // FIND ALL
   // ─────────────────────────────────────────────
-  async findAll() {
-    return this.prisma.currency_rates.findMany({
-      where: {
-        deleted_at: null,
-        active: true,
+  async findAll(params: { page?: number; pageSize?: number } = {}) {
+    const page = Math.max(1, params.page ?? 1);
+    const pageSize = Math.min(100, Math.max(10, params.pageSize ?? 25));
+    const where = { deleted_at: null, active: true };
+
+    const [items, total] = await Promise.all([
+      this.prisma.currency_rates.findMany({
+        where,
+        include: {
+          from_currency: true,
+          to_currency: true,
+        },
+        orderBy: [{ effective_date: 'desc' }, { created_at: 'desc' }],
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.currency_rates.count({ where }),
+    ]);
+
+    return {
+      items,
+      pagination: {
+        page,
+        pageSize,
+        total,
+        pageCount: Math.ceil(total / pageSize),
       },
-      include: {
-        from_currency: true,
-        to_currency: true,
-      },
-      orderBy: {
-        effective_date: 'desc',
-      },
-    });
+    };
   }
 
   // ─────────────────────────────────────────────
