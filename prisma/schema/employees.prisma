@@ -27,11 +27,12 @@ model employees {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  party             business_parties?       @relation(fields: [party_id], references: [id])
-  cash_boxes        cash_boxes[]
-  movements         cash_box_movements[]
-  sales_ordenes     orden_venta_documents[]
-  maintenance_labor maintenance_labor[]
+  party                  business_parties?              @relation(fields: [party_id], references: [id])
+  cash_boxes             cash_boxes[]
+  movements              cash_box_movements[]
+  sales_ordenes          orden_venta_documents[]
+  commission_assignments sales_commission_assignments[]
+  maintenance_labor      maintenance_labor[]
 
   @@index([party_id])
   @@schema("tenant")

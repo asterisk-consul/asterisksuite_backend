@@ -27,6 +27,8 @@ export class HrService {
     commissionRate: number,
     commissionBase?: string | null,
     asOf?: Date,
+    sellerId?: string,
+    participationRate = 100,
   ) {
     const document = await this.prisma.documents.findUnique({
       where: { id: documentId },
@@ -62,18 +64,22 @@ export class HrService {
         },
         select: { subtotal: true },
       });
-      baseAmount = Math.min(ovSubtotal, invoices.reduce((sum, invoice) => sum + Number(invoice.subtotal), 0));
+      baseAmount = Math.min(
+        ovSubtotal,
+        invoices.reduce((sum, invoice) => sum + Number(invoice.subtotal), 0),
+      );
     }
 
     const details = await this.prisma.hr_vale_commission_details.findMany({
       where: {
         document_id: documentId,
+        ...(sellerId ? { seller_id: sellerId } : {}),
         hr_vale: { deleted_at: null, status: { not: 'CANCELLED' } },
       },
       select: { commission_amount: true },
     });
     const settledAmount = details.reduce((sum, detail) => sum + Number(detail.commission_amount), 0);
-    const accruedAmount = baseAmount * commissionRate / 100;
+    const accruedAmount = (((baseAmount * participationRate) / 100) * commissionRate) / 100;
 
     return {
       baseAmount,
@@ -112,7 +118,7 @@ export class HrService {
         amount: dto.amount,
         currency_code: dto.currency_code,
         exchange_rate: dto.exchange_rate,
-        rate_type: dto.rate_type as any ?? 'OFFICIAL',
+        rate_type: (dto.rate_type as any) ?? 'OFFICIAL',
         converted_amount: dto.converted_amount,
         date: parseLocalDateTime(dto.date),
         description: dto.description,
@@ -156,16 +162,17 @@ export class HrService {
     });
 
     // Resolver created_by a nombre de usuario
-    const userIds = [...new Set(vales.map(v => v.created_by).filter(Boolean))] as string[];
-    const users = userIds.length > 0
-      ? await this.db.getDefaultClient().users.findMany({
-          where: { id: { in: userIds } },
-          select: { id: true, name: true },
-        })
-      : [];
-    const userMap = new Map(users.map(u => [u.id, u.name]));
+    const userIds = [...new Set(vales.map((v) => v.created_by).filter(Boolean))] as string[];
+    const users =
+      userIds.length > 0
+        ? await this.db.getDefaultClient().users.findMany({
+            where: { id: { in: userIds } },
+            select: { id: true, name: true },
+          })
+        : [];
+    const userMap = new Map(users.map((u) => [u.id, u.name]));
 
-    return vales.map(v => ({
+    return vales.map((v) => ({
       ...v,
       created_by_name: v.created_by ? (userMap.get(v.created_by) ?? null) : null,
     }));
@@ -207,76 +214,75 @@ export class HrService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-
-    let account = await tx.hr_accounts.findUnique({
-      where: {
-        party_id_currency_code: {
-          party_id: vale.party_id,
-          currency_code: vale.currency_code,
+      let account = await tx.hr_accounts.findUnique({
+        where: {
+          party_id_currency_code: {
+            party_id: vale.party_id,
+            currency_code: vale.currency_code,
+          },
         },
-      },
-    });
+      });
 
-    if (!account) {
-      account = await tx.hr_accounts.create({
+      if (!account) {
+        account = await tx.hr_accounts.create({
+          data: {
+            party_id: vale.party_id,
+            party_type: vale.party_type,
+            currency_code: vale.currency_code,
+            balance: 0,
+            created_by: userId,
+          },
+        });
+      }
+
+      const currentBalance = account.balance.toNumber();
+      const amount = vale.amount.toNumber();
+      const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
+
+      await tx.hr_account_entries.create({
         data: {
-          party_id: vale.party_id,
-          party_type: vale.party_type,
+          hr_account_id: account.id,
+          type: isDebit ? 'VALE_DEBIT' : 'VALE_CREDIT',
+          amount,
           currency_code: vale.currency_code,
-          balance: 0,
+          exchange_rate: vale.exchange_rate,
+          rate_type: vale.rate_type,
+          converted_amount: vale.converted_amount,
+          balance_before: currentBalance,
+          balance_after: balanceAfter,
+          description: `Vale #${vale.number} - ${vale.type}`,
+          reference_type: 'hr_vale',
+          reference_id: vale.id,
+          date: new Date(),
           created_by: userId,
         },
       });
-    }
 
-    const currentBalance = account.balance.toNumber();
-    const amount = vale.amount.toNumber();
-    const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
+      await tx.hr_accounts.update({
+        where: { id: account.id },
+        data: { balance: balanceAfter, updated_at: new Date() },
+      });
 
-    await tx.hr_account_entries.create({
-      data: {
-        hr_account_id: account.id,
-        type: isDebit ? 'VALE_DEBIT' : 'VALE_CREDIT',
-        amount,
-        currency_code: vale.currency_code,
-        exchange_rate: vale.exchange_rate,
-        rate_type: vale.rate_type,
-        converted_amount: vale.converted_amount,
-        balance_before: currentBalance,
-        balance_after: balanceAfter,
-        description: `Vale #${vale.number} - ${vale.type}`,
-        reference_type: 'hr_vale',
-        reference_id: vale.id,
-        date: new Date(),
-        created_by: userId,
-      },
-    });
+      // Crear documento VALE + current_account_entry
+      await this.createValeDocument(vale, userId, tx, requiresTreasury);
 
-    await tx.hr_accounts.update({
-      where: { id: account.id },
-      data: { balance: balanceAfter, updated_at: new Date() },
-    });
+      if (requiresTreasury) {
+        await this.createPartnerTreasuryMovement(vale, treasury!, isDebit, userId, tx);
+      }
 
-    // Crear documento VALE + current_account_entry
-    await this.createValeDocument(vale, userId, tx, requiresTreasury);
-
-    if (requiresTreasury) {
-      await this.createPartnerTreasuryMovement(vale, treasury!, isDebit, userId, tx);
-    }
-
-    return tx.hr_vales.update({
-      where: { id },
-      data: {
-        status: requiresTreasury ? 'PAID' : 'CONFIRMED',
-        paid_at: requiresTreasury ? new Date() : null,
-        confirmed_at: new Date(),
-        confirmed_by: userId,
-        updated_at: new Date(),
-      },
-      include: {
-        party: { select: { id: true, name: true, tax_id: true } },
-      },
-    });
+      return tx.hr_vales.update({
+        where: { id },
+        data: {
+          status: requiresTreasury ? 'PAID' : 'CONFIRMED',
+          paid_at: requiresTreasury ? new Date() : null,
+          confirmed_at: new Date(),
+          confirmed_by: userId,
+          updated_at: new Date(),
+        },
+        include: {
+          party: { select: { id: true, name: true, tax_id: true } },
+        },
+      });
     });
   }
 
@@ -309,7 +315,9 @@ export class HrService {
       });
       if (!cashBox) throw new BadRequestException('Caja no encontrada o inactiva');
       if (cashBox.currency_code !== vale.currency_code) {
-        throw new BadRequestException(`La caja opera en ${cashBox.currency_code} y el vale está expresado en ${vale.currency_code}`);
+        throw new BadRequestException(
+          `La caja opera en ${cashBox.currency_code} y el vale está expresado en ${vale.currency_code}`,
+        );
       }
       if (!cashBox.current_session_id) {
         throw new BadRequestException('La caja seleccionada no tiene una sesión abierta');
@@ -323,12 +331,20 @@ export class HrService {
       if (isOutflow && after < 0) throw new BadRequestException('Saldo insuficiente en la caja');
 
       await prisma.cash_box_movements.create({
-        data: { ...commonData, cash_box_id: cashBox.id, session_id: cashBox.current_session_id, balance_before: before, balance_after: after },
+        data: {
+          ...commonData,
+          cash_box_id: cashBox.id,
+          session_id: cashBox.current_session_id,
+          balance_before: before,
+          balance_after: after,
+        },
       });
       if (balance) {
         await prisma.cash_box_balances.update({ where: { id: balance.id }, data: { balance: after } });
       } else {
-        await prisma.cash_box_balances.create({ data: { cash_box_id: cashBox.id, currency_code: vale.currency_code, balance: after, created_by: userId } });
+        await prisma.cash_box_balances.create({
+          data: { cash_box_id: cashBox.id, currency_code: vale.currency_code, balance: after, created_by: userId },
+        });
       }
       await prisma.cash_box_sessions.update({
         where: { id: cashBox.current_session_id },
@@ -345,7 +361,9 @@ export class HrService {
     });
     if (!bank) throw new BadRequestException('Cuenta bancaria no encontrada o inactiva');
     if (bank.currency_code !== vale.currency_code) {
-      throw new BadRequestException(`La cuenta bancaria opera en ${bank.currency_code} y el vale está expresado en ${vale.currency_code}`);
+      throw new BadRequestException(
+        `La cuenta bancaria opera en ${bank.currency_code} y el vale está expresado en ${vale.currency_code}`,
+      );
     }
     const before = bank.balance.toNumber();
     const after = isOutflow ? before - amount : before + amount;
@@ -378,9 +396,9 @@ export class HrService {
     }
 
     if (vale.status === 'CONFIRMED' || vale.status === 'PAID') {
-    // SUELDO, ADELANTO, EXTRAS = empleado recibe dinero (crédito)
-    // RETIRO, REEMBOLSO, PRESTAMO = socio retira/devuelve (débito)
-    const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
+      // SUELDO, ADELANTO, EXTRAS = empleado recibe dinero (crédito)
+      // RETIRO, REEMBOLSO, PRESTAMO = socio retira/devuelve (débito)
+      const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
 
       // Revertir hr_account_entries
       const account = await this.prisma.hr_accounts.findUnique({
@@ -438,8 +456,12 @@ export class HrService {
   private async reversePartnerTreasuryMovement(vale: any, userId: string) {
     if (vale.party_type !== 'PARTNER') return;
     const [cashMovement, bankMovement] = await Promise.all([
-      this.prisma.cash_box_movements.findFirst({ where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null } }),
-      this.prisma.bank_account_movements.findFirst({ where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null } }),
+      this.prisma.cash_box_movements.findFirst({
+        where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null },
+      }),
+      this.prisma.bank_account_movements.findFirst({
+        where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null },
+      }),
     ]);
     const original = cashMovement ?? bankMovement;
     if (!original) return; // Vale histórico: nunca impactó Tesorería.
@@ -451,7 +473,12 @@ export class HrService {
 
     if (cashMovement) {
       const balance = await this.prisma.cash_box_balances.findUnique({
-        where: { cash_box_id_currency_code: { cash_box_id: cashMovement.cash_box_id, currency_code: cashMovement.currency_code } },
+        where: {
+          cash_box_id_currency_code: {
+            cash_box_id: cashMovement.cash_box_id,
+            currency_code: cashMovement.currency_code,
+          },
+        },
       });
       const before = balance?.balance.toNumber() ?? 0;
       const after = originalWasOutflow ? before + amount : before - amount;
@@ -480,7 +507,9 @@ export class HrService {
           where: { id: cashMovement.session_id },
           data: {
             movement_count: { increment: 1 },
-            ...(originalWasOutflow ? { total_income: { increment: amount } } : { total_expenses: { increment: amount } }),
+            ...(originalWasOutflow
+              ? { total_income: { increment: amount } }
+              : { total_expenses: { increment: amount } }),
           },
         });
       }
@@ -546,7 +575,7 @@ export class HrService {
       const lastDoc = await prisma.documents.findFirst({
         where: { document_type_id: valeDocType.id },
         orderBy: { number: 'desc' },
-        select: { number: true }
+        select: { number: true },
       });
       nextNumber = (lastDoc?.number ?? 0) + 1;
     }
@@ -767,19 +796,174 @@ export class HrService {
   // REPORTE DE COMISIONES
   // ══════════════════════════════════════════════════════════
 
-  async getCommissionsReport(month: string, sellerId?: string) {
-    // month format: "YYYY-MM"
-    const [year, monthNum] = month.split('-').map(Number);
-    const endDate = new Date(year, monthNum, 0, 23, 59, 59, 999);
+  private parseMonth(month: string) {
+    if (!/^\d{4}-\d{2}$/.test(month ?? '')) {
+      throw new BadRequestException('El período debe tener formato YYYY-MM');
+    }
+    const [year, monthNumber] = month.split('-').map(Number);
+    if (monthNumber < 1 || monthNumber > 12) {
+      throw new BadRequestException('El mes indicado no es válido');
+    }
+    return {
+      startDate: new Date(year, monthNumber - 1, 1),
+      endDate: new Date(year, monthNumber, 0, 23, 59, 59, 999),
+    };
+  }
 
-    // Las comisiones se devengan por facturación/cobro, aunque la OV sea anterior al mes.
-    const ordenes = await this.prisma.orden_venta_documents.findMany({
+  async getCommissionSellers() {
+    const sellers = await this.prisma.employees.findMany({
+      where: { deleted_at: null, is_active: true, is_salesperson: true },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        party_id: true,
+        default_commission_rate: true,
+        commission_base: true,
+      },
+      orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
+    });
+    return sellers.map((seller) => ({
+      ...seller,
+      name: `${seller.first_name} ${seller.last_name}`.trim(),
+      default_commission_rate: Number(seller.default_commission_rate ?? 0),
+    }));
+  }
+
+  async getCommissionableDocuments(month: string) {
+    const { startDate, endDate } = this.parseMonth(month);
+    const orders = await this.prisma.orden_venta_documents.findMany({
       where: {
-        seller_id: sellerId ? sellerId : { not: null },
-        commission_rate: { not: null },
         document: {
           deleted_at: null,
+          date: { gte: startDate, lte: endDate },
         },
+      },
+      include: {
+        document: {
+          include: {
+            business_parties: { select: { id: true, name: true } },
+            document_types: { select: { name: true, short_name: true, category: true } },
+            sales_commission_assignments: {
+              where: { active: true },
+              include: { seller: { select: { id: true, first_name: true, last_name: true } } },
+              orderBy: { created_at: 'asc' },
+            },
+          },
+        },
+      },
+      orderBy: { document: { date: 'desc' } },
+    });
+
+    return orders.map((order) => {
+      const document = order.document;
+      const total = Number(document.total);
+      const paid = Number(document.paid_amount ?? 0);
+      const assignments = document.sales_commission_assignments.map((assignment) => ({
+        id: assignment.id,
+        seller_id: assignment.seller_id,
+        seller_name: `${assignment.seller.first_name} ${assignment.seller.last_name}`.trim(),
+        participation_rate: Number(assignment.participation_rate),
+        commission_rate: Number(assignment.commission_rate),
+        commission_base: assignment.commission_base,
+      }));
+      return {
+        document_id: document.id,
+        number: document.number,
+        date: document.date,
+        customer: document.business_parties?.name ?? 'Sin cliente',
+        document_type: document.document_types.short_name ?? document.document_types.name,
+        subtotal: Number(document.subtotal),
+        total,
+        paid_amount: paid,
+        paid_percentage: total > 0 ? Math.min(100, (paid / total) * 100) : 0,
+        currency_code: document.currency_code,
+        assignments,
+        assignment_status: assignments.length ? 'ASSIGNED' : 'UNASSIGNED',
+      };
+    });
+  }
+
+  async saveCommissionAssignments(
+    documentId: string,
+    assignments: Array<{
+      seller_id: string;
+      participation_rate: number;
+      commission_rate: number;
+      commission_base: 'INVOICED' | 'PAID';
+    }>,
+    userId: string,
+  ) {
+    const duplicated = new Set(assignments.map((item) => item.seller_id)).size !== assignments.length;
+    if (duplicated) throw new BadRequestException('No se puede asignar dos veces el mismo vendedor');
+    const participation = assignments.reduce((sum, item) => sum + Number(item.participation_rate), 0);
+    if (Math.abs(participation - 100) > 0.01) {
+      throw new BadRequestException('La participación total de los vendedores debe sumar 100%');
+    }
+
+    const [order, sellers] = await Promise.all([
+      this.prisma.orden_venta_documents.findUnique({
+        where: { document_id: documentId },
+        select: { document: { select: { deleted_at: true } } },
+      }),
+      this.prisma.employees.findMany({
+        where: {
+          id: { in: assignments.map((item) => item.seller_id) },
+          deleted_at: null,
+          is_active: true,
+          is_salesperson: true,
+        },
+        select: { id: true },
+      }),
+    ]);
+    if (!order || order.document.deleted_at) throw new NotFoundException('Orden de venta no encontrada');
+    if (sellers.length !== assignments.length) {
+      throw new BadRequestException('Todos los vendedores deben estar activos y habilitados para comisionar');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const sellerIds = assignments.map((item) => item.seller_id);
+      await tx.sales_commission_assignments.updateMany({
+        where: { document_id: documentId, seller_id: { notIn: sellerIds }, active: true },
+        data: { active: false, updated_by: userId },
+      });
+      for (const assignment of assignments) {
+        await tx.sales_commission_assignments.upsert({
+          where: { document_id_seller_id: { document_id: documentId, seller_id: assignment.seller_id } },
+          create: {
+            document_id: documentId,
+            seller_id: assignment.seller_id,
+            participation_rate: assignment.participation_rate,
+            commission_rate: assignment.commission_rate,
+            commission_base: assignment.commission_base,
+            created_by: userId,
+          },
+          update: {
+            participation_rate: assignment.participation_rate,
+            commission_rate: assignment.commission_rate,
+            commission_base: assignment.commission_base,
+            active: true,
+            updated_by: userId,
+          },
+        });
+      }
+      return tx.sales_commission_assignments.findMany({
+        where: { document_id: documentId, active: true },
+        include: { seller: { select: { id: true, first_name: true, last_name: true } } },
+      });
+    });
+  }
+
+  async getCommissionsReport(month: string, sellerId?: string) {
+    const { endDate } = this.parseMonth(month);
+
+    // Se incluyen asignaciones de cualquier mes: el hecho económico puede ocurrir
+    // después de la fecha de la OV y se calcula acumulado hasta el cierre elegido.
+    const assignments = await this.prisma.sales_commission_assignments.findMany({
+      where: {
+        active: true,
+        ...(sellerId ? { seller_id: sellerId } : {}),
+        document: { deleted_at: null },
       },
       include: {
         seller: {
@@ -793,30 +977,34 @@ export class HrService {
     });
 
     // Group by seller
-    const sellerMap = new Map<string, {
-      seller_id: string;
-      seller_name: string;
-      party_id: string | null;
-      total_ventas: number;
-      total_comisiones: number;
-      cantidad_ov: number;
-      items: {
-        document_id: string;
-        ov_number: number;
-        subtotal: number;
-        commission_rate: number;
-        commission_amount: number;
-        commission_base: string;
-        sold_subtotal: number;
-        settled_amount: number;
-        date: Date;
-      }[];
-    }>();
+    const sellerMap = new Map<
+      string,
+      {
+        seller_id: string;
+        seller_name: string;
+        party_id: string | null;
+        total_ventas: number;
+        total_comisiones: number;
+        cantidad_ov: number;
+        items: {
+          document_id: string;
+          ov_number: number;
+          subtotal: number;
+          commission_rate: number;
+          commission_amount: number;
+          commission_base: string;
+          participation_rate: number;
+          sold_subtotal: number;
+          settled_amount: number;
+          date: Date;
+        }[];
+      }
+    >();
 
-    for (const ov of ordenes) {
-      const key = ov.seller_id!;
+    for (const assignment of assignments) {
+      const key = assignment.seller_id;
       if (!sellerMap.has(key)) {
-        const seller = ov.seller!;
+        const seller = assignment.seller;
         sellerMap.set(key, {
           seller_id: key,
           seller_name: `${seller.first_name} ${seller.last_name}`,
@@ -829,30 +1017,41 @@ export class HrService {
       }
 
       const entry = sellerMap.get(key)!;
-      const subtotal = Number(ov.document.subtotal);
-      const total = Number(ov.document.total);
-      const rate = Number(ov.commission_rate);
-      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
-      const metrics = await this.getCommissionMetrics(ov.document_id, subtotal, total, rate, base, endDate);
+      const subtotal = Number(assignment.document.subtotal);
+      const total = Number(assignment.document.total);
+      const rate = Number(assignment.commission_rate);
+      const participation = Number(assignment.participation_rate);
+      const base = assignment.commission_base ?? assignment.seller.commission_base ?? 'INVOICED';
+      const metrics = await this.getCommissionMetrics(
+        assignment.document_id,
+        subtotal,
+        total,
+        rate,
+        base,
+        endDate,
+        assignment.seller_id,
+        participation,
+      );
       if (metrics.pendingAmount <= 0.005) continue;
 
-      entry.total_ventas += metrics.baseAmount;
+      entry.total_ventas += (metrics.baseAmount * participation) / 100;
       entry.total_comisiones += metrics.pendingAmount;
       entry.cantidad_ov += 1;
       entry.items.push({
-        document_id: ov.document_id,
-        ov_number: ov.document.number,
-        subtotal: metrics.baseAmount,
+        document_id: assignment.document_id,
+        ov_number: assignment.document.number,
+        subtotal: (metrics.baseAmount * participation) / 100,
         commission_rate: rate,
         commission_amount: metrics.pendingAmount,
         commission_base: base,
         sold_subtotal: subtotal,
         settled_amount: metrics.settledAmount,
-        date: ov.document.date,
+        participation_rate: participation,
+        date: assignment.document.date,
       });
     }
 
-    const sellers = Array.from(sellerMap.values()).filter(seller => seller.cantidad_ov > 0);
+    const sellers = Array.from(sellerMap.values()).filter((seller) => seller.cantidad_ov > 0);
     return {
       month,
       sellers,
@@ -867,14 +1066,13 @@ export class HrService {
   // ══════════════════════════════════════════════════════════
 
   async generateCommissionVale(sellerId: string, month: string, userId: string) {
-    const [year, monthNum] = month.split('-').map(Number);
-    const endDate = new Date(year, monthNum, 0, 23, 59, 59, 999);
+    const { endDate } = this.parseMonth(month);
 
-    // Una OV puede liquidarse en varios vales a medida que factura o cobra.
-    const ordenes = await this.prisma.orden_venta_documents.findMany({
+    // Una asignación puede liquidarse en varios vales a medida que factura o cobra.
+    const assignments = await this.prisma.sales_commission_assignments.findMany({
       where: {
         seller_id: sellerId,
-        commission_rate: { not: null },
+        active: true,
         document: { deleted_at: null },
       },
       include: {
@@ -887,26 +1085,34 @@ export class HrService {
       },
     });
 
-    const commissionRows: Array<{ ov: typeof ordenes[number]; base: string; baseAmount: number; pendingAmount: number }> = [];
-    for (const ov of ordenes) {
-      const rate = Number(ov.commission_rate);
-      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
+    const commissionRows: Array<{
+      assignment: (typeof assignments)[number];
+      base: string;
+      baseAmount: number;
+      pendingAmount: number;
+    }> = [];
+    for (const assignment of assignments) {
+      const rate = Number(assignment.commission_rate);
+      const base = assignment.commission_base ?? assignment.seller.commission_base ?? 'INVOICED';
       const metrics = await this.getCommissionMetrics(
-        ov.document_id,
-        Number(ov.document.subtotal),
-        Number(ov.document.total),
+        assignment.document_id,
+        Number(assignment.document.subtotal),
+        Number(assignment.document.total),
         rate,
         base,
         endDate,
+        assignment.seller_id,
+        Number(assignment.participation_rate),
       );
       if (metrics.pendingAmount > 0.005) {
-        commissionRows.push({ ov, base, baseAmount: metrics.baseAmount, pendingAmount: metrics.pendingAmount });
+        commissionRows.push({ assignment, base, baseAmount: metrics.baseAmount, pendingAmount: metrics.pendingAmount });
       }
     }
 
-    if (!commissionRows.length) throw new BadRequestException('No hay comisiones pendientes para este vendedor en este mes');
+    if (!commissionRows.length)
+      throw new BadRequestException('No hay comisiones pendientes para este vendedor en este mes');
 
-    const seller = commissionRows[0].ov.seller!;
+    const seller = commissionRows[0].assignment.seller;
     const partyId = seller.party_id;
 
     if (!partyId) {
@@ -933,7 +1139,7 @@ export class HrService {
         party_type: 'EMPLOYEE',
         type: 'EXTRAS',
         amount: totalCommission,
-        currency_code: commissionRows[0].ov.document.currency_code ?? 'ARS',
+        currency_code: commissionRows[0].assignment.document.currency_code ?? 'ARS',
         date: valeDate,
         description: `Comisiones ${month} - ${seller.first_name} ${seller.last_name}`,
         status: 'DRAFT',
@@ -946,25 +1152,25 @@ export class HrService {
 
     // Create commission detail lines
     for (const row of commissionRows) {
-      const ov = row.ov;
-      const rate = Number(ov.commission_rate);
+      const assignment = row.assignment;
+      const rate = Number(assignment.commission_rate);
 
       await this.prisma.hr_vale_commission_details.create({
         data: {
           hr_vale_id: vale.id,
-          document_id: ov.document_id,
+          document_id: assignment.document_id,
           seller_id: sellerId,
-          subtotal: row.baseAmount,
+          subtotal: (row.baseAmount * Number(assignment.participation_rate)) / 100,
           commission_rate: rate,
           commission_amount: row.pendingAmount,
           commission_base: row.base,
-          date: ov.document.date,
+          date: assignment.document.date,
         },
       });
 
       // Conserva la última liquidación como dato informativo; no bloquea futuras parciales.
       await this.prisma.orden_venta_documents.update({
-        where: { document_id: ov.document_id },
+        where: { document_id: assignment.document_id },
         data: {
           commission_settled_at: new Date(),
           commission_vale_id: vale.id,
@@ -972,7 +1178,9 @@ export class HrService {
       });
     }
 
-    this.logger.log(`Vale EXTRAS #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`);
+    this.logger.log(
+      `Vale EXTRAS #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`,
+    );
 
     return vale;
   }
@@ -997,7 +1205,7 @@ export class HrService {
       orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
     });
 
-    return partners.map(partner => ({
+    return partners.map((partner) => ({
       id: partner.id,
       party_id: partner.party_id,
       name: partner.party?.name ?? `${partner.first_name} ${partner.last_name}`.trim(),
@@ -1014,7 +1222,7 @@ export class HrService {
         where: { user_id: userId, deleted_at: null },
         select: { party_id: true },
       });
-      const userPartyIds = userPartners.map(p => p.party_id).filter(Boolean);
+      const userPartyIds = userPartners.map((p) => p.party_id).filter(Boolean);
       if (!userPartyIds.includes(partyId)) {
         throw new ForbiddenException('No tenés acceso al reporte de este socio');
       }
@@ -1053,7 +1261,7 @@ export class HrService {
       where: { party_id: partyId, active: true },
     });
 
-    const balances = accounts.map(a => ({
+    const balances = accounts.map((a) => ({
       currency_code: a.currency_code,
       balance: a.balance.toNumber(),
       converted_balance: a.converted_balance?.toNumber() ?? null,
@@ -1081,8 +1289,8 @@ export class HrService {
       const amount = vale.amount.toNumber();
       const rate = vale.exchange_rate?.toNumber() ?? 0;
       const amounts = {
-        ARS: vale.currency_code === 'ARS' ? amount : (rate > 0 ? amount * rate : 0),
-        USD: vale.currency_code === 'USD' ? amount : (rate > 0 ? amount / rate : 0),
+        ARS: vale.currency_code === 'ARS' ? amount : rate > 0 ? amount * rate : 0,
+        USD: vale.currency_code === 'USD' ? amount : rate > 0 ? amount / rate : 0,
       };
       for (const currency of ['ARS', 'USD'] as const) {
         const currencySummary = summary.by_currency[currency];
@@ -1106,13 +1314,13 @@ export class HrService {
     let runningArs = 0;
     let runningUsd = 0;
     const confirmedVales = [...vales]
-      .filter(vale => ['CONFIRMED', 'PAID'].includes(vale.status))
+      .filter((vale) => ['CONFIRMED', 'PAID'].includes(vale.status))
       .sort((a, b) => a.date.getTime() - b.date.getTime());
     for (const vale of confirmedVales) {
       const amount = vale.amount.toNumber();
       const rate = vale.exchange_rate?.toNumber() ?? 0;
-      const ars = vale.currency_code === 'ARS' ? amount : (rate > 0 ? amount * rate : 0);
-      const usd = vale.currency_code === 'USD' ? amount : (rate > 0 ? amount / rate : 0);
+      const ars = vale.currency_code === 'ARS' ? amount : rate > 0 ? amount * rate : 0;
+      const usd = vale.currency_code === 'USD' ? amount : rate > 0 ? amount / rate : 0;
       const direction = vale.type === 'APORTE' ? 1 : -1;
       runningArs += ars * direction;
       runningUsd += usd * direction;
@@ -1137,7 +1345,7 @@ export class HrService {
       },
       balances,
       summary,
-      vales: vales.map(v => ({
+      vales: vales.map((v) => ({
         ...v,
         amount: v.amount.toNumber(),
         exchange_rate: v.exchange_rate?.toNumber() ?? null,

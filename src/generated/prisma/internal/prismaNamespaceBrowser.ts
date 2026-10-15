@@ -75,6 +75,7 @@ export const ModelName = {
   fiscal_authorization_alerts: 'fiscal_authorization_alerts',
   presupuesto_documents: 'presupuesto_documents',
   orden_venta_documents: 'orden_venta_documents',
+  sales_commission_assignments: 'sales_commission_assignments',
   orden_compra_documents: 'orden_compra_documents',
   employees: 'employees',
   partners: 'partners',
@@ -734,6 +735,23 @@ export const Orden_venta_documentsScalarFieldEnum = {
 } as const
 
 export type Orden_venta_documentsScalarFieldEnum = (typeof Orden_venta_documentsScalarFieldEnum)[keyof typeof Orden_venta_documentsScalarFieldEnum]
+
+
+export const Sales_commission_assignmentsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  seller_id: 'seller_id',
+  participation_rate: 'participation_rate',
+  commission_rate: 'commission_rate',
+  commission_base: 'commission_base',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Sales_commission_assignmentsScalarFieldEnum = (typeof Sales_commission_assignmentsScalarFieldEnum)[keyof typeof Sales_commission_assignmentsScalarFieldEnum]
 
 
 export const Orden_compra_documentsScalarFieldEnum = {

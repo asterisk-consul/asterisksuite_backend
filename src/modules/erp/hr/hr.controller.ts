@@ -6,6 +6,8 @@ import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
+import { SaveCommissionAssignmentsDto } from './dto/save-commission-assignments.dto';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('hr')
@@ -84,11 +86,7 @@ export class HrController {
   }
 
   @Get('partner-report/:partyId')
-  getPartnerReport(
-    @Param('partyId') partyId: string,
-    @Req() req: ExpressRequest,
-    @CurrentUser() user: AuthUser,
-  ) {
+  getPartnerReport(@Param('partyId') partyId: string, @Req() req: ExpressRequest, @CurrentUser() user: AuthUser) {
     const companyRole = req['companyUserRole'] as string | undefined;
     return this.service.getPartnerReport(partyId, user.id, companyRole);
   }
@@ -98,18 +96,36 @@ export class HrController {
   // ══════════════════════════════════════════════════════════
 
   @Get('commissions')
-  getCommissionsReport(
-    @Query('month') month: string,
-    @Query('seller_id') sellerId?: string,
-  ) {
+  @RequirePermissions('commissions.view')
+  getCommissionsReport(@Query('month') month: string, @Query('seller_id') sellerId?: string) {
     return this.service.getCommissionsReport(month, sellerId);
   }
 
-  @Post('commissions/vale')
-  generateCommissionVale(
-    @Body() body: { seller_id: string; month: string },
+  @Get('commissions/documents')
+  @RequirePermissions('commissions.view')
+  getCommissionableDocuments(@Query('month') month: string) {
+    return this.service.getCommissionableDocuments(month);
+  }
+
+  @Get('commissions/sellers')
+  @RequirePermissions('commissions.view')
+  getCommissionSellers() {
+    return this.service.getCommissionSellers();
+  }
+
+  @Patch('commissions/documents/:documentId/assignments')
+  @RequirePermissions('commissions.manage')
+  saveCommissionAssignments(
+    @Param('documentId') documentId: string,
+    @Body() dto: SaveCommissionAssignmentsDto,
     @Request() req: any,
   ) {
+    return this.service.saveCommissionAssignments(documentId, dto.assignments, req.user.id);
+  }
+
+  @Post('commissions/vale')
+  @RequirePermissions('commissions.settle')
+  generateCommissionVale(@Body() body: { seller_id: string; month: string }, @Request() req: any) {
     return this.service.generateCommissionVale(body.seller_id, body.month, req.user.id);
   }
 }

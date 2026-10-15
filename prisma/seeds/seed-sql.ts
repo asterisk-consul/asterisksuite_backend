@@ -9,7 +9,7 @@
  * IMPORTANTE: Agregar aquí al agregar nuevos permisos, tipos de documento, impuestos, etc.
  */
 
-import { Pool } from 'pg'
+import { Pool } from 'pg';
 
 // ════════════════════════════════════════════════════════════════
 // RBAC — PERMISOS
@@ -59,7 +59,10 @@ export const RBAC_PERMISSIONS = [
   { code: 'fiscal-authorizations.create', description: 'Crear autorizaciones fiscales' },
   { code: 'fiscal-authorizations.update', description: 'Editar, renovar o anular autorizaciones fiscales' },
   { code: 'fiscal-authorizations.delete', description: 'Eliminar autorizaciones fiscales sin uso' },
-  { code: 'fiscal-authorizations.configure-alerts', description: 'Configurar alertas y políticas de autorizaciones fiscales' },
+  {
+    code: 'fiscal-authorizations.configure-alerts',
+    description: 'Configurar alertas y políticas de autorizaciones fiscales',
+  },
 
   // ─── ERP - Accounts ───────────────────────────────────────
   { code: 'accounts.read', description: 'Ver cuentas contables' },
@@ -206,7 +209,10 @@ export const RBAC_PERMISSIONS = [
   { code: 'sales.delete', description: 'Eliminar ventas' },
   { code: 'sales.confirm', description: 'Confirmar ventas' },
   { code: 'sales.cancel', description: 'Cancelar ventas' },
-  { code: 'sales.orders.view_amounts', description: 'Ver precios, totales y comisiones de órdenes de venta restringidas' },
+  {
+    code: 'sales.orders.view_amounts',
+    description: 'Ver precios, totales y comisiones de órdenes de venta restringidas',
+  },
 
   // ─── ERP - Purchases ──────────────────────────────────────
   { code: 'purchases.read', description: 'Ver compras' },
@@ -218,24 +224,28 @@ export const RBAC_PERMISSIONS = [
 
   // ─── Documentos por circuito y categoría ────────────────
   ...(['sales', 'purchases'] as const).flatMap((scope) =>
-    ([
-      ['quotes', 'presupuestos'],
-      ['orders', scope === 'sales' ? 'órdenes de venta' : 'órdenes de compra'],
-      ['invoices', 'facturas'],
-      ['delivery_notes', 'remitos'],
-      ['credit_notes', 'notas de crédito'],
-      ['debit_notes', 'notas de débito'],
-      ['receipts', 'recibos'],
-      ['opening_balances', 'saldos iniciales'],
-    ] as const).flatMap(([category, label]) =>
-      ([
-        ['read', 'Ver'],
-        ['create', 'Crear'],
-        ['update', 'Editar'],
-        ['confirm', 'Confirmar'],
-        ['cancel', 'Anular'],
-        ['delete', 'Eliminar'],
-      ] as const).map(([action, verb]) => ({
+    (
+      [
+        ['quotes', 'presupuestos'],
+        ['orders', scope === 'sales' ? 'órdenes de venta' : 'órdenes de compra'],
+        ['invoices', 'facturas'],
+        ['delivery_notes', 'remitos'],
+        ['credit_notes', 'notas de crédito'],
+        ['debit_notes', 'notas de débito'],
+        ['receipts', 'recibos'],
+        ['opening_balances', 'saldos iniciales'],
+      ] as const
+    ).flatMap(([category, label]) =>
+      (
+        [
+          ['read', 'Ver'],
+          ['create', 'Crear'],
+          ['update', 'Editar'],
+          ['confirm', 'Confirmar'],
+          ['cancel', 'Anular'],
+          ['delete', 'Eliminar'],
+        ] as const
+      ).map(([action, verb]) => ({
         code: `${scope}.${category}.${action}`,
         description: `${verb} ${label} de ${scope === 'sales' ? 'ventas' : 'compras'}`,
       })),
@@ -436,6 +446,9 @@ export const RBAC_PERMISSIONS = [
   { code: 'vales.delete', description: 'Eliminar vales' },
   { code: 'vales.approve', description: 'Aprobar vales' },
   { code: 'vales.reject', description: 'Rechazar vales' },
+  { code: 'commissions.view', description: 'Ver documentos, vendedores e importes de comisiones' },
+  { code: 'commissions.manage', description: 'Asignar vendedores, participación y reglas de comisión' },
+  { code: 'commissions.settle', description: 'Generar vales para liquidar comisiones' },
 
   // ─── ERP - Checks ─────────────────────────────────────────
   { code: 'checks.read', description: 'Ver cheques' },
@@ -451,7 +464,7 @@ export const RBAC_PERMISSIONS = [
   { code: 'international_operations.create', description: 'Crear operaciones internacionales' },
   { code: 'international_operations.update', description: 'Editar operaciones internacionales' },
   { code: 'international_operations.delete', description: 'Eliminar operaciones internacionales' },
-]
+];
 
 // ════════════════════════════════════════════════════════════════
 // RBAC — ROLES
@@ -470,9 +483,9 @@ export const RBAC_ROLES = [
     name: 'Gerente',
     description: 'Acceso a módulos de negocio sin administración de roles',
     is_system: true,
-    permissionCodes: RBAC_PERMISSIONS
-      .filter((p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.'))
-      .map((p) => p.code),
+    permissionCodes: RBAC_PERMISSIONS.filter(
+      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.'),
+    ).map((p) => p.code),
   },
   {
     code: 'user',
@@ -480,25 +493,63 @@ export const RBAC_ROLES = [
     description: 'Lectura y escritura básica',
     is_system: true,
     permissionCodes: [
-      'products.read', 'products.create', 'products.update',
-      'documents.read', 'documents.create', 'documents.update',
-      'sales.read', 'sales.create', 'sales.update',
-      'purchases.read', 'purchases.create', 'purchases.update',
-      'currencies.read', 'taxes.read', 'accounts.read',
-      'units.read', 'units.create', 'units.update',
-      'categories.read', 'categories.create', 'categories.update',
-      'warehouses.read', 'trips.read', 'companies.read',
-      'cash_boxes.read', 'cash_boxes.open', 'cash_boxes.close',
-      'cash_box_movements.read', 'cash_box_renditions.read', 'cash_box_transfers.read',
-      'bank_accounts.read', 'payments.read', 'payments.create', 'payments.update',
-      'bank_concepts.read', 'bank_movements.create', 'bank_expenses.read',
+      'products.read',
+      'products.create',
+      'products.update',
+      'documents.read',
+      'documents.create',
+      'documents.update',
+      'sales.read',
+      'sales.create',
+      'sales.update',
+      'purchases.read',
+      'purchases.create',
+      'purchases.update',
+      'currencies.read',
+      'taxes.read',
+      'accounts.read',
+      'units.read',
+      'units.create',
+      'units.update',
+      'categories.read',
+      'categories.create',
+      'categories.update',
+      'warehouses.read',
+      'trips.read',
+      'companies.read',
+      'cash_boxes.read',
+      'cash_boxes.open',
+      'cash_boxes.close',
+      'cash_box_movements.read',
+      'cash_box_renditions.read',
+      'cash_box_transfers.read',
+      'bank_accounts.read',
+      'payments.read',
+      'payments.create',
+      'payments.update',
+      'bank_concepts.read',
+      'bank_movements.create',
+      'bank_expenses.read',
       'financial_investments.read',
-      'intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete', 'intake.process',
-      'business_parties.read', 'contacts.read', 'locations.read',
-      'product_variants.read', 'product_components.read',
-      'attributes.read', 'tags.read',
-      'drivers.read', 'vehicles.read', 'vehicle_combinations.read',
-      'international_operations.read', 'international_operations.create', 'international_operations.update',
+      'intake.read',
+      'intake.create',
+      'intake.upload',
+      'intake.send',
+      'intake.delete',
+      'intake.process',
+      'business_parties.read',
+      'contacts.read',
+      'locations.read',
+      'product_variants.read',
+      'product_components.read',
+      'attributes.read',
+      'tags.read',
+      'drivers.read',
+      'vehicles.read',
+      'vehicle_combinations.read',
+      'international_operations.read',
+      'international_operations.create',
+      'international_operations.update',
     ],
   },
   {
@@ -515,7 +566,7 @@ export const RBAC_ROLES = [
     is_system: true,
     permissionCodes: ['intake.read', 'intake.create', 'intake.upload', 'intake.send', 'intake.delete'],
   },
-]
+];
 
 // ════════════════════════════════════════════════════════════════
 // SQL — UNIDADES DE MEDIDA
@@ -551,7 +602,7 @@ WHERE NOT EXISTS (
   WHERE lower(u.name) = lower(d.name)
      OR lower(u.symbol) = lower(d.symbol)
 );
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — IMPUESTOS
@@ -596,7 +647,7 @@ INSERT INTO tenant.taxes (id, code, name, tax_type, rate, is_percentage, active,
 VALUES
   (gen_random_uuid(), 'IIII', 'Impuestos Internos', 'IMPUESTO_INTERNO', 10.000, true, true, 'line')
 ON CONFLICT DO NOTHING;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — CATEGORÍAS FISCALES
@@ -612,7 +663,7 @@ VALUES
   (gen_random_uuid(), 'NO_GRAV', 'No Gravado', 'No gravado, no genera credito fiscal', true)
 ON CONFLICT (code) DO UPDATE SET
   name = EXCLUDED.name, description = EXCLUDED.description, active = true;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — ASOCIACIONES CATEGORÍA ↔ IMPUESTO
@@ -639,7 +690,7 @@ FROM tenant.tax_categories tc
 JOIN tenant.taxes t ON t.code = 'IVA_27' AND t.rate = 27.000
 WHERE tc.code = 'GRAV_27'
 ON CONFLICT (tax_category_id, tax_id) DO NOTHING;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — CATEGORÍA FISCAL POR DEFECTO PARA PRODUCTOS
@@ -651,7 +702,7 @@ SET tax_category_id = (
   SELECT id FROM tenant.tax_categories WHERE code = 'GRAV_21' LIMIT 1
 )
 WHERE tax_category_id IS NULL;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — TIPOS DE DOCUMENTO
@@ -776,7 +827,7 @@ ON CONFLICT (code) DO UPDATE SET
 UPDATE tenant.document_types
 SET affects_stock = ((category = 'REMITO') IS TRUE)
 WHERE deleted_at IS NULL;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — DOCUMENT TYPES ↔ IMPUESTOS
@@ -830,7 +881,7 @@ CROSS JOIN tenant.taxes t
 WHERE dt.code = 'NDA-C'
   AND t.code IN ('IVA_21', 'IVA_105', 'IVA_27')
 ON CONFLICT DO NOTHING;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — CONCEPTOS BANCARIOS
@@ -867,7 +918,7 @@ ON CONFLICT (code) DO UPDATE SET
   available_manual = EXCLUDED.available_manual,
   available_payments = EXCLUDED.available_payments,
   available_settlements = EXCLUDED.available_settlements;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — SECUENCIAS DE DOCUMENTOS
@@ -1061,7 +1112,7 @@ SET current_number = GREATEST(
 WHERE sequence.deleted_at IS NULL;
 
 DROP TABLE IF EXISTS seed_sequence_split;
-`
+`;
 
 export const SQL_DOCUMENT_SEQUENCES = `
 INSERT INTO document_sequences (
@@ -1129,7 +1180,7 @@ SET range_start = GREATEST(COALESCE(range_start, 1), 1),
     range_end = COALESCE(range_end, 9999999)
 WHERE deleted_at IS NULL
 ;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — VINCULACIÓN SECUIANCIAS ↔ TIPOS DE DOCUMENTO
@@ -1177,7 +1228,7 @@ WHERE doc_type.document_sequence_id IS NOT NULL
 ON CONFLICT (document_type_id, sequence_id) DO UPDATE SET is_default = true;
 
 DROP TABLE IF EXISTS seed_document_sequence_defaults;
-`
+`;
 
 // ════════════════════════════════════════════════════════════════
 // HELPER — Ejecutar SQL contra un tenant
@@ -1188,23 +1239,29 @@ export async function executeSeedSql(connectionString: string, sql: string): Pro
     connectionString,
     options: '-c search_path=tenant,public',
     max: 1,
-  })
+  });
   try {
-    await pool.query('BEGIN')
+    await pool.query('BEGIN');
     const statements = sql
       .split(';')
-      .map(s => s.trim())
-      .map(s => s.split('\n').filter(line => !line.trim().startsWith('--')).join('\n').trim())
-      .filter(s => s.length > 0)
+      .map((s) => s.trim())
+      .map((s) =>
+        s
+          .split('\n')
+          .filter((line) => !line.trim().startsWith('--'))
+          .join('\n')
+          .trim(),
+      )
+      .filter((s) => s.length > 0);
 
     for (const stmt of statements) {
-      await pool.query(stmt)
+      await pool.query(stmt);
     }
-    await pool.query('COMMIT')
+    await pool.query('COMMIT');
   } catch (error) {
-    await pool.query('ROLLBACK')
-    throw error
+    await pool.query('ROLLBACK');
+    throw error;
   } finally {
-    await pool.end()
+    await pool.end();
   }
 }

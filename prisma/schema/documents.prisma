@@ -237,6 +237,7 @@ model documents {
   orden_venta_doc                 orden_venta_documents?
   orden_compra_doc                orden_compra_documents?
   hr_vale_commission_details      hr_vale_commission_details[]
+  sales_commission_assignments    sales_commission_assignments[]
   international_operation_docs    international_operation_documents[]
   international_operation_quotes  international_operation_quotes[]
   withholding_allocations         withholding_allocations[]
@@ -363,6 +364,29 @@ model orden_venta_documents {
   document documents  @relation(fields: [document_id], references: [id], onDelete: Cascade)
   seller   employees? @relation(fields: [seller_id], references: [id], onDelete: NoAction)
 
+  @@schema("tenant")
+}
+
+// Asignación independiente de vendedores para liquidar comisiones desde RRHH.
+model sales_commission_assignments {
+  id                 String    @id @default(uuid()) @db.Uuid
+  document_id        String    @db.Uuid
+  seller_id          String    @db.Uuid
+  participation_rate Decimal   @default(100) @db.Decimal(5, 2)
+  commission_rate    Decimal   @db.Decimal(5, 2)
+  commission_base    String    @default("INVOICED") @db.VarChar(20)
+  active             Boolean   @default(true)
+  created_at         DateTime  @default(now()) @db.Timestamp(6)
+  updated_at         DateTime? @updatedAt @db.Timestamp(6)
+  created_by         String?   @db.Uuid
+  updated_by         String?   @db.Uuid
+
+  document documents @relation(fields: [document_id], references: [id], onDelete: Cascade)
+  seller   employees @relation(fields: [seller_id], references: [id], onDelete: NoAction)
+
+  @@unique([document_id, seller_id])
+  @@index([seller_id, active])
+  @@index([document_id, active])
   @@schema("tenant")
 }
 

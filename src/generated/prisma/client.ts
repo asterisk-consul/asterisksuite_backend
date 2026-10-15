@@ -160,6 +160,11 @@ export type presupuesto_documents = Prisma.presupuesto_documentsModel
  */
 export type orden_venta_documents = Prisma.orden_venta_documentsModel
 /**
+ * Model sales_commission_assignments
+ * 
+ */
+export type sales_commission_assignments = Prisma.sales_commission_assignmentsModel
+/**
  * Model orden_compra_documents
  * 
  */
