@@ -4,7 +4,7 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { FiscalAuthorizationsService } from './fiscal-authorizations.service';
-import { CreateFiscalAuthorizationDto, UpdateFiscalAuthorizationDto, UpdateFiscalAuthorizationSettingsDto } from './dto/fiscal-authorization.dto';
+import { CreateFiscalAuthorizationDto, ReplaceAuthorizationDto, UpdateFiscalAuthorizationDto, UpdateFiscalAuthorizationSettingsDto } from './dto/fiscal-authorization.dto';
 
 @Controller('erp/fiscal-authorizations')
 @UseGuards(JwtAuthGuard)
@@ -19,5 +19,7 @@ export class FiscalAuthorizationsController {
   @Put('settings/current') @RequirePermissions('fiscal-authorizations.configure-alerts') updateSettings(@Body() dto: UpdateFiscalAuthorizationSettingsDto, @CurrentUser() user: AuthUser) { return this.service.updateSettings(dto, user.id); }
   @Get('alerts/current') @RequirePermissions('fiscal-authorizations.read') alerts() { return this.service.refreshAlerts(); }
   @Get('documents/:id/preview') @RequirePermissions('fiscal-authorizations.read') preview(@Param('id') id: string) { return this.service.previewForDocument(id); }
+  @Get('documents/:id/status') @RequirePermissions('fiscal-authorizations.read') status(@Param('id') id: string) { return this.service.getDocumentStatus(id); }
+  @Patch('documents/:id/replace') @RequirePermissions('delivery_notes.replace_authorization') replace(@Param('id') id: string, @CurrentUser() user: AuthUser, @Body() dto?: ReplaceAuthorizationDto) { return this.service.replaceAuthorization(id, user.id, dto); }
   @Patch('alerts/:id/read') @RequirePermissions('fiscal-authorizations.read') readAlert(@Param('id') id: string) { return this.service.markAlertRead(id); }
 }

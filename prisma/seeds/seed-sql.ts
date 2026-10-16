@@ -372,6 +372,7 @@ export const RBAC_PERMISSIONS = [
   { code: 'delivery_notes.update', description: 'Editar notas de entrega' },
   { code: 'delivery_notes.confirm', description: 'Confirmar notas de entrega' },
   { code: 'delivery_notes.delete', description: 'Eliminar notas de entrega' },
+  { code: 'delivery_notes.replace_authorization', description: 'Reemplazar la autorización fiscal (CAI) de remitos en borrador' },
 
   // ─── Logística - Transport Document Types ──────────────────
   { code: 'transport_document_types.read', description: 'Ver tipos de documento de transporte' },

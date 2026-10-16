@@ -178,6 +178,219 @@ export class FiscalAuthorizationsService {
     };
   }
 
+  // ══════════════════════════════════════════════════════════
+  // Diagnóstico de CAI por documento (evalúa contra la fecha del remito)
+  // ══════════════════════════════════════════════════════════
+
+  /** Autorización activa compatible con tipo, serie, fecha de emisión y numeración del documento. */
+  private async findCompatibleAuthorization(document: any, tx?: Prisma.TransactionClient) {
+    const client: any = tx ?? this.prisma;
+    if (!document.document_sequence_id || document.number == null) return null;
+    const date = this.startOfDay(document.date);
+    return client.fiscal_authorizations.findFirst({
+      where: {
+        deleted_at: null,
+        status: 'ACTIVE',
+        document_type_id: document.document_type_id,
+        document_sequence_id: document.document_sequence_id,
+        valid_from: { lte: date },
+        valid_to: { gte: date },
+        range_from: { lte: document.number },
+        range_to: { gte: document.number },
+        OR: [{ replacement_date: null }, { replacement_date: { gt: date } }],
+      },
+      include: { document_type: true, document_sequence: true },
+      orderBy: { valid_to: 'desc' },
+    });
+  }
+
+  private presentAuthorization(row: any) {
+    if (!row) return null;
+    return {
+      id: row.id,
+      authorization_type: row.authorization_type,
+      code: row.code,
+      valid_from: row.valid_from,
+      valid_to: row.valid_to,
+      range_from: row.range_from,
+      range_to: row.range_to,
+      status: row.status,
+    };
+  }
+
+  /**
+   * Evalúa el snapshot del documento contra la fecha de emisión (no contra hoy).
+   * - VALID: vigente actualmente.
+   * - VALID_AT_ISSUE: vencido hoy, pero válido al emitirse.
+   * - EXPIRED_BEFORE_ISSUE: no era válido en la fecha del remito.
+   * - OUT_OF_RANGE: el número no pertenece al rango autorizado.
+   */
+  private evaluateSnapshot(document: any, authorization: any): 'VALID' | 'VALID_AT_ISSUE' | 'EXPIRED_BEFORE_ISSUE' | 'OUT_OF_RANGE' {
+    const issueDate = this.startOfDay(document.date).getTime();
+    const from = this.startOfDay(authorization.valid_from).getTime();
+    const to = this.startOfDay(authorization.valid_to).getTime();
+    const today = this.startOfDay(new Date()).getTime();
+    const number = Number(document.number);
+    const inRange = number >= Number(authorization.range_from) && number <= Number(authorization.range_to);
+    if (!inRange) return 'OUT_OF_RANGE';
+    if (issueDate < from || issueDate > to) return 'EXPIRED_BEFORE_ISSUE';
+    if (today > to) return 'VALID_AT_ISSUE';
+    return 'VALID';
+  }
+
+  /** Diagnóstico del CAI asociado a un remito de venta y búsqueda de autorización compatible. */
+  async getDocumentStatus(documentId: string) {
+    const document = await this.prisma.documents.findFirst({
+      where: { id: documentId, deleted_at: null },
+      include: { document_types: true, document_sequences: true },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    // El CAI configurado pertenece a la empresa emisora: sólo aplica a remitos de venta.
+    if (document.document_types?.category !== 'REMITO' || document.document_types?.direction !== 1) {
+      throw new BadRequestException('El diagnóstico de CAI sólo aplica a remitos de venta');
+    }
+
+    let currentAuthorization: any = null;
+    if (document.fiscal_authorization_id) {
+      currentAuthorization = await this.prisma.fiscal_authorizations.findFirst({
+        where: { id: document.fiscal_authorization_id },
+      });
+    }
+    const compatible = await this.findCompatibleAuthorization(document);
+
+    // Candidatas de asociación manual: cubren la fecha del remito pero no su numeración.
+    let candidates: any[] = [];
+    if (!compatible && document.document_sequence_id && document.number != null) {
+      const date = this.startOfDay(document.date);
+      const rows = await this.prisma.fiscal_authorizations.findMany({
+        where: {
+          deleted_at: null,
+          status: 'ACTIVE',
+          document_type_id: document.document_type_id,
+          document_sequence_id: document.document_sequence_id,
+          valid_from: { lte: date },
+          valid_to: { gte: date },
+          OR: [{ replacement_date: null }, { replacement_date: { gt: date } }],
+        },
+        include: { document_type: true, document_sequence: true },
+        orderBy: { valid_to: 'desc' },
+      });
+      candidates = rows
+        .filter(row => Number(document.number) < Number(row.range_from) || Number(document.number) > Number(row.range_to))
+        .map(row => ({ ...this.presentAuthorization(row), reason: 'OUT_OF_RANGE' }));
+    }
+
+    const INVALID_STATUSES = ['MISSING', 'REPLACEMENT_AVAILABLE', 'EXPIRED_BEFORE_ISSUE', 'OUT_OF_RANGE'];
+    const EDITABLE_STATUSES = [0, 1]; // Borrador / En Tránsito (pendiente)
+    const hasSnapshot = currentAuthorization && currentAuthorization.deleted_at == null;
+    const status = hasSnapshot
+      ? this.evaluateSnapshot(document, currentAuthorization)
+      : compatible ? 'REPLACEMENT_AVAILABLE' : 'MISSING';
+
+    let allowedAction: 'REPLACE' | 'REISSUE' | null = null;
+    if (INVALID_STATUSES.includes(status)) {
+      if (EDITABLE_STATUSES.includes(document.status)) {
+        allowedAction = compatible || candidates.length ? 'REPLACE' : null;
+      } else {
+        allowedAction = 'REISSUE';
+      }
+    }
+
+    return {
+      status,
+      currentAuthorization: this.presentAuthorization(currentAuthorization),
+      compatibleAuthorization: this.presentAuthorization(compatible),
+      candidates,
+      allowedAction,
+      document: {
+        id: document.id,
+        status: document.status,
+        date: document.date,
+        number: document.number,
+      },
+    };
+  }
+
+  /** Reemplaza la autorización fiscal de un remito de venta en borrador o pendiente. */
+  async replaceAuthorization(documentId: string, userId?: string, dto?: { authorizationId?: string; allowOutOfRange?: boolean }) {
+    return this.prisma.$transaction(async (tx) => {
+      const document = await tx.documents.findFirst({
+        where: { id: documentId, deleted_at: null },
+        include: { document_types: true },
+      });
+      if (!document) throw new NotFoundException('Documento no encontrado');
+      if (document.document_types?.category !== 'REMITO' || document.document_types?.direction !== 1) {
+        throw new BadRequestException('El reemplazo de CAI sólo aplica a remitos de venta');
+      }
+      if (document.status > 1) {
+        throw new BadRequestException('Sólo se puede reemplazar la autorización de remitos en borrador o pendientes');
+      }
+
+      let authorization: any;
+      let warning: string | null = null;
+      if (dto?.authorizationId) {
+        // Asociación manual: exige mismo tipo, misma serie, vigencia activa en la
+        // fecha del remito y estado ACTIVE. El rango se puede relajar explícitamente.
+        authorization = await tx.fiscal_authorizations.findFirst({
+          where: { id: dto.authorizationId, deleted_at: null },
+          include: { document_type: true, document_sequence: true },
+        });
+        if (!authorization) throw new BadRequestException('Autorización fiscal no encontrada');
+        if (authorization.document_type_id !== document.document_type_id) {
+          throw new BadRequestException('La autorización pertenece a otro tipo de documento');
+        }
+        if (authorization.document_sequence_id !== document.document_sequence_id) {
+          throw new BadRequestException('La autorización pertenece a otra serie o punto de venta');
+        }
+        if (authorization.status !== 'ACTIVE') {
+          throw new BadRequestException('La autorización no está activa');
+        }
+        const date = this.startOfDay(document.date);
+        if (this.startOfDay(authorization.valid_from).getTime() > date.getTime() || this.startOfDay(authorization.valid_to).getTime() < date.getTime()) {
+          throw new BadRequestException(`El CAI ${authorization.code} no está vigente en la fecha del remito`);
+        }
+        const number = Number(document.number);
+        const outOfRange = number < Number(authorization.range_from) || number > Number(authorization.range_to);
+        if (outOfRange && !dto.allowOutOfRange) {
+          throw new BadRequestException(`El número ${number} está fuera del rango del CAI ${authorization.code} (${authorization.range_from}–${authorization.range_to}). Reconfirmá la operación para asociarlo de todos modos`);
+        }
+        if (outOfRange) {
+          warning = `Precaución: el número ${number} quedó asociado al CAI ${authorization.code} (${authorization.range_from}–${authorization.range_to}) fuera de su rango autorizado.`;
+        }
+      } else {
+        // Reemplazo automático: revalidación dentro de la transacción (evita carreras
+        // con confirmación u otro reemplazo).
+        authorization = await this.findCompatibleAuthorization(document, tx);
+        if (!authorization) {
+          throw new BadRequestException('No existe una autorización fiscal compatible con la fecha y numeración de este remito');
+        }
+        if (document.fiscal_authorization_id === authorization.id) {
+          throw new BadRequestException('El remito ya tiene asociada esa autorización');
+        }
+      }
+
+      const updated = await tx.documents.update({
+        where: { id: documentId },
+        data: {
+          fiscal_authorization_id: authorization.id,
+          fiscal_authorization_type: authorization.authorization_type,
+          fiscal_authorization_code: authorization.code,
+          fiscal_authorization_expires_at: authorization.valid_to,
+          fiscal_authorization_range_from: authorization.range_from,
+          fiscal_authorization_range_to: authorization.range_to,
+          updated_by: userId,
+        },
+      });
+      return {
+        document_id: updated.id,
+        previous_authorization_code: document.fiscal_authorization_code,
+        authorization: this.presentAuthorization(authorization),
+        warning,
+        message: `Se asoció ${authorization.authorization_type} ${authorization.code} al remito`,
+      };
+    });
+  }
+
   async previewForDocument(documentId: string) {
     const document = await this.prisma.documents.findFirst({
       where: { id: documentId, deleted_at: null },

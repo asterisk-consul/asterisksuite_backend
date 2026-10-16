@@ -28,3 +28,10 @@ export class UpdateFiscalAuthorizationSettingsDto {
   @IsBoolean() daily_after_expiration: boolean;
   @IsOptional() @IsArray() notify_roles?: string[];
 }
+
+export class ReplaceAuthorizationDto {
+  /** Asociación manual: id de la autorización a asociar (debe compartir tipo, serie y vigencia). */
+  @IsOptional() @IsUUID() authorizationId?: string;
+  /** Permite asociar una autorización vigente aunque el número esté fuera de su rango. */
+  @IsOptional() @IsBoolean() allowOutOfRange?: boolean;
+}
