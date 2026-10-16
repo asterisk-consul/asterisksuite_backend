@@ -66,6 +66,7 @@ export const ModelName = {
   document_type_sequences: 'document_type_sequences',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
+  document_print_templates: 'document_print_templates',
   document_taxes: 'document_taxes',
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
@@ -520,6 +521,23 @@ export const Document_itemsScalarFieldEnum = {
 export type Document_itemsScalarFieldEnum = (typeof Document_itemsScalarFieldEnum)[keyof typeof Document_itemsScalarFieldEnum]
 
 
+export const Document_print_templatesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  title: 'title',
+  is_default: 'is_default',
+  active: 'active',
+  config: 'config',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Document_print_templatesScalarFieldEnum = (typeof Document_print_templatesScalarFieldEnum)[keyof typeof Document_print_templatesScalarFieldEnum]
+
+
 export const Document_taxesScalarFieldEnum = {
   id: 'id',
   document_id: 'document_id',
@@ -705,6 +723,7 @@ export const Presupuesto_documentsScalarFieldEnum = {
   warranty_info: 'warranty_info',
   exclusions: 'exclusions',
   commercial_notes: 'commercial_notes',
+  product_specifications: 'product_specifications',
   internal_notes: 'internal_notes',
   terms_and_conditions: 'terms_and_conditions',
   created_at: 'created_at',

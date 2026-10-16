@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { DocumentSequencesService } from './document-sequences.service';
 import { CreateDocumentSequenceDto } from './dto/create-document-sequence.dto';
@@ -17,6 +17,14 @@ export class DocumentSequencesController {
   @Get()
   findAll() {
     return this.service.findAll();
+  }
+
+  @Get('preview/next-number')
+  previewNextNumber(
+    @Query('document_type_id') documentTypeId: string,
+    @Query('sequence_id') sequenceId?: string,
+  ) {
+    return this.service.previewNextNumber(documentTypeId, sequenceId);
   }
 
   @Get(':id')

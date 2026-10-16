@@ -127,6 +127,56 @@ export class DocumentSequencesService {
     return seq;
   }
 
+  async previewNextNumber(documentTypeId: string, sequenceId?: string) {
+    if (!documentTypeId) throw new BadRequestException('Seleccioná un tipo de documento');
+
+    const documentType = await this.prisma.document_types.findFirst({
+      where: { id: documentTypeId, deleted_at: null, active: true },
+      select: { id: true, code: true },
+    });
+    if (!documentType) throw new NotFoundException('Tipo de documento no encontrado');
+
+    if (sequenceId) {
+      const sequence = await this.prisma.document_sequences.findFirst({
+        where: {
+          id: sequenceId,
+          active: true,
+          deleted_at: null,
+          document_type_sequences: { some: { document_type_id: documentTypeId } },
+        },
+        select: { current_number: true, range_end: true, point_of_sale: true, prefix: true },
+      });
+      if (!sequence) throw new BadRequestException('El punto de venta no corresponde al tipo de documento');
+
+      const nextNumber = sequence.current_number + 1;
+      if (sequence.range_end != null && nextNumber > sequence.range_end) {
+        throw new BadRequestException('La secuencia seleccionada está agotada');
+      }
+      const pointOfSale = String(sequence.point_of_sale).padStart(4, '0');
+      return {
+        next_number: nextNumber,
+        point_of_sale: pointOfSale,
+        prefix: sequence.prefix,
+        formatted: `${sequence.prefix ? `${sequence.prefix} ` : ''}${pointOfSale}-${String(nextNumber).padStart(8, '0')}`,
+        source: 'SEQUENCE',
+      };
+    }
+
+    const last = await this.prisma.documents.findFirst({
+      where: { document_type_id: documentTypeId },
+      orderBy: { number: 'desc' },
+      select: { number: true },
+    });
+    const nextNumber = (last?.number ?? 0) + 1;
+    return {
+      next_number: nextNumber,
+      point_of_sale: null,
+      prefix: documentType.code,
+      formatted: `${documentType.code} ${String(nextNumber).padStart(8, '0')}`,
+      source: 'DOCUMENT_TYPE',
+    };
+  }
+
   async update(id: string, dto: UpdateDocumentSequenceDto) {
     const current = await this.findOne(id);
     const pointOfSale = dto.point_of_sale ?? current.point_of_sale;

@@ -97,6 +97,25 @@ model document_items {
   @@schema("tenant")
 }
 
+/// Plantillas comerciales configurables. Se limitan a documentos no fiscales
+/// (presupuestos/proformas y órdenes) para no alterar el formato legal.
+model document_print_templates {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @db.VarChar(120)
+  category    String    @db.VarChar(20)
+  title       String    @db.VarChar(120)
+  is_default  Boolean   @default(false)
+  active      Boolean   @default(true)
+  config      Json      @default("{}")
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
+  created_by  String?   @db.Uuid
+  updated_by  String?   @db.Uuid
+
+  @@index([category, active])
+  @@schema("tenant")
+}
+
 model document_taxes {
   id                     String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   document_id            String            @db.Uuid
@@ -332,6 +351,7 @@ model presupuesto_documents {
   warranty_info        String?   @db.VarChar(200)
   exclusions           String?   @db.Text
   commercial_notes     String?   @db.Text
+  product_specifications String? @db.Text
   internal_notes       String?   @db.Text
   terms_and_conditions String?   @db.Text
   created_at           DateTime  @default(now()) @db.Timestamp(6)

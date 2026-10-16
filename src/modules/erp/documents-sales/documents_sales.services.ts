@@ -397,6 +397,7 @@ export class DocumentsSalesService {
             warranty_info: dto.warranty_info ?? null,
             exclusions: dto.exclusions ?? null,
             commercial_notes: dto.commercial_notes ?? null,
+            product_specifications: dto.product_specifications ?? null,
             internal_notes: dto.internal_notes ?? null,
             terms_and_conditions: dto.terms_and_conditions ?? null,
           },

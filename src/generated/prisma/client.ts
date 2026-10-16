@@ -115,6 +115,12 @@ export type document_item_taxes = Prisma.document_item_taxesModel
  */
 export type document_items = Prisma.document_itemsModel
 /**
+ * Model document_print_templates
+ * Plantillas comerciales configurables. Se limitan a documentos no fiscales
+ * (presupuestos/proformas y órdenes) para no alterar el formato legal.
+ */
+export type document_print_templates = Prisma.document_print_templatesModel
+/**
  * Model document_taxes
  * 
  */

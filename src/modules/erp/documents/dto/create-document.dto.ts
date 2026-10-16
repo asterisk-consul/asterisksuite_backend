@@ -180,6 +180,10 @@ export class CreateDocumentDto {
 
   @IsOptional()
   @IsString()
+  product_specifications?: string;
+
+  @IsOptional()
+  @IsString()
   internal_notes?: string;
 
   @IsOptional()

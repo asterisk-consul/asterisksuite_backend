@@ -19,6 +19,7 @@ import { FiscalAuthorizationsModule } from '../fiscal-authorizations/fiscal-auth
 import { StockReservationsService } from './stock-reservations.service';
 import { StockReservationsController } from './stock-reservations.controller';
 import { StockReservationsScheduler } from './stock-reservations.scheduler';
+import { DocumentPrintTemplatesService } from './document-print-templates.service';
 
 @Module({
   imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule, FiscalAuthorizationsModule],
@@ -30,6 +31,7 @@ import { StockReservationsScheduler } from './stock-reservations.scheduler';
     SalesCommercialFlowService,
     StockReservationsService,
     StockReservationsScheduler,
+    DocumentPrintTemplatesService,
   ],
   exports: [DocumentsSalesService, SalesCommercialFlowService, MySalesModule],
 })
