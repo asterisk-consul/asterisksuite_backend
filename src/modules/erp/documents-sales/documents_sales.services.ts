@@ -260,6 +260,7 @@ export class DocumentsSalesService {
 
       return {
         product_id: item.productId ?? null,
+        variant_id: dtoItems[idx]?.variant_id ?? null,
         warehouse_id: dtoItems[idx]?.warehouse_id ?? dto.warehouse_id ?? null,
         quantity: item.quantity,
         currency: currencyCode,
@@ -649,6 +650,7 @@ export class DocumentsSalesService {
 
         return {
           product_id: item.productId ?? null,
+          variant_id: dto.items?.[idx]?.variant_id ?? null,
           warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
           quantity: item.quantity,
           currency: updateCurrencyCode,
@@ -887,12 +889,16 @@ export class DocumentsSalesService {
 
     tx: any,
   ) {
+    await this.validateItemVariants(items, tx);
+
     for (const item of items) {
       const docItem = await tx.document_items.create({
         data: {
           document_id: documentId,
 
           product_id: item.product_id ?? null,
+
+          variant_id: item.variant_id ?? null,
 
           warehouse_id: item.warehouse_id ?? null,
 
@@ -932,6 +938,33 @@ export class DocumentsSalesService {
             converted_tax_amount: t.converted_tax_amount ?? null,
           })),
         });
+      }
+    }
+  }
+
+  private async validateItemVariants(items: ItemInput[], tx: any) {
+    const productIds = [...new Set(items.map((item) => item.product_id).filter(Boolean))] as string[];
+    if (!productIds.length) return;
+
+    const variants = await tx.product_variants.findMany({
+      where: { product_id: { in: productIds }, deleted_at: null, active: true },
+      select: { id: true, product_id: true },
+    });
+    const variantsByProduct = new Map<string, Set<string>>();
+    for (const variant of variants) {
+      const ids = variantsByProduct.get(variant.product_id) ?? new Set<string>();
+      ids.add(variant.id);
+      variantsByProduct.set(variant.product_id, ids);
+    }
+
+    for (const item of items) {
+      if (!item.product_id) continue;
+      const allowed = variantsByProduct.get(item.product_id);
+      if (allowed?.size && !item.variant_id) {
+        throw new BadRequestException('Seleccioná una variante para todos los productos que tienen variantes.');
+      }
+      if (item.variant_id && !allowed?.has(item.variant_id)) {
+        throw new BadRequestException('La variante seleccionada no pertenece al producto o está inactiva.');
       }
     }
   }
@@ -1242,6 +1275,8 @@ export class DocumentsSalesService {
         document_items: {
           include: {
             products: true,
+
+            product_variants: true,
 
             warehouse: true,
 
@@ -1687,11 +1722,33 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string) {
+  async confirm(id: string, userId: string, assignedTo?: string | null) {
+    const companyId = getCurrentCompanyId();
+    if (assignedTo) {
+      const membership = companyId
+        ? await this.db.getDefaultClient().company_users.findUnique({
+            where: { company_id_user_id: { company_id: companyId, user_id: assignedTo } },
+          })
+        : null;
+      if (!membership) throw new BadRequestException('El responsable seleccionado no pertenece a esta empresa');
+    }
+
     const confirmed = await this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
 
       const category = doc.document_types?.category;
+
+      if (category === 'ORDER') {
+        const settings = await tx.sales_flow_settings.upsert({
+          where: { settings_key: 'default' },
+          update: {},
+          create: { settings_key: 'default' },
+        });
+        const effectiveAssignee = assignedTo || doc.assigned_to || null;
+        if (settings.require_order_assignee_on_confirmation && !effectiveAssignee) {
+          throw new BadRequestException('Asigná un responsable antes de confirmar la Orden de Venta');
+        }
+      }
 
       const canConfirm = doc.status === STATUS_DRAFT || (category === 'REMITO' && doc.status === STATUS_PENDING);
       if (!canConfirm) {
@@ -1725,6 +1782,7 @@ export class DocumentsSalesService {
         where: { id },
         data: {
           status: STATUS_CONFIRMED,
+          ...(category === 'ORDER' && assignedTo ? { assigned_to: assignedTo } : {}),
           updated_at: new Date(),
           ...(fiscalAuthorizationSnapshot ?? {}),
         },
@@ -2113,6 +2171,7 @@ export class DocumentsSalesService {
     // Copiar items del presupuesto
     const items: ItemInput[] = doc.document_items.map((item) => ({
       product_id: item.product_id,
+      variant_id: item.variant_id,
       quantity: Number(item.quantity),
       currency: item.currency_code ?? doc.currency_code ?? 'ARS',
       exchange_rate: Number(item.exchange_rate ?? 1),
@@ -2208,6 +2267,7 @@ export class DocumentsSalesService {
     // Copiar items de la orden
     const items: ItemInput[] = doc.document_items.map((item) => ({
       product_id: item.product_id,
+      variant_id: item.variant_id,
       quantity: Number(item.quantity),
       currency: item.currency_code ?? doc.currency_code ?? 'ARS',
       exchange_rate: Number(item.exchange_rate ?? 1),
@@ -2319,6 +2379,7 @@ export class DocumentsSalesService {
       const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
       return {
         product_id: sourceItem.product_id,
+        variant_id: sourceItem.variant_id,
         warehouse_id: sourceItem.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: req.quantity,
         currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
@@ -2413,6 +2474,7 @@ export class DocumentsSalesService {
       const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
       return {
         product_id: sourceItem.product_id,
+        variant_id: sourceItem.variant_id,
         quantity: req.quantity,
         currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
         exchange_rate: Number(sourceItem.exchange_rate ?? 1),

@@ -6,6 +6,7 @@ import { ExchangeService } from './exchange.service';
 @Injectable()
 export class ExchangeScheduler {
   private readonly logger = new Logger(ExchangeScheduler.name);
+  private readonly synchronizedFingerprintByTenant = new Map<string, string>();
 
   constructor(
     private readonly exchangeService: ExchangeService,
@@ -22,6 +23,7 @@ export class ExchangeScheduler {
 
     // La cotización es la misma para todos los tenants: se consulta una sola vez.
     const snapshot = await this.exchangeService.fetchRateSnapshot();
+    const fingerprint = this.snapshotFingerprint(snapshot);
 
     const companies = await this.db.getDefaultClient().companies.findMany({
       where: { deleted_at: null },
@@ -31,15 +33,27 @@ export class ExchangeScheduler {
     for (const company of companies) {
       if (!company.schema_name) continue;
 
+      if (this.synchronizedFingerprintByTenant.get(company.schema_name) === fingerprint) {
+        continue;
+      }
+
       try {
         await this.db.withTemporaryTenantClient(
           company.schema_name,
           (client) => this.exchangeService.syncAllRatesForClient(client, snapshot),
         );
+        this.synchronizedFingerprintByTenant.set(company.schema_name, fingerprint);
         this.logger.log(`[${company.name}] Cotizaciones sincronizadas`);
       } catch (error) {
         this.logger.error(`[${company.name}] Error sincronizando cotizaciones`, error);
       }
     }
+  }
+
+  private snapshotFingerprint(snapshot: Awaited<ReturnType<ExchangeService['fetchRateSnapshot']>>) {
+    const values = [...snapshot.official, ...snapshot.dollars]
+      .map((quote) => `${quote.moneda}:${quote.casa}:${quote.venta}`)
+      .sort();
+    return values.join('|');
   }
 }

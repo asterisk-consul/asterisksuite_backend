@@ -19,6 +19,11 @@ export class CreateDocumentItemDto {
   @IsUUID()
   @IsOptional()
   @Transform(({ value }) => value === '' ? undefined : value)
+  variant_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value)
   warehouse_id?: string;
 
   @IsNumber()

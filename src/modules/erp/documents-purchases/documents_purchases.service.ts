@@ -238,6 +238,7 @@ export class DocumentsPurchasesService {
     // ─── Mapear resultado del Tax Engine a ItemInput[] ──────────
     const items: ItemInput[] = calculation.document.items.map((item, idx) => ({
       product_id: item.productId ?? null,
+      variant_id: dto.items?.[idx]?.variant_id ?? null,
       warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? null,
       quantity: item.quantity,
       purchase_unit_id:
@@ -524,6 +525,7 @@ export class DocumentsPurchasesService {
 
       items = calculation.document.items.map((item, idx) => ({
         product_id: item.productId ?? null,
+        variant_id: dto.items?.[idx]?.variant_id ?? null,
         warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: item.quantity,
         purchase_unit_id:
@@ -734,6 +736,8 @@ export class DocumentsPurchasesService {
 
     tx: any,
   ) {
+    await this.validateItemVariants(items, tx);
+
     for (const item of items) {
       const docItem = await tx.document_items.create({
         data: {
@@ -779,6 +783,33 @@ export class DocumentsPurchasesService {
             tax_amount: t.tax_amount,
           })),
         });
+      }
+    }
+  }
+
+  private async validateItemVariants(items: ItemInput[], tx: any) {
+    const productIds = [...new Set(items.map((item) => item.product_id).filter(Boolean))] as string[];
+    if (!productIds.length) return;
+
+    const variants = await tx.product_variants.findMany({
+      where: { product_id: { in: productIds }, deleted_at: null, active: true },
+      select: { id: true, product_id: true },
+    });
+    const variantsByProduct = new Map<string, Set<string>>();
+    for (const variant of variants) {
+      const ids = variantsByProduct.get(variant.product_id) ?? new Set<string>();
+      ids.add(variant.id);
+      variantsByProduct.set(variant.product_id, ids);
+    }
+
+    for (const item of items) {
+      if (!item.product_id) continue;
+      const allowed = variantsByProduct.get(item.product_id);
+      if (allowed?.size && !item.variant_id) {
+        throw new BadRequestException('Seleccioná una variante para todos los productos que tienen variantes.');
+      }
+      if (item.variant_id && !allowed?.has(item.variant_id)) {
+        throw new BadRequestException('La variante seleccionada no pertenece al producto o está inactiva.');
       }
     }
   }
@@ -933,6 +964,7 @@ export class DocumentsPurchasesService {
         document_items: {
           include: {
             products: true,
+            product_variants: true,
             warehouse: true,
 
             document_item_taxes: {

@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import type { UpdateSalesFlowSettingsDto } from './sales-flow-settings.dto';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
 @Injectable()
 export class SalesCommercialFlowService {
@@ -43,6 +44,15 @@ export class SalesCommercialFlowService {
   async updateSettings(dto: UpdateSalesFlowSettingsDto, userId: string) {
     if (dto.require_payment_for_delivery && dto.delivery_payment_percentage <= 0) {
       throw new BadRequestException('El porcentaje requerido debe ser mayor que cero cuando se controla el pago');
+    }
+    if (dto.default_order_assignee_id) {
+      const companyId = getCurrentCompanyId();
+      const membership = companyId
+        ? await this.db.getDefaultClient().company_users.findUnique({
+            where: { company_id_user_id: { company_id: companyId, user_id: dto.default_order_assignee_id } },
+          })
+        : null;
+      if (!membership) throw new BadRequestException('El responsable predeterminado no pertenece a esta empresa');
     }
     return this.prisma.$transaction(async (tx) => {
       const settings = await tx.sales_flow_settings.upsert({

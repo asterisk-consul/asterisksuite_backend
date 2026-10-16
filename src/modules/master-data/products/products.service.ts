@@ -150,8 +150,8 @@ export class ProductsService {
         // ─────────────
 
         product_variants: {
-          select: { id: true },
-          where: { deleted_at: null },
+          select: { id: true, name: true, sku: true, active: true },
+          where: { deleted_at: null, active: true },
         },
       },
     };
@@ -198,8 +198,8 @@ export class ProductsService {
         },
         product_taxes: { include: { taxes: true } },
         product_variants: {
-          select: { id: true },
-          where: { deleted_at: null },
+          select: { id: true, name: true, sku: true, active: true },
+          where: { deleted_at: null, active: true },
         },
         unit: true,
       },

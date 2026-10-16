@@ -245,7 +245,12 @@ export class DocumentsSalesController {
   }
 
   @Patch(':id/confirm')
-  async confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+  async confirm(
+    @Param('id') id: string,
+    @Body() body: { assigned_to?: string | null },
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
     await this.documentAccess.assertDocument(
       user.id,
       req['companyUserRole'] as string | undefined,
@@ -253,7 +258,7 @@ export class DocumentsSalesController {
       id,
       'confirm',
     );
-    return this.service.confirm(id, user.id);
+    return this.service.confirm(id, user.id, body?.assigned_to);
   }
 
   @Patch(':id/cancel')
