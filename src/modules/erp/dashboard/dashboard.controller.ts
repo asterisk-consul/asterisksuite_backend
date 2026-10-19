@@ -36,8 +36,15 @@ export class DashboardController {
   }
 
   @Get('data')
-  getDashboardData(@Query('checks_days') checksDays?: string) {
-    return this.dashboardService.getDashboardData(checksDays ? parseInt(checksDays, 10) : undefined);
+  getDashboardData(
+    @Query('checks_days') checksDays?: string,
+    @Query('days') days?: string,
+  ) {
+    const parsedDays = days ? Number.parseInt(days, 10) : undefined;
+    return this.dashboardService.getDashboardData(
+      checksDays ? parseInt(checksDays, 10) : undefined,
+      parsedDays && Number.isFinite(parsedDays) ? Math.min(Math.max(parsedDays, 1), 3650) : undefined,
+    );
   }
 
   @Get('personal')

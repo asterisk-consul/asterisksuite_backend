@@ -61,11 +61,28 @@ export class DashboardService {
     return { success: true };
   }
 
-  async getDashboardData(checksDays?: number) {
+  async getDashboardData(checksDays?: number, documentDays?: number) {
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // Los documentos usan una fecha de negocio sin hora. Calculamos "hoy" en
+    // Argentina y lo representamos a las 00:00 UTC para comparar Date/DateTime
+    // sin depender de la zona horaria del contenedor.
+    const argentinaNow = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    const today = new Date(Date.UTC(
+      argentinaNow.getUTCFullYear(),
+      argentinaNow.getUTCMonth(),
+      argentinaNow.getUTCDate(),
+    ));
+    const tomorrow = new Date(today);
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
     const checksAhead = new Date(today);
     checksAhead.setDate(checksAhead.getDate() + (checksDays ?? 30));
+
+    // Rango de fechas para los documentos del dashboard (default: 30 días).
+    // documentDays = 1 → desde hoy (00:00)
+    const documentRange = documentDays && documentDays > 0 ? documentDays : 30;
+    const documentsFrom = new Date(today);
+    documentsFrom.setUTCDate(documentsFrom.getUTCDate() - documentRange + 1);
+    const documentDateFilter = { gte: documentsFrom, lt: tomorrow };
 
     const [
       quotes,
@@ -77,19 +94,22 @@ export class DashboardService {
       hrVales,
       hrAccounts,
       warehouseStock,
-      receivableDocs,
+      receivableAccounts,
       costedProducts,
       currentAccountsData,
       pendingPickingCount,
       activeTrips,
       dueChecks,
       pendingPayments,
+      totalProductsCount,
+      productsByUsage,
     ] = await Promise.all([
       this.prisma.documents.groupBy({
         by: ['status'],
         where: {
           deleted_at: null,
           document_types: { category: 'QUOTE' },
+          date: documentDateFilter,
         },
         _count: { id: true },
         _sum: { total: true },
@@ -99,6 +119,7 @@ export class DashboardService {
         where: {
           deleted_at: null,
           document_types: { category: 'ORDER' },
+          date: documentDateFilter,
         },
         _count: { id: true },
         _sum: { total: true },
@@ -108,6 +129,7 @@ export class DashboardService {
         where: {
           deleted_at: null,
           document_types: { category: 'REMITO' },
+          date: documentDateFilter,
         },
         _count: { id: true },
       }),
@@ -116,6 +138,7 @@ export class DashboardService {
         where: {
           deleted_at: null,
           document_types: { category: 'INVOICE' },
+          date: documentDateFilter,
         },
         _count: { id: true },
         _sum: { total: true },
@@ -125,6 +148,7 @@ export class DashboardService {
         where: {
           deleted_at: null,
           document_types: { category: 'CREDIT_NOTE' },
+          date: documentDateFilter,
         },
         _count: { id: true },
         _sum: { total: true },
@@ -134,6 +158,7 @@ export class DashboardService {
         where: {
           deleted_at: null,
           document_types: { category: 'DEBIT_NOTE' },
+          date: documentDateFilter,
         },
         _count: { id: true },
         _sum: { total: true },
@@ -152,21 +177,18 @@ export class DashboardService {
         where: { deleted_at: null },
         select: { product_id: true, quantity: true, reserved_quantity: true },
       }),
-      // Documentos por cobrar: facturas de venta confirmadas con saldo pendiente
-      this.prisma.documents.findMany({
+      // Por cobrar: circuito de ventas completo (cuentas corrientes de clientes).
+      // Incluye órdenes cuando el circuito contabiliza OV, facturas, notas de
+      // crédito, cobros aplicados y saldos iniciales.
+      this.prisma.current_accounts.aggregate({
         where: {
           deleted_at: null,
-          status: 2,
-          document_types: { category: 'INVOICE', direction: 1 },
+          active: true,
+          party_type: 'CUSTOMER',
+          balance: { gt: 0 },
         },
-        select: {
-          id: true,
-          number: true,
-          total: true,
-          paid_amount: true,
-          currency_code: true,
-          party_id: true,
-        },
+        _count: { id: true },
+        _sum: { balance: true },
       }),
       // Productos costeados: distinct product_ids con al menos un product_costs activo
       this.prisma.product_costs.findMany({
@@ -222,25 +244,36 @@ export class DashboardService {
         _count: { id: true },
         _sum: { amount: true },
       }),
+      // Productos totales
+      this.prisma.products.count({
+        where: { deleted_at: null },
+      }),
+      // Productos por uso: venta / compra / ambos
+      this.prisma.products.groupBy({
+        by: ['usage_type'],
+        where: { deleted_at: null },
+        _count: { id: true },
+      }),
     ]);
 
-    // Documentos por cobrar
-    const receivables = receivableDocs.reduce(
-      (acc, doc) => {
-        const pending = Number(doc.total) - Number(doc.paid_amount ?? 0);
-        if (pending > 0) {
-          acc.total += 1;
-          acc.totalAmount += pending;
-        }
-        return acc;
-      },
-      { total: 0, totalAmount: 0 },
-    );
+    // Por cobrar: saldos positivos de cuentas corrientes de clientes
+    const receivables = {
+      total: receivableAccounts._count?.id ?? 0,
+      totalAmount: Number(receivableAccounts._sum?.balance ?? 0),
+    };
 
     // Costeados vs no costeados
     const totalProductIds = warehouseStock.map((s) => s.product_id);
     const uniqueProductIds = [...new Set(totalProductIds)];
     const costedCount = costedProducts.length;
+
+    // Productos por uso (venta / compra)
+    const usageCounts: Record<string, number> = Object.fromEntries(
+      productsByUsage.map((g) => [String(g.usage_type), g._count.id]),
+    );
+    const saleOnly = usageCounts.SALE ?? 0;
+    const purchaseOnly = usageCounts.PURCHASE ?? 0;
+    const bothUsage = usageCounts.BOTH ?? 0;
 
     // Cuentas corrientes
     const currentAccounts = currentAccountsData.map((ca) => ({
@@ -281,6 +314,10 @@ export class DashboardService {
     );
 
     return {
+      meta: {
+        days: documentRange,
+        documents_from: documentsFrom.toISOString().slice(0, 10),
+      },
       quotes: {
         total: quotes.reduce((sum, g) => sum + g._count.id, 0),
         byStatus: Object.fromEntries(quotes.map(g => [g.status, g._count.id])),
@@ -328,6 +365,15 @@ export class DashboardService {
         totalProducts: uniqueProductIds.length,
         costed: costedCount,
         uncosted: uniqueProductIds.length - costedCount,
+      },
+      products: {
+        total: totalProductsCount,
+        withStock: uniqueProductIds.length,
+        withStockUnits: Number(warehouseStock.reduce((sum, s) => sum + Number(s.quantity), 0)),
+        costed: costedCount,
+        uncosted: Math.max(uniqueProductIds.length - costedCount, 0),
+        forSale: saleOnly + bothUsage,
+        forPurchase: purchaseOnly + bothUsage,
       },
       currentAccounts,
       picking: {
