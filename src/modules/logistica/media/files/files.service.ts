@@ -29,6 +29,7 @@ const ENTITY_CONFIG: Record<string, { maxImages: number; maxWidth: number; subfo
   payment: { maxImages: 10, maxWidth: 1600, subfolder: 'payments' },
   check: { maxImages: 5, maxWidth: 1600, subfolder: 'checks' },
   check_deposit: { maxImages: 5, maxWidth: 1600, subfolder: 'check-deposits' },
+  cash_box_movement: { maxImages: 5, maxWidth: 1600, subfolder: 'cash-box-movements' },
   intake: { maxImages: 10, maxWidth: 1600, subfolder: 'intake' },
 };
 
@@ -322,7 +323,7 @@ export class FilesService {
   }
 
   getFilePath(fileUuid: string, variant: string = 'full'): string | null {
-    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'intake'];
+    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'cash-box-movements', 'intake'];
     for (const root of this.getStorageRoots()) {
       for (const subfolder of subfolders) {
         const filePath = path.join(root, subfolder, `${fileUuid}_${variant}.webp`);
@@ -341,7 +342,7 @@ export class FilesService {
   }
 
   private getOriginalFilePath(fileUuid: string): string | null {
-    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'intake'];
+    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'cash-box-movements', 'intake'];
     for (const root of this.getStorageRoots()) {
       for (const subfolder of subfolders) {
         const directory = path.join(root, subfolder);

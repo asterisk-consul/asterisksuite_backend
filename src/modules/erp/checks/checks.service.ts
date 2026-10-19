@@ -328,10 +328,16 @@ export class ChecksService {
 
     const cashBox = await this.prisma.cash_boxes.findFirst({
       where: { id: cashBoxId, active: true, deleted_at: null },
-      select: { id: true, currency_code: true, current_session_id: true, status: true },
+      select: {
+        id: true,
+        currency_code: true,
+        current_session_id: true,
+        status: true,
+        current_session: { select: { status: true } },
+      },
     });
     if (!cashBox) throw new NotFoundException('Caja no encontrada o inactiva');
-    if (cashBox.status !== 'OPEN' || !cashBox.current_session_id) {
+    if (cashBox.status !== 'OPEN' || !cashBox.current_session_id || cashBox.current_session?.status !== 'OPEN') {
       throw new BadRequestException('La caja debe tener una sesión abierta');
     }
     if (cashBox.currency_code !== check.currency_code) {
@@ -340,12 +346,11 @@ export class ChecksService {
 
     const amount = Number(check.available_amount ?? check.amount);
     const effectiveDate = date ? parseLocalDateTime(date) : new Date();
-    const balance = await this.prisma.cash_box_balances.findUnique({
-      where: { cash_box_id_currency_code: { cash_box_id: cashBox.id, currency_code: check.currency_code } },
-    });
-    const before = Number(balance?.balance ?? 0);
-
     await this.prisma.$transaction(async (tx) => {
+      const balance = await tx.cash_box_balances.findUnique({
+        where: { cash_box_id_currency_code: { cash_box_id: cashBox.id, currency_code: check.currency_code } },
+      });
+      const before = Number(balance?.balance ?? 0);
       await tx.cash_box_movements.create({
         data: {
           cash_box_id: cashBox.id,
@@ -359,7 +364,7 @@ export class ChecksService {
           balance_before: before,
           balance_after: before + amount,
           description: `Cobro por caja del cheque #${check.check_number}`,
-          reference_type: 'check',
+          reference_type: 'check_cash_collection',
           reference_id: check.id,
           payment_id: check.payment_id,
           date: effectiveDate,
@@ -390,7 +395,7 @@ export class ChecksService {
           updated_by: userId,
         },
       });
-    });
+    }, { isolationLevel: 'Serializable' });
 
     return this.findOne(id);
   }
@@ -398,61 +403,173 @@ export class ChecksService {
   async revert(id: string, userId: string) {
     const check = await this.findOne(id);
     if (check.status !== 'CLEARED') {
-      throw new BadRequestException('Solo se pueden revertir cheques depositados');
-    }
-    if (!check.bank_account_id) {
-      throw new BadRequestException('El cheque no tiene cuenta bancaria asociada');
+      throw new BadRequestException('Solo se pueden revertir cheques cobrados o debitados');
     }
 
-    const bankAccount = await this.prisma.bank_accounts.findUnique({
-      where: { id: check.bank_account_id },
+    const cashMovement = await this.prisma.cash_box_movements.findFirst({
+      where: {
+        reference_id: check.id,
+        reference_type: { in: ['check_cash_collection', 'check_cash_payment'] },
+        deleted_at: null,
+      },
+      orderBy: { created_at: 'desc' },
     });
-    if (!bankAccount) {
-      throw new NotFoundException('Cuenta bancaria no encontrada');
-    }
-
-    const movement = await this.prisma.bank_account_movements.findFirst({
+    const bankMovement = await this.prisma.bank_account_movements.findFirst({
       where: {
         reference_type: 'check',
         reference_id: check.id,
-        type: 'COLLECTION',
         deleted_at: null,
       },
+      orderBy: { created_at: 'desc' },
     });
+    if (!cashMovement && !bankMovement) {
+      throw new BadRequestException('No se encontró el movimiento financiero original del cheque');
+    }
 
-    const currentBalance = Number(bankAccount.balance);
-    const revertAmount = movement ? Number(movement.amount) : Number(check.amount);
-    const balanceAfter = currentBalance - revertAmount;
+    const revertAmount = Math.abs(Number(cashMovement?.amount ?? bankMovement?.amount ?? check.amount));
 
     await this.prisma.$transaction(async (tx) => {
-      await tx.checks.update({
-        where: { id },
-        data: {
-          status: 'PENDING',
-          available_amount: revertAmount,
-          deposit_date: null,
-          clearing_date: null,
-          updated_at: new Date(),
-          updated_by: userId,
-        },
-      });
+      if (cashMovement) {
+        const priorCashReversal = await tx.cash_box_movements.findFirst({
+          where: { reference_type: 'check_cash_reversal', reference_id: cashMovement.id, deleted_at: null },
+          select: { id: true },
+        });
+        if (priorCashReversal) throw new BadRequestException('El movimiento de caja ya fue revertido');
 
-      if (movement) {
-        await tx.bank_account_movements.update({
-          where: { id: movement.id },
+        const box = await tx.cash_boxes.findFirst({
+          where: { id: cashMovement.cash_box_id, active: true, deleted_at: null },
+          include: { current_session: true },
+        });
+        if (!box || box.status !== 'OPEN' || !box.current_session_id || box.current_session?.status !== 'OPEN') {
+          throw new BadRequestException('La caja de origen debe tener una sesión abierta para revertir el cheque');
+        }
+        const balance = await tx.cash_box_balances.findUnique({
+          where: {
+            cash_box_id_currency_code: {
+              cash_box_id: cashMovement.cash_box_id,
+              currency_code: cashMovement.currency_code,
+            },
+          },
+        });
+        const before = Number(balance?.balance ?? 0);
+        const originalDelta = Number(cashMovement.balance_after) - Number(cashMovement.balance_before);
+        const reversalDelta = -originalDelta;
+        const after = Number((before + reversalDelta).toFixed(2));
+        if (after < 0) throw new BadRequestException('El saldo actual de la caja no alcanza para revertir el cobro');
+        const reversalType = reversalDelta < 0 ? 'DEBIT' : 'CREDIT';
+
+        await tx.cash_box_movements.create({
           data: {
-            deleted_at: new Date(),
-            deleted_by: userId,
+            cash_box_id: cashMovement.cash_box_id,
+            session_id: box.current_session_id,
+            type: reversalType,
+            amount: Math.abs(reversalDelta),
+            currency_code: cashMovement.currency_code,
+            balance_before: before,
+            balance_after: after,
+            description: `Reversión del cheque #${check.check_number}`,
+            reference_type: 'check_cash_reversal',
+            reference_id: cashMovement.id,
+            bank_account_id: cashMovement.bank_account_id,
+            payment_id: cashMovement.payment_id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+        await tx.cash_box_balances.upsert({
+          where: {
+            cash_box_id_currency_code: {
+              cash_box_id: cashMovement.cash_box_id,
+              currency_code: cashMovement.currency_code,
+            },
+          },
+          create: {
+            cash_box_id: cashMovement.cash_box_id,
+            currency_code: cashMovement.currency_code,
+            balance: after,
+            created_by: userId,
+          },
+          update: { balance: after, updated_at: new Date(), updated_by: userId },
+        });
+        await tx.cash_box_sessions.update({
+          where: { id: box.current_session_id },
+          data: {
+            movement_count: { increment: 1 },
+            ...(reversalType === 'DEBIT'
+              ? { total_expenses: { increment: Math.abs(reversalDelta) } }
+              : { total_income: { increment: Math.abs(reversalDelta) } }),
           },
         });
       }
 
-      await tx.bank_accounts.update({
-        where: { id: check.bank_account_id! },
-        data: { balance: balanceAfter, updated_at: new Date() },
+      if (bankMovement) {
+        if (!check.bank_account_id) throw new BadRequestException('El cheque no tiene cuenta bancaria asociada');
+        const priorBankReversal = await tx.bank_account_movements.findFirst({
+          where: { reference_type: 'check_reversal', reference_id: check.id, deleted_at: null },
+          select: { id: true },
+        });
+        if (priorBankReversal) throw new BadRequestException('El movimiento bancario ya fue revertido');
+
+        const operation = await this.bankMovements.openOperation({
+          bankAccountId: check.bank_account_id,
+          operationType: 'CHECK',
+          sourceType: 'check_reversal',
+          sourceId: check.id,
+          currencyCode: check.currency_code,
+          description: `Reversión cheque #${check.check_number}`,
+          userId,
+        }, tx);
+        await this.bankMovements.addMovement({
+          bankAccountId: check.bank_account_id,
+          operationId: operation.id,
+          type: 'ADJUSTMENT',
+          nature: Number(bankMovement.amount) < 0 ? 'CREDIT' : 'DEBIT',
+          amount: -Number(bankMovement.amount),
+          currencyCode: check.currency_code,
+          description: `Reversión cheque #${check.check_number}`,
+          referenceType: 'check_reversal',
+          referenceId: check.id,
+          date: new Date(),
+          userId,
+          recalculate: false,
+        }, tx);
+
+        const fundingMovement = await tx.bank_account_movements.findFirst({
+          where: { reference_type: 'check_cash_funding', reference_id: check.id, deleted_at: null },
+        });
+        if (fundingMovement) {
+          await this.bankMovements.addMovement({
+            bankAccountId: check.bank_account_id,
+            operationId: operation.id,
+            type: 'ADJUSTMENT',
+            nature: 'DEBIT',
+            amount: -Number(fundingMovement.amount),
+            currencyCode: check.currency_code,
+            description: `Reversión depósito de caja para cheque #${check.check_number}`,
+            referenceType: 'check_cash_funding_reversal',
+            referenceId: check.id,
+            date: new Date(),
+            userId,
+            recalculate: false,
+          }, tx);
+        }
+        await this.bankMovements.closeOperation(operation.id, tx);
+        await recalculateBankAccountLedger(tx, check.bank_account_id);
+      }
+
+      await tx.checks.update({
+        where: { id },
+        data: {
+          status: check.is_own ? 'CONFIRMED' : 'PENDING',
+          available_amount: revertAmount,
+          deposit_date: null,
+          clearing_date: null,
+          payment_date: null,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
       });
-      await recalculateBankAccountLedger(tx, check.bank_account_id!);
-    });
+    }, { isolationLevel: 'Serializable' });
 
     return this.findOne(id);
   }
@@ -569,6 +686,143 @@ export class ChecksService {
         },
       });
     });
+    return this.findOne(id);
+  }
+
+  async settleOwnCheckFromCashBox(id: string, cashBoxId: string, date: string, userId: string) {
+    const check = await this.findOne(id);
+    if (!check.is_own || check.status !== 'CONFIRMED') {
+      throw new BadRequestException('Solo se pueden pagar desde caja cheques propios confirmados');
+    }
+    if (!check.bank_account_id) {
+      throw new BadRequestException('El cheque propio no tiene una cuenta bancaria asociada');
+    }
+
+    const effectiveDate = parseLocalDateTime(date);
+    if (effectiveDate < new Date(check.due_date)) {
+      throw new BadRequestException('La fecha efectiva no puede ser anterior al vencimiento del cheque');
+    }
+    if (effectiveDate > new Date()) {
+      throw new BadRequestException('No se puede registrar el pago con una fecha futura');
+    }
+
+    const amount = Number(check.amount);
+    await this.prisma.$transaction(async (tx) => {
+      const existingCashMovement = await tx.cash_box_movements.findFirst({
+        where: { reference_type: 'check_cash_payment', reference_id: check.id, deleted_at: null },
+        select: { id: true },
+      });
+      const existingBankMovement = await tx.bank_account_movements.findFirst({
+        where: { reference_type: 'check', reference_id: check.id, deleted_at: null },
+        select: { id: true },
+      });
+      if (existingCashMovement || existingBankMovement) {
+        throw new BadRequestException('El cheque ya tiene un pago registrado');
+      }
+
+      const cashBox = await tx.cash_boxes.findFirst({
+        where: { id: cashBoxId, active: true, deleted_at: null },
+        include: { current_session: true },
+      });
+      if (!cashBox) throw new NotFoundException('Caja no encontrada o inactiva');
+      if (cashBox.status !== 'OPEN' || !cashBox.current_session_id || cashBox.current_session?.status !== 'OPEN') {
+        throw new BadRequestException('La caja debe tener una sesión abierta');
+      }
+      if (cashBox.currency_code !== check.currency_code) {
+        throw new BadRequestException('La moneda del cheque no coincide con la moneda de la caja');
+      }
+
+      const balance = await tx.cash_box_balances.findUnique({
+        where: { cash_box_id_currency_code: { cash_box_id: cashBoxId, currency_code: check.currency_code } },
+      });
+      const balanceBefore = Number(balance?.balance ?? 0);
+      if (balanceBefore < amount) {
+        throw new BadRequestException(`Saldo insuficiente en caja. Disponible: ${balanceBefore.toFixed(2)}`);
+      }
+      const balanceAfter = Number((balanceBefore - amount).toFixed(2));
+
+      const operation = await this.bankMovements.openOperation({
+        bankAccountId: check.bank_account_id!,
+        operationType: 'CASH_TRANSFER',
+        sourceType: 'check_cash_settlement',
+        sourceId: check.id,
+        date: effectiveDate,
+        currencyCode: check.currency_code,
+        description: `Depósito desde caja y pago del cheque #${check.check_number}`,
+        userId,
+      }, tx);
+
+      await tx.cash_box_movements.create({
+        data: {
+          cash_box_id: cashBoxId,
+          session_id: cashBox.current_session_id,
+          type: 'DEBIT',
+          amount,
+          currency_code: check.currency_code,
+          balance_before: balanceBefore,
+          balance_after: balanceAfter,
+          description: `Efectivo depositado para pagar cheque propio #${check.check_number}`,
+          reference_type: 'check_cash_payment',
+          reference_id: check.id,
+          bank_account_id: check.bank_account_id,
+          payment_id: check.payment_id,
+          date: effectiveDate,
+          created_by: userId,
+        },
+      });
+      await tx.cash_box_balances.update({
+        where: { id: balance!.id },
+        data: { balance: balanceAfter, updated_at: new Date(), updated_by: userId },
+      });
+      await tx.cash_box_sessions.update({
+        where: { id: cashBox.current_session_id },
+        data: { total_expenses: { increment: amount }, movement_count: { increment: 1 } },
+      });
+
+      await this.bankMovements.addMovement({
+        bankAccountId: check.bank_account_id!,
+        operationId: operation.id,
+        type: 'DEPOSIT',
+        nature: 'CREDIT',
+        amount,
+        currencyCode: check.currency_code,
+        description: `Depósito de efectivo desde ${cashBox.name}`,
+        referenceType: 'check_cash_funding',
+        referenceId: check.id,
+        date: effectiveDate,
+        userId,
+        recalculate: false,
+      }, tx);
+      await this.bankMovements.addMovement({
+        bankAccountId: check.bank_account_id!,
+        operationId: operation.id,
+        type: 'CHECK_ISSUED',
+        nature: 'DEBIT',
+        amount: -amount,
+        currencyCode: check.currency_code,
+        description: `Débito cheque propio #${check.check_number}`,
+        referenceType: 'check',
+        referenceId: check.id,
+        paymentId: check.payment_id,
+        date: effectiveDate,
+        userId,
+        recalculate: false,
+      }, tx);
+      await this.bankMovements.closeOperation(operation.id, tx);
+      await recalculateBankAccountLedger(tx, check.bank_account_id!);
+
+      await tx.checks.update({
+        where: { id: check.id },
+        data: {
+          status: 'CLEARED',
+          payment_date: effectiveDate,
+          clearing_date: effectiveDate,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+    }, { isolationLevel: 'Serializable' });
+
     return this.findOne(id);
   }
 

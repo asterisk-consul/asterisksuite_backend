@@ -114,7 +114,9 @@ export const RBAC_PERMISSIONS = [
 
   // ─── Treasury - Cash Box Movements ────────────────────────
   { code: 'cash_box_movements.read', description: 'Ver movimientos de caja' },
-  { code: 'cash_box_movements.create', description: 'Crear movimientos de caja' },
+  { code: 'cash_box_movements.create', description: 'Crear movimientos de caja (compatibilidad)' },
+  { code: 'cash_box_movements.create_manual', description: 'Registrar ingresos y egresos manuales de caja' },
+  { code: 'cash_box_movements.reverse', description: 'Anular movimientos manuales de caja mediante reversión' },
 
   // ─── Treasury - Cash Box Renditions ───────────────────────
   { code: 'cash_box_renditions.read', description: 'Ver rendiciones de caja' },

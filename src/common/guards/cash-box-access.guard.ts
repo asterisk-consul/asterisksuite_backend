@@ -13,7 +13,7 @@ export class CashBoxAccessGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const userId = request.user?.id;
-    const cashBoxId = request.params?.id;
+    const cashBoxId = request.body?.cash_box_id ?? request.params?.cashBoxId ?? request.params?.id;
 
     if (!userId || !cashBoxId) return true;
 

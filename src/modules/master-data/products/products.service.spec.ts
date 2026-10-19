@@ -29,6 +29,8 @@ describe('ProductsService server-side table filters', () => {
     const query = findMany.mock.calls[0][0];
     expect(query.skip).toBe(25);
     expect(query.take).toBe(25);
+    expect(query.select).toBeDefined();
+    expect(query.include).toBeUndefined();
     expect(query.where.OR).toEqual([
       { sku: { contains: 'ABC', mode: 'insensitive' } },
       { name: { contains: 'ABC', mode: 'insensitive' } },

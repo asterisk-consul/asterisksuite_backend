@@ -9,41 +9,53 @@ import { CashBoxMovementsService } from './cash-box-movements.service';
 import { CreateCashBoxMovementDto } from './dto/create-cash-box-movement.dto';
 import { UpdateCashBoxMovementDto } from './dto/update-cash-box-movement.dto';
 import { FilterCashBoxMovementDto } from './dto/filter-cash-box-movement.dto';
+import { ReverseCashBoxMovementDto } from './dto/reverse-cash-box-movement.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('logistica/cash-box-movements')
 export class CashBoxMovementsController {
   constructor(private readonly movementsService: CashBoxMovementsService) {}
 
-  @Post()
+  @Post('manual')
   @UseGuards(CashBoxAccessGuard, CashBoxSessionGuard)
-  @RequirePermissions('treasury.cash_box_movements.create')
+  @RequirePermissions('cash_box_movements.create_manual')
   create(@Body() dto: CreateCashBoxMovementDto, @CurrentUser() user: AuthUser) {
     return this.movementsService.create(dto, user.id);
   }
 
+  @Post(':id/reverse')
+  @UseGuards(CashBoxAccessGuard, CashBoxSessionGuard)
+  @RequirePermissions('cash_box_movements.reverse')
+  reverse(
+    @Param('id') id: string,
+    @Body() dto: ReverseCashBoxMovementDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.movementsService.reverse(id, dto, user.id);
+  }
+
   @Get()
-  @RequirePermissions('treasury.cash_box_movements.read')
+  @RequirePermissions('cash_box_movements.read')
   findAll(@Query() filters: FilterCashBoxMovementDto) {
     return this.movementsService.findAll(filters);
   }
 
   @Get(':id')
-  @RequirePermissions('treasury.cash_box_movements.read')
+  @RequirePermissions('cash_box_movements.read')
   findOne(@Param('id') id: string) {
     return this.movementsService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(CashBoxAccessGuard, CashBoxSessionGuard)
-  @RequirePermissions('treasury.cash_box_movements.update')
+  @RequirePermissions('cash_box_movements.reverse')
   update(@Param('id') id: string, @Body() dto: UpdateCashBoxMovementDto, @CurrentUser() user: AuthUser) {
     return this.movementsService.update(id, dto, user.id);
   }
 
   @Delete(':id')
   @UseGuards(CashBoxAccessGuard, CashBoxSessionGuard)
-  @RequirePermissions('treasury.cash_box_movements.delete')
+  @RequirePermissions('cash_box_movements.reverse')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.movementsService.remove(id, user.id);
   }

@@ -15,7 +15,7 @@ export class CashBoxSessionGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const method = request.method;
     const userId = request.user?.id;
-    const cashBoxId = request.params?.id;
+    const cashBoxId = request.body?.cash_box_id ?? request.params?.cashBoxId ?? request.params?.id;
 
     // GET siempre permitido
     if (method === 'GET') return true;

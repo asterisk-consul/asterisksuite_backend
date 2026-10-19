@@ -104,6 +104,26 @@ export class ProductsService {
     const safePageSize = Math.min(100, Math.max(1, Math.trunc(pageSize ?? 25)));
     const sortableFields = new Set(['sku', 'name', 'product_type', 'last_cost_calculated_at', 'created_at']);
     const sortField = sortableFields.has(sort ?? '') ? sort! : 'created_at';
+    const listSelect = {
+      id: true,
+      name: true,
+      sku: true,
+      requires_refrigeration: true,
+      price_enabled: true,
+      active: true,
+      product_type: true,
+      usage_type: true,
+      is_composed: true,
+      has_engineering: true,
+      manages_stock: true,
+      cost_source: true,
+      needs_cost_recalculation: true,
+      last_cost_calculated_at: true,
+      current_cost: true,
+      cost_template_id: true,
+      created_at: true,
+      updated_at: true,
+    };
     const query: any = {
       where,
 
@@ -113,7 +133,7 @@ export class ProductsService {
 
       ...(paginationEnabled ? { skip: (safePage - 1) * safePageSize, take: safePageSize } : {}),
 
-      include: {
+      ...(paginationEnabled ? { select: listSelect } : { include: {
         transfer_rate: true,
         current_cost_currency: true,
 
@@ -199,7 +219,7 @@ export class ProductsService {
           select: { id: true, name: true, sku: true, active: true },
           where: { deleted_at: null, active: true },
         },
-      },
+      } }),
     };
     const [items, total] = await Promise.all([
       this.prisma.products.findMany(query),
