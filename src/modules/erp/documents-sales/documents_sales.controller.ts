@@ -158,6 +158,7 @@ export class DocumentsSalesController {
     @Query('sort') sort?: string,
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
+    @Query('filters') filters?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'sales', 'read');
@@ -182,6 +183,7 @@ export class DocumentsSalesController {
       sort,
       order,
       excludeCancelled === 'true',
+      filters,
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     if (Array.isArray(documents)) {

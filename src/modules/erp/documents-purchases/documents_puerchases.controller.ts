@@ -57,6 +57,7 @@ export class DocumentsPurchasesController {
     @Query('sort') sort?: string,
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
+    @Query('filters') filters?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'purchases', 'read');
@@ -80,6 +81,7 @@ export class DocumentsPurchasesController {
       sort,
       order,
       excludeCancelled === 'true',
+      filters,
     );
   }
 

@@ -28,6 +28,7 @@ export class ProductsController {
     @Query('search') search?: string,
     @Query('sort') sort?: string,
     @Query('order') order?: 'asc' | 'desc',
+    @Query('filters') filters?: string,
   ) {
     return this.service.findAll(
       page !== undefined ? Number(page) : undefined,
@@ -35,6 +36,7 @@ export class ProductsController {
       search,
       sort,
       order,
+      filters,
     );
   }
 
@@ -46,6 +48,12 @@ export class ProductsController {
     @Query('limit') limit?: string,
   ) {
     return this.service.search(query, usage, Number(limit) || 30);
+  }
+
+  @Get('summary/counts')
+  @RequirePermissions('products.read')
+  getCounts() {
+    return this.service.getCounts();
   }
 
   @Get(':id/root-products')

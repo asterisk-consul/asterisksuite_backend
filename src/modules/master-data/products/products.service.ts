@@ -4,6 +4,12 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  dateFilter,
+  numberFilter,
+  parseServerTableFilters,
+  stringFilter,
+} from '@/common/utils/server-table-filters';
 
 @Injectable()
 export class ProductsService {
@@ -41,17 +47,57 @@ export class ProductsService {
   // FIND ALL
   // ─────────────────────────────
 
-  async findAll(page?: number, pageSize?: number, search?: string, sort?: string, order?: 'asc' | 'desc') {
+  async findAll(
+    page?: number,
+    pageSize?: number,
+    search?: string,
+    sort?: string,
+    order?: 'asc' | 'desc',
+    rawFilters?: string,
+  ) {
     const term = search?.trim();
+    const filters = parseServerTableFilters(rawFilters);
+    const filterConditions = filters.flatMap((filter): any[] => {
+      switch (filter.column) {
+        case 'name':
+        case 'sku': {
+          const condition = stringFilter(filter.value, filter.operator);
+          return condition ? [{ [filter.column]: condition }] : [];
+        }
+        case 'product_type': {
+          const allowed = ['RAW_MATERIAL', 'FINISHED_PRODUCT', 'SEMI_FINISHED', 'SERVICE', 'RATES'];
+          return allowed.includes(String(filter.value)) ? [{ product_type: filter.value }] : [];
+        }
+        case 'cost_source': {
+          const allowed = ['MANUAL', 'PURCHASE', 'ENGINEERING', 'BOM', 'RATE'];
+          return allowed.includes(String(filter.value)) ? [{ cost_source: filter.value }] : [];
+        }
+        case 'current_cost': {
+          const condition = numberFilter(filter.value, filter.operator);
+          return condition !== undefined ? [{ current_cost: condition }] : [];
+        }
+        case 'active':
+        case 'manages_stock':
+        case 'needs_cost_recalculation':
+          return [{ [filter.column]: filter.value === true || String(filter.value) === 'true' }];
+        case 'created_at':
+        case 'updated_at': {
+          const condition = dateFilter(filter.value, filter.operator);
+          return condition ? [{ [filter.column]: condition }] : [];
+        }
+        default:
+          return [];
+      }
+    });
     const where: any = {
       deleted_at: null,
       ...(term ? {
         OR: [
           { sku: { contains: term, mode: 'insensitive' } },
           { name: { contains: term, mode: 'insensitive' } },
-          { description: { contains: term, mode: 'insensitive' } },
         ],
       } : {}),
+      ...(filterConditions.length ? { AND: filterConditions } : {}),
     };
     const paginationEnabled = Number.isFinite(page) && Number.isFinite(pageSize);
     const safePage = Math.max(1, Math.trunc(page ?? 1));
@@ -185,7 +231,6 @@ export class ProductsService {
           OR: [
             { sku: { contains: term, mode: 'insensitive' } },
             { name: { contains: term, mode: 'insensitive' } },
-            { description: { contains: term, mode: 'insensitive' } },
           ],
         } : {}),
       },
@@ -204,6 +249,20 @@ export class ProductsService {
         unit: true,
       },
     });
+  }
+
+  async getCounts() {
+    const where = { deleted_at: null };
+    const [total, inactive] = await Promise.all([
+      this.prisma.products.count({ where }),
+      this.prisma.products.count({ where: { ...where, active: false } }),
+    ]);
+
+    return {
+      total,
+      active: total - inactive,
+      inactive,
+    };
   }
 
   // ─────────────────────────────

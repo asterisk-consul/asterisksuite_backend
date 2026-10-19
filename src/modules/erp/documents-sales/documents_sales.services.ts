@@ -4,6 +4,12 @@ import { Injectable, NotFoundException, BadRequestException, ConflictException, 
 
 import { PrismaService } from '@/prisma/prisma.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
+import {
+  dateFilter,
+  numberFilter,
+  parseServerTableFilters,
+  stringFilter,
+} from '@/common/utils/server-table-filters';
 
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 
@@ -1042,6 +1048,8 @@ export class DocumentsSalesService {
     order?: 'asc' | 'desc',
 
     excludeCancelled = false,
+
+    rawFilters?: string,
   ) {
     const and: any[] = [];
     if (userId) and.push({ OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] });
@@ -1054,6 +1062,33 @@ export class DocumentsSalesService {
       ];
       if (/^\d+$/.test(normalizedSearch)) searchConditions.push({ number: Number(normalizedSearch) });
       and.push({ OR: searchConditions });
+    }
+    const tableFilters = parseServerTableFilters(rawFilters);
+    for (const filter of tableFilters) {
+      if (filter.column === 'client') {
+        const condition = stringFilter(filter.value, filter.operator);
+        if (condition) and.push({ business_parties: { name: condition } });
+        continue;
+      }
+      if (filter.column === 'descrip' || filter.column === 'ref') {
+        const condition = stringFilter(filter.value, filter.operator);
+        if (condition) and.push({ [filter.column]: condition });
+        continue;
+      }
+      if (['number', 'status', 'total'].includes(filter.column)) {
+        const condition = numberFilter(filter.value, filter.operator);
+        if (condition !== undefined) and.push({ [filter.column]: condition });
+        continue;
+      }
+      if (filter.column === 'date' || filter.column === 'created_at') {
+        const condition = dateFilter(filter.value, filter.operator);
+        if (condition) and.push({ [filter.column]: condition });
+        continue;
+      }
+      if (filter.column === 'point_of_sale') {
+        const condition = numberFilter(filter.value, filter.operator);
+        if (condition !== undefined) and.push({ document_sequences: { point_of_sale: condition } });
+      }
     }
     const where: any = {
         deleted_at: null,
