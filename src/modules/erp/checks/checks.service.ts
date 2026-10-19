@@ -103,7 +103,9 @@ export class ChecksService {
     }
     return this.prisma.checks.findMany({
       where,
-      orderBy: { due_date: 'asc' },
+      // La cartera general muestra primero los cheques cargados recientemente.
+      // Los listados operativos por vencimiento conservan su orden específico.
+      orderBy: { created_at: 'desc' },
       include: {
         payment: {
           select: {
