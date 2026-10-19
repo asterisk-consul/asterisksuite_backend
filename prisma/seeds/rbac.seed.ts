@@ -2,7 +2,8 @@
  * RBAC Seed — Crea permisos y roles para un tenant
  *
  * Uso:
- *   npx tsx prisma/seeds/rbac.seed.ts <tenant>
+ *   pnpm run seed:rbac <tenant>
+ *   pnpm run seed:rbac -- <tenant>
  *
  * Datos importados de seed-sql.ts (fuente única de verdad)
  */
@@ -13,10 +14,17 @@ import { PrismaClient } from '@/generated/prisma/client';
 import 'dotenv/config';
 import { RBAC_PERMISSIONS, RBAC_ROLES } from './seed-sql';
 
-const tenantArg = process.argv[2];
+const tenantArg = process.argv
+  .slice(2)
+  .find((argument) => argument !== '--' && !argument.startsWith('-'));
 
 if (!tenantArg) {
-  console.error('Usage: npx tsx prisma/seeds/rbac.seed.ts <tenant>');
+  console.error('Usage: pnpm run seed:rbac <tenant>');
+  process.exit(1);
+}
+
+if (!/^[a-zA-Z0-9_-]+$/.test(tenantArg)) {
+  console.error('Invalid tenant. Use only letters, numbers, hyphens, or underscores.');
   process.exit(1);
 }
 
@@ -41,23 +49,24 @@ const adapter = new PrismaPg(pool, { schema: 'tenant' });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('Seeding RBAC...');
+  console.log('Seeding RBAC (modo aditivo, no elimina asignaciones existentes)...');
 
-  // 1. Crear permisos
+  // 1. Crear permisos faltantes. Los existentes conservan su estado y configuración.
   for (const perm of RBAC_PERMISSIONS) {
     await prisma.permissions.upsert({
       where: { code: perm.code },
-      update: { description: perm.description, active: true },
+      update: {},
       create: { code: perm.code, description: perm.description },
     });
   }
-  console.log(`  ${RBAC_PERMISSIONS.length} permisos creados/actualizados`);
+  console.log(`  ${RBAC_PERMISSIONS.length} permisos verificados`);
 
-  // 2. Crear roles y asignar permisos
+  // 2. Crear roles faltantes y agregar únicamente las asignaciones predeterminadas
+  //    que todavía no existan. Nunca se eliminan permisos personalizados.
   for (const role of RBAC_ROLES) {
     const created = await prisma.business_roles.upsert({
       where: { code: role.code },
-      update: { name: role.name, description: role.description, is_system: role.is_system },
+      update: {},
       create: {
         code: role.code,
         name: role.name,
@@ -66,27 +75,27 @@ async function main() {
       },
     });
 
-    // Limpiar permisos existentes del rol
-    await prisma.business_role_permissions.deleteMany({
-      where: { role_id: created.id },
-    });
-
     // Obtener permisos por código
     const perms = await prisma.permissions.findMany({
       where: { code: { in: role.permissionCodes }, active: true },
     });
 
-    // Asignar permisos
+    // Agregar solamente las relaciones faltantes gracias a la PK compuesta.
+    let addedPermissions = 0;
     if (perms.length) {
-      await prisma.business_role_permissions.createMany({
+      const result = await prisma.business_role_permissions.createMany({
         data: perms.map((p) => ({
           role_id: created.id,
           permission_id: p.id,
         })),
+        skipDuplicates: true,
       });
+      addedPermissions = result.count;
     }
 
-    console.log(`  Rol "${role.name}" (${role.code}) → ${perms.length} permisos`);
+    console.log(
+      `  Rol "${created.name}" (${created.code}) → ${addedPermissions} asignaciones nuevas; existentes preservadas`,
+    );
   }
 
   console.log('RBAC seed completado.');
