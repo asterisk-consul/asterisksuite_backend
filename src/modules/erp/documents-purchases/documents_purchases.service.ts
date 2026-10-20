@@ -138,18 +138,47 @@ export class DocumentsPurchasesService {
       const newCategory = docType.category;
       const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(newCategory);
       const isInvoice = newCategory === 'INVOICE';
+      const isRemito = newCategory === 'REMITO';
 
       if (isNcNd && parentCategory !== 'INVOICE') {
         throw new BadRequestException('Solo se puede referenciar una factura');
       }
-      if (isInvoice && !['ORDER', 'REMITO', 'INVOICE'].includes(parentCategory)) {
-        throw new BadRequestException('El documento referenciado debe ser una orden de compra, remito o factura');
+      if (isInvoice && parentCategory !== 'ORDER') {
+        throw new BadRequestException('La factura de compra debe originarse en una orden de compra');
+      }
+      if (isRemito && parentCategory !== 'INVOICE') {
+        throw new BadRequestException('El remito de compra debe originarse en una factura de compra');
+      }
+      if (isInvoice && (parentDoc.status < 2 || parentDoc.status >= 7)) {
+        throw new BadRequestException('La orden de compra debe estar confirmada y activa');
+      }
+      if (isRemito && parentDoc.status !== 2) {
+        throw new BadRequestException('La factura de compra debe estar confirmada');
       }
       if (parentDoc.document_types?.direction !== docType.direction) {
         throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante');
       }
       if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
         throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada');
+      }
+
+      if (isInvoice || isRemito) {
+        const existingChild = await this.prisma.documents.findFirst({
+          where: {
+            parent_document_id: dto.parent_document_id,
+            deleted_at: null,
+            status: { not: 3 },
+            document_types: { category: newCategory },
+          },
+          select: { id: true },
+        });
+        if (existingChild) {
+          throw new BadRequestException(
+            isInvoice
+              ? 'La orden de compra ya tiene una factura activa asociada'
+              : 'La factura de compra ya tiene un remito activo asociado',
+          );
+        }
       }
     }
 
@@ -1015,9 +1044,11 @@ export class DocumentsPurchasesService {
           select: {
             id: true,
             number: true,
+            date: true,
             descrip: true,
             status: true,
-            document_types: { select: { code: true, description: true, category: true } },
+            document_sequences: { select: { point_of_sale: true } },
+            document_types: { select: { code: true, description: true, category: true, direction: true } },
           },
         },
 
@@ -1025,10 +1056,12 @@ export class DocumentsPurchasesService {
           select: {
             id: true,
             number: true,
+            date: true,
             descrip: true,
             status: true,
             total: true,
-            document_types: { select: { code: true, description: true, category: true } },
+            document_sequences: { select: { point_of_sale: true } },
+            document_types: { select: { code: true, description: true, category: true, direction: true } },
           },
           orderBy: { created_at: 'asc' },
         },

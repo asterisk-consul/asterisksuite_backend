@@ -103,9 +103,10 @@ export class DashboardService {
       pendingPayments,
       totalProductsCount,
       productsByUsage,
+      dashboardDocumentTypes,
     ] = await Promise.all([
       this.prisma.documents.groupBy({
-        by: ['status'],
+        by: ['status', 'document_type_id'],
         where: {
           deleted_at: null,
           document_types: { category: 'QUOTE' },
@@ -115,7 +116,7 @@ export class DashboardService {
         _sum: { total: true },
       }),
       this.prisma.documents.groupBy({
-        by: ['status'],
+        by: ['status', 'document_type_id'],
         where: {
           deleted_at: null,
           document_types: { category: 'ORDER' },
@@ -125,7 +126,7 @@ export class DashboardService {
         _sum: { total: true },
       }),
       this.prisma.documents.groupBy({
-        by: ['status'],
+        by: ['status', 'document_type_id'],
         where: {
           deleted_at: null,
           document_types: { category: 'REMITO' },
@@ -134,7 +135,7 @@ export class DashboardService {
         _count: { id: true },
       }),
       this.prisma.documents.groupBy({
-        by: ['status'],
+        by: ['status', 'document_type_id'],
         where: {
           deleted_at: null,
           document_types: { category: 'INVOICE' },
@@ -144,7 +145,7 @@ export class DashboardService {
         _sum: { total: true },
       }),
       this.prisma.documents.groupBy({
-        by: ['status'],
+        by: ['status', 'document_type_id'],
         where: {
           deleted_at: null,
           document_types: { category: 'CREDIT_NOTE' },
@@ -154,7 +155,7 @@ export class DashboardService {
         _sum: { total: true },
       }),
       this.prisma.documents.groupBy({
-        by: ['status'],
+        by: ['status', 'document_type_id'],
         where: {
           deleted_at: null,
           document_types: { category: 'DEBIT_NOTE' },
@@ -254,7 +255,29 @@ export class DashboardService {
         where: { deleted_at: null },
         _count: { id: true },
       }),
+      this.prisma.document_types.findMany({
+        where: { deleted_at: null },
+        select: { id: true, direction: true },
+      }),
     ]);
+
+    const documentTypeDirections = new Map(
+      dashboardDocumentTypes.map((type) => [type.id, Number(type.direction)]),
+    );
+    const splitByDirection = (groups: Array<{ document_type_id: string; _count: { id: number } }>) =>
+      groups.reduce(
+        (acc, group) => {
+          if (documentTypeDirections.get(group.document_type_id) === -1) acc.purchases += group._count.id;
+          else acc.sales += group._count.id;
+          return acc;
+        },
+        { sales: 0, purchases: 0 },
+      );
+    const groupByStatus = (groups: Array<{ status: number; _count: { id: number } }>) =>
+      groups.reduce<Record<number, number>>((acc, group) => {
+        acc[group.status] = (acc[group.status] ?? 0) + group._count.id;
+        return acc;
+      }, {});
 
     // Por cobrar: saldos positivos de cuentas corrientes de clientes
     const receivables = {
@@ -320,31 +343,37 @@ export class DashboardService {
       },
       quotes: {
         total: quotes.reduce((sum, g) => sum + g._count.id, 0),
-        byStatus: Object.fromEntries(quotes.map(g => [g.status, g._count.id])),
+        byDirection: splitByDirection(quotes),
+        byStatus: groupByStatus(quotes),
         totalValue: Number(quotes.reduce((sum, g) => sum + Number(g._sum.total ?? 0), 0)),
       },
       orders: {
         total: orders.reduce((sum, g) => sum + g._count.id, 0),
-        byStatus: Object.fromEntries(orders.map(g => [g.status, g._count.id])),
+        byDirection: splitByDirection(orders),
+        byStatus: groupByStatus(orders),
         totalValue: Number(orders.reduce((sum, g) => sum + Number(g._sum.total ?? 0), 0)),
       },
       remitos: {
         total: remitos.reduce((sum, g) => sum + g._count.id, 0),
-        byStatus: Object.fromEntries(remitos.map(g => [g.status, g._count.id])),
+        byDirection: splitByDirection(remitos),
+        byStatus: groupByStatus(remitos),
       },
       invoices: {
         total: invoices.reduce((sum, g) => sum + g._count.id, 0),
-        byStatus: Object.fromEntries(invoices.map(g => [g.status, g._count.id])),
+        byDirection: splitByDirection(invoices),
+        byStatus: groupByStatus(invoices),
         totalValue: Number(invoices.reduce((sum, g) => sum + Number(g._sum.total ?? 0), 0)),
       },
       creditNotes: {
         total: creditNotes.reduce((sum, g) => sum + g._count.id, 0),
-        byStatus: Object.fromEntries(creditNotes.map(g => [g.status, g._count.id])),
+        byDirection: splitByDirection(creditNotes),
+        byStatus: groupByStatus(creditNotes),
         totalValue: Number(creditNotes.reduce((sum, g) => sum + Number(g._sum.total ?? 0), 0)),
       },
       debitNotes: {
         total: debitNotes.reduce((sum, g) => sum + g._count.id, 0),
-        byStatus: Object.fromEntries(debitNotes.map(g => [g.status, g._count.id])),
+        byDirection: splitByDirection(debitNotes),
+        byStatus: groupByStatus(debitNotes),
         totalValue: Number(debitNotes.reduce((sum, g) => sum + Number(g._sum.total ?? 0), 0)),
       },
       hr: {
