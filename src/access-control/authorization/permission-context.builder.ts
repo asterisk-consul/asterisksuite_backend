@@ -50,15 +50,18 @@ export class PermissionContextBuilder {
 
     // 1. roles + permissions
     for (const ur of userRoles) {
+      if (!ur.role.active || ur.role.deleted_at) continue;
       roles.push(ur.role.code);
 
       for (const rp of ur.role.permissions) {
+        if (!rp.permission.active || rp.permission.deleted_at) continue;
         permissions.add(rp.permission.code);
       }
     }
 
     // 2. overrides
     for (const o of overridesRaw) {
+      if (!o.permission.active || o.permission.deleted_at) continue;
       overrides.set(o.permission.code, o.effect);
     }
 

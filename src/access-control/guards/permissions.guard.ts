@@ -4,6 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { PermissionContextBuilder } from '../authorization/permission-context.builder';
 import { REQUIRE_PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
 import { REQUIRE_ANY_PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
+import { ALLOW_COMPANY_ADMINS_KEY } from '../decorators/allow-company-admins.decorator';
 import { AuthUser } from '@/auth/types/auth-user.interface';
 
 @Injectable()
@@ -32,6 +33,10 @@ export class PermissionsGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+    const allowCompanyAdmins = this.reflector.getAllAndOverride<boolean>(ALLOW_COMPANY_ADMINS_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     // console.log('REQUIRED PERMISSIONS:', requiredPermissions);
 
@@ -52,6 +57,9 @@ export class PermissionsGuard implements CanActivate {
     // OWNER bypass
     if (request.companyUserRole === 'OWNER') {
       // console.log('OWNER BYPASS -> ALLOW');
+      return true;
+    }
+    if (allowCompanyAdmins && request.companyUserRole === 'ADMIN') {
       return true;
     }
 

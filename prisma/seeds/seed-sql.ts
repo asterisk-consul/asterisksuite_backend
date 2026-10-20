@@ -41,6 +41,7 @@ export const RBAC_PERMISSIONS = [
   { code: 'documents.delete', description: 'Eliminar documentos' },
   { code: 'documents.confirm', description: 'Confirmar documentos' },
   { code: 'documents.cancel', description: 'Cancelar documentos' },
+  { code: 'management_reports.read', description: 'Ver y exportar reportes gerenciales y consolidados' },
 
   // ─── ERP - Currencies ─────────────────────────────────────
   { code: 'currencies.read', description: 'Ver monedas' },
@@ -487,7 +488,7 @@ export const RBAC_ROLES = [
     description: 'Acceso a módulos de negocio sin administración de roles',
     is_system: true,
     permissionCodes: RBAC_PERMISSIONS.filter(
-      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.'),
+      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.') && p.code !== 'management_reports.read',
     ).map((p) => p.code),
   },
   {
@@ -560,7 +561,7 @@ export const RBAC_ROLES = [
     name: 'Observador',
     description: 'Solo lectura',
     is_system: true,
-    permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read')).map((p) => p.code),
+    permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read') && p.code !== 'management_reports.read').map((p) => p.code),
   },
   {
     code: 'capturist',

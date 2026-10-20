@@ -4,6 +4,7 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
 import { ManagementReportsService } from './management-reports.service';
 import { QueryManagementReportDto } from './dto/query-management-report.dto';
 import {
@@ -12,18 +13,18 @@ import {
 } from './dto/consolidated-management-report.dto';
 
 @UseGuards(JwtAuthGuard)
+@AllowCompanyAdmins()
+@RequirePermissions('management_reports.read')
 @Controller('erp/reports/management')
 export class ManagementReportsController {
   constructor(private readonly service: ManagementReportsService) {}
 
   @Get()
-  @RequirePermissions('treasury.reports.read')
   getReport(@Query() query: QueryManagementReportDto) {
     return this.service.getReport(query);
   }
 
   @Get('metadata')
-  @RequirePermissions('treasury.reports.read')
   getMetadata() {
     return this.service.getMetadata();
   }
