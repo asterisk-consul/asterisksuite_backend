@@ -158,7 +158,7 @@ export class HrService {
           },
         },
       },
-      orderBy: { date: 'desc' },
+      orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
     });
 
     // Resolver created_by a nombre de usuario
@@ -396,7 +396,7 @@ export class HrService {
     }
 
     if (vale.status === 'CONFIRMED' || vale.status === 'PAID') {
-      // SUELDO, ADELANTO, EXTRAS = empleado recibe dinero (crédito)
+      // SUELDO, ADELANTO, EXTRAS, COMISION = empleado recibe dinero (crédito)
       // RETIRO, REEMBOLSO, PRESTAMO = socio retira/devuelve (débito)
       const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
 
@@ -633,7 +633,7 @@ export class HrService {
     const currentBalance = account.balance.toNumber();
     const amount = vale.amount.toNumber();
     // RETIRO, REEMBOLSO, PRESTAMO = socio le debe a la empresa → balance baja (débito)
-    // SUELDO, ADELANTO, EXTRAS, APORTE = empresa le debe / socio pone → balance sube (crédito)
+    // SUELDO, ADELANTO, EXTRAS, COMISION, APORTE = empresa le debe / socio pone → balance sube (crédito)
     const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
     const balanceAfter = isDebit ? currentBalance - amount : currentBalance + amount;
 
@@ -843,7 +843,7 @@ export class HrService {
         document: {
           include: {
             business_parties: { select: { id: true, name: true } },
-            document_types: { select: { name: true, short_name: true, category: true } },
+            document_types: { select: { code: true, description: true, category: true } },
             sales_commission_assignments: {
               where: { active: true },
               include: { seller: { select: { id: true, first_name: true, last_name: true } } },
@@ -852,27 +852,70 @@ export class HrService {
           },
         },
       },
-      orderBy: { document: { date: 'desc' } },
+      orderBy: [{ document: { date: 'desc' } }, { document: { created_at: 'desc' } }],
     });
 
-    return orders.map((order) => {
+    // Una OV queda bloqueada cuando ya fue liquidada en al menos un vale vigente.
+    const documentIds = orders.map((order) => order.document.id);
+    const settledDetails = documentIds.length
+      ? await this.prisma.hr_vale_commission_details.findMany({
+          where: {
+            document_id: { in: documentIds },
+            hr_vale: { deleted_at: null, status: { not: 'CANCELLED' } },
+          },
+          select: { document_id: true },
+        })
+      : [];
+    const settledIds = new Set(settledDetails.map((detail) => detail.document_id));
+
+    const round2 = (value: number) => Math.round(value * 100) / 100;
+
+    const result: any[] = [];
+    for (const order of orders) {
       const document = order.document;
       const total = Number(document.total);
       const paid = Number(document.paid_amount ?? 0);
-      const assignments = document.sales_commission_assignments.map((assignment) => ({
-        id: assignment.id,
-        seller_id: assignment.seller_id,
-        seller_name: `${assignment.seller.first_name} ${assignment.seller.last_name}`.trim(),
-        participation_rate: Number(assignment.participation_rate),
-        commission_rate: Number(assignment.commission_rate),
-        commission_base: assignment.commission_base,
-      }));
-      return {
+
+      // Comisión devengada/liquidada agregando las asignaciones de la OV.
+      let commissionAccrued = 0;
+      let commissionSettled = 0;
+      let commissionBaseAmount = 0;
+      const assignments: any[] = [];
+      for (const assignment of document.sales_commission_assignments) {
+        const metrics = await this.getCommissionMetrics(
+          document.id,
+          Number(document.subtotal),
+          total,
+          Number(assignment.commission_rate),
+          assignment.commission_base,
+          endDate,
+          assignment.seller_id,
+          Number(assignment.participation_rate),
+        );
+        commissionAccrued += metrics.accruedAmount;
+        commissionSettled += metrics.settledAmount;
+        commissionBaseAmount += (metrics.baseAmount * Number(assignment.participation_rate)) / 100;
+        assignments.push({
+          id: assignment.id,
+          seller_id: assignment.seller_id,
+          seller_name: `${assignment.seller.first_name} ${assignment.seller.last_name}`.trim(),
+          participation_rate: Number(assignment.participation_rate),
+          commission_rate: Number(assignment.commission_rate),
+          commission_base: assignment.commission_base,
+          accrued_amount: round2(metrics.accruedAmount),
+          settled_amount: round2(metrics.settledAmount),
+          pending_amount: round2(Math.max(0, metrics.accruedAmount - metrics.settledAmount)),
+          base_amount: round2((metrics.baseAmount * Number(assignment.participation_rate)) / 100),
+        });
+      }
+      const commissionPending = Math.max(0, commissionAccrued - commissionSettled);
+
+      result.push({
         document_id: document.id,
         number: document.number,
         date: document.date,
         customer: document.business_parties?.name ?? 'Sin cliente',
-        document_type: document.document_types.short_name ?? document.document_types.name,
+        document_type: document.document_types.code ?? document.document_types.description,
         subtotal: Number(document.subtotal),
         total,
         paid_amount: paid,
@@ -880,8 +923,14 @@ export class HrService {
         currency_code: document.currency_code,
         assignments,
         assignment_status: assignments.length ? 'ASSIGNED' : 'UNASSIGNED',
-      };
-    });
+        commission_accrued: round2(commissionAccrued),
+        commission_settled: round2(commissionSettled),
+        commission_pending: round2(commissionPending),
+        commission_base_amount: round2(commissionBaseAmount),
+        settled: settledIds.has(document.id),
+      });
+    }
+    return result;
   }
 
   async saveCommissionAssignments(
@@ -901,7 +950,7 @@ export class HrService {
       throw new BadRequestException('La participación total de los vendedores debe sumar 100%');
     }
 
-    const [order, sellers] = await Promise.all([
+    const [order, sellers, settledDetails] = await Promise.all([
       this.prisma.orden_venta_documents.findUnique({
         where: { document_id: documentId },
         select: { document: { select: { deleted_at: true } } },
@@ -915,8 +964,21 @@ export class HrService {
         },
         select: { id: true },
       }),
+      this.prisma.hr_vale_commission_details.findMany({
+        where: {
+          document_id: documentId,
+          hr_vale: { deleted_at: null, status: { not: 'CANCELLED' } },
+        },
+        select: { id: true },
+        take: 1,
+      }),
     ]);
     if (!order || order.document.deleted_at) throw new NotFoundException('Orden de venta no encontrada');
+    if (settledDetails.length) {
+      throw new BadRequestException(
+        'La comisión de esta OV ya fue liquidada en un vale; no se pueden modificar sus asignaciones',
+      );
+    }
     if (sellers.length !== assignments.length) {
       throw new BadRequestException('Todos los vendedores deben estar activos y habilitados para comisionar');
     }
@@ -1062,7 +1124,7 @@ export class HrService {
   }
 
   // ══════════════════════════════════════════════════════════
-  // GENERAR VALE EXTRAS POR COMISIONES
+  // GENERAR VALE COMISION POR COMISIONES
   // ══════════════════════════════════════════════════════════
 
   async generateCommissionVale(sellerId: string, month: string, userId: string) {
@@ -1137,7 +1199,7 @@ export class HrService {
         number: valeNumber,
         party_id: partyId,
         party_type: 'EMPLOYEE',
-        type: 'EXTRAS',
+        type: 'COMISION',
         amount: totalCommission,
         currency_code: commissionRows[0].assignment.document.currency_code ?? 'ARS',
         date: valeDate,
@@ -1179,7 +1241,7 @@ export class HrService {
     }
 
     this.logger.log(
-      `Vale EXTRAS #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`,
+      `Vale COMISION #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`,
     );
 
     return vale;

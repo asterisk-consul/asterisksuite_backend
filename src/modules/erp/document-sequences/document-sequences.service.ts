@@ -59,6 +59,15 @@ export class DocumentSequencesService {
     const prefix = this.normalizedPrefix(dto.prefix);
     await this.assertAvailableScope(dto.point_of_sale, prefix, documentTypeIds);
 
+    const nextNumber = dto.next_number
+      ?? (dto.range_start != null && dto.range_start > 0 ? dto.range_start : 1);
+    if (dto.range_start != null && dto.range_start > 0 && nextNumber < dto.range_start) {
+      throw new BadRequestException('El próximo número no puede ser menor que el inicio del rango');
+    }
+    if (dto.range_end != null && nextNumber > dto.range_end) {
+      throw new BadRequestException('El próximo número no puede superar el fin del rango');
+    }
+
     return this.prisma.$transaction(async (tx) => {
       const sequence = await tx.document_sequences.create({
         data: {
@@ -67,7 +76,7 @@ export class DocumentSequencesService {
           prefix,
           range_start: dto.range_start,
           range_end: dto.range_end,
-          current_number: dto.range_start != null ? dto.range_start - 1 : 0,
+          current_number: nextNumber - 1,
           automatic: dto.automatic ?? true,
           active: true,
         },
@@ -189,11 +198,37 @@ export class DocumentSequencesService {
     await this.assertAvailableScope(pointOfSale, prefix, documentTypeIds, id);
 
     return this.prisma.$transaction(async (tx) => {
-      const { document_type_ids, ...sequenceData } = dto;
+      const { document_type_ids, next_number, ...sequenceData } = dto;
+
+      if (next_number !== undefined) {
+        const highestIssued = await tx.documents.aggregate({
+          where: { document_sequence_id: id },
+          _max: { number: true },
+        });
+        const minimumNext = (highestIssued._max.number ?? 0) + 1;
+        if (next_number < minimumNext) {
+          throw new BadRequestException(
+            `El próximo número debe ser ${minimumNext} o mayor porque la secuencia ya tiene comprobantes emitidos`,
+          );
+        }
+
+        const rangeEnd = dto.range_end ?? current.range_end;
+        const rangeStart = dto.range_start ?? current.range_start;
+        if (rangeStart != null && rangeStart > 0 && next_number < rangeStart) {
+          throw new BadRequestException('El próximo número no puede ser menor que el inicio del rango');
+        }
+        if (rangeEnd != null && next_number > rangeEnd) {
+          throw new BadRequestException('El próximo número no puede superar el fin del rango');
+        }
+      }
 
       const sequence = await tx.document_sequences.update({
         where: { id },
-        data: { ...sequenceData, ...(dto.prefix !== undefined ? { prefix } : {}) },
+        data: {
+          ...sequenceData,
+          ...(next_number !== undefined ? { current_number: next_number - 1 } : {}),
+          ...(dto.prefix !== undefined ? { prefix } : {}),
+        },
       });
 
       if (document_type_ids !== undefined) {

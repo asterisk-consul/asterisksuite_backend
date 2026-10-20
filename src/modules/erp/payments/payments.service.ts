@@ -940,7 +940,7 @@ export class PaymentsService {
     if (dto.party_id) data.party_id = dto.party_id;
     if (dto.party_type) data.party_type = dto.party_type;
     if (dto.payment_method) data.payment_method = dto.payment_method;
-    if (dto.amount) data.amount = dto.amount;
+    if (dto.amount !== undefined) data.amount = dto.amount;
     if (dto.currency_code) data.currency_code = dto.currency_code;
     if (dto.exchange_rate) data.exchange_rate = dto.exchange_rate;
     if (dto.rate_type) data.rate_type = dto.rate_type;
@@ -953,9 +953,49 @@ export class PaymentsService {
     if (dto.account_id !== undefined) data.account_id = dto.account_id || null;
     if (dto.payment_mode) data.payment_mode = dto.payment_mode;
 
-    const updated = await this.prisma.payments.update({
-      where: { id },
-      data,
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const paymentUpdate = await tx.payments.update({
+        where: { id },
+        data,
+      });
+
+      if (dto.documents !== undefined) {
+        const requestedByDocument = new Map(
+          dto.documents.map((document) => [document.document_id, document.amount_applied] as [string, number]),
+        );
+        const requestedIds = [...requestedByDocument.keys()];
+        const now = new Date();
+
+        await tx.payment_documents.updateMany({
+          where: {
+            payment_id: id,
+            deleted_at: null,
+            ...(requestedIds.length ? { document_id: { notIn: requestedIds } } : {}),
+          },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+
+        for (const [documentId, amountApplied] of requestedByDocument) {
+          await tx.payment_documents.upsert({
+            where: { payment_id_document_id: { payment_id: id, document_id: documentId } },
+            update: {
+              amount_applied: amountApplied,
+              deleted_at: null,
+              deleted_by: null,
+              updated_at: now,
+              updated_by: userId,
+            },
+            create: {
+              payment_id: id,
+              document_id: documentId,
+              amount_applied: amountApplied,
+              created_by: userId,
+            },
+          });
+        }
+      }
+
+      return paymentUpdate;
     });
     if (dto.obligations !== undefined) {
       await this.syncTreasuryObligations(

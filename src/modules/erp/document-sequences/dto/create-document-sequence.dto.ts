@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsInt, MaxLength, IsArray, IsUUID } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsInt, MaxLength, IsArray, IsUUID, Min } from 'class-validator';
 
 export class CreateDocumentSequenceDto {
   @IsString()
@@ -21,6 +21,12 @@ export class CreateDocumentSequenceDto {
   @IsOptional()
   @IsInt()
   range_end?: number;
+
+  /** Número que recibirá el próximo documento emitido con esta secuencia. */
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  next_number?: number;
 
   @IsOptional()
   @IsBoolean()

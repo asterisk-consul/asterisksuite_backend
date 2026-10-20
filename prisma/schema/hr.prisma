@@ -5,7 +5,8 @@
 enum HrValeType {
   SUELDO // Pago de sueldo regular
   ADELANTO // Adelanto de sueldo
-  EXTRAS // Bonuses, horas extras, comisiones
+  EXTRAS // Bonuses, horas extras
+  COMISION // Liquidación de comisiones de ventas
   RETIRO // Socio retira dinero
   REEMBOLSO // Reembolso de gasto
   PRESTAMO // Préstamo de la empresa
@@ -123,7 +124,7 @@ model hr_vales {
 }
 
 // ══════════════════════════════════════════════════════════
-// DETALLE DE COMISIONES EN VALES EXTRAS
+// DETALLE DE COMISIONES EN VALES COMISION
 // ══════════════════════════════════════════════════════════
 
 model hr_vale_commission_details {

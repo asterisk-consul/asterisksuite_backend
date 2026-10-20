@@ -380,7 +380,7 @@ export class DashboardService {
         totalVales: hrVales.reduce((sum, g) => sum + g._count.id, 0),
         byStatus: Object.fromEntries(hrVales.map(g => [g.status, g._count.id])),
         totalDebit: Number(hrVales.filter(g => ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(g.status as string)).reduce((sum, g) => sum + Number(g._sum.amount ?? 0), 0)),
-        totalCredit: Number(hrVales.filter(g => ['SUELDO', 'ADELANTO', 'EXTRAS', 'APORTE'].includes(g.status as string)).reduce((sum, g) => sum + Number(g._sum.amount ?? 0), 0)),
+        totalCredit: Number(hrVales.filter(g => ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION', 'APORTE'].includes(g.status as string)).reduce((sum, g) => sum + Number(g._sum.amount ?? 0), 0)),
         accounts: hrAccounts,
       },
       stock: {

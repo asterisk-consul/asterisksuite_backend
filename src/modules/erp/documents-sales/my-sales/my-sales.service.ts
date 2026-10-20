@@ -86,23 +86,23 @@ export class MySalesService {
     }
 
     const pendienteCobro = totalFacturado - totalCobrado;
+    // La comisión siempre se calcula sobre la base sin IVA. Con regla PAID,
+    // se prorratea el subtotal según el % cobrado (igual que HrService).
+    const commissionBaseAmount = (ov: (typeof ordenes)[number]) => {
+      const subtotal = Number(ov.document.subtotal);
+      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
+      if (base !== 'PAID') return subtotal;
+      const total = Number(ov.document.total);
+      const paid = ov.document.child_documents.reduce((s, f) => s + Number(f.paid_amount ?? 0), 0);
+      return total > 0 ? subtotal * Math.min(paid / total, 1) : 0;
+    };
     const totalComision = ordenes.reduce((sum, ov) => {
       const rate = ov.commission_rate ? Number(ov.commission_rate) : 0;
-      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
-      let baseAmount = Number(ov.document.subtotal);
-      if (base === 'PAID') {
-        baseAmount = ov.document.child_documents.reduce((s, f) => s + Number(f.paid_amount ?? 0), 0);
-      }
-      return sum + (baseAmount * rate / 100);
+      return sum + (commissionBaseAmount(ov) * rate) / 100;
     }, 0);
     const comisionPendiente = ordenes.filter((ov) => !ov.commission_settled_at).reduce((sum, ov) => {
       const rate = ov.commission_rate ? Number(ov.commission_rate) : 0;
-      const base = ov.commission_base ?? ov.seller?.commission_base ?? 'INVOICED';
-      let baseAmount = Number(ov.document.subtotal);
-      if (base === 'PAID') {
-        baseAmount = ov.document.child_documents.reduce((s, f) => s + Number(f.paid_amount ?? 0), 0);
-      }
-      return sum + (baseAmount * rate / 100);
+      return sum + (commissionBaseAmount(ov) * rate) / 100;
     }, 0);
 
     return {
