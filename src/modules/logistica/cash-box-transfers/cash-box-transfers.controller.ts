@@ -15,13 +15,22 @@ export class CashBoxTransfersController {
 
   @Post()
   @UseGuards(CashBoxAccessGuard)
-  @RequirePermissions('treasury.cash_box_transfers.create')
+  @RequirePermissions('cash_box_transfers.create')
   create(@Body() dto: CreateCashBoxTransferDto, @CurrentUser() user: AuthUser) {
     return this.transfersService.create(dto, user.id);
   }
 
+  @Get('destination-options')
+  @RequirePermissions('cash_box_transfers.create')
+  destinationOptions(
+    @Query('company_id') companyId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.transfersService.getDestinationOptions(companyId, user.id);
+  }
+
   @Get()
-  @RequirePermissions('treasury.cash_box_transfers.read')
+  @RequirePermissions('cash_box_transfers.read')
   findAll(
     @Req() req: Request,
     @CurrentUser() user: AuthUser,
@@ -43,28 +52,27 @@ export class CashBoxTransfersController {
   }
 
   @Get(':id')
-  @RequirePermissions('treasury.cash_box_transfers.read')
+  @RequirePermissions('cash_box_transfers.read')
   findOne(@Param('id') id: string) {
     return this.transfersService.findOne(id);
   }
 
   @Patch(':id/confirm')
-  @UseGuards(CashBoxAccessGuard)
-  @RequirePermissions('treasury.cash_box_transfers.confirm')
+  @RequirePermissions('cash_box_transfers.confirm')
   confirm(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.transfersService.confirm(id, user.id);
   }
 
   @Patch(':id/cancel')
   @UseGuards(CashBoxAccessGuard)
-  @RequirePermissions('treasury.cash_box_transfers.cancel')
+  @RequirePermissions('cash_box_transfers.cancel')
   cancel(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.transfersService.cancel(id, user.id);
   }
 
   @Delete(':id')
   @UseGuards(CashBoxAccessGuard)
-  @RequirePermissions('treasury.cash_box_transfers.delete')
+  @RequirePermissions('cash_box_transfers.delete')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.transfersService.remove(id, user.id);
   }

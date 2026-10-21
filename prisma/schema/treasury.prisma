@@ -480,21 +480,25 @@ model cash_box_user_roles {
 }
 
 model cash_box_transfers {
-  id               String            @id @default(uuid()) @db.Uuid
-  session_id       String?           @db.Uuid
-  source_type      String            @db.VarChar(20)
-  source_id        String            @db.Uuid
-  dest_type        String            @db.VarChar(20)
-  dest_id          String            @db.Uuid
-  amount           Decimal           @db.Decimal(15, 2)
-  currency_code    String            @db.VarChar(10)
-  exchange_rate    Decimal?          @db.Decimal(18, 6)
-  rate_type        CurrencyRateType?
-  converted_amount Decimal?          @db.Decimal(15, 2)
-  description      String?           @db.VarChar(255)
-  reference        String?           @db.VarChar(100)
-  transfer_type    String            @db.VarChar(20)
-  status           String            @default("pending") @db.VarChar(20)
+  id                String            @id @default(uuid()) @db.Uuid
+  session_id        String?           @db.Uuid
+  source_type       String            @db.VarChar(20)
+  source_id         String            @db.Uuid
+  dest_type         String            @db.VarChar(20)
+  dest_id           String            @db.Uuid
+  dest_company_id   String?           @db.Uuid
+  dest_company_name String?           @db.VarChar(255)
+  dest_name         String?           @db.VarChar(255)
+  amount            Decimal           @db.Decimal(15, 2)
+  currency_code     String            @db.VarChar(10)
+  exchange_rate     Decimal?          @db.Decimal(18, 6)
+  rate_type         CurrencyRateType?
+  converted_amount  Decimal?          @db.Decimal(15, 2)
+  description       String?           @db.VarChar(255)
+  reference         String?           @db.VarChar(100)
+  transfer_type     String            @db.VarChar(20)
+  status            String            @default("pending") @db.VarChar(20)
+  execution_error   String?           @db.VarChar(500)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)

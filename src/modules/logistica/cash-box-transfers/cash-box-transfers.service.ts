@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCashBoxTransferDto } from './dto/create-cash-box-transfer.dto';
 import { BankMovementsService } from '@/modules/erp/bank-movements/bank-movements.service';
+import { requestContext } from '@/common/context/request-context';
 
 @Injectable()
 export class CashBoxTransfersService {
@@ -13,11 +14,102 @@ export class CashBoxTransfersService {
     return this.db.getClientForCurrentContext();
   }
 
+  private async resolveDestinationCompany(companyId: string | undefined, userId: string) {
+    const sourceCompanyId = requestContext.getStore()?.companyId;
+    if (!companyId || companyId === sourceCompanyId) return null;
+
+    const membership = await this.db.getDefaultClient().company_users.findUnique({
+      where: { company_id_user_id: { company_id: companyId, user_id: userId } },
+      include: { company: true },
+    });
+    if (!membership?.company || membership.company.deleted_at) {
+      throw new ForbiddenException('No tienes acceso a la empresa destino');
+    }
+
+    const tenantDb = membership.company.schema_name || (membership.company.subdomain ? `${membership.company.subdomain}_db` : null);
+    if (!tenantDb) throw new BadRequestException('La empresa destino no tiene un tenant configurado');
+    const client = this.db.getTenantClient(tenantDb);
+    await this.assertTargetPermission(client, userId, membership.role);
+    return { company: membership.company, client, role: membership.role };
+  }
+
+  private async assertTargetPermission(client: any, userId: string, companyRole: string) {
+    if (companyRole === 'OWNER') return;
+    const override = await client.user_permission_overrides.findFirst({
+      where: { user_id: userId, permission: { code: 'cash_box_transfers.create', active: true, deleted_at: null } },
+      select: { effect: true },
+    });
+    if (override?.effect === 'DENY') throw new ForbiddenException('No tienes permiso para transferir hacia la empresa destino');
+    if (override?.effect === 'ALLOW') return;
+    const rolePermission = await client.business_user_roles.findFirst({
+      where: {
+        user_id: userId,
+        role: {
+          active: true,
+          deleted_at: null,
+          permissions: { some: { permission: { code: 'cash_box_transfers.create', active: true, deleted_at: null } } },
+        },
+      },
+      select: { user_id: true },
+    });
+    if (!rolePermission) throw new ForbiddenException('No tienes permiso para transferir hacia la empresa destino');
+  }
+
+  private async assertSourceAccess(sourceType: string, sourceId: string, userId: string) {
+    const companyId = requestContext.getStore()?.companyId;
+    if (!companyId) throw new BadRequestException('No se pudo determinar la empresa de origen');
+    const membership = await this.db.getDefaultClient().company_users.findUnique({
+      where: { company_id_user_id: { company_id: companyId, user_id: userId } },
+    });
+    if (!membership) throw new ForbiddenException('No tienes acceso a la empresa de origen');
+    if (membership.role !== 'USER') return;
+    const role = sourceType === 'cash_box'
+      ? await this.prisma.cash_box_user_roles.findUnique({ where: { cash_box_id_user_id: { cash_box_id: sourceId, user_id: userId } } })
+      : await this.prisma.bank_account_user_roles.findUnique({ where: { bank_account_id_user_id: { bank_account_id: sourceId, user_id: userId } } });
+    if (!role) throw new ForbiddenException('No tienes acceso al fondo de origen');
+  }
+
+  async getDestinationOptions(companyId: string, userId: string) {
+    if (!companyId) throw new BadRequestException('Debes seleccionar una empresa destino');
+    const target = await this.resolveDestinationCompany(companyId, userId);
+    if (!target) throw new BadRequestException('La empresa destino debe ser diferente de la empresa actual');
+    const restrictByRole = target.role === 'USER';
+    const [cashBoxes, bankAccounts] = await Promise.all([
+      target.client.cash_boxes.findMany({
+        where: {
+          active: true,
+          deleted_at: null,
+          ...(restrictByRole ? { user_roles: { some: { user_id: userId } } } : {}),
+        },
+        select: { id: true, name: true, currency_code: true, status: true, balances: { where: { deleted_at: null } } },
+        orderBy: { name: 'asc' },
+      }),
+      target.client.bank_accounts.findMany({
+        where: {
+          active: true,
+          deleted_at: null,
+          ...(restrictByRole ? { user_roles: { some: { user_id: userId } } } : {}),
+        },
+        select: { id: true, name: true, bank_name: true, currency_code: true, balance: true },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
+    return { company: { id: target.company.id, name: target.company.name }, cash_boxes: cashBoxes, bank_accounts: bankAccounts };
+  }
+
   async create(dto: CreateCashBoxTransferDto, userId: string) {
+    await this.assertSourceAccess(dto.source_type, dto.source_id, userId);
+    const target = await this.resolveDestinationCompany(dto.dest_company_id, userId);
     // Validar que origen y destino sean diferentes
-    if (dto.source_type === dto.dest_type && dto.source_id === dto.dest_id) {
+    if (!target && dto.source_type === dto.dest_type && dto.source_id === dto.dest_id) {
       throw new BadRequestException('Origen y destino no pueden ser iguales');
     }
+
+    const destinationClient = target?.client ?? this.prisma;
+    const destination: any = dto.dest_type === 'cash_box'
+      ? await destinationClient.cash_boxes.findFirst({ where: { id: dto.dest_id, active: true, deleted_at: null } })
+      : await destinationClient.bank_accounts.findFirst({ where: { id: dto.dest_id, active: true, deleted_at: null } });
+    if (!destination) throw new BadRequestException('El destino seleccionado no está disponible');
 
     // Validar sesión abierta en caja origen
     if (dto.source_type === 'cash_box') {
@@ -43,6 +135,14 @@ export class CashBoxTransfersService {
       if (!balance || balance.balance.toNumber() < dto.amount) {
         throw new BadRequestException('Saldo insuficiente en la caja origen');
       }
+    } else {
+      const account = await this.prisma.bank_accounts.findFirst({
+        where: { id: dto.source_id, active: true, deleted_at: null },
+        select: { balance: true, currency_code: true },
+      });
+      if (!account) throw new BadRequestException('La cuenta bancaria de origen no está disponible');
+      if (account.currency_code !== dto.currency_code) throw new BadRequestException('La moneda no coincide con la cuenta bancaria de origen');
+      if (account.balance.toNumber() < dto.amount) throw new BadRequestException('Saldo insuficiente en la cuenta bancaria de origen');
     }
 
     // Crear transferencia
@@ -53,6 +153,11 @@ export class CashBoxTransfersService {
         source_id: dto.source_id,
         dest_type: dto.dest_type,
         dest_id: dto.dest_id,
+        dest_company_id: target?.company.id,
+        dest_company_name: target?.company.name,
+        dest_name: dto.dest_type === 'bank_account'
+          ? `${destination.bank_name} - ${destination.name}`
+          : destination.name,
         amount: dto.amount,
         currency_code: dto.currency_code,
         exchange_rate: dto.exchange_rate,
@@ -71,24 +176,29 @@ export class CashBoxTransfersService {
 
   async confirm(id: string, userId: string) {
     const transfer = await this.findOne(id);
-    if (transfer.status !== 'pending') {
-      throw new BadRequestException('Solo se pueden confirmar transferencias pendientes');
+    await this.assertSourceAccess(transfer.source_type, transfer.source_id, userId);
+    if (!['pending', 'processing', 'debit_applied', 'failed'].includes(transfer.status)) {
+      throw new BadRequestException('La transferencia no está pendiente de ejecución');
     }
 
-    // Ejecutar transferencia
-    await this.executeTransfer(transfer, userId);
-
-    return this.prisma.cash_box_transfers.update({
-      where: { id },
-      data: {
-        status: 'completed',
-        updated_at: new Date(),
-        updated_by: userId,
-      },
-    });
+    const target = await this.resolveDestinationCompany(transfer.dest_company_id ?? undefined, userId);
+    await this.prisma.cash_box_transfers.update({ where: { id }, data: { status: 'processing', execution_error: null, updated_by: userId } });
+    try {
+      await this.executeTransfer(transfer, userId, target?.client ?? this.prisma);
+      return await this.prisma.cash_box_transfers.update({
+        where: { id },
+        data: { status: 'completed', execution_error: null, updated_at: new Date(), updated_by: userId },
+      });
+    } catch (error: any) {
+      await this.prisma.cash_box_transfers.update({
+        where: { id },
+        data: { status: 'failed', execution_error: String(error?.message ?? error).slice(0, 500), updated_by: userId },
+      });
+      throw error;
+    }
   }
 
-  private async executeTransfer(transfer: any, userId: string) {
+  private async executeTransfer(transfer: any, userId: string, destinationClient: any) {
     const isSourceCashBox = transfer.source_type === 'cash_box';
     const isDestCashBox = transfer.dest_type === 'cash_box';
 
@@ -98,17 +208,17 @@ export class CashBoxTransfersService {
     // Resolve destination currency code
     let destCurrencyCode = transfer.currency_code;
     if (isDestCashBox) {
-      const destBox = await this.prisma.cash_boxes.findUnique({ where: { id: transfer.dest_id }, select: { currency_code: true, current_session_id: true } });
+      const destBox = await destinationClient.cash_boxes.findUnique({ where: { id: transfer.dest_id }, select: { currency_code: true, current_session_id: true } });
       destCurrencyCode = destBox?.currency_code ?? transfer.currency_code;
     } else {
-      const destAccount = await this.prisma.bank_accounts.findUnique({ where: { id: transfer.dest_id }, select: { currency_code: true } });
+      const destAccount = await destinationClient.bank_accounts.findUnique({ where: { id: transfer.dest_id }, select: { currency_code: true } });
       destCurrencyCode = destAccount?.currency_code ?? transfer.currency_code;
     }
 
     // Resolve destination session ID (each cash box has its own session)
     let destSessionId: string | null = null;
     if (isDestCashBox) {
-      const destBox = await this.prisma.cash_boxes.findUnique({ where: { id: transfer.dest_id }, select: { current_session_id: true } });
+      const destBox = await destinationClient.cash_boxes.findUnique({ where: { id: transfer.dest_id }, select: { current_session_id: true } });
       destSessionId = destBox?.current_session_id ?? null;
     }
 
@@ -133,25 +243,53 @@ export class CashBoxTransfersService {
       });
       destBalanceBefore = bal?.balance.toNumber() ?? 0;
     } else {
-      const acc = await this.prisma.bank_accounts.findUnique({ where: { id: transfer.dest_id }, select: { balance: true } });
+      const acc = await destinationClient.bank_accounts.findUnique({ where: { id: transfer.dest_id }, select: { balance: true } });
       destBalanceBefore = acc?.balance.toNumber() ?? 0;
     }
 
     // Restar del origen
     if (isSourceCashBox) {
-      await this.updateCashBoxBalance(transfer.source_id, transfer.currency_code, -sourceAmount);
-      await this.createMovement(transfer.source_id, transfer.session_id, 'TRANSFER', -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId, sourceBalanceBefore);
+      await this.applyCashMovement(this.prisma, transfer, transfer.source_id, transfer.session_id, -sourceAmount, transfer.currency_code, 'Transferencia saliente interempresa', userId, sourceBalanceBefore, 'source');
     } else {
-      await this.createBankMovement(transfer.source_id, -sourceAmount, transfer.currency_code, 'Transferencia saliente', userId);
+      await this.applyBankMovement(this.prisma, transfer, transfer.source_id, -sourceAmount, transfer.currency_code, 'Transferencia saliente interempresa', userId, 'source');
     }
+
+    await this.prisma.cash_box_transfers.update({ where: { id: transfer.id }, data: { status: 'debit_applied', updated_by: userId } });
 
     // Sumar al destino
     if (isDestCashBox) {
-      await this.updateCashBoxBalance(transfer.dest_id, destCurrencyCode, destAmount);
-      await this.createMovement(transfer.dest_id, destSessionId, 'TRANSFER', destAmount, destCurrencyCode, 'Transferencia entrante', userId, destBalanceBefore);
+      await this.applyCashMovement(destinationClient, transfer, transfer.dest_id, destSessionId, destAmount, destCurrencyCode, 'Transferencia entrante interempresa', userId, destBalanceBefore, 'destination');
     } else {
-      await this.createBankMovement(transfer.dest_id, destAmount, destCurrencyCode, 'Transferencia entrante', userId);
+      await this.applyBankMovement(destinationClient, transfer, transfer.dest_id, destAmount, destCurrencyCode, 'Transferencia entrante interempresa', userId, 'destination');
     }
+  }
+
+  private async applyBankMovement(client: any, transfer: any, bankAccountId: string, amount: number, currencyCode: string, description: string, userId: string, side: string) {
+    const exists = await client.bank_account_movements.findFirst({ where: { reference_type: `intercompany_transfer_${side}`, reference_id: transfer.id, deleted_at: null } });
+    if (exists) return exists;
+    return client.$transaction((tx: any) => this.bankMovements.addMovement({
+      bankAccountId,
+      type: 'TRANSFER',
+      nature: amount < 0 ? 'DEBIT' : 'CREDIT',
+      amount,
+      currencyCode,
+      description,
+      referenceType: `intercompany_transfer_${side}`,
+      referenceId: transfer.id,
+      reference: transfer.reference,
+      userId,
+      recalculate: false,
+    }, tx));
+  }
+
+  private async applyCashMovement(client: any, transfer: any, cashBoxId: string, sessionId: string | null, amount: number, currencyCode: string, description: string, userId: string, balanceBefore: number, side: string) {
+    const referenceType = `intercompany_transfer_${side}`;
+    const exists = await client.cash_box_movements.findFirst({ where: { reference_type: referenceType, reference_id: transfer.id, deleted_at: null } });
+    if (exists) return exists;
+    return client.$transaction(async (tx: any) => {
+      await this.updateCashBoxBalance(cashBoxId, currencyCode, amount, tx);
+      return this.createMovement(cashBoxId, sessionId, 'TRANSFER', amount, currencyCode, description, userId, balanceBefore, tx, referenceType, transfer.id);
+    });
   }
 
   private async createBankMovement(bankAccountId: string, amount: number, currencyCode: string, description: string, userId: string) {
@@ -166,8 +304,8 @@ export class CashBoxTransfersService {
     });
   }
 
-  private async updateCashBoxBalance(cashBoxId: string, currencyCode: string, delta: number) {
-    const balance = await this.prisma.cash_box_balances.findUnique({
+  private async updateCashBoxBalance(cashBoxId: string, currencyCode: string, delta: number, client: any = this.prisma) {
+    const balance = await client.cash_box_balances.findUnique({
       where: {
         cash_box_id_currency_code: { cash_box_id: cashBoxId, currency_code: currencyCode },
       },
@@ -176,12 +314,12 @@ export class CashBoxTransfersService {
     if (balance) {
       const newBalance = balance.balance.toNumber() + delta;
       if (newBalance < 0) throw new BadRequestException('Saldo insuficiente');
-      await this.prisma.cash_box_balances.update({
+      await client.cash_box_balances.update({
         where: { id: balance.id },
         data: { balance: newBalance, updated_at: new Date() },
       });
     } else if (delta > 0) {
-      await this.prisma.cash_box_balances.create({
+      await client.cash_box_balances.create({
         data: {
           cash_box_id: cashBoxId,
           currency_code: currencyCode,
@@ -192,8 +330,8 @@ export class CashBoxTransfersService {
     }
   }
 
-  private async createMovement(cashBoxId: string, sessionId: string | null, type: string, amount: number, currencyCode: string, description: string, userId: string, balanceBefore: number) {
-    const movement = await this.prisma.cash_box_movements.create({
+  private async createMovement(cashBoxId: string, sessionId: string | null, type: string, amount: number, currencyCode: string, description: string, userId: string, balanceBefore: number, client: any = this.prisma, referenceType?: string, referenceId?: string) {
+    const movement = await client.cash_box_movements.create({
       data: {
         cash_box_id: cashBoxId,
         session_id: sessionId,
@@ -203,6 +341,8 @@ export class CashBoxTransfersService {
         balance_before: balanceBefore,
         balance_after: balanceBefore + amount,
         description,
+        reference_type: referenceType,
+        reference_id: referenceId,
         created_by: userId,
       },
     });
@@ -215,7 +355,7 @@ export class CashBoxTransfersService {
       } else {
         sessionUpdate.total_expenses = { increment: Math.abs(amount) };
       }
-      await this.prisma.cash_box_sessions.update({
+      await client.cash_box_sessions.update({
         where: { id: sessionId },
         data: sessionUpdate,
       });

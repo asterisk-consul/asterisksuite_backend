@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsDateString, IsEnum } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsPositive } from 'class-validator';
 
 export class CreateCashBoxTransferDto {
   @IsString()
@@ -17,7 +17,12 @@ export class CreateCashBoxTransferDto {
   @IsString()
   dest_id!: string;
 
+  @IsString()
+  @IsOptional()
+  dest_company_id?: string;
+
   @IsNumber()
+  @IsPositive()
   amount!: number;
 
   @IsString()

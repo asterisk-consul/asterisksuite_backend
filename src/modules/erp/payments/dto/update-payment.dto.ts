@@ -1,6 +1,6 @@
 import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PaymentDocumentDto, PaymentObligationDto } from './create-payment.dto';
+import { PaymentDocumentDto, PaymentObligationDto, PaymentWithholdingDto } from './create-payment.dto';
 
 export class UpdatePaymentDto {
   @IsDateString()
@@ -94,4 +94,10 @@ export class UpdatePaymentDto {
   @Type(() => PaymentObligationDto)
   @IsOptional()
   obligations?: PaymentObligationDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentWithholdingDto)
+  @IsOptional()
+  withholdings?: PaymentWithholdingDto[];
 }

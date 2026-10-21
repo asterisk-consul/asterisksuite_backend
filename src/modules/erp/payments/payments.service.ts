@@ -917,6 +917,9 @@ export class PaymentsService {
     if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden editar pagos en borrador');
     }
+    if (dto.withholdings?.length && !(dto.party_id ?? payment.party_id)) {
+      throw new BadRequestException('party_id es requerido cuando se registran retenciones');
+    }
     if (dto.obligations?.length && payment.type !== 'PAYMENT') {
       throw new BadRequestException('Los servicios e impuestos pendientes solo pueden asociarse a un pago');
     }
@@ -990,6 +993,53 @@ export class PaymentsService {
               document_id: documentId,
               amount_applied: amountApplied,
               created_by: userId,
+            },
+          });
+        }
+      }
+
+      if (dto.withholdings !== undefined) {
+        const now = new Date();
+        await tx.withholdings.updateMany({
+          where: { payment_id: id, deleted_at: null },
+          data: { status: 'CANCELLED', deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+
+        const partyId = dto.party_id ?? payment.party_id;
+        for (const withholding of dto.withholdings) {
+          await tx.withholdings.create({
+            data: {
+              company_id: this.getCompanyId() ?? payment.id,
+              business_party_id: partyId!,
+              direction: payment.type === 'PAYMENT' || payment.type === 'EXPENSE' ? 'PRACTICADA' : 'SUFRIDA',
+              payment_id: payment.id,
+              tax_type: withholding.tax_type,
+              jurisdiction_id: withholding.jurisdiction_id ?? null,
+              withholding_concept_id: withholding.withholding_concept_id ?? null,
+              tax_rule_id: withholding.tax_rule_id ?? null,
+              base_amount: withholding.base_amount,
+              rate: withholding.rate ?? null,
+              withheld_amount: withholding.withheld_amount,
+              automatic_amount: withholding.withheld_amount,
+              currency_code: dto.currency_code ?? payment.currency_code,
+              exchange_rate: dto.exchange_rate ?? payment.exchange_rate,
+              certificate_number: withholding.certificate_number ?? null,
+              certificate_date: withholding.certificate_date ? new Date(withholding.certificate_date) : null,
+              status: 'CALCULATED',
+              date: dto.date ? parseLocalDateTime(dto.date) : payment.date,
+              observations: withholding.observations ?? null,
+              created_by: userId,
+              ...(withholding.allocations?.length
+                ? {
+                    allocations: {
+                      create: withholding.allocations.map((allocation) => ({
+                        document_id: allocation.document_id,
+                        allocated_amount: allocation.allocated_amount,
+                        created_by: userId,
+                      })),
+                    },
+                  }
+                : {}),
             },
           });
         }
