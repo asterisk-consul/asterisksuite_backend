@@ -26,7 +26,7 @@ export class StockController {
     });
   }
 
-  @RequireAnyPermission('production.read', 'production.execute', 'stock.read')
+  @RequireAnyPermission('production.read', 'production.execute')
   @Post('production/preview')
   previewProduction(@Body() body: { product_id: string; warehouse_id?: string; material_warehouse_id?: string; output_warehouse_id?: string; quantity: number; variant_id?: string }) {
     const materialWarehouseId = body.material_warehouse_id ?? body.warehouse_id!;
@@ -34,7 +34,7 @@ export class StockController {
     return this.service.previewProduction(body.product_id, materialWarehouseId, outputWarehouseId, Number(body.quantity), body.variant_id);
   }
 
-  @RequireAnyPermission('production.execute', 'stock.create')
+  @RequirePermissions('production.execute')
   @Post('production/execute')
   executeProduction(@Body() body: { product_id: string; warehouse_id?: string; material_warehouse_id?: string; output_warehouse_id?: string; quantity: number; variant_id?: string }) {
     const materialWarehouseId = body.material_warehouse_id ?? body.warehouse_id!;
@@ -42,7 +42,7 @@ export class StockController {
     return this.service.executeProduction(body.product_id, materialWarehouseId, outputWarehouseId, Number(body.quantity), body.variant_id);
   }
 
-  @RequireAnyPermission('production.history', 'stock.movements')
+  @RequirePermissions('production.history')
   @Get('production/history')
   getProductionHistory(@Query('limit') limit?: string) {
     return this.service.getProductionHistory(Number(limit));

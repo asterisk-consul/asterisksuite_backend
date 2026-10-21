@@ -24,7 +24,7 @@ type DocumentSummaryRow = { direction: 'SALE' | 'PURCHASE'; category: string; st
 type PartySummaryRow = { role: string; total: number; active: number; with_balance: number; currency_code: string; balance: number };
 type PersonSummaryRow = { name: string; kind: 'EMPLOYEE' | 'PARTNER'; active: boolean; detail: string; currency_code: string; configured_amount: number; movements_amount: number; movements_count: number; pending_amount: number };
 type FinancialAccountRow = { name: string; institution?: string; status: string; currency_code: string; current_balance: number; period_change: number; opening_amount: number; movement_count: number };
-type InventoryOrderRow = { order_number: number; order_date: string; customer: string; product: string; quantity: number; status: string; confirmation_at: string | null; user: string; invoice_total: number | null; paid_amount: number | null; currency_code: string };
+type InventoryOrderRow = { document_type: 'ORDER' | 'INVOICE'; document_number: number; document_date: string; customer: string; product: string; quantity: number; status: string; confirmation_at: string | null; user: string; invoice_total: number | null; paid_amount: number | null; currency_code: string };
 type StockMovementSummaryRow = { product: string; movement_type: string; direction: string; quantity: number; count: number };
 type ConsolidatedCompany = {
   company_id: string;
@@ -173,7 +173,7 @@ export class ManagementReportsService {
       client.documents.findMany({
         where: { deleted_at: null, date: { gte: from, lte: to } },
         select: {
-          id: true, number: true, date: true, total: true, converted_total: true, currency_code: true, status: true, created_by: true, updated_at: true,
+          id: true, number: true, date: true, total: true, paid_amount: true, converted_total: true, converted_paid_amount: true, currency_code: true, status: true, created_by: true, updated_at: true, commercial_operation_id: true,
           business_parties: { select: { name: true } },
           document_types: { select: { direction: true, category: true, description: true } },
           document_items: { where: { deleted_at: null }, select: { quantity: true, products: { select: { name: true } }, product_variants: { select: { name: true } } } },
@@ -249,23 +249,87 @@ export class ManagementReportsService {
       const newStatus = Number((audit.new_data as Record<string, unknown> | null)?.status ?? 0);
       if (!confirmationAudits.has(audit.record_id) && oldStatus < 2 && newStatus >= 2 && newStatus !== 3) confirmationAudits.set(audit.record_id, audit);
     }
+    const inventoryOrderIds = inventoryDocuments.map((document) => document.id);
+    const operationIds = [...new Set(inventoryDocuments
+      .map((document) => document.commercial_operation_id)
+      .filter((id): id is string => Boolean(id)))];
+    const linkedInvoices = inventoryOrderIds.length
+      ? await client.documents.findMany({
+        where: {
+          deleted_at: null,
+          status: { gte: 2, not: 3 },
+          document_types: { direction: 1, category: 'INVOICE' },
+          OR: [
+            { parent_document_id: { in: inventoryOrderIds } },
+            ...(operationIds.length ? [{ commercial_operation_id: { in: operationIds } }] : []),
+          ],
+        },
+        select: {
+          id: true,
+          parent_document_id: true,
+          commercial_operation_id: true,
+          status: true,
+          total: true,
+          paid_amount: true,
+          converted_total: true,
+          converted_paid_amount: true,
+          currency_code: true,
+        },
+      })
+      : [];
+    const orderIdByOperation = new Map(inventoryDocuments
+      .filter((document) => document.commercial_operation_id)
+      .map((document) => [document.commercial_operation_id!, document.id]));
+    const invoicesByOrder = new Map<string, typeof linkedInvoices>();
+    const seenInvoiceByOrder = new Map<string, Set<string>>();
+    for (const invoice of linkedInvoices) {
+      const orderId = (invoice.commercial_operation_id && orderIdByOperation.get(invoice.commercial_operation_id))
+        || (invoice.parent_document_id && inventoryOrderIds.includes(invoice.parent_document_id) ? invoice.parent_document_id : null);
+      if (!orderId || [3, 6, 8].includes(invoice.status)) continue;
+      const seen = seenInvoiceByOrder.get(orderId) ?? new Set<string>();
+      if (seen.has(invoice.id)) continue;
+      seen.add(invoice.id);
+      seenInvoiceByOrder.set(orderId, seen);
+      const orderInvoices = invoicesByOrder.get(orderId) ?? [];
+      orderInvoices.push(invoice);
+      invoicesByOrder.set(orderId, orderInvoices);
+    }
+
+    // Algunas empresas venden con circuito OV → factura y otras facturan directamente.
+    // Las facturas ya asociadas a una OV se contabilizan en esa fila; las demás se muestran como documentos independientes.
+    const linkedInvoiceIds = new Set(linkedInvoices
+      .filter((invoice) => invoice.status >= 2 && ![3, 6, 8].includes(invoice.status))
+      .map((invoice) => invoice.id));
+    const directInvoices = documents.filter((document) =>
+      document.document_types.direction === 1
+      && document.document_types.category === 'INVOICE'
+      && document.status >= 2
+      && ![3, 6, 8].includes(document.status)
+      && !linkedInvoiceIds.has(document.id),
+    );
     const userIds = [...new Set([
       ...inventoryDocuments.map((document) => document.created_by),
+      ...directInvoices.map((document) => document.created_by),
       ...[...confirmationAudits.values()].map((audit) => audit.changed_by),
     ].filter((id): id is string => Boolean(id)))];
     const creators = userIds.length
       ? await this.db.getDefaultClient().users.findMany({ where: { id: { in: userIds } }, select: { id: true, name: true, email: true } })
       : [];
     const creatorNames = new Map(creators.map((creator) => [creator.id, creator.name || creator.email]));
+
     const inventoryOrders: InventoryOrderRow[] = inventoryDocuments.flatMap((document) => {
-      const invoices = document.child_documents.filter((invoice) => invoice.status >= 2 && ![3, 6, 8].includes(invoice.status));
-      const hasConvertedAmounts = invoices.some((invoice) => invoice.converted_total != null);
+      const invoices = invoicesByOrder.get(document.id) ?? [];
+      const hasConvertedAmounts = document.converted_total != null || invoices.some((invoice) => invoice.converted_total != null);
       const invoiceTotal = invoices.reduce((sum, invoice) => sum + Number(invoice.converted_total ?? invoice.total), 0);
-      const paidAmount = invoices.reduce((sum, invoice) => sum + Number(invoice.converted_paid_amount ?? invoice.paid_amount), 0);
+      // Según la configuración del circuito, los cobros pueden aplicarse a la OV, a sus facturas o a ambos.
+      // Cada documento mantiene su propio acumulado; se suman para reflejar lo efectivamente aplicado a la operación.
+      const paidAmount = Number(document.converted_paid_amount ?? document.paid_amount)
+        + invoices.reduce((sum, invoice) => sum + Number(invoice.converted_paid_amount ?? invoice.paid_amount), 0);
       const currencyCode = hasConvertedAmounts ? 'ARS' : (invoices[0]?.currency_code ?? document.currency_code ?? 'ARS');
       return document.document_items.map((item, itemIndex) => ({
-        order_number: document.number,
-        order_date: document.date.toISOString().slice(0, 10),
+        document_type: 'ORDER' as const,
+        document_number: document.number,
+        document_date: document.date.toISOString().slice(0, 10),
         customer: document.business_parties?.name ?? 'Sin cliente',
         product: `${item.products?.name ?? 'Artículo sin producto'}${item.product_variants?.name ? ` · ${item.product_variants.name}` : ''}`,
         quantity: Number(item.quantity),
@@ -278,6 +342,23 @@ export class ManagementReportsService {
         currency_code: currencyCode,
       }));
     });
+    inventoryOrders.push(...directInvoices.flatMap((document) => {
+      const currencyCode = document.converted_total != null ? 'ARS' : (document.currency_code ?? 'ARS');
+      return document.document_items.map((item, itemIndex) => ({
+        document_type: 'INVOICE' as const,
+        document_number: document.number,
+        document_date: document.date.toISOString().slice(0, 10),
+        customer: document.business_parties?.name ?? 'Sin cliente',
+        product: `${item.products?.name ?? 'Artículo sin producto'}${item.product_variants?.name ? ` · ${item.product_variants.name}` : ''}`,
+        quantity: Number(item.quantity),
+        status: this.documentStatusLabel('INVOICE', document.status),
+        confirmation_at: document.updated_at?.toISOString() ?? null,
+        user: creatorNames.get(document.created_by ?? '') ?? 'Usuario no disponible',
+        invoice_total: itemIndex === 0 ? Number(document.converted_total ?? document.total) : null,
+        paid_amount: itemIndex === 0 ? Number(document.converted_paid_amount ?? document.paid_amount) : null,
+        currency_code: currencyCode,
+      }));
+    }));
 
     const sales: CurrencyTotals = {};
     const purchases: CurrencyTotals = {};
@@ -580,11 +661,12 @@ export class ManagementReportsService {
       Cantidad: row.quantity, Registros: row.count, Detalle: row.product, Moneda: 'Unidades', Importe: row.quantity, Saldo: '',
     }));
     company.details.inventory_orders.forEach((row) => rows.push({
-      Seccion: 'Órdenes de venta por artículo', Empresa: company.company_name, OV: row.order_number, Fecha: row.order_date,
+      Seccion: 'Documentos de venta por artículo', Empresa: company.company_name,
+      Tipo: row.document_type === 'ORDER' ? 'Orden de venta' : 'Factura', Documento: row.document_number, Fecha: row.document_date,
       Cliente: row.customer, Articulo: row.product, Cantidad: row.quantity, Estado: row.status,
       Confirmacion: row.confirmation_at ? new Date(row.confirmation_at).toLocaleString('es-AR') : 'No confirmada', Usuario: row.user,
       'Total facturado': row.invoice_total ?? '', 'Importe cobrado': row.paid_amount ?? '', 'Moneda importe': row.currency_code,
-      Detalle: `OV ${row.order_number} · ${row.customer} · ${row.product}`, Moneda: 'Unidades', Importe: row.quantity, Saldo: '',
+      Detalle: `${row.document_type === 'ORDER' ? 'OV' : 'Factura'} ${row.document_number} · ${row.customer} · ${row.product}`, Moneda: 'Unidades', Importe: row.quantity, Saldo: '',
     }));
     add('Pagos y cobros por estado', company.details.payment_statuses);
     add('Cheques por estado', company.details.checks);
@@ -608,7 +690,7 @@ export class ManagementReportsService {
       hr: ['Lectura ejecutiva', 'Vales de empleados y socios', 'Empleados', 'Socios', 'Alertas'],
       treasury: ['Lectura ejecutiva', 'Transferencias', 'Variación de bancos y cajas', 'Pagos y cobros por estado', 'Cheques por estado', 'Movimientos de tesorería por tipo', 'Cuentas bancarias', 'Cajas', 'Alertas'],
       documents: ['Lectura ejecutiva', 'Documentos', 'Pagos y cobros por estado', 'Alertas'],
-      inventory: ['Lectura ejecutiva', 'Órdenes de venta por artículo', 'Movimientos de stock', 'Alertas'],
+      inventory: ['Lectura ejecutiva', 'Documentos de venta por artículo', 'Movimientos de stock', 'Alertas'],
     };
     return rows.filter((row) => sections[view].includes(String(row.Seccion)) || (row.Seccion === 'Partes interesadas' && (view === 'customers' ? String(row.Detalle).startsWith('Cliente ·') : view === 'suppliers' && String(row.Detalle).startsWith('Proveedor ·'))));
   }
@@ -688,22 +770,22 @@ export class ManagementReportsService {
         groupedSections.set(section, sectionRows);
       }
       const sectionContent = [...groupedSections.entries()].flatMap(([section, sectionRows]) => {
-        if (section === 'Órdenes de venta por artículo') {
+        if (section === 'Documentos de venta por artículo') {
           const inventoryBody: unknown[][] = [[
-            { text: 'OV', style: 'tableHeader' }, { text: 'Fecha OV', style: 'tableHeader' }, { text: 'Cliente', style: 'tableHeader' },
+            { text: 'Tipo', style: 'tableHeader' }, { text: 'Documento', style: 'tableHeader' }, { text: 'Fecha', style: 'tableHeader' }, { text: 'Cliente', style: 'tableHeader' },
             { text: 'Artículo', style: 'tableHeader' }, { text: 'Cantidad', style: 'tableHeader', alignment: 'right' },
             { text: 'Estado', style: 'tableHeader' }, { text: 'Confirmación', style: 'tableHeader' }, { text: 'Usuario', style: 'tableHeader' },
             { text: 'Total facturado', style: 'tableHeader', alignment: 'right' }, { text: 'Importe cobrado', style: 'tableHeader', alignment: 'right' },
           ]];
           sectionRows.forEach((row) => inventoryBody.push([
-            String(row.OV), String(row.Fecha), String(row.Cliente), String(row.Articulo),
+            String(row.Tipo), String(row.Documento), String(row.Fecha), String(row.Cliente), String(row.Articulo),
             { text: Number(row.Cantidad).toLocaleString('es-AR'), alignment: 'right' }, String(row.Estado), String(row.Confirmacion), String(row.Usuario),
             { text: row['Total facturado'] === '' ? '—' : money(Number(row['Total facturado']), String(row['Moneda importe'])), alignment: 'right' },
             { text: row['Importe cobrado'] === '' ? '—' : money(Number(row['Importe cobrado']), String(row['Moneda importe'])), alignment: 'right' },
           ]));
           return [
             { text: section, style: 'sectionTitle' },
-            { table: { headerRows: 1, widths: [28, 45, 90, 145, 38, 58, 72, 70, 78, 78], body: inventoryBody }, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
+            { table: { headerRows: 1, widths: [52, 36, 42, 80, 125, 32, 50, 62, 55, 70, 70], body: inventoryBody }, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
           ];
         }
         if (section === 'Movimientos de stock') {
