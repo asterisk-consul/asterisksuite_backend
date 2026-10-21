@@ -21,7 +21,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed:rbac": "npx tsx prisma/seeds/rbac.seed.ts"
+    "seed:rbac": "npx tsx prisma/seeds/rbac.seed.ts",
+    "migrate:intercompany-transfers": "tsx scripts/apply-intercompany-transfer-migration.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

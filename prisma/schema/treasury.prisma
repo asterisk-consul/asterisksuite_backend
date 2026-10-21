@@ -484,6 +484,9 @@ model cash_box_transfers {
   session_id        String?           @db.Uuid
   source_type       String            @db.VarChar(20)
   source_id         String            @db.Uuid
+  source_company_id String?           @db.Uuid
+  source_company_name String?         @db.VarChar(255)
+  source_name       String?           @db.VarChar(255)
   dest_type         String            @db.VarChar(20)
   dest_id           String            @db.Uuid
   dest_company_id   String?           @db.Uuid
@@ -498,6 +501,7 @@ model cash_box_transfers {
   reference         String?           @db.VarChar(100)
   transfer_type     String            @db.VarChar(20)
   status            String            @default("pending") @db.VarChar(20)
+  record_side       String            @default("source") @db.VarChar(20)
   execution_error   String?           @db.VarChar(500)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
