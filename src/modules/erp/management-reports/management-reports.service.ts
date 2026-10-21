@@ -4,6 +4,7 @@ import type { ExtendedPrismaClient } from '@/prisma/prisma.service';
 import * as XLSX from 'xlsx';
 import pdfMake from 'pdfmake';
 import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import {
   ManagementPaymentState,
@@ -17,6 +18,7 @@ import {
   ConsolidatedReportView,
   ExportConsolidatedManagementReportDto,
 } from './dto/consolidated-management-report.dto';
+import { reportTemplateChartTypes, reportTemplateColumns, reportTemplateVisualizations, SaveReportTemplateDto } from './dto/save-report-template.dto';
 
 type CurrencyTotals = Record<string, number>;
 type DetailAmountRow = { label: string; currency_code: string; amount: number; count: number; balance?: number };
@@ -93,10 +95,120 @@ type ReportRow = {
 
 @Injectable()
 export class ManagementReportsService {
+  private readonly reportTemplatesKey = 'management-report-templates';
+
   constructor(private readonly db: PrismaService) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  async getReportTemplates(userId: string) {
+    const configs = await this.prisma.dashboard_configs.findMany({
+      where: { dashboard_key: this.reportTemplatesKey },
+      select: { user_id: true, config: true, updated_at: true },
+      take: 200,
+    });
+    const templates = configs.flatMap((record) => {
+      const items = Array.isArray(record.config) ? record.config as any[] : [];
+      return items
+        .filter((item) => item && (record.user_id === userId || item.shared === true))
+        .map((item) => ({ ...item, owner_id: record.user_id, is_owner: record.user_id === userId }));
+    });
+    return templates.sort((a, b) => String(a.name).localeCompare(String(b.name), 'es'));
+  }
+
+  async saveReportTemplate(userId: string, dto: SaveReportTemplateDto) {
+    if (!Array.isArray(dto.columns) || !dto.columns.length) throw new BadRequestException('Seleccioná al menos una columna');
+    if (dto.columns.some((column) => !reportTemplateColumns.includes(column))) {
+      throw new BadRequestException('La plantilla contiene columnas no disponibles');
+    }
+    const visualizations = dto.visualizations ?? ['KPIS', 'CHART', 'TABLE'];
+    if (!visualizations.length || visualizations.some((item) => !reportTemplateVisualizations.includes(item))) {
+      throw new BadRequestException('Elegí al menos una visualización disponible');
+    }
+    const chartType = dto.chart_type ?? 'BAR';
+    if (!reportTemplateChartTypes.includes(chartType)) throw new BadRequestException('El tipo de gráfico no es válido');
+    const queryInput = dto.query ?? {};
+    const allowedValues: Record<string, string[]> = {
+      basis: ['SALES_ORDER', 'INVOICE', 'COLLECTION'],
+      group_by: ['DAY', 'MONTH', 'PARTY', 'SELLER', 'CURRENCY'],
+      payment_state: ['ALL', 'UNPAID', 'PARTIAL', 'PAID'],
+      invoicing_state: ['ALL', 'NONE', 'PARTIAL', 'COMPLETE'],
+      delivery_state: ['ALL', 'NONE', 'PARTIAL', 'COMPLETE'],
+      currency_code: ['ALL', 'ARS', 'USD'],
+    };
+    for (const [key, values] of Object.entries(allowedValues)) {
+      if (queryInput[key] !== undefined && !values.includes(String(queryInput[key]))) {
+        throw new BadRequestException(`El filtro ${key} no es válido`);
+      }
+    }
+    for (const key of ['date_from', 'date_to']) {
+      if (queryInput[key] !== undefined && (typeof queryInput[key] !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(queryInput[key] as string) || Number.isNaN(Date.parse(`${queryInput[key]}T00:00:00Z`)))) {
+        throw new BadRequestException(`La fecha ${key} no es válida`);
+      }
+    }
+    for (const key of ['party_id', 'seller_id', 'product_id', 'point_of_sale_id']) {
+      const value = queryInput[key];
+      if (value !== undefined && value !== 'ALL' && (typeof value !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value))) {
+        throw new BadRequestException(`El filtro ${key} no es válido`);
+      }
+    }
+    if (queryInput.rows_limit !== undefined && (!Number.isInteger(queryInput.rows_limit) || Number(queryInput.rows_limit) < 1 || Number(queryInput.rows_limit) > 5000)) {
+      throw new BadRequestException('El límite de filas debe estar entre 1 y 5000');
+    }
+    const allowedQueryKeys = [
+      'basis', 'date_from', 'date_to', 'group_by', 'payment_state', 'currency_code', 'party_id', 'seller_id',
+      'product_id', 'point_of_sale_id', 'invoicing_state', 'delivery_state',
+      'rows_limit',
+    ];
+    const query = Object.fromEntries(Object.entries(queryInput).filter(([key]) => allowedQueryKeys.includes(key)));
+    const prisma = this.prisma;
+    const existing = await prisma.dashboard_configs.findUnique({
+      where: { user_id_dashboard_key: { user_id: userId, dashboard_key: this.reportTemplatesKey } },
+    });
+    const templates = Array.isArray(existing?.config) ? [...existing.config as any[]] : [];
+    const existingIndex = dto.id ? templates.findIndex((item) => item.id === dto.id) : -1;
+    if (dto.id && existingIndex < 0) throw new ForbiddenException('Sólo podés editar una plantilla propia');
+    if (existingIndex < 0 && templates.length >= 50) throw new BadRequestException('Alcanzaste el máximo de 50 plantillas personales');
+
+    const previous = existingIndex >= 0 ? templates[existingIndex] : null;
+    const template = {
+      id: previous?.id ?? randomUUID(),
+      name: dto.name.trim(),
+      source: 'SALES',
+      columns: dto.columns,
+      visualizations,
+      chart_type: chartType,
+      query,
+      shared: dto.shared,
+      created_at: previous?.created_at ?? new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    if (existingIndex >= 0) templates[existingIndex] = template;
+    else templates.push(template);
+
+    await prisma.dashboard_configs.upsert({
+      where: { user_id_dashboard_key: { user_id: userId, dashboard_key: this.reportTemplatesKey } },
+      create: { user_id: userId, dashboard_key: this.reportTemplatesKey, config: templates as any },
+      update: { config: templates as any },
+    });
+    return { ...template, owner_id: userId, is_owner: true };
+  }
+
+  async deleteReportTemplate(userId: string, templateId: string) {
+    const prisma = this.prisma;
+    const existing = await prisma.dashboard_configs.findUnique({
+      where: { user_id_dashboard_key: { user_id: userId, dashboard_key: this.reportTemplatesKey } },
+    });
+    const templates = Array.isArray(existing?.config) ? [...existing.config as any[]] : [];
+    const remaining = templates.filter((item) => item?.id !== templateId);
+    if (remaining.length === templates.length) throw new ForbiddenException('Sólo podés eliminar una plantilla propia');
+    await prisma.dashboard_configs.update({
+      where: { user_id_dashboard_key: { user_id: userId, dashboard_key: this.reportTemplatesKey } },
+      data: { config: remaining as any },
+    });
+    return { success: true };
   }
 
   async getAvailableCompanies(userId: string) {
@@ -936,6 +1048,7 @@ export class ManagementReportsService {
     }
 
     const grouped = this.groupRows(filtered, query.group_by);
+    const groupedByCurrency = this.groupRowsByCurrency(filtered, query.group_by);
     return {
       basis: query.basis,
       filters: query,
@@ -948,10 +1061,11 @@ export class ManagementReportsService {
         missing_exchange_rate_count: missingExchangeRateCount,
       },
       grouped,
+      grouped_by_currency: groupedByCurrency,
       commercial_performance: query.basis === ManagementReportBasis.COLLECTION
         ? null
         : this.buildCommercialPerformance(filtered),
-      rows: filtered.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 200),
+      rows: filtered.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, query.rows_limit ?? 200),
     };
   }
 
@@ -1191,5 +1305,29 @@ export class ManagementReportsService {
       groups.set(key, group);
     }
     return Array.from(groups.values()).sort((a, b) => a.key.localeCompare(b.key));
+  }
+
+  private groupRowsByCurrency(rows: ReportRow[], groupBy: ManagementReportGroupBy) {
+    const groups = new Map<string, { key: string; label: string; currency_code: string; total: number; paid: number; pending: number; count: number }>();
+    for (const row of rows) {
+      const date = row.date.toISOString();
+      const [key, label] = groupBy === ManagementReportGroupBy.DAY
+        ? [date.slice(0, 10), date.slice(0, 10)]
+        : groupBy === ManagementReportGroupBy.MONTH
+          ? [date.slice(0, 7), date.slice(0, 7)]
+          : groupBy === ManagementReportGroupBy.PARTY
+            ? [row.party_id ?? 'none', row.party_name]
+            : groupBy === ManagementReportGroupBy.SELLER
+              ? [row.seller_id ?? 'none', row.seller_name]
+              : [row.currency_code, row.currency_code];
+      const mapKey = `${key}\u0000${row.currency_code}`;
+      const group = groups.get(mapKey) ?? { key, label, currency_code: row.currency_code || 'ARS', total: 0, paid: 0, pending: 0, count: 0 };
+      group.total += row.amount;
+      group.paid += row.paid_amount;
+      group.pending += row.pending_amount;
+      group.count += 1;
+      groups.set(mapKey, group);
+    }
+    return Array.from(groups.values()).sort((a, b) => a.key.localeCompare(b.key) || a.currency_code.localeCompare(b.currency_code));
   }
 }

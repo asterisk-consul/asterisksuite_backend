@@ -1,4 +1,4 @@
-import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export enum ManagementReportBasis {
   SALES_ORDER = 'SALES_ORDER',
@@ -73,4 +73,10 @@ export class QueryManagementReportDto {
   @IsEnum(ManagementProgressState)
   @IsOptional()
   delivery_state: ManagementProgressState = ManagementProgressState.ALL;
+
+  @IsInt()
+  @Min(1)
+  @Max(5000)
+  @IsOptional()
+  rows_limit?: number;
 }

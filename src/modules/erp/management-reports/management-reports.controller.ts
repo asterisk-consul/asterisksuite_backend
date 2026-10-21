@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Post, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, Param, Post, Query, Res, UseGuards } from '@nestjs/common';
 import type { Response } from 'express';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -11,6 +11,7 @@ import {
   ConsolidatedManagementReportDto,
   ExportConsolidatedManagementReportDto,
 } from './dto/consolidated-management-report.dto';
+import { SaveReportTemplateDto } from './dto/save-report-template.dto';
 
 @UseGuards(JwtAuthGuard)
 @AllowCompanyAdmins()
@@ -27,6 +28,21 @@ export class ManagementReportsController {
   @Get('metadata')
   getMetadata() {
     return this.service.getMetadata();
+  }
+
+  @Get('templates')
+  getReportTemplates(@CurrentUser() user: AuthUser) {
+    return this.service.getReportTemplates(user.id);
+  }
+
+  @Post('templates')
+  saveReportTemplate(@Body() dto: SaveReportTemplateDto, @CurrentUser() user: AuthUser) {
+    return this.service.saveReportTemplate(user.id, dto);
+  }
+
+  @Delete('templates/:templateId')
+  deleteReportTemplate(@Param('templateId') templateId: string, @CurrentUser() user: AuthUser) {
+    return this.service.deleteReportTemplate(user.id, templateId);
   }
 
   @Get('consolidated/companies')
