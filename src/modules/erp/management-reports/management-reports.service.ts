@@ -129,6 +129,22 @@ export class ManagementReportsService {
     }
     const chartType = dto.chart_type ?? 'BAR';
     if (!reportTemplateChartTypes.includes(chartType)) throw new BadRequestException('El tipo de gráfico no es válido');
+    const componentTypes = ['KPI', 'BAR', 'LINE', 'DONUT', 'TABLE'];
+    const componentDimensions = ['MONTH', 'DAY', 'PARTY', 'SELLER', 'CURRENCY', 'PAYMENT_STATE'];
+    const componentMetrics = ['TOTAL', 'PAID', 'PENDING', 'COUNT'];
+    const components = dto.components ?? [];
+    if (components.length > 24) throw new BadRequestException('El lienzo admite hasta 24 componentes');
+    for (const component of components) {
+      if (!component || typeof component !== 'object'
+        || typeof component.id !== 'string' || component.id.length > 64
+        || !componentTypes.includes(String(component.type))
+        || typeof component.title !== 'string' || component.title.length > 80
+        || !componentDimensions.includes(String(component.dimension))
+        || !componentMetrics.includes(String(component.metric))
+        || ![4, 6, 8, 12].includes(Number(component.width))) {
+        throw new BadRequestException('El lienzo contiene un componente no válido');
+      }
+    }
     const queryInput = dto.query ?? {};
     const allowedValues: Record<string, string[]> = {
       basis: ['SALES_ORDER', 'INVOICE', 'COLLECTION'],
@@ -180,6 +196,7 @@ export class ManagementReportsService {
       columns: dto.columns,
       visualizations,
       chart_type: chartType,
+      components,
       query,
       shared: dto.shared,
       created_at: previous?.created_at ?? new Date().toISOString(),

@@ -7,13 +7,16 @@ import { FiscalAuthorizationsService } from './fiscal-authorizations.service';
 export class FiscalAuthorizationsScheduler {
   private readonly logger = new Logger(FiscalAuthorizationsScheduler.name);
 
-  constructor(private readonly db: PrismaService, private readonly service: FiscalAuthorizationsService) {}
+  constructor(
+    private readonly db: PrismaService,
+    private readonly service: FiscalAuthorizationsService,
+  ) {}
 
   @Cron('0 9 * * *', { timeZone: 'America/Argentina/Buenos_Aires' })
   async refreshAllTenants() {
     const allowedTenants = (process.env.SCHEDULER_TENANT_DATABASES ?? '')
       .split(',')
-      .map(value => value.trim())
+      .map((value) => value.trim())
       .filter(Boolean);
     const companies = await this.db.getDefaultClient().companies.findMany({
       where: {
@@ -24,10 +27,7 @@ export class FiscalAuthorizationsScheduler {
     });
     for (const company of companies) {
       try {
-        await this.db.withTemporaryTenantClient(
-          company.schema_name!,
-          (client) => this.service.refreshAlerts(client),
-        );
+        await this.service.refreshAlerts(this.db.getTenantClient(company.schema_name!));
       } catch (error) {
         const code = (error as { code?: string })?.code;
         if (code === 'P2021' || code === 'P2022') {

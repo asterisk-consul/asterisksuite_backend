@@ -12,7 +12,7 @@ export class CheckNotificationScheduler {
   async sendCheckNotifications() {
     const allowedTenants = (process.env.SCHEDULER_TENANT_DATABASES ?? '')
       .split(',')
-      .map(value => value.trim())
+      .map((value) => value.trim())
       .filter(Boolean);
     const companies = await this.db.getDefaultClient().companies.findMany({
       where: {
@@ -41,7 +41,9 @@ export class CheckNotificationScheduler {
   private argentinaDate(daysToAdd = 0) {
     const value = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'America/Argentina/Buenos_Aires',
-      year: 'numeric', month: '2-digit', day: '2-digit',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     }).format(new Date());
     const date = new Date(`${value}T00:00:00.000Z`);
     date.setUTCDate(date.getUTCDate() + daysToAdd);
@@ -49,7 +51,7 @@ export class CheckNotificationScheduler {
   }
 
   private async notifyTenant(tenantDb: string, companyName: string) {
-    return this.db.withTemporaryTenantClient(tenantDb, async (prisma) => {
+    const prisma = this.db.getTenantClient(tenantDb);
     const today = this.argentinaDate();
     const upcomingChecks = await prisma.checks.findMany({
       where: {
@@ -83,7 +85,8 @@ export class CheckNotificationScheduler {
         bank_account: { select: { balance: true, active: true, currency_code: true } },
       },
     });
-    if (overdueChecks.length) this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) vencidos requieren una acción`);
+    if (overdueChecks.length)
+      this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) vencidos requieren una acción`);
     for (const check of overdueChecks) {
       if (!check.is_own) {
         this.logger.log(
@@ -99,9 +102,8 @@ export class CheckNotificationScheduler {
       );
       this.logger.log(
         `[${companyName}] Aviso operativo: cheque propio #${check.check_number} vencido; ` +
-        `${hasEnoughFunds ? 'fondos suficientes' : 'requiere revisión de cuenta o fondos'}`,
+          `${hasEnoughFunds ? 'fondos suficientes' : 'requiere revisión de cuenta o fondos'}`,
       );
     }
-    });
   }
 }

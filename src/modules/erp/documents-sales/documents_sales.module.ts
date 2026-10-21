@@ -33,6 +33,6 @@ import { DocumentPrintTemplatesService } from './document-print-templates.servic
     StockReservationsScheduler,
     DocumentPrintTemplatesService,
   ],
-  exports: [DocumentsSalesService, SalesCommercialFlowService, MySalesModule],
+  exports: [DocumentsSalesService, SalesCommercialFlowService, MySalesModule, StockReservationsService],
 })
 export class DocumentsSalesModule {}

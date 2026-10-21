@@ -10,6 +10,7 @@ type MemorySample = {
   heapTotalMb: number;
   externalMb: number;
   arrayBuffersMb: number;
+  nativeAndMappedMb: number;
   heapLimitMb: number;
   activeResources: Record<string, number>;
   prisma: ReturnType<PrismaService['getPoolDiagnostics']>;
@@ -22,6 +23,8 @@ export class MemoryDiagnosticsService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(MemoryDiagnosticsService.name);
   private timer?: NodeJS.Timeout;
   private samples: MemorySample[] = [];
+  private baseline?: MemorySample;
+  private lastRssWarningAt = 0;
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -62,16 +65,19 @@ export class MemoryDiagnosticsService implements OnModuleInit, OnModuleDestroy {
       heapTotalMb: mb(memory.heapTotal),
       externalMb: mb(memory.external),
       arrayBuffersMb: mb(memory.arrayBuffers),
+      nativeAndMappedMb: Math.max(0, mb(memory.rss - memory.heapTotal - memory.external)),
       heapLimitMb: mb(heap.heap_size_limit),
       activeResources: resources,
       prisma: this.prisma.getPoolDiagnostics(),
     };
 
     this.samples.push(sample);
+    this.baseline ??= sample;
     if (this.samples.length > 10) this.samples.shift();
 
     this.logger.log(JSON.stringify(sample));
     this.warnOnSustainedGrowth();
+    this.warnOnRssGrowth(sample);
   }
 
   private warnOnSustainedGrowth() {
@@ -88,5 +94,18 @@ export class MemoryDiagnosticsService implements OnModuleInit, OnModuleDestroy {
         `Heap en crecimiento sostenido: +${Math.round(growthMb * 10) / 10} MB en ${recent.length} muestras`,
       );
     }
+  }
+
+  private warnOnRssGrowth(sample: MemorySample) {
+    if (!this.baseline || sample.uptimeMinutes < 30) return;
+    const growthMb = sample.rssMb - this.baseline.rssMb;
+    const now = Date.now();
+    if (growthMb < 100 || now - this.lastRssWarningAt < 60 * 60 * 1000) return;
+
+    this.lastRssWarningAt = now;
+    this.logger.warn(
+      `RSS creció ${Math.round(growthMb * 10) / 10} MB desde el arranque; ` +
+      `heap=${sample.heapUsedMb} MB, memoria nativa/mapeada estimada=${sample.nativeAndMappedMb} MB`,
+    );
   }
 }

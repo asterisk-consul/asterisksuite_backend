@@ -33,6 +33,10 @@ export class SaveReportTemplateDto {
   @IsIn(reportTemplateChartTypes)
   chart_type?: typeof reportTemplateChartTypes[number];
 
+  @IsOptional()
+  @IsArray()
+  components?: Array<Record<string, unknown>>;
+
   @IsObject()
   query!: Record<string, unknown>;
 

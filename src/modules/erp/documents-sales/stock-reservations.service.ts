@@ -1,11 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@/generated/prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { requestContext } from '@/common/context/request-context';
 
 type Tx = any;
 
 @Injectable()
 export class StockReservationsService {
+  private readonly expirationCheckIntervalMs = Math.max(
+    60_000,
+    Number(process.env.STOCK_RESERVATIONS_EXPIRATION_CHECK_MS ?? 5 * 60 * 1000),
+  );
+  private readonly lastExpirationCheck = new Map<string, number>();
+  private readonly expirationChecksInFlight = new Map<string, Promise<number>>();
+
   constructor(private readonly db: PrismaService) {}
 
   private get prisma() {
@@ -28,9 +36,49 @@ export class StockReservationsService {
     `);
   }
 
+  /**
+   * Libera vencimientos usando el cliente ya abierto por la petición actual.
+   * Se limita por tenant para no consultar la base en cada lectura de stock.
+   */
+  async releaseExpiredForCurrentTenantIfDue(force = false) {
+    const tenantDb = requestContext.getStore()?.schema;
+    if (!tenantDb || tenantDb === 'public') return 0;
+
+    const now = Date.now();
+    const lastCheck = this.lastExpirationCheck.get(tenantDb) ?? 0;
+    if (!force && now - lastCheck < this.expirationCheckIntervalMs) return 0;
+
+    const running = this.expirationChecksInFlight.get(tenantDb);
+    if (running) return running;
+
+    const prisma = this.prisma;
+    const check = this.releaseExpiredForClient(prisma)
+      .then((released) => {
+        this.lastExpirationCheck.set(tenantDb, Date.now());
+        this.trimExpirationChecks();
+        return released;
+      })
+      .finally(() => this.expirationChecksInFlight.delete(tenantDb));
+
+    this.expirationChecksInFlight.set(tenantDb, check);
+    return check;
+  }
+
+  private trimExpirationChecks() {
+    if (this.lastExpirationCheck.size <= 64) return;
+    const oldest = [...this.lastExpirationCheck.entries()]
+      .sort(([, left], [, right]) => left - right)
+      .slice(0, this.lastExpirationCheck.size - 64);
+    for (const [tenantDb] of oldest) this.lastExpirationCheck.delete(tenantDb);
+  }
+
   private async resolveWarehouse(tx: Tx, productId: string, requested: string | null, quantity: Prisma.Decimal) {
     const realCandidates = await tx.warehouse_stock.findMany({
-      where: { product_id: productId, deleted_at: null, warehouses: { active: true, deleted_at: null, is_virtual: false } },
+      where: {
+        product_id: productId,
+        deleted_at: null,
+        warehouses: { active: true, deleted_at: null, is_virtual: false },
+      },
       orderBy: { quantity: 'desc' },
     });
     const realWithAvailability = realCandidates.filter((row: any) =>
@@ -48,9 +96,14 @@ export class StockReservationsService {
           where: { transit_warehouse_id: requested, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
           select: { id: true },
         });
-        if (!transitContainer) throw new BadRequestException('El depósito virtual seleccionado no corresponde a mercadería en tránsito activa');
+        if (!transitContainer)
+          throw new BadRequestException(
+            'El depósito virtual seleccionado no corresponde a mercadería en tránsito activa',
+          );
         if (realWithAvailability.length) {
-          throw new BadRequestException('No se puede reservar stock en tránsito mientras el producto tenga disponibilidad en un depósito real');
+          throw new BadRequestException(
+            'No se puede reservar stock en tránsito mientras el producto tenga disponibilidad en un depósito real',
+          );
         }
         return requested;
       }
@@ -69,10 +122,14 @@ export class StockReservationsService {
     if (enough) return enough.warehouse_id;
     if (realWithAvailability.length) return realWithAvailability[0].warehouse_id;
 
-    const transitWarehouseIds = (await tx.international_containers.findMany({
-      where: { transit_warehouse_id: { not: null }, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
-      select: { transit_warehouse_id: true },
-    })).map((container: any) => container.transit_warehouse_id).filter(Boolean);
+    const transitWarehouseIds = (
+      await tx.international_containers.findMany({
+        where: { transit_warehouse_id: { not: null }, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
+        select: { transit_warehouse_id: true },
+      })
+    )
+      .map((container: any) => container.transit_warehouse_id)
+      .filter(Boolean);
     if (!transitWarehouseIds.length) return null;
 
     const transitCandidates = await tx.warehouse_stock.findMany({
@@ -94,6 +151,7 @@ export class StockReservationsService {
   }
 
   async getSalesOrderAvailability(orderId: string) {
+    await this.releaseExpiredForCurrentTenantIfDue();
     const [order, settings] = await Promise.all([
       this.prisma.documents.findUnique({
         where: { id: orderId },
@@ -132,7 +190,9 @@ export class StockReservationsService {
       throw new BadRequestException('La disponibilidad detallada sólo corresponde a Órdenes de Venta');
     }
 
-    const productIds = [...new Set(order.document_items.map((item: any) => item.product_id).filter(Boolean))] as string[];
+    const productIds = [
+      ...new Set(order.document_items.map((item: any) => item.product_id).filter(Boolean)),
+    ] as string[];
     const stockRows = productIds.length
       ? await this.prisma.warehouse_stock.findMany({
           where: {
@@ -150,9 +210,9 @@ export class StockReservationsService {
         })
       : [];
 
-    const transitWarehouseIds = [...new Set(stockRows
-      .filter((row: any) => row.warehouses.is_virtual)
-      .map((row: any) => row.warehouse_id))] as string[];
+    const transitWarehouseIds = [
+      ...new Set(stockRows.filter((row: any) => row.warehouses.is_virtual).map((row: any) => row.warehouse_id)),
+    ] as string[];
     const containers = transitWarehouseIds.length
       ? await this.prisma.international_containers.findMany({
           where: {
@@ -171,9 +231,11 @@ export class StockReservationsService {
           },
         })
       : [];
-    const containerByWarehouse = new Map(containers
-      .filter((container: any) => container.transit_warehouse_id)
-      .map((container: any) => [container.transit_warehouse_id, container]));
+    const containerByWarehouse = new Map(
+      containers
+        .filter((container: any) => container.transit_warehouse_id)
+        .map((container: any) => [container.transit_warehouse_id, container]),
+    );
     const number = (value: unknown) => Number(value ?? 0);
 
     const items = order.document_items.map((item: any) => {
@@ -213,11 +275,12 @@ export class StockReservationsService {
             container_number: container?.container_number ?? null,
             status: container?.status ?? null,
             available: available(row),
-            arrival_date: container?.actual_arrival_date
-              ?? container?.estimated_arrival_date
-              ?? container?.operation?.actual_arrival_date
-              ?? container?.operation?.estimated_arrival_date
-              ?? null,
+            arrival_date:
+              container?.actual_arrival_date ??
+              container?.estimated_arrival_date ??
+              container?.operation?.actual_arrival_date ??
+              container?.operation?.estimated_arrival_date ??
+              null,
           };
         }),
       };
@@ -226,13 +289,15 @@ export class StockReservationsService {
     const withoutPhysicalStock = items.filter((item: any) => item.available_now <= 0).length;
     const withShortage = items.filter((item: any) => item.available_now < item.requested).length;
     const blocksConfirmation = Boolean(
-      settings.reserve_stock_on_order_confirmation
-      && items.some((item: any) => {
+      settings.reserve_stock_on_order_confirmation &&
+      items.some((item: any) => {
         const totalReservable = item.available_now + item.transit_available;
         if (totalReservable <= 0) return !settings.allow_backorder_without_stock;
-        return totalReservable < item.requested
-          && !settings.allow_partial_stock_reservation
-          && !settings.allow_backorder_without_stock;
+        return (
+          totalReservable < item.requested &&
+          !settings.allow_partial_stock_reservation &&
+          !settings.allow_backorder_without_stock
+        );
       }),
     );
 
@@ -267,7 +332,11 @@ export class StockReservationsService {
           },
         },
       }),
-      tx.sales_flow_settings.upsert({ where: { settings_key: 'default' }, update: {}, create: { settings_key: 'default' } }),
+      tx.sales_flow_settings.upsert({
+        where: { settings_key: 'default' },
+        update: {},
+        create: { settings_key: 'default' },
+      }),
     ]);
     if (!order || order.document_types?.category !== 'ORDER' || order.document_types.direction !== 1) return [];
     if (!settings.reserve_stock_on_order_confirmation) return [];
@@ -279,7 +348,12 @@ export class StockReservationsService {
       const productLabel = item.products?.sku
         ? `${item.products.name} (${item.products.sku})`
         : (item.products?.name ?? 'uno de los productos');
-      const warehouseId = await this.resolveWarehouse(tx, item.product_id, item.warehouse_id ?? order.warehouse_id, requested);
+      const warehouseId = await this.resolveWarehouse(
+        tx,
+        item.product_id,
+        item.warehouse_id ?? order.warehouse_id,
+        requested,
+      );
       if (!warehouseId) {
         if (settings.allow_backorder_without_stock) continue;
         throw new BadRequestException(`No hay stock físico ni en tránsito disponible para ${productLabel}`);
@@ -300,12 +374,20 @@ export class StockReservationsService {
             `Stock insuficiente para ${productLabel}: solicitado ${requested.toString()}, disponible ${available.toString()}`,
           );
         }
-        reserveQty = settings.allow_partial_stock_reservation ? Prisma.Decimal.max(available, 0) : new Prisma.Decimal(0);
+        reserveQty = settings.allow_partial_stock_reservation
+          ? Prisma.Decimal.max(available, 0)
+          : new Prisma.Decimal(0);
       }
       if (reserveQty.lessThanOrEqualTo(0)) continue;
 
       const existing = await tx.stock_reservations.findFirst({
-        where: { source_type: 'SALES_ORDER', source_id: order.id, source_item_id: item.id, status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] }, deleted_at: null },
+        where: {
+          source_type: 'SALES_ORDER',
+          source_id: order.id,
+          source_item_id: item.id,
+          status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] },
+          deleted_at: null,
+        },
       });
       if (existing) continue;
 
@@ -342,8 +424,11 @@ export class StockReservationsService {
       let remaining = new Prisma.Decimal(item.quantity);
       let reservations = await tx.stock_reservations.findMany({
         where: {
-          source_type: 'SALES_ORDER', source_id: remito.parent_document_id,
-          product_id: item.product_id, status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] }, deleted_at: null,
+          source_type: 'SALES_ORDER',
+          source_id: remito.parent_document_id,
+          product_id: item.product_id,
+          status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] },
+          deleted_at: null,
           ...(item.warehouse_id ? { warehouse_id: item.warehouse_id } : {}),
         },
         orderBy: { created_at: 'asc' },
@@ -351,8 +436,11 @@ export class StockReservationsService {
       if (!reservations.length && item.warehouse_id) {
         reservations = await tx.stock_reservations.findMany({
           where: {
-            source_type: 'SALES_ORDER', source_id: remito.parent_document_id,
-            product_id: item.product_id, status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] }, deleted_at: null,
+            source_type: 'SALES_ORDER',
+            source_id: remito.parent_document_id,
+            product_id: item.product_id,
+            status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] },
+            deleted_at: null,
           },
           orderBy: { created_at: 'asc' },
         });
@@ -376,7 +464,9 @@ export class StockReservationsService {
           data: { reservation_id: reservation.id, document_id: remito.id, quantity: consume, created_by: userId },
         });
         await tx.warehouse_stock.update({
-          where: { warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id } },
+          where: {
+            warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id },
+          },
           data: { reserved_quantity: { decrement: consume }, updated_at: new Date() },
         });
         if (!item.warehouse_id || item.warehouse_id !== reservation.warehouse_id) {
@@ -397,7 +487,9 @@ export class StockReservationsService {
       const reservation = allocation.reservation;
       const quantity = new Prisma.Decimal(allocation.quantity);
       const consumed = Prisma.Decimal.max(new Prisma.Decimal(reservation.quantity_consumed).minus(quantity), 0);
-      const pending = new Prisma.Decimal(reservation.quantity_reserved).minus(consumed).minus(reservation.quantity_released);
+      const pending = new Prisma.Decimal(reservation.quantity_reserved)
+        .minus(consumed)
+        .minus(reservation.quantity_released);
       await tx.stock_reservations.update({
         where: { id: reservation.id },
         data: {
@@ -407,24 +499,34 @@ export class StockReservationsService {
         },
       });
       await tx.warehouse_stock.update({
-        where: { warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id } },
+        where: {
+          warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id },
+        },
         data: { reserved_quantity: { increment: quantity }, updated_at: new Date() },
       });
       await tx.stock_reservation_allocations.update({
-        where: { id: allocation.id }, data: { status: 'REVERSED', reversed_at: new Date() },
+        where: { id: allocation.id },
+        data: { status: 'REVERSED', reversed_at: new Date() },
       });
     }
   }
 
   async releaseOrder(tx: Tx, orderId: string, userId: string) {
     const reservations = await tx.stock_reservations.findMany({
-      where: { source_type: 'SALES_ORDER', source_id: orderId, status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] }, deleted_at: null },
+      where: {
+        source_type: 'SALES_ORDER',
+        source_id: orderId,
+        status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] },
+        deleted_at: null,
+      },
     });
     for (const reservation of reservations) {
       const pending = this.pending(reservation);
       if (pending.greaterThan(0)) {
         await tx.warehouse_stock.update({
-          where: { warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id } },
+          where: {
+            warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id },
+          },
           data: { reserved_quantity: { decrement: pending }, updated_at: new Date() },
         });
       }
@@ -435,45 +537,83 @@ export class StockReservationsService {
     }
   }
 
-  list(warehouseId?: string) {
+  async list(warehouseId?: string) {
+    await this.releaseExpiredForCurrentTenantIfDue();
     return this.prisma.stock_reservations.findMany({
       where: { ...(warehouseId ? { warehouse_id: warehouseId } : {}), deleted_at: null },
-      include: { product: { select: { id: true, name: true, sku: true } }, warehouse: { select: { id: true, name: true } } },
+      include: {
+        product: { select: { id: true, name: true, sku: true } },
+        warehouse: { select: { id: true, name: true } },
+      },
       orderBy: { created_at: 'desc' },
     });
   }
 
-  async createManual(dto: { warehouse_id: string; product_id: string; quantity: number; reason: string; expires_at?: string; party_id?: string }, userId: string) {
+  async createManual(
+    dto: {
+      warehouse_id: string;
+      product_id: string;
+      quantity: number;
+      reason: string;
+      expires_at?: string;
+      party_id?: string;
+    },
+    userId: string,
+  ) {
+    await this.releaseExpiredForCurrentTenantIfDue();
     if (!dto.reason?.trim()) throw new BadRequestException('El motivo de la reserva es obligatorio');
-    return this.prisma.$transaction(async tx => {
+    return this.prisma.$transaction(async (tx) => {
       const quantity = new Prisma.Decimal(dto.quantity);
       if (quantity.lessThanOrEqualTo(0)) throw new BadRequestException('La cantidad debe ser mayor que cero');
-      const warehouse = await tx.warehouses.findFirst({ where: { id: dto.warehouse_id, active: true, deleted_at: null } });
+      const warehouse = await tx.warehouses.findFirst({
+        where: { id: dto.warehouse_id, active: true, deleted_at: null },
+      });
       if (!warehouse) throw new BadRequestException('El depósito no existe o está inactivo');
       if (warehouse.is_virtual) {
         const transitContainer = await tx.international_containers.findFirst({
-          where: { transit_warehouse_id: dto.warehouse_id, deleted_at: null, status: { notIn: ['DELIVERED', 'CLOSED'] } },
+          where: {
+            transit_warehouse_id: dto.warehouse_id,
+            deleted_at: null,
+            status: { notIn: ['DELIVERED', 'CLOSED'] },
+          },
           select: { id: true },
         });
-        if (!transitContainer) throw new BadRequestException('Solo se puede reservar un depósito virtual asociado a un contenedor activo');
+        if (!transitContainer)
+          throw new BadRequestException('Solo se puede reservar un depósito virtual asociado a un contenedor activo');
         const realStocks = await tx.warehouse_stock.findMany({
-          where: { product_id: dto.product_id, deleted_at: null, warehouses: { active: true, deleted_at: null, is_virtual: false } },
+          where: {
+            product_id: dto.product_id,
+            deleted_at: null,
+            warehouses: { active: true, deleted_at: null, is_virtual: false },
+          },
           select: { quantity: true, reserved_quantity: true },
         });
-        if (realStocks.some((row: any) => new Prisma.Decimal(row.quantity).minus(row.reserved_quantity).greaterThan(0))) {
-          throw new BadRequestException('El producto todavía tiene disponibilidad en un depósito real; no corresponde reservarlo en tránsito');
+        if (
+          realStocks.some((row: any) => new Prisma.Decimal(row.quantity).minus(row.reserved_quantity).greaterThan(0))
+        ) {
+          throw new BadRequestException(
+            'El producto todavía tiene disponibilidad en un depósito real; no corresponde reservarlo en tránsito',
+          );
         }
       }
       await this.lockStockRow(tx, dto.warehouse_id, dto.product_id);
-      const stock = await tx.warehouse_stock.findUnique({ where: { warehouse_id_product_id: { warehouse_id: dto.warehouse_id, product_id: dto.product_id } } });
+      const stock = await tx.warehouse_stock.findUnique({
+        where: { warehouse_id_product_id: { warehouse_id: dto.warehouse_id, product_id: dto.product_id } },
+      });
       if (!stock || new Prisma.Decimal(stock.quantity).minus(stock.reserved_quantity).lessThan(quantity)) {
         throw new BadRequestException('Stock disponible insuficiente para la reserva manual');
       }
       const reservation = await tx.stock_reservations.create({
         data: {
-          warehouse_id: dto.warehouse_id, product_id: dto.product_id, quantity_reserved: quantity,
-          reservation_type: 'MANUAL', source_type: 'MANUAL', party_id: dto.party_id,
-          reason: dto.reason.trim(), expires_at: dto.expires_at ? new Date(dto.expires_at) : null, created_by: userId,
+          warehouse_id: dto.warehouse_id,
+          product_id: dto.product_id,
+          quantity_reserved: quantity,
+          reservation_type: 'MANUAL',
+          source_type: 'MANUAL',
+          party_id: dto.party_id,
+          reason: dto.reason.trim(),
+          expires_at: dto.expires_at ? new Date(dto.expires_at) : null,
+          created_by: userId,
         },
       });
       await tx.warehouse_stock.update({
@@ -485,17 +625,23 @@ export class StockReservationsService {
   }
 
   async releaseManual(id: string, userId: string) {
-    return this.prisma.$transaction(async tx => {
-      const reservation = await tx.stock_reservations.findFirst({ where: { id, reservation_type: 'MANUAL', deleted_at: null } });
+    return this.prisma.$transaction(async (tx) => {
+      const reservation = await tx.stock_reservations.findFirst({
+        where: { id, reservation_type: 'MANUAL', deleted_at: null },
+      });
       if (!reservation) throw new NotFoundException('Reserva manual no encontrada');
-      if (!['ACTIVE', 'PARTIALLY_CONSUMED'].includes(reservation.status)) throw new BadRequestException('La reserva ya no está activa');
+      if (!['ACTIVE', 'PARTIALLY_CONSUMED'].includes(reservation.status))
+        throw new BadRequestException('La reserva ya no está activa');
       const pending = this.pending(reservation);
       await tx.warehouse_stock.update({
-        where: { warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id } },
+        where: {
+          warehouse_id_product_id: { warehouse_id: reservation.warehouse_id, product_id: reservation.product_id },
+        },
         data: { reserved_quantity: { decrement: pending }, updated_at: new Date() },
       });
       return tx.stock_reservations.update({
-        where: { id }, data: { quantity_released: { increment: pending }, status: 'RELEASED', updated_by: userId },
+        where: { id },
+        data: { quantity_released: { increment: pending }, status: 'RELEASED', updated_by: userId },
       });
     });
   }

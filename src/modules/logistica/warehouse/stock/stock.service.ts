@@ -6,12 +6,14 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { requestContext } from '@/common/context/request-context';
 import { EngineeringService } from '@/modules/master-data/products/engineering/engineering.service';
 import { randomUUID } from 'node:crypto';
+import { StockReservationsService } from '@/modules/erp/documents-sales/stock-reservations.service';
 
 @Injectable()
 export class StockService {
   constructor(
     private db: PrismaService,
     private readonly engineeringService: EngineeringService,
+    private readonly stockReservations: StockReservationsService,
   ) {}
 
   private collectProductionMaterials(
@@ -47,6 +49,7 @@ export class StockService {
   }
 
   async previewProduction(productId: string, materialWarehouseId: string, outputWarehouseId: string, quantity: number, variantId?: string) {
+    await this.stockReservations.releaseExpiredForCurrentTenantIfDue();
     if (!Number.isFinite(quantity) || quantity <= 0) {
       throw new BadRequestException('La cantidad a fabricar debe ser mayor que cero');
     }
@@ -192,6 +195,7 @@ export class StockService {
   }
 
   async getCommercialAvailability(filters: { search?: string; days?: number; page?: number; limit?: number }) {
+    await this.stockReservations.releaseExpiredForCurrentTenantIfDue();
     const days = Number.isFinite(filters.days) ? Math.min(Math.max(filters.days!, 0), 365) : 30;
     const page = Number.isFinite(filters.page) ? Math.max(filters.page!, 1) : 1;
     const limit = Number.isFinite(filters.limit) ? Math.min(Math.max(filters.limit!, 1), 100) : 25;
@@ -346,6 +350,7 @@ export class StockService {
   }
 
   async getStockByWarehouse(warehouseId: string) {
+    await this.stockReservations.releaseExpiredForCurrentTenantIfDue();
     return this.prisma.warehouse_stock.findMany({
       where: { warehouse_id: warehouseId },
       include: { products: true },
@@ -502,6 +507,7 @@ export class StockService {
   }
 
   async getStockByProduct(productId: string) {
+    await this.stockReservations.releaseExpiredForCurrentTenantIfDue();
     return this.prisma.warehouse_stock.findMany({
       where: { product_id: productId },
       include: {
