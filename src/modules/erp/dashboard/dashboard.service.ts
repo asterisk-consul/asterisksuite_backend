@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { SaveDashboardConfigDto } from './dto/save-dashboard-config.dto';
 @Injectable()
 export class DashboardService {
+  private readonly logger = new Logger(DashboardService.name);
+
   constructor(private db: PrismaService) {}
 
   private get prisma() {
@@ -94,6 +96,7 @@ export class DashboardService {
       hrVales,
       hrAccounts,
       warehouseStock,
+      replenishmentPolicies,
       receivableAccounts,
       costedProducts,
       currentAccountsData,
@@ -177,6 +180,37 @@ export class DashboardService {
       this.prisma.warehouse_stock.findMany({
         where: { deleted_at: null },
         select: { product_id: true, quantity: true, reserved_quantity: true },
+      }),
+      this.prisma.stock_replenishment_policies.findMany({
+        where: {
+          deleted_at: null,
+          active: true,
+          product: { is: { deleted_at: null, active: true, manages_stock: true } },
+          warehouse: { is: { deleted_at: null, active: true, is_virtual: false } },
+        },
+        select: {
+          product_id: true,
+          warehouse_id: true,
+          reorder_point: true,
+          target_stock: true,
+          lead_time_days: true,
+          product: {
+            select: {
+              warehouse_stock: {
+                where: { deleted_at: null },
+                select: {
+                  warehouse_id: true,
+                  quantity: true,
+                  reserved_quantity: true,
+                  warehouses: { select: { is_virtual: true, active: true, deleted_at: true } },
+                },
+              },
+            },
+          },
+        },
+      }).catch((error) => {
+        this.logger.warn(`No se pudo cargar el resumen de reposición: ${error?.message ?? error}`);
+        return null;
       }),
       // Por cobrar: circuito de ventas completo (cuentas corrientes de clientes).
       // Incluye órdenes cuando el circuito contabiliza OV, facturas, notas de
@@ -290,6 +324,74 @@ export class DashboardService {
     const uniqueProductIds = [...new Set(totalProductIds)];
     const costedCount = costedProducts.length;
 
+    // El resumen de reposición usa las mismas reglas que /stock/reposicion y
+    // solo considera políticas activas asociadas a depósitos físicos.
+    const activeReplenishmentPolicies = replenishmentPolicies ?? [];
+    let stockReplenishmentAvailable = replenishmentPolicies !== null;
+    const replenishmentPolicyCount = new Map<string, number>();
+    for (const policy of activeReplenishmentPolicies) {
+      replenishmentPolicyCount.set(policy.product_id, (replenishmentPolicyCount.get(policy.product_id) ?? 0) + 1);
+    }
+    const transitWarehouseIds = [...new Set(activeReplenishmentPolicies.flatMap(policy =>
+      policy.product.warehouse_stock.filter(row => row.warehouses.is_virtual).map(row => row.warehouse_id),
+    ))];
+    const transitContainers = transitWarehouseIds.length ? await this.prisma.international_containers.findMany({
+      where: { transit_warehouse_id: { in: transitWarehouseIds }, deleted_at: null },
+      select: {
+        transit_warehouse_id: true,
+        estimated_arrival_date: true,
+        actual_arrival_date: true,
+        operation: { select: { estimated_arrival_date: true, actual_arrival_date: true } },
+      },
+    }).catch((error) => {
+      stockReplenishmentAvailable = false;
+      this.logger.warn(`No se pudieron considerar los arribos del resumen de reposición: ${error?.message ?? error}`);
+      return null;
+    }) : [];
+    const transitByWarehouse = new Map<string, any>((transitContainers ?? [])
+      .filter(container => container.transit_warehouse_id)
+      .map(container => [container.transit_warehouse_id!, container] as [string, any]));
+    const replenishmentRows = activeReplenishmentPolicies.map(policy => {
+      const number = (value: unknown) => Number(value ?? 0);
+      const physical = policy.product.warehouse_stock.find(row => row.warehouse_id === policy.warehouse_id);
+      const availableNow = Math.max(number(physical?.quantity) - number(physical?.reserved_quantity), 0);
+      const horizon = new Date();
+      horizon.setDate(horizon.getDate() + policy.lead_time_days);
+      const transitRows = policy.product.warehouse_stock.filter(row =>
+        row.warehouses.is_virtual && row.warehouses.active && !row.warehouses.deleted_at,
+      );
+      const arrivingWithinLeadTime = transitRows.reduce((sum, row) => {
+        const container = transitByWarehouse.get(row.warehouse_id);
+        const arrival = container?.actual_arrival_date ?? container?.estimated_arrival_date
+          ?? container?.operation?.actual_arrival_date ?? container?.operation?.estimated_arrival_date;
+        return arrival && new Date(arrival) <= horizon
+          ? sum + Math.max(number(row.quantity) - number(row.reserved_quantity), 0)
+          : sum;
+      }, 0);
+      const assignedTransit = replenishmentPolicyCount.get(policy.product_id) === 1 ? arrivingWithinLeadTime : 0;
+      const projected = availableNow + assignedTransit;
+      const reorderPoint = number(policy.reorder_point);
+      const status = availableNow <= 0 ? 'CRITICAL'
+        : projected <= reorderPoint ? 'REORDER'
+          : availableNow <= reorderPoint && projected > reorderPoint ? 'COVERED'
+            : 'OK';
+      return {
+        productId: policy.product_id,
+        status,
+        suggested: Math.max(number(policy.target_stock) - projected, 0),
+      };
+    });
+    const actionRows = replenishmentRows.filter(row => row.status === 'CRITICAL' || row.status === 'REORDER');
+    const stockReplenishment = {
+      available: stockReplenishmentAvailable,
+      configuredLocations: activeReplenishmentPolicies.length,
+      actionProducts: new Set(actionRows.map(row => row.productId)).size,
+      criticalCount: replenishmentRows.filter(row => row.status === 'CRITICAL').length,
+      reorderCount: replenishmentRows.filter(row => row.status === 'REORDER').length,
+      coveredCount: replenishmentRows.filter(row => row.status === 'COVERED').length,
+      suggestedQuantity: actionRows.reduce((sum, row) => sum + row.suggested, 0),
+    };
+
     // Productos por uso (venta / compra)
     const usageCounts: Record<string, number> = Object.fromEntries(
       productsByUsage.map((g) => [String(g.usage_type), g._count.id]),
@@ -388,6 +490,7 @@ export class DashboardService {
         totalQuantity: warehouseStock.reduce((sum, s) => sum + Number(s.quantity), 0),
         totalReserved: warehouseStock.reduce((sum, s) => sum + Number(s.reserved_quantity), 0),
         lowStockCount: warehouseStock.filter(s => Number(s.quantity) < 5).length,
+        replenishment: stockReplenishment,
       },
       receivables,
       costing: {
@@ -429,7 +532,7 @@ export class DashboardService {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const [recentActivity, pendingDocuments, monthlyPayments, monthlyAmountResult] = await Promise.all([
+    const [recentActivity, pendingDocuments, pendingIntakes, monthlyPayments, monthlyAmountResult] = await Promise.all([
       this.prisma.audit_logs.findMany({
         where: { changed_by: userId },
         orderBy: { changed_at: 'desc' },
@@ -441,12 +544,47 @@ export class DashboardService {
           new_data: true,
         },
       }),
-      this.prisma.documents.count({
+      this.prisma.documents.findMany({
         where: {
-          created_by: userId,
           deleted_at: null,
-          status: { in: [0, 1] },
+          AND: [
+            { OR: [
+              { status: 0 },
+              { document_types: { category: 'INVOICE' }, status: 1 },
+              { document_types: { category: 'CREDIT_NOTE' }, status: 1 },
+              { document_types: { category: 'DEBIT_NOTE' }, status: 1 },
+              { document_types: { category: 'REMITO' }, status: 1 },
+              { document_types: { category: 'ORDER' }, status: { in: [1, 2, 3, 4] } },
+            ] },
+            { OR: [
+              { assigned_to: userId },
+              { assigned_to: null, created_by: userId },
+            ] },
+          ],
         },
+        orderBy: [{ date: 'asc' }, { created_at: 'asc' }],
+        select: {
+          id: true,
+          number: true,
+          date: true,
+          status: true,
+          descrip: true,
+          created_at: true,
+          document_types: { select: { description: true, category: true, direction: true } },
+          business_parties: { select: { name: true } },
+        },
+      }),
+      this.prisma.intake_records.findMany({
+        where: {
+          deleted_at: null,
+          completed_at: null,
+          OR: [
+            { assigned_to: userId, status: { in: ['SENT', 'IN_PROGRESS'] } },
+            { assigned_to: null, created_by: userId, status: 'DRAFT' },
+          ],
+        },
+        orderBy: { created_at: 'asc' },
+        select: { id: true, title: true, notes: true, suggested_type: true, status: true, created_at: true },
       }),
       this.prisma.payments.count({
         where: {
@@ -479,6 +617,46 @@ export class DashboardService {
       DELETE: 'Eliminó',
     };
 
+    const pendingItems = [
+      ...pendingDocuments.map((document) => {
+        const category = document.document_types.category;
+        const isPurchase = document.document_types.direction < 0;
+        const statusLabels: Record<string, Record<number, string>> = {
+          QUOTE: { 0: 'Borrador', 1: 'Enviado' },
+          ORDER: { 0: 'Borrador', 1: 'Aprobada', 2: 'En preparación', 3: 'Lista para despacho', 4: 'Entrega parcial' },
+          REMITO: { 0: 'Borrador', 1: 'En tránsito' },
+          INVOICE: { 0: 'Borrador', 1: 'Pendiente de confirmación' },
+          CREDIT_NOTE: { 0: 'Borrador', 1: 'Pendiente de confirmación' },
+          DEBIT_NOTE: { 0: 'Borrador', 1: 'Pendiente de confirmación' },
+        };
+        const to = isPurchase
+          ? category === 'ORDER'
+            ? `/erp/purchases/orders/${document.id}`
+            : category === 'REMITO'
+              ? `/erp/purchases/remitos/${document.id}`
+              : `/erp/purchases/purchases-documents/${document.id}`
+          : `/erp/sales/${document.id}`;
+        return {
+          id: document.id,
+          kind: 'DOCUMENT' as const,
+          title: `${document.document_types.description} · N.º ${document.number}`,
+          detail: [document.business_parties?.name, document.descrip].filter(Boolean).join(' · '),
+          status: statusLabels[category ?? '']?.[document.status] ?? (document.status === 0 ? 'Borrador' : 'Pendiente'),
+          date: document.date.toISOString(),
+          to,
+        };
+      }),
+      ...pendingIntakes.map((record) => ({
+        id: record.id,
+        kind: 'CAPTURE' as const,
+        title: record.title || 'Comprobante por completar',
+        detail: record.notes || 'Captura de comprobante',
+        status: record.status === 'DRAFT' ? 'Borrador' : record.status === 'IN_PROGRESS' ? 'En proceso' : 'Recibido',
+        date: record.created_at.toISOString(),
+        to: `/erp/treasury/intake?record=${record.id}`,
+      })),
+    ].sort((a, b) => a.date.localeCompare(b.date));
+
     return {
       recentActivity: recentActivity.map((log) => ({
         table: tableLabels[log.table_name] || log.table_name,
@@ -486,7 +664,8 @@ export class DashboardService {
         date: log.changed_at.toISOString(),
         detail: log.new_data ? (log.new_data as any).number || (log.new_data as any).description || '' : '',
       })),
-      pendingDocuments,
+      pendingDocuments: pendingItems.length,
+      pendingItems,
       monthlyPayments,
       monthlyAmount: Number(monthlyAmountResult._sum.amount ?? 0),
     };

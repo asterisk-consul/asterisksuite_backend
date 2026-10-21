@@ -218,7 +218,11 @@ export class ReplenishmentService {
       || query.include_unconfigured === 'true'
       || query.status === 'UNCONFIGURED';
     if (includeUnconfigured) rows.push(...unconfiguredRows);
-    if (query.status) rows = rows.filter(row => row.status === query.status);
+    if (query.status === 'ACTION') {
+      rows = rows.filter(row => row.status === 'CRITICAL' || row.status === 'REORDER');
+    } else if (query.status) {
+      rows = rows.filter(row => row.status === query.status);
+    }
     const total = rows.length;
     return { data: rows.slice((page - 1) * limit, page * limit), meta: { total, page, limit, pages: Math.ceil(total / limit), summary } };
   }

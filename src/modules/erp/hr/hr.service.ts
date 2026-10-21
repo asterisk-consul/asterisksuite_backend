@@ -29,15 +29,16 @@ export class HrService {
     asOf?: Date,
     sellerId?: string,
     participationRate = 100,
+    dbClient: any = this.prisma,
   ) {
-    const document = await this.prisma.documents.findUnique({
+    const document = await dbClient.documents.findUnique({
       where: { id: documentId },
       select: { commercial_operation_id: true },
     });
 
     let baseAmount = 0;
     if (commissionBase === 'PAID') {
-      const applications = await this.prisma.payment_documents.findMany({
+      const applications = await dbClient.payment_documents.findMany({
         where: {
           deleted_at: null,
           payment: {
@@ -54,7 +55,7 @@ export class HrService {
       const paidGross = applications.reduce((sum, item) => sum + Number(item.amount_applied), 0);
       baseAmount = ovTotal > 0 ? ovSubtotal * Math.min(paidGross / ovTotal, 1) : 0;
     } else {
-      const invoices = await this.prisma.documents.findMany({
+      const invoices = await dbClient.documents.findMany({
         where: {
           parent_document_id: documentId,
           deleted_at: null,
@@ -70,22 +71,27 @@ export class HrService {
       );
     }
 
-    const details = await this.prisma.hr_vale_commission_details.findMany({
+    const details = await dbClient.hr_vale_commission_details.findMany({
       where: {
         document_id: documentId,
         ...(sellerId ? { seller_id: sellerId } : {}),
-        hr_vale: { deleted_at: null, status: { not: 'CANCELLED' } },
+        hr_vale: {
+          deleted_at: null,
+          status: { not: 'CANCELLED' },
+          ...(asOf ? { date: { lte: asOf } } : {}),
+        },
       },
       select: { commission_amount: true },
     });
-    const settledAmount = details.reduce((sum, detail) => sum + Number(detail.commission_amount), 0);
-    const accruedAmount = (((baseAmount * participationRate) / 100) * commissionRate) / 100;
+    const round2 = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
+    const settledAmount = round2(details.reduce((sum, detail) => sum + Number(detail.commission_amount), 0));
+    const accruedAmount = round2((((baseAmount * participationRate) / 100) * commissionRate) / 100);
 
     return {
       baseAmount,
       accruedAmount,
       settledAmount,
-      pendingAmount: Math.max(0, accruedAmount - settledAmount),
+      pendingAmount: round2(Math.max(0, accruedAmount - settledAmount)),
     };
   }
 
@@ -836,7 +842,11 @@ export class HrService {
       where: {
         document: {
           deleted_at: null,
-          date: { gte: startDate, lte: endDate },
+          date: { lte: endDate },
+          OR: [
+            { date: { gte: startDate } },
+            { sales_commission_assignments: { some: { active: true } } },
+          ],
         },
       },
       include: {
@@ -855,13 +865,14 @@ export class HrService {
       orderBy: [{ document: { date: 'desc' } }, { document: { created_at: 'desc' } }],
     });
 
-    // Una OV queda bloqueada cuando ya fue liquidada en al menos un vale vigente.
+    // Una OV con vales vigentes conserva bloqueadas sus asignaciones, pero eso no
+    // significa que la comisión esté completamente liquidada.
     const documentIds = orders.map((order) => order.document.id);
     const settledDetails = documentIds.length
       ? await this.prisma.hr_vale_commission_details.findMany({
           where: {
             document_id: { in: documentIds },
-            hr_vale: { deleted_at: null, status: { not: 'CANCELLED' } },
+            hr_vale: { deleted_at: null, status: { not: 'CANCELLED' }, date: { lte: endDate } },
           },
           select: { document_id: true },
         })
@@ -874,20 +885,22 @@ export class HrService {
     for (const order of orders) {
       const document = order.document;
       const total = Number(document.total);
-      const paid = Number(document.paid_amount ?? 0);
 
       // Comisión devengada/liquidada agregando las asignaciones de la OV.
       let commissionAccrued = 0;
       let commissionSettled = 0;
       let commissionBaseAmount = 0;
+      let collectedAmount = Number(document.paid_amount ?? 0);
+      let hasCollectionCommission = false;
       const assignments: any[] = [];
       for (const assignment of document.sales_commission_assignments) {
+        const commissionBase = assignment.commission_base ?? assignment.seller.commission_base ?? 'INVOICED';
         const metrics = await this.getCommissionMetrics(
           document.id,
           Number(document.subtotal),
           total,
           Number(assignment.commission_rate),
-          assignment.commission_base,
+          commissionBase,
           endDate,
           assignment.seller_id,
           Number(assignment.participation_rate),
@@ -895,20 +908,37 @@ export class HrService {
         commissionAccrued += metrics.accruedAmount;
         commissionSettled += metrics.settledAmount;
         commissionBaseAmount += (metrics.baseAmount * Number(assignment.participation_rate)) / 100;
+        if (commissionBase === 'PAID') {
+          hasCollectionCommission = true;
+          const subtotal = Number(document.subtotal);
+          if (subtotal > 0) {
+            collectedAmount = Math.max(collectedAmount, (metrics.baseAmount / subtotal) * total);
+          }
+        }
         assignments.push({
           id: assignment.id,
           seller_id: assignment.seller_id,
           seller_name: `${assignment.seller.first_name} ${assignment.seller.last_name}`.trim(),
           participation_rate: Number(assignment.participation_rate),
           commission_rate: Number(assignment.commission_rate),
-          commission_base: assignment.commission_base,
+          commission_base: commissionBase,
           accrued_amount: round2(metrics.accruedAmount),
           settled_amount: round2(metrics.settledAmount),
-          pending_amount: round2(Math.max(0, metrics.accruedAmount - metrics.settledAmount)),
+          pending_amount: round2(metrics.pendingAmount),
           base_amount: round2((metrics.baseAmount * Number(assignment.participation_rate)) / 100),
         });
       }
-      const commissionPending = Math.max(0, commissionAccrued - commissionSettled);
+      commissionAccrued = round2(commissionAccrued);
+      commissionSettled = round2(commissionSettled);
+      commissionBaseAmount = round2(commissionBaseAmount);
+      const commissionPending = round2(Math.max(0, commissionAccrued - commissionSettled));
+
+      const isCurrentMonth = document.date >= startDate;
+      const collectedPercentage = total > 0 ? Math.min(100, (collectedAmount / total) * 100) : 0;
+      const hasUnpaidCollectionCommission = hasCollectionCommission && total > 0 && collectedAmount < total - 0.005;
+      // En el arrastre incluimos deuda comisionable y también cobros pendientes:
+      // si la comisión actual ya se liquidó, un cobro posterior puede devengar más.
+      if (!isCurrentMonth && commissionPending <= 0.005 && !hasUnpaidCollectionCommission) continue;
 
       result.push({
         document_id: document.id,
@@ -918,8 +948,8 @@ export class HrService {
         document_type: document.document_types.code ?? document.document_types.description,
         subtotal: Number(document.subtotal),
         total,
-        paid_amount: paid,
-        paid_percentage: total > 0 ? Math.min(100, (paid / total) * 100) : 0,
+        paid_amount: collectedAmount,
+        paid_percentage: collectedPercentage,
         currency_code: document.currency_code,
         assignments,
         assignment_status: assignments.length ? 'ASSIGNED' : 'UNASSIGNED',
@@ -927,7 +957,10 @@ export class HrService {
         commission_settled: round2(commissionSettled),
         commission_pending: round2(commissionPending),
         commission_base_amount: round2(commissionBaseAmount),
-        settled: settledIds.has(document.id),
+        settled: commissionAccrued > 0.005 && commissionPending <= 0.005,
+        assignment_locked: settledIds.has(document.id),
+        is_carryover: !isCurrentMonth,
+        has_unpaid_collection_commission: hasUnpaidCollectionCommission,
       });
     }
     return result;
@@ -1129,122 +1162,125 @@ export class HrService {
 
   async generateCommissionVale(sellerId: string, month: string, userId: string) {
     const { endDate } = this.parseMonth(month);
+    // Serializable evita que dos solicitudes simultáneas liquiden dos veces
+    // el mismo incremento de comisión.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const vale = await this.prisma.$transaction(async (tx) => {
+          // Se consideran asignaciones de cualquier fecha. Así, una cobranza de
+          // este mes puede generar comisión sobre una OV anterior.
+          const assignments = await tx.sales_commission_assignments.findMany({
+            where: {
+              seller_id: sellerId,
+              active: true,
+              document: { deleted_at: null, date: { lte: endDate } },
+            },
+            include: {
+              seller: {
+                select: { id: true, first_name: true, last_name: true, party_id: true, commission_base: true },
+              },
+              document: {
+                select: { id: true, number: true, subtotal: true, total: true, date: true, currency_code: true },
+              },
+            },
+          });
 
-    // Una asignación puede liquidarse en varios vales a medida que factura o cobra.
-    const assignments = await this.prisma.sales_commission_assignments.findMany({
-      where: {
-        seller_id: sellerId,
-        active: true,
-        document: { deleted_at: null },
-      },
-      include: {
-        seller: {
-          select: { id: true, first_name: true, last_name: true, party_id: true, commission_base: true },
-        },
-        document: {
-          select: { id: true, number: true, subtotal: true, total: true, date: true, currency_code: true },
-        },
-      },
-    });
+          const commissionRows: Array<{
+            assignment: (typeof assignments)[number];
+            base: string;
+            baseAmount: number;
+            pendingAmount: number;
+          }> = [];
+          for (const assignment of assignments) {
+            const rate = Number(assignment.commission_rate);
+            const base = assignment.commission_base ?? assignment.seller.commission_base ?? 'INVOICED';
+            const metrics = await this.getCommissionMetrics(
+              assignment.document_id,
+              Number(assignment.document.subtotal),
+              Number(assignment.document.total),
+              rate,
+              base,
+              endDate,
+              assignment.seller_id,
+              Number(assignment.participation_rate),
+              tx,
+            );
+            if (metrics.pendingAmount > 0.005) {
+              commissionRows.push({ assignment, base, baseAmount: metrics.baseAmount, pendingAmount: metrics.pendingAmount });
+            }
+          }
 
-    const commissionRows: Array<{
-      assignment: (typeof assignments)[number];
-      base: string;
-      baseAmount: number;
-      pendingAmount: number;
-    }> = [];
-    for (const assignment of assignments) {
-      const rate = Number(assignment.commission_rate);
-      const base = assignment.commission_base ?? assignment.seller.commission_base ?? 'INVOICED';
-      const metrics = await this.getCommissionMetrics(
-        assignment.document_id,
-        Number(assignment.document.subtotal),
-        Number(assignment.document.total),
-        rate,
-        base,
-        endDate,
-        assignment.seller_id,
-        Number(assignment.participation_rate),
-      );
-      if (metrics.pendingAmount > 0.005) {
-        commissionRows.push({ assignment, base, baseAmount: metrics.baseAmount, pendingAmount: metrics.pendingAmount });
+          if (!commissionRows.length) {
+            throw new BadRequestException('No hay comisión nueva pendiente para este vendedor al cierre del período');
+          }
+
+          const seller = commissionRows[0].assignment.seller;
+          const partyId = seller.party_id;
+          if (!partyId) throw new BadRequestException('El vendedor no tiene una party asociada');
+
+          const totalCommission = commissionRows.reduce((sum, row) => sum + row.pendingAmount, 0);
+          const lastVale = await tx.hr_vales.findFirst({
+            where: { party_id: partyId },
+            orderBy: { number: 'desc' },
+          });
+          const valeNumber = (lastVale?.number ?? 0) + 1;
+          const [yearStr, monthStr] = month.split('-');
+          const valeDate = new Date(parseInt(yearStr), parseInt(monthStr) - 1, 1);
+
+          const vale = await tx.hr_vales.create({
+            data: {
+              number: valeNumber,
+              party_id: partyId,
+              party_type: 'EMPLOYEE',
+              type: 'COMISION',
+              amount: totalCommission,
+              currency_code: commissionRows[0].assignment.document.currency_code ?? 'ARS',
+              date: valeDate,
+              description: `Comisiones ${month} - ${seller.first_name} ${seller.last_name}`,
+              status: 'DRAFT',
+              created_by: userId,
+            },
+            include: { party: { select: { id: true, name: true, tax_id: true } } },
+          });
+
+          for (const row of commissionRows) {
+            const assignment = row.assignment;
+            const rate = Number(assignment.commission_rate);
+            await tx.hr_vale_commission_details.create({
+              data: {
+                hr_vale_id: vale.id,
+                document_id: assignment.document_id,
+                seller_id: sellerId,
+                subtotal: (row.baseAmount * Number(assignment.participation_rate)) / 100,
+                commission_rate: rate,
+                commission_amount: row.pendingAmount,
+                commission_base: row.base,
+                date: assignment.document.date,
+              },
+            });
+
+            // Mantiene el último vale como dato informativo; el acumulado real
+            // sale del historial de detalles y permite futuras liquidaciones.
+            await tx.orden_venta_documents.update({
+              where: { document_id: assignment.document_id },
+              data: { commission_settled_at: new Date(), commission_vale_id: vale.id },
+            });
+          }
+
+          return vale;
+        }, { isolationLevel: 'Serializable' });
+
+        this.logger.log(
+          `Vale COMISION #${vale.number} generado para vendedor ${sellerId} - Total: ${vale.amount}`,
+        );
+        return vale;
+      } catch (error: any) {
+        if (error?.code === 'P2034' && attempt === 0) continue;
+        throw error;
       }
     }
 
-    if (!commissionRows.length)
-      throw new BadRequestException('No hay comisiones pendientes para este vendedor en este mes');
-
-    const seller = commissionRows[0].assignment.seller;
-    const partyId = seller.party_id;
-
-    if (!partyId) {
-      throw new BadRequestException('El vendedor no tiene una party asociada');
-    }
-
-    // Calculate total
-    const totalCommission = commissionRows.reduce((sum, row) => sum + row.pendingAmount, 0);
-
-    // Create vale
-    const lastVale = await this.prisma.hr_vales.findFirst({
-      where: { party_id: partyId },
-      orderBy: { number: 'desc' },
-    });
-    const valeNumber = (lastVale?.number ?? 0) + 1;
-
-    const [yearStr, monthStr] = month.split('-');
-    const valeDate = new Date(parseInt(yearStr), parseInt(monthStr) - 1, 1);
-
-    const vale = await this.prisma.hr_vales.create({
-      data: {
-        number: valeNumber,
-        party_id: partyId,
-        party_type: 'EMPLOYEE',
-        type: 'COMISION',
-        amount: totalCommission,
-        currency_code: commissionRows[0].assignment.document.currency_code ?? 'ARS',
-        date: valeDate,
-        description: `Comisiones ${month} - ${seller.first_name} ${seller.last_name}`,
-        status: 'DRAFT',
-        created_by: userId,
-      },
-      include: {
-        party: { select: { id: true, name: true, tax_id: true } },
-      },
-    });
-
-    // Create commission detail lines
-    for (const row of commissionRows) {
-      const assignment = row.assignment;
-      const rate = Number(assignment.commission_rate);
-
-      await this.prisma.hr_vale_commission_details.create({
-        data: {
-          hr_vale_id: vale.id,
-          document_id: assignment.document_id,
-          seller_id: sellerId,
-          subtotal: (row.baseAmount * Number(assignment.participation_rate)) / 100,
-          commission_rate: rate,
-          commission_amount: row.pendingAmount,
-          commission_base: row.base,
-          date: assignment.document.date,
-        },
-      });
-
-      // Conserva la última liquidación como dato informativo; no bloquea futuras parciales.
-      await this.prisma.orden_venta_documents.update({
-        where: { document_id: assignment.document_id },
-        data: {
-          commission_settled_at: new Date(),
-          commission_vale_id: vale.id,
-        },
-      });
-    }
-
-    this.logger.log(
-      `Vale COMISION #${valeNumber} generado para ${seller.first_name} ${seller.last_name} - Total: ${totalCommission}`,
-    );
-
-    return vale;
+    throw new BadRequestException('No se pudo liquidar la comisión; intentá nuevamente');
   }
 
   // ══════════════════════════════════════════════════════════

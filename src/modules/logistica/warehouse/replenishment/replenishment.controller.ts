@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequireAnyPermission, RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { ReplenishmentService } from './replenishment.service';
 import { UpsertReplenishmentPolicyDto } from './dto/upsert-replenishment-policy.dto';
 
@@ -26,6 +26,6 @@ export class ReplenishmentController {
   remove(@Param('id') id: string) { return this.service.remove(id); }
 
   @Get('report')
-  @RequirePermissions('stock.replenishment.read')
+  @RequireAnyPermission('stock.replenishment.read', 'products.read')
   report(@Query() query: Record<string, string>) { return this.service.report(query); }
 }
