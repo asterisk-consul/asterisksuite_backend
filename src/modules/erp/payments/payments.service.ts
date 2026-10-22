@@ -1480,7 +1480,11 @@ export class PaymentsService {
   }
 
   private async createCurrentAccountEntry(payment: any, userId: string, tx?: any, entryType?: string) {
-    const type = entryType ?? payment.type;
+    // EXPENSE is a payment workflow type, but it is not part of the
+    // AccountEntryType enum used by current_account_entries. In a party's
+    // current account it must be recorded as the corresponding outgoing PAYMENT.
+    const sourceType = entryType ?? payment.type;
+    const type = sourceType === 'EXPENSE' ? 'PAYMENT' : sourceType;
 
     await this.currentAccountsService.addEntry(
       {

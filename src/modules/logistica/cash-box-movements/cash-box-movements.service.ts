@@ -177,9 +177,9 @@ export class CashBoxMovementsService {
 
     return this.prisma.cash_box_movements.findMany({
       where,
-      // Keep the ledger in posting order so each balance_after follows the
-      // previous movement. `date` can be backdated or shared by many entries.
-      orderBy: [{ created_at: 'asc' }, { id: 'asc' }],
+      // Show the most recently created movement first. `date` can be backdated
+      // or shared by many entries, so it is not a reliable posting-order key.
+      orderBy: [{ created_at: 'desc' }, { id: 'desc' }],
       include: {
         employee: { select: { id: true, first_name: true, last_name: true } },
       },
