@@ -95,6 +95,8 @@ export const ModelName = {
   tax_rules: 'tax_rules',
   tax_rule_brackets: 'tax_rule_brackets',
   withholdings: 'withholdings',
+  withholding_remittances: 'withholding_remittances',
+  withholding_tax_applications: 'withholding_tax_applications',
   withholding_allocations: 'withholding_allocations',
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
@@ -1155,6 +1157,7 @@ export const WithholdingsScalarFieldEnum = {
   modification_reason: 'modification_reason',
   date: 'date',
   observations: 'observations',
+  remittance_id: 'remittance_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -1164,6 +1167,54 @@ export const WithholdingsScalarFieldEnum = {
 } as const
 
 export type WithholdingsScalarFieldEnum = (typeof WithholdingsScalarFieldEnum)[keyof typeof WithholdingsScalarFieldEnum]
+
+
+export const Withholding_remittancesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  tax_type: 'tax_type',
+  tax_regime_code: 'tax_regime_code',
+  jurisdiction_id: 'jurisdiction_id',
+  period_key: 'period_key',
+  vep_number: 'vep_number',
+  vep_amount: 'vep_amount',
+  currency_code: 'currency_code',
+  due_date: 'due_date',
+  status: 'status',
+  paid_at: 'paid_at',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Withholding_remittancesScalarFieldEnum = (typeof Withholding_remittancesScalarFieldEnum)[keyof typeof Withholding_remittancesScalarFieldEnum]
+
+
+export const Withholding_tax_applicationsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  withholding_id: 'withholding_id',
+  tax_type: 'tax_type',
+  tax_period: 'tax_period',
+  application_date: 'application_date',
+  amount: 'amount',
+  declaration_reference: 'declaration_reference',
+  notes: 'notes',
+  status: 'status',
+  reversed_at: 'reversed_at',
+  reversal_reason: 'reversal_reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  reversed_by: 'reversed_by'
+} as const
+
+export type Withholding_tax_applicationsScalarFieldEnum = (typeof Withholding_tax_applicationsScalarFieldEnum)[keyof typeof Withholding_tax_applicationsScalarFieldEnum]
 
 
 export const Withholding_allocationsScalarFieldEnum = {
@@ -3333,6 +3384,7 @@ export const PaymentsScalarFieldEnum = {
   confirmed_at: 'confirmed_at',
   confirmed_by: 'confirmed_by',
   payment_date: 'payment_date',
+  withholding_remittance_id: 'withholding_remittance_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

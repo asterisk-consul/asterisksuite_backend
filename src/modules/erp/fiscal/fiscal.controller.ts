@@ -13,6 +13,8 @@ import {
   UpdateTaxRuleDto,
 } from './dto/fiscal.dto'
 import { CalculateWithholdingsDto } from './dto/calculate-withholdings.dto'
+import { CreateWithholdingRemittanceDto } from './dto/create-withholding-remittance.dto'
+import { CreateWithholdingTaxApplicationDto, ReverseWithholdingTaxApplicationDto } from './dto/create-withholding-tax-application.dto'
 
 @Controller('erp/fiscal')
 @UseGuards(JwtAuthGuard)
@@ -62,15 +64,138 @@ export class FiscalController {
         jurisdiction: { select: { id: true, code: true, name: true } },
         concept: { select: { id: true, code: true, name: true } },
         payment: { select: { id: true, number: true, type: true, date: true } },
+        remittance: { select: { id: true, vep_number: true, tax_regime_code: true, period_key: true, status: true, vep_amount: true, currency_code: true, due_date: true, paid_at: true } },
         allocations: {
           include: { document: { select: { id: true, number: true } } },
         },
+        tax_applications: { orderBy: { application_date: 'desc' } },
       },
       take: 500,
     })
 
     const total = withholdings.reduce((s, w) => s + w.withheld_amount.toNumber(), 0)
     return { items: withholdings, total_withheld: total, count: withholdings.length }
+  }
+
+  @Get('withholdings/remittances')
+  async getWithholdingRemittances() {
+    const remittances = await this.prisma.withholding_remittances.findMany({
+      where: { deleted_at: null }, orderBy: { created_at: 'desc' }, take: 500,
+      include: {
+        jurisdiction: { select: { id: true, code: true, name: true } },
+        _count: { select: { withholdings: true } },
+        payments: { where: { deleted_at: null }, select: { id: true, number: true, status: true, date: true }, orderBy: { created_at: 'desc' }, take: 3 },
+      },
+    })
+    return remittances.map(({ _count, ...remittance }) => ({ ...remittance, withholdings_count: _count.withholdings }))
+  }
+
+  @Get('withholdings/remittances/:id')
+  async getWithholdingRemittance(@Param('id') id: string) {
+    const remittance = await this.prisma.withholding_remittances.findFirst({
+      where: { id, deleted_at: null },
+      include: {
+        jurisdiction: { select: { id: true, code: true, name: true } },
+        _count: { select: { withholdings: true } },
+        withholdings: { where: { deleted_at: null }, select: { id: true, date: true, tax_type: true, withheld_amount: true, currency_code: true, business_party: { select: { id: true, name: true, tax_id: true } } }, orderBy: { date: 'asc' }, take: 500 },
+        payments: { where: { deleted_at: null }, select: { id: true, number: true, status: true, date: true }, orderBy: { created_at: 'desc' }, take: 3 },
+      },
+    })
+    if (!remittance) throw new NotFoundException('VEP no encontrado')
+    const { _count, ...data } = remittance
+    return { ...data, withholdings_count: _count.withholdings }
+  }
+
+  @Post('withholdings/remittances')
+  async createWithholdingRemittance(@Body() dto: CreateWithholdingRemittanceDto, @CurrentUser() user: AuthUser) {
+    const companyId = getCurrentCompanyId()
+    if (!companyId) throw new BadRequestException('No se pudo resolver la empresa del contexto')
+    const ids = [...new Set(dto.withholding_ids)]
+    if (ids.length !== dto.withholding_ids.length) throw new BadRequestException('Hay retenciones repetidas en la selección')
+    const selected = await this.prisma.withholdings.findMany({
+      where: { id: { in: ids }, deleted_at: null, remittance_id: null, direction: 'PRACTICADA', status: { in: ['APPLIED', 'CERTIFIED'] }, payment: { status: { in: ['CONFIRMED', 'PAID'] } } },
+      select: { id: true, tax_type: true, jurisdiction_id: true, currency_code: true, date: true, withheld_amount: true },
+      take: 201,
+    })
+    if (selected.length !== ids.length) throw new BadRequestException('Solo podés asociar retenciones practicadas confirmadas que todavía no estén vinculadas a un VEP')
+    const first = selected[0]
+    if (selected.some(row => row.tax_type !== first.tax_type || row.jurisdiction_id !== first.jurisdiction_id || row.currency_code !== first.currency_code || row.date.toISOString().slice(0, 7) !== first.date.toISOString().slice(0, 7))) {
+      throw new BadRequestException('Un VEP debe agrupar retenciones del mismo impuesto, jurisdicción, período y moneda')
+    }
+    if (dto.currency_code.toUpperCase() !== first.currency_code.toUpperCase()) throw new BadRequestException('La moneda del VEP debe coincidir con la moneda de las retenciones')
+    const total = selected.reduce((sum, row) => sum + Number(row.withheld_amount), 0)
+    if (dto.vep_amount + 0.01 < total) throw new BadRequestException(`El importe del VEP (${dto.vep_amount}) no puede ser menor que las retenciones seleccionadas (${total.toFixed(2)})`)
+    const periodKey = first.date.toISOString().slice(0, 7)
+    return this.prisma.$transaction(async tx => {
+      const remittance = await tx.withholding_remittances.create({ data: {
+        company_id: companyId, tax_type: first.tax_type, jurisdiction_id: first.jurisdiction_id,
+        period_key: periodKey, vep_number: dto.vep_number.trim(), tax_regime_code: dto.tax_regime_code?.trim() || null,
+        vep_amount: dto.vep_amount, currency_code: dto.currency_code.toUpperCase(), due_date: dto.due_date ? new Date(dto.due_date) : null,
+        notes: dto.notes ?? null, created_by: user.id,
+      } })
+      const linked = await tx.withholdings.updateMany({ where: { id: { in: ids }, remittance_id: null }, data: { remittance_id: remittance.id, updated_by: user.id } })
+      if (linked.count !== ids.length) throw new BadRequestException('Una o más retenciones ya fueron asociadas a otro VEP')
+      return remittance
+    })
+  }
+
+  @Post('withholdings/:id/tax-applications')
+  async applySufferedWithholding(@Param('id') id: string, @Body() dto: CreateWithholdingTaxApplicationDto, @CurrentUser() user: AuthUser) {
+    const companyId = getCurrentCompanyId()
+    if (!companyId) throw new BadRequestException('No se pudo resolver la empresa del contexto')
+
+    return this.prisma.$transaction(async tx => {
+      // Serialize concurrent applications against the same withholding so its available credit cannot go negative.
+      const locked = await tx.$queryRaw<Array<{ id: string }>>`SELECT id FROM tenant.withholdings WHERE id = ${id}::uuid AND company_id = ${companyId}::uuid AND deleted_at IS NULL FOR UPDATE`
+      if (!locked.length) throw new NotFoundException('Retención sufrida no encontrada')
+
+      const withholding = await tx.withholdings.findUnique({
+        where: { id },
+        include: { tax_applications: { where: { status: 'APPLIED' }, select: { amount: true } } },
+      })
+      if (!withholding || withholding.direction !== 'SUFRIDA' || !['APPLIED', 'CERTIFIED'].includes(withholding.status)) {
+        throw new BadRequestException('Solo se pueden imputar retenciones sufridas aplicadas o certificadas')
+      }
+
+      const applied = withholding.tax_applications.reduce((sum, application) => sum + Number(application.amount), 0)
+      const available = Number(withholding.withheld_amount) - applied
+      if (dto.amount > available + 0.001) {
+        throw new BadRequestException(`El importe supera el crédito disponible (${available.toFixed(2)} ${withholding.currency_code})`)
+      }
+
+      return tx.withholding_tax_applications.create({ data: {
+        company_id: companyId,
+        withholding_id: id,
+        tax_type: withholding.tax_type,
+        tax_period: dto.tax_period,
+        application_date: new Date(dto.application_date),
+        amount: dto.amount,
+        declaration_reference: dto.declaration_reference?.trim() || null,
+        notes: dto.notes?.trim() || null,
+        created_by: user.id,
+      } })
+    }, { isolationLevel: 'ReadCommitted', timeout: 10_000 })
+  }
+
+  @Post('withholding-tax-applications/:applicationId/reverse')
+  async reverseSufferedWithholdingApplication(
+    @Param('applicationId') applicationId: string,
+    @Body() dto: ReverseWithholdingTaxApplicationDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const companyId = getCurrentCompanyId()
+    if (!companyId) throw new BadRequestException('No se pudo resolver la empresa del contexto')
+
+    return this.prisma.$transaction(async tx => {
+      const application = await tx.withholding_tax_applications.findFirst({ where: { id: applicationId, company_id: companyId } })
+      if (!application) throw new NotFoundException('Imputación fiscal no encontrada')
+      await tx.$queryRaw`SELECT id FROM tenant.withholdings WHERE id = ${application.withholding_id}::uuid FOR UPDATE`
+      if (application.status !== 'APPLIED') throw new BadRequestException('La imputación ya fue revertida')
+      return tx.withholding_tax_applications.update({
+        where: { id: applicationId },
+        data: { status: 'REVERSED', reversed_at: new Date(), reversal_reason: dto.reason?.trim() || null, reversed_by: user.id, updated_by: user.id },
+      })
+    }, { isolationLevel: 'ReadCommitted', timeout: 10_000 })
   }
 
   @Get('iibb-register')

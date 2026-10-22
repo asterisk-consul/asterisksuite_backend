@@ -428,6 +428,8 @@ export const ModelName = {
   tax_rules: 'tax_rules',
   tax_rule_brackets: 'tax_rule_brackets',
   withholdings: 'withholdings',
+  withholding_remittances: 'withholding_remittances',
+  withholding_tax_applications: 'withholding_tax_applications',
   withholding_allocations: 'withholding_allocations',
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
@@ -568,7 +570,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3825,6 +3827,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.withholdingsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.WithholdingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    withholding_remittances: {
+      payload: Prisma.$withholding_remittancesPayload<ExtArgs>
+      fields: Prisma.withholding_remittancesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.withholding_remittancesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.withholding_remittancesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>
+        }
+        findFirst: {
+          args: Prisma.withholding_remittancesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.withholding_remittancesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>
+        }
+        findMany: {
+          args: Prisma.withholding_remittancesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>[]
+        }
+        create: {
+          args: Prisma.withholding_remittancesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>
+        }
+        createMany: {
+          args: Prisma.withholding_remittancesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.withholding_remittancesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>[]
+        }
+        delete: {
+          args: Prisma.withholding_remittancesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>
+        }
+        update: {
+          args: Prisma.withholding_remittancesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>
+        }
+        deleteMany: {
+          args: Prisma.withholding_remittancesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.withholding_remittancesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.withholding_remittancesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>[]
+        }
+        upsert: {
+          args: Prisma.withholding_remittancesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_remittancesPayload>
+        }
+        aggregate: {
+          args: Prisma.Withholding_remittancesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWithholding_remittances>
+        }
+        groupBy: {
+          args: Prisma.withholding_remittancesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_remittancesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.withholding_remittancesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_remittancesCountAggregateOutputType> | number
+        }
+      }
+    }
+    withholding_tax_applications: {
+      payload: Prisma.$withholding_tax_applicationsPayload<ExtArgs>
+      fields: Prisma.withholding_tax_applicationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.withholding_tax_applicationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.withholding_tax_applicationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>
+        }
+        findFirst: {
+          args: Prisma.withholding_tax_applicationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.withholding_tax_applicationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>
+        }
+        findMany: {
+          args: Prisma.withholding_tax_applicationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>[]
+        }
+        create: {
+          args: Prisma.withholding_tax_applicationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>
+        }
+        createMany: {
+          args: Prisma.withholding_tax_applicationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.withholding_tax_applicationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>[]
+        }
+        delete: {
+          args: Prisma.withholding_tax_applicationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>
+        }
+        update: {
+          args: Prisma.withholding_tax_applicationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.withholding_tax_applicationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.withholding_tax_applicationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.withholding_tax_applicationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.withholding_tax_applicationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$withholding_tax_applicationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Withholding_tax_applicationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWithholding_tax_applications>
+        }
+        groupBy: {
+          args: Prisma.withholding_tax_applicationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_tax_applicationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.withholding_tax_applicationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Withholding_tax_applicationsCountAggregateOutputType> | number
         }
       }
     }
@@ -14034,6 +14184,7 @@ export const WithholdingsScalarFieldEnum = {
   modification_reason: 'modification_reason',
   date: 'date',
   observations: 'observations',
+  remittance_id: 'remittance_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -14043,6 +14194,54 @@ export const WithholdingsScalarFieldEnum = {
 } as const
 
 export type WithholdingsScalarFieldEnum = (typeof WithholdingsScalarFieldEnum)[keyof typeof WithholdingsScalarFieldEnum]
+
+
+export const Withholding_remittancesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  tax_type: 'tax_type',
+  tax_regime_code: 'tax_regime_code',
+  jurisdiction_id: 'jurisdiction_id',
+  period_key: 'period_key',
+  vep_number: 'vep_number',
+  vep_amount: 'vep_amount',
+  currency_code: 'currency_code',
+  due_date: 'due_date',
+  status: 'status',
+  paid_at: 'paid_at',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Withholding_remittancesScalarFieldEnum = (typeof Withholding_remittancesScalarFieldEnum)[keyof typeof Withholding_remittancesScalarFieldEnum]
+
+
+export const Withholding_tax_applicationsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  withholding_id: 'withholding_id',
+  tax_type: 'tax_type',
+  tax_period: 'tax_period',
+  application_date: 'application_date',
+  amount: 'amount',
+  declaration_reference: 'declaration_reference',
+  notes: 'notes',
+  status: 'status',
+  reversed_at: 'reversed_at',
+  reversal_reason: 'reversal_reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  reversed_by: 'reversed_by'
+} as const
+
+export type Withholding_tax_applicationsScalarFieldEnum = (typeof Withholding_tax_applicationsScalarFieldEnum)[keyof typeof Withholding_tax_applicationsScalarFieldEnum]
 
 
 export const Withholding_allocationsScalarFieldEnum = {
@@ -16212,6 +16411,7 @@ export const PaymentsScalarFieldEnum = {
   confirmed_at: 'confirmed_at',
   confirmed_by: 'confirmed_by',
   payment_date: 'payment_date',
+  withholding_remittance_id: 'withholding_remittance_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -17895,6 +18095,8 @@ export type GlobalOmitConfig = {
   tax_rules?: Prisma.tax_rulesOmit
   tax_rule_brackets?: Prisma.tax_rule_bracketsOmit
   withholdings?: Prisma.withholdingsOmit
+  withholding_remittances?: Prisma.withholding_remittancesOmit
+  withholding_tax_applications?: Prisma.withholding_tax_applicationsOmit
   withholding_allocations?: Prisma.withholding_allocationsOmit
   hr_accounts?: Prisma.hr_accountsOmit
   hr_account_entries?: Prisma.hr_account_entriesOmit

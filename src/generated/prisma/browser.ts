@@ -239,6 +239,16 @@ export type tax_rule_brackets = Prisma.tax_rule_bracketsModel
  */
 export type withholdings = Prisma.withholdingsModel
 /**
+ * Model withholding_remittances
+ *
+ */
+export type withholding_remittances = Prisma.withholding_remittancesModel
+/**
+ * Model withholding_tax_applications
+ *
+ */
+export type withholding_tax_applications = Prisma.withholding_tax_applicationsModel
+/**
  * Model withholding_allocations
  * 
  */

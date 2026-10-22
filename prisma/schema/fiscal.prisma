@@ -19,10 +19,11 @@ model tax_jurisdictions {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  iibb_registrations    business_party_iibb_registrations[]
-  company_jurisdictions company_tax_jurisdictions[]
-  tax_rules             tax_rules[]
-  withholdings          withholdings[]
+  iibb_registrations      business_party_iibb_registrations[]
+  company_jurisdictions   company_tax_jurisdictions[]
+  tax_rules               tax_rules[]
+  withholdings            withholdings[]
+  withholding_remittances withholding_remittances[]
 
   @@schema("tenant")
 }
@@ -222,6 +223,7 @@ model withholdings {
   modification_reason    String?              @db.Text
   date                   DateTime             @db.Date
   observations           String?              @db.Text
+  remittance_id          String?              @db.Uuid
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -230,16 +232,79 @@ model withholdings {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  business_party business_parties          @relation(fields: [business_party_id], references: [id], onDelete: NoAction)
-  payment        payments?                 @relation(fields: [payment_id], references: [id], onDelete: NoAction)
-  jurisdiction   tax_jurisdictions?        @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
-  concept        withholding_concepts?     @relation(fields: [withholding_concept_id], references: [id], onDelete: NoAction)
-  allocations    withholding_allocations[]
+  business_party   business_parties               @relation(fields: [business_party_id], references: [id], onDelete: NoAction)
+  payment          payments?                      @relation(fields: [payment_id], references: [id], onDelete: NoAction)
+  jurisdiction     tax_jurisdictions?             @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
+  concept          withholding_concepts?          @relation(fields: [withholding_concept_id], references: [id], onDelete: NoAction)
+  allocations      withholding_allocations[]
+  tax_applications withholding_tax_applications[]
+  remittance       withholding_remittances?       @relation(fields: [remittance_id], references: [id], onDelete: SetNull)
 
   @@index([business_party_id, tax_type])
   @@index([payment_id])
   @@index([date])
   @@index([direction, status])
+  @@index([remittance_id])
+  @@schema("tenant")
+}
+
+// VEP informado manualmente desde ARCA. El pago bancario se registra como pago de tesorería.
+model withholding_remittances {
+  id              String    @id @default(uuid()) @db.Uuid
+  company_id      String    @db.Uuid
+  tax_type        String    @db.VarChar(30)
+  tax_regime_code String?   @db.VarChar(30)
+  jurisdiction_id String?   @db.Uuid
+  period_key      String    @db.VarChar(7)
+  vep_number      String    @db.VarChar(100)
+  vep_amount      Decimal   @db.Decimal(15, 2)
+  currency_code   String    @default("ARS") @db.VarChar(10)
+  due_date        DateTime? @db.Date
+  status          String    @default("REGISTERED") @db.VarChar(20)
+  paid_at         DateTime? @db.Date
+  notes           String?   @db.Text
+  created_at      DateTime  @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at      DateTime?
+  created_by      String?   @db.Uuid
+  updated_by      String?   @db.Uuid
+  deleted_by      String?   @db.Uuid
+
+  jurisdiction tax_jurisdictions? @relation(fields: [jurisdiction_id], references: [id], onDelete: NoAction)
+  withholdings withholdings[]
+  payments     payments[]
+
+  @@unique([vep_number])
+  @@index([company_id, status, period_key])
+  @@index([tax_type, jurisdiction_id, period_key])
+  @@schema("tenant")
+}
+
+// Imputación manual de una retención sufrida a un período fiscal.
+// Se conserva el historial y se revierte cambiando estado, nunca borrando el registro.
+model withholding_tax_applications {
+  id                    String    @id @default(uuid()) @db.Uuid
+  company_id            String    @db.Uuid
+  withholding_id        String    @db.Uuid
+  tax_type              String    @db.VarChar(30)
+  tax_period            String    @db.VarChar(7)
+  application_date      DateTime  @db.Date
+  amount                Decimal   @db.Decimal(15, 2)
+  declaration_reference String?   @db.VarChar(100)
+  notes                 String?   @db.Text
+  status                String    @default("APPLIED") @db.VarChar(20)
+  reversed_at           DateTime? @db.Timestamp(6)
+  reversal_reason       String?   @db.Text
+  created_at            DateTime  @default(now()) @db.Timestamp(6)
+  updated_at            DateTime? @updatedAt @db.Timestamp(6)
+  created_by            String?   @db.Uuid
+  updated_by            String?   @db.Uuid
+  reversed_by           String?   @db.Uuid
+
+  withholding withholdings @relation(fields: [withholding_id], references: [id], onDelete: NoAction)
+
+  @@index([company_id, tax_type, tax_period, status])
+  @@index([withholding_id, status])
   @@schema("tenant")
 }
 

@@ -1,8 +1,8 @@
-import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested, Min, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PaymentDocumentDto {
-  @IsString()
+  @IsUUID()
   document_id!: string;
 
   @IsNumber()
@@ -139,6 +139,10 @@ export class PaymentBankChargeDto {
 }
 
 export class CreatePaymentDto {
+  @IsUUID()
+  @IsOptional()
+  withholding_remittance_id?: string;
+
   @IsEnum(['PAYMENT', 'COLLECTION', 'EXPENSE'] as const)
   type!: string;
 

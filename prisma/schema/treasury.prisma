@@ -480,29 +480,29 @@ model cash_box_user_roles {
 }
 
 model cash_box_transfers {
-  id                String            @id @default(uuid()) @db.Uuid
-  session_id        String?           @db.Uuid
-  source_type       String            @db.VarChar(20)
-  source_id         String            @db.Uuid
-  source_company_id String?           @db.Uuid
-  source_company_name String?         @db.VarChar(255)
-  source_name       String?           @db.VarChar(255)
-  dest_type         String            @db.VarChar(20)
-  dest_id           String            @db.Uuid
-  dest_company_id   String?           @db.Uuid
-  dest_company_name String?           @db.VarChar(255)
-  dest_name         String?           @db.VarChar(255)
-  amount            Decimal           @db.Decimal(15, 2)
-  currency_code     String            @db.VarChar(10)
-  exchange_rate     Decimal?          @db.Decimal(18, 6)
-  rate_type         CurrencyRateType?
-  converted_amount  Decimal?          @db.Decimal(15, 2)
-  description       String?           @db.VarChar(255)
-  reference         String?           @db.VarChar(100)
-  transfer_type     String            @db.VarChar(20)
-  status            String            @default("pending") @db.VarChar(20)
-  record_side       String            @default("source") @db.VarChar(20)
-  execution_error   String?           @db.VarChar(500)
+  id                  String            @id @default(uuid()) @db.Uuid
+  session_id          String?           @db.Uuid
+  source_type         String            @db.VarChar(20)
+  source_id           String            @db.Uuid
+  source_company_id   String?           @db.Uuid
+  source_company_name String?           @db.VarChar(255)
+  source_name         String?           @db.VarChar(255)
+  dest_type           String            @db.VarChar(20)
+  dest_id             String            @db.Uuid
+  dest_company_id     String?           @db.Uuid
+  dest_company_name   String?           @db.VarChar(255)
+  dest_name           String?           @db.VarChar(255)
+  amount              Decimal           @db.Decimal(15, 2)
+  currency_code       String            @db.VarChar(10)
+  exchange_rate       Decimal?          @db.Decimal(18, 6)
+  rate_type           CurrencyRateType?
+  converted_amount    Decimal?          @db.Decimal(15, 2)
+  description         String?           @db.VarChar(255)
+  reference           String?           @db.VarChar(100)
+  transfer_type       String            @db.VarChar(20)
+  status              String            @default("pending") @db.VarChar(20)
+  record_side         String            @default("source") @db.VarChar(20)
+  execution_error     String?           @db.VarChar(500)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -522,29 +522,30 @@ model cash_box_transfers {
 // ─── PAGOS Y COBROS ─────────────────────────────────────
 
 model payments {
-  id               String            @id @default(uuid()) @db.Uuid
-  number           Int
-  type             PaymentType
-  date             DateTime          @db.Date
-  party_id         String?           @db.Uuid
-  party_type       String?           @db.VarChar(20)
-  payment_method   PaymentMethod
-  amount           Decimal           @db.Decimal(15, 2)
-  currency_code    String            @db.VarChar(10)
-  exchange_rate    Decimal?          @db.Decimal(18, 6)
-  rate_type        CurrencyRateType?
-  converted_amount Decimal?          @db.Decimal(15, 2)
-  exchange_note    String?           @db.VarChar(255)
-  description      String?           @db.VarChar(255)
-  reference        String?           @db.VarChar(100)
-  bank_account_id  String?           @db.Uuid
-  cash_box_id      String?           @db.Uuid
-  account_id       String?           @db.Uuid
-  status           PaymentStatus     @default(DRAFT)
-  payment_mode     PaymentMode       @default(NORMAL)
-  confirmed_at     DateTime?
-  confirmed_by     String?           @db.Uuid
-  payment_date     DateTime?         @db.Date
+  id                        String            @id @default(uuid()) @db.Uuid
+  number                    Int
+  type                      PaymentType
+  date                      DateTime          @db.Date
+  party_id                  String?           @db.Uuid
+  party_type                String?           @db.VarChar(20)
+  payment_method            PaymentMethod
+  amount                    Decimal           @db.Decimal(15, 2)
+  currency_code             String            @db.VarChar(10)
+  exchange_rate             Decimal?          @db.Decimal(18, 6)
+  rate_type                 CurrencyRateType?
+  converted_amount          Decimal?          @db.Decimal(15, 2)
+  exchange_note             String?           @db.VarChar(255)
+  description               String?           @db.VarChar(255)
+  reference                 String?           @db.VarChar(100)
+  bank_account_id           String?           @db.Uuid
+  cash_box_id               String?           @db.Uuid
+  account_id                String?           @db.Uuid
+  status                    PaymentStatus     @default(DRAFT)
+  payment_mode              PaymentMode       @default(NORMAL)
+  confirmed_at              DateTime?
+  confirmed_by              String?           @db.Uuid
+  payment_date              DateTime?         @db.Date
+  withholding_remittance_id String?           @db.Uuid
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -566,6 +567,7 @@ model payments {
   bank_charges                     payment_bank_charges[]
   cash_box_movements               cash_box_movements[]
   withholdings                     withholdings[]
+  withholding_remittance           withholding_remittances?           @relation(fields: [withholding_remittance_id], references: [id], onDelete: NoAction)
   international_operation_payments international_operation_payments[]
 
   @@unique([number])
@@ -573,6 +575,7 @@ model payments {
   @@index([date])
   @@index([payment_mode])
   @@index([payment_mode, status])
+  @@index([withholding_remittance_id])
   @@schema("tenant")
 }
 

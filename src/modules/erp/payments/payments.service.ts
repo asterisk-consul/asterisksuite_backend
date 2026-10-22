@@ -58,6 +58,18 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async create(dto: CreatePaymentDto, userId: string) {
+    if (dto.withholding_remittance_id) {
+      if (dto.type !== 'PAYMENT' || dto.payment_method !== 'BANK_TRANSFER' || dto.party_id || dto.documents?.length || dto.obligations?.length || dto.withholdings?.length) {
+        throw new BadRequestException('Un VEP se registra como pago bancario independiente, sin tercero, facturas ni retenciones nuevas')
+      }
+      const remittance = await this.prisma.withholding_remittances.findFirst({ where: { id: dto.withholding_remittance_id, deleted_at: null } })
+      if (!remittance || remittance.status !== 'REGISTERED') throw new BadRequestException('El VEP no existe o ya fue pagado')
+      if (Math.abs(Number(remittance.vep_amount) - dto.amount) > 0.01 || remittance.currency_code.toUpperCase() !== dto.currency_code.toUpperCase()) {
+        throw new BadRequestException('El importe y la moneda del pago deben coincidir con el VEP')
+      }
+      const activePayment = await this.prisma.payments.findFirst({ where: { withholding_remittance_id: remittance.id, deleted_at: null, status: { in: ['DRAFT', 'CONFIRMED', 'PAID'] } }, select: { id: true } })
+      if (activePayment) throw new BadRequestException('Este VEP ya tiene un pago en curso')
+    }
     if (dto.obligations?.length && dto.type !== 'PAYMENT') {
       throw new BadRequestException('Los servicios e impuestos pendientes solo pueden asociarse a un pago');
     }
@@ -203,6 +215,7 @@ export class PaymentsService {
           bank_account_id: dto.bank_account_id,
           cash_box_id: dto.cash_box_id,
           account_id: dto.account_id,
+          withholding_remittance_id: dto.withholding_remittance_id,
           status: 'DRAFT',
           created_by: userId,
         },
@@ -411,6 +424,12 @@ export class PaymentsService {
     if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden confirmar pagos en borrador');
     }
+    if (payment.withholding_remittance_id) {
+      const remittance = await this.prisma.withholding_remittances.findFirst({ where: { id: payment.withholding_remittance_id, deleted_at: null } })
+      if (!remittance || remittance.status !== 'REGISTERED' || Math.abs(Number(remittance.vep_amount) - Number(payment.amount)) > 0.01 || remittance.currency_code.toUpperCase() !== payment.currency_code.toUpperCase()) {
+        throw new BadRequestException('El VEP ya no está disponible o los datos del pago no coinciden')
+      }
+    }
 
     const checkCount =
       payment.payment_method === 'CHECK' ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
@@ -610,6 +629,7 @@ export class PaymentsService {
               date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
             },
             userId,
+            tx,
           );
         }
         await tx.withholdings.updateMany({
@@ -619,6 +639,13 @@ export class PaymentsService {
       }
 
       // Update status
+      if (payment.withholding_remittance_id) {
+        const updated = await tx.withholding_remittances.updateMany({
+          where: { id: payment.withholding_remittance_id, status: 'REGISTERED', deleted_at: null },
+          data: { status: 'PAID', paid_at: payment.date, updated_by: userId },
+        })
+        if (updated.count !== 1) throw new BadRequestException('El VEP fue pagado por otro movimiento o dejó de estar disponible')
+      }
       return tx.payments.update({
         where: { id },
         data: {
@@ -629,7 +656,7 @@ export class PaymentsService {
           updated_by: userId,
         },
       });
-    });
+    }, { timeout: 15_000 });
 
     const operationIds = [
       ...new Set(
@@ -723,6 +750,7 @@ export class PaymentsService {
         updated_by: userId,
       },
     });
+    if (payment.withholding_remittance_id) await this.prisma.withholding_remittances.updateMany({ where: { id: payment.withholding_remittance_id, status: 'PAID' }, data: { status: 'REGISTERED', paid_at: null, updated_by: userId } })
     await this.refreshPaymentOperations(id);
     return rejected;
   }
@@ -773,6 +801,7 @@ export class PaymentsService {
         updated_by: userId,
       },
     });
+    if (payment.withholding_remittance_id) await this.prisma.withholding_remittances.updateMany({ where: { id: payment.withholding_remittance_id, status: 'PAID' }, data: { status: 'REGISTERED', paid_at: null, updated_by: userId } })
     await this.refreshPaymentOperations(id);
     return reversed;
   }
