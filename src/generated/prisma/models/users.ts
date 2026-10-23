@@ -256,6 +256,7 @@ export type usersWhereInput = {
   deleted_by?: Prisma.UuidNullableFilter<"users"> | string | null
   refreshTokens?: Prisma.Refresh_tokensListRelationFilter
   companyUsers?: Prisma.Company_usersListRelationFilter
+  tablePreferences?: Prisma.User_table_preferencesListRelationFilter
 }
 
 export type usersOrderByWithRelationInput = {
@@ -275,6 +276,7 @@ export type usersOrderByWithRelationInput = {
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokens?: Prisma.refresh_tokensOrderByRelationAggregateInput
   companyUsers?: Prisma.company_usersOrderByRelationAggregateInput
+  tablePreferences?: Prisma.user_table_preferencesOrderByRelationAggregateInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -297,6 +299,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   deleted_by?: Prisma.UuidNullableFilter<"users"> | string | null
   refreshTokens?: Prisma.Refresh_tokensListRelationFilter
   companyUsers?: Prisma.Company_usersListRelationFilter
+  tablePreferences?: Prisma.User_table_preferencesListRelationFilter
 }, "id" | "email">
 
 export type usersOrderByWithAggregationInput = {
@@ -356,6 +359,7 @@ export type usersCreateInput = {
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -375,6 +379,7 @@ export type usersUncheckedCreateInput = {
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersUpdateInput = {
@@ -394,6 +399,7 @@ export type usersUpdateInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -413,6 +419,7 @@ export type usersUncheckedUpdateInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -554,6 +561,20 @@ export type usersUpdateOneRequiredWithoutCompanyUsersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutCompanyUsersInput, Prisma.usersUpdateWithoutCompanyUsersInput>, Prisma.usersUncheckedUpdateWithoutCompanyUsersInput>
 }
 
+export type usersCreateNestedOneWithoutTablePreferencesInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutTablePreferencesInput, Prisma.usersUncheckedCreateWithoutTablePreferencesInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutTablePreferencesInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutTablePreferencesNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutTablePreferencesInput, Prisma.usersUncheckedCreateWithoutTablePreferencesInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutTablePreferencesInput
+  upsert?: Prisma.usersUpsertWithoutTablePreferencesInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTablePreferencesInput, Prisma.usersUpdateWithoutTablePreferencesInput>, Prisma.usersUncheckedUpdateWithoutTablePreferencesInput>
+}
+
 export type usersCreateWithoutRefreshTokensInput = {
   id?: string
   name: string
@@ -570,6 +591,7 @@ export type usersCreateWithoutRefreshTokensInput = {
   updated_by?: string | null
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutRefreshTokensInput = {
@@ -588,6 +610,7 @@ export type usersUncheckedCreateWithoutRefreshTokensInput = {
   updated_by?: string | null
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutRefreshTokensInput = {
@@ -622,6 +645,7 @@ export type usersUpdateWithoutRefreshTokensInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutRefreshTokensInput = {
@@ -640,6 +664,7 @@ export type usersUncheckedUpdateWithoutRefreshTokensInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutCompanyUsersInput = {
@@ -658,6 +683,7 @@ export type usersCreateWithoutCompanyUsersInput = {
   updated_by?: string | null
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutCompanyUsersInput = {
@@ -676,6 +702,7 @@ export type usersUncheckedCreateWithoutCompanyUsersInput = {
   updated_by?: string | null
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutCompanyUsersInput = {
@@ -710,6 +737,7 @@ export type usersUpdateWithoutCompanyUsersInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutCompanyUsersInput = {
@@ -728,6 +756,99 @@ export type usersUncheckedUpdateWithoutCompanyUsersInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutTablePreferencesInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutTablePreferencesInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutTablePreferencesInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutTablePreferencesInput, Prisma.usersUncheckedCreateWithoutTablePreferencesInput>
+}
+
+export type usersUpsertWithoutTablePreferencesInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutTablePreferencesInput, Prisma.usersUncheckedUpdateWithoutTablePreferencesInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutTablePreferencesInput, Prisma.usersUncheckedCreateWithoutTablePreferencesInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutTablePreferencesInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutTablePreferencesInput, Prisma.usersUncheckedUpdateWithoutTablePreferencesInput>
+}
+
+export type usersUpdateWithoutTablePreferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutTablePreferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -738,11 +859,13 @@ export type usersUncheckedUpdateWithoutCompanyUsersInput = {
 export type UsersCountOutputType = {
   refreshTokens: number
   companyUsers: number
+  tablePreferences: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | UsersCountOutputTypeCountRefreshTokensArgs
   companyUsers?: boolean | UsersCountOutputTypeCountCompanyUsersArgs
+  tablePreferences?: boolean | UsersCountOutputTypeCountTablePreferencesArgs
 }
 
 /**
@@ -769,6 +892,13 @@ export type UsersCountOutputTypeCountCompanyUsersArgs<ExtArgs extends runtime.Ty
   where?: Prisma.company_usersWhereInput
 }
 
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountTablePreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.user_table_preferencesWhereInput
+}
+
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -787,6 +917,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   deleted_by?: boolean
   refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
   companyUsers?: boolean | Prisma.users$companyUsersArgs<ExtArgs>
+  tablePreferences?: boolean | Prisma.users$tablePreferencesArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -845,6 +976,7 @@ export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
   companyUsers?: boolean | Prisma.users$companyUsersArgs<ExtArgs>
+  tablePreferences?: boolean | Prisma.users$tablePreferencesArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -855,6 +987,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     refreshTokens: Prisma.$refresh_tokensPayload<ExtArgs>[]
     companyUsers: Prisma.$company_usersPayload<ExtArgs>[]
+    tablePreferences: Prisma.$user_table_preferencesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1267,6 +1400,7 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   refreshTokens<T extends Prisma.users$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$refresh_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   companyUsers<T extends Prisma.users$companyUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$companyUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tablePreferences<T extends Prisma.users$tablePreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$tablePreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$user_table_preferencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1748,6 +1882,30 @@ export type users$companyUsersArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.Company_usersScalarFieldEnum | Prisma.Company_usersScalarFieldEnum[]
+}
+
+/**
+ * users.tablePreferences
+ */
+export type users$tablePreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the user_table_preferences
+   */
+  select?: Prisma.user_table_preferencesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the user_table_preferences
+   */
+  omit?: Prisma.user_table_preferencesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.user_table_preferencesInclude<ExtArgs> | null
+  where?: Prisma.user_table_preferencesWhereInput
+  orderBy?: Prisma.user_table_preferencesOrderByWithRelationInput | Prisma.user_table_preferencesOrderByWithRelationInput[]
+  cursor?: Prisma.user_table_preferencesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.User_table_preferencesScalarFieldEnum | Prisma.User_table_preferencesScalarFieldEnum[]
 }
 
 /**

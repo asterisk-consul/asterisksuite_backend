@@ -659,6 +659,11 @@ export type company_users = Prisma.company_usersModel
  */
 export type company_tax_settings = Prisma.company_tax_settingsModel
 /**
+ * Model user_table_preferences
+ *
+ */
+export type user_table_preferences = Prisma.user_table_preferencesModel
+/**
  * Model permissions
  * 
  */

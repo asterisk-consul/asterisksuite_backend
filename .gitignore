@@ -59,6 +59,11 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 **/generated/prisma
+!src/generated/prisma/
+src/generated/prisma/*
+!src/generated/prisma/models/
+src/generated/prisma/models/*
+!src/generated/prisma/models/user_table_preferences.ts
 
 audit.sql
 # User-generated media must live in persistent storage, never in Git.

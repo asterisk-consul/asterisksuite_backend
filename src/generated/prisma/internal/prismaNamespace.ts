@@ -512,6 +512,7 @@ export const ModelName = {
   users: 'users',
   company_users: 'company_users',
   company_tax_settings: 'company_tax_settings',
+  user_table_preferences: 'user_table_preferences',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -570,7 +571,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "user_table_preferences" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -10046,6 +10047,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    user_table_preferences: {
+      payload: Prisma.$user_table_preferencesPayload<ExtArgs>
+      fields: Prisma.user_table_preferencesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.user_table_preferencesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.user_table_preferencesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>
+        }
+        findFirst: {
+          args: Prisma.user_table_preferencesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.user_table_preferencesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>
+        }
+        findMany: {
+          args: Prisma.user_table_preferencesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>[]
+        }
+        create: {
+          args: Prisma.user_table_preferencesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>
+        }
+        createMany: {
+          args: Prisma.user_table_preferencesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.user_table_preferencesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>[]
+        }
+        delete: {
+          args: Prisma.user_table_preferencesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>
+        }
+        update: {
+          args: Prisma.user_table_preferencesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>
+        }
+        deleteMany: {
+          args: Prisma.user_table_preferencesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.user_table_preferencesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.user_table_preferencesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>[]
+        }
+        upsert: {
+          args: Prisma.user_table_preferencesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_table_preferencesPayload>
+        }
+        aggregate: {
+          args: Prisma.User_table_preferencesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUser_table_preferences>
+        }
+        groupBy: {
+          args: Prisma.user_table_preferencesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_table_preferencesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.user_table_preferencesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_table_preferencesCountAggregateOutputType> | number
+        }
+      }
+    }
     permissions: {
       payload: Prisma.$permissionsPayload<ExtArgs>
       fields: Prisma.permissionsFieldRefs
@@ -15792,6 +15867,20 @@ export const Company_tax_settingsScalarFieldEnum = {
 export type Company_tax_settingsScalarFieldEnum = (typeof Company_tax_settingsScalarFieldEnum)[keyof typeof Company_tax_settingsScalarFieldEnum]
 
 
+export const User_table_preferencesScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  company_id: 'company_id',
+  table_key: 'table_key',
+  column_order: 'column_order',
+  column_visibility: 'column_visibility',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type User_table_preferencesScalarFieldEnum = (typeof User_table_preferencesScalarFieldEnum)[keyof typeof User_table_preferencesScalarFieldEnum]
+
+
 export const PermissionsScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -18179,6 +18268,7 @@ export type GlobalOmitConfig = {
   users?: Prisma.usersOmit
   company_users?: Prisma.company_usersOmit
   company_tax_settings?: Prisma.company_tax_settingsOmit
+  user_table_preferences?: Prisma.user_table_preferencesOmit
   permissions?: Prisma.permissionsOmit
   business_roles?: Prisma.business_rolesOmit
   business_role_permissions?: Prisma.business_role_permissionsOmit

@@ -15,6 +15,7 @@ model companies {
   updated_by    String?         @db.Uuid
   deleted_by    String?         @db.Uuid
   companyUsers  company_users[]
+  tablePreferences user_table_preferences[]
 
   @@schema("public")
 }
@@ -68,6 +69,7 @@ model users {
   deleted_by    String?          @db.Uuid
   refreshTokens refresh_tokens[]
   companyUsers  company_users[]
+  tablePreferences user_table_preferences[]
 
   @@schema("public")
 }
@@ -110,5 +112,22 @@ model company_tax_settings {
   created_at         DateTime   @default(now()) @db.Timestamp(6)
   updated_at         DateTime?  @updatedAt @db.Timestamp(6)
 
+  @@schema("public")
+}
+
+model user_table_preferences {
+  id                 String   @id @default(uuid()) @db.Uuid
+  user_id            String   @db.Uuid
+  company_id         String   @db.Uuid
+  table_key          String   @db.VarChar(200)
+  column_order       Json     @default("[]")
+  column_visibility  Json     @default("{}")
+  created_at         DateTime @default(now()) @db.Timestamp(6)
+  updated_at         DateTime @default(now()) @updatedAt @db.Timestamp(6)
+  user               users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  company            companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, company_id, table_key], map: "user_table_preferences_user_company_table_key")
+  @@index([company_id, user_id], map: "user_table_preferences_company_user_idx")
   @@schema("public")
 }

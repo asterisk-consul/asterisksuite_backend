@@ -7,6 +7,7 @@ import { TesoreriaModule } from './erp/tesoreria/tesoreria.module';
 import { TrashModule } from './trash/trash.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { InternationalOperationsModule } from './international-operations/international-operations.module';
+import { UserPreferencesModule } from './user-preferences/user-preferences.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { InternationalOperationsModule } from './international-operations/intern
     TrashModule,
     InventoryModule,
     InternationalOperationsModule,
+    UserPreferencesModule,
   ],
   exports: [
     CoreModule,
@@ -28,6 +30,7 @@ import { InternationalOperationsModule } from './international-operations/intern
     TrashModule,
     InventoryModule,
     InternationalOperationsModule,
+    UserPreferencesModule,
   ],
 })
 export class ModulesModule {}

@@ -179,6 +179,7 @@ export const ModelName = {
   users: 'users',
   company_users: 'company_users',
   company_tax_settings: 'company_tax_settings',
+  user_table_preferences: 'user_table_preferences',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -2763,6 +2764,20 @@ export const Company_tax_settingsScalarFieldEnum = {
 } as const
 
 export type Company_tax_settingsScalarFieldEnum = (typeof Company_tax_settingsScalarFieldEnum)[keyof typeof Company_tax_settingsScalarFieldEnum]
+
+
+export const User_table_preferencesScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  company_id: 'company_id',
+  table_key: 'table_key',
+  column_order: 'column_order',
+  column_visibility: 'column_visibility',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type User_table_preferencesScalarFieldEnum = (typeof User_table_preferencesScalarFieldEnum)[keyof typeof User_table_preferencesScalarFieldEnum]
 
 
 export const PermissionsScalarFieldEnum = {
