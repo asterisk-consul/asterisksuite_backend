@@ -833,8 +833,22 @@ export class PaymentsService {
         party: { select: { id: true, name: true } },
         account: { select: { id: true, code: true, name: true, account_type: true } },
         documents: {
-          include: {
-            document: { select: { id: true, number: true } },
+          where: { deleted_at: null },
+          select: {
+            id: true,
+            payment_id: true,
+            document_id: true,
+            amount_applied: true,
+            document: {
+              select: {
+                id: true,
+                number: true,
+                date: true,
+                total: true,
+                currency_code: true,
+                document_types: { select: { code: true, description: true } },
+              },
+            },
           },
         },
         withholdings: {
@@ -844,19 +858,46 @@ export class PaymentsService {
       },
     });
 
+    const paymentIds = payments.map((payment) => payment.id);
     const creatorIds = [...new Set(payments.map((p) => p.created_by).filter(Boolean))] as string[];
-    let userMap: Record<string, { name: string; email: string }> = {};
-    if (creatorIds.length > 0) {
-      const users = await this.db.getDefaultClient().users.findMany({
-        where: { id: { in: creatorIds } },
-        select: { id: true, name: true, email: true },
-      });
-      userMap = Object.fromEntries(users.map((u) => [u.id, { name: u.name, email: u.email }]));
+    const [users, obligations] = await Promise.all([
+      creatorIds.length
+        ? this.db.getDefaultClient().users.findMany({
+            where: { id: { in: creatorIds } },
+            select: { id: true, name: true, email: true },
+          })
+        : Promise.resolve([]),
+      paymentIds.length
+        ? this.prisma.treasury_obligations.findMany({
+            where: { payment_id: { in: paymentIds }, deleted_at: null },
+            orderBy: [{ due_date: 'asc' }, { id: 'asc' }],
+            select: {
+              id: true,
+              payment_id: true,
+              period_key: true,
+              description: true,
+              amount: true,
+              estimated_amount: true,
+              currency_code: true,
+              due_date: true,
+              reference: true,
+            },
+          })
+        : Promise.resolve([]),
+    ]);
+    const userMap = Object.fromEntries(users.map((user) => [user.id, { name: user.name, email: user.email }]));
+    const obligationsByPayment = new Map<string, typeof obligations>();
+    for (const obligation of obligations) {
+      if (!obligation.payment_id) continue;
+      const existing = obligationsByPayment.get(obligation.payment_id) ?? [];
+      existing.push(obligation);
+      obligationsByPayment.set(obligation.payment_id, existing);
     }
 
     return payments.map((p) => ({
       ...p,
       creator: p.created_by ? (userMap[p.created_by] ?? null) : null,
+      obligations: obligationsByPayment.get(p.id) ?? [],
     }));
   }
 
