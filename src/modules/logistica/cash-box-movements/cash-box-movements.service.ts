@@ -182,6 +182,7 @@ export class CashBoxMovementsService {
       orderBy: [{ created_at: 'desc' }, { id: 'desc' }],
       include: {
         employee: { select: { id: true, first_name: true, last_name: true } },
+        payment: { select: { status: true } },
       },
     });
   }
