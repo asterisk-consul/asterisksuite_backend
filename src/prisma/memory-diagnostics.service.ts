@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { getHeapStatistics } from 'node:v8';
+import { getHeapSpaceStatistics, getHeapStatistics } from 'node:v8';
 import { PrismaService } from './prisma.service';
 
 type MemorySample = {
@@ -8,6 +8,7 @@ type MemorySample = {
   rssMb: number;
   heapUsedMb: number;
   heapTotalMb: number;
+  heapSpaces: Record<string, { usedMb: number; sizeMb: number; physicalMb: number }>;
   externalMb: number;
   arrayBuffersMb: number;
   nativeAndMappedMb: number;
@@ -49,6 +50,13 @@ export class MemoryDiagnosticsService implements OnModuleInit, OnModuleDestroy {
 
     const memory = process.memoryUsage();
     const heap = getHeapStatistics();
+    const heapSpaces = Object.fromEntries(
+      getHeapSpaceStatistics().map((space) => [space.space_name, {
+        usedMb: mb(space.space_used_size),
+        sizeMb: mb(space.space_size),
+        physicalMb: mb(space.physical_space_size),
+      }]),
+    );
     const resources = process.getActiveResourcesInfo().reduce<Record<string, number>>(
       (counts, resource) => {
         counts[resource] = (counts[resource] ?? 0) + 1;
@@ -63,6 +71,7 @@ export class MemoryDiagnosticsService implements OnModuleInit, OnModuleDestroy {
       rssMb: mb(memory.rss),
       heapUsedMb: mb(memory.heapUsed),
       heapTotalMb: mb(memory.heapTotal),
+      heapSpaces,
       externalMb: mb(memory.external),
       arrayBuffersMb: mb(memory.arrayBuffers),
       nativeAndMappedMb: Math.max(0, mb(memory.rss - memory.heapTotal - memory.external)),

@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested, Min, IsUUID } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsArray, ValidateNested, Min, Max, IsInt, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PaymentDocumentDto {
@@ -211,8 +211,9 @@ export class CreatePaymentDto {
   @IsOptional()
   credit_card_id?: string;
 
-  @IsNumber()
+  @IsInt()
   @Min(1)
+  @Max(48)
   @IsOptional()
   installments_total?: number;
 

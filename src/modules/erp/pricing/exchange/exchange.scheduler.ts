@@ -51,12 +51,26 @@ export class ExchangeScheduler {
           continue;
         }
 
+        const startedAt = Date.now();
+        const memoryBefore = this.memorySnapshot();
         try {
           await this.exchangeService.syncAllRatesForClient(this.db.getTenantClient(company.schema_name), snapshot);
           this.synchronizedFingerprintByTenant.set(company.schema_name, fingerprint);
-          this.logger.log(`[${company.name}] Cotizaciones sincronizadas`);
+          this.logger.log(JSON.stringify({
+            event: 'exchange_tenant_sync_completed',
+            company: company.name,
+            durationMs: Date.now() - startedAt,
+            memoryBefore,
+            memoryAfter: this.memorySnapshot(),
+          }));
         } catch (error) {
-          this.logger.error(`[${company.name}] Error sincronizando cotizaciones`, error);
+          this.logger.error(JSON.stringify({
+            event: 'exchange_tenant_sync_failed',
+            company: company.name,
+            durationMs: Date.now() - startedAt,
+            memoryBefore,
+            memoryAfter: this.memorySnapshot(),
+          }), error);
         }
       }
     } finally {
@@ -69,5 +83,17 @@ export class ExchangeScheduler {
       .map((quote) => `${quote.moneda}:${quote.casa}:${quote.venta}`)
       .sort();
     return values.join('|');
+  }
+
+  private memorySnapshot() {
+    const memory = process.memoryUsage();
+    const mb = (bytes: number) => Math.round((bytes / 1024 / 1024) * 10) / 10;
+    return {
+      rssMb: mb(memory.rss),
+      heapUsedMb: mb(memory.heapUsed),
+      heapTotalMb: mb(memory.heapTotal),
+      externalMb: mb(memory.external),
+      tenantClients: this.db.getPoolDiagnostics().tenantClients,
+    };
   }
 }

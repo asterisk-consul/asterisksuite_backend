@@ -212,6 +212,8 @@ export const ModelName = {
   payment_checks: 'payment_checks',
   credit_cards: 'credit_cards',
   credit_card_transactions: 'credit_card_transactions',
+  credit_card_settlements: 'credit_card_settlements',
+  bank_account_transfers: 'bank_account_transfers',
   credit_card_installments: 'credit_card_installments',
   credit_card_summaries: 'credit_card_summaries',
   credit_card_summary_items: 'credit_card_summary_items',
@@ -3481,6 +3483,7 @@ export const Credit_cardsScalarFieldEnum = {
   name: 'name',
   type: 'type',
   brand: 'brand',
+  channel_type: 'channel_type',
   last_four: 'last_four',
   bank_name: 'bank_name',
   holder_name: 'holder_name',
@@ -3533,6 +3536,7 @@ export const Credit_card_transactionsScalarFieldEnum = {
   settlement_reference: 'settlement_reference',
   settlement_notes: 'settlement_notes',
   settlement_bank_id: 'settlement_bank_id',
+  settlement_id: 'settlement_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -3542,6 +3546,52 @@ export const Credit_card_transactionsScalarFieldEnum = {
 } as const
 
 export type Credit_card_transactionsScalarFieldEnum = (typeof Credit_card_transactionsScalarFieldEnum)[keyof typeof Credit_card_transactionsScalarFieldEnum]
+
+
+export const Credit_card_settlementsScalarFieldEnum = {
+  id: 'id',
+  credit_card_id: 'credit_card_id',
+  bank_account_id: 'bank_account_id',
+  date: 'date',
+  currency_code: 'currency_code',
+  transaction_count: 'transaction_count',
+  gross_amount: 'gross_amount',
+  commission_amount: 'commission_amount',
+  tax_amount: 'tax_amount',
+  withholding_amount: 'withholding_amount',
+  other_deductions: 'other_deductions',
+  net_amount: 'net_amount',
+  reference: 'reference',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Credit_card_settlementsScalarFieldEnum = (typeof Credit_card_settlementsScalarFieldEnum)[keyof typeof Credit_card_settlementsScalarFieldEnum]
+
+
+export const Bank_account_transfersScalarFieldEnum = {
+  id: 'id',
+  source_bank_account_id: 'source_bank_account_id',
+  destination_bank_account_id: 'destination_bank_account_id',
+  date: 'date',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  reference: 'reference',
+  notes: 'notes',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Bank_account_transfersScalarFieldEnum = (typeof Bank_account_transfersScalarFieldEnum)[keyof typeof Bank_account_transfersScalarFieldEnum]
 
 
 export const Credit_card_installmentsScalarFieldEnum = {

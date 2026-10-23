@@ -26,6 +26,7 @@ export type BankOperationTypeValue =
   | 'PAYMENT'
   | 'COLLECTION'
   | 'CARD_SETTLEMENT'
+  | 'ACCOUNT_TRANSFER'
   | 'CHECK'
   | 'CASH_TRANSFER'
   | 'HR_VALE'

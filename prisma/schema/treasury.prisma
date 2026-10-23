@@ -107,6 +107,9 @@ model bank_accounts {
   investments_origin      financial_investments[]   @relation("InvestmentSourceAccount")
   investments_destination financial_investments[]   @relation("InvestmentDestinationAccount")
   charge_rules            bank_charge_rules[]
+  card_settlements        credit_card_settlements[]
+  outgoing_transfers      bank_account_transfers[] @relation("BankTransferSource")
+  incoming_transfers      bank_account_transfers[] @relation("BankTransferDestination")
 
   @@schema("tenant")
 }
@@ -673,9 +676,10 @@ model credit_cards {
   name            String          @db.VarChar(100)
   type            CreditCardType
   brand           CreditCardBrand
-  last_four       String          @db.VarChar(4)
+  channel_type    String?         @db.VarChar(30)
+  last_four       String?         @db.VarChar(4)
   bank_name       String          @db.VarChar(100)
-  holder_name     String          @db.VarChar(255)
+  holder_name     String?         @db.VarChar(255)
   holder_id       String?         @db.VarChar(50)
   credit_limit    Decimal?        @db.Decimal(15, 2)
   currency_code   String          @db.VarChar(10)
@@ -696,6 +700,7 @@ model credit_cards {
   party        business_parties?          @relation(fields: [party_id], references: [id])
   transactions credit_card_transactions[]
   summaries    credit_card_summaries[]
+  settlements  credit_card_settlements[]
 
   @@schema("tenant")
 }
@@ -729,6 +734,7 @@ model credit_card_transactions {
   settlement_reference   String?                   @db.VarChar(100)
   settlement_notes       String?                   @db.VarChar(500)
   settlement_bank_id     String?                   @db.Uuid
+  settlement_id          String?                   @db.Uuid
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)
@@ -741,10 +747,71 @@ model credit_card_transactions {
   payment       payments?                   @relation(fields: [payment_id], references: [id])
   installments  credit_card_installments[]
   summary_items credit_card_summary_items[]
+  settlement    credit_card_settlements?           @relation(fields: [settlement_id], references: [id])
 
   @@index([credit_card_id])
   @@index([payment_id])
   @@index([clearing_status])
+  @@index([settlement_id])
+  @@schema("tenant")
+}
+
+model credit_card_settlements {
+  id                 String   @id @default(uuid()) @db.Uuid
+  credit_card_id     String   @db.Uuid
+  bank_account_id    String   @db.Uuid
+  date               DateTime @db.Date
+  currency_code      String   @db.VarChar(10)
+  transaction_count  Int
+  gross_amount       Decimal  @db.Decimal(15, 2)
+  commission_amount  Decimal  @default(0) @db.Decimal(15, 2)
+  tax_amount         Decimal  @default(0) @db.Decimal(15, 2)
+  withholding_amount Decimal  @default(0) @db.Decimal(15, 2)
+  other_deductions   Decimal  @default(0) @db.Decimal(15, 2)
+  net_amount         Decimal  @db.Decimal(15, 2)
+  reference          String?  @db.VarChar(100)
+  notes              String?  @db.VarChar(500)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  credit_card  credit_cards  @relation(fields: [credit_card_id], references: [id])
+  bank_account bank_accounts @relation(fields: [bank_account_id], references: [id])
+  transactions credit_card_transactions[]
+
+  @@index([credit_card_id, date])
+  @@index([bank_account_id, date])
+  @@index([created_at])
+  @@schema("tenant")
+}
+
+model bank_account_transfers {
+  id                         String   @id @default(uuid()) @db.Uuid
+  source_bank_account_id     String   @db.Uuid
+  destination_bank_account_id String  @db.Uuid
+  date                       DateTime @db.Date
+  amount                     Decimal  @db.Decimal(15, 2)
+  currency_code              String   @db.VarChar(10)
+  reference                  String?  @db.VarChar(100)
+  notes                      String?  @db.VarChar(500)
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  source_account      bank_accounts @relation("BankTransferSource", fields: [source_bank_account_id], references: [id])
+  destination_account bank_accounts @relation("BankTransferDestination", fields: [destination_bank_account_id], references: [id])
+
+  @@index([source_bank_account_id, date])
+  @@index([destination_bank_account_id, date])
+  @@index([created_at])
   @@schema("tenant")
 }
 

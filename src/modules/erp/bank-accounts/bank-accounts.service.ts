@@ -7,6 +7,8 @@ import { CreateBankMovementDto } from './dto/create-bank-movement.dto';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { CreateBankChargeRuleDto, SuggestedBankChargesQueryDto, UpdateBankChargeRuleDto } from './dto/bank-charge-rule.dto';
+import { BankAccountTransferDto } from './dto/bank-account-transfer.dto';
+import { recalculateBankAccountLedger } from './bank-account-ledger';
 
 @Injectable()
 export class BankAccountsService {
@@ -345,11 +347,130 @@ export class BankAccountsService {
     });
   }
 
+  async transfer(sourceId: string, dto: BankAccountTransferDto, userId: string, companyRole?: string) {
+    const amount = Math.round((Number(dto.amount) + Number.EPSILON) * 100) / 100;
+    if (!Number.isFinite(amount) || amount <= 0) throw new BadRequestException('El importe debe ser mayor que cero');
+    if (sourceId === dto.destination_bank_account_id) throw new BadRequestException('Elegí una cuenta de destino distinta');
+
+    const accountIds = [sourceId, dto.destination_bank_account_id];
+    const accounts = await this.prisma.bank_accounts.findMany({
+      where: { id: { in: accountIds }, deleted_at: null, active: true },
+    });
+    if (accounts.length !== 2) throw new NotFoundException('La cuenta de origen o destino no está disponible');
+    const source = accounts.find((account: any) => account.id === sourceId);
+    const destination = accounts.find((account: any) => account.id === dto.destination_bank_account_id);
+    if (!source || !destination) throw new NotFoundException('La cuenta de origen o destino no está disponible');
+    if (source.currency_code !== destination.currency_code) throw new BadRequestException('Las transferencias internas requieren cuentas en la misma moneda');
+    if (companyRole !== 'OWNER' && companyRole !== 'ADMIN') {
+      const roles = await this.prisma.bank_account_user_roles.findMany({
+        where: { bank_account_id: { in: accountIds }, user_id: userId, deleted_at: null },
+      });
+      const writableIds = new Set(roles.filter((role: any) => role.role !== 'VIEWER').map((role: any) => role.bank_account_id));
+      if (accountIds.some(id => !writableIds.has(id))) {
+        throw new BadRequestException('Necesitás permisos de operación sobre las cuentas de origen y destino');
+      }
+    }
+
+    const date = parseLocalDateTime(dto.date);
+    const transfer = await this.prisma.$transaction(async (tx: any) => {
+      // Bloquea ambas cuentas en orden estable para evitar sobregiros por transferencias concurrentes.
+      for (const id of [...accountIds].sort()) {
+        await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${id}::uuid FOR UPDATE`;
+      }
+      const lockedAccounts = await tx.bank_accounts.findMany({
+        where: { id: { in: accountIds }, deleted_at: null, active: true },
+      });
+      const lockedSource = lockedAccounts.find((account: any) => account.id === sourceId);
+      const lockedDestination = lockedAccounts.find((account: any) => account.id === dto.destination_bank_account_id);
+      if (!lockedSource || !lockedDestination) throw new NotFoundException('La cuenta de origen o destino ya no está disponible');
+      if (Number(lockedSource.balance) < amount) throw new BadRequestException('El saldo disponible no alcanza para transferir ese importe');
+
+      const record = await tx.bank_account_transfers.create({
+        data: {
+          source_bank_account_id: sourceId,
+          destination_bank_account_id: dto.destination_bank_account_id,
+          date,
+          amount,
+          currency_code: source.currency_code,
+          reference: dto.reference?.trim() || null,
+          notes: dto.notes?.trim() || null,
+          created_by: userId,
+        },
+      });
+      const label = `Transferencia interna ${source.name} → ${destination.name}`;
+      const operationSource = await this.bankMovements.openOperation({
+        bankAccountId: sourceId,
+        operationType: 'ACCOUNT_TRANSFER',
+        sourceType: 'bank_account_transfer',
+        sourceId: record.id,
+        currencyCode: source.currency_code,
+        date,
+        description: label,
+        reference: dto.reference ?? null,
+        userId,
+      }, tx);
+      const operationDestination = await this.bankMovements.openOperation({
+        bankAccountId: dto.destination_bank_account_id,
+        operationType: 'ACCOUNT_TRANSFER',
+        sourceType: 'bank_account_transfer',
+        sourceId: record.id,
+        currencyCode: source.currency_code,
+        date,
+        description: label,
+        reference: dto.reference ?? null,
+        userId,
+      }, tx);
+
+      await this.bankMovements.addMovement({
+        bankAccountId: sourceId,
+        type: 'TRANSFER',
+        nature: 'DEBIT',
+        amount: -amount,
+        currencyCode: source.currency_code,
+        description: `Transferencia a ${destination.name}`,
+        reference: dto.reference ?? null,
+        referenceType: 'bank_account_transfer',
+        referenceId: record.id,
+        date,
+        operationId: operationSource.id,
+        userId,
+        recalculate: false,
+      }, tx);
+      await this.bankMovements.addMovement({
+        bankAccountId: dto.destination_bank_account_id,
+        type: 'TRANSFER',
+        nature: 'CREDIT',
+        amount,
+        currencyCode: source.currency_code,
+        description: `Transferencia desde ${source.name}`,
+        reference: dto.reference ?? null,
+        referenceType: 'bank_account_transfer',
+        referenceId: record.id,
+        date,
+        operationId: operationDestination.id,
+        userId,
+        recalculate: false,
+      }, tx);
+      await this.bankMovements.closeOperation(operationSource.id, tx);
+      await this.bankMovements.closeOperation(operationDestination.id, tx);
+      await recalculateBankAccountLedger(tx, sourceId);
+      await recalculateBankAccountLedger(tx, dto.destination_bank_account_id);
+      return tx.bank_account_transfers.findUnique({
+        where: { id: record.id },
+        include: { source_account: true, destination_account: true },
+      });
+    }, { timeout: 15000 });
+    return transfer;
+  }
+
   async cancelMovement(accountId: string, movementId: string, userId: string) {
     const movement = await this.prisma.bank_account_movements.findFirst({
       where: { id: movementId, bank_account_id: accountId, deleted_at: null },
     });
     if (!movement) throw new NotFoundException('Movimiento bancario no encontrado');
+    if (movement.reference_type === 'bank_account_transfer') {
+      throw new BadRequestException('Este movimiento pertenece a una transferencia interna; no se puede anular por separado');
+    }
     return this.bankMovements.cancelMovement(movementId, userId, this.prisma);
   }
 

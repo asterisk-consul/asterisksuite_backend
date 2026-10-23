@@ -11,6 +11,7 @@ import { DocumentsSalesService } from '../documents-sales/documents_sales.servic
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
+import { CreditCardsService } from '../credit-cards/credit-cards.service';
 
 @Injectable()
 export class PaymentsService {
@@ -21,6 +22,7 @@ export class PaymentsService {
     private commercialFlow: SalesCommercialFlowService,
     private documentsSales: DocumentsSalesService,
     private bankMovements: BankMovementsService,
+    private creditCardsService: CreditCardsService,
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -58,6 +60,9 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async create(dto: CreatePaymentDto, userId: string) {
+    if (dto.installments_total != null && (!Number.isInteger(dto.installments_total) || dto.installments_total < 1 || dto.installments_total > 48)) {
+      throw new BadRequestException('La cantidad de cuotas debe ser un número entero entre 1 y 48');
+    }
     if (dto.withholding_remittance_id) {
       if (dto.type !== 'PAYMENT' || dto.payment_method !== 'BANK_TRANSFER' || dto.party_id || dto.documents?.length || dto.obligations?.length || dto.withholdings?.length) {
         throw new BadRequestException('Un VEP se registra como pago bancario independiente, sin tercero, facturas ni retenciones nuevas')
@@ -646,6 +651,9 @@ export class PaymentsService {
         })
         if (updated.count !== 1) throw new BadRequestException('El VEP fue pagado por otro movimiento o dejó de estar disponible')
       }
+      if (payment.payment_method === 'CREDIT_CARD') {
+        await this.creditCardsService.registerConfirmedPurchaseStatements(id, userId, tx);
+      }
       return tx.payments.update({
         where: { id },
         data: {
@@ -775,6 +783,7 @@ export class PaymentsService {
           'La operación de tarjeta ya impactó en banco y debe revertirse primero desde su liquidación',
         );
       }
+      await this.creditCardsService.assertPurchaseCanBeReversed(transaction.id);
     }
 
     await this.reverseSideEffects(payment, userId, 'payment_reversal', checkAction);
@@ -785,8 +794,9 @@ export class PaymentsService {
     for (const transaction of cardTransactions) {
       await this.prisma.credit_card_installments.updateMany({
         where: { transaction_id: transaction.id, deleted_at: null },
-        data: { deleted_at: new Date(), deleted_by: userId },
+        data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
       });
+      await this.creditCardsService.removePurchaseFromStatements(transaction.id, userId);
       await this.prisma.credit_card_transactions.update({
         where: { id: transaction.id },
         data: { clearing_status: 'FAILED', updated_by: userId },
@@ -993,6 +1003,9 @@ export class PaymentsService {
     if (payment.status !== 'DRAFT') {
       throw new BadRequestException('Solo se pueden editar pagos en borrador');
     }
+    if (dto.installments_total != null && (!Number.isInteger(dto.installments_total) || dto.installments_total < 1 || dto.installments_total > 48)) {
+      throw new BadRequestException('La cantidad de cuotas debe ser un número entero entre 1 y 48');
+    }
     if (dto.withholdings?.length && !(dto.party_id ?? payment.party_id)) {
       throw new BadRequestException('party_id es requerido cuando se registran retenciones');
     }
@@ -1132,8 +1145,9 @@ export class PaymentsService {
         userId,
       );
     }
+    const existingCardTransaction = payment.credit_card_transactions?.[0];
     if (effectiveMethod === 'CREDIT_CARD') {
-      const transaction = payment.credit_card_transactions?.[0];
+      const transaction = existingCardTransaction;
       const cardId = dto.credit_card_id ?? transaction?.credit_card_id;
       if (!cardId) throw new BadRequestException('Seleccioná una tarjeta corporativa o canal de cobro');
       const card = await this.prisma.credit_cards.findFirst({ where: { id: cardId, active: true, deleted_at: null } });
@@ -1152,17 +1166,45 @@ export class PaymentsService {
         installments_total: installments,
         installment_amount: Number((amount / installments).toFixed(2)),
         authorization: dto.card_authorization ?? transaction?.authorization,
+        description: dto.description ?? payment.description ?? transaction?.description,
         commission_rate: commissionRate || null,
         commission_amount: commissionRate ? Number(((amount * commissionRate) / 100).toFixed(2)) : null,
         net_amount: payment.type === 'COLLECTION' ? Number((amount * (1 - commissionRate / 100)).toFixed(2)) : amount,
+        net_currency_code: dto.currency_code ?? payment.currency_code,
         expected_clearing_date: dto.expected_clearing_date
           ? parseLocalDateTime(dto.expected_clearing_date)
           : transaction?.expected_clearing_date,
+        clearing_status: 'PENDING',
+        actual_clearing_date: null,
         updated_at: new Date(),
         updated_by: userId,
       };
-      if (transaction)
+      if (transaction) {
         await this.prisma.credit_card_transactions.update({ where: { id: transaction.id }, data: txData });
+      } else {
+        await this.prisma.credit_card_transactions.create({
+          data: {
+            ...txData,
+            payment_id: id,
+            type: payment.type === 'COLLECTION' ? 'COLLECTION' : 'PURCHASE',
+            exchange_rate: dto.exchange_rate ?? payment.exchange_rate,
+            rate_type: dto.rate_type ?? payment.rate_type,
+            converted_amount: dto.converted_amount ?? payment.converted_amount,
+            net_currency_code: dto.currency_code ?? payment.currency_code,
+            created_by: userId,
+          },
+        });
+      }
+    } else if (existingCardTransaction) {
+      const now = new Date();
+      await this.prisma.credit_card_installments.updateMany({
+        where: { transaction_id: existingCardTransaction.id, deleted_at: null, status: 'PENDING' },
+        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+      });
+      await this.prisma.credit_card_transactions.update({
+        where: { id: existingCardTransaction.id },
+        data: { clearing_status: 'FAILED', updated_at: now, updated_by: userId },
+      });
     }
     return this.findOne(updated.id);
   }

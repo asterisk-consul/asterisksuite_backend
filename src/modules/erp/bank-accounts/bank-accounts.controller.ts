@@ -4,6 +4,7 @@ import { RequirePermissions } from '@/access-control/decorators/require-permissi
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import type { Request } from 'express';
+import { BankAccountTransferDto } from './dto/bank-account-transfer.dto';
 import { BankAccountsService } from './bank-accounts.service';
 import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
@@ -69,6 +70,18 @@ export class BankAccountsController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.bankAccountsService.createMovement(id, dto, user.id);
+  }
+
+  @Post(':id/transfers')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('bank_movements.create')
+  transfer(
+    @Param('id') id: string,
+    @Body() dto: BankAccountTransferDto,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    return this.bankAccountsService.transfer(id, dto, user.id, req['companyUserRole'] as string | undefined);
   }
 
   @Post(':id/movements/:movementId/cancel')

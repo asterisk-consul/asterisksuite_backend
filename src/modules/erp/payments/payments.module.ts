@@ -6,9 +6,10 @@ import { CurrentAccountsModule } from '../current-accounts/current-accounts.modu
 import { DocumentsSalesModule } from '../documents-sales/documents_sales.module';
 import { AccessControlModule } from '@/access-control/access-control.module';
 import { BankMovementsModule } from '../bank-movements/bank-movements.module';
+import { CreditCardsModule } from '../credit-cards/credit-cards.module';
 
 @Module({
-  imports: [CurrenciesModule, CurrentAccountsModule, DocumentsSalesModule, AccessControlModule, BankMovementsModule],
+  imports: [CurrenciesModule, CurrentAccountsModule, DocumentsSalesModule, AccessControlModule, BankMovementsModule, CreditCardsModule],
   controllers: [PaymentsController],
   providers: [PaymentsService],
   exports: [PaymentsService],

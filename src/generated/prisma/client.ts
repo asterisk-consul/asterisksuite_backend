@@ -262,12 +262,12 @@ export type tax_rule_brackets = Prisma.tax_rule_bracketsModel
 export type withholdings = Prisma.withholdingsModel
 /**
  * Model withholding_remittances
- *
+ * 
  */
 export type withholding_remittances = Prisma.withholding_remittancesModel
 /**
  * Model withholding_tax_applications
- *
+ * 
  */
 export type withholding_tax_applications = Prisma.withholding_tax_applicationsModel
 /**
@@ -682,7 +682,7 @@ export type company_users = Prisma.company_usersModel
 export type company_tax_settings = Prisma.company_tax_settingsModel
 /**
  * Model user_table_preferences
- *
+ * 
  */
 export type user_table_preferences = Prisma.user_table_preferencesModel
 /**
@@ -845,6 +845,16 @@ export type credit_cards = Prisma.credit_cardsModel
  * 
  */
 export type credit_card_transactions = Prisma.credit_card_transactionsModel
+/**
+ * Model credit_card_settlements
+ * 
+ */
+export type credit_card_settlements = Prisma.credit_card_settlementsModel
+/**
+ * Model bank_account_transfers
+ * 
+ */
+export type bank_account_transfers = Prisma.bank_account_transfersModel
 /**
  * Model credit_card_installments
  * 
