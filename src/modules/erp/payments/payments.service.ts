@@ -846,7 +846,13 @@ export class PaymentsService {
                 date: true,
                 total: true,
                 currency_code: true,
-                document_types: { select: { code: true, description: true } },
+                document_types: {
+                  select: {
+                    code: true,
+                    description: true,
+                    system_modules: { select: { code: true } },
+                  },
+                },
               },
             },
           },
