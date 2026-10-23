@@ -414,30 +414,45 @@ export class FiscalAuthorizationsService {
       where: { settings_key: 'default' }, update: {}, create: { settings_key: 'default' },
     });
     if (!settings.alerts_enabled) return [];
-    const rows = await client.fiscal_authorizations.findMany({
-      where: { deleted_at: null, status: 'ACTIVE' }, include: { document_type: true, document_sequence: true },
-    });
     const today = this.startOfDay(new Date());
     const dayThresholds = (settings.day_thresholds as number[]).map(Number).sort((a, b) => a - b);
     const numberThresholds = (settings.number_thresholds as number[]).map(Number).sort((a, b) => a - b);
-    for (const row of rows) {
-      const days = Math.ceil((this.startOfDay(row.valid_to).getTime() - today.getTime()) / 86400000);
-      const remaining = Math.max(0, row.range_to - Math.max(row.document_sequence.current_number, row.range_from - 1));
-      const dayThreshold = dayThresholds.find(value => days <= value && days >= 0);
-      const numberThreshold = numberThresholds.find(value => remaining <= value);
-      const base = `${row.authorization_type} ${row.code} · ${row.document_type.code} · PV ${row.document_sequence.point_of_sale}`;
-      if (dayThreshold != null) await client.fiscal_authorization_alerts.upsert({
-        where: { fiscal_authorization_id_alert_key: { fiscal_authorization_id: row.id, alert_key: `days-${dayThreshold}` } },
-        update: {}, create: { fiscal_authorization_id: row.id, alert_key: `days-${dayThreshold}`, severity: days <= 3 ? 'ERROR' : 'WARNING', title: 'Autorización fiscal próxima a vencer', message: `${base}. Vence en ${days} día(s).` },
+    const batchSize = 100;
+    let afterId: string | undefined;
+    while (true) {
+      const rows = await client.fiscal_authorizations.findMany({
+        where: {
+          deleted_at: null,
+          status: 'ACTIVE',
+          ...(afterId ? { id: { gt: afterId } } : {}),
+        },
+        include: { document_type: true, document_sequence: true },
+        orderBy: { id: 'asc' },
+        take: batchSize,
       });
-      if (days < 0 && settings.daily_after_expiration) await client.fiscal_authorization_alerts.upsert({
-        where: { fiscal_authorization_id_alert_key: { fiscal_authorization_id: row.id, alert_key: `expired-${today.toISOString().slice(0, 10)}` } },
-        update: {}, create: { fiscal_authorization_id: row.id, alert_key: `expired-${today.toISOString().slice(0, 10)}`, severity: 'ERROR', title: 'Autorización fiscal vencida', message: `${base}. Venció hace ${Math.abs(days)} día(s).` },
-      });
-      if (numberThreshold != null) await client.fiscal_authorization_alerts.upsert({
-        where: { fiscal_authorization_id_alert_key: { fiscal_authorization_id: row.id, alert_key: `numbers-${numberThreshold}` } },
-        update: {}, create: { fiscal_authorization_id: row.id, alert_key: `numbers-${numberThreshold}`, severity: remaining <= 10 ? 'ERROR' : 'WARNING', title: 'Numeración fiscal próxima a agotarse', message: `${base}. Quedan ${remaining} números disponibles.` },
-      });
+      if (!rows.length) break;
+
+      for (const row of rows) {
+        const days = Math.ceil((this.startOfDay(row.valid_to).getTime() - today.getTime()) / 86400000);
+        const remaining = Math.max(0, row.range_to - Math.max(row.document_sequence.current_number, row.range_from - 1));
+        const dayThreshold = dayThresholds.find(value => days <= value && days >= 0);
+        const numberThreshold = numberThresholds.find(value => remaining <= value);
+        const base = `${row.authorization_type} ${row.code} · ${row.document_type.code} · PV ${row.document_sequence.point_of_sale}`;
+        if (dayThreshold != null) await client.fiscal_authorization_alerts.upsert({
+          where: { fiscal_authorization_id_alert_key: { fiscal_authorization_id: row.id, alert_key: `days-${dayThreshold}` } },
+          update: {}, create: { fiscal_authorization_id: row.id, alert_key: `days-${dayThreshold}`, severity: days <= 3 ? 'ERROR' : 'WARNING', title: 'Autorización fiscal próxima a vencer', message: `${base}. Vence en ${days} día(s).` },
+        });
+        if (days < 0 && settings.daily_after_expiration) await client.fiscal_authorization_alerts.upsert({
+          where: { fiscal_authorization_id_alert_key: { fiscal_authorization_id: row.id, alert_key: `expired-${today.toISOString().slice(0, 10)}` } },
+          update: {}, create: { fiscal_authorization_id: row.id, alert_key: `expired-${today.toISOString().slice(0, 10)}`, severity: 'ERROR', title: 'Autorización fiscal vencida', message: `${base}. Venció hace ${Math.abs(days)} día(s).` },
+        });
+        if (numberThreshold != null) await client.fiscal_authorization_alerts.upsert({
+          where: { fiscal_authorization_id_alert_key: { fiscal_authorization_id: row.id, alert_key: `numbers-${numberThreshold}` } },
+          update: {}, create: { fiscal_authorization_id: row.id, alert_key: `numbers-${numberThreshold}`, severity: remaining <= 10 ? 'ERROR' : 'WARNING', title: 'Numeración fiscal próxima a agotarse', message: `${base}. Quedan ${remaining} números disponibles.` },
+        });
+      }
+
+      afterId = rows[rows.length - 1].id;
     }
     return client.fiscal_authorization_alerts.findMany({
       where: { is_read: false }, include: { authorization: { include: { document_type: true, document_sequence: true } } }, orderBy: { created_at: 'desc' }, take: 50,

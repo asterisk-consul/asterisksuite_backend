@@ -647,34 +647,48 @@ export class StockReservationsService {
   }
 
   async releaseExpiredForClient(prisma: any) {
-    const expired = await prisma.stock_reservations.findMany({
-      where: {
-        reservation_type: 'MANUAL',
-        status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] },
-        expires_at: { lte: new Date() },
-        deleted_at: null,
-      },
-      select: { id: true },
-    });
+    const batchSize = 100;
+    let afterId: string | undefined;
+    let releasedCount = 0;
 
-    for (const reservation of expired) {
-      await prisma.$transaction(async (tx: any) => {
-        const current = await tx.stock_reservations.findUnique({ where: { id: reservation.id } });
-        if (!current || !['ACTIVE', 'PARTIALLY_CONSUMED'].includes(current.status)) return;
-        await this.lockStockRow(tx, current.warehouse_id, current.product_id);
-        const pending = this.pending(current);
-        if (pending.lessThanOrEqualTo(0)) return;
-        await tx.warehouse_stock.update({
-          where: { warehouse_id_product_id: { warehouse_id: current.warehouse_id, product_id: current.product_id } },
-          data: { reserved_quantity: { decrement: pending }, updated_at: new Date() },
-        });
-        await tx.stock_reservations.update({
-          where: { id: current.id },
-          data: { quantity_released: { increment: pending }, status: 'EXPIRED' },
-        });
+    while (true) {
+      const expired = await prisma.stock_reservations.findMany({
+        where: {
+          reservation_type: 'MANUAL',
+          status: { in: ['ACTIVE', 'PARTIALLY_CONSUMED'] },
+          expires_at: { lte: new Date() },
+          deleted_at: null,
+          ...(afterId ? { id: { gt: afterId } } : {}),
+        },
+        select: { id: true },
+        orderBy: { id: 'asc' },
+        take: batchSize,
       });
+      if (!expired.length) break;
+
+      for (const reservation of expired) {
+        const released = await prisma.$transaction(async (tx: any) => {
+          const current = await tx.stock_reservations.findUnique({ where: { id: reservation.id } });
+          if (!current || !['ACTIVE', 'PARTIALLY_CONSUMED'].includes(current.status)) return false;
+          await this.lockStockRow(tx, current.warehouse_id, current.product_id);
+          const pending = this.pending(current);
+          if (pending.lessThanOrEqualTo(0)) return false;
+          await tx.warehouse_stock.update({
+            where: { warehouse_id_product_id: { warehouse_id: current.warehouse_id, product_id: current.product_id } },
+            data: { reserved_quantity: { decrement: pending }, updated_at: new Date() },
+          });
+          await tx.stock_reservations.update({
+            where: { id: current.id },
+            data: { quantity_released: { increment: pending }, status: 'EXPIRED' },
+          });
+          return true;
+        });
+        if (released) releasedCount += 1;
+      }
+
+      afterId = expired[expired.length - 1].id;
     }
 
-    return expired.length;
+    return releasedCount;
   }
 }

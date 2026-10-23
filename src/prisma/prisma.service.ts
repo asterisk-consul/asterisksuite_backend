@@ -165,8 +165,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     const idleSeconds = [...this.tenantLastUsed.values()].map((lastUsed) =>
       Math.max(0, Math.round((now - lastUsed) / 1000)),
     );
-    const sum = (selector: (pool: Pool) => number) =>
-      tenantPools.reduce((total, pool) => total + selector(pool), 0);
+    const sum = (selector: (pool: Pool) => number) => tenantPools.reduce((total, pool) => total + selector(pool), 0);
 
     return {
       tenantClients: this.tenantClientCache.size,
@@ -187,6 +186,19 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
+  public getRuntimeMemoryDiagnostics() {
+    const memory = process.memoryUsage();
+    const mb = (bytes: number) => Math.round((bytes / 1024 / 1024) * 10) / 10;
+    return {
+      rssMb: mb(memory.rss),
+      heapUsedMb: mb(memory.heapUsed),
+      heapTotalMb: mb(memory.heapTotal),
+      externalMb: mb(memory.external),
+      arrayBuffersMb: mb(memory.arrayBuffers),
+      prisma: this.getPoolDiagnostics(),
+    };
+  }
+
   async onModuleInit() {
     await (this.defaultClient as unknown as PrismaClient).$connect();
     this.cleanupTimer = setInterval(() => {
@@ -197,9 +209,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
 
   private async releaseIdleTenantClients() {
     const expiration = Date.now() - this.tenantIdleTtlMs;
-    const tenantsByLastUse = [...this.tenantLastUsed.entries()].sort(
-      ([, left], [, right]) => left - right,
-    );
+    const tenantsByLastUse = [...this.tenantLastUsed.entries()].sort(([, left], [, right]) => left - right);
     let overflow = Math.max(0, tenantsByLastUse.length - this.tenantClientCacheMax);
     let released = 0;
     for (const [tenantDb, lastUsed] of tenantsByLastUse) {

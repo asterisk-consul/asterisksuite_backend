@@ -1,18 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { spawn } from 'node:child_process';
+import { join } from 'node:path';
 import { Cron } from '@nestjs/schedule';
-import { PrismaService } from '@/prisma/prisma.service';
-import { ExchangeService } from './exchange.service';
 
 @Injectable()
 export class ExchangeScheduler {
   private readonly logger = new Logger(ExchangeScheduler.name);
-  private readonly synchronizedFingerprintByTenant = new Map<string, string>();
   private running = false;
-
-  constructor(
-    private readonly exchangeService: ExchangeService,
-    private readonly db: PrismaService,
-  ) {}
 
   // Por defecto sincroniza una vez al día a las 15:00 de Argentina.
   // El horario puede ajustarse por ambiente sin recompilar.
@@ -24,76 +18,55 @@ export class ExchangeScheduler {
       this.logger.warn('La sincronización anterior todavía está en ejecución; se omite esta corrida');
       return;
     }
+
     this.running = true;
+    const workerPath = join(__dirname, 'exchange-sync.worker.js');
+
     try {
-      this.logger.log('Sincronizando cotizaciones...');
-
-      // La cotización es la misma para todos los tenants: se consulta una sola vez.
-      const snapshot = await this.exchangeService.fetchRateSnapshot();
-      const fingerprint = this.snapshotFingerprint(snapshot);
-
-      const allowedTenants = (process.env.SCHEDULER_TENANT_DATABASES ?? '')
-        .split(',')
-        .map((value) => value.trim())
-        .filter(Boolean);
-      const companies = await this.db.getDefaultClient().companies.findMany({
-        where: {
-          deleted_at: null,
-          schema_name: allowedTenants.length ? { in: allowedTenants } : { not: null },
-        },
-        select: { schema_name: true, name: true },
-      });
-
-      for (const company of companies) {
-        if (!company.schema_name) continue;
-
-        if (this.synchronizedFingerprintByTenant.get(company.schema_name) === fingerprint) {
-          continue;
-        }
-
-        const startedAt = Date.now();
-        const memoryBefore = this.memorySnapshot();
-        try {
-          await this.exchangeService.syncAllRatesForClient(this.db.getTenantClient(company.schema_name), snapshot);
-          this.synchronizedFingerprintByTenant.set(company.schema_name, fingerprint);
-          this.logger.log(JSON.stringify({
-            event: 'exchange_tenant_sync_completed',
-            company: company.name,
-            durationMs: Date.now() - startedAt,
-            memoryBefore,
-            memoryAfter: this.memorySnapshot(),
-          }));
-        } catch (error) {
-          this.logger.error(JSON.stringify({
-            event: 'exchange_tenant_sync_failed',
-            company: company.name,
-            durationMs: Date.now() - startedAt,
-            memoryBefore,
-            memoryAfter: this.memorySnapshot(),
-          }), error);
-        }
-      }
+      this.logger.log('Iniciando sincronización aislada de cotizaciones...');
+      await this.runWorker(workerPath);
+      this.logger.log('La sincronización aislada de cotizaciones finalizó correctamente');
+    } catch (error) {
+      this.logger.error('Falló la sincronización aislada de cotizaciones', error);
     } finally {
       this.running = false;
     }
   }
 
-  private snapshotFingerprint(snapshot: Awaited<ReturnType<ExchangeService['fetchRateSnapshot']>>) {
-    const values = [...snapshot.official, ...snapshot.dollars]
-      .map((quote) => `${quote.moneda}:${quote.casa}:${quote.venta}`)
-      .sort();
-    return values.join('|');
-  }
+  private runWorker(workerPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const child = spawn(process.execPath, [workerPath], {
+        env: process.env,
+        stdio: 'inherit',
+      });
+      let settled = false;
 
-  private memorySnapshot() {
-    const memory = process.memoryUsage();
-    const mb = (bytes: number) => Math.round((bytes / 1024 / 1024) * 10) / 10;
-    return {
-      rssMb: mb(memory.rss),
-      heapUsedMb: mb(memory.heapUsed),
-      heapTotalMb: mb(memory.heapTotal),
-      externalMb: mb(memory.external),
-      tenantClients: this.db.getPoolDiagnostics().tenantClients,
-    };
+      const timeout = setTimeout(() => {
+        this.logger.error('La sincronización superó el límite de 10 minutos; se detiene el proceso auxiliar');
+        child.kill('SIGTERM');
+      }, 10 * 60 * 1000);
+
+      child.once('error', (error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        reject(error);
+      });
+
+      child.once('spawn', () => {
+        this.logger.log(`Proceso auxiliar de cotizaciones iniciado (pid ${child.pid ?? 'desconocido'})`);
+      });
+
+      child.once('close', (code, signal) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        if (code === 0) {
+          resolve();
+        } else {
+          reject(new Error(`El proceso auxiliar terminó con código ${code ?? 'nulo'}${signal ? ` (${signal})` : ''}`));
+        }
+      });
+    });
   }
 }
