@@ -15,6 +15,7 @@ import {
 } from './dto/query-management-report.dto';
 import {
   ConsolidatedManagementReportDto,
+  ConsolidatedReportCompanyDisplayMode,
   ConsolidatedReportView,
   ExportConsolidatedManagementReportDto,
 } from './dto/consolidated-management-report.dto';
@@ -280,8 +281,12 @@ export class ManagementReportsService {
   }
 
   async exportConsolidatedReport(dto: ExportConsolidatedManagementReportDto, userId: string) {
-    const report = await this.getConsolidatedReport(dto, userId);
-    const baseName = `reporte-${dto.view ?? 'consolidado'}-${dto.date_from}-${dto.date_to}`;
+    const report = {
+      ...await this.getConsolidatedReport(dto, userId),
+      company_display_mode: dto.company_display_mode ?? 'combined',
+    };
+    const grouping = dto.format === 'csv' || report.company_display_mode === 'combined' ? 'juntas' : 'por-empresa';
+    const baseName = `reporte-${dto.view ?? 'consolidado'}-${grouping}-${dto.date_from}-${dto.date_to}`;
     if (dto.format === 'xlsx') {
       return { filename: `${baseName}.xlsx`, contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', buffer: this.toExcel(report) };
     }
@@ -752,7 +757,7 @@ export class ManagementReportsService {
       cash: 'Saldo de cajas actual',
       pending_checks: 'Cheques pendientes actuales',
     };
-    return report.companies.flatMap((company) =>
+    const companyRows = report.companies.flatMap((company) =>
       (Object.keys(labels) as Array<keyof typeof labels>).flatMap((key) => {
         const entries: Array<[string, number]> = Object.entries(company[key]);
         const currencyRows: Array<[string, number]> = entries.length ? entries : [['ARS', 0]];
@@ -761,10 +766,35 @@ export class ManagementReportsService {
           Indicador: labels[key],
           Moneda: currency,
           Importe: Number(amount),
-          Cantidad: key in company.counts ? company.counts[key as keyof typeof company.counts] : '',
+          Cantidad: key in company.counts && currencyRows.length === 1 ? company.counts[key as keyof typeof company.counts] : '',
         }));
       }),
     );
+    const totals = new Map<string, { indicator: string; currency: string; amount: number; count: number; hasCount: boolean; countIsComplete: boolean }>();
+    for (const company of report.companies) {
+      for (const key of Object.keys(labels) as Array<keyof typeof labels>) {
+        const entries: Array<[string, number]> = Object.entries(company[key]);
+        const currencyRows: Array<[string, number]> = entries.length ? entries : [['ARS', 0]];
+        for (const [currency, amount] of currencyRows) {
+          const id = `${key}:${currency}`;
+          const total = totals.get(id) ?? { indicator: labels[key], currency, amount: 0, count: 0, hasCount: false, countIsComplete: true };
+          total.amount += Number(amount);
+          if (key in company.counts) {
+            total.hasCount = true;
+            if (currencyRows.length === 1) total.count += company.counts[key as keyof typeof company.counts];
+            else total.countIsComplete = false;
+          }
+          totals.set(id, total);
+        }
+      }
+    }
+    return [
+      ...companyRows,
+      ...[...totals.values()].map((total) => ({
+        Empresa: 'TOTAL SELECCIONADO', Indicador: total.indicator, Moneda: total.currency,
+        Importe: total.amount, Cantidad: total.hasCount && total.countIsComplete ? total.count : '',
+      })),
+    ];
   }
 
   private detailExportRows(company: ConsolidatedCompany) {
@@ -831,26 +861,63 @@ export class ManagementReportsService {
     return indexes[view].map((index) => company.details.narratives[index]).filter((value): value is string => Boolean(value));
   }
 
-  private toExcel(report: { companies: ConsolidatedCompany[]; period: { from: string; to: string }; generated_at: string; view: ConsolidatedReportView }) {
+  private toExcel(report: { companies: ConsolidatedCompany[]; period: { from: string; to: string }; generated_at: string; view: ConsolidatedReportView; company_display_mode: ConsolidatedReportCompanyDisplayMode }) {
     const workbook = XLSX.utils.book_new();
     const rows = this.exportRows(report);
     const summary = XLSX.utils.json_to_sheet(rows);
     summary['!cols'] = [{ wch: 28 }, { wch: 32 }, { wch: 12 }, { wch: 18 }, { wch: 12 }];
     XLSX.utils.book_append_sheet(workbook, summary, 'Resumen');
-    report.companies.forEach((company, index) => {
-      const sheet = XLSX.utils.json_to_sheet(this.rowsForView(company, report.view));
-      sheet['!cols'] = [{ wch: 30 }, { wch: 60 }, { wch: 12 }, { wch: 18 }, { wch: 12 }, { wch: 18 }];
-      const suffix = ` ${index + 1}`;
-      const safeName = `${company.company_name.replace(/[\\/?*:[\]]/g, '').slice(0, 31 - suffix.length) || 'Empresa'}${suffix}`;
-      XLSX.utils.book_append_sheet(workbook, sheet, safeName);
-    });
+    const metrics = [
+      ['sales', 'Ventas facturadas'], ['purchases', 'Compras facturadas'], ['collections', 'Cobros'],
+      ['payments', 'Pagos'], ['receivables', 'Cuentas por cobrar actuales'], ['payables', 'Deuda con proveedores actual'],
+      ['banks', 'Saldo bancario actual'], ['cash', 'Saldo de cajas actual'], ['pending_checks', 'Cheques pendientes actuales'],
+    ] as const;
+    const currencies = [...new Set(report.companies.flatMap((company) => metrics.flatMap(([key]) => Object.keys(company[key]))))].sort();
+    if (!currencies.length) currencies.push('ARS');
+    const comparisonRows = currencies.flatMap((currency) => [
+      ...report.companies.map((company) => Object.fromEntries([
+        ['Empresa', company.company_name], ['Moneda', currency],
+        ...metrics.map(([key, label]) => [label, company[key][currency] ?? '']),
+      ])),
+      Object.fromEntries([
+        ['Empresa', 'TOTAL SELECCIONADO'], ['Moneda', currency],
+        ...metrics.map(([key, label]) => {
+          const values = report.companies.map((company) => company[key][currency]).filter((amount): amount is number => amount !== undefined);
+          return [label, values.length ? values.reduce((sum, amount) => sum + amount, 0) : ''];
+        }),
+      ]),
+    ]);
+    const comparison = XLSX.utils.json_to_sheet(comparisonRows);
+    comparison['!cols'] = [{ wch: 30 }, { wch: 12 }, ...metrics.map(() => ({ wch: 22 }))];
+    if (comparisonRows.length) {
+      comparison['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: comparisonRows.length, c: metrics.length + 1 } }) };
+    }
+    XLSX.utils.book_append_sheet(workbook, comparison, 'Comparativo');
+
+    if (report.company_display_mode === 'combined') {
+      const detailRows = report.companies.flatMap((company) => this.rowsForView(company, report.view).map((row) => ({ ...row, Empresa: company.company_name })));
+      const detail = XLSX.utils.json_to_sheet(detailRows);
+      detail['!cols'] = [{ wch: 30 }, { wch: 28 }, { wch: 60 }, { wch: 12 }, { wch: 18 }, { wch: 12 }, { wch: 18 }];
+      XLSX.utils.book_append_sheet(workbook, detail, 'Detalle conjunto');
+    } else {
+      report.companies.forEach((company, index) => {
+        const sheet = XLSX.utils.json_to_sheet(this.rowsForView(company, report.view));
+        sheet['!cols'] = [{ wch: 30 }, { wch: 60 }, { wch: 12 }, { wch: 18 }, { wch: 12 }, { wch: 18 }];
+        const suffix = ` ${index + 1}`;
+        const safeName = `${company.company_name.replace(/[\\/?*:[\]]/g, '').slice(0, 31 - suffix.length) || 'Empresa'}${suffix}`;
+        XLSX.utils.book_append_sheet(workbook, sheet, safeName);
+      });
+    }
 
     const metadata = XLSX.utils.aoa_to_sheet([
       [`Reporte de empresas · ${report.view}`],
       ['Desde', report.period.from],
       ['Hasta', report.period.to],
       ['Generado', report.generated_at],
+      ['Presentación', report.company_display_mode === 'combined' ? 'Juntas · detalle conjunto con empresa identificada' : 'Por empresa · una hoja de detalle por empresa'],
+      ['Criterio de consolidación', 'El total seleccionado suma las empresas elegidas; no aplica eliminaciones de operaciones entre empresas.'],
       ['Nota', 'Los saldos de cuentas corrientes, bancos, cajas y cheques corresponden al saldo actual al generar el reporte.'],
+      ['Monedas', 'Los importes se mantienen separados por moneda; no se realiza conversión.'],
     ]);
     metadata['!cols'] = [{ wch: 18 }, { wch: 90 }];
     XLSX.utils.book_append_sheet(workbook, metadata, 'Información');
@@ -862,7 +929,7 @@ export class ManagementReportsService {
     return XLSX.utils.sheet_to_csv(XLSX.utils.json_to_sheet(rows), { FS: ';' });
   }
 
-  private async toPdf(report: { companies: ConsolidatedCompany[]; period: { from: string; to: string }; generated_at: string; currency_note: string; view: ConsolidatedReportView }) {
+  private async toPdf(report: { companies: ConsolidatedCompany[]; period: { from: string; to: string }; generated_at: string; currency_note: string; view: ConsolidatedReportView; company_display_mode: ConsolidatedReportCompanyDisplayMode }) {
     const fontPath = join(process.cwd(), 'node_modules', 'pdfmake', 'build', 'fonts', 'Roboto');
     pdfMake.setFonts({
       Roboto: {
@@ -873,7 +940,9 @@ export class ManagementReportsService {
       },
     });
     pdfMake.setUrlAccessPolicy(() => false);
-    const money = (amount: number, currency: string) => new Intl.NumberFormat('es-AR', { style: 'currency', currency }).format(amount);
+    const money = (amount: number, currency: string) => currency === 'UN'
+      ? amount.toLocaleString('es-AR', { maximumFractionDigits: 3 })
+      : new Intl.NumberFormat('es-AR', { style: 'currency', currency }).format(amount);
     const rows = this.exportRows(report);
     const body: unknown[][] = [[
       { text: 'Empresa', style: 'tableHeader' },
@@ -882,14 +951,20 @@ export class ManagementReportsService {
       { text: 'Importe', style: 'tableHeader', alignment: 'right' },
       { text: 'Cant.', style: 'tableHeader', alignment: 'right' },
     ]];
-    for (const row of rows) body.push([
-      row.Empresa,
-      row.Indicador,
-      row.Moneda,
-      { text: money(row.Importe, row.Moneda), alignment: 'right' },
-      { text: String(row.Cantidad), alignment: 'right' },
-    ]);
-    const detailContent = report.companies.flatMap((company, companyIndex) => {
+    for (const row of rows) {
+      const totalRow = row.Empresa === 'TOTAL SELECCIONADO';
+      const cell = (text: string, alignment: 'left' | 'right' = 'left', negative = false) => ({
+        text, alignment,
+        ...(totalRow ? { bold: true, fillColor: '#e2e8f0' } : {}),
+        ...(negative ? { color: '#b91c1c' } : {}),
+      });
+      body.push([
+        cell(row.Empresa), cell(row.Indicador), cell(row.Moneda),
+        cell(money(row.Importe, row.Moneda), 'right', row.Importe < 0),
+        cell(String(row.Cantidad), 'right'),
+      ]);
+    }
+    const detailContent = report.companies.flatMap((company) => {
       const detailRows = this.rowsForView(company, report.view).filter((row) => !['Alertas', 'Lectura ejecutiva'].includes(String(row.Seccion)));
       const groupedSections = new Map<string, typeof detailRows>();
       for (const row of detailRows) {
@@ -953,7 +1028,7 @@ export class ManagementReportsService {
       });
       const showAdministrativeContext = report.view !== 'inventory';
       return [
-        { text: company.company_name, style: 'companyTitle', ...(showAdministrativeContext || companyIndex > 0 ? { pageBreak: 'before' } : {}) },
+        { text: company.company_name, style: 'companyTitle', ...(report.company_display_mode === 'separate' ? { pageBreak: 'before' } : {}) },
         ...(showAdministrativeContext ? [
           { text: 'Lectura ejecutiva', style: 'sectionTitle' },
           ...this.narrativesForView(company, report.view).map((text) => ({ text, margin: [0, 0, 0, 5], lineHeight: 1.2 })),
@@ -971,15 +1046,19 @@ export class ManagementReportsService {
       pageOrientation: 'landscape',
       pageMargins: [32, 42, 32, 42],
       defaultStyle: { font: 'Roboto', fontSize: 8 },
-      content: report.view === 'inventory' ? detailContent : [
+      content: [
         { text: reportTitles[report.view], style: 'title' },
         { text: `Período: ${report.period.from} al ${report.period.to}`, style: 'subtitle' },
         { text: `Empresas: ${report.companies.map((company) => company.company_name).join(', ')}`, margin: [0, 0, 0, 14] },
-        { text: 'Resumen ejecutivo', style: 'sectionTitle' },
-        { table: { headerRows: 1, widths: [110, 150, 48, 90, 40], body }, layout: 'lightHorizontalLines' },
-        { text: 'Criterios de lectura', style: 'sectionTitle' },
-        { text: 'Los movimientos del período se calculan por fecha de operación. Los saldos de cuentas corrientes, bancos, cajas y cheques son los vigentes al momento de generar el reporte. Documentos, pagos y movimientos de tesorería pueden representar una misma operación y no deben sumarse entre sí. Las aperturas se informan separadas y no representan ingresos del período.', style: 'note' },
-        { text: report.currency_note, style: 'note' },
+        { text: `Presentación: ${report.company_display_mode === 'combined' ? 'juntas, en un único reporte' : 'por empresa, con el detalle de cada una en páginas separadas'}.`, margin: [0, 0, 0, 10] },
+        ...(report.view === 'inventory' ? [{ text: `${report.currency_note} El total seleccionado suma las empresas elegidas y no aplica eliminaciones de operaciones entre ellas.`, style: 'note' }] : []),
+        ...(report.view === 'inventory' ? [] : [
+          { text: 'Resumen ejecutivo', style: 'sectionTitle' },
+          { table: { headerRows: 1, widths: [110, 150, 48, 90, 40], body }, layout: 'lightHorizontalLines' },
+          { text: 'Criterios de lectura', style: 'sectionTitle' },
+          { text: 'Los movimientos del período se calculan por fecha de operación. Los saldos de cuentas corrientes, bancos, cajas y cheques son los vigentes al momento de generar el reporte. Documentos, pagos y movimientos de tesorería pueden representar una misma operación y no deben sumarse entre sí. Las aperturas se informan separadas y no representan ingresos del período. El total seleccionado suma las empresas elegidas y no aplica eliminaciones de operaciones entre ellas.', style: 'note' },
+          { text: report.currency_note, style: 'note' },
+        ]),
         ...detailContent,
       ],
       footer: (currentPage: number, pageCount: number) => ({

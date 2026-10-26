@@ -3,6 +3,8 @@ import { ArrayMaxSize, ArrayMinSize, IsArray, IsDateString, IsIn, IsOptional, Is
 
 export const consolidatedReportViews = ['consolidated', 'customers', 'suppliers', 'hr', 'treasury', 'documents', 'inventory'] as const;
 export type ConsolidatedReportView = typeof consolidatedReportViews[number];
+export const consolidatedReportCompanyDisplayModes = ['combined', 'separate'] as const;
+export type ConsolidatedReportCompanyDisplayMode = typeof consolidatedReportCompanyDisplayModes[number];
 
 export class ConsolidatedManagementReportDto {
   @IsArray()
@@ -23,6 +25,10 @@ export class ConsolidatedManagementReportDto {
 }
 
 export class ExportConsolidatedManagementReportDto extends ConsolidatedManagementReportDto {
+  @IsOptional()
+  @IsIn(consolidatedReportCompanyDisplayModes)
+  company_display_mode?: ConsolidatedReportCompanyDisplayMode;
+
   @Transform(({ value }) => String(value).toLowerCase())
   @IsIn(['pdf', 'xlsx', 'csv'])
   format!: 'pdf' | 'xlsx' | 'csv';
