@@ -965,6 +965,7 @@ export class ManagementReportsService {
       ]);
     }
     const detailContent = report.companies.flatMap((company) => {
+      const includeCompanyColumn = report.company_display_mode === 'combined';
       const detailRows = this.rowsForView(company, report.view).filter((row) => !['Alertas', 'Lectura ejecutiva'].includes(String(row.Seccion)));
       const groupedSections = new Map<string, typeof detailRows>();
       for (const row of detailRows) {
@@ -976,54 +977,70 @@ export class ManagementReportsService {
       const sectionContent = [...groupedSections.entries()].flatMap(([section, sectionRows]) => {
         if (section === 'Documentos de venta por artículo') {
           const inventoryBody: unknown[][] = [[
-            { text: 'Tipo', style: 'tableHeader' }, { text: 'Documento', style: 'tableHeader' }, { text: 'Fecha', style: 'tableHeader' }, { text: 'Cliente', style: 'tableHeader' },
-            { text: 'Artículo', style: 'tableHeader' }, { text: 'Cantidad', style: 'tableHeader', alignment: 'right' },
-            { text: 'Estado', style: 'tableHeader' }, { text: 'Confirmación', style: 'tableHeader' }, { text: 'Usuario', style: 'tableHeader' },
-            { text: 'Total facturado', style: 'tableHeader', alignment: 'right' }, { text: 'Importe cobrado', style: 'tableHeader', alignment: 'right' },
+            ...(includeCompanyColumn ? [{ text: 'Empresa', style: 'tableHeader' }] : []),
+            { text: 'Tipo / N°', style: 'tableHeader' }, { text: 'Fecha / confirmación', style: 'tableHeader' },
+            { text: 'Cliente', style: 'tableHeader' }, { text: 'Artículo', style: 'tableHeader' },
+            { text: 'Cant. / estado', style: 'tableHeader' }, { text: 'Usuario', style: 'tableHeader' },
+            { text: 'Facturado / cobrado', style: 'tableHeader', alignment: 'right' },
           ]];
-          sectionRows.forEach((row) => inventoryBody.push([
-            String(row.Tipo), String(row.Documento), String(row.Fecha), String(row.Cliente), String(row.Articulo),
-            { text: Number(row.Cantidad).toLocaleString('es-AR'), alignment: 'right' }, String(row.Estado), String(row.Confirmacion), String(row.Usuario),
-            { text: row['Total facturado'] === '' ? '—' : money(Number(row['Total facturado']), String(row['Moneda importe'])), alignment: 'right' },
-            { text: row['Importe cobrado'] === '' ? '—' : money(Number(row['Importe cobrado']), String(row['Moneda importe'])), alignment: 'right' },
-          ]));
+          sectionRows.forEach((row) => {
+            const currency = String(row['Moneda importe'] || 'ARS');
+            const invoiceAmount = row['Total facturado'] === '' ? '—' : money(Number(row['Total facturado']), currency);
+            const paidAmount = row['Importe cobrado'] === '' ? '—' : money(Number(row['Importe cobrado']), currency);
+            inventoryBody.push([
+              ...(includeCompanyColumn ? [String(row.Empresa || company.company_name)] : []),
+              `${row.Tipo} · N° ${row.Documento}`, `${row.Fecha}\n${row.Confirmacion}`,
+              String(row.Cliente), String(row.Articulo),
+              `${Number(row.Cantidad).toLocaleString('es-AR')}\n${row.Estado}`, String(row.Usuario),
+              { text: `Fact.: ${invoiceAmount}\nCob.: ${paidAmount}`, alignment: 'right' },
+            ]);
+          });
+          const inventoryWidths = includeCompanyColumn
+            ? [74, 82, 96, 88, 132, 66, 68, 126]
+            : [92, 104, 94, 148, 74, 74, 148];
           return [
             { text: section, style: 'sectionTitle' },
-            { table: { headerRows: 1, widths: [52, 36, 42, 80, 125, 32, 50, 62, 55, 70, 70], body: inventoryBody }, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
+            { table: { headerRows: 1, keepWithHeaderRows: 1, dontBreakRows: true, widths: inventoryWidths, body: inventoryBody }, fontSize: 7, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
           ];
         }
         if (section === 'Movimientos de stock') {
           const stockBody: unknown[][] = [[
+            ...(includeCompanyColumn ? [{ text: 'Empresa', style: 'tableHeader' }] : []),
             { text: 'Producto', style: 'tableHeader' }, { text: 'Origen', style: 'tableHeader' },
             { text: 'Movimiento', style: 'tableHeader' }, { text: 'Cantidad neta', style: 'tableHeader', alignment: 'right' },
             { text: 'Movimientos', style: 'tableHeader', alignment: 'right' },
           ]];
           sectionRows.forEach((row) => stockBody.push([
+            ...(includeCompanyColumn ? [company.company_name] : []),
             String(row.Producto), String(row.Origen), String(row.Movimiento),
             { text: Number(row.Cantidad).toLocaleString('es-AR', { maximumFractionDigits: 3 }), alignment: 'right' },
             { text: String(row.Registros), alignment: 'right' },
           ]));
+          const stockWidths = includeCompanyColumn ? [92, 190, 132, 116, 86, 74] : [230, 170, 110, 85, 70];
           return [
             { text: section, style: 'sectionTitle' },
             { text: 'La cantidad neta es positiva para entradas y negativa para salidas.', style: 'note' },
-            { table: { headerRows: 1, widths: [230, 170, 110, 85, 70], body: stockBody }, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
+            { table: { headerRows: 1, keepWithHeaderRows: 1, dontBreakRows: true, widths: stockWidths, body: stockBody }, fontSize: 7, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
           ];
         }
         const sectionBody: unknown[][] = [[
+          ...(includeCompanyColumn ? [{ text: 'Empresa', style: 'tableHeader' }] : []),
           { text: 'Detalle', style: 'tableHeader' }, { text: 'Moneda', style: 'tableHeader' },
           { text: 'Importe / variación', style: 'tableHeader', alignment: 'right' },
           { text: 'Registros', style: 'tableHeader', alignment: 'right' },
           { text: 'Saldo / pendiente', style: 'tableHeader', alignment: 'right' },
         ]];
         sectionRows.forEach((row) => sectionBody.push([
+          ...(includeCompanyColumn ? [company.company_name] : []),
           String(row.Detalle), String(row.Moneda),
           { text: row.Importe === '' ? '' : row.Moneda === 'Unidades' ? Number(row.Importe).toLocaleString('es-AR') : money(Number(row.Importe), String(row.Moneda)), alignment: 'right' },
           { text: String(row.Cantidad), alignment: 'right' },
           { text: row.Saldo === '' ? '' : row.Moneda === 'Unidades' ? Number(row.Saldo).toLocaleString('es-AR') : money(Number(row.Saldo), String(row.Moneda)), alignment: 'right' },
         ]));
+        const sectionWidths = includeCompanyColumn ? [105, 252, 58, 112, 56, 108] : [285, 50, 100, 50, 100];
         return [
           { text: section, style: 'sectionTitle' },
-          { table: { headerRows: 1, widths: [285, 50, 100, 50, 100], body: sectionBody }, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
+          { table: { headerRows: 1, keepWithHeaderRows: 1, dontBreakRows: true, widths: sectionWidths, body: sectionBody }, fontSize: 7, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
         ];
       });
       const showAdministrativeContext = report.view !== 'inventory';

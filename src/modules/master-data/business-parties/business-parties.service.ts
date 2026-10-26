@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
+import { assertPartyIdentityIsUnique } from './party-identity.util';
 
 // Campos laborales del DTO que pertenecen al empleados vinculado, no al party
 const LABOR_FIELDS = [
@@ -29,6 +30,7 @@ export class BusinessPartiesService {
   async create(data: CreateBusinessPartyDto) {
     // Validar formato de documento
     validateDocumentNumber(data.document_type, data.tax_id);
+    await assertPartyIdentityIsUnique(this.prisma, [data.tax_id]);
 
     const laborData = this.pickLaborFields(data);
     const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, customer_enabled, ...partyData } = data;
@@ -88,7 +90,7 @@ export class BusinessPartiesService {
           party_id: party.id,
           first_name: firstName,
           last_name: lastName,
-          document_type: 'CUIT',
+          document_type: party.document_type ?? undefined,
           document_number: party.tax_id,
           currency_code: 'USD',
           is_active: true,
@@ -113,7 +115,7 @@ export class BusinessPartiesService {
           party_id: party.id,
           first_name: firstName,
           last_name: lastName,
-          document_type: 'CUIT',
+          document_type: party.document_type ?? undefined,
           document_number: party.tax_id,
           is_active: true,
           created_by: party.created_by,
@@ -139,15 +141,17 @@ export class BusinessPartiesService {
 
   // ✅ FIND ALL
   async findAll(type?: string) {
+    const where: any = { deleted_at: null };
+
+    if (type) {
+      where.OR = [
+        { type: type as any },
+        { roles: { some: { role: type as any, active: true } } },
+      ];
+    }
+
     return this.prisma.business_parties.findMany({
-      where: type
-        ? {
-            OR: [
-              { type: type as any },
-              { roles: { some: { role: type as any, active: true } } },
-            ],
-          }
-        : undefined,
+      where,
       orderBy: { created_at: 'desc' },
       include: this.fullInclude(),
     });
@@ -244,7 +248,11 @@ export class BusinessPartiesService {
 
   // ✅ UPDATE (con sync de relaciones)
   async update(id: string, data: UpdateBusinessPartyDto) {
-    await this.findOne(id);
+    const current = await this.findOne(id);
+    if (data.tax_id !== undefined && data.tax_id !== current.tax_id) {
+      await assertPartyIdentityIsUnique(this.prisma, [data.tax_id], { partyId: id });
+    }
+    validateDocumentNumber(data.document_type ?? current.document_type ?? undefined, data.tax_id ?? current.tax_id ?? undefined);
 
     const laborData = this.pickLaborFields(data);
     const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, customer_enabled, ...partyData } = data;
@@ -302,6 +310,15 @@ export class BusinessPartiesService {
 
     // 🔥 EMPLOYEE sync: persistir datos laborales en el empleado vinculado
     if (updated.type === 'EMPLOYEE') {
+      if (data.tax_id !== undefined || data.document_type !== undefined) {
+        await this.prisma.employees.updateMany({
+          where: { party_id: id, deleted_at: null },
+          data: {
+            ...(data.tax_id !== undefined ? { document_number: data.tax_id } : {}),
+            ...(data.document_type !== undefined ? { document_type: data.document_type } : {}),
+          },
+        });
+      }
       const employeeData = this.buildEmployeeUpdate(laborData);
       if (Object.keys(employeeData).length > 0) {
         const employee = await this.prisma.employees.findFirst({
@@ -320,6 +337,16 @@ export class BusinessPartiesService {
           update: { active: customer_enabled },
         });
       }
+    }
+
+    if (updated.type === 'PARTNER' && (data.tax_id !== undefined || data.document_type !== undefined)) {
+      await this.prisma.partners.updateMany({
+        where: { party_id: id, deleted_at: null },
+        data: {
+          ...(data.tax_id !== undefined ? { document_number: data.tax_id } : {}),
+          ...(data.document_type !== undefined ? { document_type: data.document_type } : {}),
+        },
+      });
     }
 
     await this.prisma.business_party_roles.upsert({

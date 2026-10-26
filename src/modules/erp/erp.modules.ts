@@ -12,6 +12,7 @@ import { SalesReportModule } from './documents-sales/sales-reports/sales_reports
 import { DocumentsTypesErpModule } from './document_types/documents-types.module';
 import { DocumentSequencesModule } from './document-sequences/document-sequences.module';
 import { BankConceptsModule } from './bank-concepts/bank-concepts.module';
+import { CommercialAdjustmentConceptsModule } from './commercial-adjustment-concepts/commercial-adjustment-concepts.module';
 import { BankMovementsModule } from './bank-movements/bank-movements.module';
 import { PricingEngineModule } from './pricing/pricing-engine.module';
 import { ExchangeModule } from './pricing/exchange/exchange.module';
@@ -54,6 +55,7 @@ import { WhatsAppReportsModule } from './whatsapp-reports/whatsapp-reports.modul
     DocumentsTypesErpModule,
     DocumentSequencesModule,
     BankConceptsModule,
+    CommercialAdjustmentConceptsModule,
     BankMovementsModule,
     PricingEngineModule,
     ExchangeModule,
@@ -94,6 +96,7 @@ import { WhatsAppReportsModule } from './whatsapp-reports/whatsapp-reports.modul
     DocumentsTypesErpModule,
     DocumentSequencesModule,
     BankConceptsModule,
+    CommercialAdjustmentConceptsModule,
     BankMovementsModule,
     PricingEngineModule,
     ExchangeModule,

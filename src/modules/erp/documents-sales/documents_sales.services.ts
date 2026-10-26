@@ -161,6 +161,10 @@ export class DocumentsSalesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
+    if (dto.commercial_adjustments?.length && docType.category !== 'INVOICE') {
+      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
+    }
+
     // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
@@ -221,7 +225,13 @@ export class DocumentsSalesService {
     };
 
     const resolution = await this.taxResolution.resolve(taxContext);
-    const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+    const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
+      resolution,
+      taxContext.items,
+      dto.commercial_adjustments,
+    );
+    const calculation = adjustmentCalculation.calculation;
+    const automaticDocumentTaxes = calculation.document.documentTaxes.map((t) => ({ ...t }));
     if (dto.taxes?.some((t) => t.manual && !t.modification_reason?.trim())) {
       throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB');
     }
@@ -296,6 +306,7 @@ export class DocumentsSalesService {
     });
 
     const totals = {
+      commercial_adjustments: adjustmentCalculation.adjustments,
       subtotal: calculation.document.subtotal,
       exempt_amount: calculation.document.exemptAmount,
       taxable_base: calculation.document.taxableBase,
@@ -306,10 +317,7 @@ export class DocumentsSalesService {
         tax_rate: t.rate,
         taxable_base: t.taxableBase,
         tax_amount: t.amount,
-        automatic_tax_amount:
-          this.taxCalculation
-            .calculate(resolution, taxContext.items)
-            .document.documentTaxes.find((a) => a.tax_id === t.tax_id)?.amount ?? t.amount,
+        automatic_tax_amount: automaticDocumentTaxes.find((a) => a.tax_id === t.tax_id)?.amount ?? t.amount,
         is_manual: dto.taxes?.some((o) => o.tax_id === t.tax_id && o.manual) ?? false,
         modification_reason: dto.taxes?.find((o) => o.tax_id === t.tax_id && o.manual)?.modification_reason ?? null,
       })),
@@ -366,6 +374,8 @@ export class DocumentsSalesService {
           total_taxes: totals.total_taxes,
 
           total: totals.total,
+
+          commercial_adjustments: totals.commercial_adjustments as any,
 
           descrip: dto.descrip ?? null,
 
@@ -571,6 +581,13 @@ export class DocumentsSalesService {
       throw new BadRequestException('No se puede modificar un documento anulado');
     }
 
+    const hasCommercialAdjustments = dto.commercial_adjustments?.length
+      ? true
+      : Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
+    if (hasCommercialAdjustments && doc.document_types?.category !== 'INVOICE') {
+      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
+    }
+
     let items: ItemInput[] | null = null;
 
     let totals: any = null;
@@ -618,7 +635,14 @@ export class DocumentsSalesService {
       };
 
       const resolution = await this.taxResolution.resolve(taxContext);
-      const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+      const requestedAdjustments = dto.commercial_adjustments ??
+        (Array.isArray(doc.commercial_adjustments) ? doc.commercial_adjustments : []);
+      const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
+        resolution,
+        taxContext.items,
+        requestedAdjustments as any,
+      );
+      const calculation = adjustmentCalculation.calculation;
       const automaticDocumentTaxes = calculation.document.documentTaxes.map((t) => ({ ...t }));
       if (dto.taxes?.some((t) => t.manual && !t.modification_reason?.trim())) {
         throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB');
@@ -697,6 +721,7 @@ export class DocumentsSalesService {
       }
 
       totals = {
+        commercial_adjustments: adjustmentCalculation.adjustments,
         subtotal: calculation.document.subtotal,
         exempt_amount: calculation.document.exemptAmount,
         taxable_base: calculation.document.taxableBase,
@@ -834,6 +859,8 @@ export class DocumentsSalesService {
 
           total: totals?.total ?? Number(doc.total),
 
+          commercial_adjustments: totals?.commercial_adjustments ?? doc.commercial_adjustments ?? undefined,
+
           descrip: dto.descrip ?? doc.descrip,
 
           ref: dto.ref ?? doc.ref,
@@ -917,6 +944,8 @@ export class DocumentsSalesService {
           unit_price: item.unit_price,
 
           original_unit_price: item.original_unit_price,
+
+          discount_percentage: item.discount_percentage ?? 0,
 
           currency_code: item.currency,
 

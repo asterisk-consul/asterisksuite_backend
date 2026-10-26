@@ -122,6 +122,10 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
+    if (dto.commercial_adjustments?.length && docType.category !== 'INVOICE') {
+      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
+    }
+
     // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
@@ -205,12 +209,17 @@ export class DocumentsPurchasesService {
       items: dtoItems.map((i) => ({
         productId: i.product_id,
         quantity: Number(i.quantity),
-        unitPrice: Number(i.unit_price),
+        unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
       })),
     };
 
     const resolution = await this.taxResolution.resolve(taxContext);
-    const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+    const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
+      resolution,
+      taxContext.items,
+      dto.commercial_adjustments,
+    );
+    const calculation = adjustmentCalculation.calculation;
     if (dto.taxes?.some((t) => t.manual && !t.modification_reason?.trim())) {
       throw new BadRequestException('Indicá el motivo de la modificación manual de IIBB');
     }
@@ -293,8 +302,9 @@ export class DocumentsPurchasesService {
         ),
       currency: currencyCode,
       exchange_rate: exchangeRate,
-      original_unit_price: item.unitPrice,
+      original_unit_price: Number(dtoItems[idx]?.unit_price ?? item.unitPrice),
       unit_price: item.unitPrice,
+      discount_percentage: Number(dtoItems[idx]?.discount_percentage ?? 0),
       converted_unit_price: isBase ? null : this.conversionService.convertAmount(item.unitPrice, exchangeRate),
       price: item.total,
       total: item.total,
@@ -313,6 +323,7 @@ export class DocumentsPurchasesService {
 
     // Usar totals del Tax Engine
     const totals = {
+      commercial_adjustments: adjustmentCalculation.adjustments,
       subtotal: calculation.document.subtotal,
       exempt_amount: calculation.document.exemptAmount,
       taxable_base: calculation.document.taxableBase,
@@ -380,6 +391,8 @@ export class DocumentsPurchasesService {
           total_taxes: totals.total_taxes,
 
           total: totals.total,
+
+          commercial_adjustments: totals.commercial_adjustments as any,
 
           descrip: dto.descrip ?? null,
 
@@ -495,6 +508,13 @@ export class DocumentsPurchasesService {
       throw new BadRequestException('No se puede modificar un documento anulado');
     }
 
+    const hasCommercialAdjustments = dto.commercial_adjustments?.length
+      ? true
+      : Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
+    if (hasCommercialAdjustments && doc.document_types?.category !== 'INVOICE') {
+      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
+    }
+
     let items: ItemInput[] | null = null;
 
     let totals: any = null;
@@ -536,12 +556,19 @@ export class DocumentsPurchasesService {
         items: dto.items.map((i) => ({
           productId: i.product_id,
           quantity: Number(i.quantity),
-          unitPrice: Number(i.unit_price),
+          unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
         })),
       };
 
       const resolution = await this.taxResolution.resolve(taxContext);
-      const calculation = this.taxCalculation.calculate(resolution, taxContext.items);
+      const requestedAdjustments = dto.commercial_adjustments ??
+        (Array.isArray(doc.commercial_adjustments) ? doc.commercial_adjustments : []);
+      const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
+        resolution,
+        taxContext.items,
+        requestedAdjustments as any,
+      );
+      const calculation = adjustmentCalculation.calculation;
       const updateProductIds = [...new Set(dto.items.map((item) => item.product_id).filter(Boolean))] as string[];
       const updateProducts = updateProductIds.length
         ? await this.prisma.products.findMany({
@@ -580,8 +607,9 @@ export class DocumentsPurchasesService {
           ),
         currency: updateCurrencyCode,
         exchange_rate: updateExchangeRate,
-        original_unit_price: item.unitPrice,
+        original_unit_price: Number(dto.items?.[idx]?.unit_price ?? item.unitPrice),
         unit_price: item.unitPrice,
+        discount_percentage: Number(dto.items?.[idx]?.discount_percentage ?? 0),
         converted_unit_price: updateIsBase
           ? null
           : this.conversionService.convertAmount(item.unitPrice, updateExchangeRate),
@@ -603,6 +631,7 @@ export class DocumentsPurchasesService {
       }));
 
       totals = {
+        commercial_adjustments: adjustmentCalculation.adjustments,
         subtotal: calculation.document.subtotal,
         exempt_amount: calculation.document.exemptAmount,
         taxable_base: calculation.document.taxableBase,
@@ -701,6 +730,8 @@ export class DocumentsPurchasesService {
 
           total: totals?.total ?? Number(doc.total),
 
+          commercial_adjustments: totals?.commercial_adjustments ?? doc.commercial_adjustments ?? undefined,
+
           descrip: dto.descrip ?? doc.descrip,
 
           ref: dto.ref ?? doc.ref,
@@ -795,6 +826,8 @@ export class DocumentsPurchasesService {
           unit_price: item.unit_price,
 
           original_unit_price: item.original_unit_price,
+
+          discount_percentage: item.discount_percentage ?? 0,
 
           currency_code: item.currency,
 

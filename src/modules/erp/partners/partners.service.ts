@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
+import { assertPartyIdentityIsUnique } from '@/modules/master-data/business-parties/party-identity.util';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -20,19 +21,7 @@ export class PartnersService {
     // Validar formato de documento
     validateDocumentNumber(dto.document_type, dto.document_number);
 
-    // Validar duplicados por document_type + document_number
-    if (dto.document_type && dto.document_number) {
-      const existing = await this.prisma.partners.findFirst({
-        where: {
-          document_type: dto.document_type,
-          document_number: dto.document_number,
-          deleted_at: null,
-        },
-      });
-      if (existing) {
-        throw new BadRequestException(`Ya existe un socio con ${dto.document_type} ${dto.document_number}`);
-      }
-    }
+    await assertPartyIdentityIsUnique(this.prisma, [dto.document_number, dto.tax_id], { partyId: dto.party_id });
 
     let finalUserId = dto.user_id;
 
@@ -179,19 +168,13 @@ export class PartnersService {
   async update(id: string, dto: UpdatePartnerDto, userId: string) {
     const partner = await this.findOne(id);
 
-    // Validar duplicados si cambia document_type/document_number
-    if (dto.document_type && dto.document_number) {
-      const existing = await this.prisma.partners.findFirst({
-        where: {
-          document_type: dto.document_type,
-          document_number: dto.document_number,
-          deleted_at: null,
-          NOT: { id },
-        },
-      });
-      if (existing) {
-        throw new BadRequestException(`Ya existe un socio con ${dto.document_type} ${dto.document_number}`);
-      }
+    if (dto.document_type !== undefined || dto.document_number !== undefined) {
+      validateDocumentNumber(dto.document_type ?? partner.document_type ?? undefined, dto.document_number ?? partner.document_number ?? undefined);
+      await assertPartyIdentityIsUnique(
+        this.prisma,
+        [dto.document_number ?? partner.document_number],
+        { partyId: partner.party_id ?? undefined, partnerId: id },
+      );
     }
 
     // Extraer campos de business_party del DTO

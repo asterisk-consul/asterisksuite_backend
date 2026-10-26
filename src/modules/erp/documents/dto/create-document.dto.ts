@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsDateString, IsNumber, IsOptional, IsString, IsUUID, Min, ValidateNested } from 'class-validator';
+import { IsArray, IsDateString, IsIn, IsNumber, IsOptional, IsString, IsUUID, Min, MinLength, ValidateNested } from 'class-validator';
 
 export class CreateDocumentItemTaxDto {
   @IsUUID()
@@ -85,6 +85,25 @@ export class CreateDocumentTaxDto {
   modification_reason?: string;
 }
 
+export class DocumentCommercialAdjustmentDto {
+  @IsString()
+  @MinLength(1)
+  concept!: string;
+
+  @IsString()
+  @IsIn(['PERCENTAGE', 'AMOUNT'])
+  value_type!: 'PERCENTAGE' | 'AMOUNT';
+
+  @IsString()
+  @IsIn(['NET', 'GROSS'])
+  basis!: 'NET' | 'GROSS';
+
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.01)
+  value!: number;
+}
+
 export class CreateDocumentDto {
   @IsUUID()
   document_type_id!: string;
@@ -159,6 +178,12 @@ export class CreateDocumentDto {
   @Type(() => CreateDocumentTaxDto)
   @IsOptional()
   taxes?: CreateDocumentTaxDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DocumentCommercialAdjustmentDto)
+  commercial_adjustments?: DocumentCommercialAdjustmentDto[];
 
   // ─── Presupuesto fields ─────────────────────────
   @IsOptional()

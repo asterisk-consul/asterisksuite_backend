@@ -41,6 +41,9 @@ export const RBAC_PERMISSIONS = [
   { code: 'documents.delete', description: 'Eliminar documentos' },
   { code: 'documents.confirm', description: 'Confirmar documentos' },
   { code: 'documents.cancel', description: 'Cancelar documentos' },
+  { code: 'commercial_adjustment_concepts.read', description: 'Ver conceptos comerciales reutilizables' },
+  { code: 'commercial_adjustment_concepts.create', description: 'Crear conceptos comerciales reutilizables' },
+  { code: 'commercial_adjustment_concepts.update', description: 'Editar conceptos comerciales reutilizables' },
   { code: 'management_reports.read', description: 'Ver y exportar reportes gerenciales y consolidados' },
 
   // ─── ERP - Currencies ─────────────────────────────────────
@@ -503,6 +506,7 @@ export const RBAC_ROLES = [
       'documents.read',
       'documents.create',
       'documents.update',
+      'commercial_adjustment_concepts.read',
       'sales.read',
       'sales.create',
       'sales.update',

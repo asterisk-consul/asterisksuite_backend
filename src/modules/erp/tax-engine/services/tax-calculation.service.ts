@@ -1,9 +1,82 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import type { TaxResolutionResult, TaxCalculationResult, CalculatedItem, CalculatedItemTax, CalculatedDocumentTax } from '../interfaces/tax-result.interface'
 import type { TaxContextItem } from '../interfaces/tax-context.interface'
+import type { AppliedCommercialAdjustment, CommercialAdjustmentInput } from '../interfaces/commercial-adjustment.interface'
 
 @Injectable()
 export class TaxCalculationService {
+  calculateWithCommercialAdjustments(
+    resolution: TaxResolutionResult,
+    sourceItems: TaxContextItem[],
+    adjustments: CommercialAdjustmentInput[] = [],
+  ): { calculation: TaxCalculationResult; adjustments: AppliedCommercialAdjustment[]; originalSubtotal: number } {
+    let items = sourceItems.map((item) => ({ ...item }))
+    let calculation = this.calculate(resolution, items)
+    const originalSubtotal = calculation.document.subtotal
+    const applied: AppliedCommercialAdjustment[] = []
+
+    for (const adjustment of adjustments) {
+      const concept = String(adjustment.concept ?? '').trim()
+      const value = Number(adjustment.value)
+      const valueType = String(adjustment.value_type ?? '').toUpperCase()
+      const basis = String(adjustment.basis ?? '').toUpperCase()
+
+      if (!concept) throw new BadRequestException('Cada concepto de descuento necesita una descripción.')
+      if (!Number.isFinite(value) || value <= 0) {
+        throw new BadRequestException(`El importe de "${concept}" debe ser mayor que cero.`)
+      }
+      if (!['PERCENTAGE', 'AMOUNT'].includes(valueType)) {
+        throw new BadRequestException(`El tipo de cálculo de "${concept}" no es válido.`)
+      }
+      if (!['NET', 'GROSS'].includes(basis)) {
+        throw new BadRequestException(`La base de cálculo de "${concept}" no es válida.`)
+      }
+      if (valueType === 'PERCENTAGE' && value > 100) {
+        throw new BadRequestException(`El porcentaje de "${concept}" no puede superar el 100%.`)
+      }
+
+      const before = calculation.document
+      const baseAmount = basis === 'NET' ? before.subtotal : before.total
+      if (baseAmount <= 0) {
+        throw new BadRequestException(`No hay una base disponible para aplicar "${concept}".`)
+      }
+
+      const requestedAmount = valueType === 'PERCENTAGE'
+        ? baseAmount * value / 100
+        : value
+      if (requestedAmount > baseAmount + 0.005) {
+        throw new BadRequestException(`"${concept}" no puede superar la base de cálculo.`)
+      }
+
+      // A fixed discount is converted into a proportional reduction so the tax
+      // engine can distribute it consistently across lines and tax rates.
+      const reductionRatio = Math.min(1, requestedAmount / baseAmount)
+      items = items.map((item) => ({
+        ...item,
+        // document_items.unit_price is stored with two decimal places; calculate
+        // against the value that will actually be persisted and displayed.
+        unitPrice: round2(item.unitPrice * (1 - reductionRatio)),
+      }))
+      calculation = this.calculate(resolution, items)
+      const after = calculation.document
+      const selectedBaseAfter = basis === 'NET' ? after.subtotal : after.total
+
+      applied.push({
+        concept,
+        value_type: valueType as CommercialAdjustmentInput['value_type'],
+        basis: basis as CommercialAdjustmentInput['basis'],
+        value,
+        base_amount: round2(baseAmount),
+        calculated_amount: round2(baseAmount - selectedBaseAfter),
+        net_discount: round2(before.subtotal - after.subtotal),
+        tax_reduction: round2(before.totalTaxes - after.totalTaxes),
+        total_reduction: round2(before.total - after.total),
+      })
+    }
+
+    return { calculation, adjustments: applied, originalSubtotal }
+  }
+
   calculate(resolution: TaxResolutionResult, items: TaxContextItem[]): TaxCalculationResult {
     const calcItems: CalculatedItem[] = []
     const allItemTaxes: CalculatedItemTax[] = []
@@ -123,4 +196,8 @@ export class TaxCalculationService {
 
     return Array.from(map.values())
   }
+}
+
+function round2(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100
 }

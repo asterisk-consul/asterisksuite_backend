@@ -63,6 +63,7 @@ export const ModelName = {
   currency_rates: 'currency_rates',
   dashboard_configs: 'dashboard_configs',
   document_sequences: 'document_sequences',
+  commercial_adjustment_concepts: 'commercial_adjustment_concepts',
   document_type_sequences: 'document_type_sequences',
   document_item_taxes: 'document_item_taxes',
   document_items: 'document_items',
@@ -468,6 +469,27 @@ export const Document_sequencesScalarFieldEnum = {
 export type Document_sequencesScalarFieldEnum = (typeof Document_sequencesScalarFieldEnum)[keyof typeof Document_sequencesScalarFieldEnum]
 
 
+export const Commercial_adjustment_conceptsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  applies_to: 'applies_to',
+  value_type: 'value_type',
+  basis: 'basis',
+  default_value: 'default_value',
+  is_active: 'is_active',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Commercial_adjustment_conceptsScalarFieldEnum = (typeof Commercial_adjustment_conceptsScalarFieldEnum)[keyof typeof Commercial_adjustment_conceptsScalarFieldEnum]
+
+
 export const Document_type_sequencesScalarFieldEnum = {
   id: 'id',
   document_type_id: 'document_type_id',
@@ -644,6 +666,7 @@ export const DocumentsScalarFieldEnum = {
   converted_taxable_base: 'converted_taxable_base',
   converted_paid_amount: 'converted_paid_amount',
   custom_fields: 'custom_fields',
+  commercial_adjustments: 'commercial_adjustments',
   assigned_to: 'assigned_to',
   validity_date: 'validity_date',
   delivery_date: 'delivery_date',

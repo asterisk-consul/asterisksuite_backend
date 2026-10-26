@@ -25,6 +25,29 @@ model document_sequences {
   @@schema("tenant")
 }
 
+/// Reusable commercial discount/bonus templates. Documents keep their own
+/// immutable snapshot in documents.commercial_adjustments.
+model commercial_adjustment_concepts {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @db.VarChar(120)
+  description  String?   @db.Text
+  applies_to   String    @default("BOTH") @db.VarChar(20) // SALES, PURCHASES, BOTH
+  value_type   String    @db.VarChar(20) // PERCENTAGE, AMOUNT
+  basis        String    @db.VarChar(10) // NET, GROSS
+  default_value Decimal? @db.Decimal(15, 4)
+  is_active    Boolean   @default(true)
+  sort_order   Int       @default(0)
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at   DateTime? @db.Timestamp(6)
+  created_by   String?   @db.Uuid
+  updated_by   String?   @db.Uuid
+  deleted_by   String?   @db.Uuid
+
+  @@index([is_active, applies_to, sort_order], map: "idx_commercial_adjustment_concepts_active_scope_order")
+  @@schema("tenant")
+}
+
 model document_type_sequences {
   id               String   @id @default(uuid()) @db.Uuid
   document_type_id String   @db.Uuid
@@ -222,6 +245,7 @@ model documents {
   converted_taxable_base          Decimal?                            @db.Decimal(18, 2)
   converted_paid_amount           Decimal?                            @db.Decimal(18, 2)
   custom_fields                   Json?
+  commercial_adjustments         Json?
   assigned_to                     String?                             @db.Uuid
   validity_date                   DateTime?                           @db.Date
   delivery_date                   DateTime?                           @db.Date

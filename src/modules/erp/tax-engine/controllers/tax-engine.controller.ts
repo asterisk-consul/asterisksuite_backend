@@ -13,7 +13,18 @@ export class TaxEngineController {
   @Post('calculate-preview')
   async calculatePreview(@Body() dto: TaxContextDto) {
     const resolution = await this.resolution.resolve(dto)
-    const result = this.calculation.calculate(resolution, dto.items)
-    return result
+    const result = this.calculation.calculateWithCommercialAdjustments(
+      resolution,
+      dto.items,
+      dto.commercial_adjustments,
+    )
+    return {
+      ...result.calculation,
+      document: {
+        ...result.calculation.document,
+        commercial_adjustments: result.adjustments,
+        originalSubtotal: result.originalSubtotal,
+      },
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsArray, ValidateNested, IsNumber, IsIn } from 'class-validator'
+import { IsString, IsOptional, IsArray, ValidateNested, IsNumber, IsIn, Min, Max, MinLength } from 'class-validator'
 import { Type } from 'class-transformer'
 
 class TaxContextItemDto {
@@ -11,6 +11,25 @@ class TaxContextItemDto {
 
   @IsNumber()
   unitPrice: number
+}
+
+class CommercialAdjustmentDto {
+  @IsString()
+  @MinLength(1)
+  concept: string
+
+  @IsString()
+  @IsIn(['PERCENTAGE', 'AMOUNT'])
+  value_type: 'PERCENTAGE' | 'AMOUNT'
+
+  @IsString()
+  @IsIn(['NET', 'GROSS'])
+  basis: 'NET' | 'GROSS'
+
+  @IsNumber()
+  @Min(0.01)
+  @Max(1000000000000)
+  value: number
 }
 
 export class TaxContextDto {
@@ -58,4 +77,10 @@ export class TaxContextDto {
   @ValidateNested({ each: true })
   @Type(() => TaxContextItemDto)
   items: TaxContextItemDto[]
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CommercialAdjustmentDto)
+  commercial_adjustments?: CommercialAdjustmentDto[]
 }

@@ -108,13 +108,25 @@ export class TrashService {
   }
 
   // 💀 hard delete BULK (elimina físicamente)
-  hardDeleteMany(model: string, ids: string[]) {
+  async hardDeleteMany(model: string, ids: string[]) {
     if (this.domainProtectedModels.has(model)) {
       throw new BadRequestException('Los documentos y pagos conservan trazabilidad y no admiten eliminación definitiva');
     }
-    return this.prisma.getClientForCurrentContext()[model].deleteMany({
-      where: { id: { in: ids } },
-    });
+
+    try {
+      return await this.prisma.getClientForCurrentContext()[model].deleteMany({
+        where: { id: { in: ids } },
+      });
+    } catch (error) {
+      const code = (error as { code?: string })?.code;
+      if (code === 'P2003') {
+        const message = model === 'business_parties'
+          ? 'No se puede eliminar definitivamente esta parte interesada porque tiene documentos u otros registros vinculados. Reasigná esas relaciones a la ficha que vas a conservar antes de eliminarla.'
+          : 'No se puede eliminar definitivamente este registro porque tiene otros datos vinculados.';
+        throw new BadRequestException(message);
+      }
+      throw error;
+    }
   }
 
   // 🧠 lista de modelos permitidos (todos los que tienen deleted_at)
