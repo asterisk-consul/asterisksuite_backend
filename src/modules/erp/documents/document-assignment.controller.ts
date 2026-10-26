@@ -8,6 +8,7 @@ import type { Request } from 'express';
 import { DocumentAccessService } from '@/access-control/services/document-access.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { requestContext } from '@/common/context/request-context';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 
 export class AssignDocumentDto {
   @IsUUID()
@@ -17,7 +18,11 @@ export class AssignDocumentDto {
 @Controller('documents/assignment')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class DocumentAssignmentController {
-  constructor(private readonly db: PrismaService, private readonly documentAccess: DocumentAccessService) {}
+  constructor(
+    private readonly db: PrismaService,
+    private readonly documentAccess: DocumentAccessService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   private context() {
     const context = requestContext.getStore();
@@ -68,11 +73,45 @@ export class DocumentAssignmentController {
       select: { user: { select: { id: true, name: true } } },
     });
     if (!member) throw new BadRequestException('El usuario debe estar activo y pertenecer a esta empresa');
-    const document = await this.db.getClientForCurrentContext().documents.findFirst({ where: { id, deleted_at: null }, select: { id: true } });
-    if (!document) throw new NotFoundException('Documento no encontrado');
-    await this.db.getClientForCurrentContext().documents.update({
+    const client = this.db.getClientForCurrentContext();
+    const document = await client.documents.findFirst({
       where: { id, deleted_at: null },
-      data: { assigned_to: dto.user_id },
+      select: {
+        id: true,
+        number: true,
+        assigned_to: true,
+        document_types: { select: { direction: true, category: true } },
+      },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    await client.$transaction(async tx => {
+      await tx.documents.update({
+        where: { id, deleted_at: null },
+        data: { assigned_to: dto.user_id },
+      });
+
+      if (document.assigned_to !== dto.user_id) {
+        const isSale = document.document_types.direction === 1;
+        const category = document.document_types.category;
+        const targetPath = isSale
+          ? `/erp/sales/${id}`
+          : category === 'ORDER'
+            ? `/erp/purchases/orders/${id}`
+            : category === 'REMITO'
+              ? `/erp/purchases/remitos/${id}`
+              : `/erp/purchases/purchases-documents/${id}`;
+        await this.notifications.createAssignment({
+          tx,
+          companyId: context.companyId,
+          recipientUserId: dto.user_id,
+          actorUserId: user.id,
+          title: 'Te asignaron un documento',
+          message: `Documento N.º ${document.number}`,
+          targetPath,
+          targetType: isSale ? 'SALES_DOCUMENT' : 'PURCHASE_DOCUMENT',
+          targetId: id,
+        });
+      }
     });
     return member.user;
   }

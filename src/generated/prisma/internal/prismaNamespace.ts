@@ -480,6 +480,7 @@ export const ModelName = {
   maintenance_plan_assets: 'maintenance_plan_assets',
   system_modules: 'system_modules',
   locations: 'locations',
+  user_notifications: 'user_notifications',
   operation_taxes: 'operation_taxes',
   pallet_items: 'pallet_items',
   pallets: 'pallets',
@@ -513,6 +514,8 @@ export const ModelName = {
   company_users: 'company_users',
   company_tax_settings: 'company_tax_settings',
   user_table_preferences: 'user_table_preferences',
+  company_whatsapp_report_settings: 'company_whatsapp_report_settings',
+  company_whatsapp_report_runs: 'company_whatsapp_report_runs',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -573,7 +576,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "user_table_preferences" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -7681,6 +7684,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    user_notifications: {
+      payload: Prisma.$user_notificationsPayload<ExtArgs>
+      fields: Prisma.user_notificationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.user_notificationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.user_notificationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>
+        }
+        findFirst: {
+          args: Prisma.user_notificationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.user_notificationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>
+        }
+        findMany: {
+          args: Prisma.user_notificationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>[]
+        }
+        create: {
+          args: Prisma.user_notificationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>
+        }
+        createMany: {
+          args: Prisma.user_notificationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.user_notificationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>[]
+        }
+        delete: {
+          args: Prisma.user_notificationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>
+        }
+        update: {
+          args: Prisma.user_notificationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.user_notificationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.user_notificationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.user_notificationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.user_notificationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notificationsPayload>
+        }
+        aggregate: {
+          args: Prisma.User_notificationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUser_notifications>
+        }
+        groupBy: {
+          args: Prisma.user_notificationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_notificationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.user_notificationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_notificationsCountAggregateOutputType> | number
+        }
+      }
+    }
     operation_taxes: {
       payload: Prisma.$operation_taxesPayload<ExtArgs>
       fields: Prisma.operation_taxesFieldRefs
@@ -10120,6 +10197,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.user_table_preferencesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.User_table_preferencesCountAggregateOutputType> | number
+        }
+      }
+    }
+    company_whatsapp_report_settings: {
+      payload: Prisma.$company_whatsapp_report_settingsPayload<ExtArgs>
+      fields: Prisma.company_whatsapp_report_settingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.company_whatsapp_report_settingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.company_whatsapp_report_settingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>
+        }
+        findFirst: {
+          args: Prisma.company_whatsapp_report_settingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.company_whatsapp_report_settingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>
+        }
+        findMany: {
+          args: Prisma.company_whatsapp_report_settingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>[]
+        }
+        create: {
+          args: Prisma.company_whatsapp_report_settingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>
+        }
+        createMany: {
+          args: Prisma.company_whatsapp_report_settingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.company_whatsapp_report_settingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>[]
+        }
+        delete: {
+          args: Prisma.company_whatsapp_report_settingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>
+        }
+        update: {
+          args: Prisma.company_whatsapp_report_settingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.company_whatsapp_report_settingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.company_whatsapp_report_settingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.company_whatsapp_report_settingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.company_whatsapp_report_settingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_settingsPayload>
+        }
+        aggregate: {
+          args: Prisma.Company_whatsapp_report_settingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompany_whatsapp_report_settings>
+        }
+        groupBy: {
+          args: Prisma.company_whatsapp_report_settingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_report_settingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.company_whatsapp_report_settingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_report_settingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    company_whatsapp_report_runs: {
+      payload: Prisma.$company_whatsapp_report_runsPayload<ExtArgs>
+      fields: Prisma.company_whatsapp_report_runsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.company_whatsapp_report_runsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.company_whatsapp_report_runsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>
+        }
+        findFirst: {
+          args: Prisma.company_whatsapp_report_runsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.company_whatsapp_report_runsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>
+        }
+        findMany: {
+          args: Prisma.company_whatsapp_report_runsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>[]
+        }
+        create: {
+          args: Prisma.company_whatsapp_report_runsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>
+        }
+        createMany: {
+          args: Prisma.company_whatsapp_report_runsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.company_whatsapp_report_runsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>[]
+        }
+        delete: {
+          args: Prisma.company_whatsapp_report_runsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>
+        }
+        update: {
+          args: Prisma.company_whatsapp_report_runsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>
+        }
+        deleteMany: {
+          args: Prisma.company_whatsapp_report_runsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.company_whatsapp_report_runsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.company_whatsapp_report_runsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>[]
+        }
+        upsert: {
+          args: Prisma.company_whatsapp_report_runsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_report_runsPayload>
+        }
+        aggregate: {
+          args: Prisma.Company_whatsapp_report_runsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompany_whatsapp_report_runs>
+        }
+        groupBy: {
+          args: Prisma.company_whatsapp_report_runsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_report_runsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.company_whatsapp_report_runsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_report_runsCountAggregateOutputType> | number
         }
       }
     }
@@ -15434,6 +15659,23 @@ export const LocationsScalarFieldEnum = {
 export type LocationsScalarFieldEnum = (typeof LocationsScalarFieldEnum)[keyof typeof LocationsScalarFieldEnum]
 
 
+export const User_notificationsScalarFieldEnum = {
+  id: 'id',
+  recipient_user_id: 'recipient_user_id',
+  actor_user_id: 'actor_user_id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  target_path: 'target_path',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at',
+  read_at: 'read_at'
+} as const
+
+export type User_notificationsScalarFieldEnum = (typeof User_notificationsScalarFieldEnum)[keyof typeof User_notificationsScalarFieldEnum]
+
+
 export const Operation_taxesScalarFieldEnum = {
   id: 'id',
   tax_id: 'tax_id',
@@ -16029,6 +16271,41 @@ export const User_table_preferencesScalarFieldEnum = {
 } as const
 
 export type User_table_preferencesScalarFieldEnum = (typeof User_table_preferencesScalarFieldEnum)[keyof typeof User_table_preferencesScalarFieldEnum]
+
+
+export const Company_whatsapp_report_settingsScalarFieldEnum = {
+  company_id: 'company_id',
+  enabled: 'enabled',
+  selected_company_ids: 'selected_company_ids',
+  consolidated_enabled: 'consolidated_enabled',
+  consolidated_group_id: 'consolidated_group_id',
+  inventory_enabled: 'inventory_enabled',
+  inventory_group_id: 'inventory_group_id',
+  configured_by: 'configured_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_whatsapp_report_settingsScalarFieldEnum = (typeof Company_whatsapp_report_settingsScalarFieldEnum)[keyof typeof Company_whatsapp_report_settingsScalarFieldEnum]
+
+
+export const Company_whatsapp_report_runsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  report_type: 'report_type',
+  period_start: 'period_start',
+  period_end: 'period_end',
+  status: 'status',
+  attempt_count: 'attempt_count',
+  message_id: 'message_id',
+  last_error: 'last_error',
+  started_at: 'started_at',
+  sent_at: 'sent_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_whatsapp_report_runsScalarFieldEnum = (typeof Company_whatsapp_report_runsScalarFieldEnum)[keyof typeof Company_whatsapp_report_runsScalarFieldEnum]
 
 
 export const PermissionsScalarFieldEnum = {
@@ -18434,6 +18711,7 @@ export type GlobalOmitConfig = {
   maintenance_plan_assets?: Prisma.maintenance_plan_assetsOmit
   system_modules?: Prisma.system_modulesOmit
   locations?: Prisma.locationsOmit
+  user_notifications?: Prisma.user_notificationsOmit
   operation_taxes?: Prisma.operation_taxesOmit
   pallet_items?: Prisma.pallet_itemsOmit
   pallets?: Prisma.palletsOmit
@@ -18467,6 +18745,8 @@ export type GlobalOmitConfig = {
   company_users?: Prisma.company_usersOmit
   company_tax_settings?: Prisma.company_tax_settingsOmit
   user_table_preferences?: Prisma.user_table_preferencesOmit
+  company_whatsapp_report_settings?: Prisma.company_whatsapp_report_settingsOmit
+  company_whatsapp_report_runs?: Prisma.company_whatsapp_report_runsOmit
   permissions?: Prisma.permissionsOmit
   business_roles?: Prisma.business_rolesOmit
   business_role_permissions?: Prisma.business_role_permissionsOmit

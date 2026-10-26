@@ -15,6 +15,8 @@ export class TreasuryObligationsController {
   findAll(@Query('status') status?: string, @Query('category') category?: string, @Query('from') from?: string, @Query('to') to?: string, @Query('search') search?: string) {
     return this.service.findAll({ status, category, from, to, search });
   }
+  @Get('notifications') @RequirePermissions('treasury.payments.read')
+  notifications() { return this.service.findNotificationAlerts(); }
   @Get('summary') @RequirePermissions('treasury.payments.read')
   summary() { return this.service.summary(); }
   @Get('templates') @RequirePermissions('treasury.payments.read')

@@ -752,13 +752,23 @@ export class CreditCardsService {
   async dashboard(days = 7) {
     const now = new Date();
     const horizon = new Date(now); horizon.setDate(horizon.getDate() + days);
+    const corporateInstallmentsWhere = {
+      status: 'PENDING' as const,
+      due_date: { gte: now, lte: horizon },
+      deleted_at: null,
+      transaction: {
+        type: 'PURCHASE',
+        credit_card: { type: 'COMPANY' },
+        payment: { status: { in: ['CONFIRMED', 'PAID'] }, deleted_at: null },
+      },
+    };
     const [pending, overdue, corporate, collections] = await Promise.all([
       this.prisma.credit_card_transactions.count({ where: { type: 'COLLECTION', clearing_status: 'PENDING', deleted_at: null } }),
       this.prisma.credit_card_transactions.count({ where: { type: 'COLLECTION', clearing_status: 'PENDING', expected_clearing_date: { lt: now }, deleted_at: null } }),
-      this.prisma.credit_card_installments.aggregate({ _sum: { amount: true }, where: { status: 'PENDING', due_date: { lte: horizon }, deleted_at: null } }),
+      this.prisma.credit_card_installments.aggregate({ _sum: { amount: true }, _count: { id: true }, where: corporateInstallmentsWhere }),
       this.prisma.credit_card_transactions.aggregate({ _sum: { net_amount: true }, where: { type: 'COLLECTION', clearing_status: 'PENDING', expected_clearing_date: { lte: horizon }, deleted_at: null } }),
     ]);
-    return { pending_collections: pending, overdue_collections: overdue, upcoming_installments: Number(corporate._sum.amount ?? 0), expected_settlements: Number(collections._sum.net_amount ?? 0), days };
+    return { pending_collections: pending, overdue_collections: overdue, upcoming_installments: Number(corporate._sum.amount ?? 0), upcoming_installments_count: corporate._count.id, expected_settlements: Number(collections._sum.net_amount ?? 0), days };
   }
 
   async report(from?: string, to?: string) {

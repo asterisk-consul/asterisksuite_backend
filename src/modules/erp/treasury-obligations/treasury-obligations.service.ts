@@ -54,6 +54,79 @@ export class TreasuryObligationsService {
     return data;
   }
 
+  async findNotificationAlerts() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const horizon = new Date(today);
+    horizon.setDate(horizon.getDate() + 15);
+
+    const select = {
+      id: true,
+      party_id: true,
+      description: true,
+      due_date: true,
+      notification_days: true,
+      status: true,
+    } as const;
+    const [overdue, upcoming] = await Promise.all([
+      this.prisma.treasury_obligations.findMany({
+        where: {
+          deleted_at: null,
+          status: { notIn: ['PAID', 'CANCELLED'] },
+          due_date: { lt: today },
+        },
+        select,
+        orderBy: { due_date: 'desc' },
+        take: 25,
+      }),
+      this.prisma.treasury_obligations.findMany({
+        where: {
+          deleted_at: null,
+          status: { notIn: ['PAID', 'CANCELLED'] },
+          due_date: { gte: today, lte: horizon },
+          OR: [
+            { notification_days: { array_contains: [7] } },
+            { notification_days: { array_contains: [15] } },
+          ],
+        },
+        select,
+        orderBy: { due_date: 'asc' },
+        take: 50,
+      }),
+    ]);
+    const rows = [...overdue, ...upcoming];
+    const partyIds = [...new Set(rows.map(row => row.party_id))];
+    const parties = partyIds.length
+      ? await this.prisma.business_parties.findMany({
+          where: { id: { in: partyIds }, deleted_at: null },
+          select: { id: true, name: true },
+        })
+      : [];
+    const partyMap = new Map(parties.map(party => [party.id, party]));
+
+    return rows.map(row => {
+      const dueDate = new Date(row.due_date);
+      dueDate.setHours(0, 0, 0, 0);
+      const daysUntilDue = Math.round((dueDate.getTime() - today.getTime()) / 86_400_000);
+      const pending = !['PAID', 'CANCELLED'].includes(row.status);
+      const notificationDays = Array.isArray(row.notification_days)
+        ? row.notification_days.map(Number).filter(Number.isFinite)
+        : [];
+      const overdue = pending && daysUntilDue < 0;
+      const shouldNotify = pending && (overdue || notificationDays.some(days => daysUntilDue >= 0 && daysUntilDue <= days));
+
+      return {
+        ...row,
+        party: partyMap.get(row.party_id) ?? null,
+        effective_status: overdue ? 'OVERDUE' : row.status,
+        should_notify: shouldNotify,
+        notification_reason: !shouldNotify ? null : overdue
+          ? `Venció hace ${Math.abs(daysUntilDue)} día(s)`
+          : daysUntilDue === 0 ? 'Vence hoy' : `Vence en ${daysUntilDue} día(s)`,
+      };
+    }).filter(row => row.should_notify);
+  }
+
   async summary() {
     const rows = await this.findAll({});
     const pending = rows.filter(r => !['PAID', 'CANCELLED'].includes(r.status));

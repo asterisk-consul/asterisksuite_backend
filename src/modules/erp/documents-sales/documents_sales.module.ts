@@ -20,9 +20,10 @@ import { StockReservationsService } from './stock-reservations.service';
 import { StockReservationsController } from './stock-reservations.controller';
 import { StockReservationsScheduler } from './stock-reservations.scheduler';
 import { DocumentPrintTemplatesService } from './document-print-templates.service';
+import { NotificationsModule } from '@/modules/notifications/notifications.module';
 
 @Module({
-  imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule, FiscalAuthorizationsModule],
+  imports: [AccessControlModule, PrismaModule, ProductPricingModule, SalesReportModule, CurrentAccountsModule, TaxEngineModule, CurrenciesModule, CommonErpModule, MySalesModule, FiscalAuthorizationsModule, NotificationsModule],
   controllers: [DocumentsSalesController, DocumentAssignmentController, SalesCommercialFlowController, StockReservationsController],
   providers: [
     DocumentsSalesService,

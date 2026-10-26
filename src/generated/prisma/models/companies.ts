@@ -264,6 +264,8 @@ export type companiesWhereInput = {
   deleted_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   companyUsers?: Prisma.Company_usersListRelationFilter
   tablePreferences?: Prisma.User_table_preferencesListRelationFilter
+  whatsappReportSettings?: Prisma.XOR<Prisma.Company_whatsapp_report_settingsNullableScalarRelationFilter, Prisma.company_whatsapp_report_settingsWhereInput> | null
+  whatsappReportRuns?: Prisma.Company_whatsapp_report_runsListRelationFilter
 }
 
 export type companiesOrderByWithRelationInput = {
@@ -284,6 +286,8 @@ export type companiesOrderByWithRelationInput = {
   deleted_by?: Prisma.SortOrderInput | Prisma.SortOrder
   companyUsers?: Prisma.company_usersOrderByRelationAggregateInput
   tablePreferences?: Prisma.user_table_preferencesOrderByRelationAggregateInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsOrderByWithRelationInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsOrderByRelationAggregateInput
 }
 
 export type companiesWhereUniqueInput = Prisma.AtLeast<{
@@ -307,6 +311,8 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   deleted_by?: Prisma.UuidNullableFilter<"companies"> | string | null
   companyUsers?: Prisma.Company_usersListRelationFilter
   tablePreferences?: Prisma.User_table_preferencesListRelationFilter
+  whatsappReportSettings?: Prisma.XOR<Prisma.Company_whatsapp_report_settingsNullableScalarRelationFilter, Prisma.company_whatsapp_report_settingsWhereInput> | null
+  whatsappReportRuns?: Prisma.Company_whatsapp_report_runsListRelationFilter
 }, "id" | "subdomain" | "schema_name">
 
 export type companiesOrderByWithAggregationInput = {
@@ -369,6 +375,8 @@ export type companiesCreateInput = {
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesUncheckedCreateInput = {
@@ -389,6 +397,8 @@ export type companiesUncheckedCreateInput = {
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesUpdateInput = {
@@ -409,6 +419,8 @@ export type companiesUpdateInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesUncheckedUpdateInput = {
@@ -429,6 +441,8 @@ export type companiesUncheckedUpdateInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesCreateManyInput = {
@@ -572,6 +586,34 @@ export type companiesUpdateOneRequiredWithoutTablePreferencesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutTablePreferencesInput, Prisma.companiesUpdateWithoutTablePreferencesInput>, Prisma.companiesUncheckedUpdateWithoutTablePreferencesInput>
 }
 
+export type companiesCreateNestedOneWithoutWhatsappReportSettingsInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportSettingsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportSettingsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutWhatsappReportSettingsInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesUpdateOneRequiredWithoutWhatsappReportSettingsNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportSettingsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportSettingsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutWhatsappReportSettingsInput
+  upsert?: Prisma.companiesUpsertWithoutWhatsappReportSettingsInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutWhatsappReportSettingsInput, Prisma.companiesUpdateWithoutWhatsappReportSettingsInput>, Prisma.companiesUncheckedUpdateWithoutWhatsappReportSettingsInput>
+}
+
+export type companiesCreateNestedOneWithoutWhatsappReportRunsInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportRunsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportRunsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutWhatsappReportRunsInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesUpdateOneRequiredWithoutWhatsappReportRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportRunsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportRunsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutWhatsappReportRunsInput
+  upsert?: Prisma.companiesUpsertWithoutWhatsappReportRunsInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutWhatsappReportRunsInput, Prisma.companiesUpdateWithoutWhatsappReportRunsInput>, Prisma.companiesUncheckedUpdateWithoutWhatsappReportRunsInput>
+}
+
 export type companiesCreateWithoutCompanyUsersInput = {
   id?: string
   name: string
@@ -589,6 +631,8 @@ export type companiesCreateWithoutCompanyUsersInput = {
   updated_by?: string | null
   deleted_by?: string | null
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesUncheckedCreateWithoutCompanyUsersInput = {
@@ -608,6 +652,8 @@ export type companiesUncheckedCreateWithoutCompanyUsersInput = {
   updated_by?: string | null
   deleted_by?: string | null
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesCreateOrConnectWithoutCompanyUsersInput = {
@@ -643,6 +689,8 @@ export type companiesUpdateWithoutCompanyUsersInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutCompanyUsersInput = {
@@ -662,6 +710,8 @@ export type companiesUncheckedUpdateWithoutCompanyUsersInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesCreateWithoutTablePreferencesInput = {
@@ -681,6 +731,8 @@ export type companiesCreateWithoutTablePreferencesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesUncheckedCreateWithoutTablePreferencesInput = {
@@ -700,6 +752,8 @@ export type companiesUncheckedCreateWithoutTablePreferencesInput = {
   updated_by?: string | null
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type companiesCreateOrConnectWithoutTablePreferencesInput = {
@@ -735,6 +789,8 @@ export type companiesUpdateWithoutTablePreferencesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutTablePreferencesInput = {
@@ -754,6 +810,208 @@ export type companiesUncheckedUpdateWithoutTablePreferencesInput = {
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type companiesCreateWithoutWhatsappReportSettingsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
+}
+
+export type companiesUncheckedCreateWithoutWhatsappReportSettingsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type companiesCreateOrConnectWithoutWhatsappReportSettingsInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportSettingsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportSettingsInput>
+}
+
+export type companiesUpsertWithoutWhatsappReportSettingsInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutWhatsappReportSettingsInput, Prisma.companiesUncheckedUpdateWithoutWhatsappReportSettingsInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportSettingsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportSettingsInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutWhatsappReportSettingsInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutWhatsappReportSettingsInput, Prisma.companiesUncheckedUpdateWithoutWhatsappReportSettingsInput>
+}
+
+export type companiesUpdateWithoutWhatsappReportSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutWhatsappReportSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type companiesCreateWithoutWhatsappReportRunsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+}
+
+export type companiesUncheckedCreateWithoutWhatsappReportRunsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type companiesCreateOrConnectWithoutWhatsappReportRunsInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportRunsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportRunsInput>
+}
+
+export type companiesUpsertWithoutWhatsappReportRunsInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutWhatsappReportRunsInput, Prisma.companiesUncheckedUpdateWithoutWhatsappReportRunsInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutWhatsappReportRunsInput, Prisma.companiesUncheckedCreateWithoutWhatsappReportRunsInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutWhatsappReportRunsInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutWhatsappReportRunsInput, Prisma.companiesUncheckedUpdateWithoutWhatsappReportRunsInput>
+}
+
+export type companiesUpdateWithoutWhatsappReportRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutWhatsappReportRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
 }
 
 
@@ -764,11 +1022,13 @@ export type companiesUncheckedUpdateWithoutTablePreferencesInput = {
 export type CompaniesCountOutputType = {
   companyUsers: number
   tablePreferences: number
+  whatsappReportRuns: number
 }
 
 export type CompaniesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companyUsers?: boolean | CompaniesCountOutputTypeCountCompanyUsersArgs
   tablePreferences?: boolean | CompaniesCountOutputTypeCountTablePreferencesArgs
+  whatsappReportRuns?: boolean | CompaniesCountOutputTypeCountWhatsappReportRunsArgs
 }
 
 /**
@@ -795,6 +1055,13 @@ export type CompaniesCountOutputTypeCountTablePreferencesArgs<ExtArgs extends ru
   where?: Prisma.user_table_preferencesWhereInput
 }
 
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountWhatsappReportRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.company_whatsapp_report_runsWhereInput
+}
+
 
 export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -814,6 +1081,8 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   deleted_by?: boolean
   companyUsers?: boolean | Prisma.companies$companyUsersArgs<ExtArgs>
   tablePreferences?: boolean | Prisma.companies$tablePreferencesArgs<ExtArgs>
+  whatsappReportSettings?: boolean | Prisma.companies$whatsappReportSettingsArgs<ExtArgs>
+  whatsappReportRuns?: boolean | Prisma.companies$whatsappReportRunsArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companies"]>
 
@@ -875,6 +1144,8 @@ export type companiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type companiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companyUsers?: boolean | Prisma.companies$companyUsersArgs<ExtArgs>
   tablePreferences?: boolean | Prisma.companies$tablePreferencesArgs<ExtArgs>
+  whatsappReportSettings?: boolean | Prisma.companies$whatsappReportSettingsArgs<ExtArgs>
+  whatsappReportRuns?: boolean | Prisma.companies$whatsappReportRunsArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type companiesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -885,6 +1156,8 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     companyUsers: Prisma.$company_usersPayload<ExtArgs>[]
     tablePreferences: Prisma.$user_table_preferencesPayload<ExtArgs>[]
+    whatsappReportSettings: Prisma.$company_whatsapp_report_settingsPayload<ExtArgs> | null
+    whatsappReportRuns: Prisma.$company_whatsapp_report_runsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1298,6 +1571,8 @@ export interface Prisma__companiesClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   companyUsers<T extends Prisma.companies$companyUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$companyUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tablePreferences<T extends Prisma.companies$tablePreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$tablePreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$user_table_preferencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  whatsappReportSettings<T extends Prisma.companies$whatsappReportSettingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$whatsappReportSettingsArgs<ExtArgs>>): Prisma.Prisma__company_whatsapp_report_settingsClient<runtime.Types.Result.GetResult<Prisma.$company_whatsapp_report_settingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  whatsappReportRuns<T extends Prisma.companies$whatsappReportRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$whatsappReportRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_whatsapp_report_runsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1780,6 +2055,49 @@ export type companies$tablePreferencesArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.User_table_preferencesScalarFieldEnum | Prisma.User_table_preferencesScalarFieldEnum[]
+}
+
+/**
+ * companies.whatsappReportSettings
+ */
+export type companies$whatsappReportSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the company_whatsapp_report_settings
+   */
+  select?: Prisma.company_whatsapp_report_settingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the company_whatsapp_report_settings
+   */
+  omit?: Prisma.company_whatsapp_report_settingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.company_whatsapp_report_settingsInclude<ExtArgs> | null
+  where?: Prisma.company_whatsapp_report_settingsWhereInput
+}
+
+/**
+ * companies.whatsappReportRuns
+ */
+export type companies$whatsappReportRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the company_whatsapp_report_runs
+   */
+  select?: Prisma.company_whatsapp_report_runsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the company_whatsapp_report_runs
+   */
+  omit?: Prisma.company_whatsapp_report_runsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.company_whatsapp_report_runsInclude<ExtArgs> | null
+  where?: Prisma.company_whatsapp_report_runsWhereInput
+  orderBy?: Prisma.company_whatsapp_report_runsOrderByWithRelationInput | Prisma.company_whatsapp_report_runsOrderByWithRelationInput[]
+  cursor?: Prisma.company_whatsapp_report_runsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Company_whatsapp_report_runsScalarFieldEnum | Prisma.Company_whatsapp_report_runsScalarFieldEnum[]
 }
 
 /**

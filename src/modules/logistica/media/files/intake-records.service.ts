@@ -1,9 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 
 @Injectable()
 export class IntakeRecordsService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -66,9 +71,25 @@ export class IntakeRecordsService {
       where: { entity_type: 'intake', entity_id: id, deleted_at: null },
     });
     if (!attachmentCount) throw new BadRequestException('Subí al menos un archivo antes de enviar');
-    return this.prisma.intake_records.update({
-      where: { id },
-      data: { status: 'SENT', assigned_to: assignedTo, sent_at: new Date(), updated_by: userId },
+    return this.prisma.$transaction(async tx => {
+      const updated = await tx.intake_records.update({
+        where: { id },
+        data: { status: 'SENT', assigned_to: assignedTo, sent_at: new Date(), updated_by: userId },
+      });
+
+      await this.notifications.createAssignment({
+        tx,
+        companyId: getCurrentCompanyId(),
+        recipientUserId: assignedTo,
+        actorUserId: userId,
+        title: 'Te asignaron una captura',
+        message: record.title,
+        targetPath: `/erp/treasury/intake?record=${encodeURIComponent(id)}`,
+        targetType: 'INTAKE_RECORD',
+        targetId: id,
+      });
+
+      return updated;
     });
   }
 

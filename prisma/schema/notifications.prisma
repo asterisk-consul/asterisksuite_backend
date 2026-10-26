@@ -1,0 +1,17 @@
+model user_notifications {
+  id                String    @id @default(uuid()) @db.Uuid
+  recipient_user_id String    @db.Uuid
+  actor_user_id     String?   @db.Uuid
+  type              String    @db.VarChar(50)
+  title             String    @db.VarChar(160)
+  message           String    @db.VarChar(500)
+  target_path       String?   @db.VarChar(500)
+  target_type       String?   @db.VarChar(60)
+  target_id         String?   @db.Uuid
+  created_at        DateTime  @default(now()) @db.Timestamp(6)
+  read_at           DateTime? @db.Timestamp(6)
+
+  @@index([recipient_user_id, created_at(sort: Desc)], map: "user_notifications_recipient_created_idx")
+  @@index([recipient_user_id, read_at], map: "user_notifications_recipient_read_idx")
+  @@schema("tenant")
+}

@@ -11,10 +11,14 @@ import { ChangeStatusDto, BulkUpdateStatusDto } from './dto/change-status.dto';
 import { MaintenanceStatus, MaintenancePriority } from '../enums/maintenance.enums';
 import { omitUndefined } from '@/common/utils/object.utils';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 
 @Injectable()
 export class MaintenanceOrdersService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -279,6 +283,41 @@ export class MaintenanceOrdersService {
 
       await this.createStatusHistory(tx, order.id, null, MaintenanceStatus.PENDING, userId, 'Orden creada');
 
+      if (dto.assigned_to) {
+        await this.notifications.createAssignment({
+          tx,
+          companyId: this.getCompanyId(),
+          recipientUserId: dto.assigned_to,
+          actorUserId: userId,
+          title: 'Te asignaron una orden de mantenimiento',
+          message: `${number} · ${dto.title}`,
+          targetPath: `/logistica/mantenimiento/${order.id}/editar`,
+          targetType: 'MAINTENANCE_ORDER',
+          targetId: order.id,
+        });
+      }
+
+      const taskAssignees = new Map<string, string[]>();
+      for (const task of dto.tasks ?? []) {
+        if (!task.assigned_to || task.assigned_to === dto.assigned_to) continue;
+        const descriptions = taskAssignees.get(task.assigned_to) ?? [];
+        descriptions.push(task.description);
+        taskAssignees.set(task.assigned_to, descriptions);
+      }
+      for (const [recipientUserId, descriptions] of taskAssignees) {
+        await this.notifications.createAssignment({
+          tx,
+          companyId: this.getCompanyId(),
+          recipientUserId,
+          actorUserId: userId,
+          title: 'Te asignaron tareas de mantenimiento',
+          message: `${number} · ${descriptions.slice(0, 2).join(' / ')}${descriptions.length > 2 ? ` y ${descriptions.length - 2} más` : ''}`,
+          targetPath: `/logistica/mantenimiento/${order.id}/editar`,
+          targetType: 'MAINTENANCE_ORDER',
+          targetId: order.id,
+        });
+      }
+
       return this.findOne(order.id, tx);
     });
   }
@@ -325,6 +364,20 @@ export class MaintenanceOrdersService {
           updated_by: userId,
         }),
       });
+
+      if (dto.assigned_to && dto.assigned_to !== existing.assigned_to) {
+        await this.notifications.createAssignment({
+          tx,
+          companyId: this.getCompanyId(),
+          recipientUserId: dto.assigned_to,
+          actorUserId: userId,
+          title: 'Te asignaron una orden de mantenimiento',
+          message: `${existing.number} · ${dto.title ?? existing.title}`,
+          targetPath: `/logistica/mantenimiento/${id}/editar`,
+          targetType: 'MAINTENANCE_ORDER',
+          targetId: id,
+        });
+      }
 
       if (dto.status && dto.status !== oldStatus) {
         await this.createStatusHistory(tx, id, oldStatus, dto.status, userId);

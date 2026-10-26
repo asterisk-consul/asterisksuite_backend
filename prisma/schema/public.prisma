@@ -16,6 +16,8 @@ model companies {
   deleted_by    String?         @db.Uuid
   companyUsers  company_users[]
   tablePreferences user_table_preferences[]
+  whatsappReportSettings company_whatsapp_report_settings?
+  whatsappReportRuns     company_whatsapp_report_runs[]
 
   @@schema("public")
 }
@@ -68,7 +70,7 @@ model users {
   updated_by    String?          @db.Uuid
   deleted_by    String?          @db.Uuid
   refreshTokens refresh_tokens[]
-  companyUsers  company_users[]
+  companyUsers     company_users[]
   tablePreferences user_table_preferences[]
 
   @@schema("public")
@@ -129,5 +131,43 @@ model user_table_preferences {
 
   @@unique([user_id, company_id, table_key], map: "user_table_preferences_user_company_table_key")
   @@index([company_id, user_id], map: "user_table_preferences_company_user_idx")
+  @@schema("public")
+}
+
+model company_whatsapp_report_settings {
+  company_id            String    @id @db.Uuid
+  enabled               Boolean   @default(false)
+  selected_company_ids  Json      @default("[]")
+  consolidated_enabled  Boolean   @default(true)
+  consolidated_group_id String?   @db.VarChar(255)
+  inventory_enabled     Boolean   @default(true)
+  inventory_group_id    String?   @db.VarChar(255)
+  configured_by         String?   @db.Uuid
+  created_at            DateTime  @default(now()) @db.Timestamp(6)
+  updated_at            DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  company               companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@index([enabled], map: "company_whatsapp_report_settings_enabled_idx")
+  @@schema("public")
+}
+
+model company_whatsapp_report_runs {
+  id            String    @id @default(uuid()) @db.Uuid
+  company_id    String    @db.Uuid
+  report_type   String    @db.VarChar(32)
+  period_start  DateTime  @db.Date
+  period_end    DateTime  @db.Date
+  status        String    @default("PENDING") @db.VarChar(20)
+  attempt_count Int       @default(0)
+  message_id    String?   @db.VarChar(255)
+  last_error    String?   @db.Text
+  started_at    DateTime? @db.Timestamp(6)
+  sent_at       DateTime? @db.Timestamp(6)
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  company       companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@unique([company_id, report_type, period_start, period_end], map: "company_whatsapp_report_runs_period_key")
+  @@index([company_id, created_at(sort: Desc)], map: "company_whatsapp_report_runs_company_created_idx")
   @@schema("public")
 }

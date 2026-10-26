@@ -147,6 +147,7 @@ export const ModelName = {
   maintenance_plan_assets: 'maintenance_plan_assets',
   system_modules: 'system_modules',
   locations: 'locations',
+  user_notifications: 'user_notifications',
   operation_taxes: 'operation_taxes',
   pallet_items: 'pallet_items',
   pallets: 'pallets',
@@ -180,6 +181,8 @@ export const ModelName = {
   company_users: 'company_users',
   company_tax_settings: 'company_tax_settings',
   user_table_preferences: 'user_table_preferences',
+  company_whatsapp_report_settings: 'company_whatsapp_report_settings',
+  company_whatsapp_report_runs: 'company_whatsapp_report_runs',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -2185,6 +2188,23 @@ export const LocationsScalarFieldEnum = {
 export type LocationsScalarFieldEnum = (typeof LocationsScalarFieldEnum)[keyof typeof LocationsScalarFieldEnum]
 
 
+export const User_notificationsScalarFieldEnum = {
+  id: 'id',
+  recipient_user_id: 'recipient_user_id',
+  actor_user_id: 'actor_user_id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  target_path: 'target_path',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at',
+  read_at: 'read_at'
+} as const
+
+export type User_notificationsScalarFieldEnum = (typeof User_notificationsScalarFieldEnum)[keyof typeof User_notificationsScalarFieldEnum]
+
+
 export const Operation_taxesScalarFieldEnum = {
   id: 'id',
   tax_id: 'tax_id',
@@ -2780,6 +2800,41 @@ export const User_table_preferencesScalarFieldEnum = {
 } as const
 
 export type User_table_preferencesScalarFieldEnum = (typeof User_table_preferencesScalarFieldEnum)[keyof typeof User_table_preferencesScalarFieldEnum]
+
+
+export const Company_whatsapp_report_settingsScalarFieldEnum = {
+  company_id: 'company_id',
+  enabled: 'enabled',
+  selected_company_ids: 'selected_company_ids',
+  consolidated_enabled: 'consolidated_enabled',
+  consolidated_group_id: 'consolidated_group_id',
+  inventory_enabled: 'inventory_enabled',
+  inventory_group_id: 'inventory_group_id',
+  configured_by: 'configured_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_whatsapp_report_settingsScalarFieldEnum = (typeof Company_whatsapp_report_settingsScalarFieldEnum)[keyof typeof Company_whatsapp_report_settingsScalarFieldEnum]
+
+
+export const Company_whatsapp_report_runsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  report_type: 'report_type',
+  period_start: 'period_start',
+  period_end: 'period_end',
+  status: 'status',
+  attempt_count: 'attempt_count',
+  message_id: 'message_id',
+  last_error: 'last_error',
+  started_at: 'started_at',
+  sent_at: 'sent_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_whatsapp_report_runsScalarFieldEnum = (typeof Company_whatsapp_report_runsScalarFieldEnum)[keyof typeof Company_whatsapp_report_runsScalarFieldEnum]
 
 
 export const PermissionsScalarFieldEnum = {

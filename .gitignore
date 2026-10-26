@@ -64,6 +64,9 @@ src/generated/prisma/*
 !src/generated/prisma/models/
 src/generated/prisma/models/*
 !src/generated/prisma/models/user_table_preferences.ts
+!src/generated/prisma/models/user_notifications.ts
+!src/generated/prisma/models/company_whatsapp_report_settings.ts
+!src/generated/prisma/models/company_whatsapp_report_runs.ts
 
 audit.sql
 # User-generated media must live in persistent storage, never in Git.

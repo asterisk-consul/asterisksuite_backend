@@ -30,6 +30,7 @@ import { ProductPartyPricingService } from '../pricing/product-party-pricing/pro
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 import { StockReservationsService } from './stock-reservations.service';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -73,6 +74,8 @@ export class DocumentsSalesService {
     private readonly fiscalAuthorizations: FiscalAuthorizationsService,
 
     private readonly stockReservations: StockReservationsService,
+
+    private readonly notifications: NotificationsService,
   ) {}
 
   private get prisma() {
@@ -1823,6 +1826,20 @@ export class DocumentsSalesService {
           ...(fiscalAuthorizationSnapshot ?? {}),
         },
       });
+
+      if (category === 'ORDER' && assignedTo && assignedTo !== doc.assigned_to) {
+        await this.notifications.createAssignment({
+          tx,
+          companyId,
+          recipientUserId: assignedTo,
+          actorUserId: userId,
+          title: 'Te asignaron un pedido de venta',
+          message: `Pedido N.º ${doc.number}`,
+          targetPath: `/erp/sales/${doc.id}`,
+          targetType: 'SALES_ORDER',
+          targetId: doc.id,
+        });
+      }
 
       if (category === 'ORDER' && doc.document_types?.direction === 1) {
         await this.stockReservations.reserveSalesOrder(tx, doc.id, userId);

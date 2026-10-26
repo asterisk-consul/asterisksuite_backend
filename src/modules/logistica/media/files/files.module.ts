@@ -7,11 +7,13 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { IntakeRecordsController } from './intake-records.controller';
 import { IntakeRecordsService } from './intake-records.service';
 import { AccessControlModule } from '@/access-control/access-control.module';
+import { NotificationsModule } from '@/modules/notifications/notifications.module';
 
 @Module({
   imports: [
     PrismaModule,
     AccessControlModule,
+    NotificationsModule,
     MulterModule.register({
       storage: memoryStorage(),
       limits: { fileSize: 5 * 1024 * 1024 },

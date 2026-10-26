@@ -4,10 +4,15 @@ import { CreateMaintenanceTaskDto } from './dto/maintenance-task.dto';
 import { UpdateMaintenanceTaskDto } from './dto/maintenance-task.dto';
 import { MaintenanceTaskStatus } from '../enums/maintenance.enums';
 import { omitUndefined } from '@/common/utils/object.utils';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 
 @Injectable()
 export class MaintenanceTasksService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -34,17 +39,39 @@ export class MaintenanceTasksService {
     });
     if (!order) throw new BadRequestException('Orden de mantenimiento no encontrada');
 
-    return this.prisma.maintenance_tasks.create({
-      data: {
-        ...dto,
-        estimated_hours: dto.estimated_hours ? Number(dto.estimated_hours) : null,
-        created_by: userId,
-      },
+    return this.prisma.$transaction(async tx => {
+      const task = await tx.maintenance_tasks.create({
+        data: {
+          ...dto,
+          estimated_hours: dto.estimated_hours ? Number(dto.estimated_hours) : null,
+          created_by: userId,
+        },
+      });
+
+      if (dto.assigned_to) {
+        await this.notifications.createAssignment({
+          tx,
+          companyId: getCurrentCompanyId(),
+          recipientUserId: dto.assigned_to,
+          actorUserId: userId,
+          title: 'Te asignaron una tarea de mantenimiento',
+          message: `${order.number} · ${dto.description}`,
+          targetPath: `/logistica/mantenimiento/${order.id}/editar`,
+          targetType: 'MAINTENANCE_TASK',
+          targetId: task.id,
+        });
+      }
+
+      return task;
     });
   }
 
   async update(id: string, dto: UpdateMaintenanceTaskDto, userId: string) {
-    await this.findOne(id);
+    const existing = await this.prisma.maintenance_tasks.findFirst({
+      where: { id, deleted_at: null },
+      include: { maintenance_order: { select: { id: true, number: true } } },
+    });
+    if (!existing) throw new NotFoundException('Tarea no encontrada');
 
     const updateData: any = omitUndefined({
       description: dto.description,
@@ -63,9 +90,27 @@ export class MaintenanceTasksService {
       updateData.completed_at = new Date();
     }
 
-    return this.prisma.maintenance_tasks.update({
-      where: { id },
-      data: updateData,
+    return this.prisma.$transaction(async tx => {
+      const updated = await tx.maintenance_tasks.update({
+        where: { id },
+        data: updateData,
+      });
+
+      if (dto.assigned_to && dto.assigned_to !== existing.assigned_to) {
+        await this.notifications.createAssignment({
+          tx,
+          companyId: getCurrentCompanyId(),
+          recipientUserId: dto.assigned_to,
+          actorUserId: userId,
+          title: 'Te asignaron una tarea de mantenimiento',
+          message: `${existing.maintenance_order.number} · ${dto.description ?? existing.description}`,
+          targetPath: `/logistica/mantenimiento/${existing.maintenance_order.id}/editar`,
+          targetType: 'MAINTENANCE_TASK',
+          targetId: id,
+        });
+      }
+
+      return updated;
     });
   }
 

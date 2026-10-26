@@ -72,6 +72,7 @@ model treasury_obligations {
 
   @@unique([template_id, period_key])
   @@index([party_id, status, due_date])
+  @@index([status, due_date], map: "treasury_obligations_status_due_date_idx")
   @@index([document_id])
   @@index([payment_id])
   @@schema("tenant")
@@ -108,8 +109,8 @@ model bank_accounts {
   investments_destination financial_investments[]   @relation("InvestmentDestinationAccount")
   charge_rules            bank_charge_rules[]
   card_settlements        credit_card_settlements[]
-  outgoing_transfers      bank_account_transfers[] @relation("BankTransferSource")
-  incoming_transfers      bank_account_transfers[] @relation("BankTransferDestination")
+  outgoing_transfers      bank_account_transfers[]  @relation("BankTransferSource")
+  incoming_transfers      bank_account_transfers[]  @relation("BankTransferDestination")
 
   @@schema("tenant")
 }
@@ -747,7 +748,7 @@ model credit_card_transactions {
   payment       payments?                   @relation(fields: [payment_id], references: [id])
   installments  credit_card_installments[]
   summary_items credit_card_summary_items[]
-  settlement    credit_card_settlements?           @relation(fields: [settlement_id], references: [id])
+  settlement    credit_card_settlements?    @relation(fields: [settlement_id], references: [id])
 
   @@index([credit_card_id])
   @@index([payment_id])
@@ -779,8 +780,8 @@ model credit_card_settlements {
   updated_by String?   @db.Uuid
   deleted_by String?   @db.Uuid
 
-  credit_card  credit_cards  @relation(fields: [credit_card_id], references: [id])
-  bank_account bank_accounts @relation(fields: [bank_account_id], references: [id])
+  credit_card  credit_cards               @relation(fields: [credit_card_id], references: [id])
+  bank_account bank_accounts              @relation(fields: [bank_account_id], references: [id])
   transactions credit_card_transactions[]
 
   @@index([credit_card_id, date])
@@ -790,14 +791,14 @@ model credit_card_settlements {
 }
 
 model bank_account_transfers {
-  id                         String   @id @default(uuid()) @db.Uuid
-  source_bank_account_id     String   @db.Uuid
-  destination_bank_account_id String  @db.Uuid
-  date                       DateTime @db.Date
-  amount                     Decimal  @db.Decimal(15, 2)
-  currency_code              String   @db.VarChar(10)
-  reference                  String?  @db.VarChar(100)
-  notes                      String?  @db.VarChar(500)
+  id                          String   @id @default(uuid()) @db.Uuid
+  source_bank_account_id      String   @db.Uuid
+  destination_bank_account_id String   @db.Uuid
+  date                        DateTime @db.Date
+  amount                      Decimal  @db.Decimal(15, 2)
+  currency_code               String   @db.VarChar(10)
+  reference                   String?  @db.VarChar(100)
+  notes                       String?  @db.VarChar(500)
 
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime? @updatedAt @db.Timestamp(6)

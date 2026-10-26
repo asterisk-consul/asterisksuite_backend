@@ -23,7 +23,12 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate:user-table-preferences": "tsx scripts/apply-user-table-preferences-migration.ts",
     "seed:rbac": "npx tsx prisma/seeds/rbac.seed.ts",
-    "migrate:intercompany-transfers": "tsx scripts/apply-intercompany-transfer-migration.ts"
+    "migrate:intercompany-transfers": "tsx scripts/apply-intercompany-transfer-migration.ts",
+    "migrate:user-notifications": "tsx scripts/apply-user-notifications-migration.ts",
+    "migrate:whatsapp-reports": "node dist/src/scripts/apply-whatsapp-reports-migration.js",
+    "migrate:whatsapp-reports:dev": "tsx src/scripts/apply-whatsapp-reports-migration.ts",
+    "whatsapp:weekly-reports": "node dist/src/modules/erp/whatsapp-reports/run-weekly-reports.js",
+    "whatsapp:weekly-reports:dev": "tsx src/modules/erp/whatsapp-reports/run-weekly-reports.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

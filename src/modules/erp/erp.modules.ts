@@ -40,6 +40,7 @@ import { PriceListsModule } from './pricing/price-lists/price-lists.module';
 import { ListPricesModule } from './pricing/list-prices/list-prices.module';
 import { ManagementReportsModule } from './management-reports/management-reports.module';
 import { FinancialInvestmentsModule } from './financial-investments/financial-investments.module';
+import { WhatsAppReportsModule } from './whatsapp-reports/whatsapp-reports.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { FinancialInvestmentsModule } from './financial-investments/financial-in
     ListPricesModule,
     ManagementReportsModule,
     FinancialInvestmentsModule,
+    WhatsAppReportsModule,
   ],
   exports: [
     AccountsModule,
@@ -119,6 +121,7 @@ import { FinancialInvestmentsModule } from './financial-investments/financial-in
     ListPricesModule,
     ManagementReportsModule,
     FinancialInvestmentsModule,
+    WhatsAppReportsModule,
   ],
 })
 export class ErpModulesModule {}

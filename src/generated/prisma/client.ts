@@ -22,7 +22,7 @@ export * as $Enums from './enums.js'
 export * from "./enums.js"
 /**
  * ## Prisma Client
- * 
+ *
  * Type-safe database client for TypeScript
  * @example
  * ```
@@ -32,7 +32,7 @@ export * from "./enums.js"
  * // Fetch zero or more Accounts
  * const accounts = await prisma.accounts.findMany()
  * ```
- * 
+ *
  * Read more in our [docs](https://pris.ly/d/client).
  */
 export const PrismaClient = $Class.getPrismaClientClass()
@@ -41,77 +41,77 @@ export { Prisma }
 
 /**
  * Model accounts
- * 
+ *
  */
 export type accounts = Prisma.accountsModel
 /**
  * Model audit_logs
- * 
+ *
  */
 export type audit_logs = Prisma.audit_logsModel
 /**
  * Model bank_concepts
- * 
+ *
  */
 export type bank_concepts = Prisma.bank_conceptsModel
 /**
  * Model product_costs
- * 
+ *
  */
 export type product_costs = Prisma.product_costsModel
 /**
  * Model product_cost_breakdowns
- * 
+ *
  */
 export type product_cost_breakdowns = Prisma.product_cost_breakdownsModel
 /**
  * Model cost_components
- * 
+ *
  */
 export type cost_components = Prisma.cost_componentsModel
 /**
  * Model cost_templates
- * 
+ *
  */
 export type cost_templates = Prisma.cost_templatesModel
 /**
  * Model cost_template_components
- * 
+ *
  */
 export type cost_template_components = Prisma.cost_template_componentsModel
 /**
  * Model currencies
- * 
+ *
  */
 export type currencies = Prisma.currenciesModel
 /**
  * Model currency_rates
- * 
+ *
  */
 export type currency_rates = Prisma.currency_ratesModel
 /**
  * Model dashboard_configs
- * 
+ *
  */
 export type dashboard_configs = Prisma.dashboard_configsModel
 /**
  * Model document_sequences
- * 
+ *
  */
 export type document_sequences = Prisma.document_sequencesModel
 /**
  * Model document_type_sequences
- * 
+ *
  */
 export type document_type_sequences = Prisma.document_type_sequencesModel
 /**
  * Model document_item_taxes
- * 
+ *
  */
 export type document_item_taxes = Prisma.document_item_taxesModel
 /**
  * Model document_items
- * 
+ *
  */
 export type document_items = Prisma.document_itemsModel
 /**
@@ -122,777 +122,792 @@ export type document_items = Prisma.document_itemsModel
 export type document_print_templates = Prisma.document_print_templatesModel
 /**
  * Model document_taxes
- * 
+ *
  */
 export type document_taxes = Prisma.document_taxesModel
 /**
  * Model document_types
- * 
+ *
  */
 export type document_types = Prisma.document_typesModel
 /**
  * Model document_type_taxes
- * 
+ *
  */
 export type document_type_taxes = Prisma.document_type_taxesModel
 /**
  * Model documents
- * 
+ *
  */
 export type documents = Prisma.documentsModel
 /**
  * Model fiscal_authorizations
- * 
+ *
  */
 export type fiscal_authorizations = Prisma.fiscal_authorizationsModel
 /**
  * Model fiscal_authorization_settings
- * 
+ *
  */
 export type fiscal_authorization_settings = Prisma.fiscal_authorization_settingsModel
 /**
  * Model fiscal_authorization_alerts
- * 
+ *
  */
 export type fiscal_authorization_alerts = Prisma.fiscal_authorization_alertsModel
 /**
  * Model presupuesto_documents
- * 
+ *
  */
 export type presupuesto_documents = Prisma.presupuesto_documentsModel
 /**
  * Model orden_venta_documents
- * 
+ *
  */
 export type orden_venta_documents = Prisma.orden_venta_documentsModel
 /**
  * Model sales_commission_assignments
- * 
+ *
  */
 export type sales_commission_assignments = Prisma.sales_commission_assignmentsModel
 /**
  * Model orden_compra_documents
- * 
+ *
  */
 export type orden_compra_documents = Prisma.orden_compra_documentsModel
 /**
  * Model employees
- * 
+ *
  */
 export type employees = Prisma.employeesModel
 /**
  * Model partners
- * 
+ *
  */
 export type partners = Prisma.partnersModel
 /**
  * Model product_structure_versions
- * 
+ *
  */
 export type product_structure_versions = Prisma.product_structure_versionsModel
 /**
  * Model entity_photos
- * 
+ *
  */
 export type entity_photos = Prisma.entity_photosModel
 /**
  * Model files
- * 
+ *
  */
 export type files = Prisma.filesModel
 /**
  * Model intake_records
- * 
+ *
  */
 export type intake_records = Prisma.intake_recordsModel
 /**
  * Model financial_investments
- * 
+ *
  */
 export type financial_investments = Prisma.financial_investmentsModel
 /**
  * Model financial_investment_valuations
- * 
+ *
  */
 export type financial_investment_valuations = Prisma.financial_investment_valuationsModel
 /**
  * Model financial_investment_transactions
- * 
+ *
  */
 export type financial_investment_transactions = Prisma.financial_investment_transactionsModel
 /**
  * Model tax_jurisdictions
- * 
+ *
  */
 export type tax_jurisdictions = Prisma.tax_jurisdictionsModel
 /**
  * Model withholding_concepts
- * 
+ *
  */
 export type withholding_concepts = Prisma.withholding_conceptsModel
 /**
  * Model business_party_withholding_profiles
- * 
+ *
  */
 export type business_party_withholding_profiles = Prisma.business_party_withholding_profilesModel
 /**
  * Model business_party_iibb_registrations
- * 
+ *
  */
 export type business_party_iibb_registrations = Prisma.business_party_iibb_registrationsModel
 /**
  * Model company_tax_jurisdictions
- * 
+ *
  */
 export type company_tax_jurisdictions = Prisma.company_tax_jurisdictionsModel
 /**
  * Model tax_rules
- * 
+ *
  */
 export type tax_rules = Prisma.tax_rulesModel
 /**
  * Model tax_rule_brackets
- * 
+ *
  */
 export type tax_rule_brackets = Prisma.tax_rule_bracketsModel
 /**
  * Model withholdings
- * 
+ *
  */
 export type withholdings = Prisma.withholdingsModel
 /**
  * Model withholding_remittances
- * 
+ *
  */
 export type withholding_remittances = Prisma.withholding_remittancesModel
 /**
  * Model withholding_tax_applications
- * 
+ *
  */
 export type withholding_tax_applications = Prisma.withholding_tax_applicationsModel
 /**
  * Model withholding_allocations
- * 
+ *
  */
 export type withholding_allocations = Prisma.withholding_allocationsModel
 /**
  * Model hr_accounts
- * 
+ *
  */
 export type hr_accounts = Prisma.hr_accountsModel
 /**
  * Model hr_account_entries
- * 
+ *
  */
 export type hr_account_entries = Prisma.hr_account_entriesModel
 /**
  * Model hr_vales
- * 
+ *
  */
 export type hr_vales = Prisma.hr_valesModel
 /**
  * Model hr_vale_commission_details
- * 
+ *
  */
 export type hr_vale_commission_details = Prisma.hr_vale_commission_detailsModel
 /**
  * Model international_operations
- * 
+ *
  */
 export type international_operations = Prisma.international_operationsModel
 /**
  * Model international_operation_quotes
- * 
+ *
  */
 export type international_operation_quotes = Prisma.international_operation_quotesModel
 /**
  * Model international_containers
- * 
+ *
  */
 export type international_containers = Prisma.international_containersModel
 /**
  * Model container_events
- * 
+ *
  */
 export type container_events = Prisma.container_eventsModel
 /**
  * Model international_operation_documents
- * 
+ *
  */
 export type international_operation_documents = Prisma.international_operation_documentsModel
 /**
  * Model international_operation_payments
- * 
+ *
  */
 export type international_operation_payments = Prisma.international_operation_paymentsModel
 /**
  * Model international_operation_settings
- * 
+ *
  */
 export type international_operation_settings = Prisma.international_operation_settingsModel
 /**
  * Model cargo_transfer_items
- * 
+ *
  */
 export type cargo_transfer_items = Prisma.cargo_transfer_itemsModel
 /**
  * Model cargo_transfers
- * 
+ *
  */
 export type cargo_transfers = Prisma.cargo_transfersModel
 /**
  * Model delivery_notes
- * 
+ *
  */
 export type delivery_notes = Prisma.delivery_notesModel
 /**
  * Model drivers
- * 
+ *
  */
 export type drivers = Prisma.driversModel
 /**
  * Model picking_items
- * 
+ *
  */
 export type picking_items = Prisma.picking_itemsModel
 /**
  * Model picking_orders
- * 
+ *
  */
 export type picking_orders = Prisma.picking_ordersModel
 /**
  * Model picking_results
- * 
+ *
  */
 export type picking_results = Prisma.picking_resultsModel
 /**
  * Model picking_sources
- * 
+ *
  */
 export type picking_sources = Prisma.picking_sourcesModel
 /**
  * Model trip_cargo
- * 
+ *
  */
 export type trip_cargo = Prisma.trip_cargoModel
 /**
  * Model trip_temperature_logs
- * 
+ *
  */
 export type trip_temperature_logs = Prisma.trip_temperature_logsModel
 /**
  * Model dispatch_orders
- * 
+ *
  */
 export type dispatch_orders = Prisma.dispatch_ordersModel
 /**
  * Model dispatch_order_items
- * 
+ *
  */
 export type dispatch_order_items = Prisma.dispatch_order_itemsModel
 /**
  * Model trips
- * 
+ *
  */
 export type trips = Prisma.tripsModel
 /**
  * Model trip_stops
- * 
+ *
  */
 export type trip_stops = Prisma.trip_stopsModel
 /**
  * Model trip_stop_orders
- * 
+ *
  */
 export type trip_stop_orders = Prisma.trip_stop_ordersModel
 /**
  * Model corridors
- * 
+ *
  */
 export type corridors = Prisma.corridorsModel
 /**
  * Model corridor_stops
- * 
+ *
  */
 export type corridor_stops = Prisma.corridor_stopsModel
 /**
  * Model vehicles
- * 
+ *
  */
 export type vehicles = Prisma.vehiclesModel
 /**
  * Model vehicle_combinations
- * 
+ *
  */
 export type vehicle_combinations = Prisma.vehicle_combinationsModel
 /**
  * Model transport_document_types
- * 
+ *
  */
 export type transport_document_types = Prisma.transport_document_typesModel
 /**
  * Model documents_vehicle
- * 
+ *
  */
 export type documents_vehicle = Prisma.documents_vehicleModel
 /**
  * Model documents_driver
- * 
+ *
  */
 export type documents_driver = Prisma.documents_driverModel
 /**
  * Model transfer_rates
- * 
+ *
  */
 export type transfer_rates = Prisma.transfer_ratesModel
 /**
  * Model dispatch_rates
- * 
+ *
  */
 export type dispatch_rates = Prisma.dispatch_ratesModel
 /**
  * Model maintenance_orders
- * 
+ *
  */
 export type maintenance_orders = Prisma.maintenance_ordersModel
 /**
  * Model maintenance_tasks
- * 
+ *
  */
 export type maintenance_tasks = Prisma.maintenance_tasksModel
 /**
  * Model maintenance_parts
- * 
+ *
  */
 export type maintenance_parts = Prisma.maintenance_partsModel
 /**
  * Model maintenance_labor
- * 
+ *
  */
 export type maintenance_labor = Prisma.maintenance_laborModel
 /**
  * Model maintenance_services
- * 
+ *
  */
 export type maintenance_services = Prisma.maintenance_servicesModel
 /**
  * Model maintenance_status_history
- * 
+ *
  */
 export type maintenance_status_history = Prisma.maintenance_status_historyModel
 /**
  * Model tires
- * 
+ *
  */
 export type tires = Prisma.tiresModel
 /**
  * Model vehicle_tire_positions
- * 
+ *
  */
 export type vehicle_tire_positions = Prisma.vehicle_tire_positionsModel
 /**
  * Model tire_movements
- * 
+ *
  */
 export type tire_movements = Prisma.tire_movementsModel
 /**
  * Model tire_position_history
- * 
+ *
  */
 export type tire_position_history = Prisma.tire_position_historyModel
 /**
  * Model maintenance_plans
- * 
+ *
  */
 export type maintenance_plans = Prisma.maintenance_plansModel
 /**
  * Model maintenance_plan_assets
- * 
+ *
  */
 export type maintenance_plan_assets = Prisma.maintenance_plan_assetsModel
 /**
  * Model system_modules
- * 
+ *
  */
 export type system_modules = Prisma.system_modulesModel
 /**
  * Model locations
- * 
+ *
  */
 export type locations = Prisma.locationsModel
 /**
+ * Model user_notifications
+ *
+ */
+export type user_notifications = Prisma.user_notificationsModel
+/**
  * Model operation_taxes
- * 
+ *
  */
 export type operation_taxes = Prisma.operation_taxesModel
 /**
  * Model pallet_items
- * 
+ *
  */
 export type pallet_items = Prisma.pallet_itemsModel
 /**
  * Model pallets
- * 
+ *
  */
 export type pallets = Prisma.palletsModel
 /**
  * Model business_parties
- * 
+ *
  */
 export type business_parties = Prisma.business_partiesModel
 /**
  * Model business_party_roles
- * 
+ *
  */
 export type business_party_roles = Prisma.business_party_rolesModel
 /**
  * Model party_bank_accounts
- * 
+ *
  */
 export type party_bank_accounts = Prisma.party_bank_accountsModel
 /**
  * Model party_locations
- * 
+ *
  */
 export type party_locations = Prisma.party_locationsModel
 /**
  * Model party_contacts
- * 
+ *
  */
 export type party_contacts = Prisma.party_contactsModel
 /**
  * Model product_price
- * 
+ *
  */
 export type product_price = Prisma.product_priceModel
 /**
  * Model products
- * 
+ *
  */
 export type products = Prisma.productsModel
 /**
  * Model units
- * 
+ *
  */
 export type units = Prisma.unitsModel
 /**
  * Model product_variants
- * 
+ *
  */
 export type product_variants = Prisma.product_variantsModel
 /**
  * Model product_components
- * 
+ *
  */
 export type product_components = Prisma.product_componentsModel
 /**
  * Model categories
- * 
+ *
  */
 export type categories = Prisma.categoriesModel
 /**
  * Model product_categories
- * 
+ *
  */
 export type product_categories = Prisma.product_categoriesModel
 /**
  * Model tags
- * 
+ *
  */
 export type tags = Prisma.tagsModel
 /**
  * Model product_tags
- * 
+ *
  */
 export type product_tags = Prisma.product_tagsModel
 /**
  * Model attributes
- * 
+ *
  */
 export type attributes = Prisma.attributesModel
 /**
  * Model product_attribute_values
- * 
+ *
  */
 export type product_attribute_values = Prisma.product_attribute_valuesModel
 /**
  * Model product_variant_prices
- * 
+ *
  */
 export type product_variant_prices = Prisma.product_variant_pricesModel
 /**
  * Model product_variant_costs
- * 
+ *
  */
 export type product_variant_costs = Prisma.product_variant_costsModel
 /**
  * Model product_suppliers
- * 
+ *
  */
 export type product_suppliers = Prisma.product_suppliersModel
 /**
  * Model product_party_prices
- * 
+ *
  */
 export type product_party_prices = Prisma.product_party_pricesModel
 /**
  * Model product_party_price_history
- * 
+ *
  */
 export type product_party_price_history = Prisma.product_party_price_historyModel
 /**
  * Model price_lists
- * 
+ *
  */
 export type price_lists = Prisma.price_listsModel
 /**
  * Model product_list_prices
- * 
+ *
  */
 export type product_list_prices = Prisma.product_list_pricesModel
 /**
  * Model companies
- * 
+ *
  */
 export type companies = Prisma.companiesModel
 /**
  * Model refresh_tokens
- * 
+ *
  */
 export type refresh_tokens = Prisma.refresh_tokensModel
 /**
  * Model audit_logs_public
- * 
+ *
  */
 export type audit_logs_public = Prisma.audit_logs_publicModel
 /**
  * Model users
- * 
+ *
  */
 export type users = Prisma.usersModel
 /**
  * Model company_users
- * 
+ *
  */
 export type company_users = Prisma.company_usersModel
 /**
  * Model company_tax_settings
- * 
+ *
  */
 export type company_tax_settings = Prisma.company_tax_settingsModel
 /**
  * Model user_table_preferences
- * 
+ *
  */
 export type user_table_preferences = Prisma.user_table_preferencesModel
 /**
+ * Model company_whatsapp_report_settings
+ *
+ */
+export type company_whatsapp_report_settings = Prisma.company_whatsapp_report_settingsModel
+/**
+ * Model company_whatsapp_report_runs
+ *
+ */
+export type company_whatsapp_report_runs = Prisma.company_whatsapp_report_runsModel
+/**
  * Model permissions
- * 
+ *
  */
 export type permissions = Prisma.permissionsModel
 /**
  * Model business_roles
- * 
+ *
  */
 export type business_roles = Prisma.business_rolesModel
 /**
  * Model business_role_permissions
- * 
+ *
  */
 export type business_role_permissions = Prisma.business_role_permissionsModel
 /**
  * Model business_user_roles
- * 
+ *
  */
 export type business_user_roles = Prisma.business_user_rolesModel
 /**
  * Model user_permission_overrides
- * 
+ *
  */
 export type user_permission_overrides = Prisma.user_permission_overridesModel
 /**
  * Model sales_flow_settings
- * 
+ *
  */
 export type sales_flow_settings = Prisma.sales_flow_settingsModel
 /**
  * Model commercial_operations
- * 
+ *
  */
 export type commercial_operations = Prisma.commercial_operationsModel
 /**
  * Model tax_categories
- * 
+ *
  */
 export type tax_categories = Prisma.tax_categoriesModel
 /**
  * Model tax_category_taxes
- * 
+ *
  */
 export type tax_category_taxes = Prisma.tax_category_taxesModel
 /**
  * Model product_taxes
- * 
+ *
  */
 export type product_taxes = Prisma.product_taxesModel
 /**
  * Model taxes
- * 
+ *
  */
 export type taxes = Prisma.taxesModel
 /**
  * Model treasury_obligation_templates
- * 
+ *
  */
 export type treasury_obligation_templates = Prisma.treasury_obligation_templatesModel
 /**
  * Model treasury_obligations
- * 
+ *
  */
 export type treasury_obligations = Prisma.treasury_obligationsModel
 /**
  * Model bank_accounts
- * 
+ *
  */
 export type bank_accounts = Prisma.bank_accountsModel
 /**
  * Model bank_charge_rules
- * 
+ *
  */
 export type bank_charge_rules = Prisma.bank_charge_rulesModel
 /**
  * Model bank_account_user_roles
- * 
+ *
  */
 export type bank_account_user_roles = Prisma.bank_account_user_rolesModel
 /**
  * Model bank_operations
- * 
+ *
  */
 export type bank_operations = Prisma.bank_operationsModel
 /**
  * Model bank_account_movements
- * 
+ *
  */
 export type bank_account_movements = Prisma.bank_account_movementsModel
 /**
  * Model payment_bank_charges
- * 
+ *
  */
 export type payment_bank_charges = Prisma.payment_bank_chargesModel
 /**
  * Model cash_boxes
- * 
+ *
  */
 export type cash_boxes = Prisma.cash_boxesModel
 /**
  * Model cash_box_sessions
- * 
+ *
  */
 export type cash_box_sessions = Prisma.cash_box_sessionsModel
 /**
  * Model cash_box_balances
- * 
+ *
  */
 export type cash_box_balances = Prisma.cash_box_balancesModel
 /**
  * Model cash_box_movements
- * 
+ *
  */
 export type cash_box_movements = Prisma.cash_box_movementsModel
 /**
  * Model cash_box_renditions
- * 
+ *
  */
 export type cash_box_renditions = Prisma.cash_box_renditionsModel
 /**
  * Model cash_box_user_roles
- * 
+ *
  */
 export type cash_box_user_roles = Prisma.cash_box_user_rolesModel
 /**
  * Model cash_box_transfers
- * 
+ *
  */
 export type cash_box_transfers = Prisma.cash_box_transfersModel
 /**
  * Model payments
- * 
+ *
  */
 export type payments = Prisma.paymentsModel
 /**
  * Model payment_documents
- * 
+ *
  */
 export type payment_documents = Prisma.payment_documentsModel
 /**
  * Model checks
- * 
+ *
  */
 export type checks = Prisma.checksModel
 /**
  * Model payment_checks
- * 
+ *
  */
 export type payment_checks = Prisma.payment_checksModel
 /**
  * Model credit_cards
- * 
+ *
  */
 export type credit_cards = Prisma.credit_cardsModel
 /**
  * Model credit_card_transactions
- * 
+ *
  */
 export type credit_card_transactions = Prisma.credit_card_transactionsModel
 /**
  * Model credit_card_settlements
- * 
+ *
  */
 export type credit_card_settlements = Prisma.credit_card_settlementsModel
 /**
  * Model bank_account_transfers
- * 
+ *
  */
 export type bank_account_transfers = Prisma.bank_account_transfersModel
 /**
  * Model credit_card_installments
- * 
+ *
  */
 export type credit_card_installments = Prisma.credit_card_installmentsModel
 /**
  * Model credit_card_summaries
- * 
+ *
  */
 export type credit_card_summaries = Prisma.credit_card_summariesModel
 /**
  * Model credit_card_summary_items
- * 
+ *
  */
 export type credit_card_summary_items = Prisma.credit_card_summary_itemsModel
 /**
  * Model current_accounts
- * 
+ *
  */
 export type current_accounts = Prisma.current_accountsModel
 /**
  * Model current_account_entries
- * 
+ *
  */
 export type current_account_entries = Prisma.current_account_entriesModel
 /**
  * Model warehouse_stock
- * 
+ *
  */
 export type warehouse_stock = Prisma.warehouse_stockModel
 /**
  * Model stock_reservations
- * 
+ *
  */
 export type stock_reservations = Prisma.stock_reservationsModel
 /**
  * Model stock_reservation_allocations
- * 
+ *
  */
 export type stock_reservation_allocations = Prisma.stock_reservation_allocationsModel
 /**
@@ -902,11 +917,11 @@ export type stock_reservation_allocations = Prisma.stock_reservation_allocations
 export type warehouse_stock_movements = Prisma.warehouse_stock_movementsModel
 /**
  * Model warehouses
- * 
+ *
  */
 export type warehouses = Prisma.warehousesModel
 /**
  * Model stock_replenishment_policies
- * 
+ *
  */
 export type stock_replenishment_policies = Prisma.stock_replenishment_policiesModel
