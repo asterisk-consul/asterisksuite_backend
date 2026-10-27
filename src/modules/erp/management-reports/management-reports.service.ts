@@ -995,9 +995,11 @@ export class ManagementReportsService {
               { text: `Fact.: ${invoiceAmount}\nCob.: ${paidAmount}`, alignment: 'right' },
             ]);
           });
-          const inventoryWidths = includeCompanyColumn
-            ? [74, 82, 96, 88, 132, 66, 68, 126]
-            : [92, 104, 94, 148, 74, 74, 148];
+          // Usar porcentajes hace que ambas variantes respeten el ancho imprimible
+          // de A4 horizontal, incluyendo los márgenes internos de las celdas.
+          const inventoryWidths: Array<number | string> = includeCompanyColumn
+            ? ['12%', '12%', '12%', '13%', '17%', '9%', '9%', '16%']
+            : ['14%', '14%', '15%', '20%', '10%', '10%', '17%'];
           return [
             { text: section, style: 'sectionTitle' },
             { table: { headerRows: 1, keepWithHeaderRows: 1, dontBreakRows: true, widths: inventoryWidths, body: inventoryBody }, fontSize: 7, layout: 'lightHorizontalLines', margin: [0, 0, 0, 12] },
