@@ -45,6 +45,10 @@ export class CreateDocumentsTypeDto {
   @IsBoolean()
   calculates_taxes?: boolean;
 
+  @IsOptional()
+  @IsBoolean()
+  accepts_commercial_adjustments?: boolean;
+
   @IsBoolean()
   active!: boolean;
 

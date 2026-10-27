@@ -10,12 +10,18 @@ import {
 import { QueryPurchasesDto } from './dto/query-purchases.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { GlobalPurchaseDocumentsResponseDto } from './dto/documents_purchases/global-purchases-documents';
-import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequireAnyPermission, RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('purchases')
 @UseGuards(JwtAuthGuard)
 export class PurchasesController {
   constructor(private readonly purchasesService: PurchasesService) {}
+
+  @RequireAnyPermission('purchases.read', 'documents-purchases.read', 'documents.read')
+  @Get('dashboard-summary')
+  getDashboardSummary(@Query('days') days?: string) {
+    return this.purchasesService.getDashboardSummary(days ? Number(days) : undefined);
+  }
 
   @RequirePermissions('purchases.read')
   @Get('summary')

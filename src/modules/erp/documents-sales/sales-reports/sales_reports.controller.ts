@@ -10,12 +10,18 @@ import {
 import { QuerySalesDto } from './dto/query-sales.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { GlobalSalesDocumentsResponseDto } from './dto/global-sales-documents';
-import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { RequireAnyPermission, RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('sales-reports')
 @UseGuards(JwtAuthGuard)
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
+
+  @RequireAnyPermission('sales.read', 'documents.read', 'sales-reports.read')
+  @Get('dashboard-summary')
+  getDashboardSummary(@Query('days') days?: string) {
+    return this.salesService.getDashboardSummary(days ? Number(days) : undefined);
+  }
 
   @RequirePermissions('sales-reports.read')
   @Get('summary')

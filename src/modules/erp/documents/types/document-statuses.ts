@@ -127,6 +127,12 @@ export function getStatusColor(category: string | null | undefined, status: numb
   return COLOR_MAPS[category ?? '']?.[status] ?? 'neutral'
 }
 
+export function getCancelledDocumentStatus(category: string, direction = 1): number {
+  if (category === 'QUOTE') return 6
+  if (category === 'ORDER') return direction === -1 ? 3 : 8
+  return 3
+}
+
 // ══════════════════════════════════════════════════════════
 // Transiciones válidas por categoría
 // ══════════════════════════════════════════════════════════

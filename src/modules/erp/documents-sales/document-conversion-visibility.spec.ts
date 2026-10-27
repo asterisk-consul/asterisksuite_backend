@@ -73,4 +73,45 @@ describe('Creator visibility after sales document conversion', () => {
       expect(prisma.documents.findMany.mock.calls[2][0].where.OR).toBeUndefined();
     },
   );
+
+  it('transfers commercial adjustments and prorates fixed amounts for partial documents', () => {
+    const sourceWithAdjustment = {
+      document_items: [{ quantity: 2, original_unit_price: 100, discount_percentage: 0 }],
+      commercial_adjustments: [{
+        concept: 'Bonificación', value_type: 'AMOUNT', basis: 'NET', value: 20,
+        base_amount: 200, calculated_amount: 20, net_discount: 20, tax_reduction: 0, total_reduction: 20,
+      }],
+    };
+
+    const carried = (service as any).carryCommercialAdjustments(sourceWithAdjustment, { accepts_commercial_adjustments: true }, [
+      { quantity: 1, original_unit_price: 100, unit_price: 100 } as any,
+    ]);
+
+    expect(carried.adjustments[0].value).toBe(10);
+    expect(carried.adjustments[0].total_reduction).toBe(10);
+    expect(carried.totalReduction).toBe(10);
+  });
+
+  it('does not silently drop adjustments when the destination type rejects them', () => {
+    const sourceWithAdjustment = {
+      document_items: [{ quantity: 1, original_unit_price: 100 }],
+      commercial_adjustments: [{ concept: 'Bonificación', value_type: 'PERCENTAGE', value: 10 }],
+    };
+
+    expect(() => (service as any).carryCommercialAdjustments(
+      sourceWithAdjustment,
+      { accepts_commercial_adjustments: false },
+      [{ quantity: 1, original_unit_price: 100, unit_price: 100 }],
+    )).toThrow('El documento de destino no acepta los conceptos comerciales');
+  });
+
+  it('excludes only the cancellation status that belongs to each sales category', async () => {
+    await service.findAll(undefined, undefined, ['QUOTE', 'ORDER', 'REMITO'], 1, undefined, undefined, false, undefined, undefined, undefined, undefined, undefined, true);
+
+    expect(prisma.documents.findMany.mock.calls[0][0].where.AND).toEqual([
+      { NOT: { document_types: { category: 'QUOTE' }, status: 6 } },
+      { NOT: { document_types: { category: 'ORDER' }, status: 8 } },
+      { NOT: { document_types: { category: 'REMITO' }, status: 3 } },
+    ]);
+  });
 });

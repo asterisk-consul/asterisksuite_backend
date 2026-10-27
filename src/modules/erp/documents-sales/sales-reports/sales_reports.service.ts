@@ -52,6 +52,66 @@ export class SalesService {
     [DocumentTypeFilter.DEBIT_NOTE]: 'DEBIT_NOTE',
   };
 
+  /** Resumen liviano para el dashboard comercial: sólo agrega documentos del período. */
+  async getDashboardSummary(daysInput?: number) {
+    const days = Number.isFinite(daysInput) ? Math.min(Math.max(Math.trunc(daysInput!), 7), 90) : 30;
+    const now = new Date();
+    const argentinaNow = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    const to = new Date(Date.UTC(argentinaNow.getUTCFullYear(), argentinaNow.getUTCMonth(), argentinaNow.getUTCDate() + 1));
+    const from = new Date(to);
+    from.setUTCDate(from.getUTCDate() - days);
+    const grouped = await this.prisma.documents.groupBy({
+      by: ['date', 'status', 'document_type_id', 'currency_code'],
+      where: {
+        deleted_at: null,
+        date: { gte: from, lt: to },
+        document_types: { category: { in: ['INVOICE', 'CREDIT_NOTE', 'DEBIT_NOTE', 'QUOTE', 'ORDER', 'REMITO'] } },
+      },
+      _count: { id: true },
+      _sum: { total: true },
+    });
+    const types = await this.prisma.document_types.findMany({
+      where: { id: { in: [...new Set(grouped.map(row => row.document_type_id))] } },
+      select: { id: true, category: true },
+    });
+    const categoryByType = new Map<string, string>(types.map(type => [type.id, type.category ?? ''] as const));
+    const daily = new Map<string, Record<string, number>>();
+    const categories: Record<string, { count: number; confirmedCount: number; amountByCurrency: Record<string, number>; byStatus: Record<string, number> }> = {};
+    for (const row of grouped) {
+      const category = categoryByType.get(row.document_type_id) ?? 'OTHER';
+      const amount = Number(row._sum.total ?? 0);
+      const count = row._count.id;
+      const signedAmount = category === 'CREDIT_NOTE' ? -amount : amount;
+      const currency = row.currency_code || 'ARS';
+      const categoryRow = categories[category] ??= { count: 0, confirmedCount: 0, amountByCurrency: {}, byStatus: {} };
+      categoryRow.count += count;
+      if (row.status === 2) {
+        categoryRow.confirmedCount += count;
+        categoryRow.amountByCurrency[currency] = (categoryRow.amountByCurrency[currency] ?? 0) + signedAmount;
+      }
+      categoryRow.byStatus[String(row.status)] = (categoryRow.byStatus[String(row.status)] ?? 0) + count;
+      const key = new Date(row.date).toISOString().slice(0, 10);
+      const dailyCategories = daily.get(key) ?? {};
+      dailyCategories[category] = (dailyCategories[category] ?? 0) + count;
+      daily.set(key, dailyCategories);
+    }
+    const netInvoicedByCurrency: Record<string, number> = {};
+    for (const category of ['INVOICE', 'CREDIT_NOTE', 'DEBIT_NOTE']) {
+      for (const [currency, amount] of Object.entries(categories[category]?.amountByCurrency ?? {})) {
+        netInvoicedByCurrency[currency] = (netInvoicedByCurrency[currency] ?? 0) + amount;
+      }
+    }
+    return {
+      period: { from: from.toISOString().slice(0, 10), to: new Date(to.getTime() - 86400000).toISOString().slice(0, 10), days },
+      netInvoicedByCurrency,
+      invoiceCount: categories.INVOICE?.confirmedCount ?? 0,
+      quoteCount: categories.QUOTE?.count ?? 0,
+      orderCount: categories.ORDER?.count ?? 0,
+      categories,
+      daily: [...daily.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, counts]) => ({ date, counts })),
+    };
+  }
+
   // ---------------------------------------------------------------------------
   // RESUMEN GLOBAL DE VENTAS POR PRODUCTO
   // ---------------------------------------------------------------------------

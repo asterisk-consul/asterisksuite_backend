@@ -718,18 +718,18 @@ WHERE tax_category_id IS NULL;
 
 export const SQL_DOCUMENT_TYPES = `
 -- Facturas de venta
-INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
+INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, accepts_commercial_adjustments, active)
 VALUES
-  (gen_random_uuid(), 'FA-A', 'Factura A - Responsable Inscripto', 1, 'INVOICE', 'A', '01', true, true, true, true, true, true, true),
-  (gen_random_uuid(), 'FB-A', 'Factura B - Consumidor Final', 1, 'INVOICE', 'B', '06', true, true, true, true, true, true, true),
-  (gen_random_uuid(), 'FC-A', 'Factura C - Exento', 1, 'INVOICE', 'C', '11', true, true, true, true, true, true, true),
-  (gen_random_uuid(), 'FX-A', 'Factura X - Comprobante interno', 1, 'INVOICE', 'X', null, false, false, true, true, false, true, true)
+  (gen_random_uuid(), 'FA-A', 'Factura A - Responsable Inscripto', 1, 'INVOICE', 'A', '01', true, true, true, true, true, true, true, true),
+  (gen_random_uuid(), 'FB-A', 'Factura B - Consumidor Final', 1, 'INVOICE', 'B', '06', true, true, true, true, true, true, true, true),
+  (gen_random_uuid(), 'FC-A', 'Factura C - Exento', 1, 'INVOICE', 'C', '11', true, true, true, true, true, true, true, true),
+  (gen_random_uuid(), 'FX-A', 'Factura X - Comprobante interno', 1, 'INVOICE', 'X', null, false, false, true, true, false, true, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   letter_type = EXCLUDED.letter_type, afip_code = EXCLUDED.afip_code, requires_cae = EXCLUDED.requires_cae,
   is_electronic = EXCLUDED.is_electronic, affects_stock = EXCLUDED.affects_stock,
   affects_accounting = EXCLUDED.affects_accounting, affects_tax_book = EXCLUDED.affects_tax_book,
-  affects_payment = EXCLUDED.affects_payment;
+  affects_payment = EXCLUDED.affects_payment, accepts_commercial_adjustments = EXCLUDED.accepts_commercial_adjustments;
 
 -- Notas de crédito venta
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
@@ -754,15 +754,15 @@ ON CONFLICT (code) DO UPDATE SET
   affects_payment = EXCLUDED.affects_payment;
 
 -- Facturas de compra
-INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
+INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, accepts_commercial_adjustments, active)
 VALUES
-  (gen_random_uuid(), 'FA-C', 'Factura A Compra - Proveedor RI', -1, 'INVOICE', 'A', '01', false, false, true, true, true, true, true),
-  (gen_random_uuid(), 'FB-C', 'Factura B Compra - Proveedor CF', -1, 'INVOICE', 'B', '06', false, false, true, true, true, true, true),
-  (gen_random_uuid(), 'FC-C', 'Factura C Compra - Proveedor Exento', -1, 'INVOICE', 'C', '11', false, false, true, true, true, true, true)
+  (gen_random_uuid(), 'FA-C', 'Factura A Compra - Proveedor RI', -1, 'INVOICE', 'A', '01', false, false, true, true, true, true, true, true),
+  (gen_random_uuid(), 'FB-C', 'Factura B Compra - Proveedor CF', -1, 'INVOICE', 'B', '06', false, false, true, true, true, true, true, true),
+  (gen_random_uuid(), 'FC-C', 'Factura C Compra - Proveedor Exento', -1, 'INVOICE', 'C', '11', false, false, true, true, true, true, true, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
   letter_type = EXCLUDED.letter_type, afip_code = EXCLUDED.afip_code,
-  affects_payment = EXCLUDED.affects_payment;
+  affects_payment = EXCLUDED.affects_payment, accepts_commercial_adjustments = EXCLUDED.accepts_commercial_adjustments;
 
 -- Notas de compra
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)

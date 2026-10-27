@@ -66,11 +66,28 @@ export class FilesController {
         throw new ForbiddenException('No tienes permisos para adjuntar archivos a capturas');
       }
     }
+    if (entityType === 'cash_box_transfer') {
+      if (!user?.id) throw new ForbiddenException('No tienes permisos para adjuntar archivos');
+      if ((req as any)?.companyUserRole !== 'OWNER') {
+        const permissionContext = await this.permissionContextBuilder.build(user.id);
+        if (!permissionContext.can('media.read')) {
+          throw new ForbiddenException('Necesitas el permiso para ver archivos antes de adjuntar comprobantes');
+        }
+        if (!permissionContext.can('media.upload')) {
+          throw new ForbiddenException('No tienes el permiso para subir archivos');
+        }
+        if (!permissionContext.can('cash_box_transfers.create')) {
+          throw new ForbiddenException('No tienes permisos para adjuntar archivos a transferencias');
+        }
+      }
+      await this.filesService.assertTransferAttachmentTarget(entityId, user.id);
+    }
     return this.filesService.upload(file, entityType, entityId, photoType, user?.id);
   }
 
   // ─── Download (full) ─────────────────────────────────
   @Get('files/:fileUuid/download')
+  @RequirePermissions('media.read')
   async download(
     @Param('fileUuid') fileUuid: string,
     @Res() res: Response,
@@ -89,6 +106,7 @@ export class FilesController {
   }
 
   @Get('files/:fileUuid/view')
+  @RequirePermissions('media.read')
   async view(@Param('fileUuid') fileUuid: string, @Res() res: Response) {
     const stored = await this.filesService.getStoredFile(fileUuid, 'original');
     if (!stored?.filePath || !fs.existsSync(stored.filePath)) return res.status(404).json({ message: 'Archivo no encontrado' });
@@ -103,6 +121,7 @@ export class FilesController {
 
   // ─── Download (medium) ───────────────────────────────
   @Get('files/:fileUuid/medium')
+  @RequirePermissions('media.read')
   async downloadMedium(
     @Param('fileUuid') fileUuid: string,
     @Res() res: Response,
@@ -121,6 +140,7 @@ export class FilesController {
 
   // ─── Download (thumb) ────────────────────────────────
   @Get('files/:fileUuid/thumb')
+  @RequirePermissions('media.read')
   async downloadThumb(
     @Param('fileUuid') fileUuid: string,
     @Res() res: Response,
@@ -139,6 +159,7 @@ export class FilesController {
 
   // ─── Get photos by entity ────────────────────────────
   @Get('photos/:entityType/:entityId')
+  @RequirePermissions('media.read')
   findByEntity(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
@@ -152,12 +173,42 @@ export class FilesController {
     return this.filesService.getStorageUsage();
   }
 
+  @Get('library')
+  @RequirePermissions('media.read')
+  findLibrary(
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('search') search?: string,
+    @Query('sort') sort?: string,
+    @Query('order') order?: string,
+  ) {
+    return this.filesService.findLibrary({ page, pageSize, search, sort, order });
+  }
+
   // ─── Delete photo ────────────────────────────────────
   @Delete('photos/:photoId')
-  deletePhoto(
+  async deletePhoto(
     @Param('photoId') photoId: string,
     @CurrentUser() user?: AuthUser,
+    @Req() req?: Request,
   ) {
+    const photo = await this.filesService.findPhotoAssociation(photoId);
+    if (photo?.entity_type === 'cash_box_transfer') {
+      if (!user?.id) throw new ForbiddenException('No tienes permisos para quitar comprobantes de transferencias');
+      if ((req as any)?.companyUserRole !== 'OWNER') {
+        const permissionContext = await this.permissionContextBuilder.build(user.id);
+        if (!permissionContext.can('media.read')) {
+          throw new ForbiddenException('Necesitas el permiso para ver archivos antes de quitar comprobantes');
+        }
+        if (!permissionContext.can('media.upload')) {
+          throw new ForbiddenException('No tienes el permiso para quitar archivos');
+        }
+        if (!permissionContext.can('cash_box_transfers.create')) {
+          throw new ForbiddenException('No tienes permisos para quitar comprobantes de transferencias');
+        }
+      }
+      await this.filesService.assertTransferAttachmentTarget(photo.entity_id, user.id);
+    }
     return this.filesService.deletePhoto(photoId, user?.id);
   }
 

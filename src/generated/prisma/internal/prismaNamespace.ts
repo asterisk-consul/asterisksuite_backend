@@ -14150,6 +14150,7 @@ export const Document_typesScalarFieldEnum = {
   affects_tax_book: 'affects_tax_book',
   affects_payment: 'affects_payment',
   calculates_taxes: 'calculates_taxes',
+  accepts_commercial_adjustments: 'accepts_commercial_adjustments',
   active: 'active',
   category: 'category',
   letter_type: 'letter_type',

@@ -31,6 +31,7 @@ import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 import { StockReservationsService } from './stock-reservations.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
+import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -80,6 +81,50 @@ export class DocumentsSalesService {
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  private carryCommercialAdjustments(source: any, targetType: any, targetItems: ItemInput[]) {
+    const sourceAdjustments = Array.isArray(source?.commercial_adjustments) ? source.commercial_adjustments : [];
+    if (!sourceAdjustments.length) return { adjustments: [], netDiscount: 0, taxReduction: 0, totalReduction: 0 };
+    if (!targetType?.accepts_commercial_adjustments) {
+      throw new BadRequestException('El documento de destino no acepta los conceptos comerciales del documento de origen. Activá la opción en su configuración.');
+    }
+
+    const itemBase = (item: any) => Number(item.quantity ?? 0)
+      * Number(item.original_unit_price ?? item.unit_price ?? 0)
+      * (1 - Number(item.discount_percentage ?? 0) / 100);
+    const sourceBase = (source.document_items ?? []).reduce((sum: number, item: any) => sum + itemBase(item), 0);
+    const targetBase = targetItems.reduce((sum, item) => sum + itemBase(item), 0);
+    const ratio = sourceBase > 0 ? Math.min(1, targetBase / sourceBase) : 1;
+    const scale = (value: unknown) => Number(value ?? 0) * ratio;
+    const adjustments = sourceAdjustments.map((adjustment: any) => ({
+      concept: adjustment.concept,
+      value_type: adjustment.value_type,
+      basis: adjustment.basis,
+      value: adjustment.value_type === 'AMOUNT' ? scale(adjustment.value) : Number(adjustment.value),
+      base_amount: scale(adjustment.base_amount),
+      calculated_amount: scale(adjustment.calculated_amount),
+      net_discount: scale(adjustment.net_discount),
+      tax_reduction: scale(adjustment.tax_reduction),
+      total_reduction: scale(adjustment.total_reduction),
+    }));
+
+    return {
+      adjustments,
+      netDiscount: adjustments.reduce((sum: number, item: any) => sum + item.net_discount, 0),
+      taxReduction: adjustments.reduce((sum: number, item: any) => sum + item.tax_reduction, 0),
+      totalReduction: adjustments.reduce((sum: number, item: any) => sum + item.total_reduction, 0),
+    };
+  }
+
+  private applyCommercialReductions(totals: any, carried: ReturnType<DocumentsSalesService['carryCommercialAdjustments']>) {
+    return {
+      ...totals,
+      subtotal: Math.max(0, Number(totals.subtotal) - carried.netDiscount),
+      taxable_base: Math.max(0, Number(totals.taxable_base) - carried.netDiscount),
+      total_taxes: Math.max(0, Number(totals.total_taxes) - carried.taxReduction),
+      total: Math.max(0, Number(totals.total) - carried.totalReduction),
+    };
   }
 
   getSalesOrderAvailability(id: string) {
@@ -161,15 +206,15 @@ export class DocumentsSalesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
-    if (dto.commercial_adjustments?.length && docType.category !== 'INVOICE') {
-      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
-    }
+    let commercialAdjustments = dto.commercial_adjustments ?? [];
 
     // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
         where: { id: dto.parent_document_id },
-        include: { document_types: { select: { category: true, direction: true } } },
+        include: {
+          document_types: { select: { category: true, direction: true } },
+        },
       });
       if (!parentDoc) {
         throw new BadRequestException('El documento referenciado no existe');
@@ -194,6 +239,18 @@ export class DocumentsSalesService {
       if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
         throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada');
       }
+      if (dto.commercial_adjustments === undefined && Array.isArray(parentDoc.commercial_adjustments)) {
+        commercialAdjustments = (parentDoc.commercial_adjustments as any[]).map((adjustment) => ({
+          concept: adjustment.concept,
+          value_type: adjustment.value_type,
+          basis: adjustment.basis,
+          value: Number(adjustment.value),
+        }));
+      }
+    }
+
+    if (commercialAdjustments.length && !docType.accepts_commercial_adjustments) {
+      throw new BadRequestException('Este tipo de documento no acepta conceptos comerciales. Activá la opción en su configuración para transferirlos.');
     }
 
     // ─── Validar contexto fiscal (emisor × receptor) ───────────
@@ -228,7 +285,7 @@ export class DocumentsSalesService {
     const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
       resolution,
       taxContext.items,
-      dto.commercial_adjustments,
+      commercialAdjustments,
     );
     const calculation = adjustmentCalculation.calculation;
     const automaticDocumentTaxes = calculation.document.documentTaxes.map((t) => ({ ...t }));
@@ -581,11 +638,10 @@ export class DocumentsSalesService {
       throw new BadRequestException('No se puede modificar un documento anulado');
     }
 
-    const hasCommercialAdjustments = dto.commercial_adjustments?.length
-      ? true
-      : Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
-    if (hasCommercialAdjustments && doc.document_types?.category !== 'INVOICE') {
-      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
+    const hasNewAdjustments = Boolean(dto.commercial_adjustments?.length)
+      && (!Array.isArray(doc.commercial_adjustments) || doc.commercial_adjustments.length === 0);
+    if (hasNewAdjustments && !doc.document_types?.accepts_commercial_adjustments) {
+      throw new BadRequestException('Este tipo de documento no acepta conceptos comerciales. Activá la opción en su configuración.');
     }
 
     let items: ItemInput[] | null = null;
@@ -1122,6 +1178,15 @@ export class DocumentsSalesService {
         if (condition !== undefined) and.push({ document_sequences: { point_of_sale: condition } });
       }
     }
+    const categories = Array.isArray(category) ? category : category ? [category] : [];
+    const cancelledFilters = excludeCancelled
+      ? categories.map((documentCategory) => ({
+          NOT: {
+            document_types: { category: documentCategory },
+            status: getCancelledDocumentStatus(documentCategory, direction ?? 1),
+          },
+        }))
+      : [];
     const where: any = {
         deleted_at: null,
 
@@ -1137,11 +1202,15 @@ export class DocumentsSalesService {
             }
           : {}),
 
-        ...(status !== undefined ? { status } : excludeCancelled ? { status: { not: 3 } } : {}),
+        ...(status !== undefined
+          ? { status }
+          : excludeCancelled && categories.length === 0
+            ? { status: { not: STATUS_CANCELLED } }
+            : {}),
 
         ...(partyId ? { party_id: partyId } : {}),
 
-        ...(and.length ? { AND: and } : {}),
+        ...(and.length || cancelledFilters.length ? { AND: [...and, ...cancelledFilters] } : {}),
     };
     const directionOrder = order === 'asc' ? 'asc' : 'desc';
     const sortableFields = new Set(['number', 'date', 'status', 'total', 'created_at']);
@@ -2251,24 +2320,32 @@ export class DocumentsSalesService {
     }
 
     // Copiar items del presupuesto
-    const items: ItemInput[] = doc.document_items.map((item) => ({
-      product_id: item.product_id,
-      variant_id: item.variant_id,
-      quantity: Number(item.quantity),
-      currency: item.currency_code ?? doc.currency_code ?? 'ARS',
-      exchange_rate: Number(item.exchange_rate ?? 1),
-      original_unit_price: Number(item.original_unit_price ?? item.unit_price),
-      unit_price: Number(item.unit_price),
-      converted_unit_price: Number(item.unit_price),
-      price: Number(item.price),
-      total: Number(item.price),
-      exempt_amount: 0,
-      taxable_base: Number(item.price),
-      total_taxes: 0,
-      taxes: [],
-    }));
+    const hasCommercialAdjustments = Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
+    const items: ItemInput[] = doc.document_items.map((item) => {
+      const unitPrice = hasCommercialAdjustments ? Number(item.original_unit_price ?? item.unit_price) : Number(item.unit_price);
+      const discountPercentage = hasCommercialAdjustments ? Number(item.discount_percentage ?? 0) : 0;
+      const price = Number(item.quantity) * unitPrice * (1 - discountPercentage / 100);
+      return {
+        product_id: item.product_id,
+        variant_id: item.variant_id,
+        quantity: Number(item.quantity),
+        currency: item.currency_code ?? doc.currency_code ?? 'ARS',
+        exchange_rate: Number(item.exchange_rate ?? 1),
+        original_unit_price: unitPrice,
+        unit_price: unitPrice,
+        discount_percentage: discountPercentage,
+        converted_unit_price: unitPrice,
+        price,
+        total: price,
+        exempt_amount: 0,
+        taxable_base: price,
+        total_taxes: 0,
+        taxes: [],
+      };
+    });
 
-    const totals = this.totalsService.calculate(items);
+    const carriedAdjustments = this.carryCommercialAdjustments(doc, orderType, items);
+    const totals = this.applyCommercialReductions(this.totalsService.calculate(items), carriedAdjustments);
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
@@ -2292,6 +2369,7 @@ export class DocumentsSalesService {
           taxable_base: totals.taxable_base,
           total_taxes: totals.total_taxes,
           total: totals.total,
+          commercial_adjustments: carriedAdjustments.adjustments as any,
           descrip: doc.descrip,
           ref: `PRES-${doc.number}`,
         },
@@ -2347,24 +2425,32 @@ export class DocumentsSalesService {
     }
 
     // Copiar items de la orden
-    const items: ItemInput[] = doc.document_items.map((item) => ({
-      product_id: item.product_id,
-      variant_id: item.variant_id,
-      quantity: Number(item.quantity),
-      currency: item.currency_code ?? doc.currency_code ?? 'ARS',
-      exchange_rate: Number(item.exchange_rate ?? 1),
-      original_unit_price: Number(item.original_unit_price ?? item.unit_price),
-      unit_price: Number(item.unit_price),
-      converted_unit_price: Number(item.unit_price),
-      price: Number(item.price),
-      total: Number(item.price),
-      exempt_amount: 0,
-      taxable_base: Number(item.price),
-      total_taxes: 0,
-      taxes: [],
-    }));
+    const hasCommercialAdjustments = Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
+    const items: ItemInput[] = doc.document_items.map((item) => {
+      const unitPrice = hasCommercialAdjustments ? Number(item.original_unit_price ?? item.unit_price) : Number(item.unit_price);
+      const discountPercentage = hasCommercialAdjustments ? Number(item.discount_percentage ?? 0) : 0;
+      const price = Number(item.quantity) * unitPrice * (1 - discountPercentage / 100);
+      return {
+        product_id: item.product_id,
+        variant_id: item.variant_id,
+        quantity: Number(item.quantity),
+        currency: item.currency_code ?? doc.currency_code ?? 'ARS',
+        exchange_rate: Number(item.exchange_rate ?? 1),
+        original_unit_price: unitPrice,
+        unit_price: unitPrice,
+        discount_percentage: discountPercentage,
+        converted_unit_price: unitPrice,
+        price,
+        total: price,
+        exempt_amount: 0,
+        taxable_base: price,
+        total_taxes: 0,
+        taxes: [],
+      };
+    });
 
-    const totals = this.totalsService.calculate(items);
+    const carriedAdjustments = this.carryCommercialAdjustments(doc, remitoType, items);
+    const totals = this.applyCommercialReductions(this.totalsService.calculate(items), carriedAdjustments);
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
@@ -2388,6 +2474,7 @@ export class DocumentsSalesService {
           taxable_base: totals.taxable_base,
           total_taxes: totals.total_taxes,
           total: totals.total,
+          commercial_adjustments: carriedAdjustments.adjustments as any,
           descrip: doc.descrip,
           ref: `OV-${doc.number}`,
           delivery_date: new Date(),
@@ -2457,8 +2544,12 @@ export class DocumentsSalesService {
     }
 
     // Crear remito con solo los items indicados
+    const hasCommercialAdjustments = Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
     const remitoItems: ItemInput[] = items.map((req) => {
       const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
+      const unitPrice = hasCommercialAdjustments ? Number(sourceItem.original_unit_price ?? sourceItem.unit_price) : Number(sourceItem.unit_price);
+      const discountPercentage = hasCommercialAdjustments ? Number(sourceItem.discount_percentage ?? 0) : 0;
+      const price = unitPrice * req.quantity * (1 - discountPercentage / 100);
       return {
         product_id: sourceItem.product_id,
         variant_id: sourceItem.variant_id,
@@ -2466,19 +2557,21 @@ export class DocumentsSalesService {
         quantity: req.quantity,
         currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
         exchange_rate: Number(sourceItem.exchange_rate ?? 1),
-        original_unit_price: Number(sourceItem.original_unit_price ?? sourceItem.unit_price),
-        unit_price: Number(sourceItem.unit_price),
-        converted_unit_price: Number(sourceItem.unit_price),
-        price: Number(sourceItem.unit_price) * req.quantity,
-        total: Number(sourceItem.unit_price) * req.quantity,
+        original_unit_price: unitPrice,
+        unit_price: unitPrice,
+        discount_percentage: discountPercentage,
+        converted_unit_price: unitPrice,
+        price,
+        total: price,
         exempt_amount: 0,
-        taxable_base: Number(sourceItem.unit_price) * req.quantity,
+        taxable_base: price,
         total_taxes: 0,
         taxes: [],
       };
     });
 
-    const totals = this.totalsService.calculate(remitoItems);
+    const carriedAdjustments = this.carryCommercialAdjustments(doc, remitoType, remitoItems);
+    const totals = this.applyCommercialReductions(this.totalsService.calculate(remitoItems), carriedAdjustments);
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
@@ -2501,6 +2594,7 @@ export class DocumentsSalesService {
           taxable_base: totals.taxable_base,
           total_taxes: totals.total_taxes,
           total: totals.total,
+          commercial_adjustments: carriedAdjustments.adjustments as any,
           descrip: doc.descrip,
           ref: `OV-${doc.number}`,
           delivery_date: new Date(),
@@ -2552,27 +2646,33 @@ export class DocumentsSalesService {
     }
 
     // Crear factura con items seleccionados
+    const hasCommercialAdjustments = Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
     const invoiceItems: ItemInput[] = items.map((req) => {
       const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
+      const unitPrice = hasCommercialAdjustments ? Number(sourceItem.original_unit_price ?? sourceItem.unit_price) : Number(sourceItem.unit_price);
+      const discountPercentage = hasCommercialAdjustments ? Number(sourceItem.discount_percentage ?? 0) : 0;
+      const price = unitPrice * req.quantity * (1 - discountPercentage / 100);
       return {
         product_id: sourceItem.product_id,
         variant_id: sourceItem.variant_id,
         quantity: req.quantity,
         currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
         exchange_rate: Number(sourceItem.exchange_rate ?? 1),
-        original_unit_price: Number(sourceItem.original_unit_price ?? sourceItem.unit_price),
-        unit_price: Number(sourceItem.unit_price),
-        converted_unit_price: Number(sourceItem.unit_price),
-        price: Number(sourceItem.unit_price) * req.quantity,
-        total: Number(sourceItem.unit_price) * req.quantity,
+        original_unit_price: unitPrice,
+        unit_price: unitPrice,
+        discount_percentage: discountPercentage,
+        converted_unit_price: unitPrice,
+        price,
+        total: price,
         exempt_amount: 0,
-        taxable_base: Number(sourceItem.unit_price) * req.quantity,
+        taxable_base: price,
         total_taxes: 0,
         taxes: [],
       };
     });
 
-    const totals = this.totalsService.calculate(invoiceItems);
+    const carriedAdjustments = this.carryCommercialAdjustments(doc, invoiceType, invoiceItems);
+    const totals = this.applyCommercialReductions(this.totalsService.calculate(invoiceItems), carriedAdjustments);
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
@@ -2600,6 +2700,7 @@ export class DocumentsSalesService {
           taxable_base: totals.taxable_base,
           total_taxes: totals.total_taxes,
           total: totals.total,
+          commercial_adjustments: carriedAdjustments.adjustments as any,
           descrip: doc.descrip,
           ref: `OV-${doc.number}`,
         },
@@ -2686,14 +2787,44 @@ export class DocumentsSalesService {
     if (!remitoType) throw new NotFoundException('No hay un tipo de Remito de venta configurado');
     if (!dispatch.dispatch_items.length) throw new BadRequestException('La Orden de Despacho no tiene productos');
 
+    const sourceDocument = dispatch.source_document_id ? await this.findOne(dispatch.source_document_id) : null;
+    const sourceHasCommercialAdjustments = Array.isArray(sourceDocument?.commercial_adjustments)
+      && sourceDocument.commercial_adjustments.length > 0;
+    const remitoItems: ItemInput[] = dispatch.dispatch_items.map((item) => {
+      const sourceItem = sourceDocument?.document_items.find((source: any) => source.id === item.source_document_item_id);
+      const unitPrice = sourceHasCommercialAdjustments
+        ? Number(sourceItem?.original_unit_price ?? item.unit_price)
+        : Number(item.unit_price);
+      const discountPercentage = sourceHasCommercialAdjustments ? Number(sourceItem?.discount_percentage ?? 0) : 0;
+      const price = Number(item.quantity) * unitPrice * (1 - discountPercentage / 100);
+      return {
+        product_id: item.product_id,
+        variant_id: sourceItem?.variant_id ?? null,
+        warehouse_id: sourceItem?.warehouse_id ?? null,
+        quantity: Number(item.quantity),
+        currency: item.currency_code ?? sourceDocument?.currency_code ?? 'ARS',
+        exchange_rate: Number(sourceItem?.exchange_rate ?? 1),
+        original_unit_price: unitPrice,
+        unit_price: unitPrice,
+        discount_percentage: discountPercentage,
+        converted_unit_price: unitPrice,
+        price,
+        total: price,
+        exempt_amount: 0,
+        taxable_base: price,
+        total_taxes: 0,
+        taxes: [],
+      };
+    });
+    const carriedAdjustments = sourceDocument
+      ? this.carryCommercialAdjustments(sourceDocument, remitoType, remitoItems)
+      : { adjustments: [], netDiscount: 0, taxReduction: 0, totalReduction: 0 };
+    const totals = this.applyCommercialReductions(this.totalsService.calculate(remitoItems), carriedAdjustments);
+
     let createdId = '';
     await this.prisma.$transaction(async (tx) => {
       const sequenceId = await this.resolveSequence(remitoType.id, null, remitoType.document_sequences?.id ?? null, tx);
       const number = await this.getNextNumber(remitoType.id, sequenceId, tx);
-      const subtotal = dispatch.dispatch_items.reduce(
-        (sum, item) => sum + Number(item.quantity) * Number(item.unit_price),
-        0,
-      );
       const created = await tx.documents.create({
         data: {
           document_type_id: remitoType.id,
@@ -2706,9 +2837,12 @@ export class DocumentsSalesService {
           date: new Date(),
           status: STATUS_DRAFT,
           currency_code: dispatch.dispatch_items[0]?.currency_code ?? 'ARS',
-          subtotal,
-          taxable_base: subtotal,
-          total: subtotal,
+          subtotal: totals.subtotal,
+          exempt_amount: totals.exempt_amount,
+          taxable_base: totals.taxable_base,
+          total_taxes: totals.total_taxes,
+          total: totals.total,
+          commercial_adjustments: carriedAdjustments.adjustments as any,
           ref: dispatch.order_number.substring(0, 50),
           descrip: 'Remito generado desde Orden de Despacho',
           created_by: userId,
@@ -2716,20 +2850,7 @@ export class DocumentsSalesService {
       });
       createdId = created.id;
       await this.commercialFlow.inheritFromParent(tx, created.id, dispatch.source_document_id);
-      await tx.document_items.createMany({
-        data: dispatch.dispatch_items.map((item) => ({
-          document_id: created.id,
-          product_id: item.product_id,
-          quantity: item.quantity,
-          unit_price: item.unit_price,
-
-          discount_percentage: item.discount_percentage ?? 0,
-          original_unit_price: item.unit_price,
-          currency_code: item.currency_code,
-          exchange_rate: 1,
-          price: Number(item.quantity) * Number(item.unit_price),
-        })),
-      });
+      await this.persistItems(created.id, remitoItems, tx);
     });
     return this.findOne(createdId);
   }

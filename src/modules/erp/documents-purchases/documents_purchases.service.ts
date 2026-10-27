@@ -30,6 +30,7 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
+import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
 import {
   receiveInternationalRemitoFromTransit,
   registerInternationalInvoiceInTransit,
@@ -122,15 +123,15 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
-    if (dto.commercial_adjustments?.length && docType.category !== 'INVOICE') {
-      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
-    }
+    let commercialAdjustments = dto.commercial_adjustments ?? [];
 
     // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
         where: { id: dto.parent_document_id },
-        include: { document_types: { select: { category: true, direction: true } } },
+        include: {
+          document_types: { select: { category: true, direction: true } },
+        },
       });
       if (!parentDoc) {
         throw new BadRequestException('El documento referenciado no existe');
@@ -166,6 +167,15 @@ export class DocumentsPurchasesService {
         throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada');
       }
 
+      if (dto.commercial_adjustments === undefined && Array.isArray(parentDoc.commercial_adjustments)) {
+        commercialAdjustments = (parentDoc.commercial_adjustments as any[]).map((adjustment) => ({
+          concept: adjustment.concept,
+          value_type: adjustment.value_type,
+          basis: adjustment.basis,
+          value: Number(adjustment.value),
+        }));
+      }
+
       if (isInvoice || isRemito) {
         const existingChild = await this.prisma.documents.findFirst({
           where: {
@@ -184,6 +194,10 @@ export class DocumentsPurchasesService {
           );
         }
       }
+    }
+
+    if (commercialAdjustments.length && !docType.accepts_commercial_adjustments) {
+      throw new BadRequestException('Este tipo de documento no acepta conceptos comerciales. Activá la opción en su configuración para transferirlos.');
     }
 
     // ─── Validar contexto fiscal (proveedor emisor × empresa receptor) ──
@@ -217,7 +231,7 @@ export class DocumentsPurchasesService {
     const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
       resolution,
       taxContext.items,
-      dto.commercial_adjustments,
+      commercialAdjustments,
     );
     const calculation = adjustmentCalculation.calculation;
     if (dto.taxes?.some((t) => t.manual && !t.modification_reason?.trim())) {
@@ -508,11 +522,10 @@ export class DocumentsPurchasesService {
       throw new BadRequestException('No se puede modificar un documento anulado');
     }
 
-    const hasCommercialAdjustments = dto.commercial_adjustments?.length
-      ? true
-      : Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
-    if (hasCommercialAdjustments && doc.document_types?.category !== 'INVOICE') {
-      throw new BadRequestException('Los descuentos comerciales solo se pueden cargar en facturas.');
+    const hasNewAdjustments = Boolean(dto.commercial_adjustments?.length)
+      && (!Array.isArray(doc.commercial_adjustments) || doc.commercial_adjustments.length === 0);
+    if (hasNewAdjustments && !doc.document_types?.accepts_commercial_adjustments) {
+      throw new BadRequestException('Este tipo de documento no acepta conceptos comerciales. Activá la opción en su configuración.');
     }
 
     let items: ItemInput[] | null = null;
@@ -946,6 +959,15 @@ export class DocumentsPurchasesService {
         if (condition) and.push({ [filter.column]: condition });
       }
     }
+    const categories = Array.isArray(category) ? category : category ? [category] : [];
+    const cancelledFilters = excludeCancelled
+      ? categories.map((documentCategory) => ({
+          NOT: {
+            document_types: { category: documentCategory },
+            status: getCancelledDocumentStatus(documentCategory, direction ?? -1),
+          },
+        }))
+      : [];
     const where: any = {
         deleted_at: null,
 
@@ -960,9 +982,13 @@ export class DocumentsPurchasesService {
             }
           : {}),
 
-        ...(status !== undefined ? { status } : excludeCancelled ? { status: { not: 3 } } : {}),
+        ...(status !== undefined
+          ? { status }
+          : excludeCancelled && categories.length === 0
+            ? { status: { not: STATUS_CANCELLED } }
+            : {}),
 
-        ...(and.length ? { AND: and } : {}),
+        ...(and.length || cancelledFilters.length ? { AND: [...and, ...cancelledFilters] } : {}),
     };
     const directionOrder = order === 'asc' ? 'asc' : 'desc';
     const sortableFields = new Set(['number', 'date', 'status', 'total', 'created_at']);
