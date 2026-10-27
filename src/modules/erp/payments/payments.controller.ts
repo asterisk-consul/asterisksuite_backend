@@ -24,7 +24,7 @@ export class PaymentsController {
   ) {}
 
   @Post()
-  @RequirePermissions('treasury.payments.create')
+  @RequirePermissions('payments.create')
   async create(@Body() dto: CreatePaymentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     console.log('[payments-controller] create called, dto:', JSON.stringify(dto, null, 2))
     console.log('[payments-controller] user.id:', user.id)
@@ -33,7 +33,7 @@ export class PaymentsController {
   }
 
   @Get()
-  @RequirePermissions('treasury.payments.read')
+  @RequirePermissions('payments.read')
   findAll(
     @Req() req: Request,
     @CurrentUser() user: AuthUser,
@@ -55,13 +55,13 @@ export class PaymentsController {
   }
 
   @Get(':id')
-  @RequirePermissions('treasury.payments.read')
+  @RequirePermissions('payments.read')
   findOne(@Param('id') id: string) {
     return this.paymentsService.findOne(id);
   }
 
   @Patch(':id')
-  @RequirePermissions('treasury.payments.update')
+  @RequirePermissions('payments.update')
   async update(@Param('id') id: string, @Body() dto: UpdatePaymentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const payment = await this.paymentsService.findOne(id);
     await this.assertCardPermission(dto.payment_method ?? payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'create');
@@ -69,7 +69,7 @@ export class PaymentsController {
   }
 
   @Post(':id/confirm')
-  @RequirePermissions('treasury.payments.confirm')
+  @RequirePermissions('payments.confirm')
   async confirm(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const payment = await this.paymentsService.findOne(id);
     await this.assertCardPermission(payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'confirm');
@@ -77,19 +77,19 @@ export class PaymentsController {
   }
 
   @Post(':id/pay')
-  @RequirePermissions('treasury.payments.mark_as_paid')
+  @RequirePermissions('payments.mark_as_paid')
   markAsPaid(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.markAsPaid(id, user.id);
   }
 
   @Post(':id/reject')
-  @RequirePermissions('treasury.payments.reject')
+  @RequirePermissions('payments.reject')
   reject(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.reject(id, user.id);
   }
 
   @Post(':id/reverse')
-  @RequirePermissions('treasury.payments.reverse')
+  @RequirePermissions('payments.reverse')
   async reverse(@Param('id') id: string, @Body() dto: ReversePaymentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const payment = await this.paymentsService.findOne(id);
     await this.assertCardPermission(payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'reverse');
@@ -97,6 +97,7 @@ export class PaymentsController {
   }
 
   @Delete(':id')
+  @RequirePermissions('payments.delete')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.paymentsService.remove(id, user.id);
   }

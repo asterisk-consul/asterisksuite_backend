@@ -324,6 +324,48 @@ export class CurrentAccountsService {
     });
   }
 
+  async deleteManualAdjustment(partyId: string, entryId: string, userId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const account = await tx.current_accounts.findFirst({
+        where: { party_id: partyId, deleted_at: null },
+        select: { id: true },
+      });
+      if (!account) throw new NotFoundException('Cuenta corriente no encontrada');
+
+      await tx.$queryRaw`SELECT id FROM tenant.current_accounts WHERE id = ${account.id}::uuid FOR UPDATE`;
+
+      const entry = await tx.current_account_entries.findFirst({
+        where: {
+          id: entryId,
+          current_account_id: account.id,
+          deleted_at: null,
+        },
+      });
+      if (!entry) throw new NotFoundException('Movimiento no encontrado');
+      if (
+        entry.type !== 'ADJUSTMENT' ||
+        entry.reference_type !== 'manual_balance_correction' ||
+        entry.payment_id !== null
+      ) {
+        throw new BadRequestException('Solo se pueden eliminar ajustes manuales de corrección de saldo. Las facturas y pagos deben anularse desde sus módulos.');
+      }
+
+      const delta = Number(entry.balance_after) - Number(entry.balance_before);
+      const now = new Date();
+      await tx.current_account_entries.update({
+        where: { id: entry.id },
+        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+      });
+      await tx.current_accounts.update({
+        where: { id: account.id },
+        data: { balance: { decrement: delta }, updated_at: now, updated_by: userId },
+      });
+      const balance = await recalculateCurrentAccountLedger(tx, account.id);
+
+      return { success: true, balance };
+    });
+  }
+
   async removeDocumentEffects(documentId: string, userId: string, tx?: any) {
     const prisma = tx ?? this.prisma;
     const entries = await prisma.current_account_entries.findMany({

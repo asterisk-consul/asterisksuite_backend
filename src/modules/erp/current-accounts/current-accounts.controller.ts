@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -21,6 +21,20 @@ export class CurrentAccountsController {
   @RequirePermissions('treasury.current_accounts.create')
   deleteOpeningBalance(@Param('partyId') partyId: string, @CurrentUser() user: AuthUser) {
     return this.currentAccountsService.deleteOpeningBalance(partyId, user.id);
+  }
+
+  @Delete('party/:partyId/entries/:entryId')
+  deleteManualAdjustment(
+    @Param('partyId') partyId: string,
+    @Param('entryId') entryId: string,
+    @CurrentUser() user: AuthUser,
+    @Req() request: any,
+  ) {
+    const role = request['companyUserRole'] as string | undefined;
+    if (role !== 'OWNER' && role !== 'ADMIN') {
+      throw new ForbiddenException('Solo OWNER o ADMIN pueden eliminar ajustes manuales de cuenta corriente');
+    }
+    return this.currentAccountsService.deleteManualAdjustment(partyId, entryId, user.id);
   }
 
   @Get('party/:partyId')
