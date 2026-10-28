@@ -233,7 +233,7 @@ model documents {
   total_taxes                     Decimal                             @default(0) @db.Decimal(15, 2)
   total                           Decimal                             @default(0) @db.Decimal(15, 2)
   paid_amount                     Decimal                             @default(0) @db.Decimal(15, 2)
-  descrip                         String?                             @db.VarChar(50)
+  descrip                         String?                             @db.Text
   ref                             String?                             @db.VarChar(50)
   currency_code                   String?                             @db.VarChar(10)
   exchange_rate                   Decimal?                            @db.Decimal(18, 6)

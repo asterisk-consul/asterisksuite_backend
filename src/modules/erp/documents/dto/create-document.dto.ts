@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsDateString, IsIn, IsNumber, IsOptional, IsString, IsUUID, Min, MinLength, ValidateNested } from 'class-validator';
+import { IsArray, IsDateString, IsIn, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
 
 export class CreateDocumentItemTaxDto {
   @IsUUID()
@@ -135,6 +135,7 @@ export class CreateDocumentDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(500)
   descrip?: string;
 
   @IsString()
