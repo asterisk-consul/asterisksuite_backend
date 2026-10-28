@@ -61,6 +61,13 @@ export class BankAccountsController {
     return this.bankAccountsService.getMovements(id);
   }
 
+  @Get(':id/movements/:movementId/details')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('treasury.bank_accounts.read')
+  getMovementDetails(@Param('id') id: string, @Param('movementId') movementId: string) {
+    return this.bankAccountsService.getMovementDetails(id, movementId);
+  }
+
   @Post(':id/movements')
   @UseGuards(BankAccountAccessGuard)
   @RequirePermissions('bank_movements.create')

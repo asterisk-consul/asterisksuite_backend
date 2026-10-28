@@ -48,16 +48,62 @@ export class TaxCalculationService {
         throw new BadRequestException(`"${concept}" no puede superar la base de cálculo.`)
       }
 
-      // A fixed discount is converted into a proportional reduction so the tax
-      // engine can distribute it consistently across lines and tax rates.
+      // Distribute the adjustment proportionally across lines while retaining
+      // sub-cent unit-price precision inside the calculation. Persisted line
+      // amounts are rounded to cents later; rounding each unit price here made
+      // fixed discounts miss the amount entered by the user.
       const reductionRatio = Math.min(1, requestedAmount / baseAmount)
       items = items.map((item) => ({
         ...item,
-        // document_items.unit_price is stored with two decimal places; calculate
-        // against the value that will actually be persisted and displayed.
-        unitPrice: round2(item.unitPrice * (1 - reductionRatio)),
+        unitPrice: item.unitPrice * (1 - reductionRatio),
       }))
       calculation = this.calculate(resolution, items)
+
+      if (valueType === 'AMOUNT') {
+        // Correct floating-point drift so an entered fixed amount remains exact
+        // after proportional allocation, including line and document taxes.
+        for (let attempt = 0; attempt < 2; attempt++) {
+          const actualReduction = basis === 'NET'
+            ? before.subtotal - calculation.document.subtotal
+            : before.total - calculation.document.total
+          const residual = requestedAmount - actualReduction
+          if (Math.abs(residual) < 0.000001) break
+
+          let candidateIndex = -1
+          for (let index = items.length - 1; index >= 0; index--) {
+            if (items[index].quantity > 0 && (items[index].unitPrice > 0 || residual < 0)) {
+              candidateIndex = index
+              break
+            }
+          }
+          if (candidateIndex < 0) break
+
+          const candidate = items[candidateIndex]
+          const lineTaxes = [
+            ...(resolution.productTaxes.get(candidate.productId ?? '') ?? []),
+            ...resolution.operationTaxes,
+          ].filter((tax) => tax.calculation_level.toLowerCase() === 'line')
+          const includedFactor = Math.max(0.000001, 1 - lineTaxes
+            .filter((tax) => tax.is_included_in_price)
+            .reduce((sum, tax) => sum + tax.rate / (100 + tax.rate), 0))
+          const priceFactor = basis === 'NET'
+            ? includedFactor
+            : 1
+              + lineTaxes.filter((tax) => !tax.is_included_in_price)
+                .reduce((sum, tax) => sum + tax.rate / 100, 0)
+              + includedFactor * resolution.operationTaxes
+                .filter((tax) => tax.calculation_level.toLowerCase() === 'document')
+                .reduce((sum, tax) => sum + tax.rate / 100, 0)
+          const nextItems = [...items]
+          nextItems[candidateIndex] = {
+            ...candidate,
+            unitPrice: Math.max(0, candidate.unitPrice - residual / (candidate.quantity * priceFactor)),
+          }
+          items = nextItems
+          calculation = this.calculate(resolution, items)
+        }
+      }
+
       const after = calculation.document
       const selectedBaseAfter = basis === 'NET' ? after.subtotal : after.total
 

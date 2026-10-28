@@ -96,6 +96,13 @@ export class CashBoxesController {
     return this.cashBoxesService.getBalances(id);
   }
 
+  @Get(':id/movements/:movementId/details')
+  @UseGuards(CashBoxAccessGuard)
+  @RequirePermissions('cash_box_movements.read')
+  getMovementDetails(@Param('id') id: string, @Param('movementId') movementId: string) {
+    return this.cashBoxesService.getMovementDetails(id, movementId);
+  }
+
   @Post(':id/open')
   @UseGuards(CashBoxAccessGuard)
   @RequirePermissions('treasury.cash_boxes.open')

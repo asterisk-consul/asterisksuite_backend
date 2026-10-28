@@ -223,7 +223,9 @@ export class DocumentsPurchasesService {
       items: dtoItems.map((i) => ({
         productId: i.product_id,
         quantity: Number(i.quantity),
-        unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
+        unitPrice: i.net_subtotal_override != null
+          ? Number(i.net_subtotal_override) / Number(i.quantity)
+          : Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
       })),
     };
 
@@ -320,7 +322,9 @@ export class DocumentsPurchasesService {
       unit_price: item.unitPrice,
       discount_percentage: Number(dtoItems[idx]?.discount_percentage ?? 0),
       converted_unit_price: isBase ? null : this.conversionService.convertAmount(item.unitPrice, exchangeRate),
-      price: item.total,
+      // `price` is the line subtotal before taxes; `total` includes line taxes.
+      // Persisting the latter as price made the detail add VAT a second time.
+      price: item.price,
       total: item.total,
       exempt_amount: item.exemptAmount,
       taxable_base: item.taxableBase,
@@ -362,6 +366,13 @@ export class DocumentsPurchasesService {
       totals.taxable_base = 0;
       totals.total_taxes = 0;
       totals.documentTaxes = [];
+    }
+
+    if (docType.category === 'INVOICE' && dto.supplier_total != null) {
+      // Keep the tax engine's subtotal and taxes; only reconcile the payable
+      // total with the supplier's source document. The difference is visible
+      // as a document-level rounding/source adjustment in the UI.
+      totals.total = Number(dto.supplier_total);
     }
 
     let createdId = '';
@@ -569,7 +580,9 @@ export class DocumentsPurchasesService {
         items: dto.items.map((i) => ({
           productId: i.product_id,
           quantity: Number(i.quantity),
-          unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
+          unitPrice: i.net_subtotal_override != null
+            ? Number(i.net_subtotal_override) / Number(i.quantity)
+            : Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
         })),
       };
 
@@ -626,7 +639,7 @@ export class DocumentsPurchasesService {
         converted_unit_price: updateIsBase
           ? null
           : this.conversionService.convertAmount(item.unitPrice, updateExchangeRate),
-        price: item.total,
+        price: item.price,
         total: item.total,
         exempt_amount: item.exemptAmount,
         taxable_base: item.taxableBase,
@@ -657,6 +670,10 @@ export class DocumentsPurchasesService {
           tax_amount: t.amount,
         })),
       };
+
+      if (docType?.category === 'INVOICE' && dto.supplier_total != null) {
+        totals.total = Number(dto.supplier_total);
+      }
     }
 
     await this.prisma.$transaction(async (tx) => {

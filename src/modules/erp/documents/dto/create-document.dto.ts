@@ -50,6 +50,13 @@ export class CreateDocumentItemDto {
   @Min(0)
   discount_percentage?: number;
 
+  /** Exact net line amount derived from a manually entered purchase discount. */
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  net_subtotal_override?: number;
+
   // ✅ ahora opcional (backend lo calcula)
   @IsOptional()
   @IsNumber()
@@ -166,6 +173,13 @@ export class CreateDocumentDto {
   @IsNumber()
   @Min(0)
   total?: number;
+
+  /** Total que figura en la factura del proveedor; conserva los impuestos calculados. */
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  supplier_total?: number;
 
   @IsArray()
   @ValidateNested({ each: true })

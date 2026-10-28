@@ -276,6 +276,130 @@ export class BankAccountsService {
     });
   }
 
+  async getMovementDetails(accountId: string, movementId: string) {
+    const movement = await this.prisma.bank_account_movements.findFirst({
+      where: { id: movementId, bank_account_id: accountId, deleted_at: null },
+      include: {
+        bank_concept: { select: { id: true, code: true, name: true, nature: true, concept_type: true } },
+        operation: true,
+        charge: {
+          select: {
+            id: true,
+            concept_name_snapshot: true,
+            nature: true,
+            base_amount: true,
+            tax_amount: true,
+            total_amount: true,
+            jurisdiction: true,
+            tax_code: true,
+            certificate_number: true,
+            period: true,
+            reference: true,
+          },
+        },
+        payment: {
+          select: {
+            id: true,
+            number: true,
+            type: true,
+            payment_method: true,
+            amount: true,
+            currency_code: true,
+            exchange_rate: true,
+            status: true,
+            date: true,
+            payment_date: true,
+            description: true,
+            reference: true,
+            party: { select: { id: true, name: true, tax_id: true } },
+            documents: {
+              where: { deleted_at: null },
+              select: {
+                id: true,
+                amount_applied: true,
+                document: {
+                  select: {
+                    id: true,
+                    number: true,
+                    date: true,
+                    total: true,
+                    currency_code: true,
+                    document_types: { select: { code: true, description: true } },
+                  },
+                },
+              },
+            },
+            checks: {
+              where: { deleted_at: null },
+              select: {
+                id: true,
+                check_number: true,
+                bank_name: true,
+                issuer_name: true,
+                issuer_id: true,
+                amount: true,
+                available_amount: true,
+                currency_code: true,
+                issue_date: true,
+                due_date: true,
+                status: true,
+                is_own: true,
+                deposit_date: true,
+                clearing_date: true,
+              },
+            },
+            payment_allocations: {
+              select: {
+                amount_applied: true,
+                check: {
+                  select: {
+                    id: true,
+                    check_number: true,
+                    bank_name: true,
+                    issuer_name: true,
+                    issuer_id: true,
+                    amount: true,
+                    available_amount: true,
+                    currency_code: true,
+                    issue_date: true,
+                    due_date: true,
+                    status: true,
+                    is_own: true,
+                    deposit_date: true,
+                    clearing_date: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!movement) throw new NotFoundException('Movimiento bancario no encontrado');
+    const linkedCheck = movement.reference_type === 'check' && movement.reference_id
+      ? await this.prisma.checks.findFirst({
+          where: { id: movement.reference_id, deleted_at: null },
+          select: {
+            id: true,
+            check_number: true,
+            bank_name: true,
+            issuer_name: true,
+            issuer_id: true,
+            amount: true,
+            available_amount: true,
+            currency_code: true,
+            issue_date: true,
+            due_date: true,
+            status: true,
+            is_own: true,
+            deposit_date: true,
+            clearing_date: true,
+          },
+        })
+      : null;
+    return { ...movement, linked_check: linkedCheck };
+  }
+
   // ═══════════════════════════════════════════
   // MOVIMIENTO MANUAL
   // ═══════════════════════════════════════════
