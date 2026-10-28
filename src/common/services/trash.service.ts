@@ -166,6 +166,7 @@ export class TrashService {
           id: true,
           number: true,
           status: true,
+          source: true,
           deleted_at: true,
           paid_amount: true,
           parent_document_id: true,
@@ -212,7 +213,7 @@ export class TrashService {
       }
 
       const documentIds = documents.map((document) => document.id);
-      const [stockMovements, stockReservations, reservationSources, accountEntries, bankMovements, cashMovements, obligations, attachments, intakeCaptures] = await Promise.all([
+      const [stockMovements, stockReservations, reservationSources, accountEntries, allAccountEntries, bankMovements, cashMovements, obligations, attachments, intakeCaptures] = await Promise.all([
         tx.warehouse_stock_movements.groupBy({
           by: ['reference_id'], where: { reference_id: { in: documentIds } }, _count: { _all: true },
         }),
@@ -221,6 +222,9 @@ export class TrashService {
         }),
         tx.stock_reservations.groupBy({
           by: ['source_id'], where: { source_id: { in: documentIds } }, _count: { _all: true },
+        }),
+        tx.current_account_entries.groupBy({
+          by: ['reference_id'], where: { reference_id: { in: documentIds }, deleted_at: null }, _count: { _all: true },
         }),
         tx.current_account_entries.groupBy({
           by: ['reference_id'], where: { reference_id: { in: documentIds } }, _count: { _all: true },
@@ -244,7 +248,31 @@ export class TrashService {
         }),
       ]);
 
+      const openingBalanceDocuments = documents.filter(
+        (document) => document.document_types.category === 'OPENING_BALANCE'
+          && document.source === 'opening_balance'
+          && document.status === 2,
+      );
+      const deletedOpeningBalanceEntries = openingBalanceDocuments.length
+        ? await tx.current_account_entries.findMany({
+            where: {
+              reference_type: 'document',
+              reference_id: { in: openingBalanceDocuments.map((document) => document.id) },
+              type: 'OPENING_BALANCE',
+              deleted_at: { not: null },
+            },
+            select: { reference_id: true },
+          })
+        : [];
+      const safelyRemovedOpeningBalanceIds = new Set(
+        deletedOpeningBalanceEntries
+          .map((entry) => entry.reference_id)
+          .filter((id): id is string => Boolean(id)),
+      );
+
       const linkedIds = new Set<string>();
+      const accountEntryIds = new Set<string>();
+      for (const group of allAccountEntries) if (group.reference_id) accountEntryIds.add(group.reference_id);
       for (const group of stockMovements) if (group.reference_id) linkedIds.add(group.reference_id);
       for (const group of stockReservations) linkedIds.add(group.document_id);
       for (const group of reservationSources) if (group.source_id) linkedIds.add(group.source_id);
@@ -257,22 +285,29 @@ export class TrashService {
 
       const blocked = documents.flatMap((document) => {
         const category = document.document_types.category;
+        const isSafelyRemovedOpeningBalance = category === 'OPENING_BALANCE'
+          && document.source === 'opening_balance'
+          && document.status === 2
+          && safelyRemovedOpeningBalanceIds.has(document.id);
+        const isCancelledInvoice = category === 'INVOICE' && document.status === 3;
         const cancelledStatus = category === 'QUOTE'
           ? 6
           : category === 'ORDER'
             ? document.document_types.direction === -1 ? 3 : 8
-            : null;
+            : 3;
         let reason: string | null = null;
 
-        if (document.status !== cancelledStatus) {
+        if (!isSafelyRemovedOpeningBalance && document.status !== cancelledStatus) {
           reason = 'no está anulado';
-        } else if (!['QUOTE', 'ORDER'].includes(category ?? '')) {
+        } else if (!isSafelyRemovedOpeningBalance && !['QUOTE', 'ORDER', 'INVOICE'].includes(category ?? '')) {
           reason = 'su tipo de comprobante debe conservarse por trazabilidad fiscal u operativa';
+        } else if (isCancelledInvoice && accountEntryIds.has(document.id)) {
+          reason = 'conserva asientos de cuenta corriente, incluso si fueron revertidos';
         } else if (
           document.document_types.affects_stock
-          || document.document_types.affects_accounting
+          || (document.document_types.affects_accounting && !isSafelyRemovedOpeningBalance && !isCancelledInvoice)
           || document.document_types.affects_tax_book
-          || document.document_types.affects_payment
+          || (document.document_types.affects_payment && !isSafelyRemovedOpeningBalance && !isCancelledInvoice)
           || document.document_types.requires_cae
           || document.document_types.is_electronic
           || document.document_types.afip_code
@@ -312,6 +347,20 @@ export class TrashService {
         const examples = blocked.slice(0, 3).map((item) => `#${item.number}: ${item.reason}`).join('; ');
         const more = blocked.length > 3 ? ` y ${blocked.length - 3} más` : '';
         throw new BadRequestException(`No se pueden eliminar definitivamente estos comprobantes. ${examples}${more}.`);
+      }
+
+      const safelyRemovedOpeningBalanceIdsToDelete = documents
+        .filter((document) => safelyRemovedOpeningBalanceIds.has(document.id))
+        .map((document) => document.id);
+      if (safelyRemovedOpeningBalanceIdsToDelete.length) {
+        await tx.current_account_entries.deleteMany({
+          where: {
+            reference_type: 'document',
+            reference_id: { in: safelyRemovedOpeningBalanceIdsToDelete },
+            type: 'OPENING_BALANCE',
+            deleted_at: { not: null },
+          },
+        });
       }
 
       return tx.documents.deleteMany({
