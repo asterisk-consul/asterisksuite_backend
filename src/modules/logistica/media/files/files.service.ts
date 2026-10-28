@@ -177,7 +177,7 @@ export class FilesService {
       ...(search ? { file_name: { contains: search, mode: 'insensitive' } } : {}),
     };
 
-    const [records, total] = await Promise.all([
+    const [records, total, storage, imageStorage, pdfStorage] = await Promise.all([
       this.prisma.files.findMany({
         where,
         skip: (page - 1) * pageSize,
@@ -199,6 +199,21 @@ export class FilesService {
         },
       }),
       this.prisma.files.count({ where }),
+      this.prisma.files.aggregate({
+        where: { deleted_at: null },
+        _count: { id: true },
+        _sum: { file_size: true },
+      }),
+      this.prisma.files.aggregate({
+        where: { deleted_at: null, mime_type: { startsWith: 'image/' } },
+        _count: { id: true },
+        _sum: { file_size: true },
+      }),
+      this.prisma.files.aggregate({
+        where: { deleted_at: null, mime_type: 'application/pdf' },
+        _count: { id: true },
+        _sum: { file_size: true },
+      }),
     ]);
 
     const fileIds = records.map((file) => file.id);
@@ -338,6 +353,30 @@ export class FilesService {
       page_size: pageSize,
       total,
       total_pages: Math.ceil(total / pageSize),
+      storage_active_files: storage._count.id,
+      storage_original_bytes: Number(storage._sum.file_size ?? 0),
+      storage_breakdown: [
+        {
+          category: 'images',
+          files: imageStorage._count.id,
+          bytes: Number(imageStorage._sum.file_size ?? 0),
+        },
+        {
+          category: 'pdf',
+          files: pdfStorage._count.id,
+          bytes: Number(pdfStorage._sum.file_size ?? 0),
+        },
+        {
+          category: 'other',
+          files: Math.max(0, storage._count.id - imageStorage._count.id - pdfStorage._count.id),
+          bytes: Math.max(
+            0,
+            Number(storage._sum.file_size ?? 0)
+              - Number(imageStorage._sum.file_size ?? 0)
+              - Number(pdfStorage._sum.file_size ?? 0),
+          ),
+        },
+      ],
     };
   }
 
