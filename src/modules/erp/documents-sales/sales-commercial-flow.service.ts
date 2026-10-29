@@ -63,8 +63,55 @@ export class SalesCommercialFlowService {
 
       await this.syncDocumentTypes(tx, dto.accounting_basis, dto.payment_document_basis);
 
-      return settings;
-    });
+      const recalculatedDeliveryOrders = await this.reapplyDeliveryRulesToUnstartedOrders(tx, settings, userId);
+
+      return { ...settings, recalculated_delivery_orders: recalculatedDeliveryOrders };
+    }, { maxWait: 10_000, timeout: 60_000 });
+  }
+
+  private async reapplyDeliveryRulesToUnstartedOrders(tx: any, settings: any, userId: string) {
+    const batchSize = 50;
+    let afterId: string | undefined;
+    let recalculated = 0;
+
+    while (true) {
+      const operations = await tx.commercial_operations.findMany({
+        where: {
+          delivery_note_id: null,
+          delivery_status: { in: ['PENDING', 'ELIGIBLE'] },
+          root_document: { is: { deleted_at: null, status: { not: 8 } } },
+          OR: [
+            { require_payment_for_delivery: { not: settings.require_payment_for_delivery } },
+            { delivery_payment_percentage: { not: settings.delivery_payment_percentage } },
+            { require_invoice_for_delivery: { not: settings.require_invoice_for_delivery } },
+          ],
+          ...(afterId ? { id: { gt: afterId } } : {}),
+        },
+        select: { id: true },
+        orderBy: { id: 'asc' },
+        take: batchSize,
+      });
+      if (!operations.length) break;
+
+      const ids = operations.map((operation: { id: string }) => operation.id);
+      await tx.commercial_operations.updateMany({
+        where: { id: { in: ids } },
+        data: {
+          require_payment_for_delivery: settings.require_payment_for_delivery,
+          delivery_payment_percentage: settings.delivery_payment_percentage,
+          require_invoice_for_delivery: settings.require_invoice_for_delivery,
+          updated_by: userId,
+        },
+      });
+      for (const operation of operations) {
+        await this.refresh(operation.id, tx);
+      }
+
+      recalculated += operations.length;
+      afterId = operations[operations.length - 1].id;
+    }
+
+    return recalculated;
   }
 
   async createForOrder(tx: any, document: { id: string; party_id: string | null; currency_code: string | null; total: any }, userId?: string) {
@@ -102,8 +149,8 @@ export class SalesCommercialFlowService {
     return parent.commercial_operation_id;
   }
 
-  async refresh(operationId: string) {
-    const operation = await this.prisma.commercial_operations.findUnique({
+  async refresh(operationId: string, client: any = this.prisma) {
+    const operation = await client.commercial_operations.findUnique({
       where: { id: operationId },
       include: { documents: { where: { deleted_at: null }, include: { document_types: { select: { category: true } } } } },
     });
@@ -111,7 +158,7 @@ export class SalesCommercialFlowService {
 
     const invoices = operation.documents.filter((d: any) => d.document_types.category === 'INVOICE' && d.status !== 3);
     const invoicedTotal = invoices.reduce((sum: number, d: any) => sum + Number(d.total), 0);
-    const applications = await this.prisma.payment_documents.findMany({
+    const applications = await client.payment_documents.findMany({
       where: {
         deleted_at: null,
         document: { commercial_operation_id: operationId },
@@ -127,7 +174,7 @@ export class SalesCommercialFlowService {
     const eligible = paymentReady && invoiceReady;
     const alreadyDelivered = ['DRAFT_CREATED', 'DELIVERED'].includes(operation.delivery_status);
 
-    return this.prisma.commercial_operations.update({
+    return client.commercial_operations.update({
       where: { id: operationId },
       data: {
         invoiced_total: invoicedTotal,

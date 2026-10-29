@@ -49,6 +49,26 @@ const STATUS_CONFIRMED = 2;
 
 const STATUS_CANCELLED = 3;
 
+function orderFlowStatusWhere(deliveryStatus: string) {
+  const activeOrderStatuses = [1, 2, 3, 6];
+  const statusesWithHigherDisplayPriority = [0, 4, 5, 7, 8];
+
+  if (deliveryStatus === 'PENDING') {
+    return {
+      status: { in: activeOrderStatuses },
+      OR: [
+        { commercial_operation: { is: { delivery_status: 'PENDING' } } },
+        { commercial_operation: { is: null } },
+      ],
+    };
+  }
+
+  return {
+    status: { notIn: statusesWithHigherDisplayPriority },
+    commercial_operation: { is: { delivery_status: deliveryStatus } },
+  };
+}
+
 @Injectable()
 export class DocumentsSalesService {
   private readonly logger = new Logger(DocumentsSalesService.name);
@@ -1138,8 +1158,12 @@ export class DocumentsSalesService {
     excludeCancelled = false,
 
     rawFilters?: string,
+
+    deliveryStatus?: string,
   ) {
     const and: any[] = [];
+    const categories = Array.isArray(category) ? category : category ? [category] : [];
+    const isOrderList = categories.includes('ORDER');
     if (userId) and.push({ OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] });
     const normalizedSearch = search?.trim();
     if (normalizedSearch) {
@@ -1163,7 +1187,37 @@ export class DocumentsSalesService {
         if (condition) and.push({ [filter.column]: condition });
         continue;
       }
-      if (['number', 'status', 'total'].includes(filter.column)) {
+      if (filter.column === 'status') {
+        const scopedStatus = /^document-status:([A-Z_]+):(.+)$/.exec(String(filter.value ?? ''));
+        if (scopedStatus) {
+          const [, statusCategory, categoryStatus] = scopedStatus;
+          and.push({ document_types: { category: statusCategory } });
+          const orderFlowMatch = /^order-flow:(PENDING|ELIGIBLE|DRAFT_CREATED)$/.exec(categoryStatus);
+          if (statusCategory === 'ORDER' && orderFlowMatch) {
+            and.push(orderFlowStatusWhere(orderFlowMatch[1]));
+          } else {
+            const condition = numberFilter(categoryStatus, filter.operator);
+            if (condition !== undefined) and.push({ status: condition });
+          }
+          continue;
+        }
+        const flowFilterStatuses: Record<string, string> = {
+          'order-flow:PENDING': 'PENDING',
+          'order-flow:ELIGIBLE': 'ELIGIBLE',
+          'order-flow:DRAFT_CREATED': 'DRAFT_CREATED',
+        };
+        const filterValue = String(filter.value ?? '');
+        const flowStatus = flowFilterStatuses[filterValue]
+          ?? (isOrderList ? ({ '2': 'PENDING', '3': 'ELIGIBLE' } as Record<string, string>)[filterValue] : undefined);
+        if (flowStatus) {
+          and.push(orderFlowStatusWhere(flowStatus));
+        } else {
+          const condition = numberFilter(filter.value, filter.operator);
+          if (condition !== undefined) and.push({ status: condition });
+        }
+        continue;
+      }
+      if (['number', 'total'].includes(filter.column)) {
         const condition = numberFilter(filter.value, filter.operator);
         if (condition !== undefined) and.push({ [filter.column]: condition });
         continue;
@@ -1178,7 +1232,7 @@ export class DocumentsSalesService {
         if (condition !== undefined) and.push({ document_sequences: { point_of_sale: condition } });
       }
     }
-    const categories = Array.isArray(category) ? category : category ? [category] : [];
+    if (deliveryStatus) and.push(orderFlowStatusWhere(deliveryStatus));
     const cancelledFilters = excludeCancelled
       ? categories.map((documentCategory) => ({
           NOT: {

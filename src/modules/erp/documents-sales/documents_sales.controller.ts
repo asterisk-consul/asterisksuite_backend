@@ -1,5 +1,6 @@
 import {
   Body,
+  BadRequestException,
   Controller,
   Delete,
   ForbiddenException,
@@ -159,7 +160,17 @@ export class DocumentsSalesController {
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
     @Query('filters') filters?: string,
+    @Query('deliveryStatus') deliveryStatus?: string,
   ) {
+    const validDeliveryStatuses = ['PENDING', 'ELIGIBLE', 'DRAFT_CREATED'];
+    if (deliveryStatus && !validDeliveryStatuses.includes(deliveryStatus)) {
+      throw new BadRequestException('Estado operativo de entrega inválido');
+    }
+    const isOrderList = category === 'ORDER' || categories?.split(',').includes('ORDER');
+    const legacyOrderDeliveryStatus = isOrderList
+      ? ({ '2': 'PENDING', '3': 'ELIGIBLE' } as Record<string, string>)[status ?? '']
+      : undefined;
+    const effectiveDeliveryStatus = deliveryStatus ?? legacyOrderDeliveryStatus;
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'sales', 'read');
     if (category) await this.documentAccess.assertCategory(user.id, companyRole, 'sales', category, 'read');
@@ -171,7 +182,7 @@ export class DocumentsSalesController {
     }
     const documents = await this.service.findAll(
       documentTypeId,
-      status !== undefined ? Number(status) : undefined,
+      status !== undefined && !effectiveDeliveryStatus ? Number(status) : undefined,
       requestedCategories,
       direction !== undefined ? Number(direction) : undefined,
       partyId ? undefined : companyRole === 'USER' ? user.id : undefined,
@@ -184,6 +195,7 @@ export class DocumentsSalesController {
       order,
       excludeCancelled === 'true',
       filters,
+      effectiveDeliveryStatus,
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     if (Array.isArray(documents)) {
