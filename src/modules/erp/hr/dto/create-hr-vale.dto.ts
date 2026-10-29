@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsEnum, IsDateString } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsEnum, IsDateString, Min } from 'class-validator';
 
 export enum HrValeTypeDto {
   SUELDO = 'SUELDO',
@@ -21,7 +21,8 @@ export class CreateHrValeDto {
   @IsEnum(HrValeTypeDto)
   type: HrValeTypeDto;
 
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0.01)
   amount: number;
 
   @IsString()

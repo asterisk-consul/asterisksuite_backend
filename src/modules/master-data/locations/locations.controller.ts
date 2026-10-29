@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
@@ -29,6 +30,12 @@ export class LocationsController {
   @Get()
   findAll() {
     return this.service.findAll();
+  }
+
+  @RequirePermissions('locations.read')
+  @Get('search')
+  search(@Query('q') query = '', @Query('limit') limit?: string) {
+    return this.service.search(query, Number(limit) || 30);
   }
 
   @RequirePermissions('locations.read')

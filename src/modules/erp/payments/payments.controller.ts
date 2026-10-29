@@ -4,11 +4,13 @@ import type { Response } from 'express';
 import * as XLSX from 'xlsx';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { UpdatePaymentFinancialDetailsDto } from './dto/update-payment-financial-details.dto';
 import { ApplyAdvanceDto } from './dto/apply-advance.dto';
 import { ReversePaymentDto } from './dto/reverse-payment.dto';
 import type { Request } from 'express';
@@ -66,6 +68,17 @@ export class PaymentsController {
     const payment = await this.paymentsService.findOne(id);
     await this.assertCardPermission(dto.payment_method ?? payment.payment_method, payment.type, user.id, req['companyUserRole'] as string | undefined, 'create');
     return this.paymentsService.update(id, dto, user.id);
+  }
+
+  @Patch(':id/financial-details')
+  @RequirePermissions('payments.update')
+  @AllowCompanyAdmins()
+  updateFinancialDetails(
+    @Param('id') id: string,
+    @Body() dto: UpdatePaymentFinancialDetailsDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.paymentsService.updateFinalizedFinancialDetails(id, dto, user.id);
   }
 
   @Post(':id/confirm')

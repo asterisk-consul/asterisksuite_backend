@@ -35,6 +35,35 @@ export class LocationsService {
     });
   }
 
+  async search(query = '', requestedLimit = 30) {
+    const term = query.trim().slice(0, 120);
+    const take = Math.min(Math.max(Math.trunc(requestedLimit) || 30, 1), 50);
+
+    return this.prisma.locations.findMany({
+      where: term
+        ? {
+            OR: [
+              { address: { contains: term, mode: 'insensitive' } },
+              { city: { contains: term, mode: 'insensitive' } },
+              { province: { contains: term, mode: 'insensitive' } },
+              { country: { contains: term, mode: 'insensitive' } },
+              { postal_code: { contains: term, mode: 'insensitive' } },
+            ],
+          }
+        : undefined,
+      orderBy: [{ city: 'asc' }, { address: 'asc' }],
+      take,
+      select: {
+        id: true,
+        address: true,
+        city: true,
+        province: true,
+        country: true,
+        postal_code: true,
+      },
+    });
+  }
+
   async findOne(id: string) {
     const location = await this.prisma.locations.findUnique({
       where: { id },

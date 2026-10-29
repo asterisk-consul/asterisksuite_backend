@@ -47,6 +47,11 @@ export class HrController {
     return this.service.findOneVale(id);
   }
 
+  @Get('partners/:id/funds')
+  getPartnerFunds(@Param('id') id: string, @Query('currency_code') currencyCode = 'ARS') {
+    return this.service.getPartnerFunds(id, currencyCode.toUpperCase());
+  }
+
   @Patch('vales/:id/confirm')
   confirmVale(@Param('id') id: string, @Body() dto: ConfirmHrValeDto, @Request() req: any) {
     return this.service.confirmVale(id, req.user.id, dto);

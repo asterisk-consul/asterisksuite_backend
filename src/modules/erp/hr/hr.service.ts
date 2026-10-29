@@ -100,6 +100,11 @@ export class HrService {
   // ══════════════════════════════════════════════════════════
 
   async createVale(dto: CreateHrValeDto, userId: string) {
+    if (!Number.isFinite(dto.amount) || dto.amount <= 0) throw new BadRequestException('El importe debe ser mayor a cero');
+    const allowedTypes = dto.party_type === 'PARTNER'
+      ? ['APORTE', 'RETIRO', 'SUELDO', 'REEMBOLSO', 'PRESTAMO']
+      : dto.party_type === 'EMPLOYEE' ? ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'] : [];
+    if (!allowedTypes.includes(dto.type)) throw new BadRequestException('El concepto no corresponde al tipo de persona');
     const party = await this.prisma.business_parties.findUnique({
       where: { id: dto.party_id },
     });
@@ -167,6 +172,58 @@ export class HrService {
       orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
     });
 
+    const employeeVales = vales.filter((vale) => vale.party_type === 'EMPLOYEE' || ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(vale.type));
+    const valeDocuments = employeeVales.length
+      ? await this.prisma.documents.findMany({
+          where: {
+            deleted_at: null,
+            document_types: { category: 'VALE' },
+            OR: employeeVales.map((vale) => ({ party_id: vale.party_id, descrip: `Vale #${vale.number}` })),
+          },
+          select: { id: true, party_id: true, descrip: true, total: true, paid_amount: true },
+        })
+      : [];
+    const paymentDocumentByVale = new Map(
+      valeDocuments.map((document) => [
+        `${document.party_id}:${document.descrip}`,
+        {
+          id: document.id,
+          pending: Math.max(0, Number(document.total) - Number(document.paid_amount)),
+        },
+      ]),
+    );
+
+    const partnerValeIds = vales.filter((vale) => vale.party_type === 'PARTNER').map((vale) => vale.id);
+    const [cashMovements, bankMovements] = partnerValeIds.length
+      ? await Promise.all([
+          this.prisma.cash_box_movements.findMany({
+            where: { reference_type: 'hr_vale', reference_id: { in: partnerValeIds }, deleted_at: null },
+            select: { reference_id: true, cash_box: { select: { name: true } } },
+          }),
+          this.prisma.bank_account_movements.findMany({
+            where: { reference_type: 'hr_vale', reference_id: { in: partnerValeIds }, deleted_at: null },
+            select: { reference_id: true, bank_account: { select: { name: true, bank_name: true } } },
+          }),
+        ])
+      : [[], []];
+    const treasuryTargetByVale = new Map<string, { type: 'CASH_BOX' | 'BANK_ACCOUNT'; label: string }>();
+    for (const movement of cashMovements) {
+      if (movement.reference_id) {
+        treasuryTargetByVale.set(movement.reference_id, {
+          type: 'CASH_BOX',
+          label: `Caja · ${movement.cash_box.name}`,
+        });
+      }
+    }
+    for (const movement of bankMovements) {
+      if (movement.reference_id && !treasuryTargetByVale.has(movement.reference_id) && movement.bank_account) {
+        treasuryTargetByVale.set(movement.reference_id, {
+          type: 'BANK_ACCOUNT',
+          label: `Banco · ${[movement.bank_account.bank_name, movement.bank_account.name].filter(Boolean).join(' · ')}`,
+        });
+      }
+    }
+
     // Resolver created_by a nombre de usuario
     const userIds = [...new Set(vales.map((v) => v.created_by).filter(Boolean))] as string[];
     const users =
@@ -181,6 +238,10 @@ export class HrService {
     return vales.map((v) => ({
       ...v,
       created_by_name: v.created_by ? (userMap.get(v.created_by) ?? null) : null,
+      treasury_target: treasuryTargetByVale.get(v.id) ?? null,
+      payment_document: v.party_type === 'EMPLOYEE' || ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(v.type)
+        ? paymentDocumentByVale.get(`${v.party_id}:Vale #${v.number}`) ?? null
+        : null,
     }));
   }
 
@@ -206,6 +267,23 @@ export class HrService {
     return vale;
   }
 
+  async getPartnerFunds(partyId: string, currencyCode: string, client: any = this.prisma) {
+    const totals = await client.hr_vales.groupBy({
+      by: ['type'],
+      where: { party_id: partyId, party_type: 'PARTNER', currency_code: currencyCode, type: { in: ['APORTE', 'RETIRO'] }, status: { in: ['CONFIRMED', 'PAID'] }, deleted_at: null },
+      _sum: { amount: true },
+    });
+    const contributions = Number(totals.find((row: any) => row.type === 'APORTE')?._sum.amount ?? 0);
+    const withdrawals = Number(totals.find((row: any) => row.type === 'RETIRO')?._sum.amount ?? 0);
+    const balance = Math.round((contributions - withdrawals) * 100) / 100;
+    const remuneration = await client.documents.aggregate({
+      where: { party_id: partyId, currency_code: currencyCode, document_types: { category: 'VALE' }, ref: { in: ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'] }, status: 2, deleted_at: null },
+      _sum: { total: true, paid_amount: true },
+    });
+    const remunerationPending = Math.max(0, Math.round((Number(remuneration._sum.total ?? 0) - Number(remuneration._sum.paid_amount ?? 0)) * 100) / 100);
+    return { currency_code: currencyCode, contributions, withdrawals, balance, available: Math.max(0, balance), remuneration_pending: remunerationPending };
+  }
+
   async confirmVale(id: string, userId: string, treasury?: ConfirmHrValeDto) {
     const vale = await this.findOneVale(id);
 
@@ -214,12 +292,24 @@ export class HrService {
     }
 
     const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
-    const requiresTreasury = vale.party_type === 'PARTNER';
+    const requiresTreasury = vale.party_type === 'PARTNER' && !['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(vale.type);
     if (requiresTreasury && (!treasury?.treasury_target_type || !treasury.treasury_target_id)) {
       throw new BadRequestException('Seleccioná una caja o cuenta bancaria para registrar el movimiento del socio');
     }
 
     return this.prisma.$transaction(async (tx) => {
+      // Serialize confirmations and cancellations for the same person.
+      await tx.$queryRaw`SELECT id FROM tenant.business_parties WHERE id = ${vale.party_id}::uuid FOR UPDATE`;
+      const currentVale = await tx.hr_vales.findUnique({ where: { id } });
+      if (!currentVale || currentVale.status !== 'DRAFT' || currentVale.deleted_at) {
+        throw new BadRequestException('El vale ya fue confirmado o anulado');
+      }
+      if (vale.party_type === 'PARTNER' && vale.type === 'RETIRO') {
+        const funds = await this.getPartnerFunds(vale.party_id, vale.currency_code, tx);
+        if (Number(vale.amount) > funds.available) {
+          throw new BadRequestException(`El retiro supera los aportes disponibles: ${funds.available.toFixed(2)} ${vale.currency_code}. Registrá un aporte o utilizá el concepto Préstamo si corresponde.`);
+        }
+      }
       let account = await tx.hr_accounts.findUnique({
         where: {
           party_id_currency_code: {
@@ -300,7 +390,8 @@ export class HrService {
     prisma: any,
   ) {
     const amount = vale.amount.toNumber();
-    const description = `${vale.type === 'APORTE' ? 'Aporte' : 'Retiro'} de socio · Vale #${vale.number}${vale.description ? ` · ${vale.description}` : ''}`;
+    const concept = { APORTE: 'Aporte de fondos', RETIRO: 'Retiro de aportes', REEMBOLSO: 'Reembolso', PRESTAMO: 'Préstamo' }[vale.type as string] ?? vale.type;
+    const description = `${concept} de socio · Vale #${vale.number}${vale.description ? ` · ${vale.description}` : ''}`;
     const commonData = {
       type: isOutflow ? 'PAYMENT' : 'COLLECTION',
       amount: vale.amount,
@@ -395,77 +486,110 @@ export class HrService {
   }
 
   async cancelVale(id: string, userId: string) {
-    const vale = await this.findOneVale(id);
-
-    if (vale.status === 'CANCELLED') {
-      throw new BadRequestException('El vale ya está anulado');
-    }
-
-    if (vale.status === 'CONFIRMED' || vale.status === 'PAID') {
-      // SUELDO, ADELANTO, EXTRAS, COMISION = empleado recibe dinero (crédito)
-      // RETIRO, REEMBOLSO, PRESTAMO = socio retira/devuelve (débito)
-      const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
-
-      // Revertir hr_account_entries
-      const account = await this.prisma.hr_accounts.findUnique({
-        where: {
-          party_id_currency_code: {
-            party_id: vale.party_id,
-            currency_code: vale.currency_code,
-          },
-        },
-      });
-
-      if (account) {
-        const currentBalance = account.balance.toNumber();
-        const amount = vale.amount.toNumber();
-        const balanceAfter = isDebit ? currentBalance + amount : currentBalance - amount;
-
-        await this.prisma.hr_account_entries.create({
-          data: {
-            hr_account_id: account.id,
-            type: 'ADJUSTMENT',
-            amount,
-            currency_code: vale.currency_code,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Anulación Vale #${vale.number}`,
-            reference_type: 'hr_vale',
-            reference_id: vale.id,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-
-        await this.prisma.hr_accounts.update({
-          where: { id: account.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
-        });
+    return this.prisma.$transaction(async (tx) => {
+      const party = await tx.hr_vales.findUnique({ where: { id }, select: { party_id: true } });
+      if (!party) throw new NotFoundException('Vale no encontrado');
+      await tx.$queryRaw`SELECT id FROM tenant.business_parties WHERE id = ${party.party_id}::uuid FOR UPDATE`;
+      const vale = await tx.hr_vales.findUnique({ where: { id } });
+      if (!vale) throw new NotFoundException('Vale no encontrado');
+      if (vale.status === 'CANCELLED') throw new BadRequestException('El vale ya está anulado');
+      if (vale.party_type === 'PARTNER' && vale.type === 'APORTE' && ['CONFIRMED', 'PAID'].includes(vale.status)) {
+        const funds = await this.getPartnerFunds(vale.party_id, vale.currency_code, tx);
+        if (funds.balance - Number(vale.amount) < 0) {
+          throw new BadRequestException('No se puede anular este aporte porque dejaría retiros sin respaldo. Primero anulá los retiros correspondientes.');
+        }
       }
 
-      // Revertir documento y current_account_entries
-      await this.reverseValeDocument(vale, userId);
-      await this.reversePartnerTreasuryMovement(vale, userId);
-    }
+      const valeDocument = await tx.documents.findFirst({
+        where: {
+          descrip: `Vale #${vale.number}`,
+          party_id: vale.party_id,
+          deleted_at: null,
+          document_types: { category: 'VALE' },
+        },
+        select: { id: true },
+      });
 
-    return this.prisma.hr_vales.update({
-      where: { id },
-      data: {
-        status: 'CANCELLED',
-        updated_at: new Date(),
-        deleted_at: new Date(),
-        deleted_by: userId,
-      },
+      if (valeDocument) {
+        const associatedPayments = await tx.payment_documents.findMany({
+          where: {
+            document_id: valeDocument.id,
+            deleted_at: null,
+            payment: { deleted_at: null },
+          },
+          include: { payment: true },
+        });
+        const activePayments = associatedPayments.filter(
+          ({ payment }) => !['CANCELLED', 'REVERSED'].includes(payment.status),
+        );
+
+        if (activePayments.length > 0) {
+          const paymentList = activePayments
+            .map(({ payment }) => `#${payment.number} (${payment.status})`)
+            .join(', ');
+          throw new BadRequestException(
+            `No se puede anular el vale porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
+          );
+        }
+      }
+
+      // Claim the transition before writing reversals. This makes retries and
+      // concurrent clicks idempotent; all changes roll back together on error.
+      const claimed = await tx.hr_vales.updateMany({
+        where: { id, status: vale.status, deleted_at: vale.deleted_at },
+        data: { status: 'CANCELLED', updated_at: new Date(), updated_by: userId },
+      });
+      if (!claimed.count) throw new BadRequestException('El vale ya fue modificado. Actualizá la lista e intentá de nuevo.');
+
+      if (vale.status === 'CONFIRMED' || vale.status === 'PAID') {
+        const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
+        const account = await tx.hr_accounts.findUnique({
+          where: { party_id_currency_code: { party_id: vale.party_id, currency_code: vale.currency_code } },
+        });
+
+        if (account) {
+          const currentBalance = account.balance.toNumber();
+          const amount = vale.amount.toNumber();
+          const balanceAfter = isDebit ? currentBalance + amount : currentBalance - amount;
+          await tx.hr_account_entries.create({
+            data: {
+              hr_account_id: account.id,
+              type: 'ADJUSTMENT',
+              amount,
+              currency_code: vale.currency_code,
+              balance_before: currentBalance,
+              balance_after: balanceAfter,
+              description: `Anulación Vale #${vale.number}`,
+              reference_type: 'hr_vale',
+              reference_id: vale.id,
+              date: new Date(),
+              created_by: userId,
+            },
+          });
+          await tx.hr_accounts.update({
+            where: { id: account.id },
+            data: { balance: balanceAfter, updated_at: new Date(), updated_by: userId },
+          });
+        }
+
+        await this.reverseValeDocument(vale, userId, tx);
+        await this.reversePartnerTreasuryMovement(vale, userId, tx);
+      }
+
+      return tx.hr_vales.findUnique({
+        where: { id },
+        include: { party: { select: { id: true, name: true, tax_id: true } } },
+      });
     });
   }
 
-  private async reversePartnerTreasuryMovement(vale: any, userId: string) {
+  private async reversePartnerTreasuryMovement(vale: any, userId: string, prisma: any = this.prisma) {
     if (vale.party_type !== 'PARTNER') return;
     const [cashMovement, bankMovement] = await Promise.all([
-      this.prisma.cash_box_movements.findFirst({
+      prisma.cash_box_movements.findFirst({
         where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null },
       }),
-      this.prisma.bank_account_movements.findFirst({
+      prisma.bank_account_movements.findFirst({
         where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null },
       }),
     ]);
@@ -478,7 +602,7 @@ export class HrService {
     const description = `Anulación Vale #${vale.number}`;
 
     if (cashMovement) {
-      const balance = await this.prisma.cash_box_balances.findUnique({
+      const balance = await prisma.cash_box_balances.findUnique({
         where: {
           cash_box_id_currency_code: {
             cash_box_id: cashMovement.cash_box_id,
@@ -488,7 +612,7 @@ export class HrService {
       });
       const before = balance?.balance.toNumber() ?? 0;
       const after = originalWasOutflow ? before + amount : before - amount;
-      await this.prisma.cash_box_movements.create({
+      await prisma.cash_box_movements.create({
         data: {
           cash_box_id: cashMovement.cash_box_id,
           session_id: cashMovement.session_id,
@@ -507,9 +631,9 @@ export class HrService {
           created_by: userId,
         },
       });
-      if (balance) await this.prisma.cash_box_balances.update({ where: { id: balance.id }, data: { balance: after } });
+      if (balance) await prisma.cash_box_balances.update({ where: { id: balance.id }, data: { balance: after } });
       if (cashMovement.session_id) {
-        await this.prisma.cash_box_sessions.update({
+        await prisma.cash_box_sessions.update({
           where: { id: cashMovement.session_id },
           data: {
             movement_count: { increment: 1 },
@@ -523,7 +647,7 @@ export class HrService {
     }
 
     if (bankMovement) {
-      const bank = await this.prisma.bank_accounts.findUnique({ where: { id: bankMovement.bank_account_id } });
+      const bank = await prisma.bank_accounts.findUnique({ where: { id: bankMovement.bank_account_id } });
       if (!bank) return;
       const reversalAmount = -Number(bankMovement.amount);
       await this.bankMovements.addMovement({
@@ -540,7 +664,7 @@ export class HrService {
         referenceId: vale.id,
         date: new Date(),
         userId,
-      });
+      }, prisma);
     }
   }
 
@@ -675,11 +799,11 @@ export class HrService {
   // REVERTIR DOCUMENTO VALE
   // ══════════════════════════════════════════════════════════
 
-  private async reverseValeDocument(vale: any, userId: string) {
+  private async reverseValeDocument(vale: any, userId: string, prisma: any = this.prisma) {
     // Buscar el documento VALE asociado al vale
-    const doc = await this.prisma.documents.findFirst({
+    const doc = await prisma.documents.findFirst({
       where: {
-        descrip: { contains: `Vale #${vale.number}` },
+        descrip: `Vale #${vale.number}`,
         party_id: vale.party_id,
         deleted_at: null,
       },
@@ -691,7 +815,7 @@ export class HrService {
     }
 
     // Revertir current_account_entries
-    const entry = await this.prisma.current_account_entries.findFirst({
+    const entry = await prisma.current_account_entries.findFirst({
       where: {
         reference_id: doc.id,
         reference_type: 'document',
@@ -700,18 +824,17 @@ export class HrService {
     });
 
     if (entry) {
-      const account = await this.prisma.current_accounts.findUnique({
+      const account = await prisma.current_accounts.findUnique({
         where: { id: entry.current_account_id },
       });
 
       if (account) {
         const currentBalance = account.balance.toNumber();
         const amount = entry.amount.toNumber();
-        // Revertir: si era crédito (RETIRO), ahora es débito y viceversa
-        const isDebit = entry.balance_after > entry.balance_before;
-        const balanceAfter = isDebit ? currentBalance + amount : currentBalance - amount;
+        const originalDelta = Number(entry.balance_after) - Number(entry.balance_before);
+        const balanceAfter = currentBalance - originalDelta;
 
-        await this.prisma.current_account_entries.create({
+        await prisma.current_account_entries.create({
           data: {
             current_account_id: account.id,
             type: 'CREDIT_NOTE',
@@ -727,16 +850,16 @@ export class HrService {
           },
         });
 
-        await this.prisma.current_accounts.update({
+        await prisma.current_accounts.update({
           where: { id: account.id },
           data: { balance: balanceAfter, updated_at: new Date() },
         });
-        await recalculateCurrentAccountLedger(this.prisma, account.id);
+        await recalculateCurrentAccountLedger(prisma, account.id);
       }
     }
 
     // Soft-delete el documento
-    await this.prisma.documents.update({
+    await prisma.documents.update({
       where: { id: doc.id },
       data: {
         deleted_at: new Date(),
@@ -754,7 +877,14 @@ export class HrService {
   async getHrAccounts(params?: { party_type?: string }) {
     const where: any = { deleted_at: null, active: true };
 
-    if (params?.party_type) where.party_type = params.party_type;
+    if (params?.party_type) {
+      const partyTypes = params.party_type
+        .split(',')
+        .map((partyType) => partyType.trim())
+        .filter(Boolean);
+      if (partyTypes.length === 1) where.party_type = partyTypes[0];
+      else if (partyTypes.length > 1) where.party_type = { in: partyTypes };
+    }
 
     return this.prisma.hr_accounts.findMany({
       where,
@@ -782,7 +912,59 @@ export class HrService {
       orderBy: { date: 'desc' },
     });
 
-    return { account, entries };
+    const valeIds = [...new Set(
+      entries
+        .filter((entry) => entry.reference_type === 'hr_vale' && entry.reference_id)
+        .map((entry) => entry.reference_id as string),
+    )];
+
+    if (valeIds.length === 0) return { account, entries };
+
+    const [vales, cashMovements, bankMovements] = await Promise.all([
+      this.prisma.hr_vales.findMany({
+        where: { id: { in: valeIds } },
+        select: { id: true, status: true, type: true },
+      }),
+      this.prisma.cash_box_movements.findMany({
+        where: { reference_type: 'hr_vale', reference_id: { in: valeIds }, deleted_at: null },
+        select: { reference_id: true, cash_box: { select: { name: true } } },
+      }),
+      this.prisma.bank_account_movements.findMany({
+        where: { reference_type: 'hr_vale', reference_id: { in: valeIds }, deleted_at: null },
+        select: {
+          reference_id: true,
+          bank_account: { select: { name: true, bank_name: true } },
+        },
+      }),
+    ]);
+
+    const statusByVale = new Map(vales.map((vale) => [vale.id, vale.status]));
+    const typeByVale = new Map(vales.map((vale) => [vale.id, vale.type]));
+    const paymentOriginByVale = new Map<string, string>();
+    for (const movement of cashMovements) {
+      if (movement.reference_id) paymentOriginByVale.set(movement.reference_id, `Caja · ${movement.cash_box.name}`);
+    }
+    for (const movement of bankMovements) {
+      if (movement.reference_id && !paymentOriginByVale.has(movement.reference_id) && movement.bank_account) {
+        paymentOriginByVale.set(
+          movement.reference_id,
+          `Banco · ${[movement.bank_account.bank_name, movement.bank_account.name].filter(Boolean).join(' · ')}`,
+        );
+      }
+    }
+
+    return {
+      account,
+      entries: entries.map((entry) => {
+        if (entry.reference_type !== 'hr_vale' || !entry.reference_id) return entry;
+        return {
+          ...entry,
+          vale_status: statusByVale.get(entry.reference_id) ?? null,
+          vale_type: typeByVale.get(entry.reference_id) ?? null,
+          payment_origin: paymentOriginByVale.get(entry.reference_id) ?? null,
+        };
+      }),
+    };
   }
 
   async getHrBalance(partyId: string, currencyCode: string) {

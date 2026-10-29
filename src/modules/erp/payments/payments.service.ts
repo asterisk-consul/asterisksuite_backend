@@ -471,6 +471,7 @@ export class PaymentsService {
       for (const pd of paymentDocs) {
         const document = await this.prisma.documents.findUnique({
           where: { id: pd.document_id },
+          include: { document_types: { select: { category: true } } },
         });
         if (!document) {
           throw new NotFoundException(`Documento ${pd.document_id} no encontrado`);
@@ -482,6 +483,9 @@ export class PaymentsService {
         // Convertir pending a la moneda de pago si es cross-currency
         const docCurrency = document.currency_code?.toUpperCase();
         const payCurrency = payment.currency_code?.toUpperCase();
+        if (document.document_types?.category === 'VALE' && docCurrency !== payCurrency) {
+          throw new BadRequestException(`El pago del Vale #${document.descrip?.match(/Vale #(\d+)/)?.[1] ?? document.number} debe registrarse en ${docCurrency}`);
+        }
         let pendingInPayCurrency = pending;
         if (docCurrency !== payCurrency && document.exchange_rate) {
           pendingInPayCurrency = Number((pending * Number(document.exchange_rate)).toFixed(2));
@@ -569,20 +573,22 @@ export class PaymentsService {
           const match = doc.descrip?.match(/Vale #(\d+)/);
           if (match) {
             const valeNumber = parseInt(match[1], 10);
-            await tx.hr_vales.updateMany({
-              where: {
-                party_id: payment.party_id,
-                number: valeNumber,
-                status: 'CONFIRMED',
-                deleted_at: null,
-              },
-              data: {
-                status: 'PAID',
-                paid_at: new Date(),
-                updated_at: new Date(),
-                updated_by: userId,
-              },
+            const vale = await tx.hr_vales.findFirst({
+              where: { party_id: payment.party_id, number: valeNumber, deleted_at: null, OR: [{ party_type: 'EMPLOYEE' }, { party_type: 'PARTNER', type: { in: ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'] } }] },
             });
+            if (vale) {
+              await this.applyHrValePayment(tx, vale, doc, pd.amount_applied.toNumber(), payment, userId);
+              const fullyPaid = Number(doc.paid_amount) >= Number(doc.total) - 0.01;
+              await tx.hr_vales.update({
+                where: { id: vale.id },
+                data: {
+                  status: fullyPaid ? 'PAID' : 'CONFIRMED',
+                  paid_at: fullyPaid ? new Date() : null,
+                  updated_at: new Date(),
+                  updated_by: userId,
+                },
+              });
+            }
           }
         }
       }
@@ -875,6 +881,120 @@ export class PaymentsService {
     });
 
     const paymentIds = payments.map((payment) => payment.id);
+    const partnerValeTypeFilter = filters?.type === 'PAYMENT'
+      ? { in: ['RETIRO', 'REEMBOLSO', 'PRESTAMO'] }
+      : filters?.type === 'COLLECTION'
+        ? { in: ['APORTE'] }
+        : { in: ['APORTE', 'RETIRO', 'REEMBOLSO', 'PRESTAMO'] };
+    const includePartnerVales = (!filters?.type || ['PAYMENT', 'COLLECTION'].includes(filters.type))
+      && (!filters?.status || ['PAID', 'CANCELLED'].includes(filters.status))
+      && (!filters?.payment_method || ['CASH', 'BANK_TRANSFER'].includes(filters.payment_method));
+    const partnerVales = !includePartnerVales
+      ? []
+      : await this.prisma.hr_vales.findMany({
+          where: {
+            party_type: 'PARTNER',
+            ...(partnerValeTypeFilter ? { type: partnerValeTypeFilter } : {}),
+            ...(filters?.party_id ? { party_id: filters.party_id } : {}),
+            ...(filters?.user_id ? { created_by: filters.user_id } : {}),
+            ...(filters?.status ? { status: filters.status } : { status: { in: ['PAID', 'CANCELLED'] } }),
+            OR: [
+              { status: 'PAID', deleted_at: null },
+              { status: 'CANCELLED' },
+            ],
+          },
+          orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
+          select: {
+            id: true,
+            number: true,
+            party_id: true,
+            type: true,
+            amount: true,
+            currency_code: true,
+            exchange_rate: true,
+            rate_type: true,
+            converted_amount: true,
+            status: true,
+            description: true,
+            date: true,
+            created_by: true,
+            party: { select: { id: true, name: true } },
+          },
+        });
+    const valeIds = partnerVales.map((vale) => vale.id);
+    let valeCashMovements: any[] = [];
+    let valeBankMovements: any[] = [];
+    if (valeIds.length) {
+      [valeCashMovements, valeBankMovements] = await Promise.all([
+          this.prisma.cash_box_movements.findMany({
+            where: { reference_type: 'hr_vale', reference_id: { in: valeIds }, deleted_at: null },
+            select: {
+              reference_id: true,
+              type: true,
+              date: true,
+              created_at: true,
+              created_by: true,
+              description: true,
+              cash_box_id: true,
+              cash_box: { select: { id: true, name: true, type: true, currency_code: true } },
+            },
+          }),
+          this.prisma.bank_account_movements.findMany({
+            where: { reference_type: 'hr_vale', reference_id: { in: valeIds }, deleted_at: null },
+            select: {
+              reference_id: true,
+              type: true,
+              date: true,
+              created_at: true,
+              created_by: true,
+              description: true,
+              bank_account_id: true,
+              bank_account: { select: { id: true, name: true, bank_name: true, account_number: true, cbu: true, alias: true, currency_code: true } },
+            },
+          }),
+      ]);
+    }
+    const cashMovementByVale = new Map(valeCashMovements.map((movement) => [movement.reference_id, movement]));
+    const bankMovementByVale = new Map(valeBankMovements.map((movement) => [movement.reference_id, movement]));
+    const partnerValePayments = partnerVales.flatMap((vale) => {
+      const cashMovement = cashMovementByVale.get(vale.id);
+      const bankMovement = bankMovementByVale.get(vale.id);
+      const movement = cashMovement ?? bankMovement;
+      if (!movement) return [];
+      if (filters?.payment_method === 'CASH' && !cashMovement) return [];
+      if (filters?.payment_method && filters.payment_method !== 'CASH' && filters.payment_method !== 'BANK_TRANSFER') return [];
+      if (filters?.payment_method === 'BANK_TRANSFER' && !bankMovement) return [];
+      return [{
+        id: vale.id,
+        number: vale.number,
+        type: movement.type,
+        date: movement.date,
+        party_id: vale.party_id,
+        party_type: 'PARTNER',
+        party: vale.party,
+        payment_method: cashMovement ? 'CASH' : 'BANK_TRANSFER',
+        amount: vale.amount,
+        currency_code: vale.currency_code,
+        exchange_rate: vale.exchange_rate,
+        rate_type: vale.rate_type,
+        converted_amount: vale.converted_amount,
+        description: movement.description ?? `Vale #${vale.number} · ${vale.type}`,
+        reference: `Vale #${vale.number}`,
+        cash_box_id: cashMovement?.cash_box_id ?? null,
+        cash_box: cashMovement?.cash_box ?? null,
+        bank_account_id: bankMovement?.bank_account_id ?? null,
+        bank_account: bankMovement?.bank_account ?? null,
+        status: vale.status === 'CANCELLED' ? 'CANCELLED' : 'PAID',
+        payment_mode: 'NORMAL',
+        created_at: movement.created_at,
+        created_by: movement.created_by ?? vale.created_by,
+        source_kind: 'PARTNER_VALE' as const,
+        source_id: vale.id,
+        source_description: vale.description,
+        documents: [],
+        obligations: [],
+      }];
+    });
     const creatorIds = [...new Set(payments.map((p) => p.created_by).filter(Boolean))] as string[];
     const [users, obligations] = await Promise.all([
       creatorIds.length
@@ -910,11 +1030,13 @@ export class PaymentsService {
       obligationsByPayment.set(obligation.payment_id, existing);
     }
 
-    return payments.map((p) => ({
+    const paymentRows = payments.map((p) => ({
       ...p,
       creator: p.created_by ? (userMap[p.created_by] ?? null) : null,
       obligations: obligationsByPayment.get(p.id) ?? [],
     }));
+    return [...paymentRows, ...partnerValePayments]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   async findOne(id: string) {
@@ -1207,6 +1329,381 @@ export class PaymentsService {
       });
     }
     return this.findOne(updated.id);
+  }
+
+  async updateFinalizedFinancialDetails(
+    id: string,
+    dto: import('./dto/update-payment-financial-details.dto').UpdatePaymentFinancialDetailsDto,
+    userId: string,
+  ) {
+    const payment = await this.findOne(id);
+    if (!['CONFIRMED', 'PAID'].includes(payment.status)) {
+      throw new BadRequestException('Las retenciones y la cuenta contable solo se pueden ajustar en pagos confirmados o pagados');
+    }
+    if (!['CASH', 'BANK_TRANSFER'].includes(payment.payment_method)) {
+      throw new BadRequestException('Este ajuste está disponible para pagos en efectivo o transferencia bancaria');
+    }
+    if (payment.payment_mode === 'ADVANCE') {
+      throw new BadRequestException('Los anticipos no admiten ajustes posteriores de retenciones');
+    }
+
+    if (dto.party_id && payment.type !== 'EXPENSE') {
+      throw new BadRequestException('Solo se puede asociar un proveedor o entidad desde el ajuste de un gasto varios');
+    }
+    if (dto.party_id && payment.party_id && dto.party_id !== payment.party_id) {
+      throw new BadRequestException('El proveedor o entidad de un gasto confirmado no se puede reemplazar');
+    }
+    const assignedParty = dto.party_id && !payment.party_id
+      ? await this.prisma.business_parties.findFirst({
+          where: { id: dto.party_id, deleted_at: null },
+          select: { id: true, type: true, roles: { where: { active: true }, select: { role: true } } },
+        })
+      : null;
+    if (dto.party_id && !payment.party_id && !assignedParty) {
+      throw new BadRequestException('El proveedor o entidad seleccionada no existe o está inactiva');
+    }
+    if (assignedParty && !(['SUPPLIER', 'SERVICE_PROVIDER', 'UTILITY', 'FINANCIAL', 'TAX_AUTHORITY'].includes(assignedParty.type)
+      || assignedParty.roles.some((role) => ['SUPPLIER', 'SERVICE_PROVIDER', 'UTILITY', 'FINANCIAL', 'TAX_AUTHORITY'].includes(role.role)))) {
+      throw new BadRequestException('Seleccioná un proveedor o una entidad habilitada para registrar retenciones');
+    }
+    const effectivePartyId = payment.party_id ?? assignedParty?.id ?? null;
+    const effectivePartyType = payment.party_type ?? assignedParty?.type ?? null;
+
+    const documents = await this.prisma.payment_documents.findMany({
+      where: { payment_id: id, deleted_at: null },
+      select: { document_id: true, amount_applied: true },
+    });
+    if (!documents.length && payment.type !== 'EXPENSE') {
+      throw new BadRequestException('El pago debe estar aplicado a documentos; los gastos varios se ajustan sobre su importe original');
+    }
+    const existing = await this.prisma.withholdings.findMany({
+      where: { payment_id: id, deleted_at: null },
+      select: { id: true, tax_type: true, jurisdiction_id: true, withholding_concept_id: true, tax_rule_id: true, base_amount: true, rate: true, withheld_amount: true, certificate_number: true, remittance_id: true },
+    });
+    const requested = dto.withholdings ?? existing.map((row) => ({
+      tax_type: row.tax_type, jurisdiction_id: row.jurisdiction_id,
+      withholding_concept_id: row.withholding_concept_id, tax_rule_id: row.tax_rule_id,
+      base_amount: Number(row.base_amount), rate: row.rate == null ? undefined : Number(row.rate),
+      withheld_amount: Number(row.withheld_amount),
+    }));
+    if (requested.length && !effectivePartyId) {
+      throw new BadRequestException('Asigná un proveedor o entidad al gasto para registrar retenciones');
+    }
+    const signature = (items: any[]) => items.map((row) => [
+      row.tax_type, row.jurisdiction_id ?? '', row.withholding_concept_id ?? '', row.tax_rule_id ?? '',
+      Number(row.base_amount ?? 0), Number(row.rate ?? 0), Number(row.withheld_amount ?? 0),
+    ].join('|')).sort().join('::');
+    const changed = signature(requested) !== signature(existing);
+
+    if (changed && existing.length) {
+      const ids = existing.map((row) => row.id);
+      const [applications, protectedRows] = await Promise.all([
+        this.prisma.withholding_tax_applications.count({ where: { withholding_id: { in: ids }, status: 'APPLIED', reversed_at: null } }),
+        this.prisma.withholdings.count({ where: { id: { in: ids }, OR: [{ remittance_id: { not: null } }, { certificate_number: { not: null } }] } }),
+      ]);
+      if (applications || protectedRows) {
+        throw new BadRequestException('No se pueden modificar retenciones con certificado, remesa o imputación fiscal activa. Anulá primero esa trazabilidad.');
+      }
+    }
+    if (requested.some((row) => !Number.isFinite(Number(row.withheld_amount)) || Number(row.withheld_amount) < 0)) {
+      throw new BadRequestException('Cada retención debe tener un importe válido igual o mayor a cero');
+    }
+    const retainedTotal = requested.reduce((sum, row) => sum + Number(row.withheld_amount || 0), 0);
+    const grossApplied = documents.length
+      ? documents.reduce((sum, row) => sum + Number(row.amount_applied), 0)
+      : Number(payment.amount) + existing.reduce((sum, row) => sum + Number(row.withheld_amount), 0);
+    if (retainedTotal > grossApplied + 0.01) throw new BadRequestException('El total de retenciones no puede superar el importe bruto del pago o gasto');
+    const nextNet = Math.round((grossApplied - retainedTotal + Number.EPSILON) * 100) / 100;
+    const oldNet = Number(payment.amount);
+    const netDifference = Math.round((nextNet - oldNet + Number.EPSILON) * 100) / 100;
+    const conversionFactor = oldNet > 0 && payment.converted_amount != null
+      ? Number(payment.converted_amount) / oldNet
+      : payment.exchange_rate ? Number(payment.exchange_rate) : 1;
+    const nextConvertedAmount = payment.converted_amount == null
+      ? null
+      : Math.round((nextNet * conversionFactor + Number.EPSILON) * 100) / 100;
+    const now = new Date();
+
+    await this.prisma.$transaction(async (tx) => {
+      if (dto.account_id) {
+        const account = await tx.accounts.findFirst({ where: { id: dto.account_id, active: true, deleted_at: null }, select: { id: true } });
+        if (!account) throw new BadRequestException('La cuenta contable seleccionada no existe o está inactiva');
+      }
+
+      const oldIds = existing.map((row) => row.id);
+      const oldLedgerEntries = await tx.current_account_entries.findMany({
+        where: {
+          payment_id: id,
+          deleted_at: null,
+          OR: [
+            { reference_type: 'payment_financial_adjustment' },
+            ...(changed && oldIds.length ? [{ reference_type: 'withholding', reference_id: { in: oldIds } }] : []),
+          ],
+        },
+        select: { id: true, current_account_id: true, balance_before: true, balance_after: true },
+      });
+      const removedDeltaByAccount = new Map<string, number>();
+      for (const entry of oldLedgerEntries) {
+        const delta = Number(entry.balance_after) - Number(entry.balance_before);
+        removedDeltaByAccount.set(entry.current_account_id, (removedDeltaByAccount.get(entry.current_account_id) ?? 0) + delta);
+      }
+      if (oldLedgerEntries.length) {
+        await tx.current_account_entries.updateMany({
+          where: { id: { in: oldLedgerEntries.map((entry) => entry.id) } },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+        for (const [accountId, removedDelta] of removedDeltaByAccount) {
+          await tx.current_accounts.update({ where: { id: accountId }, data: { balance: { decrement: removedDelta }, updated_at: now } });
+        }
+      }
+
+      const baseEntry = payment.party_id
+        ? await tx.current_account_entries.findFirst({
+            where: { payment_id: id, reference_type: 'payment', deleted_at: null },
+            orderBy: { created_at: 'asc' },
+            select: { id: true, current_account_id: true, amount: true, converted_amount: true, balance_before: true, balance_after: true },
+          })
+        : null;
+      if (baseEntry && Math.abs(netDifference) > 0.001) {
+        const oldDelta = Number(baseEntry.balance_after) - Number(baseEntry.balance_before);
+        const nextBalanceAmount = nextConvertedAmount
+          ?? Math.round((nextNet * conversionFactor + Number.EPSILON) * 100) / 100;
+        const nextDelta = Math.sign(oldDelta || 1) * nextBalanceAmount;
+        await tx.current_account_entries.update({ where: { id: baseEntry.id }, data: {
+          amount: nextNet,
+          converted_amount: nextBalanceAmount,
+          balance_after: Number(baseEntry.balance_before) + nextDelta,
+          updated_at: now,
+          updated_by: userId,
+        } });
+        await tx.current_accounts.update({ where: { id: baseEntry.current_account_id }, data: {
+          balance: { increment: nextDelta - oldDelta }, updated_at: now,
+        } });
+      }
+
+      if (!baseEntry && assignedParty) {
+        await this.createCurrentAccountEntry({
+          ...payment,
+          party_id: assignedParty.id,
+          party_type: assignedParty.type,
+          amount: { toNumber: () => nextNet },
+        }, userId, tx, payment.type);
+      }
+
+      if (changed) {
+        if (oldIds.length) {
+          await tx.withholdings.updateMany({
+            where: { id: { in: oldIds }, deleted_at: null },
+            data: { status: 'CANCELLED', deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+          });
+        }
+        for (const withholding of requested) {
+          const created = await tx.withholdings.create({
+            data: {
+              company_id: this.getCompanyId() ?? payment.id,
+              business_party_id: effectivePartyId!,
+              direction: payment.type === 'PAYMENT' || payment.type === 'EXPENSE' ? 'PRACTICADA' : 'SUFRIDA',
+              payment_id: id, tax_type: withholding.tax_type,
+              jurisdiction_id: withholding.jurisdiction_id ?? null,
+              withholding_concept_id: withholding.withholding_concept_id ?? null,
+              tax_rule_id: withholding.tax_rule_id ?? null,
+              base_amount: withholding.base_amount, rate: withholding.rate ?? null,
+              withheld_amount: withholding.withheld_amount, automatic_amount: withholding.withheld_amount,
+              currency_code: payment.currency_code, exchange_rate: payment.exchange_rate,
+              certificate_number: withholding.certificate_number ?? null,
+              certificate_date: withholding.certificate_date ? new Date(withholding.certificate_date) : null,
+              status: 'APPLIED', date: payment.date, observations: withholding.observations ?? null,
+              created_by: userId,
+              ...(withholding.allocations?.length ? { allocations: { create: withholding.allocations.map((a) => ({
+                document_id: a.document_id, allocated_amount: a.allocated_amount, created_by: userId,
+              })) } } : {}),
+            },
+          });
+          if (effectivePartyId) await this.currentAccountsService.addEntry({
+            party_id: effectivePartyId, party_type: effectivePartyType ?? 'SUPPLIER',
+            currency_code: payment.currency_code, type: 'WITHHOLDING',
+            amount: Number(withholding.withheld_amount),
+            exchange_rate: payment.exchange_rate ? Number(payment.exchange_rate) : undefined,
+            rate_type: payment.rate_type ?? undefined,
+            description: `Retención ${withholding.tax_type} - Pago #${payment.number}`,
+            reference_type: 'withholding', reference_id: created.id, payment_id: id,
+            date: payment.date instanceof Date ? payment.date.toISOString().slice(0, 10) : payment.date,
+          }, userId, tx);
+        }
+      }
+
+      if (payment.cash_box_id) await this.updateFinalizedCashMovement(tx, payment, nextNet, nextConvertedAmount, userId, now);
+      if (payment.bank_account_id) await this.updateFinalizedBankMovement(tx, payment, nextNet, nextConvertedAmount, grossApplied, retainedTotal, userId, now);
+
+      await tx.payments.update({ where: { id }, data: {
+        amount: nextNet,
+        converted_amount: nextConvertedAmount,
+        ...(assignedParty ? { party_id: assignedParty.id, party_type: assignedParty.type } : {}),
+        ...(dto.account_id !== undefined ? { account_id: dto.account_id || null } : {}),
+        updated_at: now, updated_by: userId,
+      } });
+      if (effectivePartyId) {
+        const currentAccount = await tx.current_accounts.findUnique({ where: { party_id: effectivePartyId }, select: { id: true } });
+        if (currentAccount) await recalculateCurrentAccountLedger(tx, currentAccount.id);
+      }
+    }, { timeout: 15_000 });
+    return this.findOne(id);
+  }
+
+  private async updateFinalizedCashMovement(
+    tx: any,
+    payment: any,
+    nextNet: number,
+    nextConvertedAmount: number | null,
+    userId: string,
+    now: Date,
+  ) {
+    const movement = await tx.cash_box_movements.findFirst({
+      where: { payment_id: payment.id, reference_type: 'payment', deleted_at: null },
+      orderBy: { created_at: 'asc' },
+    });
+    if (!movement) throw new BadRequestException('No se encontró el movimiento original de caja para actualizar el pago');
+
+    const adjustments = await tx.cash_box_movements.findMany({
+      where: { payment_id: payment.id, reference_type: 'payment_financial_adjustment', deleted_at: null },
+      select: { id: true, session_id: true, amount: true, balance_before: true, balance_after: true },
+    });
+    const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
+    const targetDelta = isOutflow ? -Math.abs(nextNet) : Math.abs(nextNet);
+    const oldPrimaryDelta = Number(movement.balance_after) - Number(movement.balance_before);
+    const oldAdjustmentsDelta = adjustments.reduce((sum: number, row: any) => sum + Number(row.balance_after) - Number(row.balance_before), 0);
+    const balance = await tx.cash_box_balances.findUnique({
+      where: { cash_box_id_currency_code: { cash_box_id: movement.cash_box_id, currency_code: movement.currency_code } },
+    });
+    if (!balance) throw new BadRequestException('No se encontró el saldo de caja para recalcular el pago');
+    const balanceDelta = targetDelta - oldPrimaryDelta - oldAdjustmentsDelta;
+    const nextBalance = Number(balance.balance) + balanceDelta;
+    if (nextBalance < -0.001) throw new BadRequestException('El cambio dejaría el saldo de la caja en negativo');
+
+    await tx.cash_box_movements.update({ where: { id: movement.id }, data: {
+      amount: Math.abs(nextNet),
+      converted_amount: nextConvertedAmount == null ? null : Math.abs(nextConvertedAmount),
+      balance_after: Number(movement.balance_before) + targetDelta,
+      updated_at: now,
+      updated_by: userId,
+    } });
+    if (adjustments.length) {
+      await tx.cash_box_movements.updateMany({
+        where: { id: { in: adjustments.map((row: any) => row.id) } },
+        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+      });
+    }
+    await tx.cash_box_balances.update({
+      where: { id: balance.id },
+      data: { balance: nextBalance, updated_at: now, updated_by: userId },
+    });
+
+    const sessionDeltas = new Map<string, { income: number; expenses: number; count: number }>();
+    const registerSessionDelta = (sessionId: string | null, kind: 'income' | 'expenses', amount: number, count = 0) => {
+      if (!sessionId) return;
+      const value = sessionDeltas.get(sessionId) ?? { income: 0, expenses: 0, count: 0 };
+      value[kind] += amount;
+      value.count += count;
+      sessionDeltas.set(sessionId, value);
+    };
+    const sourceAmountChange = nextNet - Number(movement.amount);
+    registerSessionDelta(movement.session_id, isOutflow ? 'expenses' : 'income', sourceAmountChange);
+    for (const adjustment of adjustments) {
+      const delta = Number(adjustment.balance_after) - Number(adjustment.balance_before);
+      registerSessionDelta(adjustment.session_id, delta < 0 ? 'expenses' : 'income', -Math.abs(delta), -1);
+    }
+    for (const [sessionId, delta] of sessionDeltas) {
+      await tx.cash_box_sessions.update({ where: { id: sessionId }, data: {
+        ...(delta.income ? { total_income: { increment: delta.income } } : {}),
+        ...(delta.expenses ? { total_expenses: { increment: delta.expenses } } : {}),
+        ...(delta.count ? { movement_count: { increment: delta.count } } : {}),
+        updated_at: now,
+        updated_by: userId,
+      } });
+    }
+
+    const activeMovements = await tx.cash_box_movements.findMany({
+      where: { cash_box_id: movement.cash_box_id, currency_code: movement.currency_code, deleted_at: null },
+      orderBy: [{ date: 'asc' }, { created_at: 'asc' }, { id: 'asc' }],
+      select: { id: true, balance_before: true, balance_after: true },
+    });
+    const totalDelta = activeMovements.reduce((sum: number, row: any) => sum + Number(row.balance_after) - Number(row.balance_before), 0);
+    let runningBalance = Math.round((nextBalance - totalDelta + Number.EPSILON) * 100) / 100;
+    for (const row of activeMovements) {
+      const delta = Number(row.balance_after) - Number(row.balance_before);
+      const before = runningBalance;
+      const after = Math.round((before + delta + Number.EPSILON) * 100) / 100;
+      if (Number(row.balance_before) !== before || Number(row.balance_after) !== after) {
+        await tx.cash_box_movements.update({ where: { id: row.id }, data: { balance_before: before, balance_after: after } });
+      }
+      runningBalance = after;
+    }
+    await tx.cash_box_balances.update({ where: { id: balance.id }, data: { balance: runningBalance, updated_at: now, updated_by: userId } });
+  }
+
+  private async updateFinalizedBankMovement(
+    tx: any,
+    payment: any,
+    nextNet: number,
+    nextConvertedAmount: number | null,
+    grossApplied: number,
+    retainedTotal: number,
+    userId: string,
+    now: Date,
+  ) {
+    const movement = await tx.bank_account_movements.findFirst({
+      where: { payment_id: payment.id, reference_type: 'payment', deleted_at: null },
+      orderBy: { created_at: 'asc' },
+    });
+    if (!movement) throw new BadRequestException('No se encontró el movimiento original del banco para actualizar el pago');
+
+    const adjustments = await tx.bank_account_movements.findMany({
+      where: { payment_id: payment.id, reference_type: 'payment_financial_adjustment', deleted_at: null },
+      select: { id: true, amount: true },
+    });
+    const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
+    const targetAmount = isOutflow ? -Math.abs(nextNet) : Math.abs(nextNet);
+    const oldAdjustmentsAmount = adjustments.reduce((sum: number, row: any) => sum + Number(row.amount), 0);
+    const balanceDelta = targetAmount - Number(movement.amount) - oldAdjustmentsAmount;
+    const account = await tx.bank_accounts.findUnique({ where: { id: movement.bank_account_id }, select: { balance: true } });
+    if (!account) throw new BadRequestException('No se encontró la cuenta bancaria para recalcular el pago');
+    if (isOutflow && Number(account.balance) + balanceDelta < -0.001) {
+      throw new BadRequestException('El cambio dejaría el saldo de la cuenta bancaria en negativo');
+    }
+
+    await tx.bank_account_movements.update({ where: { id: movement.id }, data: {
+      amount: targetAmount,
+      nature: isOutflow ? 'DEBIT' : 'CREDIT',
+      converted_amount: nextConvertedAmount == null ? null : Math.abs(nextConvertedAmount),
+      updated_at: now,
+      updated_by: userId,
+    } });
+    if (adjustments.length) {
+      await tx.bank_account_movements.updateMany({
+        where: { id: { in: adjustments.map((row: any) => row.id) } },
+        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+      });
+    }
+    if (Math.abs(balanceDelta) > 0.001) {
+      await tx.bank_accounts.update({ where: { id: movement.bank_account_id }, data: {
+        balance: { increment: balanceDelta }, updated_at: now, updated_by: userId,
+      } });
+    }
+    await recalculateBankAccountLedger(tx, movement.bank_account_id);
+    const operation = await tx.bank_operations.findFirst({
+      where: { source_type: 'payment', source_id: payment.id, deleted_at: null },
+      orderBy: { created_at: 'desc' },
+      select: { id: true },
+    });
+    if (operation) {
+      await this.bankMovements.closeOperation(operation.id, tx);
+      await tx.bank_operations.update({ where: { id: operation.id }, data: {
+        gross_amount: grossApplied,
+        retentions_amount: retainedTotal,
+        updated_at: now,
+        updated_by: userId,
+      } });
+    }
   }
 
   // ═══════════════════════════════════════════
@@ -1667,6 +2164,37 @@ export class PaymentsService {
     });
   }
 
+  private async applyHrValePayment(tx: any, vale: any, document: any, amount: number, payment: any, userId: string) {
+    const account = await tx.hr_accounts.findUnique({
+      where: { party_id_currency_code: { party_id: vale.party_id, currency_code: document.currency_code } },
+    });
+    if (!account) throw new BadRequestException(`No existe cuenta corriente RRHH para el vale #${vale.number}`);
+    const before = Number(account.balance);
+    const after = before - amount;
+    await tx.hr_account_entries.create({
+      data: {
+        hr_account_id: account.id,
+        type: 'PAYMENT',
+        amount,
+        currency_code: document.currency_code,
+        exchange_rate: document.exchange_rate,
+        rate_type: document.rate_type,
+        converted_amount: document.converted_total,
+        balance_before: before,
+        balance_after: after,
+        description: `Pago de Vale #${vale.number} · Pago #${payment.number}`,
+        reference_type: 'payment',
+        reference_id: payment.id,
+        date: payment.date,
+        created_by: userId,
+      },
+    });
+    await tx.hr_accounts.update({
+      where: { id: account.id },
+      data: { balance: after, updated_at: new Date(), updated_by: userId },
+    });
+  }
+
   private async reverseSideEffects(
     payment: any,
     userId: string,
@@ -1845,11 +2373,11 @@ export class PaymentsService {
       }
     }
 
-    if (payment.payment_method === 'PAYROLL_DEDUCTION') {
-      const hrEntries = await this.prisma.hr_account_entries.findMany({
-        where: { reference_type: 'payment', reference_id: payment.id, deleted_at: null },
-      });
-      for (const entry of hrEntries) {
+    const hrEntries = await this.prisma.hr_account_entries.findMany({
+      where: { reference_type: 'payment', reference_id: payment.id, deleted_at: null },
+    });
+    for (const entry of hrEntries) {
+      if (payment.payment_method === 'PAYROLL_DEDUCTION' && entry.type === 'PAYROLL_DEDUCTION') {
         const account = await this.prisma.hr_accounts.findUnique({ where: { id: entry.hr_account_id } });
         if (!account) continue;
         const removedDelta = Number(entry.balance_after) - Number(entry.balance_before);
@@ -1862,7 +2390,60 @@ export class PaymentsService {
           where: { id: account.id },
           data: { balance: Number(account.balance) - removedDelta, updated_at: now, updated_by: userId },
         });
+        continue;
       }
+
+      if (entry.type !== 'PAYMENT') continue;
+      const alreadyReversed = await this.prisma.hr_account_entries.findFirst({
+        where: { reference_type: 'payment_reversal', reference_id: entry.id, deleted_at: null },
+        select: { id: true },
+      });
+      if (alreadyReversed) continue;
+      const account = await this.prisma.hr_accounts.findUnique({ where: { id: entry.hr_account_id } });
+      if (!account) continue;
+      const before = Number(account.balance);
+      const after = before + Number(entry.amount);
+      await this.prisma.hr_account_entries.create({
+        data: {
+          hr_account_id: account.id,
+          type: 'PAYMENT',
+          amount: entry.amount,
+          currency_code: entry.currency_code,
+          exchange_rate: entry.exchange_rate,
+          rate_type: entry.rate_type,
+          converted_amount: entry.converted_amount,
+          balance_before: before,
+          balance_after: after,
+          description: `Reversión de pago #${payment.number} · Vale`,
+          reference_type: 'payment_reversal',
+          reference_id: entry.id,
+          date: new Date(),
+          created_by: userId,
+        },
+      });
+      await this.prisma.hr_accounts.update({
+        where: { id: account.id },
+        data: { balance: after, updated_at: new Date(), updated_by: userId },
+      });
+    }
+
+    for (const pd of paymentDocs) {
+      const document = await this.prisma.documents.findUnique({
+        where: { id: pd.document_id },
+        include: { document_types: { select: { category: true } } },
+      });
+      if (document?.document_types?.category !== 'VALE' || !payment.party_id) continue;
+      const match = document.descrip?.match(/Vale #(\d+)/);
+      if (!match) continue;
+      const vale = await this.prisma.hr_vales.findFirst({
+        where: { party_id: payment.party_id, number: Number(match[1]), deleted_at: null, OR: [{ party_type: 'EMPLOYEE' }, { party_type: 'PARTNER', type: { in: ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'] } }] },
+      });
+      if (!vale || vale.status === 'CANCELLED') continue;
+      const fullyPaid = Number(document.paid_amount) >= Number(document.total) - 0.01;
+      await this.prisma.hr_vales.update({
+        where: { id: vale.id },
+        data: { status: fullyPaid ? 'PAID' : 'CONFIRMED', paid_at: fullyPaid ? vale.paid_at : null, updated_at: new Date(), updated_by: userId },
+      });
     }
   }
 

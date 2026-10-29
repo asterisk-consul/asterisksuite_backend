@@ -1165,8 +1165,12 @@ export class DocumentsPurchasesService {
     const docs = await this.prisma.documents.findMany({
       where: {
         document_types: {
-          direction: -1,
-          affects_payment: true,
+          OR: [
+            { direction: -1, affects_payment: true },
+            // Los vales de RRHH son obligaciones pagables aunque el tipo
+            // documental del tenant no tenga actualizado affects_payment.
+            { category: 'VALE' },
+          ],
         },
         status: 2,
         deleted_at: null,
