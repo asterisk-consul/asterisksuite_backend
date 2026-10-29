@@ -185,6 +185,37 @@ export class StockService {
     }));
   }
 
+  async getProductionSummary() {
+    const where = {
+      reference_type: 'PRODUCTION_ORDER',
+      movement_type: 'PRODUCTION_OUTPUT',
+      deleted_at: null,
+    };
+    const recentPeriodStart = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    const [allTime, recent] = await Promise.all([
+      this.prisma.warehouse_stock_movements.aggregate({
+        where,
+        _count: { id: true },
+        _sum: { quantity: true },
+        _max: { created_at: true },
+      }),
+      this.prisma.warehouse_stock_movements.aggregate({
+        where: { ...where, created_at: { gte: recentPeriodStart } },
+        _count: { id: true },
+        _sum: { quantity: true },
+      }),
+    ]);
+
+    return {
+      total_fabrications: allTime._count.id,
+      total_quantity: Number(allTime._sum.quantity ?? 0),
+      recent_fabrications: recent._count.id,
+      recent_quantity: Number(recent._sum.quantity ?? 0),
+      last_fabrication_at: allTime._max.created_at,
+    };
+  }
+
   // Getter privado para reutilizar en todos los métodos
   private get prisma() {
     return this.db.getClientForCurrentContext();

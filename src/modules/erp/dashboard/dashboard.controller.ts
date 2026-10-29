@@ -4,6 +4,7 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { DashboardService } from './dashboard.service';
 import { SaveDashboardConfigDto } from './dto/save-dashboard-config.dto';
+import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
 @Controller('erp/dashboard')
 @UseGuards(JwtAuthGuard)
@@ -50,5 +51,17 @@ export class DashboardController {
   @Get('personal')
   getPersonalData(@CurrentUser() user: AuthUser) {
     return this.dashboardService.getPersonalData(user.id);
+  }
+
+  @Get('notifications/stock-replenishment')
+  @RequirePermissions('stock.read')
+  getStockReplenishmentNotifications() {
+    return this.dashboardService.getStockReplenishmentNotifications();
+  }
+
+  @Get('notifications/old-account-balances')
+  @RequirePermissions('treasury.current_accounts.read')
+  getOldAccountBalanceNotifications() {
+    return this.dashboardService.getOldAccountBalanceNotifications();
   }
 }

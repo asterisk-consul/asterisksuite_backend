@@ -34,6 +34,12 @@ export class StockController {
     return this.service.previewProduction(body.product_id, materialWarehouseId, outputWarehouseId, Number(body.quantity), body.variant_id);
   }
 
+  @RequireAnyPermission('production.read', 'production.execute', 'production.history')
+  @Get('production/summary')
+  getProductionSummary() {
+    return this.service.getProductionSummary();
+  }
+
   @RequirePermissions('production.execute')
   @Post('production/execute')
   executeProduction(@Body() body: { product_id: string; warehouse_id?: string; material_warehouse_id?: string; output_warehouse_id?: string; quantity: number; variant_id?: string }) {

@@ -63,6 +63,103 @@ export class DashboardService {
     return { success: true };
   }
 
+  async getStockReplenishmentNotifications() {
+    const policies = await this.prisma.stock_replenishment_policies.findMany({
+      where: {
+        deleted_at: null,
+        active: true,
+        reorder_point: { gt: 0 },
+        product: { is: { deleted_at: null, active: true, manages_stock: true } },
+        warehouse: { is: { deleted_at: null, active: true, is_virtual: false } },
+      },
+      select: {
+        product_id: true,
+        warehouse_id: true,
+        reorder_point: true,
+        product: {
+          select: {
+            name: true,
+            sku: true,
+            warehouse_stock: {
+              where: { deleted_at: null },
+              select: { warehouse_id: true, quantity: true, reserved_quantity: true },
+            },
+          },
+        },
+        warehouse: { select: { name: true } },
+      },
+      orderBy: [{ product_id: 'asc' }, { warehouse_id: 'asc' }],
+      take: 500,
+    });
+
+    return policies.flatMap((policy) => {
+      const stock = policy.product.warehouse_stock.find((row) => row.warehouse_id === policy.warehouse_id);
+      const available = Math.max(Number(stock?.quantity ?? 0) - Number(stock?.reserved_quantity ?? 0), 0);
+      const reorderPoint = Number(policy.reorder_point);
+      if (available > reorderPoint) return [];
+      return [{
+        id: `${policy.product_id}:${policy.warehouse_id}`,
+        product_id: policy.product_id,
+        product_name: policy.product.name,
+        product_sku: policy.product.sku,
+        warehouse_name: policy.warehouse.name,
+        available,
+        reorder_point: reorderPoint,
+        critical: available <= 0,
+      }];
+    }).slice(0, 50);
+  }
+
+  async getOldAccountBalanceNotifications() {
+    const today = new Date(new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date()) + 'T00:00:00.000Z');
+    const cutoff = new Date(today);
+    cutoff.setUTCDate(cutoff.getUTCDate() - 30);
+    const [rows, baseCurrency] = await Promise.all([
+      this.prisma.current_accounts.findMany({
+        where: {
+          deleted_at: null,
+          active: true,
+          last_entry_date: { lte: cutoff },
+          OR: [
+            { party_type: 'CUSTOMER', balance: { gt: 0 } },
+            { party_type: 'SUPPLIER', balance: { gt: 0 } },
+          ],
+        },
+        select: {
+          id: true,
+          party_id: true,
+          party_type: true,
+          balance: true,
+          last_entry_date: true,
+          party: { select: { name: true } },
+        },
+        orderBy: [{ last_entry_date: 'asc' }, { id: 'asc' }],
+        take: 100,
+      }),
+      this.prisma.currencies.findFirst({ where: { is_base: true, active: true }, select: { code: true } }),
+    ]);
+
+    return rows.map((account) => {
+      const lastMovement = account.last_entry_date ? new Date(account.last_entry_date) : cutoff;
+      const daysWithoutMovement = Math.max(30, Math.floor((today.getTime() - lastMovement.getTime()) / 86_400_000));
+      return {
+        id: account.id,
+        party_id: account.party_id,
+        party_name: account.party?.name ?? 'Parte interesada',
+        party_type: account.party_type,
+        balance: Number(account.balance),
+        currency_code: baseCurrency?.code ?? null,
+        days_without_movement: daysWithoutMovement,
+        severity: daysWithoutMovement >= 90 ? 'HIGH' : daysWithoutMovement >= 60 ? 'MEDIUM' : 'LOW',
+      };
+    });
+  }
+
   async getDashboardData(checksDays?: number, documentDays?: number) {
     const now = new Date();
     // Los documentos usan una fecha de negocio sin hora. Calculamos "hoy" en

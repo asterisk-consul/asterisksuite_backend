@@ -64,6 +64,16 @@ export class ProductsService {
           const condition = stringFilter(filter.value, filter.operator);
           return condition ? [{ [filter.column]: condition }] : [];
         }
+        case 'category_id':
+        case 'tag_id': {
+          const id = String(filter.value ?? '');
+          if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+            return [];
+          }
+          return filter.column === 'category_id'
+            ? [{ product_categories: { some: { category_id: id, deleted_at: null } } }]
+            : [{ product_tags: { some: { tag_id: id, deleted_at: null } } }];
+        }
         case 'product_type': {
           const allowed = ['RAW_MATERIAL', 'FINISHED_PRODUCT', 'SEMI_FINISHED', 'SERVICE', 'RATES'];
           return allowed.includes(String(filter.value)) ? [{ product_type: filter.value }] : [];
@@ -123,6 +133,20 @@ export class ProductsService {
       cost_template_id: true,
       created_at: true,
       updated_at: true,
+      product_categories: {
+        where: { deleted_at: null },
+        select: {
+          category_id: true,
+          categories: { select: { id: true, name: true, parent_id: true } },
+        },
+      },
+      product_tags: {
+        where: { deleted_at: null },
+        select: {
+          tag_id: true,
+          tags: { select: { id: true, name: true } },
+        },
+      },
     };
     const query: any = {
       where,
