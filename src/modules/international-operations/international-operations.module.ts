@@ -7,9 +7,10 @@ import { EventsService } from './events/events.service';
 import { IntlOpsSettingsController } from './settings/settings.controller';
 import { IntlOpsSettingsService } from './settings/settings.service';
 import { DocumentsPurchasesModule } from '@/modules/erp/documents-purchases/documents_purchases.module';
+import { AccessControlModule } from '@/access-control/access-control.module';
 
 @Module({
-  imports: [DocumentSequencesModule, DocumentsPurchasesModule],
+  imports: [DocumentSequencesModule, DocumentsPurchasesModule, AccessControlModule],
   controllers: [IntlOpsSettingsController, InternationalOperationsController],
   providers: [InternationalOperationsService, ContainersService, EventsService, IntlOpsSettingsService],
   exports: [InternationalOperationsService],

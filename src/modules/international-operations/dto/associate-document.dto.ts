@@ -10,9 +10,8 @@ export class AssociateDocumentDto {
   @IsEnum(InternationalExpenseType)
   expense_type?: InternationalExpenseType;
 
-  @IsOptional()
   @IsUUID()
-  container_id?: string;
+  container_id: string;
 
   @IsOptional()
   @IsString()

@@ -3,6 +3,7 @@ import { Prisma } from '@/generated/prisma/client';
 import { relocateTransitReservations } from './transit-reservations';
 
 const TRANSIT_ENTRY_REFERENCE = 'intl_invoice_transit';
+const TRANSIT_ORDER_REFERENCE = 'intl_order_transit';
 const TRANSIT_RECEIPT_REFERENCE = 'intl_remito_receipt';
 const TRANSIT_STOCK_STATUSES = new Set([
   'SHIPPED',
@@ -38,21 +39,15 @@ async function getTransitWarehouse(tx: any, containerId: string) {
   return container;
 }
 
-export async function registerInternationalInvoiceInTransit(
+export async function registerInternationalPurchaseInTransit(
   tx: any,
   documentId: string,
   containerId: string,
   userId?: string,
 ) {
-  const existing = await tx.warehouse_stock_movements.findFirst({
-    where: {
-      reference_type: TRANSIT_ENTRY_REFERENCE,
-      reference_id: documentId,
-      deleted_at: null,
-    },
-    select: { id: true },
-  });
-  if (existing) return false;
+  // Serialize family quantity checks so simultaneous OC/invoice confirmations
+  // cannot register the same goods twice in this container.
+  await tx.$queryRaw`SELECT id FROM tenant.international_containers WHERE id = ${containerId}::uuid FOR UPDATE`;
 
   const [container, document] = await Promise.all([
     getTransitWarehouse(tx, containerId),
@@ -60,6 +55,7 @@ export async function registerInternationalInvoiceInTransit(
       where: { id: documentId },
       include: {
         document_types: { select: { category: true, direction: true } },
+        parent_document: { select: { id: true, document_types: { select: { category: true } } } },
         document_items: {
           where: { deleted_at: null },
           select: { product_id: true, quantity: true, stock_quantity: true },
@@ -68,13 +64,45 @@ export async function registerInternationalInvoiceInTransit(
     }),
   ]);
   if (!TRANSIT_STOCK_STATUSES.has(container.status)) return false;
-  if (!document) throw new BadRequestException('La factura asociada no existe');
-  if (document.document_types?.category !== 'INVOICE' || document.document_types?.direction !== -1) return false;
-
-  const quantities = quantitiesByProduct(document.document_items);
-  if (!quantities.size) throw new BadRequestException('La factura de mercadería no contiene productos para ingresar en tránsito');
-
-  for (const [productId, quantity] of quantities) {
+  if (!document) throw new BadRequestException('El comprobante asociado no existe');
+  if (!['ORDER', 'INVOICE'].includes(document.document_types?.category) || document.document_types?.direction !== -1 || document.status !== 2 || document.deleted_at) return false;
+  const rootId = document.document_types.category === 'INVOICE' && document.parent_document?.document_types?.category === 'ORDER'
+    ? document.parent_document.id : document.id;
+  const otherContainer = await tx.international_operation_documents.findFirst({
+    where: { expense_type: 'MERCHANDISE', container_id: { not: containerId }, document: { document_types: { direction: -1, category: { in: ['ORDER', 'INVOICE'] } }, OR: [{ id: rootId }, { parent_document_id: rootId }] } },
+    select: { container_id: true },
+  });
+  if (otherContainer) throw new BadRequestException('La OC y su factura de mercadería deben usar el mismo contenedor para no duplicar stock en tránsito');
+  const family = await tx.international_operation_documents.findMany({
+    where: {
+      container_id: containerId, expense_type: 'MERCHANDISE',
+      document: { document_types: { direction: -1, category: { in: ['ORDER', 'INVOICE'] } }, OR: [{ id: rootId }, { parent_document_id: rootId }] },
+    },
+    include: { document: { include: { document_items: { where: { deleted_at: null }, select: { product_id: true, quantity: true, stock_quantity: true } } } } },
+  });
+  if (!family.some((link: any) => link.document_id === documentId)) return false;
+  const quantities = new Map<string, Prisma.Decimal>();
+  for (const link of family) {
+    if (link.document.deleted_at || link.document.status !== 2) continue;
+    for (const [productId, quantity] of quantitiesByProduct(link.document.document_items)) {
+      const previous = quantities.get(productId) ?? new Prisma.Decimal(0);
+      if (quantity.greaterThan(previous)) quantities.set(productId, quantity);
+    }
+  }
+  if (!quantities.size) throw new BadRequestException('El comprobante de mercadería no contiene productos para ingresar en tránsito');
+  // Count historical inbound movements, including quantities already received.
+  // Comparing with today's warehouse balance would re-enter consumed stock.
+  const movements = await tx.warehouse_stock_movements.findMany({
+    where: { warehouse_id: container.transit_warehouse_id, reference_type: { in: [TRANSIT_ORDER_REFERENCE, TRANSIT_ENTRY_REFERENCE] }, reference_id: { in: family.map((link: any) => link.document_id) }, direction: 'IN', deleted_at: null },
+    select: { product_id: true, quantity: true },
+  });
+  const registered = quantitiesByProduct(movements);
+  let changed = false;
+  const isOrder = document.document_types.category === 'ORDER';
+  for (const [productId, target] of quantities) {
+    const quantity = target.sub(registered.get(productId) ?? new Prisma.Decimal(0));
+    if (!quantity.greaterThan(0)) continue;
+    changed = true;
     await tx.warehouse_stock_movements.create({
       data: {
         warehouse_id: container.transit_warehouse_id,
@@ -82,9 +110,9 @@ export async function registerInternationalInvoiceInTransit(
         movement_type: 'INTL_TRANSIT',
         direction: 'IN',
         quantity,
-        reference_type: TRANSIT_ENTRY_REFERENCE,
+        reference_type: isOrder ? TRANSIT_ORDER_REFERENCE : TRANSIT_ENTRY_REFERENCE,
         reference_id: documentId,
-        notes: `Ingreso por factura internacional · contenedor ${container.container_number}`,
+        notes: `Ingreso por ${isOrder ? 'OC' : 'factura'} internacional · contenedor ${container.container_number}`,
         created_by: userId,
       },
     });
@@ -94,8 +122,11 @@ export async function registerInternationalInvoiceInTransit(
       update: { quantity: { increment: quantity }, updated_at: new Date() },
     });
   }
-  return true;
+  return changed;
 }
+
+// Keep compatibility for callers outside the international module.
+export const registerInternationalInvoiceInTransit = registerInternationalPurchaseInTransit;
 
 export async function receiveInternationalRemitoFromTransit(
   tx: any,
@@ -212,12 +243,24 @@ export async function receiveInternationalRemitoFromTransit(
 }
 
 export async function hasInternationalTransitMovements(tx: any, documentId: string) {
-  return Boolean(await tx.warehouse_stock_movements.findFirst({
+  const direct = await tx.warehouse_stock_movements.findFirst({
     where: {
-      reference_type: { in: [TRANSIT_ENTRY_REFERENCE, TRANSIT_RECEIPT_REFERENCE] },
+      reference_type: { in: [TRANSIT_ORDER_REFERENCE, TRANSIT_ENTRY_REFERENCE, TRANSIT_RECEIPT_REFERENCE] },
       reference_id: documentId,
       deleted_at: null,
     },
+    select: { id: true },
+  });
+  if (direct) return true;
+  const document = await tx.documents.findUnique({ where: { id: documentId }, select: { document_types: { select: { category: true } } } });
+  if (!['ORDER', 'INVOICE'].includes(document?.document_types?.category)) return false;
+  const descendants = await tx.documents.findMany({
+    where: { document_types: { category: { in: ['INVOICE', 'REMITO'] } }, OR: [{ parent_document_id: documentId }, { parent_document: { parent_document_id: documentId } }] },
+    select: { id: true },
+  });
+  if (!descendants.length) return false;
+  return Boolean(await tx.warehouse_stock_movements.findFirst({
+    where: { reference_type: { in: [TRANSIT_ORDER_REFERENCE, TRANSIT_ENTRY_REFERENCE, TRANSIT_RECEIPT_REFERENCE] }, reference_id: { in: descendants.map((child: any) => child.id) }, deleted_at: null },
     select: { id: true },
   }));
 }

@@ -14935,6 +14935,11 @@ export const International_operation_quotesScalarFieldEnum = {
   document_id: 'document_id',
   status: 'status',
   notes: 'notes',
+  container_id: 'container_id',
+  expense_type: 'expense_type',
+  custom_expense_description: 'custom_expense_description',
+  exchange_rate: 'exchange_rate',
+  converted_document_id: 'converted_document_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -17934,6 +17939,20 @@ export type ListEnumQuoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'InternationalExpenseType'
+ */
+export type EnumInternationalExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternationalExpenseType'>
+    
+
+
+/**
+ * Reference to a field of type 'InternationalExpenseType[]'
+ */
+export type ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternationalExpenseType[]'>
+    
+
+
+/**
  * Reference to a field of type 'ContainerType'
  */
 export type EnumContainerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerType'>
@@ -17972,20 +17991,6 @@ export type EnumContainerEventTypeFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'ContainerEventType[]'
  */
 export type ListEnumContainerEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContainerEventType[]'>
-    
-
-
-/**
- * Reference to a field of type 'InternationalExpenseType'
- */
-export type EnumInternationalExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternationalExpenseType'>
-    
-
-
-/**
- * Reference to a field of type 'InternationalExpenseType[]'
- */
-export type ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternationalExpenseType[]'>
     
 
 

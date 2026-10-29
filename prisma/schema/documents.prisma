@@ -284,6 +284,7 @@ model documents {
   sales_commission_assignments    sales_commission_assignments[]
   international_operation_docs    international_operation_documents[]
   international_operation_quotes  international_operation_quotes[]
+  converted_international_quote international_operation_quotes? @relation("converted_international_quote")
   withholding_allocations         withholding_allocations[]
   maintenance_services            maintenance_services[]
   purchase_tires                  tires[]

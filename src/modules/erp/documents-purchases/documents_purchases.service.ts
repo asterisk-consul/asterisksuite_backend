@@ -33,7 +33,8 @@ import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-aut
 import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
 import {
   receiveInternationalRemitoFromTransit,
-  registerInternationalInvoiceInTransit,
+  registerInternationalPurchaseInTransit,
+  hasInternationalTransitMovements,
 } from '@/modules/international-operations/international-stock';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
@@ -107,7 +108,7 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CREATE
   // ─────────────────────────────────────────────
-  async create(dto: CreateDocumentDto, userId?: string) {
+  async create(dto: CreateDocumentDto, userId?: string, transactionClient?: any) {
     const dtoItems = dto.items ?? [];
     const docType = await this.prisma.document_types.findUnique({
       where: {
@@ -377,7 +378,7 @@ export class DocumentsPurchasesService {
 
     let createdId = '';
 
-    await this.prisma.$transaction(async (tx) => {
+    const persistDocument = async (tx: any) => {
       const sequenceId = await this.resolveSequence(
         dto.document_type_id,
         dto.document_sequence_id,
@@ -500,13 +501,32 @@ export class DocumentsPurchasesService {
           })),
         });
       }
-    });
+      if (docType.category === 'INVOICE' && dto.parent_document_id) {
+        const assignments = await tx.international_operation_documents.findMany({
+          where: { document_id: dto.parent_document_id, container_id: { not: null }, container: { deleted_at: null }, operation: { deleted_at: null } },
+          select: { operation_id: true, container_id: true, expense_type: true, custom_expense_description: true, exchange_rate: true, document: { select: { currency_code: true } } },
+          take: 2,
+        });
+        if (assignments.length > 1) throw new BadRequestException('La OC tiene varias asociaciones internacionales. Revisá su contenedor antes de facturar.');
+        const assignment = assignments[0];
+        if (assignment) {
+          if (assignment.document.currency_code !== currencyCode) throw new BadRequestException('La factura debe conservar la moneda de la OC internacional para heredar su contenedor y cotización');
+          await tx.international_operation_documents.create({ data: {
+            operation_id: assignment.operation_id, document_id: document.id, container_id: assignment.container_id,
+            expense_type: assignment.expense_type, custom_expense_description: assignment.custom_expense_description,
+            exchange_rate: assignment.exchange_rate,
+          } });
+        }
+      }
+    };
+    if (transactionClient) await persistDocument(transactionClient);
+    else await this.prisma.$transaction(persistDocument);
 
     if (!createdId) {
       throw new BadRequestException('No se pudo crear el documento');
     }
 
-    return this.findOne(createdId);
+    return this.findOne(createdId, transactionClient);
   }
 
   // ─────────────────────────────────────────────
@@ -1082,12 +1102,12 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // FIND ONE
   // ─────────────────────────────────────────────
-  async findOne(id: string) {
+  async findOne(id: string, client = this.prisma) {
     if (!id || id === 'undefined') {
       throw new BadRequestException('ID inválido');
     }
 
-    const doc = await this.prisma.documents.findFirst({
+    const doc = await client.documents.findFirst({
       where: { id, deleted_at: null },
 
       include: {
@@ -1503,9 +1523,10 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string, _options?: { updateProductPrices?: boolean | string }) {
-    return this.prisma.$transaction(async (tx) => {
-      const doc = await this.findOne(id);
+  async confirm(id: string, userId: string, _options?: { updateProductPrices?: boolean | string }, transactionClient?: any) {
+    const confirmDocument = async (tx: any) => {
+      await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${id}::uuid FOR UPDATE`;
+      const doc = await this.findOne(id, tx);
 
       if (doc.status !== STATUS_DRAFT) {
         throw new BadRequestException('Solo se puede confirmar un documento en borrador');
@@ -1538,11 +1559,10 @@ export class DocumentsPurchasesService {
         select: { container_id: true },
       });
 
-      // La factura internacional representa mercadería que ya pertenece a la
-      // empresa pero todavía está viajando. Este ingreso es excepcional y no
-      // depende de affects_stock del tipo de factura.
-      if (category === 'INVOICE' && internationalMerchandiseLink?.container_id) {
-        await registerInternationalInvoiceInTransit(tx, doc.id, internationalMerchandiseLink.container_id, userId);
+      // OC y factura internacionales comparten la cobertura de cantidades en
+      // tránsito. No depende de affects_stock ni duplica lo ingresado por la OC.
+      if (['ORDER', 'INVOICE'].includes(category ?? '') && internationalMerchandiseLink?.container_id) {
+        await registerInternationalPurchaseInTransit(tx, doc.id, internationalMerchandiseLink.container_id, userId);
       } else if (category === 'REMITO' && internationalMerchandiseLink?.container_id) {
         // El remito acredita la recepción física y transfiere únicamente sus
         // cantidades desde el depósito virtual al depósito real seleccionado.
@@ -1630,7 +1650,8 @@ export class DocumentsPurchasesService {
       await this.productPartyPricing.captureDocumentPrices(tx, doc, 'PURCHASE', userId);
 
       return tx.documents.findUnique({ where: { id } });
-    });
+    };
+    return transactionClient ? confirmDocument(transactionClient) : this.prisma.$transaction(confirmDocument);
   }
 
   /**
@@ -1781,7 +1802,10 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   async cancel(id: string, userId: string) {
     return this.prisma.$transaction(async (tx) => {
-      const doc = await this.findOne(id);
+      await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${id}::uuid FOR UPDATE`;
+      const doc = await this.findOne(id, tx);
+      const internationalLink = await tx.international_operation_documents.findFirst({ where: { document_id: id, container_id: { not: null } }, select: { container_id: true } });
+      if (internationalLink?.container_id) await tx.$queryRaw`SELECT id FROM tenant.international_containers WHERE id = ${internationalLink.container_id}::uuid FOR UPDATE`;
 
       if (doc.status === STATUS_CANCELLED) {
         await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
@@ -1801,6 +1825,10 @@ export class DocumentsPurchasesService {
         throw new BadRequestException(
           `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
         );
+      }
+
+      if (await hasInternationalTransitMovements(tx, doc.id)) {
+        throw new BadRequestException('No se puede anular el comprobante porque respalda stock en tránsito o recibido. Regularizá primero los movimientos del contenedor.');
       }
 
       if (

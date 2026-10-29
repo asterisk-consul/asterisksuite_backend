@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
@@ -27,6 +28,8 @@ import { AssociateDocumentDto } from './dto/associate-document.dto';
 import { AssociateQuoteDto } from './dto/associate-quote.dto';
 import { UpdateQuoteStatusDto } from './dto/update-quote-status.dto';
 import { OperationStatus } from '@/generated/prisma/enums';
+import { ConvertQuoteDto } from './dto/convert-quote.dto';
+import { DocumentAccessService } from '@/access-control/services/document-access.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('international-operations')
@@ -35,6 +38,7 @@ export class InternationalOperationsController {
     private readonly operationsService: InternationalOperationsService,
     private readonly containersService: ContainersService,
     private readonly eventsService: EventsService,
+    private readonly documentAccess: DocumentAccessService,
   ) {}
 
   @Post()
@@ -117,8 +121,8 @@ export class InternationalOperationsController {
 
   @Post(':id/purchase-orders')
   @RequirePermissions('international_operations.update')
-  associatePurchaseOrder(@Param('id') id: string, @Body('document_id') document_id: string) {
-    return this.operationsService.associatePurchaseOrder(id, document_id);
+  associatePurchaseOrder(@Param('id') id: string, @Body() dto: AssociateDocumentDto) {
+    return this.operationsService.associatePurchaseOrder(id, dto.document_id, dto.container_id, dto.expense_type, dto.custom_expense_description, dto.exchange_rate);
   }
 
   @Delete(':id/purchase-orders/:poId')
@@ -130,7 +134,17 @@ export class InternationalOperationsController {
   @Post(':id/quotes')
   @RequirePermissions('international_operations.update')
   associateQuote(@Param('id') id: string, @Body() dto: AssociateQuoteDto) {
-    return this.operationsService.associateQuote(id, dto.document_id);
+    return this.operationsService.associateQuote(id, dto.document_id, dto);
+  }
+
+  @Post(':id/quotes/:quoteId/convert')
+  @RequirePermissions('international_operations.update')
+  async convertQuote(@Param('id') id: string, @Param('quoteId') quoteId: string, @Body() dto: ConvertQuoteDto, @CurrentUser() user: AuthUser, @Req() req: any) {
+    const role = req['companyUserRole'] as string | undefined;
+    await this.documentAccess.assertCategory(user.id, role, 'purchases', 'QUOTE', 'read');
+    await this.documentAccess.assertDocumentType(user.id, role, 'purchases', dto.document_type_id, 'create');
+    if (dto.confirm) await this.documentAccess.assertDocumentType(user.id, role, 'purchases', dto.document_type_id, 'confirm');
+    return this.operationsService.convertQuote(id, quoteId, dto, user.id);
   }
 
   @Patch(':id/quotes/:quoteId/status')

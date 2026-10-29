@@ -13,10 +13,10 @@ describe('Purchase document visibility', () => {
 
     await service.findAll(undefined, undefined, undefined, -1, 'buyer-user');
 
-    expect(findMany.mock.calls[0][0].where.OR).toEqual([
+    expect(findMany.mock.calls[0][0].where.AND).toContainEqual({ OR: [
       { assigned_to: 'buyer-user' },
       { assigned_to: null, created_by: 'buyer-user' },
-    ]);
+    ] });
   });
 
   it('does not restrict administrators by creator or assignee', async () => {

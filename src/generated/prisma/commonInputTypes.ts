@@ -844,6 +844,13 @@ export type EnumQuoteStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumQuoteStatusFilter<$PrismaModel> | $Enums.QuoteStatus
 }
 
+export type EnumInternationalExpenseTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel> | $Enums.InternationalExpenseType
+}
+
 export type EnumQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.QuoteStatus | Prisma.EnumQuoteStatusFieldRefInput<$PrismaModel>
   in?: $Enums.QuoteStatus[] | Prisma.ListEnumQuoteStatusFieldRefInput<$PrismaModel>
@@ -852,6 +859,16 @@ export type EnumQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumQuoteStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumQuoteStatusFilter<$PrismaModel>
+}
+
+export type EnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternationalExpenseType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
 }
 
 export type EnumContainerTypeFilter<$PrismaModel = never> = {
@@ -903,23 +920,6 @@ export type EnumContainerEventTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumContainerEventTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumContainerEventTypeFilter<$PrismaModel>
-}
-
-export type EnumInternationalExpenseTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel> | $Enums.InternationalExpenseType
-}
-
-export type EnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternationalExpenseType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
 }
 
 export type EnumDispatchStatusFilter<$PrismaModel = never> = {
@@ -2502,6 +2502,13 @@ export type NestedEnumQuoteStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumQuoteStatusFilter<$PrismaModel> | $Enums.QuoteStatus
 }
 
+export type NestedEnumInternationalExpenseTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel> | $Enums.InternationalExpenseType
+}
+
 export type NestedEnumQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.QuoteStatus | Prisma.EnumQuoteStatusFieldRefInput<$PrismaModel>
   in?: $Enums.QuoteStatus[] | Prisma.ListEnumQuoteStatusFieldRefInput<$PrismaModel>
@@ -2510,6 +2517,16 @@ export type NestedEnumQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumQuoteStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumQuoteStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternationalExpenseType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumContainerTypeFilter<$PrismaModel = never> = {
@@ -2561,23 +2578,6 @@ export type NestedEnumContainerEventTypeWithAggregatesFilter<$PrismaModel = neve
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumContainerEventTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumContainerEventTypeFilter<$PrismaModel>
-}
-
-export type NestedEnumInternationalExpenseTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel> | $Enums.InternationalExpenseType
-}
-
-export type NestedEnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.InternationalExpenseType | Prisma.EnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.InternationalExpenseType[] | Prisma.ListEnumInternationalExpenseTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumInternationalExpenseTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternationalExpenseType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumInternationalExpenseTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumDispatchStatusFilter<$PrismaModel = never> = {

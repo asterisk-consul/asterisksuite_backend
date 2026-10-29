@@ -4,11 +4,14 @@ import { convertWithMarketRate, normalizeMarketRate } from '@/common/utils/curre
 import { DocumentSequencesService } from '@/modules/erp/document-sequences/document-sequences.service';
 import { CreateOperationDto } from './dto/create-operation.dto';
 import { UpdateOperationDto } from './dto/update-operation.dto';
+import { AssociateQuoteDto } from './dto/associate-quote.dto';
+import { ConvertQuoteDto } from './dto/convert-quote.dto';
+import { DocumentsPurchasesService } from '@/modules/erp/documents-purchases/documents_purchases.service';
 import { OperationStatus, InternationalExpenseType, QuoteStatus } from '@/generated/prisma/enums';
 import {
   hasInternationalTransitMovements,
   receiveInternationalRemitoFromTransit,
-  registerInternationalInvoiceInTransit,
+  registerInternationalPurchaseInTransit,
 } from './international-stock';
 
 @Injectable()
@@ -16,6 +19,7 @@ export class InternationalOperationsService {
   constructor(
     private db: PrismaService,
     private sequencesService: DocumentSequencesService,
+    private purchases: DocumentsPurchasesService,
   ) {}
 
   private get prisma() {
@@ -158,6 +162,8 @@ export class InternationalOperationsService {
         operation_quotes: {
           where: { deleted_at: null },
           include: {
+            container: { select: { id: true, container_number: true } },
+            converted_document: { select: { id: true, number: true, status: true, deleted_at: true, document_types: { select: { code: true, category: true } } } },
             document: {
               include: {
                 document_types: { select: { code: true, description: true, category: true } },
@@ -500,6 +506,8 @@ export class InternationalOperationsService {
 
   async associateDocument(operationId: string, documentId: string, expenseType?: InternationalExpenseType, containerId?: string, customExpenseDescription?: string, exchangeRate?: number) {
     const operation = await this.findOne(operationId);
+    await this.requireContainer(this.prisma, operationId, containerId);
+    if (expenseType === 'OTHER' && !customExpenseDescription?.trim()) throw new BadRequestException('Indicá el concepto de la categoría Otros');
 
     const doc = await this.prisma.documents.findFirst({
       where: { id: documentId, deleted_at: null },
@@ -510,6 +518,10 @@ export class InternationalOperationsService {
     });
     if (!doc) throw new NotFoundException('Documento no encontrado');
 
+    if (!['ORDER', 'INVOICE'].includes(doc.document_types?.category ?? '') || ![-1, 1].includes(Number(doc.document_types?.direction))) {
+      throw new BadRequestException('Solo se pueden asociar órdenes y facturas de compra o venta. Los presupuestos se vinculan desde Presupuestos.');
+    }
+    if (doc.status === 3 || doc.status >= 7) throw new BadRequestException('No se puede asociar un documento anulado');
     const documentCurrency = doc.currency_code ?? operation.currency_code ?? 'ARS';
     const operationCurrency = operation.currency_code ?? documentCurrency;
     const normalizedExchangeRate = normalizeMarketRate(exchangeRate, documentCurrency, operationCurrency);
@@ -535,6 +547,8 @@ export class InternationalOperationsService {
     }
 
     return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.international_operations WHERE id = ${operationId}::uuid FOR UPDATE`;
+      await this.requireContainer(tx, operationId, containerId);
       const relation = await tx.international_operation_documents.create({
         data: {
           operation_id: operationId,
@@ -546,9 +560,12 @@ export class InternationalOperationsService {
         },
       });
 
+      if (doc.document_types?.category === 'ORDER' && doc.document_types.direction === -1) {
+        await tx.orden_compra_documents.update({ where: { document_id: documentId }, data: { international_operation_id: operationId } });
+      }
       if ((expenseType ?? 'MERCHANDISE') === 'MERCHANDISE' && containerId && doc.status === 2) {
-        if (doc.document_types?.category === 'INVOICE') {
-          await registerInternationalInvoiceInTransit(tx, documentId, containerId);
+        if (['ORDER', 'INVOICE'].includes(doc.document_types?.category ?? '')) {
+          await registerInternationalPurchaseInTransit(tx, documentId, containerId);
         } else if (doc.document_types?.category === 'REMITO') {
           await receiveInternationalRemitoFromTransit(tx, doc, containerId);
         }
@@ -625,8 +642,17 @@ export class InternationalOperationsService {
     });
   }
 
-  async associateQuote(operationId: string, documentId: string) {
-    await this.findOne(operationId);
+  private async requireContainer(client: any, operationId: string, containerId?: string) {
+    if (!containerId) throw new BadRequestException('Primero creá un contenedor y seleccioná a cuál asociar el documento');
+    const container = await client.international_containers.findFirst({ where: { id: containerId, operation_id: operationId, deleted_at: null }, select: { id: true } });
+    if (!container) throw new BadRequestException('El contenedor no existe o no pertenece a esta operación');
+    return container;
+  }
+
+  async associateQuote(operationId: string, documentId: string, assignment: AssociateQuoteDto) {
+    const operation = await this.findOne(operationId);
+    await this.requireContainer(this.prisma, operationId, assignment.container_id);
+    if (assignment.expense_type === 'OTHER' && !assignment.custom_expense_description?.trim()) throw new BadRequestException('Indicá el concepto de la categoría Otros');
 
     const doc = await this.prisma.documents.findFirst({
       where: { id: documentId, deleted_at: null },
@@ -647,38 +673,98 @@ export class InternationalOperationsService {
       throw new BadRequestException('El presupuesto ya está asociado a esta operación');
     }
 
-    return this.prisma.international_operation_quotes.create({
-      data: { operation_id: operationId, document_id: documentId },
+    if (doc.status === 3 || doc.status >= 7) throw new BadRequestException('El presupuesto está anulado');
+    const currency = doc.currency_code ?? operation.currency_code ?? 'ARS';
+    const operationCurrency = operation.currency_code ?? currency;
+    const rate = normalizeMarketRate(assignment.exchange_rate, currency, operationCurrency);
+    if (currency !== operationCurrency && !rate) throw new BadRequestException('Indicá una cotización válida para la moneda de la operación');
+    return this.prisma.$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM tenant.international_operations WHERE id = ${operationId}::uuid FOR UPDATE`;
+      await this.requireContainer(tx, operationId, assignment.container_id);
+      return tx.international_operation_quotes.create({ data: { operation_id: operationId, document_id: documentId, container_id: assignment.container_id, expense_type: assignment.expense_type, custom_expense_description: assignment.expense_type === 'OTHER' ? assignment.custom_expense_description?.trim() : null, exchange_rate: rate } });
     });
   }
 
   async updateQuoteStatus(operationId: string, quoteId: string, status: QuoteStatus) {
     await this.findOne(operationId);
-
-    const quote = await this.prisma.international_operation_quotes.findFirst({
-      where: { id: quoteId, operation_id: operationId, deleted_at: null },
-    });
-    if (!quote) throw new NotFoundException('Presupuesto no encontrado');
-
-    if (status === 'ACCEPTED') {
-      return this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.international_operations WHERE id = ${operationId}::uuid FOR UPDATE`;
+      const quote = await tx.international_operation_quotes.findFirst({ where: { id: quoteId, operation_id: operationId, deleted_at: null } });
+      if (!quote) throw new NotFoundException('Presupuesto no encontrado');
+      if (quote.converted_document_id) throw new BadRequestException('El presupuesto ya fue transformado; gestioná el comprobante generado');
+      if (status === 'ACCEPTED') {
+        await this.requireContainer(tx, operationId, quote.container_id ?? undefined);
+        const converted = await tx.international_operation_quotes.findFirst({
+          where: { operation_id: operationId, container_id: quote.container_id, expense_type: quote.expense_type, custom_expense_description: quote.custom_expense_description, deleted_at: null, converted_document_id: { not: null } }, select: { id: true },
+        });
+        if (converted) throw new BadRequestException('Esta categoría y contenedor ya tienen un presupuesto transformado');
         await tx.international_operation_quotes.updateMany({
-          where: { operation_id: operationId, id: { not: quoteId }, status: 'PENDING' },
+          where: { operation_id: operationId, container_id: quote.container_id, expense_type: quote.expense_type, custom_expense_description: quote.custom_expense_description, deleted_at: null, id: { not: quoteId }, status: { in: ['PENDING', 'ACCEPTED'] } },
           data: { status: 'REJECTED' },
         });
-        return tx.international_operation_quotes.update({
-          where: { id: quoteId },
-          data: { status: 'ACCEPTED' },
-          include: { document: { include: { business_parties: true } } },
-        });
-      });
-    }
-
-    return this.prisma.international_operation_quotes.update({
-      where: { id: quoteId },
-      data: { status },
-      include: { document: { include: { business_parties: true } } },
+      }
+      return tx.international_operation_quotes.update({ where: { id: quoteId }, data: { status }, include: { document: { include: { business_parties: true } } } });
     });
+  }
+
+  async convertQuote(operationId: string, quoteId: string, dto: ConvertQuoteDto, userId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.international_operations WHERE id = ${operationId}::uuid FOR UPDATE`;
+      const operation = await tx.international_operations.findFirst({ where: { id: operationId, deleted_at: null }, select: { currency_code: true } });
+      if (!operation) throw new NotFoundException('Operación internacional no encontrada');
+      await this.requireContainer(tx, operationId, dto.container_id);
+      const quote = await tx.international_operation_quotes.findFirst({
+        where: { id: quoteId, operation_id: operationId, deleted_at: null },
+        include: { document: { include: { document_types: true, document_items: { where: { deleted_at: null } }, document_taxes: true } } },
+      });
+      if (!quote) throw new NotFoundException('Presupuesto no encontrado');
+      const source = quote.document;
+      if (source.deleted_at || source.status === 3 || source.status >= 7 || source.document_types.category !== 'QUOTE' || source.document_types.direction !== -1) {
+        throw new BadRequestException('El origen debe ser un presupuesto de compra activo');
+      }
+      if (quote.container_id && (quote.container_id !== dto.container_id || quote.expense_type !== dto.expense_type)) {
+        throw new BadRequestException('La transformación debe conservar el contenedor y la categoría del presupuesto');
+      }
+      const custom = quote.container_id ? quote.custom_expense_description : dto.expense_type === 'OTHER' ? dto.custom_expense_description?.trim() ?? null : null;
+      if (dto.expense_type === 'OTHER' && !custom) throw new BadRequestException('Indicá el concepto de la categoría Otros');
+      const type = await tx.document_types.findFirst({ where: { id: dto.document_type_id, direction: -1, category: { in: ['ORDER', 'INVOICE'] }, active: true } });
+      if (!type) throw new BadRequestException('Elegí un tipo de orden de compra o factura de compra activo');
+      if (quote.converted_document_id) {
+        const existing = await tx.documents.findFirst({ where: { id: quote.converted_document_id, deleted_at: null } });
+        if (!existing || existing.document_type_id !== dto.document_type_id || existing.status === 3) throw new BadRequestException('El presupuesto ya tiene un comprobante generado; abrilo para gestionarlo');
+        const document = dto.confirm && existing.status === 0 ? await this.purchases.confirm(existing.id, userId, undefined, tx) : existing;
+        return { document, existing: true };
+      }
+      const sibling = await tx.international_operation_quotes.findFirst({ where: { operation_id: operationId, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, deleted_at: null, id: { not: quoteId }, converted_document_id: { not: null } }, select: { id: true } });
+      if (sibling) throw new BadRequestException('Esta categoría y contenedor ya tienen un presupuesto transformado');
+      if (!source.document_items.length) throw new BadRequestException('El presupuesto no tiene ítems');
+      if (source.document_items.some(item => Number(item.original_unit_price ?? item.unit_price) === 0 && Number(item.price) > 0)) {
+        throw new BadRequestException('El presupuesto histórico no tiene un precio unitario válido. Revisá sus ítems antes de transformarlo.');
+      }
+      const currency = source.currency_code ?? operation.currency_code ?? 'ARS';
+      const rate = normalizeMarketRate(quote.exchange_rate == null ? dto.exchange_rate : Number(quote.exchange_rate), currency, operation.currency_code ?? currency);
+      if (currency !== (operation.currency_code ?? currency) && !rate) throw new BadRequestException('Indicá la cotización del presupuesto para asociar el documento generado');
+      const adjustments = Array.isArray(source.commercial_adjustments) ? source.commercial_adjustments : [];
+      if (adjustments.length && !type.accepts_commercial_adjustments) throw new BadRequestException('El tipo destino no acepta los descuentos del presupuesto; revisá su configuración');
+      const created = await this.purchases.create({
+        document_type_id: type.id,
+        party_id: source.party_id ?? undefined,
+        date: new Date().toISOString().slice(0, 10),
+        currency_code: currency,
+        exchange_rate: source.exchange_rate == null ? undefined : Number(source.exchange_rate),
+        rate_type: source.rate_type ?? undefined,
+        descrip: source.descrip ?? `Presupuesto #${source.number}`,
+        ref: `Presupuesto #${source.number}`,
+        commercial_adjustments: adjustments as any,
+        items: source.document_items.map(item => ({ product_id: item.product_id ?? undefined, variant_id: item.variant_id ?? undefined, quantity: Number(item.quantity), unit_price: Number(item.original_unit_price ?? item.unit_price), discount_percentage: Number(item.discount_percentage ?? 0), purchase_unit_id: item.purchase_unit_id ?? undefined, unit_conversion_factor: Number(item.unit_conversion_factor ?? 1) })),
+      }, userId, tx);
+      await tx.international_operation_documents.create({ data: { operation_id: operationId, document_id: created.id, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, exchange_rate: rate } });
+      if (type.category === 'ORDER') await tx.orden_compra_documents.update({ where: { document_id: created.id }, data: { international_operation_id: operationId } });
+      await tx.international_operation_quotes.updateMany({ where: { operation_id: operationId, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, deleted_at: null, id: { not: quoteId }, status: { in: ['PENDING', 'ACCEPTED'] } }, data: { status: 'REJECTED' } });
+      await tx.international_operation_quotes.update({ where: { id: quoteId }, data: { status: 'ACCEPTED', converted_document_id: created.id, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, exchange_rate: rate, updated_by: userId } });
+      const document = dto.confirm ? await this.purchases.confirm(created.id, userId, undefined, tx) : created;
+      return { document, existing: false };
+    }, { timeout: 30_000 });
   }
 
   async disassociateQuote(operationId: string, quoteId: string) {
@@ -689,22 +775,21 @@ export class InternationalOperationsService {
     });
     if (!quote) throw new NotFoundException('Presupuesto no encontrado');
 
+    if (quote.converted_document_id) throw new BadRequestException('No se puede desasociar un presupuesto transformado; conserva el vínculo con el documento generado');
+
     return this.prisma.international_operation_quotes.delete({
       where: { id: quoteId },
     });
   }
 
-  async associatePurchaseOrder(operationId: string, documentId: string) {    await this.findOne(operationId);
+  async associatePurchaseOrder(operationId: string, documentId: string, containerId?: string, expenseType?: InternationalExpenseType, customExpenseDescription?: string, exchangeRate?: number) {
 
     const po = await this.prisma.orden_compra_documents.findFirst({
       where: { document_id: documentId },
     });
     if (!po) throw new NotFoundException('Orden de compra no encontrada');
 
-    return this.prisma.orden_compra_documents.update({
-      where: { document_id: documentId },
-      data: { international_operation_id: operationId },
-    });
+    return this.associateDocument(operationId, documentId, expenseType, containerId, customExpenseDescription, exchangeRate);
   }
 
   async disassociatePurchaseOrder(operationId: string, documentId: string) {

@@ -3,7 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateContainerDto } from './dto/create-container.dto';
 import { UpdateContainerDto } from './dto/update-container.dto';
 import { DocumentsPurchasesService } from '@/modules/erp/documents-purchases/documents_purchases.service';
-import { registerInternationalInvoiceInTransit } from '../international-stock';
+import { registerInternationalPurchaseInTransit } from '../international-stock';
 
 @Injectable()
 export class ContainersService {
@@ -16,7 +16,7 @@ export class ContainersService {
     return this.db.getClientForCurrentContext();
   }
 
-  private async syncTransitInvoices(tx: any, containerId: string, userId?: string) {
+  private async syncTransitPurchases(tx: any, containerId: string, userId?: string) {
     const merchandiseInvoices = await tx.international_operation_documents.findMany({
       where: {
         container_id: containerId,
@@ -24,18 +24,20 @@ export class ContainersService {
         document: {
           deleted_at: null,
           status: 2,
-          document_types: { category: 'INVOICE', direction: -1 },
+          document_types: { category: { in: ['ORDER', 'INVOICE'] }, direction: -1 },
         },
       },
-      select: { document_id: true },
+      select: { document_id: true, document: { select: { document_types: { select: { category: true } } } } },
     });
     let registered = 0;
+    let invoicesRegistered = 0;
     for (const relation of merchandiseInvoices) {
-      if (await registerInternationalInvoiceInTransit(tx, relation.document_id, containerId, userId)) {
+      if (await registerInternationalPurchaseInTransit(tx, relation.document_id, containerId, userId)) {
         registered += 1;
+        if (relation.document.document_types.category === 'INVOICE') invoicesRegistered++;
       }
     }
-    return { invoices_found: merchandiseInvoices.length, invoices_registered: registered };
+    return { documents_found: merchandiseInvoices.length, documents_registered: registered, invoices_found: merchandiseInvoices.filter(relation => relation.document.document_types.category === 'INVOICE').length, invoices_registered: invoicesRegistered };
   }
 
   async create(operationId: string, dto: CreateContainerDto) {
@@ -210,7 +212,7 @@ export class ContainersService {
       });
 
       if (dto.status && ['SHIPPED', 'IN_TRANSIT', 'ARRIVED', 'CUSTOMS', 'RELEASED'].includes(dto.status)) {
-        await this.syncTransitInvoices(tx, id, userId);
+        await this.syncTransitPurchases(tx, id, userId);
       }
 
       return updated;
@@ -224,7 +226,7 @@ export class ContainersService {
     }
     return this.prisma.$transaction(async (tx) => ({
       container_id: id,
-      ...(await this.syncTransitInvoices(tx, id, userId)),
+      ...(await this.syncTransitPurchases(tx, id, userId)),
     }));
   }
 
@@ -336,23 +338,29 @@ export class ContainersService {
 
   async remove(id: string) {
     const container = await this.findOne(id);
+    return this.prisma.$transaction(async tx => {
+    await tx.$queryRaw`SELECT id FROM tenant.international_operations WHERE id = ${container.operation_id}::uuid FOR UPDATE`;
+    const active = await tx.international_containers.findFirst({ where: { id, deleted_at: null }, select: { id: true } });
+    if (!active) throw new NotFoundException('Contenedor no encontrado');
 
-    const docsCount = await this.prisma.international_operation_documents.count({
+    const docsCount = await tx.international_operation_documents.count({
       where: { container_id: id },
     });
-    const paysCount = await this.prisma.international_operation_payments.count({
+    const paysCount = await tx.international_operation_payments.count({
       where: { container_id: id },
     });
+    const quotesCount = await tx.international_operation_quotes.count({ where: { container_id: id, deleted_at: null } });
 
-    if (docsCount > 0 || paysCount > 0) {
+    if (docsCount > 0 || paysCount > 0 || quotesCount > 0) {
       throw new BadRequestException(
-        `No se puede eliminar el contenedor ${container.container_number}: tiene ${docsCount} documento(s) y ${paysCount} pago(s) asociado(s). Desasocialos primero.`,
+        `No se puede eliminar el contenedor ${container.container_number}: tiene ${docsCount} documento(s), ${paysCount} pago(s) y ${quotesCount} presupuesto(s) asociado(s). Desasocialos primero.`,
       );
     }
 
-    return this.prisma.international_containers.update({
+    return tx.international_containers.update({
       where: { id },
       data: { deleted_at: new Date() },
+    });
     });
   }
 }

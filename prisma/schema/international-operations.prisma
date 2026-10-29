@@ -171,6 +171,11 @@ model international_operation_quotes {
   document_id  String      @unique @db.Uuid
   status       QuoteStatus @default(PENDING)
   notes        String?     @db.Text
+  container_id String?     @db.Uuid
+  expense_type InternationalExpenseType @default(MERCHANDISE)
+  custom_expense_description String? @db.VarChar(255)
+  exchange_rate Decimal? @db.Decimal(18, 6)
+  converted_document_id String? @unique @db.Uuid
   created_at   DateTime    @default(now()) @db.Timestamp(6)
   updated_at   DateTime?   @updatedAt @db.Timestamp(6)
   deleted_at   DateTime?
@@ -180,9 +185,12 @@ model international_operation_quotes {
 
   operation international_operations @relation(fields: [operation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   document  documents                @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  container international_containers? @relation(fields: [container_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  converted_document documents? @relation("converted_international_quote", fields: [converted_document_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
 
   @@index([operation_id], map: "idx_ioq_operation")
   @@index([status], map: "idx_ioq_status")
+  @@index([container_id, expense_type], map: "idx_ioq_container_expense")
   @@schema("tenant")
 }
 
@@ -221,6 +229,7 @@ model international_containers {
   destination_port_loc locations?                          @relation("ic_destination_port", fields: [destination_port_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   events               container_events[]
   container_documents  international_operation_documents[]
+  operation_quotes international_operation_quotes[]
   operation_payments   international_operation_payments[]
 
   @@index([operation_id], map: "idx_ic_operation")
