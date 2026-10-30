@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsOptional, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsEmail, IsOptional, MinLength, MaxLength, Matches, ValidateIf } from 'class-validator';
 
 export class UpdateCompanyUserDto {
   @IsOptional()
@@ -9,6 +9,13 @@ export class UpdateCompanyUserDto {
   @IsOptional()
   @IsEmail()
   email?: string;
+
+  @ValidateIf((_object, value) => value !== undefined && value !== null && String(value).trim() !== '')
+  @IsString()
+  @Matches(/^\+[1-9]\d{7,14}$/, {
+    message: 'Usá el formato internacional con + y código de país, por ejemplo +54911XXXXXXXX.',
+  })
+  whatsapp_phone?: string | null;
 }
 
 export class ChangeUserPasswordDto {

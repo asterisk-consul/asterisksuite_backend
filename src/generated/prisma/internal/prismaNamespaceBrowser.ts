@@ -149,6 +149,7 @@ export const ModelName = {
   system_modules: 'system_modules',
   locations: 'locations',
   user_notifications: 'user_notifications',
+  user_notification_alert_dismissals: 'user_notification_alert_dismissals',
   operation_taxes: 'operation_taxes',
   pallet_items: 'pallet_items',
   pallets: 'pallets',
@@ -184,6 +185,11 @@ export const ModelName = {
   user_table_preferences: 'user_table_preferences',
   company_whatsapp_report_settings: 'company_whatsapp_report_settings',
   company_whatsapp_report_runs: 'company_whatsapp_report_runs',
+  mcp_oauth_clients: 'mcp_oauth_clients',
+  mcp_oauth_pending_authorizations: 'mcp_oauth_pending_authorizations',
+  mcp_oauth_grants: 'mcp_oauth_grants',
+  mcp_oauth_codes: 'mcp_oauth_codes',
+  mcp_oauth_refresh_tokens: 'mcp_oauth_refresh_tokens',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -228,7 +234,11 @@ export const ModelName = {
   stock_reservation_allocations: 'stock_reservation_allocations',
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
-  stock_replenishment_policies: 'stock_replenishment_policies'
+  stock_replenishment_policies: 'stock_replenishment_policies',
+  user_whatsapp_contacts: 'user_whatsapp_contacts',
+  company_whatsapp_notification_settings: 'company_whatsapp_notification_settings',
+  whatsapp_notification_outbox: 'whatsapp_notification_outbox',
+  whatsapp_notification_dispatch_state: 'whatsapp_notification_dispatch_state'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2228,10 +2238,21 @@ export const User_notificationsScalarFieldEnum = {
   target_type: 'target_type',
   target_id: 'target_id',
   created_at: 'created_at',
-  read_at: 'read_at'
+  read_at: 'read_at',
+  dismissed_until: 'dismissed_until'
 } as const
 
 export type User_notificationsScalarFieldEnum = (typeof User_notificationsScalarFieldEnum)[keyof typeof User_notificationsScalarFieldEnum]
+
+
+export const User_notification_alert_dismissalsScalarFieldEnum = {
+  recipient_user_id: 'recipient_user_id',
+  alert_key: 'alert_key',
+  dismissed_until: 'dismissed_until',
+  created_at: 'created_at'
+} as const
+
+export type User_notification_alert_dismissalsScalarFieldEnum = (typeof User_notification_alert_dismissalsScalarFieldEnum)[keyof typeof User_notification_alert_dismissalsScalarFieldEnum]
 
 
 export const Operation_taxesScalarFieldEnum = {
@@ -2864,6 +2885,75 @@ export const Company_whatsapp_report_runsScalarFieldEnum = {
 } as const
 
 export type Company_whatsapp_report_runsScalarFieldEnum = (typeof Company_whatsapp_report_runsScalarFieldEnum)[keyof typeof Company_whatsapp_report_runsScalarFieldEnum]
+
+
+export const Mcp_oauth_clientsScalarFieldEnum = {
+  client_id: 'client_id',
+  client_info: 'client_info',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Mcp_oauth_clientsScalarFieldEnum = (typeof Mcp_oauth_clientsScalarFieldEnum)[keyof typeof Mcp_oauth_clientsScalarFieldEnum]
+
+
+export const Mcp_oauth_pending_authorizationsScalarFieldEnum = {
+  id: 'id',
+  client_id: 'client_id',
+  redirect_uri: 'redirect_uri',
+  requested_state: 'requested_state',
+  code_challenge: 'code_challenge',
+  requested_scopes: 'requested_scopes',
+  resource: 'resource',
+  expires_at: 'expires_at',
+  consumed_at: 'consumed_at',
+  created_at: 'created_at'
+} as const
+
+export type Mcp_oauth_pending_authorizationsScalarFieldEnum = (typeof Mcp_oauth_pending_authorizationsScalarFieldEnum)[keyof typeof Mcp_oauth_pending_authorizationsScalarFieldEnum]
+
+
+export const Mcp_oauth_grantsScalarFieldEnum = {
+  id: 'id',
+  client_id: 'client_id',
+  user_id: 'user_id',
+  company_id: 'company_id',
+  scopes: 'scopes',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Mcp_oauth_grantsScalarFieldEnum = (typeof Mcp_oauth_grantsScalarFieldEnum)[keyof typeof Mcp_oauth_grantsScalarFieldEnum]
+
+
+export const Mcp_oauth_codesScalarFieldEnum = {
+  code_hash: 'code_hash',
+  grant_id: 'grant_id',
+  client_id: 'client_id',
+  redirect_uri: 'redirect_uri',
+  code_challenge: 'code_challenge',
+  scopes: 'scopes',
+  resource: 'resource',
+  expires_at: 'expires_at',
+  consumed_at: 'consumed_at',
+  created_at: 'created_at'
+} as const
+
+export type Mcp_oauth_codesScalarFieldEnum = (typeof Mcp_oauth_codesScalarFieldEnum)[keyof typeof Mcp_oauth_codesScalarFieldEnum]
+
+
+export const Mcp_oauth_refresh_tokensScalarFieldEnum = {
+  id: 'id',
+  grant_id: 'grant_id',
+  token_hash: 'token_hash',
+  scopes: 'scopes',
+  expires_at: 'expires_at',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at'
+} as const
+
+export type Mcp_oauth_refresh_tokensScalarFieldEnum = (typeof Mcp_oauth_refresh_tokensScalarFieldEnum)[keyof typeof Mcp_oauth_refresh_tokensScalarFieldEnum]
 
 
 export const PermissionsScalarFieldEnum = {
@@ -3910,6 +4000,71 @@ export const Stock_replenishment_policiesScalarFieldEnum = {
 } as const
 
 export type Stock_replenishment_policiesScalarFieldEnum = (typeof Stock_replenishment_policiesScalarFieldEnum)[keyof typeof Stock_replenishment_policiesScalarFieldEnum]
+
+
+export const User_whatsapp_contactsScalarFieldEnum = {
+  user_id: 'user_id',
+  phone_e164: 'phone_e164',
+  opted_in: 'opted_in',
+  consent_at: 'consent_at',
+  updated_at: 'updated_at'
+} as const
+
+export type User_whatsapp_contactsScalarFieldEnum = (typeof User_whatsapp_contactsScalarFieldEnum)[keyof typeof User_whatsapp_contactsScalarFieldEnum]
+
+
+export const Company_whatsapp_notification_settingsScalarFieldEnum = {
+  company_id: 'company_id',
+  enabled: 'enabled',
+  assignments_enabled: 'assignments_enabled',
+  customer_balances_enabled: 'customer_balances_enabled',
+  customer_balance_recipient_ids: 'customer_balance_recipient_ids',
+  supplier_balances_enabled: 'supplier_balances_enabled',
+  supplier_balance_recipient_ids: 'supplier_balance_recipient_ids',
+  checks_enabled: 'checks_enabled',
+  check_recipient_ids: 'check_recipient_ids',
+  min_interval_seconds: 'min_interval_seconds',
+  batch_window_seconds: 'batch_window_seconds',
+  configured_by: 'configured_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_whatsapp_notification_settingsScalarFieldEnum = (typeof Company_whatsapp_notification_settingsScalarFieldEnum)[keyof typeof Company_whatsapp_notification_settingsScalarFieldEnum]
+
+
+export const Whatsapp_notification_outboxScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  recipient_user_id: 'recipient_user_id',
+  recipient_phone: 'recipient_phone',
+  event_type: 'event_type',
+  title: 'title',
+  message: 'message',
+  target_path: 'target_path',
+  deduplication_key: 'deduplication_key',
+  status: 'status',
+  attempt_count: 'attempt_count',
+  available_at: 'available_at',
+  locked_at: 'locked_at',
+  sent_at: 'sent_at',
+  provider_message_id: 'provider_message_id',
+  last_error: 'last_error',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Whatsapp_notification_outboxScalarFieldEnum = (typeof Whatsapp_notification_outboxScalarFieldEnum)[keyof typeof Whatsapp_notification_outboxScalarFieldEnum]
+
+
+export const Whatsapp_notification_dispatch_stateScalarFieldEnum = {
+  id: 'id',
+  next_send_at: 'next_send_at',
+  locked_until: 'locked_until',
+  updated_at: 'updated_at'
+} as const
+
+export type Whatsapp_notification_dispatch_stateScalarFieldEnum = (typeof Whatsapp_notification_dispatch_stateScalarFieldEnum)[keyof typeof Whatsapp_notification_dispatch_stateScalarFieldEnum]
 
 
 export const SortOrder = {

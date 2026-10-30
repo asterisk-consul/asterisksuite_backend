@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
@@ -8,7 +10,10 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class EmployeesService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly whatsAppNotifications: WhatsAppNotificationsService,
+  ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
   }
@@ -25,10 +30,15 @@ export class EmployeesService {
     await assertPartyIdentityIsUnique(this.prisma, [dto.document_number, dto.tax_id], { partyId: dto.party_id });
 
     let finalUserId = dto.user_id;
+    const preparedWhatsAppPhone = dto.create_user
+      ? await this.whatsAppNotifications.prepareManagedPhone(dto.create_user.whatsapp_phone)
+      : null;
 
     // Crear usuario en public.users si se solicita
     if (dto.create_user) {
       const publicPrisma = this.db.getDefaultClient();
+      const companyId = getCurrentCompanyId();
+      if (!companyId) throw new BadRequestException('No se pudo determinar la empresa actual para crear el acceso.');
 
       const existing = await publicPrisma.users.findUnique({
         where: { email: dto.create_user.email },
@@ -47,7 +57,14 @@ export class EmployeesService {
         },
       });
 
+      await publicPrisma.company_users.create({
+        data: { company_id: companyId, user_id: newUser.id, role: 'USER' },
+      });
+
       finalUserId = newUser.id;
+      if (preparedWhatsAppPhone) {
+        await this.whatsAppNotifications.saveManagedPhone(newUser.id, preparedWhatsAppPhone);
+      }
     }
 
     // Auto-crear business_party si no se provee party_id

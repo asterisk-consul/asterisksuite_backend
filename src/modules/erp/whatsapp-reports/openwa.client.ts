@@ -16,20 +16,24 @@ export class OpenWaClient {
     const baseUrl = process.env.OPENWA_BASE_URL?.trim();
     const apiKey = process.env.OPENWA_API_KEY?.trim();
     const sessionId = process.env.OPENWA_SESSION_ID?.trim();
-    const gatewayEnabled = process.env.WHATSAPP_REPORTS_ENABLED?.toLowerCase() === 'true';
+    const reportsEnabled = process.env.WHATSAPP_REPORTS_ENABLED?.trim().toLowerCase() === 'true';
+    const notificationDeliveryEnabled = process.env.WHATSAPP_NOTIFICATIONS_ENABLED?.trim().toLowerCase() === 'true';
 
     return {
-      gatewayEnabled,
+      gatewayEnabled: reportsEnabled,
+      reportsEnabled,
+      notificationDeliveryEnabled,
       configured: Boolean(baseUrl && apiKey && sessionId),
       apiKeyConfigured: Boolean(apiKey),
       sessionConfigured: Boolean(sessionId),
     };
   }
 
-  assertReady() {
+  assertReady(feature: 'reports' | 'notifications' = 'reports') {
     const status = this.getStatus();
-    if (!status.gatewayEnabled) {
-      throw new ServiceUnavailableException('La integración de reportes por WhatsApp está desactivada en el backend.');
+    const enabled = feature === 'reports' ? status.reportsEnabled : status.notificationDeliveryEnabled;
+    if (!enabled) {
+      throw new ServiceUnavailableException(`Los envíos de WhatsApp para ${feature === 'reports' ? 'reportes' : 'avisos'} están desactivados en el backend.`);
     }
     if (!status.configured) {
       throw new ServiceUnavailableException('Falta configurar OPENWA_BASE_URL, OPENWA_API_KEY u OPENWA_SESSION_ID en el backend.');
@@ -52,7 +56,16 @@ export class OpenWaClient {
   }
 
   async sendTestText(chatId: string, text: string, idempotencyKey: string) {
-    this.assertReady();
+    this.assertReady('reports');
+    return this.sendTextRequest(chatId, text, idempotencyKey);
+  }
+
+  async sendText(chatId: string, text: string, idempotencyKey: string) {
+    this.assertReady('notifications');
+    return this.sendTextRequest(chatId, text, idempotencyKey);
+  }
+
+  private async sendTextRequest(chatId: string, text: string, idempotencyKey: string) {
     const sessionId = encodeURIComponent(process.env.OPENWA_SESSION_ID!.trim());
     return this.request<OpenWaSendResult>(
       `sessions/${sessionId}/messages/send-text`,
@@ -70,7 +83,7 @@ export class OpenWaClient {
     pdf: Buffer,
     idempotencyKey: string,
   ) {
-    this.assertReady();
+    this.assertReady('reports');
     const gatewayLimitBytes = 50 * 1024 * 1024;
     const configuredLimit = Number(process.env.OPENWA_MAX_REPORT_PDF_BYTES ?? 15 * 1024 * 1024);
     const maxBytes = Number.isFinite(configuredLimit) && configuredLimit > 0

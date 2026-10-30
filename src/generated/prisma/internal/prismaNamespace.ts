@@ -482,6 +482,7 @@ export const ModelName = {
   system_modules: 'system_modules',
   locations: 'locations',
   user_notifications: 'user_notifications',
+  user_notification_alert_dismissals: 'user_notification_alert_dismissals',
   operation_taxes: 'operation_taxes',
   pallet_items: 'pallet_items',
   pallets: 'pallets',
@@ -517,6 +518,11 @@ export const ModelName = {
   user_table_preferences: 'user_table_preferences',
   company_whatsapp_report_settings: 'company_whatsapp_report_settings',
   company_whatsapp_report_runs: 'company_whatsapp_report_runs',
+  mcp_oauth_clients: 'mcp_oauth_clients',
+  mcp_oauth_pending_authorizations: 'mcp_oauth_pending_authorizations',
+  mcp_oauth_grants: 'mcp_oauth_grants',
+  mcp_oauth_codes: 'mcp_oauth_codes',
+  mcp_oauth_refresh_tokens: 'mcp_oauth_refresh_tokens',
   permissions: 'permissions',
   business_roles: 'business_roles',
   business_role_permissions: 'business_role_permissions',
@@ -561,7 +567,11 @@ export const ModelName = {
   stock_reservation_allocations: 'stock_reservation_allocations',
   warehouse_stock_movements: 'warehouse_stock_movements',
   warehouses: 'warehouses',
-  stock_replenishment_policies: 'stock_replenishment_policies'
+  stock_replenishment_policies: 'stock_replenishment_policies',
+  user_whatsapp_contacts: 'user_whatsapp_contacts',
+  company_whatsapp_notification_settings: 'company_whatsapp_notification_settings',
+  whatsapp_notification_outbox: 'whatsapp_notification_outbox',
+  whatsapp_notification_dispatch_state: 'whatsapp_notification_dispatch_state'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -577,7 +587,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "company_tax_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -7833,6 +7843,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    user_notification_alert_dismissals: {
+      payload: Prisma.$user_notification_alert_dismissalsPayload<ExtArgs>
+      fields: Prisma.user_notification_alert_dismissalsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.user_notification_alert_dismissalsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.user_notification_alert_dismissalsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>
+        }
+        findFirst: {
+          args: Prisma.user_notification_alert_dismissalsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.user_notification_alert_dismissalsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>
+        }
+        findMany: {
+          args: Prisma.user_notification_alert_dismissalsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>[]
+        }
+        create: {
+          args: Prisma.user_notification_alert_dismissalsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>
+        }
+        createMany: {
+          args: Prisma.user_notification_alert_dismissalsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.user_notification_alert_dismissalsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>[]
+        }
+        delete: {
+          args: Prisma.user_notification_alert_dismissalsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>
+        }
+        update: {
+          args: Prisma.user_notification_alert_dismissalsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>
+        }
+        deleteMany: {
+          args: Prisma.user_notification_alert_dismissalsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.user_notification_alert_dismissalsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.user_notification_alert_dismissalsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>[]
+        }
+        upsert: {
+          args: Prisma.user_notification_alert_dismissalsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_notification_alert_dismissalsPayload>
+        }
+        aggregate: {
+          args: Prisma.User_notification_alert_dismissalsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUser_notification_alert_dismissals>
+        }
+        groupBy: {
+          args: Prisma.user_notification_alert_dismissalsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_notification_alert_dismissalsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.user_notification_alert_dismissalsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_notification_alert_dismissalsCountAggregateOutputType> | number
+        }
+      }
+    }
     operation_taxes: {
       payload: Prisma.$operation_taxesPayload<ExtArgs>
       fields: Prisma.operation_taxesFieldRefs
@@ -10420,6 +10504,376 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.company_whatsapp_report_runsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_report_runsCountAggregateOutputType> | number
+        }
+      }
+    }
+    mcp_oauth_clients: {
+      payload: Prisma.$mcp_oauth_clientsPayload<ExtArgs>
+      fields: Prisma.mcp_oauth_clientsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.mcp_oauth_clientsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.mcp_oauth_clientsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>
+        }
+        findFirst: {
+          args: Prisma.mcp_oauth_clientsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.mcp_oauth_clientsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>
+        }
+        findMany: {
+          args: Prisma.mcp_oauth_clientsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>[]
+        }
+        create: {
+          args: Prisma.mcp_oauth_clientsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>
+        }
+        createMany: {
+          args: Prisma.mcp_oauth_clientsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.mcp_oauth_clientsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>[]
+        }
+        delete: {
+          args: Prisma.mcp_oauth_clientsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>
+        }
+        update: {
+          args: Prisma.mcp_oauth_clientsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>
+        }
+        deleteMany: {
+          args: Prisma.mcp_oauth_clientsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.mcp_oauth_clientsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.mcp_oauth_clientsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>[]
+        }
+        upsert: {
+          args: Prisma.mcp_oauth_clientsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_clientsPayload>
+        }
+        aggregate: {
+          args: Prisma.Mcp_oauth_clientsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMcp_oauth_clients>
+        }
+        groupBy: {
+          args: Prisma.mcp_oauth_clientsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_clientsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.mcp_oauth_clientsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_clientsCountAggregateOutputType> | number
+        }
+      }
+    }
+    mcp_oauth_pending_authorizations: {
+      payload: Prisma.$mcp_oauth_pending_authorizationsPayload<ExtArgs>
+      fields: Prisma.mcp_oauth_pending_authorizationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.mcp_oauth_pending_authorizationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.mcp_oauth_pending_authorizationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>
+        }
+        findFirst: {
+          args: Prisma.mcp_oauth_pending_authorizationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.mcp_oauth_pending_authorizationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>
+        }
+        findMany: {
+          args: Prisma.mcp_oauth_pending_authorizationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>[]
+        }
+        create: {
+          args: Prisma.mcp_oauth_pending_authorizationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>
+        }
+        createMany: {
+          args: Prisma.mcp_oauth_pending_authorizationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.mcp_oauth_pending_authorizationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>[]
+        }
+        delete: {
+          args: Prisma.mcp_oauth_pending_authorizationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>
+        }
+        update: {
+          args: Prisma.mcp_oauth_pending_authorizationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.mcp_oauth_pending_authorizationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.mcp_oauth_pending_authorizationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.mcp_oauth_pending_authorizationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.mcp_oauth_pending_authorizationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_pending_authorizationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Mcp_oauth_pending_authorizationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMcp_oauth_pending_authorizations>
+        }
+        groupBy: {
+          args: Prisma.mcp_oauth_pending_authorizationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_pending_authorizationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.mcp_oauth_pending_authorizationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_pending_authorizationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    mcp_oauth_grants: {
+      payload: Prisma.$mcp_oauth_grantsPayload<ExtArgs>
+      fields: Prisma.mcp_oauth_grantsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.mcp_oauth_grantsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.mcp_oauth_grantsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>
+        }
+        findFirst: {
+          args: Prisma.mcp_oauth_grantsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.mcp_oauth_grantsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>
+        }
+        findMany: {
+          args: Prisma.mcp_oauth_grantsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>[]
+        }
+        create: {
+          args: Prisma.mcp_oauth_grantsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>
+        }
+        createMany: {
+          args: Prisma.mcp_oauth_grantsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.mcp_oauth_grantsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>[]
+        }
+        delete: {
+          args: Prisma.mcp_oauth_grantsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>
+        }
+        update: {
+          args: Prisma.mcp_oauth_grantsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>
+        }
+        deleteMany: {
+          args: Prisma.mcp_oauth_grantsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.mcp_oauth_grantsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.mcp_oauth_grantsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>[]
+        }
+        upsert: {
+          args: Prisma.mcp_oauth_grantsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_grantsPayload>
+        }
+        aggregate: {
+          args: Prisma.Mcp_oauth_grantsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMcp_oauth_grants>
+        }
+        groupBy: {
+          args: Prisma.mcp_oauth_grantsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_grantsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.mcp_oauth_grantsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_grantsCountAggregateOutputType> | number
+        }
+      }
+    }
+    mcp_oauth_codes: {
+      payload: Prisma.$mcp_oauth_codesPayload<ExtArgs>
+      fields: Prisma.mcp_oauth_codesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.mcp_oauth_codesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.mcp_oauth_codesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>
+        }
+        findFirst: {
+          args: Prisma.mcp_oauth_codesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.mcp_oauth_codesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>
+        }
+        findMany: {
+          args: Prisma.mcp_oauth_codesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>[]
+        }
+        create: {
+          args: Prisma.mcp_oauth_codesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>
+        }
+        createMany: {
+          args: Prisma.mcp_oauth_codesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.mcp_oauth_codesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>[]
+        }
+        delete: {
+          args: Prisma.mcp_oauth_codesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>
+        }
+        update: {
+          args: Prisma.mcp_oauth_codesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>
+        }
+        deleteMany: {
+          args: Prisma.mcp_oauth_codesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.mcp_oauth_codesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.mcp_oauth_codesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>[]
+        }
+        upsert: {
+          args: Prisma.mcp_oauth_codesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_codesPayload>
+        }
+        aggregate: {
+          args: Prisma.Mcp_oauth_codesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMcp_oauth_codes>
+        }
+        groupBy: {
+          args: Prisma.mcp_oauth_codesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_codesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.mcp_oauth_codesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_codesCountAggregateOutputType> | number
+        }
+      }
+    }
+    mcp_oauth_refresh_tokens: {
+      payload: Prisma.$mcp_oauth_refresh_tokensPayload<ExtArgs>
+      fields: Prisma.mcp_oauth_refresh_tokensFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.mcp_oauth_refresh_tokensFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.mcp_oauth_refresh_tokensFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>
+        }
+        findFirst: {
+          args: Prisma.mcp_oauth_refresh_tokensFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.mcp_oauth_refresh_tokensFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>
+        }
+        findMany: {
+          args: Prisma.mcp_oauth_refresh_tokensFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>[]
+        }
+        create: {
+          args: Prisma.mcp_oauth_refresh_tokensCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>
+        }
+        createMany: {
+          args: Prisma.mcp_oauth_refresh_tokensCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.mcp_oauth_refresh_tokensCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>[]
+        }
+        delete: {
+          args: Prisma.mcp_oauth_refresh_tokensDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>
+        }
+        update: {
+          args: Prisma.mcp_oauth_refresh_tokensUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>
+        }
+        deleteMany: {
+          args: Prisma.mcp_oauth_refresh_tokensDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.mcp_oauth_refresh_tokensUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.mcp_oauth_refresh_tokensUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>[]
+        }
+        upsert: {
+          args: Prisma.mcp_oauth_refresh_tokensUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mcp_oauth_refresh_tokensPayload>
+        }
+        aggregate: {
+          args: Prisma.Mcp_oauth_refresh_tokensAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMcp_oauth_refresh_tokens>
+        }
+        groupBy: {
+          args: Prisma.mcp_oauth_refresh_tokensGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_refresh_tokensGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.mcp_oauth_refresh_tokensCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Mcp_oauth_refresh_tokensCountAggregateOutputType> | number
         }
       }
     }
@@ -13753,6 +14207,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    user_whatsapp_contacts: {
+      payload: Prisma.$user_whatsapp_contactsPayload<ExtArgs>
+      fields: Prisma.user_whatsapp_contactsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.user_whatsapp_contactsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.user_whatsapp_contactsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>
+        }
+        findFirst: {
+          args: Prisma.user_whatsapp_contactsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.user_whatsapp_contactsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>
+        }
+        findMany: {
+          args: Prisma.user_whatsapp_contactsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>[]
+        }
+        create: {
+          args: Prisma.user_whatsapp_contactsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>
+        }
+        createMany: {
+          args: Prisma.user_whatsapp_contactsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.user_whatsapp_contactsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>[]
+        }
+        delete: {
+          args: Prisma.user_whatsapp_contactsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>
+        }
+        update: {
+          args: Prisma.user_whatsapp_contactsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>
+        }
+        deleteMany: {
+          args: Prisma.user_whatsapp_contactsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.user_whatsapp_contactsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.user_whatsapp_contactsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>[]
+        }
+        upsert: {
+          args: Prisma.user_whatsapp_contactsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$user_whatsapp_contactsPayload>
+        }
+        aggregate: {
+          args: Prisma.User_whatsapp_contactsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUser_whatsapp_contacts>
+        }
+        groupBy: {
+          args: Prisma.user_whatsapp_contactsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_whatsapp_contactsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.user_whatsapp_contactsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.User_whatsapp_contactsCountAggregateOutputType> | number
+        }
+      }
+    }
+    company_whatsapp_notification_settings: {
+      payload: Prisma.$company_whatsapp_notification_settingsPayload<ExtArgs>
+      fields: Prisma.company_whatsapp_notification_settingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.company_whatsapp_notification_settingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.company_whatsapp_notification_settingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>
+        }
+        findFirst: {
+          args: Prisma.company_whatsapp_notification_settingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.company_whatsapp_notification_settingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>
+        }
+        findMany: {
+          args: Prisma.company_whatsapp_notification_settingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>[]
+        }
+        create: {
+          args: Prisma.company_whatsapp_notification_settingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>
+        }
+        createMany: {
+          args: Prisma.company_whatsapp_notification_settingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.company_whatsapp_notification_settingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>[]
+        }
+        delete: {
+          args: Prisma.company_whatsapp_notification_settingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>
+        }
+        update: {
+          args: Prisma.company_whatsapp_notification_settingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.company_whatsapp_notification_settingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.company_whatsapp_notification_settingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.company_whatsapp_notification_settingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.company_whatsapp_notification_settingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$company_whatsapp_notification_settingsPayload>
+        }
+        aggregate: {
+          args: Prisma.Company_whatsapp_notification_settingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompany_whatsapp_notification_settings>
+        }
+        groupBy: {
+          args: Prisma.company_whatsapp_notification_settingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_notification_settingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.company_whatsapp_notification_settingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Company_whatsapp_notification_settingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    whatsapp_notification_outbox: {
+      payload: Prisma.$whatsapp_notification_outboxPayload<ExtArgs>
+      fields: Prisma.whatsapp_notification_outboxFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.whatsapp_notification_outboxFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.whatsapp_notification_outboxFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>
+        }
+        findFirst: {
+          args: Prisma.whatsapp_notification_outboxFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.whatsapp_notification_outboxFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>
+        }
+        findMany: {
+          args: Prisma.whatsapp_notification_outboxFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>[]
+        }
+        create: {
+          args: Prisma.whatsapp_notification_outboxCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>
+        }
+        createMany: {
+          args: Prisma.whatsapp_notification_outboxCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.whatsapp_notification_outboxCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>[]
+        }
+        delete: {
+          args: Prisma.whatsapp_notification_outboxDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>
+        }
+        update: {
+          args: Prisma.whatsapp_notification_outboxUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>
+        }
+        deleteMany: {
+          args: Prisma.whatsapp_notification_outboxDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.whatsapp_notification_outboxUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.whatsapp_notification_outboxUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>[]
+        }
+        upsert: {
+          args: Prisma.whatsapp_notification_outboxUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_outboxPayload>
+        }
+        aggregate: {
+          args: Prisma.Whatsapp_notification_outboxAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsapp_notification_outbox>
+        }
+        groupBy: {
+          args: Prisma.whatsapp_notification_outboxGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Whatsapp_notification_outboxGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.whatsapp_notification_outboxCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Whatsapp_notification_outboxCountAggregateOutputType> | number
+        }
+      }
+    }
+    whatsapp_notification_dispatch_state: {
+      payload: Prisma.$whatsapp_notification_dispatch_statePayload<ExtArgs>
+      fields: Prisma.whatsapp_notification_dispatch_stateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.whatsapp_notification_dispatch_stateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.whatsapp_notification_dispatch_stateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>
+        }
+        findFirst: {
+          args: Prisma.whatsapp_notification_dispatch_stateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.whatsapp_notification_dispatch_stateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>
+        }
+        findMany: {
+          args: Prisma.whatsapp_notification_dispatch_stateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>[]
+        }
+        create: {
+          args: Prisma.whatsapp_notification_dispatch_stateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>
+        }
+        createMany: {
+          args: Prisma.whatsapp_notification_dispatch_stateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.whatsapp_notification_dispatch_stateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>[]
+        }
+        delete: {
+          args: Prisma.whatsapp_notification_dispatch_stateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>
+        }
+        update: {
+          args: Prisma.whatsapp_notification_dispatch_stateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>
+        }
+        deleteMany: {
+          args: Prisma.whatsapp_notification_dispatch_stateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.whatsapp_notification_dispatch_stateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.whatsapp_notification_dispatch_stateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>[]
+        }
+        upsert: {
+          args: Prisma.whatsapp_notification_dispatch_stateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$whatsapp_notification_dispatch_statePayload>
+        }
+        aggregate: {
+          args: Prisma.Whatsapp_notification_dispatch_stateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsapp_notification_dispatch_state>
+        }
+        groupBy: {
+          args: Prisma.whatsapp_notification_dispatch_stateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Whatsapp_notification_dispatch_stateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.whatsapp_notification_dispatch_stateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Whatsapp_notification_dispatch_stateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -15773,10 +16523,21 @@ export const User_notificationsScalarFieldEnum = {
   target_type: 'target_type',
   target_id: 'target_id',
   created_at: 'created_at',
-  read_at: 'read_at'
+  read_at: 'read_at',
+  dismissed_until: 'dismissed_until'
 } as const
 
 export type User_notificationsScalarFieldEnum = (typeof User_notificationsScalarFieldEnum)[keyof typeof User_notificationsScalarFieldEnum]
+
+
+export const User_notification_alert_dismissalsScalarFieldEnum = {
+  recipient_user_id: 'recipient_user_id',
+  alert_key: 'alert_key',
+  dismissed_until: 'dismissed_until',
+  created_at: 'created_at'
+} as const
+
+export type User_notification_alert_dismissalsScalarFieldEnum = (typeof User_notification_alert_dismissalsScalarFieldEnum)[keyof typeof User_notification_alert_dismissalsScalarFieldEnum]
 
 
 export const Operation_taxesScalarFieldEnum = {
@@ -16409,6 +17170,75 @@ export const Company_whatsapp_report_runsScalarFieldEnum = {
 } as const
 
 export type Company_whatsapp_report_runsScalarFieldEnum = (typeof Company_whatsapp_report_runsScalarFieldEnum)[keyof typeof Company_whatsapp_report_runsScalarFieldEnum]
+
+
+export const Mcp_oauth_clientsScalarFieldEnum = {
+  client_id: 'client_id',
+  client_info: 'client_info',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Mcp_oauth_clientsScalarFieldEnum = (typeof Mcp_oauth_clientsScalarFieldEnum)[keyof typeof Mcp_oauth_clientsScalarFieldEnum]
+
+
+export const Mcp_oauth_pending_authorizationsScalarFieldEnum = {
+  id: 'id',
+  client_id: 'client_id',
+  redirect_uri: 'redirect_uri',
+  requested_state: 'requested_state',
+  code_challenge: 'code_challenge',
+  requested_scopes: 'requested_scopes',
+  resource: 'resource',
+  expires_at: 'expires_at',
+  consumed_at: 'consumed_at',
+  created_at: 'created_at'
+} as const
+
+export type Mcp_oauth_pending_authorizationsScalarFieldEnum = (typeof Mcp_oauth_pending_authorizationsScalarFieldEnum)[keyof typeof Mcp_oauth_pending_authorizationsScalarFieldEnum]
+
+
+export const Mcp_oauth_grantsScalarFieldEnum = {
+  id: 'id',
+  client_id: 'client_id',
+  user_id: 'user_id',
+  company_id: 'company_id',
+  scopes: 'scopes',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Mcp_oauth_grantsScalarFieldEnum = (typeof Mcp_oauth_grantsScalarFieldEnum)[keyof typeof Mcp_oauth_grantsScalarFieldEnum]
+
+
+export const Mcp_oauth_codesScalarFieldEnum = {
+  code_hash: 'code_hash',
+  grant_id: 'grant_id',
+  client_id: 'client_id',
+  redirect_uri: 'redirect_uri',
+  code_challenge: 'code_challenge',
+  scopes: 'scopes',
+  resource: 'resource',
+  expires_at: 'expires_at',
+  consumed_at: 'consumed_at',
+  created_at: 'created_at'
+} as const
+
+export type Mcp_oauth_codesScalarFieldEnum = (typeof Mcp_oauth_codesScalarFieldEnum)[keyof typeof Mcp_oauth_codesScalarFieldEnum]
+
+
+export const Mcp_oauth_refresh_tokensScalarFieldEnum = {
+  id: 'id',
+  grant_id: 'grant_id',
+  token_hash: 'token_hash',
+  scopes: 'scopes',
+  expires_at: 'expires_at',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at'
+} as const
+
+export type Mcp_oauth_refresh_tokensScalarFieldEnum = (typeof Mcp_oauth_refresh_tokensScalarFieldEnum)[keyof typeof Mcp_oauth_refresh_tokensScalarFieldEnum]
 
 
 export const PermissionsScalarFieldEnum = {
@@ -17455,6 +18285,71 @@ export const Stock_replenishment_policiesScalarFieldEnum = {
 } as const
 
 export type Stock_replenishment_policiesScalarFieldEnum = (typeof Stock_replenishment_policiesScalarFieldEnum)[keyof typeof Stock_replenishment_policiesScalarFieldEnum]
+
+
+export const User_whatsapp_contactsScalarFieldEnum = {
+  user_id: 'user_id',
+  phone_e164: 'phone_e164',
+  opted_in: 'opted_in',
+  consent_at: 'consent_at',
+  updated_at: 'updated_at'
+} as const
+
+export type User_whatsapp_contactsScalarFieldEnum = (typeof User_whatsapp_contactsScalarFieldEnum)[keyof typeof User_whatsapp_contactsScalarFieldEnum]
+
+
+export const Company_whatsapp_notification_settingsScalarFieldEnum = {
+  company_id: 'company_id',
+  enabled: 'enabled',
+  assignments_enabled: 'assignments_enabled',
+  customer_balances_enabled: 'customer_balances_enabled',
+  customer_balance_recipient_ids: 'customer_balance_recipient_ids',
+  supplier_balances_enabled: 'supplier_balances_enabled',
+  supplier_balance_recipient_ids: 'supplier_balance_recipient_ids',
+  checks_enabled: 'checks_enabled',
+  check_recipient_ids: 'check_recipient_ids',
+  min_interval_seconds: 'min_interval_seconds',
+  batch_window_seconds: 'batch_window_seconds',
+  configured_by: 'configured_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_whatsapp_notification_settingsScalarFieldEnum = (typeof Company_whatsapp_notification_settingsScalarFieldEnum)[keyof typeof Company_whatsapp_notification_settingsScalarFieldEnum]
+
+
+export const Whatsapp_notification_outboxScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  recipient_user_id: 'recipient_user_id',
+  recipient_phone: 'recipient_phone',
+  event_type: 'event_type',
+  title: 'title',
+  message: 'message',
+  target_path: 'target_path',
+  deduplication_key: 'deduplication_key',
+  status: 'status',
+  attempt_count: 'attempt_count',
+  available_at: 'available_at',
+  locked_at: 'locked_at',
+  sent_at: 'sent_at',
+  provider_message_id: 'provider_message_id',
+  last_error: 'last_error',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Whatsapp_notification_outboxScalarFieldEnum = (typeof Whatsapp_notification_outboxScalarFieldEnum)[keyof typeof Whatsapp_notification_outboxScalarFieldEnum]
+
+
+export const Whatsapp_notification_dispatch_stateScalarFieldEnum = {
+  id: 'id',
+  next_send_at: 'next_send_at',
+  locked_until: 'locked_until',
+  updated_at: 'updated_at'
+} as const
+
+export type Whatsapp_notification_dispatch_stateScalarFieldEnum = (typeof Whatsapp_notification_dispatch_stateScalarFieldEnum)[keyof typeof Whatsapp_notification_dispatch_stateScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -18816,6 +19711,7 @@ export type GlobalOmitConfig = {
   system_modules?: Prisma.system_modulesOmit
   locations?: Prisma.locationsOmit
   user_notifications?: Prisma.user_notificationsOmit
+  user_notification_alert_dismissals?: Prisma.user_notification_alert_dismissalsOmit
   operation_taxes?: Prisma.operation_taxesOmit
   pallet_items?: Prisma.pallet_itemsOmit
   pallets?: Prisma.palletsOmit
@@ -18851,6 +19747,11 @@ export type GlobalOmitConfig = {
   user_table_preferences?: Prisma.user_table_preferencesOmit
   company_whatsapp_report_settings?: Prisma.company_whatsapp_report_settingsOmit
   company_whatsapp_report_runs?: Prisma.company_whatsapp_report_runsOmit
+  mcp_oauth_clients?: Prisma.mcp_oauth_clientsOmit
+  mcp_oauth_pending_authorizations?: Prisma.mcp_oauth_pending_authorizationsOmit
+  mcp_oauth_grants?: Prisma.mcp_oauth_grantsOmit
+  mcp_oauth_codes?: Prisma.mcp_oauth_codesOmit
+  mcp_oauth_refresh_tokens?: Prisma.mcp_oauth_refresh_tokensOmit
   permissions?: Prisma.permissionsOmit
   business_roles?: Prisma.business_rolesOmit
   business_role_permissions?: Prisma.business_role_permissionsOmit
@@ -18896,6 +19797,10 @@ export type GlobalOmitConfig = {
   warehouse_stock_movements?: Prisma.warehouse_stock_movementsOmit
   warehouses?: Prisma.warehousesOmit
   stock_replenishment_policies?: Prisma.stock_replenishment_policiesOmit
+  user_whatsapp_contacts?: Prisma.user_whatsapp_contactsOmit
+  company_whatsapp_notification_settings?: Prisma.company_whatsapp_notification_settingsOmit
+  whatsapp_notification_outbox?: Prisma.whatsapp_notification_outboxOmit
+  whatsapp_notification_dispatch_state?: Prisma.whatsapp_notification_dispatch_stateOmit
 }
 
 /* Types for Logging */

@@ -1221,6 +1221,7 @@ export class DocumentsPurchasesService {
           converted_total: d.converted_total ? Number(d.converted_total) : null,
           party_id: d.party_id,
           party_name: d.business_parties?.name ?? null,
+          reference: d.ref ?? null,
           party_type: d.business_parties?.type ?? null,
           document_type_code: d.document_types?.code ?? null,
           document_type_description: d.document_types?.description ?? null,

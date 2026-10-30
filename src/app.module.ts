@@ -11,6 +11,7 @@ import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { TenantAccessGuard } from './common/guards/tenant-access.guard';
 import { PermissionsGuard } from './access-control/guards/permissions.guard';
 import { CombinedGuard } from './common/guards/combined.guard';
+import { McpModule } from './modules/mcp/mcp.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CombinedGuard } from './common/guards/combined.guard';
     AccessControlModule,
     DataImportModule,
     ModulesModule,
+    McpModule,
   ],
   providers: [
     TenantAccessGuard,

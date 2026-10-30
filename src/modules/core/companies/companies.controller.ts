@@ -79,6 +79,16 @@ export class CompaniesController {
   }
 
   @RequirePermissions('companies.update')
+  @Get(':id/users/:userId/whatsapp')
+  getUserWhatsAppContact(
+    @Param('id') companyId: string,
+    @Param('userId') userId: string,
+    @CurrentUser('id') requestUserId: string,
+  ) {
+    return this.companiesService.getUserWhatsAppContact(companyId, userId, requestUserId);
+  }
+
+  @RequirePermissions('companies.update')
   @Patch(':id/users/:userId')
   updateUser(
     @Param('id') companyId: string,

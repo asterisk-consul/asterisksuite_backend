@@ -3,7 +3,7 @@
 import { Injectable, NotFoundException, BadRequestException, ConflictException, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
-import { parseLocalDateTime } from '@/common/utils/dates';
+import { parseLocalDateTime, today } from '@/common/utils/dates';
 import {
   dateFilter,
   numberFilter,
@@ -31,6 +31,7 @@ import { SalesCommercialFlowService } from './sales-commercial-flow.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 import { StockReservationsService } from './stock-reservations.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
+import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
@@ -97,6 +98,8 @@ export class DocumentsSalesService {
     private readonly stockReservations: StockReservationsService,
 
     private readonly notifications: NotificationsService,
+
+    private readonly whatsAppNotifications: WhatsAppNotificationsService,
   ) {}
 
   private get prisma() {
@@ -1406,6 +1409,7 @@ export class DocumentsSalesService {
           converted_total: d.converted_total ? Number(d.converted_total) : null,
           party_id: d.party_id,
           party_name: d.business_parties?.name ?? null,
+          reference: d.ref ?? null,
           party_type: d.business_parties?.type ?? null,
           document_type_code: d.document_types?.code ?? null,
           document_type_description: d.document_types?.description ?? null,
@@ -1915,6 +1919,7 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   async confirm(id: string, userId: string, assignedTo?: string | null) {
     const companyId = getCurrentCompanyId();
+    let previousOrderAssignee: string | null = null;
     if (assignedTo) {
       const membership = companyId
         ? await this.db.getDefaultClient().company_users.findUnique({
@@ -1928,6 +1933,7 @@ export class DocumentsSalesService {
       const doc = await this.findOne(id);
 
       const category = doc.document_types?.category;
+      if (category === 'ORDER') previousOrderAssignee = doc.assigned_to ?? null;
 
       if (category === 'ORDER') {
         const settings = await tx.sales_flow_settings.upsert({
@@ -2171,6 +2177,28 @@ export class DocumentsSalesService {
         },
       });
     });
+
+    if (
+      confirmed?.document_types?.category === 'ORDER' &&
+      assignedTo &&
+      assignedTo !== previousOrderAssignee &&
+      assignedTo !== userId &&
+      companyId
+    ) {
+      try {
+        await this.whatsAppNotifications.enqueueOrderAssignment({
+          companyId,
+          recipientUserId: assignedTo,
+          documentId: confirmed.id,
+          documentNumber: confirmed.number,
+          documentReference: confirmed.ref?.trim() || confirmed.descrip?.trim(),
+          partyName: confirmed.business_parties?.name,
+          assignedAt: new Date(),
+        });
+      } catch (error) {
+        this.logger.warn(`No se pudo encolar el aviso WhatsApp de la OV ${id}: ${String(error)}`);
+      }
+    }
 
     // La actualización de precios acordados es complementaria: un problema en
     // su historial no debe revertir una factura que ya pasó todas las validaciones.
@@ -2699,34 +2727,110 @@ export class DocumentsSalesService {
       }
     }
 
-    // Crear factura con items seleccionados
+    // La factura es el comprobante fiscal: recalcular con su tipo y fecha en
+    // lugar de heredar el total de impuestos de la OV.
     const hasCommercialAdjustments = Array.isArray(doc.commercial_adjustments) && doc.commercial_adjustments.length > 0;
-    const invoiceItems: ItemInput[] = items.map((req) => {
+    const invoiceSourceItems = items.map((req) => {
       const sourceItem = sourceItems.find((i) => i.id === req.document_item_id)!;
       const unitPrice = hasCommercialAdjustments ? Number(sourceItem.original_unit_price ?? sourceItem.unit_price) : Number(sourceItem.unit_price);
       const discountPercentage = hasCommercialAdjustments ? Number(sourceItem.discount_percentage ?? 0) : 0;
-      const price = unitPrice * req.quantity * (1 - discountPercentage / 100);
       return {
-        product_id: sourceItem.product_id,
-        variant_id: sourceItem.variant_id,
+        sourceItem,
+        unitPrice,
+        discountPercentage,
+        discountedUnitPrice: unitPrice * (1 - discountPercentage / 100),
         quantity: req.quantity,
-        currency: sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
-        exchange_rate: Number(sourceItem.exchange_rate ?? 1),
-        original_unit_price: unitPrice,
-        unit_price: unitPrice,
-        discount_percentage: discountPercentage,
-        converted_unit_price: unitPrice,
-        price,
-        total: price,
-        exempt_amount: 0,
-        taxable_base: price,
-        total_taxes: 0,
-        taxes: [],
       };
     });
 
-    const carriedAdjustments = this.carryCommercialAdjustments(doc, invoiceType, invoiceItems);
-    const totals = this.applyCommercialReductions(this.totalsService.calculate(invoiceItems), carriedAdjustments);
+    const carriedAdjustments = this.carryCommercialAdjustments(doc, invoiceType, invoiceSourceItems.map((item) => ({
+      product_id: item.sourceItem.product_id,
+      quantity: item.quantity,
+      original_unit_price: item.unitPrice,
+      unit_price: item.discountedUnitPrice,
+      discount_percentage: item.discountPercentage,
+      price: item.quantity * item.discountedUnitPrice,
+      total: item.quantity * item.discountedUnitPrice,
+      exempt_amount: 0,
+      taxable_base: item.quantity * item.discountedUnitPrice,
+      total_taxes: 0,
+      taxes: [],
+      currency: item.sourceItem.currency_code ?? doc.currency_code ?? 'ARS',
+      exchange_rate: Number(item.sourceItem.exchange_rate ?? doc.exchange_rate ?? 1),
+    })));
+    const invoiceDate = today();
+    const fiscalCtx = await this.fiscalValidation.resolveFiscalContext({
+      direction: 'SALE',
+      partyId: doc.party_id,
+      documentLetterType: invoiceType.letter_type ?? undefined,
+    });
+    const taxContext: TaxContext = {
+      issuerCompanyId: getCurrentCompanyId() ?? '00000000-0000-0000-0000-000000000000',
+      issuerVatCondition: fiscalCtx.issuerVatCondition || undefined,
+      partnerId: doc.party_id ?? undefined,
+      partnerVatCondition: fiscalCtx.partnerVatCondition || undefined,
+      documentTypeId: invoiceType.id,
+      documentLetterType: invoiceType.letter_type ?? undefined,
+      currency: doc.currency_code ?? 'ARS',
+      date: invoiceDate,
+      jurisdictionId: doc.fiscal_jurisdiction_id ?? undefined,
+      operationType: 'SALE',
+      items: invoiceSourceItems.map((item) => ({
+        productId: item.sourceItem.product_id,
+        quantity: item.quantity,
+        unitPrice: item.discountedUnitPrice,
+      })),
+    };
+    const resolution = await this.taxResolution.resolve(taxContext);
+    const adjustmentCalculation = this.taxCalculation.calculateWithCommercialAdjustments(
+      resolution,
+      taxContext.items,
+      carriedAdjustments.adjustments,
+    );
+    const calculation = adjustmentCalculation.calculation;
+    const currencyCode = doc.currency_code ?? 'ARS';
+    const baseCurrency = await this.conversionService.getBaseCurrency();
+    const isBase = currencyCode.toUpperCase() === baseCurrency.code.toUpperCase();
+    const exchangeRate = Number(doc.exchange_rate ?? 1);
+    const invoiceItems: ItemInput[] = calculation.document.items.map((item, index) => {
+      const baseItem = invoiceSourceItems[index];
+      return {
+        product_id: item.productId ?? null,
+        variant_id: baseItem.sourceItem.variant_id ?? null,
+        warehouse_id: baseItem.sourceItem.warehouse_id ?? doc.warehouse_id ?? null,
+        quantity: item.quantity,
+        currency: currencyCode,
+        exchange_rate: Number(baseItem.sourceItem.exchange_rate ?? exchangeRate),
+        rate_type: baseItem.sourceItem.rate_type ?? doc.rate_type ?? null,
+        original_unit_price: baseItem.unitPrice,
+        unit_price: item.unitPrice,
+        discount_percentage: baseItem.discountPercentage,
+        converted_unit_price: isBase ? null : this.conversionService.convertAmount(item.unitPrice, exchangeRate),
+        converted_price: isBase ? null : this.conversionService.convertAmount(item.total, exchangeRate),
+        price: item.total,
+        total: item.total,
+        exempt_amount: item.exemptAmount,
+        taxable_base: item.taxableBase,
+        total_taxes: item.totalTaxes,
+        taxes: item.taxes.map((tax) => ({
+          tax_id: tax.tax_id,
+          tax_rate: tax.rate,
+          tax_amount: tax.amount,
+          converted_tax_amount: isBase ? null : this.conversionService.convertAmount(tax.amount, exchangeRate),
+          calculation_level: 'line',
+          is_included_in_price: tax.isIncludedInPrice,
+        })),
+      };
+    });
+    const totals = {
+      subtotal: calculation.document.subtotal,
+      exempt_amount: calculation.document.exemptAmount,
+      taxable_base: calculation.document.taxableBase,
+      total_taxes: calculation.document.totalTaxes,
+      total: calculation.document.total,
+      documentTaxes: calculation.document.documentTaxes,
+      commercial_adjustments: adjustmentCalculation.adjustments,
+    };
     let createdId = '';
 
     await this.prisma.$transaction(async (tx) => {
@@ -2744,25 +2848,58 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          fiscal_jurisdiction_id: doc.fiscal_jurisdiction_id ?? null,
           created_by: userId,
           number,
-          date: new Date(),
+          date: parseLocalDateTime(invoiceDate),
           status: STATUS_DRAFT,
-          currency_code: doc.currency_code,
+          currency_code: currencyCode,
+          exchange_rate: exchangeRate,
+          rate_type: doc.rate_type ?? null,
           subtotal: totals.subtotal,
           exempt_amount: totals.exempt_amount,
           taxable_base: totals.taxable_base,
           total_taxes: totals.total_taxes,
           total: totals.total,
-          commercial_adjustments: carriedAdjustments.adjustments as any,
+          commercial_adjustments: totals.commercial_adjustments as any,
           descrip: doc.descrip,
           ref: `OV-${doc.number}`,
+          ...(!isBase
+            ? await this.conversionService.convertDocumentFields(
+                currencyCode,
+                exchangeRate,
+                doc.rate_type ?? null,
+                {
+                  subtotal: Number(totals.subtotal),
+                  exempt_amount: Number(totals.exempt_amount),
+                  total_taxes: Number(totals.total_taxes),
+                  total: Number(totals.total),
+                  taxable_base: Number(totals.taxable_base),
+                },
+                parseLocalDateTime(invoiceDate),
+              )
+            : {}),
         },
       });
 
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, invoiceItems, tx);
+      if (totals.documentTaxes.length) {
+        await tx.document_taxes.createMany({
+          data: totals.documentTaxes.map((tax) => ({
+            document_id: newDoc.id,
+            tax_id: tax.tax_id,
+            tax_rate: tax.rate,
+            taxable_base: tax.taxableBase,
+            tax_amount: tax.amount,
+            automatic_tax_amount: tax.amount,
+            is_manual: false,
+            converted_taxable_base: isBase ? null : this.conversionService.convertAmount(tax.taxableBase, exchangeRate),
+            converted_tax_amount: isBase ? null : this.conversionService.convertAmount(tax.amount, exchangeRate),
+          })),
+        });
+      }
       await this.commercialFlow.inheritFromParent(tx, newDoc.id, doc.id);
 
       // Actualizar tracking

@@ -27,10 +27,12 @@
     "migrate:user-notifications": "tsx scripts/apply-user-notifications-migration.ts",
     "migrate:whatsapp-reports": "node dist/src/scripts/apply-whatsapp-reports-migration.js",
     "migrate:whatsapp-reports:dev": "tsx src/scripts/apply-whatsapp-reports-migration.ts",
+    "migrate:mcp-oauth": "tsx src/scripts/apply-mcp-oauth-migration.ts",
     "whatsapp:weekly-reports": "node dist/src/modules/erp/whatsapp-reports/run-weekly-reports.js",
     "whatsapp:weekly-reports:dev": "tsx src/modules/erp/whatsapp-reports/run-weekly-reports.ts"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",

@@ -257,6 +257,7 @@ export type usersWhereInput = {
   refreshTokens?: Prisma.Refresh_tokensListRelationFilter
   companyUsers?: Prisma.Company_usersListRelationFilter
   tablePreferences?: Prisma.User_table_preferencesListRelationFilter
+  mcpGrants?: Prisma.Mcp_oauth_grantsListRelationFilter
 }
 
 export type usersOrderByWithRelationInput = {
@@ -277,6 +278,7 @@ export type usersOrderByWithRelationInput = {
   refreshTokens?: Prisma.refresh_tokensOrderByRelationAggregateInput
   companyUsers?: Prisma.company_usersOrderByRelationAggregateInput
   tablePreferences?: Prisma.user_table_preferencesOrderByRelationAggregateInput
+  mcpGrants?: Prisma.mcp_oauth_grantsOrderByRelationAggregateInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +302,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   refreshTokens?: Prisma.Refresh_tokensListRelationFilter
   companyUsers?: Prisma.Company_usersListRelationFilter
   tablePreferences?: Prisma.User_table_preferencesListRelationFilter
+  mcpGrants?: Prisma.Mcp_oauth_grantsListRelationFilter
 }, "id" | "email">
 
 export type usersOrderByWithAggregationInput = {
@@ -360,6 +363,7 @@ export type usersCreateInput = {
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -380,6 +384,7 @@ export type usersUncheckedCreateInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersUpdateInput = {
@@ -400,6 +405,7 @@ export type usersUpdateInput = {
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -420,6 +426,7 @@ export type usersUncheckedUpdateInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -575,6 +582,20 @@ export type usersUpdateOneRequiredWithoutTablePreferencesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTablePreferencesInput, Prisma.usersUpdateWithoutTablePreferencesInput>, Prisma.usersUncheckedUpdateWithoutTablePreferencesInput>
 }
 
+export type usersCreateNestedOneWithoutMcpGrantsInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutMcpGrantsInput, Prisma.usersUncheckedCreateWithoutMcpGrantsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutMcpGrantsInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutMcpGrantsNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutMcpGrantsInput, Prisma.usersUncheckedCreateWithoutMcpGrantsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutMcpGrantsInput
+  upsert?: Prisma.usersUpsertWithoutMcpGrantsInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutMcpGrantsInput, Prisma.usersUpdateWithoutMcpGrantsInput>, Prisma.usersUncheckedUpdateWithoutMcpGrantsInput>
+}
+
 export type usersCreateWithoutRefreshTokensInput = {
   id?: string
   name: string
@@ -592,6 +613,7 @@ export type usersCreateWithoutRefreshTokensInput = {
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutRefreshTokensInput = {
@@ -611,6 +633,7 @@ export type usersUncheckedCreateWithoutRefreshTokensInput = {
   deleted_by?: string | null
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutRefreshTokensInput = {
@@ -646,6 +669,7 @@ export type usersUpdateWithoutRefreshTokensInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutRefreshTokensInput = {
@@ -665,6 +689,7 @@ export type usersUncheckedUpdateWithoutRefreshTokensInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutCompanyUsersInput = {
@@ -684,6 +709,7 @@ export type usersCreateWithoutCompanyUsersInput = {
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutCompanyUsersInput = {
@@ -703,6 +729,7 @@ export type usersUncheckedCreateWithoutCompanyUsersInput = {
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutCompanyUsersInput = {
@@ -738,6 +765,7 @@ export type usersUpdateWithoutCompanyUsersInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutCompanyUsersInput = {
@@ -757,6 +785,7 @@ export type usersUncheckedUpdateWithoutCompanyUsersInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutTablePreferencesInput = {
@@ -776,6 +805,7 @@ export type usersCreateWithoutTablePreferencesInput = {
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutTablePreferencesInput = {
@@ -795,6 +825,7 @@ export type usersUncheckedCreateWithoutTablePreferencesInput = {
   deleted_by?: string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutTablePreferencesInput = {
@@ -830,6 +861,7 @@ export type usersUpdateWithoutTablePreferencesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutTablePreferencesInput = {
@@ -849,6 +881,103 @@ export type usersUncheckedUpdateWithoutTablePreferencesInput = {
   deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutMcpGrantsInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutMcpGrantsInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutMcpGrantsInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutMcpGrantsInput, Prisma.usersUncheckedCreateWithoutMcpGrantsInput>
+}
+
+export type usersUpsertWithoutMcpGrantsInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutMcpGrantsInput, Prisma.usersUncheckedUpdateWithoutMcpGrantsInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutMcpGrantsInput, Prisma.usersUncheckedCreateWithoutMcpGrantsInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutMcpGrantsInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutMcpGrantsInput, Prisma.usersUncheckedUpdateWithoutMcpGrantsInput>
+}
+
+export type usersUpdateWithoutMcpGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutMcpGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -860,12 +989,14 @@ export type UsersCountOutputType = {
   refreshTokens: number
   companyUsers: number
   tablePreferences: number
+  mcpGrants: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | UsersCountOutputTypeCountRefreshTokensArgs
   companyUsers?: boolean | UsersCountOutputTypeCountCompanyUsersArgs
   tablePreferences?: boolean | UsersCountOutputTypeCountTablePreferencesArgs
+  mcpGrants?: boolean | UsersCountOutputTypeCountMcpGrantsArgs
 }
 
 /**
@@ -899,6 +1030,13 @@ export type UsersCountOutputTypeCountTablePreferencesArgs<ExtArgs extends runtim
   where?: Prisma.user_table_preferencesWhereInput
 }
 
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountMcpGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.mcp_oauth_grantsWhereInput
+}
+
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -918,6 +1056,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
   companyUsers?: boolean | Prisma.users$companyUsersArgs<ExtArgs>
   tablePreferences?: boolean | Prisma.users$tablePreferencesArgs<ExtArgs>
+  mcpGrants?: boolean | Prisma.users$mcpGrantsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -977,6 +1116,7 @@ export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   refreshTokens?: boolean | Prisma.users$refreshTokensArgs<ExtArgs>
   companyUsers?: boolean | Prisma.users$companyUsersArgs<ExtArgs>
   tablePreferences?: boolean | Prisma.users$tablePreferencesArgs<ExtArgs>
+  mcpGrants?: boolean | Prisma.users$mcpGrantsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -988,6 +1128,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     refreshTokens: Prisma.$refresh_tokensPayload<ExtArgs>[]
     companyUsers: Prisma.$company_usersPayload<ExtArgs>[]
     tablePreferences: Prisma.$user_table_preferencesPayload<ExtArgs>[]
+    mcpGrants: Prisma.$mcp_oauth_grantsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1401,6 +1542,7 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   refreshTokens<T extends Prisma.users$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$refresh_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   companyUsers<T extends Prisma.users$companyUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$companyUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tablePreferences<T extends Prisma.users$tablePreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$tablePreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$user_table_preferencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mcpGrants<T extends Prisma.users$mcpGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$mcpGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$mcp_oauth_grantsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1906,6 +2048,30 @@ export type users$tablePreferencesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.User_table_preferencesScalarFieldEnum | Prisma.User_table_preferencesScalarFieldEnum[]
+}
+
+/**
+ * users.mcpGrants
+ */
+export type users$mcpGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the mcp_oauth_grants
+   */
+  select?: Prisma.mcp_oauth_grantsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the mcp_oauth_grants
+   */
+  omit?: Prisma.mcp_oauth_grantsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.mcp_oauth_grantsInclude<ExtArgs> | null
+  where?: Prisma.mcp_oauth_grantsWhereInput
+  orderBy?: Prisma.mcp_oauth_grantsOrderByWithRelationInput | Prisma.mcp_oauth_grantsOrderByWithRelationInput[]
+  cursor?: Prisma.mcp_oauth_grantsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Mcp_oauth_grantsScalarFieldEnum | Prisma.Mcp_oauth_grantsScalarFieldEnum[]
 }
 
 /**

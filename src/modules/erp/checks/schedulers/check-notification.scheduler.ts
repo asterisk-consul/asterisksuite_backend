@@ -1,13 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '@/prisma/prisma.service';
+import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 
 @Injectable()
 export class CheckNotificationScheduler {
   private readonly logger = new Logger(CheckNotificationScheduler.name);
   private running = false;
 
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly whatsApp: WhatsAppNotificationsService,
+  ) {}
 
   @Cron('0 9 * * *', { timeZone: 'America/Argentina/Buenos_Aires' })
   async sendCheckNotifications() {
@@ -62,7 +66,7 @@ export class CheckNotificationScheduler {
               .filter((membership) => membership.role === 'OWNER' || membership.role === 'ADMIN')
               .map((membership) => membership.user_id);
             const result = await this.db.withTemporaryTenantClient(company.schema_name, (client) =>
-              this.notifyTenant(client, company.name, administrators, memberIds),
+              this.notifyTenant(client, company.id, company.name, administrators, memberIds),
             );
             tenantsProcessed += 1;
             this.logger.log(
@@ -134,6 +138,7 @@ export class CheckNotificationScheduler {
 
   private async notifyTenant(
     prisma: any,
+    companyId: string,
     companyName: string,
     administratorIds: string[],
     memberIds: Set<string>,
@@ -168,7 +173,54 @@ export class CheckNotificationScheduler {
       }
     }
 
+    // WhatsApp has its own daily deduplication key and must not depend on
+    // notification_sent, which only controls the one-time in-app reminder.
+    let upcomingReviewed = 0;
+    let upcomingAfterId: string | undefined;
+    const upcomingDigest: string[] = [];
+    while (true) {
+      const upcomingChecks = await prisma.checks.findMany({
+        where: {
+          status: { in: ['PENDING', 'CONFIRMED'] },
+          due_date: { gt: today, lte: upcomingLimit },
+          deleted_at: null,
+          ...(upcomingAfterId ? { id: { gt: upcomingAfterId } } : {}),
+        },
+        select: { id: true, is_own: true, check_number: true, due_date: true },
+        orderBy: { id: 'asc' },
+        take: batchSize,
+      });
+      if (!upcomingChecks.length) break;
+      upcomingReviewed += upcomingChecks.length;
+      for (const check of upcomingChecks) {
+        if (upcomingDigest.length < 8) {
+          upcomingDigest.push(`• Cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number}: vence el ${check.due_date.toISOString().slice(0, 10)}`);
+        }
+      }
+      upcomingAfterId = upcomingChecks[upcomingChecks.length - 1].id;
+    }
+
+    if (upcomingReviewed > 0) {
+      try {
+        await this.whatsApp.enqueueConfiguredDigest({
+          companyId,
+          eventType: 'CHECK_DUE',
+          deduplicationKey: `check-due-digest:${this.argentinaDate().toISOString().slice(0, 10)}`,
+          title: 'Cheques próximos a vencer',
+          message: [
+            `Hay ${upcomingReviewed} cheque(s) pendiente(s) con vencimiento dentro de 2 días.`,
+            ...upcomingDigest,
+            ...(upcomingReviewed > upcomingDigest.length ? [`• Y ${upcomingReviewed - upcomingDigest.length} cheque(s) más.`] : []),
+          ].join('\n'),
+          targetPath: '/erp/treasury/checks',
+        });
+      } catch (error) {
+        this.logger.warn(`No se pudo encolar el resumen de cheques próximos a vencer para ${companyName}: ${String(error)}`);
+      }
+    }
+
     let afterId: string | undefined;
+    const overdueDigest: string[] = [];
     while (true) {
       const overdueChecks = await prisma.checks.findMany({
         where: {
@@ -199,6 +251,9 @@ export class CheckNotificationScheduler {
       this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) vencidos requieren una acción`);
       overdueReviewed += overdueChecks.length;
       for (const check of overdueChecks) {
+        if (overdueDigest.length < 8) {
+          overdueDigest.push(`• Cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number}: venció el ${check.due_date.toISOString().slice(0, 10)}`);
+        }
         const linkedPayments = [
           ...(check.payment ? [check.payment] : []),
           ...check.payment_allocations.map((allocation: any) => allocation.payment),
@@ -235,13 +290,15 @@ export class CheckNotificationScheduler {
             target_path: '/erp/treasury/checks',
             target_type: 'CHECK_OVERDUE',
             target_id: check.id,
-            created_at: new Date(),
-            read_at: null,
           };
           if (existingReminder) {
+            // Refresh the copy without reopening a reminder that the user has
+            // already hidden for today.
             await prisma.user_notifications.update({ where: { id: existingReminder.id }, data: reminderData });
           } else {
-            await prisma.user_notifications.create({ data: { ...reminderData, recipient_user_id: recipientUserId } });
+            await prisma.user_notifications.create({
+              data: { ...reminderData, recipient_user_id: recipientUserId, created_at: new Date(), read_at: null },
+            });
           }
           remindersCreatedOrReopened += 1;
         }
@@ -265,16 +322,33 @@ export class CheckNotificationScheduler {
       }
       afterId = overdueChecks[overdueChecks.length - 1].id;
     }
+    if (overdueReviewed > 0) {
+      try {
+        await this.whatsApp.enqueueConfiguredDigest({
+          companyId,
+          eventType: 'CHECK_OVERDUE',
+          deduplicationKey: `check-overdue-digest:${this.argentinaDate().toISOString().slice(0, 10)}`,
+          title: 'Cheques vencidos pendientes de resolver',
+          message: [
+            `Hay ${overdueReviewed} cheque(s) vencido(s) que requieren una acción.`,
+            ...overdueDigest,
+            ...(overdueReviewed > overdueDigest.length ? [`• Y ${overdueReviewed - overdueDigest.length} cheque(s) más.`] : []),
+          ].join('\n'),
+          targetPath: '/erp/treasury/checks',
+        });
+      } catch (error) {
+        this.logger.warn(`No se pudo encolar el resumen de cheques vencidos para ${companyName}: ${String(error)}`);
+      }
+    }
 
-    // Mark unread reminders as resolved once the check is cleared, cancelled,
-    // bounced, deleted, or moved to a future due date.
+    // Remove reminders for checks that were cleared, cancelled, bounced,
+    // deleted, or moved to a future due date. This also removes dismissed rows.
     let notificationAfterId: string | undefined;
     while (true) {
       const reminders = await prisma.user_notifications.findMany({
         where: {
           type: 'CHECK_OVERDUE',
           target_type: 'CHECK_OVERDUE',
-          read_at: null,
           ...(notificationAfterId ? { id: { gt: notificationAfterId } } : {}),
         },
         select: { id: true, target_id: true },
@@ -299,9 +373,8 @@ export class CheckNotificationScheduler {
       const resolvedIds = reminders.filter((reminder) => !activeCheckIds.has(reminder.target_id ?? ''))
         .map((reminder) => reminder.id);
       if (resolvedIds.length) {
-        const result = await prisma.user_notifications.updateMany({
-          where: { id: { in: resolvedIds }, read_at: null },
-          data: { read_at: new Date() },
+        const result = await prisma.user_notifications.deleteMany({
+          where: { id: { in: resolvedIds } },
         });
         remindersResolved += result.count;
       }

@@ -1,0 +1,65 @@
+// Configuración y cola de avisos operativos enviados por WhatsApp.
+// Estas tablas viven en la base pública para centralizar los envíos de la sesión OpenWA.
+
+model user_whatsapp_contacts {
+  user_id     String    @id @db.Uuid
+  phone_e164  String    @db.VarChar(20)
+  opted_in    Boolean   @default(false)
+  consent_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+
+  @@schema("public")
+}
+
+model company_whatsapp_notification_settings {
+  company_id                       String    @id @db.Uuid
+  enabled                          Boolean   @default(false)
+  assignments_enabled              Boolean   @default(true)
+  customer_balances_enabled        Boolean   @default(false)
+  customer_balance_recipient_ids   Json      @default("[]")
+  supplier_balances_enabled        Boolean   @default(false)
+  supplier_balance_recipient_ids   Json      @default("[]")
+  checks_enabled                   Boolean   @default(false)
+  check_recipient_ids              Json      @default("[]")
+  min_interval_seconds             Int       @default(15)
+  batch_window_seconds             Int       @default(20)
+  configured_by                    String?   @db.Uuid
+  created_at                       DateTime  @default(now()) @db.Timestamp(6)
+  updated_at                       DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+
+  @@schema("public")
+}
+
+model whatsapp_notification_outbox {
+  id                  String    @id @default(uuid()) @db.Uuid
+  company_id          String    @db.Uuid
+  recipient_user_id   String    @db.Uuid
+  recipient_phone     String    @db.VarChar(20)
+  event_type          String    @db.VarChar(40)
+  title               String    @db.VarChar(160)
+  message             String    @db.VarChar(800)
+  target_path         String?   @db.VarChar(500)
+  deduplication_key   String    @unique @db.VarChar(300)
+  status              String    @default("PENDING") @db.VarChar(20)
+  attempt_count       Int       @default(0)
+  available_at        DateTime  @default(now()) @db.Timestamp(6)
+  locked_at           DateTime? @db.Timestamp(6)
+  sent_at             DateTime? @db.Timestamp(6)
+  provider_message_id String?   @db.VarChar(255)
+  last_error          String?   @db.VarChar(500)
+  created_at          DateTime  @default(now()) @db.Timestamp(6)
+  updated_at          DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+
+  @@index([status, available_at, created_at], map: "whatsapp_notification_outbox_pending_idx")
+  @@index([company_id, recipient_user_id, created_at], map: "whatsapp_notification_outbox_recipient_idx")
+  @@schema("public")
+}
+
+model whatsapp_notification_dispatch_state {
+  id           Int       @id @default(1)
+  next_send_at DateTime? @db.Timestamp(6)
+  locked_until DateTime? @db.Timestamp(6)
+  updated_at   DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+
+  @@schema("public")
+}

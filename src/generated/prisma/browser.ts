@@ -510,6 +510,11 @@ export type locations = Prisma.locationsModel
  */
 export type user_notifications = Prisma.user_notificationsModel
 /**
+ * Model user_notification_alert_dismissals
+ * 
+ */
+export type user_notification_alert_dismissals = Prisma.user_notification_alert_dismissalsModel
+/**
  * Model operation_taxes
  * 
  */
@@ -684,6 +689,31 @@ export type company_whatsapp_report_settings = Prisma.company_whatsapp_report_se
  * 
  */
 export type company_whatsapp_report_runs = Prisma.company_whatsapp_report_runsModel
+/**
+ * Model mcp_oauth_clients
+ * 
+ */
+export type mcp_oauth_clients = Prisma.mcp_oauth_clientsModel
+/**
+ * Model mcp_oauth_pending_authorizations
+ * 
+ */
+export type mcp_oauth_pending_authorizations = Prisma.mcp_oauth_pending_authorizationsModel
+/**
+ * Model mcp_oauth_grants
+ * 
+ */
+export type mcp_oauth_grants = Prisma.mcp_oauth_grantsModel
+/**
+ * Model mcp_oauth_codes
+ * 
+ */
+export type mcp_oauth_codes = Prisma.mcp_oauth_codesModel
+/**
+ * Model mcp_oauth_refresh_tokens
+ * 
+ */
+export type mcp_oauth_refresh_tokens = Prisma.mcp_oauth_refresh_tokensModel
 /**
  * Model permissions
  * 
@@ -909,3 +939,23 @@ export type warehouses = Prisma.warehousesModel
  * 
  */
 export type stock_replenishment_policies = Prisma.stock_replenishment_policiesModel
+/**
+ * Model user_whatsapp_contacts
+ * 
+ */
+export type user_whatsapp_contacts = Prisma.user_whatsapp_contactsModel
+/**
+ * Model company_whatsapp_notification_settings
+ * 
+ */
+export type company_whatsapp_notification_settings = Prisma.company_whatsapp_notification_settingsModel
+/**
+ * Model whatsapp_notification_outbox
+ * 
+ */
+export type whatsapp_notification_outbox = Prisma.whatsapp_notification_outboxModel
+/**
+ * Model whatsapp_notification_dispatch_state
+ * 
+ */
+export type whatsapp_notification_dispatch_state = Prisma.whatsapp_notification_dispatch_stateModel

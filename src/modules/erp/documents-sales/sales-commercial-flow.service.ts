@@ -1,11 +1,17 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import type { UpdateSalesFlowSettingsDto } from './sales-flow-settings.dto';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 
 @Injectable()
 export class SalesCommercialFlowService {
-  constructor(private readonly db: PrismaService) {}
+  private readonly logger = new Logger(SalesCommercialFlowService.name);
+
+  constructor(
+    private readonly db: PrismaService,
+    private readonly whatsAppNotifications: WhatsAppNotificationsService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -174,7 +180,7 @@ export class SalesCommercialFlowService {
     const eligible = paymentReady && invoiceReady;
     const alreadyDelivered = ['DRAFT_CREATED', 'DELIVERED'].includes(operation.delivery_status);
 
-    return client.commercial_operations.update({
+    const updated = await client.commercial_operations.update({
       where: { id: operationId },
       data: {
         invoiced_total: invoicedTotal,
@@ -182,6 +188,47 @@ export class SalesCommercialFlowService {
         ...(!alreadyDelivered ? { delivery_status: eligible ? 'ELIGIBLE' : 'PENDING', released_at: eligible ? operation.released_at ?? new Date() : null } : {}),
       },
     });
+
+    const becameReadyForDelivery = operation.delivery_status !== 'ELIGIBLE'
+      && updated.delivery_status === 'ELIGIBLE'
+      && operation.require_payment_for_delivery;
+    // refresh() is also called with a transaction client while rules are being
+    // recalculated. Queue the WhatsApp only after a committed request-level refresh.
+    if (becameReadyForDelivery && typeof client.$transaction === 'function') {
+      const companyId = getCurrentCompanyId();
+      if (companyId) {
+        try {
+          const root = await client.documents.findUnique({
+            where: { id: operation.root_document_id },
+            select: {
+              id: true,
+              number: true,
+              descrip: true,
+              ref: true,
+              assigned_to: true,
+              business_parties: { select: { name: true } },
+            },
+          });
+          if (root?.assigned_to) {
+            await this.whatsAppNotifications.enqueueOrderReadyForDelivery({
+              companyId,
+              recipientUserId: root.assigned_to,
+              documentId: root.id,
+              operationId: operation.id,
+              documentNumber: root.number,
+              documentReference: root.ref?.trim() || root.descrip?.trim(),
+              partyName: root.business_parties?.name,
+              readyAt: updated.released_at ?? new Date(),
+            });
+          }
+        } catch (error) {
+          // The commercial operation must remain valid even if WhatsApp is unavailable.
+          this.logger.warn(`No se pudo encolar el aviso de OV lista para entrega ${operation.root_document_id}: ${String(error)}`);
+        }
+      }
+    }
+
+    return updated;
   }
 
   async listDeliveryQueue() {

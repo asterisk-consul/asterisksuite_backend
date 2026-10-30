@@ -18,6 +18,7 @@ model companies {
   tablePreferences user_table_preferences[]
   whatsappReportSettings company_whatsapp_report_settings?
   whatsappReportRuns     company_whatsapp_report_runs[]
+  mcpGrants              mcp_oauth_grants[]
 
   @@schema("public")
 }
@@ -72,6 +73,7 @@ model users {
   refreshTokens refresh_tokens[]
   companyUsers     company_users[]
   tablePreferences user_table_preferences[]
+  mcpGrants       mcp_oauth_grants[]
 
   @@schema("public")
 }
@@ -169,5 +171,78 @@ model company_whatsapp_report_runs {
 
   @@unique([company_id, report_type, period_start, period_end], map: "company_whatsapp_report_runs_period_key")
   @@index([company_id, created_at(sort: Desc)], map: "company_whatsapp_report_runs_company_created_idx")
+  @@schema("public")
+}
+
+model mcp_oauth_clients {
+  client_id   String   @id @db.VarChar(255)
+  client_info Json
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @updatedAt @db.Timestamp(6)
+
+  @@schema("public")
+}
+
+model mcp_oauth_pending_authorizations {
+  id               String    @id @default(uuid()) @db.Uuid
+  client_id        String    @db.VarChar(255)
+  redirect_uri     String    @db.Text
+  requested_state  String?   @db.Text
+  code_challenge   String    @db.VarChar(255)
+  requested_scopes String[]  @default([])
+  resource         String?   @db.Text
+  expires_at       DateTime  @db.Timestamp(6)
+  consumed_at      DateTime? @db.Timestamp(6)
+  created_at       DateTime  @default(now()) @db.Timestamp(6)
+
+  @@index([expires_at], map: "mcp_oauth_pending_expiry_idx")
+  @@schema("public")
+}
+
+model mcp_oauth_grants {
+  id         String    @id @default(uuid()) @db.Uuid
+  client_id  String    @db.VarChar(255)
+  user_id    String    @db.Uuid
+  company_id String    @db.Uuid
+  scopes     String[]  @default([])
+  revoked_at DateTime? @db.Timestamp(6)
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime  @updatedAt @db.Timestamp(6)
+  user       users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  company    companies @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([user_id, company_id, revoked_at], map: "mcp_oauth_grants_user_company_idx")
+  @@index([client_id], map: "mcp_oauth_grants_client_idx")
+  @@schema("public")
+}
+
+model mcp_oauth_codes {
+  code_hash      String    @id @db.VarChar(64)
+  grant_id       String    @db.Uuid
+  client_id      String    @db.VarChar(255)
+  redirect_uri   String    @db.Text
+  code_challenge String    @db.VarChar(255)
+  scopes         String[]  @default([])
+  resource       String?   @db.Text
+  expires_at     DateTime  @db.Timestamp(6)
+  consumed_at    DateTime? @db.Timestamp(6)
+  created_at     DateTime  @default(now()) @db.Timestamp(6)
+
+  @@index([expires_at], map: "mcp_oauth_codes_expiry_idx")
+  @@index([grant_id], map: "mcp_oauth_codes_grant_idx")
+  @@schema("public")
+}
+
+model mcp_oauth_refresh_tokens {
+  id         String    @id @default(uuid()) @db.Uuid
+  grant_id   String    @db.Uuid
+  token_hash String    @unique @db.VarChar(64)
+  scopes     String[]  @default([])
+  expires_at DateTime  @db.Timestamp(6)
+  revoked_at DateTime? @db.Timestamp(6)
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+
+  @@index([grant_id, revoked_at], map: "mcp_oauth_refresh_grant_idx")
+  @@index([expires_at], map: "mcp_oauth_refresh_expiry_idx")
   @@schema("public")
 }

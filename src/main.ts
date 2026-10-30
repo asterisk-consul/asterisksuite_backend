@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { RequestContextInterceptor } from './common/interceptors/request-context.interceptor.js';
 import * as express from 'express';
 import * as path from 'path';
+import { mcpAuthRouter } from '@modelcontextprotocol/sdk/server/auth/router.js';
+import { McpOAuthProvider } from './modules/mcp/mcp-oauth.provider.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -74,6 +76,40 @@ async function bootstrap() {
       '/api/docs',
       apiReference({ content: document, theme: 'purple', layout: 'modern' }),
     );
+  }
+
+  if (config.get<string>('MCP_ENABLED') === 'true') {
+    const issuerUrl = new URL(config.getOrThrow<string>('MCP_AUTH_ISSUER_URL'));
+    const resourceUrl = new URL(config.getOrThrow<string>('MCP_PUBLIC_URL'));
+    const authorizeUrl = new URL(config.getOrThrow<string>('MCP_APP_AUTHORIZE_URL'));
+    const accessTokenSecret = config.getOrThrow<string>('MCP_ACCESS_TOKEN_SECRET');
+    if (accessTokenSecret.length < 32) {
+      throw new Error('MCP_ACCESS_TOKEN_SECRET debe tener al menos 32 caracteres aleatorios.');
+    }
+    if (config.get<string>('NODE_ENV') === 'production'
+      && [issuerUrl, resourceUrl, authorizeUrl].some((url) => url.protocol !== 'https:')) {
+      throw new Error('Las URLs públicas de MCP deben usar HTTPS en producción.');
+    }
+    if (issuerUrl.pathname !== '/' || issuerUrl.search || issuerUrl.hash || issuerUrl.username || issuerUrl.password) {
+      throw new Error('MCP_AUTH_ISSUER_URL debe ser el origen público, sin ruta, credenciales, query ni fragmento.');
+    }
+    if (resourceUrl.pathname.replace(/\/+$/, '') !== '/api/mcp') {
+      throw new Error('MCP_PUBLIC_URL debe apuntar a la ruta /api/mcp.');
+    }
+    if (authorizeUrl.pathname.replace(/\/+$/, '') !== '/mcp/authorize') {
+      throw new Error('MCP_APP_AUTHORIZE_URL debe apuntar a la pantalla /mcp/authorize.');
+    }
+
+    const oauth = app.get(McpOAuthProvider);
+    app.use(mcpAuthRouter({
+      provider: oauth,
+      issuerUrl,
+      baseUrl: resourceUrl,
+      resourceServerUrl: resourceUrl,
+      resourceName: 'Asterisk Suite ERP',
+      scopesSupported: ['erp:read', 'intake:files.read', 'purchases:drafts.write'],
+    }));
+    logger.log(`MCP OAuth habilitado para ${resourceUrl.href}`);
   }
 
   const port = config.get<number>('PORT') ?? 3008;

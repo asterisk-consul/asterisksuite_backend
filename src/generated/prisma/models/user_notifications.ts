@@ -36,6 +36,7 @@ export type User_notificationsMinAggregateOutputType = {
   target_id: string | null
   created_at: Date | null
   read_at: Date | null
+  dismissed_until: Date | null
 }
 
 export type User_notificationsMaxAggregateOutputType = {
@@ -50,6 +51,7 @@ export type User_notificationsMaxAggregateOutputType = {
   target_id: string | null
   created_at: Date | null
   read_at: Date | null
+  dismissed_until: Date | null
 }
 
 export type User_notificationsCountAggregateOutputType = {
@@ -64,6 +66,7 @@ export type User_notificationsCountAggregateOutputType = {
   target_id: number
   created_at: number
   read_at: number
+  dismissed_until: number
   _all: number
 }
 
@@ -80,6 +83,7 @@ export type User_notificationsMinAggregateInputType = {
   target_id?: true
   created_at?: true
   read_at?: true
+  dismissed_until?: true
 }
 
 export type User_notificationsMaxAggregateInputType = {
@@ -94,6 +98,7 @@ export type User_notificationsMaxAggregateInputType = {
   target_id?: true
   created_at?: true
   read_at?: true
+  dismissed_until?: true
 }
 
 export type User_notificationsCountAggregateInputType = {
@@ -108,6 +113,7 @@ export type User_notificationsCountAggregateInputType = {
   target_id?: true
   created_at?: true
   read_at?: true
+  dismissed_until?: true
   _all?: true
 }
 
@@ -195,6 +201,7 @@ export type User_notificationsGroupByOutputType = {
   target_id: string | null
   created_at: Date
   read_at: Date | null
+  dismissed_until: Date | null
   _count: User_notificationsCountAggregateOutputType | null
   _min: User_notificationsMinAggregateOutputType | null
   _max: User_notificationsMaxAggregateOutputType | null
@@ -230,6 +237,7 @@ export type user_notificationsWhereInput = {
   target_id?: Prisma.UuidNullableFilter<"user_notifications"> | string | null
   created_at?: Prisma.DateTimeFilter<"user_notifications"> | Date | string
   read_at?: Prisma.DateTimeNullableFilter<"user_notifications"> | Date | string | null
+  dismissed_until?: Prisma.DateTimeNullableFilter<"user_notifications"> | Date | string | null
 }
 
 export type user_notificationsOrderByWithRelationInput = {
@@ -244,6 +252,7 @@ export type user_notificationsOrderByWithRelationInput = {
   target_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   read_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  dismissed_until?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type user_notificationsWhereUniqueInput = Prisma.AtLeast<{
@@ -261,6 +270,7 @@ export type user_notificationsWhereUniqueInput = Prisma.AtLeast<{
   target_id?: Prisma.UuidNullableFilter<"user_notifications"> | string | null
   created_at?: Prisma.DateTimeFilter<"user_notifications"> | Date | string
   read_at?: Prisma.DateTimeNullableFilter<"user_notifications"> | Date | string | null
+  dismissed_until?: Prisma.DateTimeNullableFilter<"user_notifications"> | Date | string | null
 }, "id">
 
 export type user_notificationsOrderByWithAggregationInput = {
@@ -275,6 +285,7 @@ export type user_notificationsOrderByWithAggregationInput = {
   target_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   read_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  dismissed_until?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.user_notificationsCountOrderByAggregateInput
   _max?: Prisma.user_notificationsMaxOrderByAggregateInput
   _min?: Prisma.user_notificationsMinOrderByAggregateInput
@@ -295,6 +306,7 @@ export type user_notificationsScalarWhereWithAggregatesInput = {
   target_id?: Prisma.UuidNullableWithAggregatesFilter<"user_notifications"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"user_notifications"> | Date | string
   read_at?: Prisma.DateTimeNullableWithAggregatesFilter<"user_notifications"> | Date | string | null
+  dismissed_until?: Prisma.DateTimeNullableWithAggregatesFilter<"user_notifications"> | Date | string | null
 }
 
 export type user_notificationsCreateInput = {
@@ -309,6 +321,7 @@ export type user_notificationsCreateInput = {
   target_id?: string | null
   created_at?: Date | string
   read_at?: Date | string | null
+  dismissed_until?: Date | string | null
 }
 
 export type user_notificationsUncheckedCreateInput = {
@@ -323,6 +336,7 @@ export type user_notificationsUncheckedCreateInput = {
   target_id?: string | null
   created_at?: Date | string
   read_at?: Date | string | null
+  dismissed_until?: Date | string | null
 }
 
 export type user_notificationsUpdateInput = {
@@ -337,6 +351,7 @@ export type user_notificationsUpdateInput = {
   target_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   read_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dismissed_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type user_notificationsUncheckedUpdateInput = {
@@ -351,6 +366,7 @@ export type user_notificationsUncheckedUpdateInput = {
   target_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   read_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dismissed_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type user_notificationsCreateManyInput = {
@@ -365,6 +381,7 @@ export type user_notificationsCreateManyInput = {
   target_id?: string | null
   created_at?: Date | string
   read_at?: Date | string | null
+  dismissed_until?: Date | string | null
 }
 
 export type user_notificationsUpdateManyMutationInput = {
@@ -379,6 +396,7 @@ export type user_notificationsUpdateManyMutationInput = {
   target_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   read_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dismissed_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type user_notificationsUncheckedUpdateManyInput = {
@@ -393,6 +411,7 @@ export type user_notificationsUncheckedUpdateManyInput = {
   target_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   read_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dismissed_until?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type user_notificationsCountOrderByAggregateInput = {
@@ -407,6 +426,7 @@ export type user_notificationsCountOrderByAggregateInput = {
   target_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   read_at?: Prisma.SortOrder
+  dismissed_until?: Prisma.SortOrder
 }
 
 export type user_notificationsMaxOrderByAggregateInput = {
@@ -421,6 +441,7 @@ export type user_notificationsMaxOrderByAggregateInput = {
   target_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   read_at?: Prisma.SortOrder
+  dismissed_until?: Prisma.SortOrder
 }
 
 export type user_notificationsMinOrderByAggregateInput = {
@@ -435,6 +456,7 @@ export type user_notificationsMinOrderByAggregateInput = {
   target_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   read_at?: Prisma.SortOrder
+  dismissed_until?: Prisma.SortOrder
 }
 
 
@@ -451,6 +473,7 @@ export type user_notificationsSelect<ExtArgs extends runtime.Types.Extensions.In
   target_id?: boolean
   created_at?: boolean
   read_at?: boolean
+  dismissed_until?: boolean
 }, ExtArgs["result"]["user_notifications"]>
 
 export type user_notificationsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -465,6 +488,7 @@ export type user_notificationsSelectCreateManyAndReturn<ExtArgs extends runtime.
   target_id?: boolean
   created_at?: boolean
   read_at?: boolean
+  dismissed_until?: boolean
 }, ExtArgs["result"]["user_notifications"]>
 
 export type user_notificationsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -479,6 +503,7 @@ export type user_notificationsSelectUpdateManyAndReturn<ExtArgs extends runtime.
   target_id?: boolean
   created_at?: boolean
   read_at?: boolean
+  dismissed_until?: boolean
 }, ExtArgs["result"]["user_notifications"]>
 
 export type user_notificationsSelectScalar = {
@@ -493,9 +518,10 @@ export type user_notificationsSelectScalar = {
   target_id?: boolean
   created_at?: boolean
   read_at?: boolean
+  dismissed_until?: boolean
 }
 
-export type user_notificationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "recipient_user_id" | "actor_user_id" | "type" | "title" | "message" | "target_path" | "target_type" | "target_id" | "created_at" | "read_at", ExtArgs["result"]["user_notifications"]>
+export type user_notificationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "recipient_user_id" | "actor_user_id" | "type" | "title" | "message" | "target_path" | "target_type" | "target_id" | "created_at" | "read_at" | "dismissed_until", ExtArgs["result"]["user_notifications"]>
 
 export type $user_notificationsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "user_notifications"
@@ -512,6 +538,7 @@ export type $user_notificationsPayload<ExtArgs extends runtime.Types.Extensions.
     target_id: string | null
     created_at: Date
     read_at: Date | null
+    dismissed_until: Date | null
   }, ExtArgs["result"]["user_notifications"]>
   composites: {}
 }
@@ -946,6 +973,7 @@ export interface user_notificationsFieldRefs {
   readonly target_id: Prisma.FieldRef<"user_notifications", 'String'>
   readonly created_at: Prisma.FieldRef<"user_notifications", 'DateTime'>
   readonly read_at: Prisma.FieldRef<"user_notifications", 'DateTime'>
+  readonly dismissed_until: Prisma.FieldRef<"user_notifications", 'DateTime'>
 }
     
 

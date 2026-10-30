@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { Injectable, NotFoundException, ForbiddenException, ConflictException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { CreateCompanyUserDto } from './dto/create-company-user.dto';
@@ -23,7 +24,10 @@ import {
 export class CompaniesService {
   private readonly logger = new Logger(CompaniesService.name);
 
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private readonly whatsAppNotifications: WhatsAppNotificationsService,
+  ) {}
 
   private get prisma() {
     return this.db.getDefaultClient();
@@ -359,6 +363,7 @@ export class CompaniesService {
     }
 
     const tenantPrisma = this.db.getClientForCurrentContext();
+    const preparedWhatsAppPhone = await this.whatsAppNotifications.prepareManagedPhone(dto.whatsapp_phone);
     const employee = dto.link_employee_id
       ? await tenantPrisma.employees.findUnique({
           where: { id: dto.link_employee_id },
@@ -410,6 +415,10 @@ export class CompaniesService {
         role: dto.role || 'USER',
       },
     });
+
+    if (preparedWhatsAppPhone) {
+      await this.whatsAppNotifications.saveManagedPhone(user.id, preparedWhatsAppPhone);
+    }
 
     if (employee) {
       await tenantPrisma.employees.update({
@@ -509,7 +518,22 @@ export class CompaniesService {
     });
   }
 
-  async updateUser(companyId: string, userId: string, dto: { name?: string; email?: string }, requestUserId: string) {
+  async getUserWhatsAppContact(companyId: string, userId: string, requestUserId: string) {
+    await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
+    const membership = await this.prisma.company_users.findUnique({
+      where: { company_id_user_id: { company_id: companyId, user_id: userId } },
+      select: { user_id: true },
+    });
+    if (!membership) throw new NotFoundException('Usuario no encontrado en esta empresa');
+    return this.whatsAppNotifications.getManagedContact(userId);
+  }
+
+  async updateUser(
+    companyId: string,
+    userId: string,
+    dto: { name?: string; email?: string; whatsapp_phone?: string | null },
+    requestUserId: string,
+  ) {
     await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
 
     const membership = await this.prisma.company_users.findUnique({
@@ -519,6 +543,10 @@ export class CompaniesService {
     if (!membership) {
       throw new NotFoundException('Usuario no encontrado en esta empresa');
     }
+
+    const preparedWhatsAppPhone = dto.whatsapp_phone !== undefined
+      ? await this.whatsAppNotifications.prepareManagedPhone(dto.whatsapp_phone)
+      : undefined;
 
     // Validar email único si se cambia
     if (dto.email) {
@@ -530,7 +558,7 @@ export class CompaniesService {
       }
     }
 
-    return this.prisma.users.update({
+    const user = await this.prisma.users.update({
       where: { id: userId },
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
@@ -538,6 +566,10 @@ export class CompaniesService {
       },
       select: { id: true, name: true, email: true },
     });
+    if (dto.whatsapp_phone !== undefined) {
+      await this.whatsAppNotifications.saveManagedPhone(userId, preparedWhatsAppPhone ?? null);
+    }
+    return user;
   }
 
   async changeUserPassword(companyId: string, userId: string, newPassword: string, requestUserId: string) {

@@ -21,6 +21,25 @@ export class NotificationsService {
     return this.db.getClientForCurrentContext();
   }
 
+  private argentinaDateStart(value = new Date()) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(value);
+    const part = (type: string) => parts.find(item => item.type === type)?.value ?? '';
+    return new Date(Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day'))));
+  }
+
+  private nextArgentinaMidnight(value = new Date()) {
+    const tomorrow = this.argentinaDateStart(value);
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+    // Argentina currently uses UTC-03:00 year-round.
+    tomorrow.setUTCHours(3);
+    return tomorrow;
+  }
+
   async createAssignment(input: CreateAssignmentNotificationInput) {
     if (!input.companyId) {
       throw new BadRequestException('No se pudo resolver la empresa para validar la asignación');
@@ -61,7 +80,14 @@ export class NotificationsService {
     const take = Number.isInteger(parsedTake) && parsedTake > 0
       ? Math.min(parsedTake, 50)
       : 30;
-    const where = { recipient_user_id: userId };
+    const now = new Date();
+    await this.prisma.user_notifications.updateMany({
+      where: { recipient_user_id: userId, dismissed_until: { lte: now } },
+      data: { dismissed_until: null, read_at: null },
+    });
+    await this.removeResolvedCheckReminders(userId);
+
+    const where = { recipient_user_id: userId, dismissed_until: null };
 
     const [rows, unreadCount, totalCount] = await Promise.all([
       this.prisma.user_notifications.findMany({
@@ -102,6 +128,78 @@ export class NotificationsService {
     };
   }
 
+  private async removeResolvedCheckReminders(userId: string) {
+    const today = this.argentinaDateStart();
+    const reminders = await this.prisma.user_notifications.findMany({
+      where: {
+        recipient_user_id: userId,
+        type: 'CHECK_OVERDUE',
+        target_type: 'CHECK_OVERDUE',
+      },
+      select: { id: true, target_id: true },
+      orderBy: { created_at: 'desc' },
+      take: 500,
+    });
+    if (!reminders.length) return;
+
+    const checkIds = [...new Set(reminders.map(row => row.target_id).filter(Boolean))] as string[];
+    const activeChecks = checkIds.length
+      ? await this.prisma.checks.findMany({
+          where: {
+            id: { in: checkIds },
+            status: { in: ['PENDING', 'CONFIRMED'] },
+            due_date: { lte: today },
+            deleted_at: null,
+          },
+          select: { id: true },
+        })
+      : [];
+    const activeIds = new Set(activeChecks.map(check => check.id));
+    const resolvedIds = reminders
+      .filter(row => !row.target_id || !activeIds.has(row.target_id))
+      .map(row => row.id);
+    if (resolvedIds.length) {
+      await this.prisma.user_notifications.deleteMany({
+        where: { recipient_user_id: userId, id: { in: resolvedIds } },
+      });
+    }
+  }
+
+  async listActiveDismissals(userId: string) {
+    const now = new Date();
+    await this.prisma.user_notification_alert_dismissals.deleteMany({
+      where: { recipient_user_id: userId, dismissed_until: { lte: now } },
+    });
+    const rows = await this.prisma.user_notification_alert_dismissals.findMany({
+      where: { recipient_user_id: userId, dismissed_until: { gt: now } },
+      select: { alert_key: true },
+      take: 500,
+    });
+    return { alert_keys: rows.map(row => row.alert_key) };
+  }
+
+  async dismissAlert(userId: string, alertKey: string) {
+    const key = alertKey.trim();
+    if (!key || key.length > 200) throw new BadRequestException('Identificador de alerta inválido');
+    const dismissedUntil = this.nextArgentinaMidnight();
+    await this.prisma.user_notification_alert_dismissals.upsert({
+      where: { recipient_user_id_alert_key: { recipient_user_id: userId, alert_key: key } },
+      create: { recipient_user_id: userId, alert_key: key, dismissed_until: dismissedUntil },
+      update: { dismissed_until: dismissedUntil, created_at: new Date() },
+    });
+    return { success: true, dismissed_until: dismissedUntil };
+  }
+
+  async dismiss(id: string, userId: string) {
+    const now = new Date();
+    const result = await this.prisma.user_notifications.updateMany({
+      where: { id, recipient_user_id: userId },
+      data: { read_at: now, dismissed_until: this.nextArgentinaMidnight(now) },
+    });
+    if (result.count === 0) throw new NotFoundException('Notificación no encontrada');
+    return { success: true };
+  }
+
   async markRead(id: string, userId: string) {
     const result = await this.prisma.user_notifications.updateMany({
       where: { id, recipient_user_id: userId, read_at: null },
@@ -120,9 +218,10 @@ export class NotificationsService {
   }
 
   async markAllRead(userId: string) {
+    const now = new Date();
     const result = await this.prisma.user_notifications.updateMany({
-      where: { recipient_user_id: userId, read_at: null },
-      data: { read_at: new Date() },
+      where: { recipient_user_id: userId, read_at: null, dismissed_until: null },
+      data: { read_at: now, dismissed_until: this.nextArgentinaMidnight(now) },
     });
     return { success: true, updated: result.count };
   }

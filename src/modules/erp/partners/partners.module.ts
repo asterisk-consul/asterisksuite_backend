@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PartnersController } from './partners.controller';
 import { PartnersService } from './partners.service';
+import { NotificationsModule } from '@/modules/notifications/notifications.module';
 
 @Module({
+  imports: [NotificationsModule],
   controllers: [PartnersController],
   providers: [PartnersService],
   exports: [PartnersService],

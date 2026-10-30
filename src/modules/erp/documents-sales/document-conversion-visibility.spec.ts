@@ -18,6 +18,8 @@ describe('Creator visibility after sales document conversion', () => {
   let prisma: any;
   let source: any;
   let saved: any;
+  let taxResolution: any;
+  let taxCalculation: any;
 
   beforeEach(() => {
     source = {
@@ -26,20 +28,53 @@ describe('Creator visibility after sales document conversion', () => {
       document_items: [{ id: 'item', product_id: 'product', quantity: 2, unit_price: 10, price: 20 }],
     };
     prisma = {
-      document_types: { findFirst: jest.fn().mockResolvedValue({ id: 'target-type' }) },
+      document_types: { findFirst: jest.fn().mockResolvedValue({
+        id: 'target-type',
+        category: 'INVOICE',
+        direction: 1,
+        letter_type: 'A',
+        calculates_taxes: true,
+        document_sequences: null,
+      }) },
       documents: {
         create: jest.fn(async ({ data }) => { saved = { ...data, id: 'child', assigned_to: null }; return saved; }),
         update: jest.fn(),
         findMany: jest.fn().mockResolvedValue([]),
       },
       document_items: { update: jest.fn(), findMany: jest.fn().mockResolvedValue(source.document_items) },
+      document_taxes: { createMany: jest.fn() },
       $transaction: jest.fn(async callback => callback(prisma)),
+    };
+    taxResolution = {
+      resolve: jest.fn().mockResolvedValue({ productTaxes: new Map(), operationTaxes: [], settings: {} }),
+    };
+    taxCalculation = {
+      calculateWithCommercialAdjustments: jest.fn().mockReturnValue({
+        calculation: {
+          document: {
+            items: [{
+              productId: 'product', quantity: 1, unitPrice: 10, price: 10,
+              exemptAmount: 0, taxableBase: 10, totalTaxes: 2.1, total: 12.1,
+              taxes: [{ tax_id: 'vat', rate: 21, amount: 2.1, taxableBase: 10, isIncludedInPrice: false }],
+            }],
+            documentTaxes: [{ tax_id: 'vat', rate: 21, taxableBase: 10, amount: 2.1 }],
+            subtotal: 10, exemptAmount: 0, taxableBase: 10, totalTaxes: 2.1, total: 12.1,
+          },
+        },
+        adjustments: [],
+        originalSubtotal: 10,
+      }),
     };
     service = new DocumentsSalesService(
       { getClientForCurrentContext: () => prisma } as any,
       { calculate: () => ({ subtotal: 20, exempt_amount: 0, taxable_base: 20, total_taxes: 0, total: 20 }) } as any,
-      {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any,
+      {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any, {} as any,
     );
+    (service as any).commercialFlow = { createForOrder: jest.fn(), inheritFromParent: jest.fn() };
+    (service as any).taxResolution = taxResolution;
+    (service as any).taxCalculation = taxCalculation;
+    (service as any).conversionService = { getBaseCurrency: jest.fn().mockResolvedValue({ code: 'ARS' }) };
+    (service as any).fiscalValidation = { resolveFiscalContext: jest.fn().mockResolvedValue({}) };
     jest.spyOn(service, 'findOne').mockImplementation(async id => id === 'source' ? source : saved);
     jest.spyOn(service as any, 'resolveSequence').mockResolvedValue(null);
     jest.spyOn(service as any, 'getNextNumber').mockResolvedValue(2);
@@ -103,6 +138,20 @@ describe('Creator visibility after sales document conversion', () => {
       { accepts_commercial_adjustments: false },
       [{ quantity: 1, original_unit_price: 100, unit_price: 100 }],
     )).toThrow('El documento de destino no acepta los conceptos comerciales');
+  });
+
+  it('recalculates taxes with the invoice document type when invoicing an order', async () => {
+    await service.partialInvoice('source', [{ document_item_id: 'item', quantity: 1 }], actor);
+
+    expect(taxResolution.resolve).toHaveBeenCalledWith(expect.objectContaining({
+      documentTypeId: 'target-type',
+      operationType: 'SALE',
+    }));
+    expect(prisma.documents.create.mock.calls[0][0].data.total_taxes).toBe(2.1);
+    expect(prisma.documents.create.mock.calls[0][0].data.total).toBe(12.1);
+    expect(prisma.document_taxes.createMany).toHaveBeenCalledWith({
+      data: [expect.objectContaining({ tax_id: 'vat', tax_amount: 2.1, is_manual: false })],
+    });
   });
 
   it('excludes only the cancellation status that belongs to each sales category', async () => {
