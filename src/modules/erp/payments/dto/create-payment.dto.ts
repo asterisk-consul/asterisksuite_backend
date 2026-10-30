@@ -84,6 +84,23 @@ export class PaymentCheckDto {
   amount_applied!: number;
 }
 
+export class PaymentTenderDto {
+  @IsEnum(['CASH', 'BANK_TRANSFER', 'CHECK'] as const)
+  method!: string;
+
+  @IsNumber()
+  @Min(0.01)
+  amount!: number;
+
+  @IsString()
+  @IsOptional()
+  cash_box_id?: string;
+
+  @IsString()
+  @IsOptional()
+  bank_account_id?: string;
+}
+
 export class PaymentBankChargeRetentionDto {
   @IsString()
   @IsOptional()
@@ -161,7 +178,7 @@ export class CreatePaymentDto {
   @IsOptional()
   party_type?: string;
 
-  @IsEnum(['CASH', 'CHECK', 'BANK_TRANSFER', 'CREDIT_CARD', 'DEBIT_CARD', 'VIRTUAL_WALLET', 'PAYROLL_DEDUCTION'] as const)
+  @IsEnum(['CASH', 'CHECK', 'BANK_TRANSFER', 'MIXED', 'CREDIT_CARD', 'DEBIT_CARD', 'VIRTUAL_WALLET', 'PAYROLL_DEDUCTION'] as const)
   payment_method!: string;
 
   @IsNumber()
@@ -235,6 +252,12 @@ export class CreatePaymentDto {
   @Type(() => PaymentCheckDto)
   @IsOptional()
   checks?: PaymentCheckDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PaymentTenderDto)
+  @IsOptional()
+  tenders?: PaymentTenderDto[];
 
   @IsArray()
   @ValidateNested({ each: true })

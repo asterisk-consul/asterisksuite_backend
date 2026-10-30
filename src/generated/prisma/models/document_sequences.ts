@@ -47,6 +47,7 @@ export type Document_sequencesMinAggregateOutputType = {
   point_of_sale: string | null
   current_number: number | null
   prefix: string | null
+  sales_order_tax_mode: string | null
   active: boolean | null
   created_at: Date | null
   updated_at: Date | null
@@ -65,6 +66,7 @@ export type Document_sequencesMaxAggregateOutputType = {
   point_of_sale: string | null
   current_number: number | null
   prefix: string | null
+  sales_order_tax_mode: string | null
   active: boolean | null
   created_at: Date | null
   updated_at: Date | null
@@ -83,6 +85,7 @@ export type Document_sequencesCountAggregateOutputType = {
   point_of_sale: number
   current_number: number
   prefix: number
+  sales_order_tax_mode: number
   active: number
   created_at: number
   updated_at: number
@@ -115,6 +118,7 @@ export type Document_sequencesMinAggregateInputType = {
   point_of_sale?: true
   current_number?: true
   prefix?: true
+  sales_order_tax_mode?: true
   active?: true
   created_at?: true
   updated_at?: true
@@ -133,6 +137,7 @@ export type Document_sequencesMaxAggregateInputType = {
   point_of_sale?: true
   current_number?: true
   prefix?: true
+  sales_order_tax_mode?: true
   active?: true
   created_at?: true
   updated_at?: true
@@ -151,6 +156,7 @@ export type Document_sequencesCountAggregateInputType = {
   point_of_sale?: true
   current_number?: true
   prefix?: true
+  sales_order_tax_mode?: true
   active?: true
   created_at?: true
   updated_at?: true
@@ -256,6 +262,7 @@ export type Document_sequencesGroupByOutputType = {
   point_of_sale: string
   current_number: number
   prefix: string | null
+  sales_order_tax_mode: string
   active: boolean
   created_at: Date
   updated_at: Date | null
@@ -297,6 +304,7 @@ export type document_sequencesWhereInput = {
   point_of_sale?: Prisma.StringFilter<"document_sequences"> | string
   current_number?: Prisma.IntFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
+  sales_order_tax_mode?: Prisma.StringFilter<"document_sequences"> | string
   active?: Prisma.BoolFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_sequences"> | Date | string | null
@@ -319,6 +327,7 @@ export type document_sequencesOrderByWithRelationInput = {
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrderInput | Prisma.SortOrder
+  sales_order_tax_mode?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -344,6 +353,7 @@ export type document_sequencesWhereUniqueInput = Prisma.AtLeast<{
   point_of_sale?: Prisma.StringFilter<"document_sequences"> | string
   current_number?: Prisma.IntFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableFilter<"document_sequences"> | string | null
+  sales_order_tax_mode?: Prisma.StringFilter<"document_sequences"> | string
   active?: Prisma.BoolFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeFilter<"document_sequences"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"document_sequences"> | Date | string | null
@@ -366,6 +376,7 @@ export type document_sequencesOrderByWithAggregationInput = {
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrderInput | Prisma.SortOrder
+  sales_order_tax_mode?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -392,6 +403,7 @@ export type document_sequencesScalarWhereWithAggregatesInput = {
   point_of_sale?: Prisma.StringWithAggregatesFilter<"document_sequences"> | string
   current_number?: Prisma.IntWithAggregatesFilter<"document_sequences"> | number
   prefix?: Prisma.StringNullableWithAggregatesFilter<"document_sequences"> | string | null
+  sales_order_tax_mode?: Prisma.StringWithAggregatesFilter<"document_sequences"> | string
   active?: Prisma.BoolWithAggregatesFilter<"document_sequences"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"document_sequences"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"document_sequences"> | Date | string | null
@@ -410,6 +422,7 @@ export type document_sequencesCreateInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -432,6 +445,7 @@ export type document_sequencesUncheckedCreateInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -454,6 +468,7 @@ export type document_sequencesUpdateInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -476,6 +491,7 @@ export type document_sequencesUncheckedUpdateInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -498,6 +514,7 @@ export type document_sequencesCreateManyInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -516,6 +533,7 @@ export type document_sequencesUpdateManyMutationInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -534,6 +552,7 @@ export type document_sequencesUncheckedUpdateManyInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -552,6 +571,7 @@ export type document_sequencesCountOrderByAggregateInput = {
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrder
+  sales_order_tax_mode?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -576,6 +596,7 @@ export type document_sequencesMaxOrderByAggregateInput = {
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrder
+  sales_order_tax_mode?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -594,6 +615,7 @@ export type document_sequencesMinOrderByAggregateInput = {
   point_of_sale?: Prisma.SortOrder
   current_number?: Prisma.SortOrder
   prefix?: Prisma.SortOrder
+  sales_order_tax_mode?: Prisma.SortOrder
   active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -696,6 +718,7 @@ export type document_sequencesCreateWithoutDocument_type_sequencesInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -717,6 +740,7 @@ export type document_sequencesUncheckedCreateWithoutDocument_type_sequencesInput
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -754,6 +778,7 @@ export type document_sequencesUpdateWithoutDocument_type_sequencesInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -775,6 +800,7 @@ export type document_sequencesUncheckedUpdateWithoutDocument_type_sequencesInput
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -796,6 +822,7 @@ export type document_sequencesCreateWithoutDocument_typesInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -817,6 +844,7 @@ export type document_sequencesUncheckedCreateWithoutDocument_typesInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -854,6 +882,7 @@ export type document_sequencesUpdateWithoutDocument_typesInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -875,6 +904,7 @@ export type document_sequencesUncheckedUpdateWithoutDocument_typesInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -896,6 +926,7 @@ export type document_sequencesCreateWithoutDocumentsInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -917,6 +948,7 @@ export type document_sequencesUncheckedCreateWithoutDocumentsInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -954,6 +986,7 @@ export type document_sequencesUpdateWithoutDocumentsInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -975,6 +1008,7 @@ export type document_sequencesUncheckedUpdateWithoutDocumentsInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -996,6 +1030,7 @@ export type document_sequencesCreateWithoutFiscal_authorizationsInput = {
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -1017,6 +1052,7 @@ export type document_sequencesUncheckedCreateWithoutFiscal_authorizationsInput =
   point_of_sale: string
   current_number?: number
   prefix?: string | null
+  sales_order_tax_mode?: string
   active?: boolean
   created_at?: Date | string
   updated_at?: Date | string | null
@@ -1054,6 +1090,7 @@ export type document_sequencesUpdateWithoutFiscal_authorizationsInput = {
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1075,6 +1112,7 @@ export type document_sequencesUncheckedUpdateWithoutFiscal_authorizationsInput =
   point_of_sale?: Prisma.StringFieldUpdateOperationsInput | string
   current_number?: Prisma.IntFieldUpdateOperationsInput | number
   prefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sales_order_tax_mode?: Prisma.StringFieldUpdateOperationsInput | string
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1154,6 +1192,7 @@ export type document_sequencesSelect<ExtArgs extends runtime.Types.Extensions.In
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
+  sales_order_tax_mode?: boolean
   active?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -1177,6 +1216,7 @@ export type document_sequencesSelectCreateManyAndReturn<ExtArgs extends runtime.
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
+  sales_order_tax_mode?: boolean
   active?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -1195,6 +1235,7 @@ export type document_sequencesSelectUpdateManyAndReturn<ExtArgs extends runtime.
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
+  sales_order_tax_mode?: boolean
   active?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -1213,6 +1254,7 @@ export type document_sequencesSelectScalar = {
   point_of_sale?: boolean
   current_number?: boolean
   prefix?: boolean
+  sales_order_tax_mode?: boolean
   active?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -1222,7 +1264,7 @@ export type document_sequencesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "automatic" | "range_start" | "range_end" | "point_of_sale" | "current_number" | "prefix" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_sequences"]>
+export type document_sequencesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "automatic" | "range_start" | "range_end" | "point_of_sale" | "current_number" | "prefix" | "sales_order_tax_mode" | "active" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_sequences"]>
 export type document_sequencesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_types?: boolean | Prisma.document_sequences$document_typesArgs<ExtArgs>
   document_type_sequences?: boolean | Prisma.document_sequences$document_type_sequencesArgs<ExtArgs>
@@ -1250,6 +1292,7 @@ export type $document_sequencesPayload<ExtArgs extends runtime.Types.Extensions.
     point_of_sale: string
     current_number: number
     prefix: string | null
+    sales_order_tax_mode: string
     active: boolean
     created_at: Date
     updated_at: Date | null
@@ -1692,6 +1735,7 @@ export interface document_sequencesFieldRefs {
   readonly point_of_sale: Prisma.FieldRef<"document_sequences", 'String'>
   readonly current_number: Prisma.FieldRef<"document_sequences", 'Int'>
   readonly prefix: Prisma.FieldRef<"document_sequences", 'String'>
+  readonly sales_order_tax_mode: Prisma.FieldRef<"document_sequences", 'String'>
   readonly active: Prisma.FieldRef<"document_sequences", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"document_sequences", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"document_sequences", 'DateTime'>

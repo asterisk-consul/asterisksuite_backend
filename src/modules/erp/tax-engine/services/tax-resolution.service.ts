@@ -34,17 +34,40 @@ export class TaxResolutionService {
     // Flag del tipo de documento: comprobantes sin cálculo de impuestos
     const docType = await this.db.document_types.findUnique({
       where: { id: ctx.documentTypeId },
-      select: { calculates_taxes: true },
+      select: { calculates_taxes: true, category: true, direction: true, document_sequence_id: true },
     })
     if (docType && docType.calculates_taxes === false) {
       return { settings, productTaxes: new Map(), operationTaxes: [] }
     }
 
+    // Una serie puede pedir presentación neta solo para órdenes de venta.
+    // La factura se calcula con su propio tipo y no hereda esta configuración.
+    const netOrderSequence = ctx.operationType === 'SALE'
+      && docType?.category === 'ORDER'
+      && Number(docType.direction) === 1
+      && ctx.documentSequenceId
+      ? await this.db.document_sequences.findFirst({
+          where: {
+            id: ctx.documentSequenceId,
+            active: true,
+            deleted_at: null,
+            OR: [
+              { document_type_sequences: { some: { document_type_id: ctx.documentTypeId } } },
+              ...(docType.document_sequence_id ? [{ id: docType.document_sequence_id }] : []),
+            ],
+          },
+          select: { sales_order_tax_mode: true },
+        })
+      : null
+    const omitOrderVat = netOrderSequence?.sales_order_tax_mode === 'NET_ONLY'
+
     const productTaxes = new Map<string, ResolvedTax[]>()
     for (const item of ctx.items) {
       if (item.productId) {
         const taxes = await this.resolveProductTaxes(item.productId, settings, ctx.documentLetterType)
-        productTaxes.set(item.productId, taxes)
+        productTaxes.set(item.productId, omitOrderVat
+          ? taxes.filter((tax) => tax.tax_type?.toUpperCase() !== 'IVA')
+          : taxes)
       }
     }
 

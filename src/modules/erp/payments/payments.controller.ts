@@ -175,6 +175,7 @@ export class PaymentsController {
     };
     const methodLabels: Record<string, string> = {
       CASH: 'Efectivo', CHECK: 'Cheque', BANK_TRANSFER: 'Transferencia',
+      MIXED: 'Mixto',
       CREDIT_CARD: 'Tarjeta crédito', DEBIT_CARD: 'Tarjeta débito', VIRTUAL_WALLET: 'Billetera virtual',
       PAYROLL_DEDUCTION: 'Descuento de haberes'
     };

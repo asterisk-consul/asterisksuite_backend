@@ -15,6 +15,24 @@ export class DocumentSequencesService {
     return prefix?.trim() || null;
   }
 
+  private async validateSalesOrderTaxMode(documentTypeId: string, mode: string) {
+    if (!['STANDARD', 'NET_ONLY'].includes(mode)) {
+      throw new BadRequestException('El tratamiento de impuestos de la serie no es válido');
+    }
+    if (mode !== 'NET_ONLY') return;
+
+    const documentType = await this.prisma.document_types.findFirst({
+      where: { id: documentTypeId, deleted_at: null },
+      select: { category: true, direction: true, calculates_taxes: true },
+    });
+    if (documentType?.category !== 'ORDER' || Number(documentType.direction) !== 1) {
+      throw new BadRequestException('El modo de OV en neto solo se puede configurar en secuencias de órdenes de venta');
+    }
+    if (documentType.calculates_taxes === false) {
+      throw new BadRequestException('Para diferenciar el cálculo por secuencia, habilitá el cálculo de impuestos en el tipo de OV; esta opción omitirá el IVA solo en esta serie.');
+    }
+  }
+
   private async assertAvailableScope(
     pointOfSale: string,
     prefix: string | null,
@@ -56,6 +74,8 @@ export class DocumentSequencesService {
     if (documentTypeIds.length !== 1) {
       throw new BadRequestException('Seleccioná un único tipo de documento para la serie');
     }
+    const salesOrderTaxMode = dto.sales_order_tax_mode ?? 'STANDARD';
+    await this.validateSalesOrderTaxMode(documentTypeIds[0], salesOrderTaxMode);
     const prefix = this.normalizedPrefix(dto.prefix);
     await this.assertAvailableScope(dto.point_of_sale, prefix, documentTypeIds);
 
@@ -78,6 +98,7 @@ export class DocumentSequencesService {
           range_end: dto.range_end,
           current_number: nextNumber - 1,
           automatic: dto.automatic ?? true,
+          sales_order_tax_mode: salesOrderTaxMode,
           active: true,
         },
       });
@@ -195,6 +216,8 @@ export class DocumentSequencesService {
     if (documentTypeIds.length !== 1) {
       throw new BadRequestException('Cada serie debe pertenecer a un único tipo de documento');
     }
+    const salesOrderTaxMode = dto.sales_order_tax_mode ?? current.sales_order_tax_mode ?? 'STANDARD';
+    await this.validateSalesOrderTaxMode(documentTypeIds[0], salesOrderTaxMode);
     await this.assertAvailableScope(pointOfSale, prefix, documentTypeIds, id);
 
     return this.prisma.$transaction(async (tx) => {

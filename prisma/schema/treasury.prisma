@@ -100,6 +100,7 @@ model bank_accounts {
   deleted_by String?   @db.Uuid
 
   payments                payments[]
+  payment_tenders         payment_tenders[]
   movements               bank_account_movements[]
   operations              bank_operations[]
   cash_box_movements      cash_box_movements[]
@@ -319,6 +320,7 @@ model cash_boxes {
   user_roles      cash_box_user_roles[]
   sessions        cash_box_sessions[]   @relation("SessionHistory")
   payments        payments[]
+  payment_tenders payment_tenders[]
 
   @@schema("tenant")
 }
@@ -565,6 +567,7 @@ model payments {
   documents                        payment_documents[]
   checks                           checks[]
   payment_allocations              payment_checks[]
+  tenders                          payment_tenders[]
   credit_card_transactions         credit_card_transactions[]
   account_entries                  current_account_entries[]
   bank_account_movements           bank_account_movements[]
@@ -580,6 +583,33 @@ model payments {
   @@index([payment_mode])
   @@index([payment_mode, status])
   @@index([withholding_remittance_id])
+  @@schema("tenant")
+}
+
+// Medios que componen un pago/cobro mixto. Los pagos históricos siguen usando
+// payment_method/cash_box_id/bank_account_id en la cabecera.
+model payment_tenders {
+  id              String        @id @default(uuid()) @db.Uuid
+  payment_id      String        @db.Uuid
+  method          PaymentMethod
+  amount          Decimal       @db.Decimal(15, 2)
+  cash_box_id     String?       @db.Uuid
+  bank_account_id String?       @db.Uuid
+
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at DateTime?
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  deleted_by String?   @db.Uuid
+
+  payment      payments       @relation(fields: [payment_id], references: [id], onDelete: Cascade)
+  cash_box     cash_boxes?    @relation(fields: [cash_box_id], references: [id])
+  bank_account bank_accounts? @relation(fields: [bank_account_id], references: [id])
+
+  @@unique([payment_id, method])
+  @@index([cash_box_id])
+  @@index([bank_account_id])
   @@schema("tenant")
 }
 

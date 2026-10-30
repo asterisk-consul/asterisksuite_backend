@@ -55,6 +55,70 @@ export class PaymentsService {
     }
   }
 
+  private validateMixedTenders(
+    tenders: Array<{ method: string; amount: any; cash_box_id?: string | null; bank_account_id?: string | null }> | undefined,
+    amount: number,
+    hasChecks: boolean,
+  ) {
+    if (!tenders || tenders.length < 2 || tenders.length > 3) {
+      throw new BadRequestException('Un pago mixto debe combinar entre dos y tres medios');
+    }
+    const methods = new Set(tenders.map((tender) => tender.method));
+    if ([...methods].some((method) => !['CASH', 'BANK_TRANSFER', 'CHECK'].includes(method))) {
+      throw new BadRequestException('Los pagos mixtos solo admiten efectivo, transferencias y cheques');
+    }
+    if (methods.size !== tenders.length) {
+      throw new BadRequestException('Cada medio puede agregarse una sola vez al pago mixto');
+    }
+    const hasCheckTender = methods.has('CHECK');
+    if (hasCheckTender !== hasChecks) {
+      throw new BadRequestException('La selección de cheques debe coincidir con los medios del pago mixto');
+    }
+
+    const total = tenders.reduce((sum, tender) => sum + Number(tender.amount), 0);
+    if (Math.abs(Math.round(total * 100) / 100 - Math.round(amount * 100) / 100) > 0.01) {
+      throw new BadRequestException('La suma de los medios debe coincidir con el importe del pago');
+    }
+
+    for (const tender of tenders) {
+      this.validatePaymentInstrument(tender.method, {
+        cashBoxId: tender.cash_box_id,
+        bankAccountId: tender.bank_account_id,
+        hasChecks: hasCheckTender,
+      });
+      if (tender.method === 'CASH' && tender.bank_account_id) {
+        throw new BadRequestException('El efectivo solo puede asociarse a una caja');
+      }
+      if (tender.method === 'BANK_TRANSFER' && tender.cash_box_id) {
+        throw new BadRequestException('La transferencia solo puede asociarse a una cuenta bancaria');
+      }
+      if (tender.method === 'CHECK' && (tender.cash_box_id || tender.bank_account_id)) {
+        throw new BadRequestException('Los cheques no pueden asociarse a una caja o cuenta bancaria');
+      }
+    }
+  }
+
+  private tenderMovementPayment(payment: any, tender: any, convertedAmount: number | null) {
+    return {
+      ...payment,
+      amount: tender.amount,
+      converted_amount: convertedAmount,
+      cash_box_id: tender.method === 'CASH' ? tender.cash_box_id : null,
+      bank_account_id: tender.method === 'BANK_TRANSFER' ? tender.bank_account_id : null,
+    };
+  }
+
+  private mixedTenderConvertedAmounts(payment: any, tenders: any[]) {
+    const convertedTotal = payment.converted_amount == null ? null : Number(payment.converted_amount);
+    const amountTotal = Number(payment.amount);
+    if (convertedTotal == null || amountTotal <= 0 || !tenders.length) return tenders.map(() => null);
+
+    const amounts = tenders.map((tender) => Math.round((convertedTotal * Number(tender.amount) / amountTotal) * 100) / 100);
+    const allocated = amounts.slice(0, -1).reduce((sum, amount) => sum + amount, 0);
+    amounts[amounts.length - 1] = Math.round((convertedTotal - allocated) * 100) / 100;
+    return amounts;
+  }
+
   // ═══════════════════════════════════════════
   // CREATE (DRAFT — no side effects)
   // ═══════════════════════════════════════════
@@ -89,12 +153,25 @@ export class PaymentsService {
       throw new BadRequestException('party_id es requerido para anticipos');
     }
 
-    this.validatePaymentInstrument(dto.payment_method, {
-      cashBoxId: dto.cash_box_id,
-      bankAccountId: dto.bank_account_id,
-      hasChecks: Boolean(dto.checks?.length || dto.check_ids?.length),
-      creditCardId: dto.credit_card_id,
-    });
+    const isMixedPayment = dto.payment_method === 'MIXED';
+    const hasRequestedChecks = Boolean(dto.checks?.length || dto.check_ids?.length);
+    if (isMixedPayment) {
+      if (dto.bank_charges?.length) {
+        throw new BadRequestException('Los gastos bancarios detallados no se pueden incluir en pagos mixtos todavía');
+      }
+      if (dto.withholding_remittance_id) {
+        throw new BadRequestException('Un VEP debe registrarse como un pago bancario independiente');
+      }
+      this.validateMixedTenders(dto.tenders, dto.amount, hasRequestedChecks);
+    } else {
+      if (dto.tenders?.length) throw new BadRequestException('Los medios detallados solo se usan en pagos mixtos');
+      this.validatePaymentInstrument(dto.payment_method, {
+        cashBoxId: dto.cash_box_id,
+        bankAccountId: dto.bank_account_id,
+        hasChecks: hasRequestedChecks,
+        creditCardId: dto.credit_card_id,
+      });
+    }
 
     const party = dto.party_id
       ? await this.prisma.business_parties.findFirst({
@@ -159,8 +236,15 @@ export class PaymentsService {
         });
       }
     }
+    if (isMixedPayment) {
+      const checkTender = dto.tenders!.find((tender) => tender.method === 'CHECK');
+      const checksAmount = checkAllocations.reduce((sum, allocation) => sum + allocation.amount_applied, 0);
+      if (checkTender && Math.abs(Math.round(checksAmount * 100) / 100 - Math.round(checkTender.amount * 100) / 100) > 0.01) {
+        throw new BadRequestException('El importe del medio cheque debe coincidir con el valor de los cheques seleccionados');
+      }
+    }
     const effectiveAmount =
-      dto.payment_method === 'CHECK' && checkAllocations.length > 0
+      !isMixedPayment && dto.payment_method === 'CHECK' && checkAllocations.length > 0
         ? Number(checkAllocations.reduce((sum, allocation) => sum + allocation.amount_applied, 0).toFixed(2))
         : dto.amount;
 
@@ -217,14 +301,27 @@ export class PaymentsService {
           exchange_note: dto.exchange_note,
           description: dto.description,
           reference: dto.reference,
-          bank_account_id: dto.bank_account_id,
-          cash_box_id: dto.cash_box_id,
+          bank_account_id: isMixedPayment ? null : dto.bank_account_id,
+          cash_box_id: isMixedPayment ? null : dto.cash_box_id,
           account_id: dto.account_id,
           withholding_remittance_id: dto.withholding_remittance_id,
           status: 'DRAFT',
           created_by: userId,
         },
       });
+
+      if (isMixedPayment) {
+        await this.prisma.payment_tenders.createMany({
+          data: dto.tenders!.map((tender) => ({
+            payment_id: payment.id,
+            method: tender.method as any,
+            amount: tender.amount,
+            cash_box_id: tender.cash_box_id ?? null,
+            bank_account_id: tender.bank_account_id ?? null,
+            created_by: userId,
+          })),
+        });
+      }
 
       // Store documents for later confirmation
       if (dto.documents && dto.documents.length > 0) {
@@ -352,7 +449,10 @@ export class PaymentsService {
 
       // Store bank charges (gastos y retenciones bancarias) — detail until confirm
       if (dto.bank_charges && dto.bank_charges.length > 0) {
-        if (dto.payment_method !== 'BANK_TRANSFER') {
+        const hasBankTransfer = isMixedPayment
+          ? dto.tenders!.some((tender) => tender.method === 'BANK_TRANSFER')
+          : dto.payment_method === 'BANK_TRANSFER';
+        if (!hasBankTransfer) {
           throw new BadRequestException(
             'Los gastos bancarios solo aplican a pagos o cobros por transferencia bancaria',
           );
@@ -436,14 +536,19 @@ export class PaymentsService {
       }
     }
 
-    const checkCount =
-      payment.payment_method === 'CHECK' ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
-    this.validatePaymentInstrument(payment.payment_method, {
-      cashBoxId: payment.cash_box_id,
-      bankAccountId: payment.bank_account_id,
-      hasChecks: checkCount > 0,
-      creditCardId: payment.credit_card_transactions?.[0]?.credit_card_id,
-    });
+    const mixedTenders = payment.payment_method === 'MIXED' ? (payment.tenders ?? []) : [];
+    const hasCheckTender = payment.payment_method === 'CHECK' || mixedTenders.some((tender: any) => tender.method === 'CHECK');
+    const checkCount = hasCheckTender ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
+    if (payment.payment_method === 'MIXED') {
+      this.validateMixedTenders(mixedTenders, Number(payment.amount), checkCount > 0);
+    } else {
+      this.validatePaymentInstrument(payment.payment_method, {
+        cashBoxId: payment.cash_box_id,
+        bankAccountId: payment.bank_account_id,
+        hasChecks: checkCount > 0,
+        creditCardId: payment.credit_card_transactions?.[0]?.credit_card_id,
+      });
+    }
 
     // Validate documents if present
     const paymentDocs = await this.prisma.payment_documents.findMany({
@@ -519,7 +624,7 @@ export class PaymentsService {
     }
 
     // Validación: dinero efectivo + retenciones >= importe aplicado a documentos
-    if (paymentDocs.length > 0 && withholdings.length > 0) {
+    if (paymentDocs.length > 0 && (withholdings.length > 0 || payment.payment_method === 'MIXED')) {
       const appliedTotal = paymentDocs.reduce((s, pd) => s + pd.amount_applied.toNumber(), 0);
       const cashTotal = payment.amount.toNumber();
       if (appliedTotal > cashTotal + withheldTotal + 0.01) {
@@ -530,14 +635,18 @@ export class PaymentsService {
     }
 
     // Validación: los cheques vinculados deben cubrir lo aplicado a documentos
-    if (payment.payment_method === 'CHECK') {
+    if (hasCheckTender) {
       const allocations = await this.prisma.payment_checks.findMany({
         where: { payment_id: payment.id },
       });
       if (allocations.length > 0) {
         const checksTotal = allocations.reduce((s, a) => s + a.amount_applied.toNumber(), 0);
+        const checkTender = mixedTenders.find((tender: any) => tender.method === 'CHECK');
+        if (checkTender && Math.abs(Math.round(checksTotal * 100) / 100 - Math.round(Number(checkTender.amount) * 100) / 100) > 0.01) {
+          throw new BadRequestException('El importe del medio cheque no coincide con los cheques vinculados');
+        }
         const appliedDocsTotal = paymentDocs.reduce((s, pd) => s + pd.amount_applied.toNumber(), 0);
-        if (appliedDocsTotal > checksTotal + withheldTotal + 0.01) {
+        if (!checkTender && appliedDocsTotal > checksTotal + withheldTotal + 0.01) {
           throw new BadRequestException(
             `Los cheques vinculados (${checksTotal.toFixed(2)}) no cubren el importe aplicado a documentos (${appliedDocsTotal.toFixed(2)})`,
           );
@@ -593,21 +702,36 @@ export class PaymentsService {
         }
       }
 
-      // Create cash box movement
-      if (payment.cash_box_id) {
-        await this.createCashBoxMovement(payment, userId, tx);
-      }
+      if (payment.payment_method === 'MIXED') {
+        const convertedAmounts = this.mixedTenderConvertedAmounts(payment, mixedTenders);
+        for (let index = 0; index < mixedTenders.length; index += 1) {
+          const tender = mixedTenders[index];
+          const tenderPayment = this.tenderMovementPayment(payment, tender, convertedAmounts[index]);
+          if (tender.method === 'CASH') {
+            await this.createCashBoxMovement(tenderPayment, userId, tx);
+          } else if (tender.method === 'BANK_TRANSFER') {
+            const bankOperation = await this.createBankMovement(tenderPayment, userId, tx);
+            if (bankOperation) await this.createBankCharges(tenderPayment, bankOperation, userId, tx);
+          }
+        }
+      } else {
+        // Create cash box movement
+        if (payment.cash_box_id) {
+          await this.createCashBoxMovement(payment, userId, tx);
+        }
 
-      // Create bank account movement (for non-check payments)
-      if (payment.bank_account_id && payment.payment_method !== 'CHECK') {
-        const bankOperation = await this.createBankMovement(payment, userId, tx);
-        if (bankOperation) {
-          await this.createBankCharges(payment, bankOperation, userId, tx);
+        // Create bank account movement (for non-check payments)
+        if (payment.bank_account_id && payment.payment_method !== 'CHECK') {
+          const bankOperation = await this.createBankMovement(payment, userId, tx);
+          if (bankOperation) {
+            await this.createBankCharges(payment, bankOperation, userId, tx);
+          }
         }
       }
 
-      // Process linked checks
-      if (payment.payment_method === 'CHECK') {
+      // Process linked checks once, whether they are the only method or one
+      // component of a mixed payment.
+      if (hasCheckTender) {
         await this.processLinkedChecks(payment, userId, tx);
       }
 
@@ -1073,6 +1197,16 @@ export class PaymentsService {
             },
           },
         },
+        tenders: {
+          where: { deleted_at: null },
+          orderBy: { created_at: 'asc' },
+          include: {
+            cash_box: { select: { id: true, name: true, type: true, currency_code: true } },
+            bank_account: {
+              select: { id: true, name: true, bank_name: true, account_number: true, currency_code: true },
+            },
+          },
+        },
         documents: {
           include: {
             document: {
@@ -1136,14 +1270,41 @@ export class PaymentsService {
     }
 
     const effectiveMethod = dto.payment_method ?? payment.payment_method;
-    const checkCount =
-      effectiveMethod === 'CHECK' ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
-    this.validatePaymentInstrument(effectiveMethod, {
-      cashBoxId: dto.cash_box_id ?? payment.cash_box_id,
-      bankAccountId: dto.bank_account_id ?? payment.bank_account_id,
-      hasChecks: checkCount > 0,
-      creditCardId: dto.credit_card_id ?? payment.credit_card_transactions?.[0]?.credit_card_id,
-    });
+    const effectiveTenders = dto.tenders ?? payment.tenders ?? [];
+    if (effectiveMethod === 'MIXED') {
+      if (payment.withholding_remittance_id) {
+        throw new BadRequestException('Un VEP debe registrarse como un pago bancario independiente');
+      }
+      const activeBankCharges = await this.prisma.payment_bank_charges.count({
+        where: { payment_id: id, deleted_at: null },
+      });
+      if (activeBankCharges > 0) {
+        throw new BadRequestException('Quitá los gastos bancarios detallados antes de combinar medios de pago');
+      }
+    }
+    const currentCheckIds = (payment.payment_allocations ?? []).map((allocation: any) => allocation.check_id);
+    const effectiveCheckIds = dto.checks
+      ? dto.checks.map((check) => check.check_id)
+      : dto.check_ids ?? currentCheckIds;
+    if (effectiveMethod === 'MIXED') {
+      this.validateMixedTenders(effectiveTenders, Number(dto.amount ?? payment.amount), effectiveCheckIds.length > 0);
+      const checkTender = effectiveTenders.find((tender: any) => tender.method === 'CHECK');
+      if (checkTender && dto.checks) {
+        const requestedCheckAmount = dto.checks.reduce((sum, check) => sum + Number(check.amount_applied), 0);
+        if (Math.abs(Math.round(requestedCheckAmount * 100) / 100 - Math.round(Number(checkTender.amount) * 100) / 100) > 0.01) {
+          throw new BadRequestException('El importe del medio cheque debe coincidir con los cheques seleccionados');
+        }
+      }
+    } else {
+      if (dto.tenders?.length) throw new BadRequestException('Los medios detallados solo se usan en pagos mixtos');
+      const checkCount = effectiveMethod === 'CHECK' ? effectiveCheckIds.length : 0;
+      this.validatePaymentInstrument(effectiveMethod, {
+        cashBoxId: dto.cash_box_id ?? payment.cash_box_id,
+        bankAccountId: dto.bank_account_id ?? payment.bank_account_id,
+        hasChecks: checkCount > 0,
+        creditCardId: dto.credit_card_id ?? payment.credit_card_transactions?.[0]?.credit_card_id,
+      });
+    }
 
     const data: Record<string, any> = {
       updated_at: new Date(),
@@ -1162,8 +1323,14 @@ export class PaymentsService {
     if (dto.exchange_note) data.exchange_note = dto.exchange_note;
     if (dto.description) data.description = dto.description;
     if (dto.reference) data.reference = dto.reference;
-    if (dto.bank_account_id) data.bank_account_id = dto.bank_account_id;
-    if (dto.cash_box_id) data.cash_box_id = dto.cash_box_id;
+    if (effectiveMethod === 'MIXED') {
+      data.bank_account_id = null;
+      data.cash_box_id = null;
+      data.amount = dto.amount ?? payment.amount;
+    } else {
+      if (dto.bank_account_id) data.bank_account_id = dto.bank_account_id;
+      if (dto.cash_box_id) data.cash_box_id = dto.cash_box_id;
+    }
     if (dto.account_id !== undefined) data.account_id = dto.account_id || null;
     if (dto.payment_mode) data.payment_mode = dto.payment_mode;
 
@@ -1172,6 +1339,70 @@ export class PaymentsService {
         where: { id },
         data,
       });
+
+      if (dto.tenders !== undefined) {
+        await tx.payment_tenders.deleteMany({ where: { payment_id: id } });
+        if (dto.tenders.length) {
+          await tx.payment_tenders.createMany({
+            data: dto.tenders.map((tender) => ({
+              payment_id: id,
+              method: tender.method as any,
+              amount: tender.amount,
+              cash_box_id: tender.cash_box_id ?? null,
+              bank_account_id: tender.bank_account_id ?? null,
+              created_by: userId,
+            })),
+          });
+        }
+      }
+
+      if (dto.checks !== undefined || dto.check_ids !== undefined) {
+        const requestedChecks = dto.checks ?? (dto.check_ids ?? []).map((check_id) => ({ check_id, amount_applied: 0 }));
+        const requestedIds = new Set(requestedChecks.map((check) => check.check_id));
+        const existingAllocations = await tx.payment_checks.findMany({
+          where: { payment_id: id },
+          include: { check: { select: { amount: true, available_amount: true } } },
+        });
+
+        for (const allocation of existingAllocations) {
+          if (requestedIds.has(allocation.check_id)) continue;
+          await tx.checks.updateMany({
+            where: { id: allocation.check_id, payment_id: id },
+            data: {
+              payment_id: null,
+              status: 'PENDING',
+              available_amount: allocation.amount_applied,
+              updated_at: new Date(),
+              updated_by: userId,
+            },
+          });
+          await tx.payment_checks.delete({
+            where: { payment_id_check_id: { payment_id: id, check_id: allocation.check_id } },
+          });
+        }
+
+        for (const requested of requestedChecks) {
+          const check = await tx.checks.findFirst({ where: { id: requested.check_id, deleted_at: null } });
+          if (!check) throw new NotFoundException(`Cheque ${requested.check_id} no encontrado`);
+          if (check.payment_id && check.payment_id !== id) {
+            throw new BadRequestException(`El cheque #${check.check_number} ya está vinculado a otro pago`);
+          }
+          const available = check.available_amount != null ? Number(check.available_amount) : Number(check.amount);
+          if (requested.amount_applied > 0 && requested.amount_applied > available + 0.01) {
+            throw new BadRequestException(`El cheque #${check.check_number} no tiene saldo suficiente`);
+          }
+          const amountApplied = available;
+          await tx.checks.update({
+            where: { id: check.id },
+            data: { payment_id: id, updated_at: new Date(), updated_by: userId },
+          });
+          await tx.payment_checks.upsert({
+            where: { payment_id_check_id: { payment_id: id, check_id: check.id } },
+            update: { amount_applied: amountApplied },
+            create: { payment_id: id, check_id: check.id, amount_applied: amountApplied, created_by: userId },
+          });
+        }
+      }
 
       if (dto.documents !== undefined) {
         const requestedByDocument = new Map(
@@ -2224,6 +2455,98 @@ export class PaymentsService {
       });
     }
 
+    if (payment.payment_method === 'MIXED') {
+      const cashMovements = await this.prisma.cash_box_movements.findMany({
+        where: { payment_id: payment.id, reference_type: 'payment', deleted_at: null },
+        orderBy: { created_at: 'asc' },
+      });
+      for (const movement of cashMovements) {
+        const cashBox = await this.prisma.cash_boxes.findFirst({
+          where: { id: movement.cash_box_id, deleted_at: null },
+          select: { current_session_id: true },
+        });
+        const balance = await this.prisma.cash_box_balances.findUnique({
+          where: { cash_box_id_currency_code: { cash_box_id: movement.cash_box_id, currency_code: movement.currency_code } },
+        });
+        if (!balance) throw new BadRequestException('No se encontró el saldo de caja para revertir el pago mixto');
+
+        const currentBalance = Number(balance.balance);
+        const originalDelta = Number(movement.balance_after) - Number(movement.balance_before);
+        const reversalDelta = -originalDelta;
+        const balanceAfter = Number((currentBalance + reversalDelta).toFixed(2));
+        const amount = Math.abs(Number(movement.amount));
+        const wasOutflow = originalDelta < 0;
+        await this.prisma.cash_box_movements.create({
+          data: {
+            cash_box_id: movement.cash_box_id,
+            session_id: cashBox?.current_session_id ?? null,
+            type: 'ADJUSTMENT',
+            amount,
+            currency_code: movement.currency_code,
+            exchange_rate: movement.exchange_rate,
+            rate_type: movement.rate_type,
+            converted_amount: movement.converted_amount,
+            balance_before: currentBalance,
+            balance_after: balanceAfter,
+            description: `Reversión de pago mixto #${payment.number}`,
+            payment_id: payment.id,
+            reference_type: referenceType,
+            reference_id: payment.id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+        if (cashBox?.current_session_id) {
+          await this.prisma.cash_box_sessions.update({
+            where: { id: cashBox.current_session_id },
+            data: {
+              movement_count: { increment: 1 },
+              ...(wasOutflow ? { total_income: { increment: amount } } : { total_expenses: { increment: amount } }),
+            },
+          });
+        }
+        await this.prisma.cash_box_balances.update({ where: { id: balance.id }, data: { balance: balanceAfter, updated_at: new Date() } });
+      }
+
+      const bankMovements = await this.prisma.bank_account_movements.findMany({
+        where: { payment_id: payment.id, reference_type: 'payment', deleted_at: null },
+        orderBy: { created_at: 'asc' },
+      });
+      for (const movement of bankMovements) {
+        const bankAccount = await this.prisma.bank_accounts.findUnique({ where: { id: movement.bank_account_id } });
+        if (!bankAccount) continue;
+        const currentBalance = Number(bankAccount.balance);
+        const reversalAmount = -Number(movement.amount);
+        const balanceAfter = Number((currentBalance + reversalAmount).toFixed(2));
+        const isOutflow = movement.nature === 'DEBIT';
+        await this.prisma.bank_account_movements.create({
+          data: {
+            bank_account_id: movement.bank_account_id,
+            type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
+            nature: isOutflow ? 'CREDIT' : 'DEBIT',
+            amount: reversalAmount,
+            currency_code: movement.currency_code,
+            exchange_rate: movement.exchange_rate,
+            rate_type: movement.rate_type,
+            converted_amount: movement.converted_amount,
+            balance_before: currentBalance,
+            balance_after: balanceAfter,
+            description: `Reversión de pago mixto #${payment.number}`,
+            payment_id: payment.id,
+            reference_type: referenceType,
+            reference_id: payment.id,
+            date: new Date(),
+            created_by: userId,
+          },
+        });
+        await this.prisma.bank_accounts.update({
+          where: { id: movement.bank_account_id },
+          data: { balance: balanceAfter, updated_at: new Date(), updated_by: userId },
+        });
+        await recalculateBankAccountLedger(this.prisma, movement.bank_account_id);
+      }
+    }
+
     // Revert cash box movement
     if (payment.cash_box_id) {
       const cashBox = await this.prisma.cash_boxes.findFirst({
@@ -2331,7 +2654,7 @@ export class PaymentsService {
     }
 
     // Revert linked checks
-    if (payment.payment_method === 'CHECK') {
+    if (payment.payment_method === 'CHECK' || (payment.payment_method === 'MIXED' && payment.tenders?.some((tender: any) => tender.method === 'CHECK'))) {
       await this.reverseLinkedChecks(payment, userId, checkAction);
     }
 

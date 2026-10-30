@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsInt, MaxLength, IsArray, IsUUID, Min } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsInt, MaxLength, IsArray, IsUUID, Min, IsIn } from 'class-validator';
 
 export class CreateDocumentSequenceDto {
   @IsString()
@@ -31,6 +31,11 @@ export class CreateDocumentSequenceDto {
   @IsOptional()
   @IsBoolean()
   automatic?: boolean;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['STANDARD', 'NET_ONLY'])
+  sales_order_tax_mode?: 'STANDARD' | 'NET_ONLY';
 
   @IsOptional()
   @IsArray()

@@ -4,6 +4,7 @@ export interface TaxContext {
   partnerId?: string
   partnerVatCondition?: string
   documentTypeId: string
+  documentSequenceId?: string
   documentLetterType?: string
   currency: string
   date: string

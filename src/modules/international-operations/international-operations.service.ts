@@ -143,7 +143,21 @@ export class InternationalOperationsService {
                 business_parties: { select: { id: true, name: true } },
                 payment_documents: {
                   include: {
-                    payment: { select: { id: true, number: true, amount: true, currency_code: true, status: true, date: true, payment_method: true } },
+                    payment: {
+                      select: {
+                        id: true,
+                        number: true,
+                        amount: true,
+                        currency_code: true,
+                        status: true,
+                        date: true,
+                        payment_method: true,
+                        exchange_rate: true,
+                        rate_type: true,
+                        converted_amount: true,
+                        exchange_note: true,
+                      },
+                    },
                   },
                 },
                 document_items: {
@@ -349,14 +363,94 @@ export class InternationalOperationsService {
     let unconvertedCount = 0;
     let unconvertedAmount = 0;
 
+    // Equivalentes USD/ARS calculados con el tipo de cambio guardado en cada
+    // comprobante o pago. No se reutiliza la cotización de compra para convertir
+    // un pago que tenga otra cotización.
+    const currencyTotals = {
+      USD: { total: 0, paid: 0, totalMissing: 0, paidMissing: 0 },
+      ARS: { total: 0, paid: 0, totalMissing: 0, paidMissing: 0 },
+    };
+    const roundCurrency = (amount: number) => Math.round((amount + Number.EPSILON) * 100) / 100;
+    const documentAmountIn = (doc: any, relation: any, target: 'USD' | 'ARS'): number | null => {
+      const amount = Number(doc.total ?? 0);
+      const source = String(doc.currency_code ?? 'USD').toUpperCase();
+      if (source === target) return amount;
+
+      if (target === 'ARS') {
+        if (doc.converted_total != null) {
+          const documentTotal = Number(doc.total ?? 0);
+          return documentTotal > 0 ? (Number(doc.converted_total) * amount) / documentTotal : 0;
+        }
+        const rate = source === String(opCurrency).toUpperCase()
+          ? doc.exchange_rate
+          : relation.exchange_rate;
+        if (source !== 'ARS' && Number(rate) === 1) return null;
+        return convertWithMarketRate(amount, source, 'ARS', rate == null ? null : Number(rate));
+      }
+
+      // ARS → USD usa la tasa guardada al asociar el documento a una operación
+      // en USD. Si no existe esa tasa, no se inventa un equivalente.
+      if (source === 'ARS' && String(opCurrency).toUpperCase() === 'USD') {
+        const rate = relation.exchange_rate == null ? null : Number(relation.exchange_rate);
+        if (rate == null || rate === 1) return null;
+        return convertWithMarketRate(amount, 'ARS', 'USD', rate);
+      }
+      return null;
+    };
+    const paymentAmountIn = (amount: number, payment: any, target: 'USD' | 'ARS'): number | null => {
+      const source = String(payment?.currency_code ?? opCurrency).toUpperCase();
+      if (source === target) return amount;
+      const rate = payment?.exchange_rate == null ? null : Number(payment.exchange_rate);
+
+      if (target === 'ARS') {
+        if (rate != null && !(source !== 'ARS' && rate === 1)) {
+          return convertWithMarketRate(amount, source, 'ARS', rate);
+        }
+        const paymentTotal = Number(payment?.amount ?? 0);
+        if (payment?.converted_amount != null && paymentTotal > 0) {
+          return (Number(payment.converted_amount) * amount) / paymentTotal;
+        }
+        return null;
+      }
+
+      // Para pasar un pago en ARS a USD tiene que existir una cotización propia
+      // del pago; nunca se hereda la cotización del comprobante.
+      if (source === 'ARS' && rate != null && rate !== 1) return convertWithMarketRate(amount, 'ARS', 'USD', rate);
+      return null;
+    };
+    const addCurrencyAmount = (currency: 'USD' | 'ARS', kind: 'total' | 'paid', amount: number | null) => {
+      if (amount == null || !Number.isFinite(amount)) {
+        currencyTotals[currency][kind === 'total' ? 'totalMissing' : 'paidMissing'] += 1;
+      } else {
+        currencyTotals[currency][kind] += amount;
+      }
+    };
+    const documentPaymentIds = new Set<string>();
+
     for (const rel of operation.operation_documents) {
       const doc = rel.document;
       if (!doc) continue;
 
       const docTotal = Number(doc.total ?? 0);
       const docBase = Number(doc.converted_total ?? doc.total ?? 0);
-      const docPaid = doc.payment_documents?.reduce((sum: number, pd: any) => sum + Number(pd.amount_applied ?? 0), 0) ?? 0;
+      const paidAllocations = (doc.payment_documents ?? []).filter((pd: any) =>
+        ['CONFIRMED', 'PAID'].includes(String(pd.payment?.status)),
+      );
+      const docPaid = paidAllocations.reduce((sum: number, pd: any) => sum + Number(pd.amount_applied ?? 0), 0);
       const docCurrency = doc.currency_code ?? 'USD';
+
+      for (const currency of ['USD', 'ARS'] as const) {
+        addCurrencyAmount(currency, 'total', documentAmountIn(doc, rel, currency));
+      }
+      for (const allocation of doc.payment_documents ?? []) {
+        const payment = allocation.payment;
+        if (!payment || !['CONFIRMED', 'PAID'].includes(String(payment.status))) continue;
+        documentPaymentIds.add(payment.id);
+        const applied = Number(allocation.amount_applied ?? 0);
+        for (const currency of ['USD', 'ARS'] as const) {
+          addCurrencyAmount(currency, 'paid', paymentAmountIn(applied, payment, currency));
+        }
+      }
 
       totalOriginal += docTotal;
       totalBase += docBase;
@@ -365,7 +459,26 @@ export class InternationalOperationsService {
 
       // Consolidado en moneda de operación
       const convertedTotal = convertWithMarketRate(docTotal, docCurrency, opCurrency, rel.exchange_rate ? Number(rel.exchange_rate) : null);
-      const convertedPaid = convertWithMarketRate(docPaid, docCurrency, opCurrency, rel.exchange_rate ? Number(rel.exchange_rate) : null);
+      let convertedPaid: number | null;
+      if (['USD', 'ARS'].includes(String(opCurrency).toUpperCase())) {
+        convertedPaid = 0;
+        for (const allocation of paidAllocations) {
+          const applied = Number(allocation.amount_applied ?? 0);
+          const converted = paymentAmountIn(
+            applied,
+            allocation.payment,
+            String(opCurrency).toUpperCase() as 'USD' | 'ARS',
+          );
+          if (converted == null) {
+            unconvertedCount += 1;
+            unconvertedAmount += applied;
+          } else {
+            convertedPaid += converted;
+          }
+        }
+      } else {
+        convertedPaid = convertWithMarketRate(docPaid, docCurrency, opCurrency, rel.exchange_rate ? Number(rel.exchange_rate) : null);
+      }
       if (convertedTotal != null) {
         totalOpCurrency += convertedTotal;
         paidOpCurrency += convertedPaid ?? 0;
@@ -418,22 +531,59 @@ export class InternationalOperationsService {
     if (paymentIds.length > 0) {
       const pays = await this.prisma.payments.findMany({
         where: { id: { in: paymentIds }, deleted_at: null },
-        select: { amount: true, converted_amount: true, currency_code: true },
+        select: {
+          id: true,
+          amount: true,
+          converted_amount: true,
+          currency_code: true,
+          exchange_rate: true,
+          rate_type: true,
+          status: true,
+        },
       });
       for (const pay of pays) {
+        if (documentPaymentIds.has(pay.id)) continue;
+        if (!['CONFIRMED', 'PAID'].includes(String(pay.status))) continue;
         paidOriginal += Number(pay.amount);
         paidBase += Number(pay.converted_amount ?? pay.amount);
         const payCurrency = pay.currency_code ?? opCurrency;
-        if (payCurrency === opCurrency) {
-          paidOpCurrency += Number(pay.amount);
-        } else if (pay.converted_amount != null) {
-          paidOpCurrency += Number(pay.converted_amount);
+        const convertedPayment = ['USD', 'ARS'].includes(String(opCurrency).toUpperCase())
+          ? paymentAmountIn(Number(pay.amount), pay, String(opCurrency).toUpperCase() as 'USD' | 'ARS')
+          : payCurrency === opCurrency
+            ? Number(pay.amount)
+            : pay.converted_amount == null ? null : Number(pay.converted_amount);
+        if (convertedPayment != null) {
+          paidOpCurrency += convertedPayment;
         } else {
           unconvertedCount += 1;
           unconvertedAmount += Number(pay.amount);
         }
+        for (const currency of ['USD', 'ARS'] as const) {
+          addCurrencyAmount(currency, 'paid', paymentAmountIn(Number(pay.amount), pay, currency));
+        }
       }
     }
+
+    const financialDualCurrency = Object.fromEntries(
+      (['USD', 'ARS'] as const).map((currency) => {
+        const values = currencyTotals[currency];
+        return [currency, {
+          total: roundCurrency(values.total),
+          paid: roundCurrency(values.paid),
+          pending: values.totalMissing || values.paidMissing
+            ? null
+            : roundCurrency(values.total - values.paid),
+          totalMissing: values.totalMissing,
+          paidMissing: values.paidMissing,
+        }];
+      }),
+    ) as Record<'USD' | 'ARS', {
+      total: number;
+      paid: number;
+      pending: number | null;
+      totalMissing: number;
+      paidMissing: number;
+    }>;
 
     const productCount = operation.purchase_orders.reduce((acc, po) => {
       return acc + (po.document?.document_items?.length ?? 0);
@@ -478,6 +628,7 @@ export class InternationalOperationsService {
         pending: { amount: totalOpCurrency - paidOpCurrency, baseAmount: totalOpCurrency - paidOpCurrency },
         unconverted: { count: unconvertedCount, amount: unconvertedAmount },
       },
+      financialDualCurrency,
       financialByCurrency: Object.values(financialByCurrency).map(f => ({
         currency: f.currency,
         total: f.total,

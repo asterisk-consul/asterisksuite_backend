@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsArray, ValidateNested, IsNumber, IsIn, Min, Max, MinLength } from 'class-validator'
+import { IsString, IsOptional, IsArray, ValidateNested, IsNumber, IsIn, IsUUID, Min, Max, MinLength } from 'class-validator'
 import { Type } from 'class-transformer'
 
 class TaxContextItemDto {
@@ -50,6 +50,10 @@ export class TaxContextDto {
 
   @IsString()
   documentTypeId: string
+
+  @IsOptional()
+  @IsUUID('4')
+  documentSequenceId?: string
 
   @IsOptional()
   @IsString()

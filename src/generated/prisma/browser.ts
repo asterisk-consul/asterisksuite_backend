@@ -850,6 +850,11 @@ export type cash_box_transfers = Prisma.cash_box_transfersModel
  */
 export type payments = Prisma.paymentsModel
 /**
+ * Model payment_tenders
+ *
+ */
+export type payment_tenders = Prisma.payment_tendersModel
+/**
  * Model payment_documents
  * 
  */

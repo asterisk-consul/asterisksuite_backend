@@ -7,6 +7,7 @@ model document_sequences {
   point_of_sale           String                    @db.VarChar(10)
   current_number          Int                       @default(0)
   prefix                  String?                   @db.VarChar(20)
+  sales_order_tax_mode    String                    @default("STANDARD") @db.VarChar(20)
   active                  Boolean                   @default(true)
   created_at              DateTime                  @default(now()) @db.Timestamp(6)
   updated_at              DateTime?                 @updatedAt @db.Timestamp(6)

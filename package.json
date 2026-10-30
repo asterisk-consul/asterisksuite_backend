@@ -25,6 +25,7 @@
     "seed:rbac": "npx tsx prisma/seeds/rbac.seed.ts",
     "migrate:intercompany-transfers": "tsx scripts/apply-intercompany-transfer-migration.ts",
     "migrate:user-notifications": "tsx scripts/apply-user-notifications-migration.ts",
+    "migrate:payment-tenders": "tsx scripts/apply-payment-tenders-migration.ts",
     "migrate:whatsapp-reports": "node dist/src/scripts/apply-whatsapp-reports-migration.js",
     "migrate:whatsapp-reports:dev": "tsx src/scripts/apply-whatsapp-reports-migration.ts",
     "migrate:mcp-oauth": "tsx src/scripts/apply-mcp-oauth-migration.ts",

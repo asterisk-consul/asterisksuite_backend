@@ -217,6 +217,7 @@ export const ModelName = {
   cash_box_user_roles: 'cash_box_user_roles',
   cash_box_transfers: 'cash_box_transfers',
   payments: 'payments',
+  payment_tenders: 'payment_tenders',
   payment_documents: 'payment_documents',
   checks: 'checks',
   payment_checks: 'payment_checks',
@@ -467,6 +468,7 @@ export const Document_sequencesScalarFieldEnum = {
   point_of_sale: 'point_of_sale',
   current_number: 'current_number',
   prefix: 'prefix',
+  sales_order_tax_mode: 'sales_order_tax_mode',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -3585,6 +3587,24 @@ export const PaymentsScalarFieldEnum = {
 } as const
 
 export type PaymentsScalarFieldEnum = (typeof PaymentsScalarFieldEnum)[keyof typeof PaymentsScalarFieldEnum]
+
+
+export const Payment_tendersScalarFieldEnum = {
+  id: 'id',
+  payment_id: 'payment_id',
+  method: 'method',
+  amount: 'amount',
+  cash_box_id: 'cash_box_id',
+  bank_account_id: 'bank_account_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  deleted_by: 'deleted_by'
+} as const
+
+export type Payment_tendersScalarFieldEnum = (typeof Payment_tendersScalarFieldEnum)[keyof typeof Payment_tendersScalarFieldEnum]
 
 
 export const Payment_documentsScalarFieldEnum = {

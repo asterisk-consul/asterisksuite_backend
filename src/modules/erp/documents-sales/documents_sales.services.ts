@@ -189,16 +189,25 @@ export class DocumentsSalesService {
       const seq = await tx.document_sequences.findUnique({
         where: { id: userOverrideId, active: true, deleted_at: null },
       });
-      if (seq) return seq.id;
+      if (seq) {
+        const linked = await tx.document_type_sequences.findFirst({
+          where: { document_type_id: documentTypeId, sequence_id: seq.id },
+          select: { id: true },
+        });
+        if (linked || legacyFallbackId === seq.id) return seq.id;
+      }
 
       // An explicit choice must never be silently replaced by the sequence on
       // document_types: that would number the document with a different PV.
-      throw new BadRequestException('La secuencia seleccionada no existe o no está activa');
+      throw new BadRequestException('La secuencia seleccionada no está activa o no corresponde al tipo de documento');
     }
 
     // 2. Junction table: priorizar is_default, sino primera vinculada
     const linked = await tx.document_type_sequences.findMany({
-      where: { document_type_id: documentTypeId },
+      where: {
+        document_type_id: documentTypeId,
+        document_sequences: { active: true, deleted_at: null },
+      },
       orderBy: { is_default: 'desc' },
     });
     if (linked.length > 0) return linked[0].sequence_id;
@@ -228,6 +237,13 @@ export class DocumentsSalesService {
     if (!docType) {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
+
+    const resolvedSequenceId = await this.resolveSequence(
+      dto.document_type_id,
+      dto.document_sequence_id,
+      docType.document_sequences?.id ?? null,
+      this.prisma,
+    );
 
     let commercialAdjustments = dto.commercial_adjustments ?? [];
 
@@ -292,6 +308,7 @@ export class DocumentsSalesService {
       partnerId: dto.party_id ?? undefined,
       partnerVatCondition: fiscalCtx.partnerVatCondition || undefined,
       documentTypeId: dto.document_type_id,
+      documentSequenceId: resolvedSequenceId ?? undefined,
       documentLetterType: docType.letter_type ?? undefined,
       currency: dto.currency_code ?? 'ARS',
       date: dto.date,
@@ -418,10 +435,13 @@ export class DocumentsSalesService {
     await this.prisma.$transaction(async (tx) => {
       const sequenceId = await this.resolveSequence(
         dto.document_type_id,
-        dto.document_sequence_id,
+        resolvedSequenceId,
         docType.document_sequences?.id ?? null,
         tx,
       );
+      if (sequenceId !== resolvedSequenceId) {
+        throw new ConflictException('La secuencia del documento cambió mientras se guardaba. Revisá el punto de venta e intentá nuevamente.');
+      }
 
       const number = await this.getNextNumber(dto.document_type_id, sequenceId, tx);
 
@@ -667,6 +687,34 @@ export class DocumentsSalesService {
       throw new BadRequestException('Este tipo de documento no acepta conceptos comerciales. Activá la opción en su configuración.');
     }
 
+    const sequenceChanged = dto.document_sequence_id !== undefined
+      && dto.document_sequence_id !== doc.document_sequence_id;
+    const taxSequenceId = sequenceChanged
+      ? await this.resolveSequence(
+          doc.document_type_id,
+          dto.document_sequence_id,
+          doc.document_types?.document_sequence_id ?? null,
+          this.prisma,
+        )
+      : doc.document_sequence_id;
+    const isSalesOrder = doc.document_types?.category === 'ORDER'
+      && Number(doc.document_types?.direction) === 1;
+    const storedItemsForSequenceChange = sequenceChanged && isSalesOrder
+      ? (doc.document_items ?? []).map((item: any) => ({
+          product_id: item.product_id,
+          quantity: Number(item.quantity),
+          unit_price: Number(item.original_unit_price ?? (
+            Number(item.discount_percentage ?? 0) < 100
+              ? Number(item.unit_price ?? 0) / (1 - Number(item.discount_percentage ?? 0) / 100)
+              : item.unit_price ?? 0
+          )),
+          discount_percentage: Number(item.discount_percentage ?? 0),
+          variant_id: item.variant_id ?? null,
+          warehouse_id: item.warehouse_id ?? null,
+        }))
+      : [];
+    const calculationItems = dto.items?.length ? dto.items : storedItemsForSequenceChange;
+
     let items: ItemInput[] | null = null;
 
     let totals: any = null;
@@ -679,8 +727,8 @@ export class DocumentsSalesService {
     let updateExchangeRate = dto.exchange_rate ?? Number(doc.exchange_rate) ?? 1;
     let updateRateType = (dto.rate_type as any) ?? doc.rate_type ?? null;
 
-    if (dto.items?.length) {
-      if (!dto.currency_code) {
+    if (calculationItems.length) {
+      if (dto.items?.length && !dto.currency_code) {
         throw new BadRequestException('currency_code es requerido');
       }
 
@@ -701,12 +749,13 @@ export class DocumentsSalesService {
         partnerId: partnerId ?? undefined,
         partnerVatCondition: fiscalCtx.partnerVatCondition || undefined,
         documentTypeId: doc.document_type_id,
+        documentSequenceId: taxSequenceId ?? undefined,
         documentLetterType: docType?.letter_type ?? undefined,
-        currency: dto.currency_code,
+        currency: updateCurrencyCode,
         date: dto.date ?? new Date(doc.date).toISOString(),
         jurisdictionId: dto.fiscal_jurisdiction_id ?? doc.fiscal_jurisdiction_id ?? undefined,
         operationType: 'SALE',
-        items: dto.items.map((i) => ({
+        items: calculationItems.map((i) => ({
           productId: i.product_id,
           quantity: Number(i.quantity),
           unitPrice: Number(i.unit_price) * (1 - Math.min(100, Math.max(0, Number(i.discount_percentage ?? 0))) / 100),
@@ -763,15 +812,15 @@ export class DocumentsSalesService {
 
         return {
           product_id: item.productId ?? null,
-          variant_id: dto.items?.[idx]?.variant_id ?? null,
-          warehouse_id: dto.items?.[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
+          variant_id: calculationItems[idx]?.variant_id ?? null,
+          warehouse_id: calculationItems[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
           quantity: item.quantity,
           currency: updateCurrencyCode,
           exchange_rate: updateExchangeRate,
           rate_type: updateRateType,
-          original_unit_price: Number(dto.items?.[idx]?.unit_price ?? item.unitPrice),
+          original_unit_price: Number(calculationItems[idx]?.unit_price ?? item.unitPrice),
           unit_price: item.unitPrice,
-          discount_percentage: Number(dto.items?.[idx]?.discount_percentage ?? 0),
+          discount_percentage: Number(calculationItems[idx]?.discount_percentage ?? 0),
           converted_unit_price: convertedUnitPrice,
           price: item.total,
           converted_price: convertedPrice,
@@ -825,7 +874,15 @@ export class DocumentsSalesService {
       // Cambiar de PV implica liberar el último número de la secuencia anterior
       // (cuando todavía es seguro hacerlo) y reservar uno en la nueva.
       if (dto.document_sequence_id !== undefined && dto.document_sequence_id !== doc.document_sequence_id) {
-        updatedSequenceId = await this.resolveSequence(doc.document_type_id, dto.document_sequence_id, null, tx);
+        updatedSequenceId = await this.resolveSequence(
+          doc.document_type_id,
+          dto.document_sequence_id,
+          doc.document_types?.document_sequence_id ?? null,
+          tx,
+        );
+        if (updatedSequenceId !== taxSequenceId) {
+          throw new ConflictException('La secuencia del documento cambió mientras se guardaba. Revisá el punto de venta e intentá nuevamente.');
+        }
 
         updatedNumber = await this.getNextNumber(doc.document_type_id, updatedSequenceId, tx);
 
